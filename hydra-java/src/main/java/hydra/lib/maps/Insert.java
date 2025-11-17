@@ -24,16 +24,28 @@ import static hydra.dsl.Types.scheme;
  * Adds an element to a set.
  */
 public class Insert extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.insert");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(Types.var("k"), Types.var("v"), map("k", "v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
@@ -46,25 +58,35 @@ public class Insert extends PrimitiveFunction {
 
     /**
      * Adds an element.
-     * @param k the element
-     * @return the updated set
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to insert
+     * @return a curried function that takes a value, a map, and returns the updated map
      */
-        public static <K, V> Function<V, Function<Map<K, V>, Map<K, V>>> apply(K k) {
+    public static <K, V> Function<V, Function<Map<K, V>, Map<K, V>>> apply(K k) {
         return v -> apply(k, v);
     }
 
     /**
      * Adds an element.
-     * @param k the element
-     * @param v the set
-     * @return the updated set
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to insert
+     * @param v the value to insert
+     * @return a function that takes a map and returns the updated map
      */
-        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k, V v) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k, V v) {
         return before -> apply(k, v, before);
     }
 
     /**
      * Apply the function to all three arguments.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param k the key to insert
+     * @param v the value to insert
+     * @param before the map to insert into
+     * @return the updated map
      */
     public static <K, V> Map<K, V> apply(K k, V v, Map<K, V> before) {
         Map<K, V> after = new HashMap<>(before);

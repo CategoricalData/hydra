@@ -22,18 +22,31 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ReadFloat32.
+ * Primitive function which parses a string into a float32 (32-bit floating-point).
+ * Returns an optional value that is empty if the string cannot be parsed.
  */
 public class ReadFloat32 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.readFloat32"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.readFloat32");
     }
 
+    /**
+     * Returns the type scheme for this function: string -&gt; optional float32.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), optional(float32())));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that parses string terms into optional float32 terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)),
@@ -41,11 +54,11 @@ public class ReadFloat32 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ReadFloat32 operation.
-     * @param str the str
-     * @return the result
+     * Attempts to parse a string into a Float (32-bit).
+     * @param str the string to parse
+     * @return an Opt containing the parsed Float, or empty if parsing fails
      */
-        public static Opt<Float> apply(String str) {
+    public static Opt<Float> apply(String str) {
         try {
             return Opt.of(Float.parseFloat(str));
         } catch (NumberFormatException e) {

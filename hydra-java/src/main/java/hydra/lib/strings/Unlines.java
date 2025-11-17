@@ -23,15 +23,27 @@ import static hydra.dsl.Types.string;
  * Joins a list of strings with newlines and appends a final newline.
  */
 public class Unlines extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.unlines"
+     */
     public Name name() {
         return new Name("hydra.lib.strings.unlines");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that joins strings with newlines
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(list(string()), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(

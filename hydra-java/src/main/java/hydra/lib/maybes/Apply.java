@@ -25,16 +25,28 @@ import static hydra.dsl.Types.scheme;
  * Applies a function in a flow context.
  */
 public class Apply extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.apply"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.apply");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for applying an optional function to an optional value
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", "b",
             function(optional(function("a", "b")), optional("a"), optional("b")));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that applies an optional function to an optional argument
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.optional(Flows::pure, args.get(0)), Expect.optional(Flows::pure, args.get(1)),
@@ -45,16 +57,23 @@ public class Apply extends PrimitiveFunction {
     }
 
     /**
-     * Applies a function within a flow.
-     * @param optionalF the flowFunction
-     * @return the result flow
+     * Applies a function within a flow context. Curried version.
+     * @param <X> the input type
+     * @param <Y> the output type
+     * @param optionalF the optional function to apply
+     * @return a function that takes an optional argument and returns an optional result
      */
-        public static <X, Y> Function<Opt<X>, Opt<Y>> apply(Opt<Function<X, Y>> optionalF) {
+    public static <X, Y> Function<Opt<X>, Opt<Y>> apply(Opt<Function<X, Y>> optionalF) {
         return (optionalArg) -> apply(optionalF, optionalArg);
     }
 
     /**
-     * Apply the function to both arguments.
+     * Applies an optional function to an optional argument.
+     * @param <X> the input type
+     * @param <Y> the output type
+     * @param optionalF the optional function to apply
+     * @param optionalArg the optional argument
+     * @return the optional result of applying the function to the argument, or empty if either is empty
      */
     public static <X, Y> Opt<Y> apply(Opt<Function<X, Y>> optionalF, Opt<X> optionalArg) {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {

@@ -44,20 +44,22 @@ public class Drop extends PrimitiveFunction {
 
     /**
      * Drops the first n elements.
-     * @param n the n
-     * @return the remaining list
+     * @param <X> the element type
+     * @param n the number of elements to drop
+     * @return a function that drops n elements from a list
      */
-        public static <X> Function<List<X>, List<X>> apply(Integer n) {
+    public static <X> Function<List<X>, List<X>> apply(Integer n) {
         return lst -> apply(n, lst);
     }
 
     /**
      * Drops the first n elements.
-     * @param n the n
-     * @param lst the list
+     * @param <X> the element type
+     * @param n the number of elements to drop
+     * @param lst the list to drop from
      * @return the remaining list
      */
-        public static <X> List<X> apply(Integer n, List<X> lst) {
+    public static <X> List<X> apply(Integer n, List<X> lst) {
         if (n <= 0) {
             return lst;
         }

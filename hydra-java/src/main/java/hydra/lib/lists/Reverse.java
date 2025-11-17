@@ -43,6 +43,9 @@ public class Reverse extends PrimitiveFunction {
 
     /**
      * Apply the function to the single argument.
+     * @param <X> the element type
+     * @param list the list to reverse
+     * @return the reversed list
      */
     public static <X> List<X> apply(List<X> list) {
         List<X> newList = new ArrayList<>();

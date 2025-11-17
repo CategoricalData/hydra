@@ -20,18 +20,30 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ShowInt8.
+ * Primitive function which converts an int8 (8-bit signed integer) to its string representation.
  */
 public class ShowInt8 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showInt8"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showInt8");
     }
 
+    /**
+     * Returns the type scheme for this function: int8 -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int8(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts int8 terms to string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int8(args.get(0)),
@@ -39,11 +51,11 @@ public class ShowInt8 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ShowInt8 operation.
-     * @param value the value
-     * @return the result
+     * Converts a Byte (8-bit signed integer) value to its string representation.
+     * @param value the Byte value to convert
+     * @return the string representation of the value
      */
-        public static String apply(Byte value) {
+    public static String apply(Byte value) {
         return Byte.toString(value);
     }
 }

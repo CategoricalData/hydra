@@ -41,15 +41,20 @@ public class Intersperse extends PrimitiveFunction {
 
     /**
      * Inserts an element between elements.
-     * @param delim the separator
-     * @return the interspersed list
+     * @param <X> the element type
+     * @param delim the separator element to insert
+     * @return a function that intersperses the separator into a list
      */
-        public static <X> Function<List<X>, List<X>> apply(X delim) {
+    public static <X> Function<List<X>, List<X>> apply(X delim) {
         return (list) -> apply(delim, list);
     }
 
     /**
      * Apply the function to both arguments.
+     * @param <X> the element type
+     * @param delim the separator element to insert
+     * @param list the list to intersperse
+     * @return the list with the separator inserted between elements
      */
     public static <X> List<X> apply(X delim, List<X> list) {
         List<X> result = new ArrayList<>();

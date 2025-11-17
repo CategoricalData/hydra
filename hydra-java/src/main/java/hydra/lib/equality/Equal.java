@@ -39,20 +39,22 @@ public class Equal extends PrimitiveFunction {
 
     /**
      * Checks if two values are equal.
+     * @param <A> the type
      * @param left the value1
      * @return true if equal, false otherwise
      */
-        public static <A> Function<A, Boolean> apply(A left) {
+    public static <A> Function<A, Boolean> apply(A left) {
         return right -> apply(left, right);
     }
 
     /**
      * Checks if two values are equal.
+     * @param <A> the type
      * @param left the value1
      * @param right the value2
      * @return true if equal, false otherwise
      */
-        public static <A> boolean apply(A left, A right) {
+    public static <A> boolean apply(A left, A right) {
         return left.equals(right);
     }
 }

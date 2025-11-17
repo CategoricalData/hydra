@@ -52,21 +52,28 @@ public class Foldl extends PrimitiveFunction {
 
     /**
      * Performs a left fold in flow context.
+     * @param <S> the state type
+     * @param <A> the accumulator type
+     * @param <B> the element type
+     * @param f the function
      * @return the flow of result
      */
-        public static <S, A, B> Function<A, Function<List<B>, Flow<S, A>>> apply(
+    public static <S, A, B> Function<A, Function<List<B>, Flow<S, A>>> apply(
             BiFunction<A, B, Flow<S, A>> f) {
         return initial -> list -> apply(f, initial, list);
     }
 
     /**
      * Performs a left fold in flow context.
+     * @param <S> the state type
+     * @param <A> the accumulator type
+     * @param <B> the element type
      * @param f the function
      * @param initial the initial
      * @param list the list
      * @return the flow of result
      */
-        public static <S, A, B> Flow<S, A> apply(BiFunction<A, B, Flow<S, A>> f, A initial, List<B> list) {
+    public static <S, A, B> Flow<S, A> apply(BiFunction<A, B, Flow<S, A>> f, A initial, List<B> list) {
         Flow<S, A> result = pure(initial);
         for (B item : list) {
             result = bind(result, acc -> f.apply(acc, item));

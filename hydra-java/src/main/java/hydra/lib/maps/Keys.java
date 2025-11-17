@@ -24,10 +24,18 @@ import static hydra.dsl.Types.scheme;
  * Returns all keys.
  */
 public class Keys extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.keys");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
@@ -36,6 +44,10 @@ public class Keys extends PrimitiveFunction {
                         list("k")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
@@ -46,10 +58,12 @@ public class Keys extends PrimitiveFunction {
 
     /**
      * Returns the list of keys.
+     * @param <K> the key type
+     * @param <V> the value type
      * @param map the map
      * @return the keys
      */
-        public static <K, V> List<K> apply(Map<K, V> map) {
+    public static <K, V> List<K> apply(Map<K, V> map) {
         return new ArrayList<K>(map.keySet());
     }
 }

@@ -21,18 +21,31 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ReadString.
+ * Primitive function which parses a string literal representation into a string value.
+ * Expects the input to be surrounded by double quotes.
  */
 public class ReadString extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.readString"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.readString");
     }
 
+    /**
+     * Returns the type scheme for this function: string -&gt; optional string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), optional(string())));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that parses string literal terms into optional string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)),
@@ -40,11 +53,11 @@ public class ReadString extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ReadString operation.
-     * @param str the str
-     * @return the result
+     * Attempts to parse a quoted string literal into a string value.
+     * @param str the string to parse (must be surrounded by double quotes)
+     * @return an Opt containing the unquoted string, or empty if the input is not properly quoted
      */
-        public static Opt<String> apply(String str) {
+    public static Opt<String> apply(String str) {
         // In Haskell, readMaybe parses a string literal representation
         // For simple string reading, we just return the string wrapped in Some
         // A more sophisticated implementation might parse escaped strings

@@ -56,20 +56,24 @@ public class Zip extends PrimitiveFunction {
 
     /**
      * Combines two lists into pairs.
-     * @param lst1 the list1
-     * @return the zipped list
+     * @param <X> the first list element type
+     * @param <Y> the second list element type
+     * @param lst1 the first list
+     * @return a function that zips the first list with a second list
      */
-        public static <X, Y> Function<List<Y>, List<Map.Entry<X, Y>>> apply(List<X> lst1) {
+    public static <X, Y> Function<List<Y>, List<Map.Entry<X, Y>>> apply(List<X> lst1) {
         return lst2 -> apply(lst1, lst2);
     }
 
     /**
      * Combines two lists into pairs.
-     * @param lst1 the list1
-     * @param lst2 the list2
-     * @return the zipped list
+     * @param <X> the first list element type
+     * @param <Y> the second list element type
+     * @param lst1 the first list
+     * @param lst2 the second list
+     * @return a list of pairs containing elements from both lists
      */
-        public static <X, Y> List<Map.Entry<X, Y>> apply(List<X> lst1, List<Y> lst2) {
+    public static <X, Y> List<Map.Entry<X, Y>> apply(List<X> lst1, List<Y> lst2) {
         List<Map.Entry<X, Y>> result = new ArrayList<>();
         int minSize = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < minSize; i++) {

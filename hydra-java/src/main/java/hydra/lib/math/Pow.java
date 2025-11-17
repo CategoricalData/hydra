@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Raises a number to a power.
  */
 public class Pow extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.pow");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), float64(), float64()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.float64(args.get(0)), Expect.float64(args.get(1)),
@@ -42,7 +54,7 @@ public class Pow extends PrimitiveFunction {
      * @param x the base
      * @return the result
      */
-        public static Function<Double, Double> apply(Double x) {
+    public static Function<Double, Double> apply(Double x) {
         return (y) -> apply(x, y);
     }
 
@@ -52,7 +64,7 @@ public class Pow extends PrimitiveFunction {
      * @param y the exponent
      * @return the result
      */
-        public static Double apply(Double x, Double y) {
+    public static Double apply(Double x, Double y) {
         return Math.pow(x, y);
     }
 }

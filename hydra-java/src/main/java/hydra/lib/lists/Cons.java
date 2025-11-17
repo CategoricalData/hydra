@@ -43,6 +43,10 @@ public class Cons extends PrimitiveFunction {
 
     /**
      * Apply the function to both arguments.
+     * @param <X> the element type
+     * @param el the element to prepend
+     * @param l the list to prepend to
+     * @return the list with the element prepended
      */
     public static <X> List<X> apply(X el, List<X> l) {
         List<X> combined = new ArrayList<>();

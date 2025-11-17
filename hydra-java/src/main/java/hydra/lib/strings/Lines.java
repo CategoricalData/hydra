@@ -24,23 +24,35 @@ import static hydra.dsl.Types.string;
  * Splits a string into lines by breaking at newline characters.
  */
 public class Lines extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.lines"
+     */
     public Name name() {
         return new Name("hydra.lib.strings.lines");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that splits a string into lines
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), list(string())));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map(Expect.string(args.get(0)), 
+        return args -> map(Expect.string(args.get(0)),
             s -> Terms.list(apply(s).stream().map(Terms::string).collect(Collectors.toList())));
     }
 
     /**
-     * Splits a string into lines.
+     * Splits a string into lines by breaking at newline characters.
      * @param s the string to split
      * @return the list of lines
      */

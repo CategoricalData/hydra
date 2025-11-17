@@ -34,10 +34,11 @@ public class Identity extends PrimitiveFunction {
 
     /**
      * Identity function.
+     * @param <X> the type
      * @param object the value
      * @return the same value
      */
-        public static <X> X apply(X object) {
+    public static <X> X apply(X object) {
         return object;
     }
 }

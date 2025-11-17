@@ -25,16 +25,28 @@ import static hydra.dsl.Types.scheme;
  * Checks if an element is in a set.
  */
 public class Member extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.member");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(Types.var("k"), hydra.dsl.Types.map("k", "v"), boolean_()));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.map(Flows::pure, Flows::pure, args.get(1)),
@@ -43,20 +55,24 @@ public class Member extends PrimitiveFunction {
 
     /**
      * Checks if the element is present.
-     * @param key the element
-     * @return true if present, false otherwise
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key to check
+     * @return a function that takes a map and returns true if the key is present
      */
-        public static <K, V> Function<Map<K, V>, Boolean> apply(K key) {
+    public static <K, V> Function<Map<K, V>, Boolean> apply(K key) {
         return mp -> apply(key, mp);
     }
 
     /**
      * Checks if the element is present.
-     * @param key the element
-     * @param mp the set
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key to check
+     * @param mp the map to search
      * @return true if present, false otherwise
      */
-        public static <K, V> Boolean apply(K key, Map<K, V> mp) {
+    public static <K, V> Boolean apply(K key, Map<K, V> mp) {
         return mp.containsKey(key);
     }
 }

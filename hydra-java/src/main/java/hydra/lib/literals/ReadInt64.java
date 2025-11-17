@@ -22,18 +22,31 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ReadInt64.
+ * Primitive function which parses a string into an int64 (64-bit signed integer).
+ * Returns an optional value that is empty if the string cannot be parsed.
  */
 public class ReadInt64 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.readInt64"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.readInt64");
     }
 
+    /**
+     * Returns the type scheme for this function: string -&gt; optional int64.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), optional(int64())));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that parses string terms into optional int64 terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)),
@@ -41,11 +54,11 @@ public class ReadInt64 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ReadInt64 operation.
-     * @param str the str
-     * @return the result
+     * Attempts to parse a string into a Long (64-bit signed).
+     * @param str the string to parse
+     * @return an Opt containing the parsed Long, or empty if parsing fails
      */
-        public static Opt<Long> apply(String str) {
+    public static Opt<Long> apply(String str) {
         try {
             return Opt.of(Long.parseLong(str));
         } catch (NumberFormatException e) {

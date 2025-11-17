@@ -23,15 +23,27 @@ import static hydra.dsl.Types.scheme;
  * Determines whether an integer is even.
  */
 public class Even extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.even");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int32(), boolean_()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int32(args.get(0)),
@@ -43,7 +55,7 @@ public class Even extends PrimitiveFunction {
      * @param num the number
      * @return true if even, false otherwise
      */
-        public static Boolean apply(Integer num) {
+    public static Boolean apply(Integer num) {
         return num % 2 == 0;
     }
 }

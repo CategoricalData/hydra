@@ -44,6 +44,10 @@ public class Concat2 extends PrimitiveFunction {
 
     /**
      * Apply the function to both arguments.
+     * @param <X> the element type
+     * @param l1 the first list
+     * @param l2 the second list
+     * @return the concatenated list
      */
     public static <X> List<X> apply(List<X> l1, List<X> l2) {
         List<X> combined = new ArrayList<>();

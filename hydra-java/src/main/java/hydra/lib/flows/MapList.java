@@ -50,7 +50,8 @@ public class MapList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            throw new UnsupportedOperationException("MapList.implementation() not yet available - requires Elimination.List");
+            throw new UnsupportedOperationException(
+                    "MapList.implementation() not yet available - requires Elimination.List");
         };
     }
     // @Override
@@ -68,20 +69,26 @@ public class MapList extends PrimitiveFunction {
 
     /**
      * Applies a flow function to each element.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the function
      * @return the flow of results
      */
-        public static <S, X, Y> Function<List<X>, Flow<S, List<Y>>> apply(Function<X, Flow<S, Y>> mapping) {
+    public static <S, X, Y> Function<List<X>, Flow<S, List<Y>>> apply(Function<X, Flow<S, Y>> mapping) {
         return list -> Flows.mapM(list, mapping);
     }
 
     /**
      * Applies a flow function to each element.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the function
      * @param list the list
      * @return the flow of results
      */
-        public static <S, X, Y> Flow<S, List<Y>> apply(Function<X, Flow<S, Y>> mapping, List<X> list) {
+    public static <S, X, Y> Flow<S, List<Y>> apply(Function<X, Flow<S, Y>> mapping, List<X> list) {
         return apply(mapping).apply(list);
     }
 }

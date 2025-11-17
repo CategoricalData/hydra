@@ -65,10 +65,12 @@ public class Sequence extends PrimitiveFunction {
 
     /**
      * Combines flows into a flow of list.
+     * @param <S> the state type
+     * @param <X> the element type
      * @param flows the flows
      * @return the flow of list
      */
-        public static <S, X> Flow<S, List<X>> apply(List<Flow<S, X>> flows) {
+    public static <S, X> Flow<S, List<X>> apply(List<Flow<S, X>> flows) {
         return Flows.sequence(flows);
     }
 }

@@ -20,18 +20,30 @@ import static hydra.dsl.Types.uint8;
 
 
 /**
- * Primitive function: ShowUint8.
+ * Primitive function which converts a uint8 (8-bit unsigned integer) to its string representation.
  */
 public class ShowUint8 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showUint8"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showUint8");
     }
 
+    /**
+     * Returns the type scheme for this function: uint8 -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(uint8(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts uint8 terms to string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int16(args.get(0)),
@@ -39,11 +51,11 @@ public class ShowUint8 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ShowUint8 operation.
-     * @param value the value
-     * @return the result
+     * Converts a Short (used to represent 8-bit unsigned integer) to its string representation.
+     * @param value the Short value to convert
+     * @return the string representation of the value
      */
-        public static String apply(Short value) {
+    public static String apply(Short value) {
         return Short.toString(value);
     }
 }

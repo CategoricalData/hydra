@@ -54,21 +54,27 @@ public class ZipWith extends PrimitiveFunction {
 
     /**
      * Combines two lists using a function.
-     * @param f the function
-     * @return the combined list
+     * @param <X> the first list element type
+     * @param <Y> the second list element type
+     * @param <Z> the result element type
+     * @param f the combining function
+     * @return a curried function that takes two lists and combines them
      */
-        public static <X, Y, Z> Function<List<X>, Function<List<Y>, List<Z>>> apply(BiFunction<X, Y, Z> f) {
+    public static <X, Y, Z> Function<List<X>, Function<List<Y>, List<Z>>> apply(BiFunction<X, Y, Z> f) {
         return lst1 -> lst2 -> apply(f, lst1, lst2);
     }
 
     /**
      * Combines two lists using a function.
-     * @param f the function
-     * @param lst1 the list1
-     * @param lst2 the list2
-     * @return the combined list
+     * @param <X> the first list element type
+     * @param <Y> the second list element type
+     * @param <Z> the result element type
+     * @param f the combining function
+     * @param lst1 the first list
+     * @param lst2 the second list
+     * @return a list of elements created by applying the function to pairs
      */
-        public static <X, Y, Z> List<Z> apply(BiFunction<X, Y, Z> f, List<X> lst1, List<Y> lst2) {
+    public static <X, Y, Z> List<Z> apply(BiFunction<X, Y, Z> f, List<X> lst1, List<Y> lst2) {
         List<Z> result = new ArrayList<>();
         int minSize = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < minSize; i++) {
