@@ -26,7 +26,11 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.*;
+import static hydra.dsl.Flows.fromFlow;
+import static hydra.dsl.Flows.map;
+import static hydra.dsl.Flows.map2;
+import static hydra.dsl.Flows.mapM;
+import static hydra.dsl.Flows.pure;
 
 
 /**
@@ -35,6 +39,11 @@ import static hydra.dsl.Flows.*;
 public interface Rewriting {
     /**
      * A generic rewriting function, suitable for many recursive data structures.
+     * @param <X> the input type
+     * @param <Y> the output type
+     * @param fsub the substitution function
+     * @param f the transformation function
+     * @return the rewriting function
      */
     static <X, Y> Function<X, Y> rewrite(Function<Function<X, Y>, Function<X, Y>> fsub,
                                          Function<Function<X, Y>, Function<X, Y>> f) {
@@ -45,6 +54,10 @@ public interface Rewriting {
 
     /**
      * Rewrite an elimination expression using a monadic function.
+     * @param <S> the state type
+     * @param recurse the recursive rewriting function
+     * @param original the original elimination expression
+     * @return a flow containing the rewritten elimination
      */
     static <S> Flow<S, Elimination> rewriteEliminationM(Function<Term, Flow<S, Term>> recurse,
                                                                  Elimination original) {
@@ -93,6 +106,10 @@ public interface Rewriting {
 
     /**
      * Rewrite a field using a monadic function.
+     * @param <S> the state type
+     * @param recurse the recursive rewriting function
+     * @param original the original field
+     * @return a flow containing the rewritten field
      */
     static <S> Flow<S, Field> rewriteFieldM(Function<Term, Flow<S, Term>> recurse, Field original) {
         return map(recurse.apply(original.term), term -> new Field(original.name, term));
@@ -100,6 +117,10 @@ public interface Rewriting {
 
     /**
      * Rewrite a function expression using a monadic function.
+     * @param <S> the state type
+     * @param recurse the recursive rewriting function
+     * @param original the original function
+     * @return a flow containing the rewritten function
      */
     static <S> Flow<S, hydra.core.Function> rewriteFunctionM(Function<Term, Flow<S, Term>> recurse,
                                                                       hydra.core.Function original) {
@@ -127,6 +148,10 @@ public interface Rewriting {
 
     /**
      * This is a workaround for a non-monadic rewriting function; the latter would be more efficient.
+     * @param f the transformation function
+     * @param mf the map transformation function
+     * @param original the original term
+     * @return the rewritten term
      */
     static Term rewriteTerm(Function<Function<Term, Term>, Function<Term, Term>> f,
                                       Function<Map<Name, Term>, Map<Name, Term>> mf, Term original) {
@@ -142,6 +167,11 @@ public interface Rewriting {
 
     /**
      * Rewrite a term using a monadic function.
+     * @param <S> the state type
+     * @param f the transformation function
+     * @param mf the map transformation function
+     * @param original the original term
+     * @return a flow containing the rewritten term
      */
     static <S> Flow<S, Term> rewriteTermM(
             Function<Function<Term, Flow<S, Term>>, Function<Term, Flow<S, Term>>> f,
@@ -246,10 +276,12 @@ public interface Rewriting {
                     @Override
                     public Flow<S, Term> visit(Term.Either instance) {
                         if (instance.value instanceof hydra.util.Either.Left) {
-                            hydra.util.Either.Left<Term, Term> left = (hydra.util.Either.Left<Term, Term>) instance.value;
+                            hydra.util.Either.Left<Term, Term> left =
+                                    (hydra.util.Either.Left<Term, Term>) instance.value;
                             return map(recurse.apply(left.value), Terms::left);
                         } else {
-                            hydra.util.Either.Right<Term, Term> right = (hydra.util.Either.Right<Term, Term>) instance.value;
+                            hydra.util.Either.Right<Term, Term> right =
+                                    (hydra.util.Either.Right<Term, Term>) instance.value;
                             return map(recurse.apply(right.value), Terms::right);
                         }
                     }

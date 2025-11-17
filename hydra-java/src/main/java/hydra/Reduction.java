@@ -30,8 +30,11 @@ import static hydra.dsl.Flows.unexpected;
 // import static hydra.strip.Strip.stripTerm; // TODO: restore when kernel terms modules are generated
 
 
-// TODO: restore when hydra.extras.Extras and hydra.strip.Strip are generated
-// The entire Reduction class is commented out because it depends heavily on stripTerm and primitiveArity
+/**
+ * Reduction utilities for evaluating terms.
+ * TODO: restore when hydra.extras.Extras and hydra.strip.Strip are generated
+ * The entire Reduction class is commented out because it depends heavily on stripTerm and primitiveArity
+ */
 public class Reduction {
     private Reduction() {
     }
@@ -187,9 +190,10 @@ public class Reduction {
 //                                List<Term> argList = LList.take(arity, args);
 //                                Flow<Graph, List<Term>> reducedArgs = mapM(argList, a -> reduceArg(eager, a));
 //                                LList<Term> remainingArgs = LList.drop(arity, args);
-//                                return bind(reducedArgs, rargs -> bind(prim.implementation.apply(rargs),
-//                                        result -> bind(reduce(eager, result),
-//                                                reducedResult -> applyIfNullary(eager, reducedResult, remainingArgs))));
+//                                return bind(reducedArgs, rargs -> bind(
+//                                        prim.implementation.apply(rargs), result -> bind(
+//                                        reduce(eager, result), reducedResult -> applyIfNullary(
+//                                        eager, reducedResult, remainingArgs))));
 //                            } else {
 //                                // Not enough arguments available; back out
 //                                return pure(applyToArguments(original, args));

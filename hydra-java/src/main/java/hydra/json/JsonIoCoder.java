@@ -12,14 +12,24 @@ import java.util.Map;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
+ *
+ * @param <S1> the state type for encoding
+ * @param <S2> the state type for decoding
  */
 public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
+    /**
+     * Constructs a new JsonIoCoder.
+     */
     public JsonIoCoder() {
         super(JsonIoCoder::encode, JsonIoCoder::decode);
     }
 
     /**
      * Encode a JSON value as a json-io object.
+     *
+     * @param <S> the state type
+     * @param value the JSON value to encode
+     * @return a flow containing the encoded json-io object
      */
     public static <S> Flow<S, Object> encode(Value value) {
         return value.accept(new Value.Visitor<Flow<S, Object>>() {
@@ -69,6 +79,10 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
 
     /**
      * Decode a json-io object as a JSON value.
+     *
+     * @param <S> the state type
+     * @param value the json-io object to decode
+     * @return a flow containing the decoded JSON value
      */
     public static <S> Flow<S, Value> decode(Object value) {
         if (value == null) {
@@ -92,6 +106,9 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
 
     /**
      * Normalize an already-encoded json-io object.
+     *
+     * @param raw the raw json-io object to normalize
+     * @return the normalized json-io object
      */
     public static Object normalizeEncoded(Object raw) {
         if (raw instanceof Value.Null) {
@@ -116,6 +133,13 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
         }
     }
 
+    /**
+     * Decode a json-io object key as a string.
+     *
+     * @param <S> the state type
+     * @param key the key object to decode
+     * @return a flow containing the decoded string key
+     */
     private static <S> Flow<S, String> decodeKey(Object key) {
         if (key instanceof String) {
             return Flows.pure((String) key);

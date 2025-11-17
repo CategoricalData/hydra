@@ -35,11 +35,17 @@ import static hydra.dsl.Flows.unexpected;
  * Functions for decoding of native Java values from Hydra terms.
  */
 public class Expect {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Expect() {
     }
 
     /**
      * Decode a bigfloat value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded BigDecimal value
      */
     public static <S> Flow<S, BigDecimal> bigfloat(final Term term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, BigDecimal>>() {
@@ -57,6 +63,9 @@ public class Expect {
 
     /**
      * Decode a bigint value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded BigInteger value
      */
     public static <S> Flow<S, BigInteger> bigint(final Term term) {
         return bind(integer(term),
@@ -75,6 +84,9 @@ public class Expect {
 
     /**
      * Decode a binary value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded binary string
      */
     public static <S> Flow<S, String> binary(final Term term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
@@ -92,6 +104,9 @@ public class Expect {
 
     /**
      * Decode a boolean value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Boolean value
      */
     public static <S> Flow<S, Boolean> boolean_(final Term term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, Boolean>>() {
@@ -109,6 +124,12 @@ public class Expect {
 
     /**
      * Retrieve and decode a field from a map of field names to terms.
+     * @param <S> the state type
+     * @param <X> the decoded value type
+     * @param fname the field name to retrieve
+     * @param accessor the function to decode the field value
+     * @param fields the map of field names to terms
+     * @return a Flow containing the decoded field value
      */
     public static <S, X> Flow<S, X> field(final Name fname,
                                           final Function<Term, Flow<S, X>> accessor,
@@ -123,6 +144,9 @@ public class Expect {
 
     /**
      * Decode a floating point value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded FloatValue
      */
     public static <S> Flow<S, FloatValue> float_(final Term term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, FloatValue>>() {
@@ -140,6 +164,9 @@ public class Expect {
 
     /**
      * Decode a float32 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Float value
      */
     public static <S> Flow<S, Float> float32(final Term term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Float>>() {
@@ -157,6 +184,9 @@ public class Expect {
 
     /**
      * Decode a float64 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Double value
      */
     public static <S> Flow<S, Double> float64(final Term term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
@@ -172,19 +202,22 @@ public class Expect {
         }));
     }
 
-    /**
-     * Decode a function.
-     */
     // TODO: Uncomment when Reduction.reduce() is restored
-//    public static <X, Y> Function<X, Flow<Graph, Y>> function(
-//            final Function<X, Term> fin,
-//            final Function<Term, Flow<Graph, Y>> fout,
-//            final Term func) {
-//        return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
-//    }
+    // /**
+    //  * Decode a function.
+    //  */
+    // public static <X, Y> Function<X, Flow<Graph, Y>> function(
+    //         final Function<X, Term> fin,
+    //         final Function<Term, Flow<Graph, Y>> fout,
+    //         final Term func) {
+    //     return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
+    // }
 
     /**
      * Decode an int8 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Byte value
      */
     public static <S> Flow<S, Byte> int8(final Term term) {
         return bind(integer(term),
@@ -203,6 +236,9 @@ public class Expect {
 
     /**
      * Decode an int16 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Short value
      */
     public static <S> Flow<S, Short> int16(final Term term) {
         return bind(integer(term),
@@ -221,6 +257,9 @@ public class Expect {
 
     /**
      * Decode an int32 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Integer value
      */
     public static <S> Flow<S, Integer> int32(final Term term) {
         return bind(integer(term),
@@ -239,6 +278,9 @@ public class Expect {
 
     /**
      * Decode an int64 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Long value
      */
     public static <S> Flow<S, Long> int64(final Term term) {
         return bind(integer(term),
@@ -257,6 +299,9 @@ public class Expect {
 
     /**
      * Decode an integer value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded IntegerValue
      */
     public static <S> Flow<S, IntegerValue> integer(final Term term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, IntegerValue>>() {
@@ -274,6 +319,11 @@ public class Expect {
 
     /**
      * Decode a list of values.
+     * @param <S> the state type
+     * @param <X> the element type
+     * @param elems the function to decode list elements
+     * @param term the term to decode
+     * @return a Flow containing the decoded List
      */
     public static <S, X> Flow<S, List<X>> list(final Function<Term, Flow<S, X>> elems, final Term term) {
         return term.accept(new Term.PartialVisitor<Flow<S, List<X>>>() {
@@ -291,6 +341,9 @@ public class Expect {
 
     /**
      * Decode a literal value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Literal
      */
     public static <S> Flow<S, Literal> literal(final Term term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Literal>>() {
@@ -308,6 +361,13 @@ public class Expect {
 
     /**
      * Decode a map of keys to values.
+     * @param <S> the state type
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param keys the function to decode map keys
+     * @param values the function to decode map values
+     * @param term the term to decode
+     * @return a Flow containing the decoded Map
      */
     public static <S, K, V> Flow<S, Map<K, V>> map(
             final Function<Term, Flow<S, K>> keys,
@@ -339,6 +399,11 @@ public class Expect {
 
     /**
      * Decode an optional value.
+     * @param <S> the state type
+     * @param <X> the element type
+     * @param elems the function to decode the optional element
+     * @param term the term to decode
+     * @return a Flow containing the decoded Opt
      */
     public static <S, X> Flow<S, Opt<X>> optional(final Function<Term, Flow<S, X>> elems,
                                                   final Term term) {
@@ -358,6 +423,12 @@ public class Expect {
 
     /**
      * Decode a pair of values.
+     * @param <S> the state type
+     * @param <T1> the first element type
+     * @param <T2> the second element type
+     * @param first the function to decode the first element
+     * @param second the function to decode the second element
+     * @param term the term to decode
      * @return a Flow of the decoded pair
      */
     public static <S, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
@@ -383,6 +454,10 @@ public class Expect {
 
     /**
      * Decode a record.
+     * @param <S> the state type
+     * @param tname the expected record type name
+     * @param term the term to decode
+     * @return a Flow containing the decoded list of fields
      */
     public static <S> Flow<S, List<Field>> record(final Name tname, final Term term) {
         return term.accept(new Term.PartialVisitor<Flow<S, List<Field>>>() {
@@ -404,6 +479,10 @@ public class Expect {
 
     /**
      * Decode a record as a map from field names to terms.
+     * @param <S> the state type
+     * @param tname the expected record type name
+     * @param term the term to decode
+     * @return a Flow containing the decoded map of field names to terms
      */
     public static <S> Flow<S, Map<Name, Term>> recordAsMap(final Name tname, final Term term) {
         return Flows.map(record(tname, term), fields -> {
@@ -417,6 +496,11 @@ public class Expect {
 
     /**
      * Decode a set of values.
+     * @param <S> the state type
+     * @param <X> the element type
+     * @param elems the function to decode set elements
+     * @param term the term to decode
+     * @return a Flow containing the decoded Set
      */
     public static <S, X> Flow<S, Set<X>> set(final Function<Term, Flow<S, X>> elems, final Term term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Set<X>>>() {
@@ -434,6 +518,9 @@ public class Expect {
 
     /**
      * Decode a string value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded String
      */
     public static <S> Flow<S, String> string(final Term term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
@@ -451,6 +538,9 @@ public class Expect {
 
     /**
      * Decode a term.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Term
      */
     public static <S> Flow<S, Term> term(final Term term) {
         return pure(term);
@@ -458,6 +548,9 @@ public class Expect {
 
     /**
      * Decode a type.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Type
      */
     public static <S> Flow<S, Type> type(final Term term) {
         return fail("Core decoding not yet implemented");
@@ -465,6 +558,9 @@ public class Expect {
 
     /**
      * Decode a uint8 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Short value
      */
     public static <S> Flow<S, Short> uint8(final Term term) {
         return bind(integer(term),
@@ -483,6 +579,9 @@ public class Expect {
 
     /**
      * Decode a uint16 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Character value
      */
     public static <S> Flow<S, Character> uint16(final Term term) {
         return bind(integer(term),
@@ -501,6 +600,9 @@ public class Expect {
 
     /**
      * Decode a uint32 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Long value
      */
     public static <S> Flow<S, Long> uint32(final Term term) {
         return bind(integer(term),
@@ -519,6 +621,9 @@ public class Expect {
 
     /**
      * Decode a uint64 value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing the decoded BigInteger value
      */
     public static <S> Flow<S, BigInteger> uint64(final Term term) {
         return bind(integer(term),
@@ -535,6 +640,15 @@ public class Expect {
                 }));
     }
 
+    /**
+     * Helper method to produce an error flow for wrong type cases.
+     *
+     * @param <S> the state type
+     * @param <X> the expected value type
+     * @param category the expected category
+     * @param term the term that had the wrong type
+     * @return a failure flow with an appropriate error message
+     */
     private static <S, X> Flow<S, X> wrongType(String category, Term term) {
         return unexpected(category, PrettyPrinter.printTerm(term));
     }

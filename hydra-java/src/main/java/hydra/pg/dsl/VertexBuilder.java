@@ -5,6 +5,7 @@ import hydra.pg.model.VertexLabel;
 
 /**
  * A builder object for property graph vertices.
+ * @param <V> the vertex identifier type
  */
 public class VertexBuilder<V> extends ElementBuilder<V, Vertex<V>, VertexBuilder<V>> {
     private final VertexLabel label;
@@ -12,6 +13,8 @@ public class VertexBuilder<V> extends ElementBuilder<V, Vertex<V>, VertexBuilder
 
     /**
      * Construct the builder object.
+     * @param label the vertex label
+     * @param id the vertex identifier
      */
     public VertexBuilder(VertexLabel label, V id) {
         this.label = label;

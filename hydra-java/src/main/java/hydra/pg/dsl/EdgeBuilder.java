@@ -6,6 +6,7 @@ import hydra.pg.model.EdgeType;
 
 /**
  * A builder object for property graph edges.
+ * @param <V> the vertex identifier type
  */
 public class EdgeBuilder<V> extends ElementBuilder<V, Edge<V>, EdgeBuilder<V>> {
     private final EdgeLabel label;
@@ -15,6 +16,10 @@ public class EdgeBuilder<V> extends ElementBuilder<V, Edge<V>, EdgeBuilder<V>> {
 
     /**
      * Construct the builder object.
+     * @param label the edge label
+     * @param id the edge identifier
+     * @param outId the outgoing vertex identifier
+     * @param inId the incoming vertex identifier
      */
     public EdgeBuilder(EdgeLabel label, V id, V outId, V inId) {
         this.label = label;

@@ -41,7 +41,8 @@ public class TestSuiteRunner extends HydraTestBase {
         Graph graph = emptyGraph();
         String suffix = " (" + name + ")";
 
-        // Flow<Graph, Term> reduced = Reduction.reduce(eager, input); // TODO: Uncomment when Reduction.reduce is available
+        // Flow<Graph, Term> reduced = Reduction.reduce(eager, input);
+        // TODO: Uncomment when Reduction.reduce is available
         Flow<Graph, Term> reduced = null; // Placeholder
 
         // Skip test if Reduction.reduce is not yet implemented

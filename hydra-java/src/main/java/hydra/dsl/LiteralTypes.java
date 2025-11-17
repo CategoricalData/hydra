@@ -9,76 +9,165 @@ import hydra.core.LiteralType;
  * DSL utilities for working with literal types.
  */
 public interface LiteralTypes {
+    /**
+     * Create a bigfloat literal type.
+     *
+     * @return a bigfloat literal type
+     */
     static LiteralType bigfloat() {
         return float_(new FloatType.Bigfloat(false));
     }
 
+    /**
+     * Create a bigint literal type.
+     *
+     * @return a bigint literal type
+     */
     static LiteralType bigint() {
         return integer(new IntegerType.Bigint(false));
     }
 
+    /**
+     * Create a binary literal type.
+     *
+     * @return a binary literal type
+     */
     static LiteralType binary() {
         return new LiteralType.Binary(false);
     }
 
+    /**
+     * Create a boolean literal type.
+     *
+     * @return a boolean literal type
+     */
     static LiteralType boolean_() {
         return new LiteralType.Boolean_(false);
     }
 
+    /**
+     * Create a float32 literal type.
+     *
+     * @return a float32 literal type
+     */
     static LiteralType float32() {
         return float_(new FloatType.Float32(false));
     }
 
+    /**
+     * Create a float64 literal type.
+     *
+     * @return a float64 literal type
+     */
     static LiteralType float64() {
         return float_(new FloatType.Float64(false));
     }
 
+    /**
+     * Create a float literal type from a FloatType.
+     *
+     * @param ftype the float type specification
+     * @return a float literal type
+     */
     static LiteralType float_(final FloatType ftype) {
         return new LiteralType.Float_(ftype);
     }
 
+    /**
+     * Create an int16 literal type.
+     *
+     * @return an int16 literal type
+     */
     static LiteralType int16() {
         return integer(new IntegerType.Int16(false));
     }
 
+    /**
+     * Create an int32 literal type.
+     *
+     * @return an int32 literal type
+     */
     static LiteralType int32() {
         return integer(new IntegerType.Int32(false));
     }
 
+    /**
+     * Create an int64 literal type.
+     *
+     * @return an int64 literal type
+     */
     static LiteralType int64() {
         return integer(new IntegerType.Int64(false));
     }
 
+    /**
+     * Create an int8 literal type.
+     *
+     * @return an int8 literal type
+     */
     static LiteralType int8() {
         return integer(new IntegerType.Int8(false));
     }
 
+    /**
+     * Create an integer literal type from an IntegerType.
+     *
+     * @param itype the integer type specification
+     * @return an integer literal type
+     */
     static LiteralType integer(final IntegerType itype) {
         return new LiteralType.Integer_(itype);
     }
 
+    /**
+     * Create a string literal type.
+     *
+     * @return a string literal type
+     */
     static LiteralType string() {
         return new LiteralType.String_(false);
     }
 
+    /**
+     * Create a uint16 literal type.
+     *
+     * @return a uint16 literal type
+     */
     static LiteralType uint16() {
         return integer(new IntegerType.Uint16(false));
     }
 
+    /**
+     * Create a uint32 literal type.
+     *
+     * @return a uint32 literal type
+     */
     static LiteralType uint32() {
         return integer(new IntegerType.Uint32(false));
     }
 
+    /**
+     * Create a uint64 literal type.
+     *
+     * @return a uint64 literal type
+     */
     static LiteralType uint64() {
         return integer(new IntegerType.Uint64(false));
     }
 
+    /**
+     * Create a uint8 literal type.
+     *
+     * @return a uint8 literal type
+     */
     static LiteralType uint8() {
         return integer(new IntegerType.Uint8(false));
     }
 
     /**
      * Encode a literal type as a string.
+     * @param type the literal type to encode
+     * @return a string representation of the literal type
      */
     static String showLiteralType(LiteralType type) {
         return type.accept(new LiteralType.Visitor<String>() {

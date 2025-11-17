@@ -22,6 +22,9 @@ public class Lexical {
 
     /**
      * Get a primitive from a graph by name; the primitive is not required to exist.
+     * @param g the graph to search
+     * @param name the name of the primitive
+     * @return an optional containing the primitive if found
      */
     public static  Opt<Primitive> lookupPrimitive(Graph g, Name name) {
         return Opt.ofNullable(g.primitives.get(name));
@@ -29,6 +32,8 @@ public class Lexical {
 
     /**
      * Get a primitive from the current graph by name; the primitive is required to exist.
+     * @param name the name of the primitive
+     * @return a flow containing the primitive
      */
     public static  Flow<Graph, Primitive> requirePrimitive(Name name) {
         return bind(getState(), g -> {
