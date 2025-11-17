@@ -565,9 +565,8 @@ encodeTermInline env noCast term = case deannotateTerm term of
     TermTypeApplication (TypeApplicationTerm body _) -> do
       pybase <- encodeTermInline env True $ deannotateAndDeTypeApplyTerm body
       withCast pybase
-    TermTypeLambda tl@(TypeLambda _ body) ->
-      withTypeLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env tl $ \env2 ->
-        encodeTermInline env2 noCast body
+    TermTypeLambda tl@(TypeLambda _ body) -> withTypeLambda env tl $ \env2 ->
+      encodeTermInline env2 noCast body
     TermUnion (Injection tname field) -> do
       rt <- inGraphContext $ requireUnionType tname
       if isEnumRowType rt
@@ -658,7 +657,7 @@ encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.te
             return [Py.CaseBlock patterns Nothing body]
           toCaseBlock isEnum (Field fname fterm) = case deannotateTerm fterm of
             TermFunction (FunctionLambda lam@(Lambda v _ body)) ->
-              withLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env lam $ \env2 -> do
+              withLambda env lam $ \env2 -> do
                 stmts <- encodeTermMultiline env2 body
                 let pyBody = indentedBlock Nothing [stmts]
                 let pattern = if isEnum
@@ -1004,6 +1003,15 @@ variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
 
 withBindings :: [Binding] -> Flow PyGraph a -> Flow PyGraph a
 withBindings = withGraphBindings pyGraphGraph PyGraph pyGraphMetadata
+
+withLambda :: PythonEnvironment -> Lambda -> (PythonEnvironment -> Flow s a) -> Flow s a
+withLambda = withLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })
+
+withLet :: PythonEnvironment -> Let -> (PythonEnvironment -> Flow s a) -> Flow s a
+withLet = withLetContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })
+
+withTypeLambda :: PythonEnvironment -> TypeLambda -> (PythonEnvironment -> Flow s a) -> Flow s a
+withTypeLambda = withTypeLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })
 
 withUpdatedGraph :: (Graph -> Graph) -> Flow PyGraph a -> Flow PyGraph a
 withUpdatedGraph = withUpdatedCoderGraph pyGraphGraph pyGraphMetadata PyGraph
