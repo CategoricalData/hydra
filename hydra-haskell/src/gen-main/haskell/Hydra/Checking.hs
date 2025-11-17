@@ -197,7 +197,12 @@ checkTypeVariables tx typ =
                   "unbound type variable \"",
                   Core.unName v1,
                   "\" in ",
-                  (Core__.type_ typ)]))))
+                  Core__.type_ typ,
+                  ". Local variables: {",
+                  Strings.intercalate ", " (Lists.map Core.unName (Sets.toList vars)),
+                  "}, schema variables: {",
+                  Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.inferenceContextSchemaTypes cx))),
+                  "}"]))))
                 _ -> dflt) typ)
         in (Monads.withTrace (Strings.cat [
           "checking variables of: ",
@@ -507,7 +512,10 @@ typeOfUnwrap tx typeArgs tname = (Flows.bind (Schemas.requireSchemaType (Typing.
 typeOfVariable :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)
 typeOfVariable tx typeArgs name = (Flows.bind (Maybes.maybe (Flows.fail (Strings.cat [
   "unbound variable: ",
-  (Core.unName name)])) Schemas.instantiateType (Maps.lookup name (Typing.typeContextTypes tx))) (\t -> applyTypeArgumentsToType tx typeArgs t))
+  Core.unName name,
+  ". Variables: {",
+  Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
+  "}"])) Schemas.instantiateType (Maps.lookup name (Typing.typeContextTypes tx))) (\t -> applyTypeArgumentsToType tx typeArgs t))
 
 typeOfWrappedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.WrappedTerm -> Compute.Flow t0 Core.Type)
 typeOfWrappedTerm tx typeArgs wt =  

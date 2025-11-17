@@ -110,16 +110,15 @@ bindingDef = define "binding" $
 eliminationDef :: TBinding (Elimination -> String)
 eliminationDef = define "elimination" $
   doc "Show an elimination as a string" $
-  "elm" ~> cases _Elimination (var "elm") Nothing [
+  "elm" ~>
+  cases _Elimination (var "elm") Nothing [
     _Elimination_product>>: "tp" ~>
-      "arity" <~ Core.tupleProjectionArity (var "tp") $
-      "index" <~ Core.tupleProjectionIndex (var "tp") $
 --      "domain" <~ Core.tupleProjectionDomain (var "tp") $ -- TODO: show domain if present
       Strings.cat $ list [
         string "[",
-        Literals.showInt32 $ var "index",
+        Literals.showInt32 (Core.tupleProjectionIndex $ var "tp"),
         string "/",
-        Literals.showInt32 $ var "arity",
+        Literals.showInt32 (Core.tupleProjectionArity $ var "tp"),
         string "]"],
     _Elimination_record>>: "proj" ~>
       "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
@@ -154,7 +153,7 @@ fieldDef = define "field" $
   "field" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  Strings.cat2 (var "fname") $ Strings.cat2 (string "=") (ref termDef @@ var "fterm")
+  Strings.cat $ list [var "fname",  "=", ref termDef @@ var "fterm"]
 
 fieldTypeDef :: TBinding (FieldType -> String)
 fieldTypeDef = define "fieldType" $
