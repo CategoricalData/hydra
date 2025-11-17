@@ -24,15 +24,27 @@ import static hydra.dsl.Types.string;
  * Converts a string to a list of character code points.
  */
 public class ToList extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.toList"
+     */
     public Name name() {
         return new Name("hydra.lib.strings.toList");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that converts a string to a list of integers
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), list(int32())));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> {

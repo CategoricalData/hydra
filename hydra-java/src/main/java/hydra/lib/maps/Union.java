@@ -26,16 +26,28 @@ import static hydra.dsl.Types.scheme;
  * Computes the union of two sets.
  */
 public class Union extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.union");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(map("k", "v"), map("k", "v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(0)), mp1 ->
@@ -47,21 +59,25 @@ public class Union extends PrimitiveFunction {
     }
 
     /**
-     * Combines two sets.
-     * @param mp1 the set1
-     * @return the union
+     * Combines two maps.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param mp1 the first map
+     * @return a function that takes a second map and returns the union
      */
-        public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Map<K, V> mp1) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Map<K, V> mp1) {
         return mp2 -> apply(mp1, mp2);
     }
 
     /**
-     * Combines two sets.
-     * @param mp1 the set1
-     * @param mp2 the set2
-     * @return the union
+     * Combines two maps.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param mp1 the first map
+     * @param mp2 the second map
+     * @return the union of the two maps
      */
-        public static <K, V> Map<K, V> apply(Map<K, V> mp1, Map<K, V> mp2) {
+    public static <K, V> Map<K, V> apply(Map<K, V> mp1, Map<K, V> mp2) {
         Map<K, V> result = new HashMap<>(mp1);
         result.putAll(mp2);
         return result;

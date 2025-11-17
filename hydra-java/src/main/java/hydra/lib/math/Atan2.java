@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Computes the arctangent of y/x.
  */
 public class Atan2 extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.atan2");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), float64(), float64()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.float64(args.get(0)), Expect.float64(args.get(1)),
@@ -42,7 +54,7 @@ public class Atan2 extends PrimitiveFunction {
      * @param y the y
      * @return the arctangent
      */
-        public static Function<Double, Double> apply(Double y) {
+    public static Function<Double, Double> apply(Double y) {
         return (x) -> apply(y, x);
     }
 
@@ -52,7 +64,7 @@ public class Atan2 extends PrimitiveFunction {
      * @param x the x
      * @return the arctangent
      */
-        public static Double apply(Double y, Double x) {
+    public static Double apply(Double y, Double x) {
         return Math.atan2(y, x);
     }
 }

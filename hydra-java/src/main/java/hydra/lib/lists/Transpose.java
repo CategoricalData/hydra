@@ -45,10 +45,11 @@ public class Transpose extends PrimitiveFunction {
 
     /**
      * Transposes rows and columns.
-     * @param matrix the matrix
+     * @param <X> the element type
+     * @param matrix the matrix to transpose
      * @return the transposed matrix
      */
-        public static <X> List<List<X>> apply(List<List<X>> matrix) {
+    public static <X> List<List<X>> apply(List<List<X>> matrix) {
         if (matrix.isEmpty() || matrix.get(0).isEmpty()) {
             return List.of();
         }

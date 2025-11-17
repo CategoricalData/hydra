@@ -25,16 +25,28 @@ import static hydra.dsl.Types.scheme;
  * Maps a flow function over map keys.
  */
 public class MapKeys extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.mapKeys");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k1", "k2", "v",
             function(function("k1", "k2"), map("k1", "v"), map("k2", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(
@@ -43,15 +55,24 @@ public class MapKeys extends PrimitiveFunction {
 
     /**
      * Transforms map keys with flow.
-     * @param mapping the function
-     * @return the flow of results
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V> the value type
+     * @param mapping the function to apply to each key
+     * @return a function that takes a map and returns the map with transformed keys
      */
-        public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
+    public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
     /**
      * Apply the function to both arguments.
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V> the value type
+     * @param mapping the function to apply to each key
+     * @param arg the input map
+     * @return the map with transformed keys
      */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
         java.util.Map<K2, V> result = new HashMap<>();

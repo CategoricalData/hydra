@@ -20,27 +20,40 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
 /**
- * Primitive function: BigintToBigfloat.
+ * Primitive function which converts a bigint (arbitrary-precision integer) to a bigfloat (arbitrary-precision decimal).
+ * This conversion is lossless.
  */
 public class BigintToBigfloat extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.bigintToBigfloat"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.bigintToBigfloat");
     }
 
+    /**
+     * Returns the type scheme for this function: bigint -&gt; bigfloat.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(Types.bigint(), Types.bigfloat()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts bigint terms to bigfloat terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.bigint(args.get(0)), s -> Terms.bigfloat(apply(s)));
     }
 
     /**
-     * Applies the BigintToBigfloat operation.
-     * @param value the value
-     * @return the result
+     * Converts a BigInteger value to a BigDecimal.
+     * @param value the BigInteger value to convert
+     * @return the BigDecimal representation of the value
      */
     public static BigDecimal apply(BigInteger value) {
         return new BigDecimal(value);

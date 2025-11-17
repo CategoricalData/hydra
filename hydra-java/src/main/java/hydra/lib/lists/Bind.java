@@ -46,20 +46,24 @@ public class Bind extends PrimitiveFunction {
 
     /**
      * Chains flow computations.
-     * @param args the flowValue
-     * @return the result flow
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param args the list of input values
+     * @return a function that takes a mapping function and returns the result list
      */
-        public static <X, Y> Function<Function<X, List<Y>>, List<Y>> apply(List<X> args) {
+    public static <X, Y> Function<Function<X, List<Y>>, List<Y>> apply(List<X> args) {
         return (mapping) -> apply(args, mapping);
     }
 
     /**
      * Chains flow computations.
-     * @param args the flowValue
-     * @param mapping the function
-     * @return the result flow
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param args the list of input values
+     * @param mapping the function to apply to each element
+     * @return the flattened result list
      */
-        public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
+    public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
         return args.stream().flatMap(x -> mapping.apply(x).stream()).collect(Collectors.toList());
     }
 }

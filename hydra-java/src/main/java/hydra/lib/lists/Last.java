@@ -37,10 +37,11 @@ public class Last extends PrimitiveFunction {
 
     /**
      * Returns the last element.
-     * @param list the list
+     * @param <X> the element type
+     * @param list the list to get the last element from
      * @return the last element
      */
-        public static <X> X apply(List<X> list) {
+    public static <X> X apply(List<X> list) {
         return list.get(list.size() - 1);
     }
 }

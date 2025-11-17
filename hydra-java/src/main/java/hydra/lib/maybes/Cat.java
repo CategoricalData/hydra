@@ -25,15 +25,27 @@ import static hydra.dsl.Types.scheme;
  * Filters and extracts Just values.
  */
 public class Cat extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.cat"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.cat");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for extracting present values from a list of optionals
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", function(list(optional("a")), list("a")));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that filters and extracts Just values from a list
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(x -> Expect.optional(Flows::pure, x), args.get(0)),
@@ -41,7 +53,10 @@ public class Cat extends PrimitiveFunction {
     }
 
     /**
-     * Apply the function to its single argument.
+     * Filters and extracts Just values from a list of optionals.
+     * @param <X> the element type
+     * @param opt the list of optional values
+     * @return a list containing only the present values
      */
     public static <X> List<X> apply(List<Opt<X>> opt) {
         List<X> result = new ArrayList<>();

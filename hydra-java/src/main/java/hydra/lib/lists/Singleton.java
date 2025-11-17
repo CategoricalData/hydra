@@ -39,10 +39,11 @@ public class Singleton extends PrimitiveFunction {
 
     /**
      * Creates a list with one element.
-     * @param elem the value
+     * @param <X> the element type
+     * @param elem the element to wrap in a list
      * @return the singleton list
      */
-        public static <X> List<X> apply(X elem) {
+    public static <X> List<X> apply(X elem) {
         return Collections.singletonList(elem);
     }
 }

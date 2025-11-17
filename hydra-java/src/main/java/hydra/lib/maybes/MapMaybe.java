@@ -28,15 +28,27 @@ import static hydra.dsl.Types.scheme;
  * Maps a flow function over Maybe.
  */
 public class MapMaybe extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.mapMaybe"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.mapMaybe");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for mapping an optional-returning function over a list
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", "b", function(function("a", optional("b")), list("a"), list("b")));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that maps an optional-returning function over a list
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.list(Flows::pure, args.get(1)), inputList -> {
@@ -52,21 +64,25 @@ public class MapMaybe extends PrimitiveFunction {
     }
 
     /**
-     * Applies a flow function to Maybe value.
-     * @param f the function
-     * @return the flow of Maybe
+     * Maps an optional-returning function over a list and collects present values. Curried version.
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param f the optional-returning function to map
+     * @return a function that takes a list and returns a list of present values
      */
-        public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Opt<Y>> f) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Opt<Y>> f) {
         return (list) -> apply(f, list);
     }
 
     /**
-     * Applies a flow function to Maybe value.
-     * @param f the function
-     * @param list the maybeValue
-     * @return the flow of Maybe
+     * Maps an optional-returning function over a list and collects present values.
+     * @param <X> the input element type
+     * @param <Y> the output element type
+     * @param f the optional-returning function to map
+     * @param list the list to map over
+     * @return a list containing only the present values from applying the function
      */
-        public static <X, Y> List<Y> apply(Function<X, Opt<Y>> f, List<X> list) {
+    public static <X, Y> List<Y> apply(Function<X, Opt<Y>> f, List<X> list) {
         return list.stream()
             .map(f)
             .filter(Opt::isPresent)

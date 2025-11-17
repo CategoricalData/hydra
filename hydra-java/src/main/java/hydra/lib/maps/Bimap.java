@@ -26,10 +26,18 @@ import static hydra.dsl.Types.map;
  * Transforms both keys and values.
  */
 public class Bimap extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.bimap");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return new TypeScheme(
@@ -37,6 +45,10 @@ public class Bimap extends PrimitiveFunction {
                 function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
@@ -52,18 +64,30 @@ public class Bimap extends PrimitiveFunction {
 
     /**
      * Maps functions over keys and values.
-     * @return the transformed map
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param kf the key transformation function
+     * @return a curried function that takes a value function, a map, and returns the transformed map
      */
-        public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<Map<K1, V1>, Map<K2, V2>>> apply(
+    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<Map<K1, V1>, Map<K2, V2>>> apply(
             Function<K1, K2> kf) {
         return vf -> mp -> apply(kf, vf, mp);
     }
 
     /**
      * Maps functions over keys and values.
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param kf the key transformation function
+     * @param vf the value transformation function
+     * @param mp the input map
      * @return the transformed map
      */
-        public static <K1, K2, V1, V2> Map<K2, V2> apply(
+    public static <K1, K2, V1, V2> Map<K2, V2> apply(
             Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
         Map<K2, V2> result = new HashMap<>();
         for (Map.Entry<K1, V1> entry : mp.entrySet()) {

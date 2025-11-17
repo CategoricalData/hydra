@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Performs subtraction on two numbers.
  */
 public class Sub extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.sub");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int32(), int32(), int32()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map2(Expect.int32(args.get(0)), Expect.int32(args.get(1)),
@@ -42,7 +54,7 @@ public class Sub extends PrimitiveFunction {
      * @param minuend the minuend
      * @return the difference
      */
-        public static Function<Integer, Integer> apply(Integer minuend) {
+    public static Function<Integer, Integer> apply(Integer minuend) {
         return (subtrahend) -> apply(minuend, subtrahend);
     }
 
@@ -52,7 +64,7 @@ public class Sub extends PrimitiveFunction {
      * @param subtrahend the subtrahend
      * @return the difference
      */
-        public static Integer apply(Integer minuend, Integer subtrahend) {
+    public static Integer apply(Integer minuend, Integer subtrahend) {
         return (minuend - subtrahend);
     }
 }

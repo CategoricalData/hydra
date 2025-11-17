@@ -41,6 +41,9 @@ public class Nub extends PrimitiveFunction {
 
     /**
      * Apply the function to the single argument.
+     * @param <X> the element type
+     * @param arg the list to remove duplicates from
+     * @return the list with duplicates removed
      */
     public static <X> List<X> apply(List<X> arg) {
         Set<X> visited = new HashSet<>();

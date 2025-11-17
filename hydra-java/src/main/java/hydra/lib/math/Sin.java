@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Computes the sine of an angle.
  */
 public class Sin extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.sin");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float64(), float64()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.float64(args.get(0)),
@@ -42,7 +54,7 @@ public class Sin extends PrimitiveFunction {
      * @param x the angle
      * @return the sine value
      */
-        public static Double apply(Double x) {
+    public static Double apply(Double x) {
         return Math.sin(x);
     }
 }

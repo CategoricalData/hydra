@@ -21,15 +21,27 @@ import static hydra.dsl.Types.scheme;
  * Converts a character to lowercase.
  */
 public class ToLower extends PrimitiveFunction {
+    /**
+     * Gets the qualified name of this primitive function.
+     * @return the name "hydra.lib.chars.toLower"
+     */
     public Name name() {
         return new Name("hydra.lib.chars.toLower");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme representing int32 to int32 function
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int32(), int32()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that takes a list of terms and returns a flow producing an int32 term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(

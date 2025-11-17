@@ -47,20 +47,22 @@ public class Filter extends PrimitiveFunction {
 
     /**
      * Filters entries where values match predicate.
-     * @param pred the predicate
-     * @return the filtered map
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @return a function that filters a list by the predicate
      */
-        public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
         return lst -> apply(pred, lst);
     }
 
     /**
      * Filters entries where values match predicate.
-     * @param pred the predicate
-     * @param lst the map
-     * @return the filtered map
+     * @param <X> the element type
+     * @param pred the predicate to test elements
+     * @param lst the list to filter
+     * @return the filtered list
      */
-        public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
         return lst.stream().filter(pred).collect(Collectors.toList());
     }
 }

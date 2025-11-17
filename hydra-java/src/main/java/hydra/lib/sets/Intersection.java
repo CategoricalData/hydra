@@ -21,18 +21,30 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 
 /**
- * Computes the intersection.
+ * Computes the intersection of two sets.
  */
 public class Intersection extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.sets.intersection"
+     */
     public Name name() {
         return new Name("hydra.lib.sets.intersection");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that computes set intersection
+     */
     @Override
     public TypeScheme type() {
         return scheme("x", function(set("x"), set("x"), set("x")));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map2(
@@ -42,16 +54,21 @@ public class Intersection extends PrimitiveFunction {
     }
 
     /**
-     * Finds common elements.
-     * @param s1 the set1
-     * @return the intersection
+     * Computes the intersection of two sets.
+     * @param <X> the type of elements in the sets
+     * @param s1 the first set
+     * @return a function that takes the second set and returns the intersection
      */
-        public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
+    public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
         return (s2) -> apply(s1, s2);
     }
 
     /**
-     * Apply the function to both arguments.
+     * Computes the intersection of two sets.
+     * @param <X> the type of elements in the sets
+     * @param s1 the first set
+     * @param s2 the second set
+     * @return a new set containing elements common to both sets
      */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
         Set<X> newSet = new HashSet<>(s1);

@@ -41,10 +41,11 @@ public class Init extends PrimitiveFunction {
 
     /**
      * Returns all but the last element.
-     * @param lst the list
-     * @return the initial elements
+     * @param <X> the element type
+     * @param lst the list to get the initial elements from
+     * @return the initial elements (all except the last)
      */
-        public static <X> List<X> apply(List<X> lst) {
+    public static <X> List<X> apply(List<X> lst) {
         if (lst.isEmpty()) {
             throw new IllegalArgumentException("init: empty list");
         }

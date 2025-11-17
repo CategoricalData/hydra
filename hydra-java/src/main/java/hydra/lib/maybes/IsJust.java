@@ -23,26 +23,39 @@ import static hydra.dsl.Types.scheme;
  * Checks if value is Just.
  */
 public class IsJust extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.maybes.isJust"
+     */
     public Name name() {
         return new Name("hydra.lib.maybes.isJust");
     }
 
+    /**
+     * Returns the type scheme of this primitive function.
+     * @return the type scheme for checking if an optional is present
+     */
     @Override
     public TypeScheme type() {
         return scheme("a", function(optional("a"), "a"));
     }
 
+    /**
+     * Returns the implementation of this primitive function.
+     * @return a function that checks if an optional value is present
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)), x -> Terms.boolean_(IsJust.apply(x)));
     }
 
     /**
-     * Checks for presence.
-     * @param opt the maybeValue
-     * @return true if Just, false otherwise
+     * Checks if an optional value is present (Just).
+     * @param <X> the value type
+     * @param opt the optional value to check
+     * @return true if the optional contains a value, false otherwise
      */
-        public static <X> boolean apply(Opt<X> opt) {
+    public static <X> boolean apply(Opt<X> opt) {
         return opt.isPresent();
     }
 }

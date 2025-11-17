@@ -31,7 +31,8 @@ public class Foldl extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("a","b",
-                function(function(Types.var("b"), Types.var("a"), Types.var("b")), variable("b"), list("a"), variable("b")));
+                function(function(Types.var("b"), Types.var("a"), Types.var("b")), variable("b"), list("a"),
+                        variable("b")));
     }
 
     @Override
@@ -51,31 +52,37 @@ public class Foldl extends PrimitiveFunction {
 
     /**
      * Performs a left fold in flow context.
-     * @param mapping the function
-     * @return the flow of result
+     * @param <X> the input element type
+     * @param <Y> the accumulator type
+     * @param mapping the folding function
+     * @return a function that takes an initial value and returns a function that takes a list
      */
-        public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
+    public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
     /**
      * Performs a left fold in flow context.
-     * @param mapping the function
-     * @param init the initial
-     * @return the flow of result
+     * @param <X> the input element type
+     * @param <Y> the accumulator type
+     * @param mapping the folding function
+     * @param init the initial accumulator value
+     * @return a function that takes a list and returns the folded result
      */
-        public static <X, Y> Function<List<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
+    public static <X, Y> Function<List<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
         return xs -> apply(mapping, init, xs);
     }
 
     /**
      * Performs a left fold in flow context.
-     * @param mapping the function
-     * @param init the initial
-     * @param xs the list
-     * @return the flow of result
+     * @param <X> the input element type
+     * @param <Y> the accumulator type
+     * @param mapping the folding function
+     * @param init the initial accumulator value
+     * @param xs the list to fold
+     * @return the folded result
      */
-        public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
+    public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
         Y cur = init;
         for (X x : xs) {
             cur = mapping.apply(cur).apply(x);

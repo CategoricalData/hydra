@@ -60,10 +60,11 @@ public class Group extends PrimitiveFunction {
 
     /**
      * Groups consecutive equal elements.
-     * @param lst the list
-     * @return the grouped list
+     * @param <X> the element type
+     * @param lst the list to group
+     * @return the list of groups of consecutive equal elements
      */
-        public static <X> List<List<X>> apply(List<X> lst) {
+    public static <X> List<List<X>> apply(List<X> lst) {
         List<List<X>> groups = new ArrayList<>();
         if (lst.isEmpty()) {
             return groups;
@@ -73,8 +74,8 @@ public class Group extends PrimitiveFunction {
         for (int i = 1; i < lst.size(); i++) {
             X current = lst.get(i);
             X previous = lst.get(i - 1);
-            if ((current == null && previous == null) ||
-                (current != null && current.equals(previous))) {
+            if ((current == null && previous == null)
+                    || (current != null && current.equals(previous))) {
                 currentGroup.add(current);
             } else {
                 groups.add(currentGroup);

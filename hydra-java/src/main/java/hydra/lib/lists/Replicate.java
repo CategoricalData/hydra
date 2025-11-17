@@ -47,20 +47,22 @@ public class Replicate extends PrimitiveFunction {
 
     /**
      * Replicates a value n times.
-     * @param n the n
-     * @return the replicated list
+     * @param <X> the element type
+     * @param n the number of copies to create
+     * @return a function that replicates an element n times
      */
-        public static <X> Function<X, List<X>> apply(Integer n) {
+    public static <X> Function<X, List<X>> apply(Integer n) {
         return elem -> apply(n, elem);
     }
 
     /**
      * Replicates a value n times.
-     * @param n the n
-     * @param elem the value
-     * @return the replicated list
+     * @param <X> the element type
+     * @param n the number of copies to create
+     * @param elem the element to replicate
+     * @return a list containing n copies of the element
      */
-        public static <X> List<X> apply(Integer n, X elem) {
+    public static <X> List<X> apply(Integer n, X elem) {
         return new ArrayList<>(Collections.nCopies(n, elem));
     }
 }

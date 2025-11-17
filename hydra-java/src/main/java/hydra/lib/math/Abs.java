@@ -22,15 +22,27 @@ import static hydra.dsl.Types.scheme;
  * Computes the absolute value of a number.
  */
 public class Abs extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.abs");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(int32(), int32()));
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int32(args.get(0)),
@@ -42,7 +54,7 @@ public class Abs extends PrimitiveFunction {
      * @param num the number
      * @return the absolute value
      */
-        public static Integer apply(Integer num) {
+    public static Integer apply(Integer num) {
         return Math.abs(num);
     }
 }

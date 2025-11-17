@@ -1,28 +1,14 @@
 package hydra.lib;
 
+import hydra.lib.equality.Compare;
 import hydra.lib.equality.Equal;
-import hydra.lib.equality.EqualBigfloat;
-import hydra.lib.equality.EqualBigint;
-import hydra.lib.equality.EqualBinary;
-import hydra.lib.equality.EqualBoolean;
-import hydra.lib.equality.EqualFloat32;
-import hydra.lib.equality.EqualFloat64;
-import hydra.lib.equality.EqualInt16;
-import hydra.lib.equality.EqualInt32;
-import hydra.lib.equality.EqualInt64;
-import hydra.lib.equality.EqualInt8;
-import hydra.lib.equality.EqualString;
-import hydra.lib.equality.EqualTerm;
-import hydra.lib.equality.EqualType;
-import hydra.lib.equality.EqualUint16;
-import hydra.lib.equality.EqualUint32;
-import hydra.lib.equality.EqualUint64;
-import hydra.lib.equality.EqualUint8;
-import hydra.lib.equality.GtInt32;
-import hydra.lib.equality.GteInt32;
+import hydra.lib.equality.Gt;
+import hydra.lib.equality.Gte;
 import hydra.lib.equality.Identity;
-import hydra.lib.equality.LtInt32;
-import hydra.lib.equality.LteInt32;
+import hydra.lib.equality.Lt;
+import hydra.lib.equality.Lte;
+import hydra.lib.equality.Max;
+import hydra.lib.equality.Min;
 import hydra.lib.chars.IsAlphaNum;
 import hydra.lib.chars.IsLower;
 import hydra.lib.chars.IsSpace;
@@ -46,6 +32,8 @@ public class Libraries {
 
     /**
      * All standard primitive functions as a list.
+     *
+     * @return a list containing all standard primitive functions from all categories
      */
     public static List<PrimitiveFunction> standardPrimitives() {
         List<PrimitiveFunction> prims = new ArrayList<>();
@@ -77,29 +65,15 @@ public class Libraries {
 
     private static List<PrimitiveFunction> equalityPrimitives() {
         return Arrays.asList(
+                new Compare(),
                 new Equal(),
-                new EqualBigfloat(),
-                new EqualBigint(),
-                new EqualBinary(),
-                new EqualBoolean(),
-                new EqualFloat32(),
-                new EqualFloat64(),
-                new EqualInt8(),
-                new EqualInt16(),
-                new EqualInt32(),
-                new EqualInt64(),
-                new EqualString(),
-                new EqualTerm(),
-                new EqualType(),
-                new EqualUint8(),
-                new EqualUint16(),
-                new EqualUint32(),
-                new EqualUint64(),
-                new GteInt32(),
-                new GtInt32(),
+                new Gt(),
+                new Gte(),
                 new Identity(),
-                new LteInt32(),
-                new LtInt32());
+                new Lt(),
+                new Lte(),
+                new Max(),
+                new Min());
     }
 
     private static List<PrimitiveFunction> flowsPrimitives() {

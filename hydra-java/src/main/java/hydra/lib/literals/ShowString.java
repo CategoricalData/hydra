@@ -18,29 +18,42 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 
 /**
- * Primitive function: ShowString.
+ * Primitive function which converts a string to its quoted string literal representation.
+ * Escapes special characters and surrounds the string with double quotes.
  */
 public class ShowString extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showString"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showString");
     }
 
+    /**
+     * Returns the type scheme for this function: string -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts string terms to quoted string literal terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> Terms.string(apply(s)));
     }
 
     /**
-     * Applies the ShowString operation.
-     * @param value the value
-     * @return the result
+     * Converts a string to its quoted and escaped literal representation.
+     * @param value the string value to convert
+     * @return the quoted and escaped string literal
      */
-        public static String apply(String value) {
+    public static String apply(String value) {
         return "\"" + StringEscapeUtils.escapeJava(value) + "\"";
     }
 }

@@ -19,29 +19,42 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
 /**
- * Primitive function: BigintToInt16.
+ * Primitive function which converts a bigint (arbitrary-precision integer) to an int16 (16-bit signed integer).
+ * This conversion may result in loss of precision if the value is outside the int16 range.
  */
 public class BigintToInt16 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.bigintToInt16"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.bigintToInt16");
     }
 
+    /**
+     * Returns the type scheme for this function: bigint -&gt; int16.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(Types.bigint(), Types.int16()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts bigint terms to int16 terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.bigint(args.get(0)), s -> Terms.int16(apply(s)));
     }
 
     /**
-     * Applies the BigintToInt16 operation.
-     * @param value the value
-     * @return the result
+     * Converts a BigInteger value to a Short (16-bit signed integer).
+     * @param value the BigInteger value to convert
+     * @return the Short representation of the value
      */
-        public static Short apply(BigInteger value) {
+    public static Short apply(BigInteger value) {
         return value.shortValue();
     }
 }

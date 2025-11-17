@@ -46,7 +46,8 @@ public class Apply extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            throw new UnsupportedOperationException("Apply.implementation() not yet available - requires OptionalCases");
+            throw new UnsupportedOperationException(
+                    "Apply.implementation() not yet available - requires OptionalCases");
         };
     }
     // @Override
@@ -70,20 +71,26 @@ public class Apply extends PrimitiveFunction {
 
     /**
      * Applies a function within a flow.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the flowFunction
      * @return the result flow
      */
-        public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Flow<S, Function<X, Y>> mapping) {
+    public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Flow<S, Function<X, Y>> mapping) {
         return input -> apply(mapping, input);
     }
 
     /**
      * Applies a function within a flow.
+     * @param <S> the state type
+     * @param <X> the input type
+     * @param <Y> the output type
      * @param mapping the flowFunction
      * @param input the flowValue
      * @return the result flow
      */
-        public static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
+    public static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
         return Flows.apply(mapping, input);
     }
 }

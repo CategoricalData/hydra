@@ -21,16 +21,29 @@ import static hydra.dsl.Types.var;
  * Performs conditional branching based on a boolean condition.
  */
 public class IfElse extends PrimitiveFunction {
+    /**
+     * Returns the fully qualified name of this primitive function.
+     * @return the name "hydra.lib.logic.ifElse"
+     */
     public Name name() {
         return new Name("hydra.lib.logic.ifElse");
     }
 
+    /**
+     * Returns the type scheme for this function.
+     * @return a polymorphic type scheme representing a function that takes two values of type 'a',
+     *         a boolean condition, and returns a value of type 'a'
+     */
     @Override
     public TypeScheme type() {
         return scheme("a",
             function(var("a"), var("a"), boolean_(), var("a")));
     }
 
+    /**
+     * Returns the implementation of this primitive function as a Flow computation.
+     * @return a function that takes a list of terms and returns a Flow producing the selected value
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.boolean_(args.get(0)), b -> IfElse.apply(b, args.get(1), args.get(2)));

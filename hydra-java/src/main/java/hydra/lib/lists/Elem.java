@@ -42,20 +42,22 @@ public class Elem extends PrimitiveFunction {
 
     /**
      * Checks if the element is present.
-     * @param elem the element
-     * @return true if present, false otherwise
+     * @param <X> the element type
+     * @param elem the element to search for
+     * @return a function that checks if the element is present in a list
      */
-        public static <X> Function<List<X>, Boolean> apply(X elem) {
+    public static <X> Function<List<X>, Boolean> apply(X elem) {
         return lst -> apply(elem, lst);
     }
 
     /**
      * Checks if the element is present.
-     * @param elem the element
-     * @param lst the list
+     * @param <X> the element type
+     * @param elem the element to search for
+     * @param lst the list to search in
      * @return true if present, false otherwise
      */
-        public static <X> Boolean apply(X elem, List<X> lst) {
+    public static <X> Boolean apply(X elem, List<X> lst) {
         return lst.contains(elem);
     }
 }

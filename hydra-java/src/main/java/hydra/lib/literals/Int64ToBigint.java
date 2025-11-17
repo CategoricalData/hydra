@@ -19,29 +19,42 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
 /**
- * Primitive function: Int64ToBigint.
+ * Primitive function which converts an int64 (64-bit signed integer) to a bigint (arbitrary-precision integer).
+ * This conversion is lossless.
  */
 public class Int64ToBigint extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.int64ToBigint"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.int64ToBigint");
     }
 
+    /**
+     * Returns the type scheme for this function: int64 -&gt; bigint.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(Types.int64(), Types.bigint()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts int64 terms to bigint terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.int64(args.get(0)), s -> Terms.bigint(apply(s)));
     }
 
     /**
-     * Applies the Int64ToBigint operation.
-     * @param value the value
-     * @return the result
+     * Converts a Long (64-bit signed integer) value to a BigInteger.
+     * @param value the Long value to convert
+     * @return the BigInteger representation of the value
      */
-        public static BigInteger apply(Long value) {
+    public static BigInteger apply(Long value) {
         return BigInteger.valueOf(value);
     }
 }

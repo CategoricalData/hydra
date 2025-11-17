@@ -23,29 +23,42 @@ import static hydra.dsl.Types.set;
 
 
 /**
- * Creates a map from a list of pairs.
+ * Creates a set from a list of elements.
  */
 public class FromList extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.sets.fromList"
+     */
     public Name name() {
         return new Name("hydra.lib.sets.fromList");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that creates a set from a list
+     */
     @Override
     public TypeScheme type() {
         return scheme("x", function(list("x"), set("x")));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), arg -> Terms.set(apply(arg)));
     }
 
     /**
-     * Creates a map from key-value pairs.
-     * @param arg the pairs
-     * @return the map
+     * Creates a set from a list of elements.
+     * @param <X> the type of elements in the list and set
+     * @param arg the list of elements
+     * @return a set containing all unique elements from the list
      */
-        public static <X> Set<X> apply(List<X> arg) {
+    public static <X> Set<X> apply(List<X> arg) {
         return new HashSet<>(arg);
     }
 }

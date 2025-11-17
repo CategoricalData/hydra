@@ -20,15 +20,27 @@ import static hydra.dsl.Types.scheme;
  * Returns the mathematical constant e.
  */
 public class E extends PrimitiveFunction {
+    /**
+     * Gets the name of this primitive function.
+     * @return the function name
+     */
     public Name name() {
         return new Name("hydra.lib.math.e");
     }
 
+    /**
+     * Gets the type scheme for this function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme(float64());
     }
 
+    /**
+     * Provides the implementation of this function.
+     * @return a function that maps terms to a flow of terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.pure(Terms.float64(apply()));
@@ -38,7 +50,7 @@ public class E extends PrimitiveFunction {
      * Returns e.
      * @return the value of e
      */
-        public static Double apply() {
+    public static Double apply() {
         return Math.E;
     }
 }

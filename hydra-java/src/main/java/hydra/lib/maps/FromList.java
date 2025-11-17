@@ -27,16 +27,28 @@ import static hydra.dsl.Types.variable;
  * Creates a map from a list of pairs.
  */
 public class FromList extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.fromList");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(list(pair(variable("k"), variable("v"))), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(list(term -> Expect.pair(Flows::pure, Flows::pure, term), args.get(0)),
@@ -45,6 +57,10 @@ public class FromList extends PrimitiveFunction {
 
     /**
      * Apply the function to its single argument.
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param pairs the list of key-value pairs
+     * @return a map constructed from the pairs
      */
     public static <K, V> Map<K, V> apply(List<Tuple.Tuple2<K, V>> pairs) {
         Map<K, V> mp = new HashMap<>();

@@ -39,10 +39,11 @@ public class Length extends PrimitiveFunction {
 
     /**
      * Returns the number of elements.
-     * @param list the list
-     * @return the length
+     * @param <X> the element type
+     * @param list the list to get the length of
+     * @return the number of elements
      */
-        public static <X> int apply(List<X> list) {
+    public static <X> int apply(List<X> list) {
         return list.size();
     }
 }

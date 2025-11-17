@@ -42,6 +42,9 @@ public class SafeHead extends PrimitiveFunction {
 
     /**
      * Apply the function to it single argument.
+     * @param <X> the element type
+     * @param list the list to get the head from
+     * @return an optional containing the first element, or empty if the list is empty
      */
     public static <X> Opt<X> apply(List<X> list) {
         if (list.isEmpty()) {

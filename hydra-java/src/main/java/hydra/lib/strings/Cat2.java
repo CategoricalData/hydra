@@ -21,15 +21,27 @@ import static hydra.dsl.Types.string;
  * Concatenates two strings.
  */
 public class Cat2 extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.cat2"
+     */
     public Name name() {
         return new Name("hydra.lib.strings.cat2");
     }
 
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that concatenates two strings
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(string(), string(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map2(

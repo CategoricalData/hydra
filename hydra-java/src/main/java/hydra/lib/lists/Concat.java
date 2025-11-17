@@ -42,10 +42,11 @@ public class Concat extends PrimitiveFunction {
 
     /**
      * Flattens a list of lists.
-     * @param sublists the lists
+     * @param <X> the element type
+     * @param sublists the list of lists to concatenate
      * @return the concatenated list
      */
-        public static <X> List<X> apply(List<List<X>> sublists) {
+    public static <X> List<X> apply(List<List<X>> sublists) {
         return sublists.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 }

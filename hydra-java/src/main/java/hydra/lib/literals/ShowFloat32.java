@@ -20,18 +20,30 @@ import static hydra.dsl.Types.string;
 
 
 /**
- * Primitive function: ShowFloat32.
+ * Primitive function which converts a float32 (32-bit floating-point) to its string representation.
  */
 public class ShowFloat32 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.lib.literals.showFloat32"
+     */
     public Name name() {
         return new Name("hydra.lib.literals.showFloat32");
     }
 
+    /**
+     * Returns the type scheme for this function: float32 -&gt; string.
+     * @return the type scheme representing the function signature
+     */
     @Override
     public TypeScheme type() {
         return scheme(function(float32(), string()));
     }
 
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts float32 terms to string terms
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.float32(args.get(0)),
@@ -39,11 +51,11 @@ public class ShowFloat32 extends PrimitiveFunction {
     }
 
     /**
-     * Applies the ShowFloat32 operation.
-     * @param value the value
-     * @return the result
+     * Converts a Float (32-bit) value to its string representation.
+     * @param value the Float value to convert
+     * @return the string representation of the value
      */
-        public static String apply(Float value) {
+    public static String apply(Float value) {
         return Float.toString(value);
     }
 }

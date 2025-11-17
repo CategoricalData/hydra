@@ -29,16 +29,28 @@ import static hydra.dsl.Types.scheme;
  * Modifies a key's value.
  */
 public class Alter extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
     public Name name() {
         return new Name("hydra.lib.maps.alter");
     }
 
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
     @Override
     public TypeScheme type() {
         return scheme("k", "v",
                 function(function(optional("v"), optional("v")), Types.var("k"), map("k", "v"), map("k", "v")));
     }
 
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
@@ -60,21 +72,26 @@ public class Alter extends PrimitiveFunction {
 
     /**
      * Applies a function to modify the entry.
-     * @return the modified map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param f the function to apply to the optional value
+     * @return a curried function that takes a key and a map and returns the modified map
      */
-        public static <K, V> Function<K, Function<Map<K, V>, Map<K, V>>> apply(
+    public static <K, V> Function<K, Function<Map<K, V>, Map<K, V>>> apply(
             Function<Opt<V>, Opt<V>> f) {
         return key -> mp -> apply(f, key, mp);
     }
 
     /**
      * Applies a function to modify the entry.
-     * @param f the function
-     * @param key the key
-     * @param mp the map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param f the function to apply to the optional value
+     * @param key the key to modify
+     * @param mp the map to alter
      * @return the modified map
      */
-        public static <K, V> Map<K, V> apply(Function<Opt<V>, Opt<V>> f, K key, Map<K, V> mp) {
+    public static <K, V> Map<K, V> apply(Function<Opt<V>, Opt<V>> f, K key, Map<K, V> mp) {
         Map<K, V> result = new HashMap<>(mp);
         Opt<V> currentValue = Lookup.apply(key, mp);
         Opt<V> newValue = f.apply(currentValue);
