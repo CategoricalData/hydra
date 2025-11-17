@@ -17,6 +17,7 @@ type PackageMap = M.Map Namespace Java.PackageName
 data Aliases = Aliases {
   aliasesCurrentNamespace :: Namespace,
   aliasesPackages :: PackageMap,
+  aliasesBranchVars :: S.Set Name,
   aliasesRecursiveVars :: S.Set Name } deriving Show
 
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
@@ -53,7 +54,7 @@ fieldNameToJavaVariableDeclaratorId :: Name -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (Name n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForModule :: Module -> Aliases
-importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty
+importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -472,6 +473,8 @@ sanitizeJavaName :: String -> String
 sanitizeJavaName name = if isEscaped name
   -- The '$' prefix allows names to be excluded from sanitization
   then unescape name
+  else if name == "_"
+  then "ignored"
   else sanitizeWithUnderscores reservedWords name
 
 toAcceptMethod :: Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration
