@@ -118,7 +118,7 @@ key_freshTypeVariableCountDef = defineAnnotationKey "freshTypeVariableCount" $
 maxInt32Def :: TBinding Int
 maxInt32Def = define "maxInt32" $
   doc "The maximum value of a 32-bit integer" $
-  int32 maxBound
+  int32 2147483647 -- 2^31 - 1
 
 placeholderNameDef :: TBinding Name
 placeholderNameDef = define "placeholderName" $
