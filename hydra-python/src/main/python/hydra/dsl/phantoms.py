@@ -236,7 +236,7 @@ def identity() -> TTerm[A]:
 
 def inject(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
     """Create a union injection."""
-    return TTerm[B](terms.inject(name, Field(fname, un_tterm(term))))
+    return TTerm[B](terms.inject(name, fname, un_tterm(term)))
 
 
 def inject_lambda(name: Name, fname: Name) -> TTerm[A]:
@@ -479,9 +479,9 @@ def unit() -> TTerm[A]:
     return TTerm[A](terms.unit())
 
 
-def unit_variant(name: Name, fname: Name) -> TTerm[A]:
-    """Create a unit variant of a union."""
-    return TTerm[A](terms.inject(name, Field(fname, terms.unit())))
+def inject_unit(name: Name, fname: Name) -> TTerm[A]:
+    """Create a unit injection of a union."""
+    return TTerm[A](terms.inject(name, fname, terms.unit()))
 
 
 def unqualify_name(qname: QualifiedName) -> Name:
@@ -508,9 +508,6 @@ def var(v: str) -> TTerm[A]:
     return TTerm[A](terms.var(v))
 
 
-def variant(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
-    """Create a union variant."""
-    return TTerm[B](terms.inject(name, Field(fname, un_tterm(term))))
 
 
 def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
