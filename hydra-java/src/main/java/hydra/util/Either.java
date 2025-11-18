@@ -50,6 +50,65 @@ public abstract class Either<L, R> {
     public abstract boolean isRight();
 
     /**
+     * Accept a visitor for pattern matching on Either values.
+     *
+     * @param <T> the return type of the visitor
+     * @param visitor the visitor to accept
+     * @return the result of applying the visitor
+     */
+    public abstract <T> T accept(Visitor<L, R, T> visitor);
+
+    /**
+     * Visitor interface for pattern matching on Either values.
+     *
+     * @param <T> the return type
+     */
+    public interface Visitor<L, R, T> {
+        /**
+         * Visit a Left value.
+         *
+         * @param instance the Left instance
+         * @return the result
+         */
+        T visit(Left<L, R> instance);
+
+        /**
+         * Visit a Right value.
+         *
+         * @param instance the Right instance
+         * @return the result
+         */
+        T visit(Right<L, R> instance);
+    }
+
+    /**
+     * Partial visitor interface with a default case for non-exhaustive matching.
+     *
+     * @param <T> the return type
+     */
+    public interface PartialVisitor<L, R, T> extends Visitor<L, R, T> {
+        /**
+         * Default case for non-exhaustive patterns.
+         *
+         * @param instance the Either instance
+         * @return the result
+         */
+        default T otherwise(Either<?, ?> instance) {
+            throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+        }
+
+        @Override
+        default T visit(Left<L, R> instance) {
+            return otherwise(instance);
+        }
+
+        @Override
+        default T visit(Right<L, R> instance) {
+            return otherwise(instance);
+        }
+    }
+
+    /**
      * A Left value in an Either.
      *
      * @param <L> the left type
@@ -75,6 +134,11 @@ public abstract class Either<L, R> {
         @Override
         public boolean isRight() {
             return false;
+        }
+
+        @Override
+        public <T> T accept(Visitor<L, R, T> visitor) {
+            return visitor.visit(this);
         }
 
         /**
@@ -129,6 +193,11 @@ public abstract class Either<L, R> {
         @Override
         public boolean isRight() {
             return true;
+        }
+
+        @Override
+        public <T> T accept(Visitor<L, R, T> visitor) {
+            return visitor.visit(this);
         }
 
         /**
