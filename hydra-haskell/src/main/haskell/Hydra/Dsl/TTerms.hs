@@ -410,3 +410,33 @@ letsTyped :: [(String, TTerm Term, TTerm TypeScheme)] -> TTerm Term -> TTerm Ter
 letsTyped bindings body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding bindings) body
   where
     toBinding = fmap (\(n, t, ts) -> Core.binding (name n) t (Phantoms.just ts))
+
+-- | Create a term-encoded character literal via int32
+-- Example: char 'A'
+char :: Char -> TTerm Term
+char = int32 . ord
+  where
+    ord = fromEnum
+
+-- | Term-encoded function composition (apply g then f)
+-- Example: compose f g creates a function that applies g then f
+compose :: TTerm Term -> TTerm Term -> TTerm Term
+compose f g = lambda "arg_" $ f @@ (g @@ var "arg_")
+
+-- | Term-encoded identity function
+-- Example: identity
+identity :: TTerm Term
+identity = lambda "x_" $ var "x_"
+
+-- | Create a term-encoded 5-tuple
+-- Example: tuple5 (int32 1) (string "a") (boolean True) (float32 3.14) (int32 42)
+tuple5 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+tuple5 t1 t2 t3 t4 t5 = tuple [t1, t2, t3, t4, t5]
+
+-- | Convert a Comparison enum value to a term-encoded term
+-- Example: comparison ComparisonEqualTo
+comparison :: Comparison -> TTerm Term
+comparison t = case t of
+  ComparisonEqualTo -> Phantoms.unitVariant _Comparison _Comparison_equalTo
+  ComparisonLessThan -> Phantoms.unitVariant _Comparison _Comparison_lessThan
+  ComparisonGreaterThan -> Phantoms.unitVariant _Comparison _Comparison_greaterThan

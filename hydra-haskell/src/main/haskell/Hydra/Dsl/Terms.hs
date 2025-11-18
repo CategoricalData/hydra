@@ -130,6 +130,12 @@ identity = lambda "x_" $ var "x_"
 inject :: Name -> Field -> Term
 inject tname = TermUnion . Injection tname
 
+-- | Create a unit variant of a union (convenience function)
+-- Example: injectUnit (Name "Result") (Name "success")
+-- Equivalent to inject but automatically uses unit as the value
+injectUnit :: Name -> Name -> Term
+injectUnit tname fname = inject tname (Field fname unit)
+
 -- | Create an int8 literal
 -- Example: int8 127
 int8 :: Int8 -> Term

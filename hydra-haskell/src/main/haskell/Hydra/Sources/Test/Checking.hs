@@ -266,91 +266,91 @@ leftValuesTests = subgroup "Left values" [
   checkTest "left int" []
     (left $ int32 42)
     (tylam "t0" $ tyapps (left $ int32 42) [T.int32, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either T.int32 (T.var "t0")),
+    (T.forAlls ["t0"] $ T.either_ T.int32 (T.var "t0")),
   checkTest "left string" []
     (left $ string "error")
     (tylam "t0" $ tyapps (left $ string "error") [T.string, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either T.string (T.var "t0")),
+    (T.forAlls ["t0"] $ T.either_ T.string (T.var "t0")),
   checkTest "left boolean" []
     (left $ boolean False)
     (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either T.boolean (T.var "t0"))]
+    (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
 
 rightValuesTests :: TTerm TestGroup
 rightValuesTests = subgroup "Right values" [
   checkTest "right int" []
     (right $ int32 42)
     (tylam "t0" $ tyapps (right $ int32 42) [T.var "t0", T.int32])
-    (T.forAlls ["t0"] $ T.either (T.var "t0") T.int32),
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32),
   checkTest "right string" []
     (right $ string "success")
     (tylam "t0" $ tyapps (right $ string "success") [T.var "t0", T.string])
-    (T.forAlls ["t0"] $ T.either (T.var "t0") T.string),
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.string),
   checkTest "right boolean" []
     (right $ boolean True)
     (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
-    (T.forAlls ["t0"] $ T.either (T.var "t0") T.boolean)]
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean)]
 
 polymorphicEithersTests :: TTerm TestGroup
 polymorphicEithersTests = subgroup "Polymorphic eithers" [
   checkTest "left from lambda" []
     (lambda "x" $ left $ var "x")
     (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (left $ var "x") [T.var "t0", T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either (T.var "t0") (T.var "t1"))),
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t1"))),
   checkTest "right from lambda" []
     (lambda "x" $ right $ var "x")
     (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (right $ var "x") [T.var "t1", T.var "t0"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either (T.var "t1") (T.var "t0"))),
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t1") (T.var "t0"))),
   checkTest "either from two lambdas" []
     (lambda "flag" $ lambda "x" $
       primitive _logic_ifElse @@ var "flag" @@
         (left $ var "x") @@
         (right $ var "x"))
     (tylam "t0" $ lambdaTyped "flag" T.boolean $ lambdaTyped "x" (T.var "t0") $
-      tyapp (primitive _logic_ifElse) (T.either (T.var "t0") (T.var "t0")) @@ var "flag" @@
+      tyapp (primitive _logic_ifElse) (T.either_ (T.var "t0") (T.var "t0")) @@ var "flag" @@
         tyapps (left $ var "x") [T.var "t0", T.var "t0"] @@
         tyapps (right $ var "x") [T.var "t0", T.var "t0"])
-    (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either (T.var "t0") (T.var "t0"))))]
+    (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
 
 eithersInComplexContextsTests :: TTerm TestGroup
 eithersInComplexContextsTests = subgroup "Eithers in complex contexts" [
   checkTest "either in tuple" []
     (tuple [left $ string "error", int32 100])
     (tylam "t0" $ tuple [tyapps (left $ string "error") [T.string, T.var "t0"], int32 100])
-    (T.forAlls ["t0"] $ T.product [T.either T.string (T.var "t0"), T.int32]),
+    (T.forAlls ["t0"] $ T.product [T.either_ T.string (T.var "t0"), T.int32]),
   checkTest "either in list" []
     (list [left $ string "error", right $ int32 42])
     (list [tyapps (left $ string "error") [T.string, T.int32], tyapps (right $ int32 42) [T.string, T.int32]])
-    (T.list $ T.either T.string T.int32),
+    (T.list $ T.either_ T.string T.int32),
   checkTest "either in let binding" []
     (lets ["result">: right $ int32 42] $
       var "result")
-    (tylam "t0" $ letsTyped [("result", tylam "t1" $ tyapps (right $ int32 42) [T.var "t1", T.int32], T.poly ["t1"] $ T.either (T.var "t1") T.int32)] $
+    (tylam "t0" $ letsTyped [("result", tylam "t1" $ tyapps (right $ int32 42) [T.var "t1", T.int32], T.poly ["t1"] $ T.either_ (T.var "t1") T.int32)] $
       tyapp (var "result") (T.var "t0"))
-    (T.forAlls ["t0"] $ T.either (T.var "t0") T.int32)]
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32)]
 
 nestedEithersTests :: TTerm TestGroup
 nestedEithersTests = subgroup "Nested eithers" [
   checkTest "either of either (left left)" []
     (left $ left $ int32 1)
-    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [T.int32, T.var "t0"]) [T.either T.int32 (T.var "t0"), T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.either (T.either T.int32 (T.var "t0")) (T.var "t1")),
+    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [T.int32, T.var "t0"]) [T.either_ T.int32 (T.var "t0"), T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ T.int32 (T.var "t0")) (T.var "t1")),
   checkTest "either of either (left right)" []
     (left $ right $ string "nested")
-    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (right $ string "nested") [T.var "t0", T.string]) [T.either (T.var "t0") T.string, T.var "t1"])
-    (T.forAlls ["t0", "t1"] $ T.either (T.either (T.var "t0") T.string) (T.var "t1")),
+    (tylams ["t0", "t1"] $ tyapps (left $ tyapps (right $ string "nested") [T.var "t0", T.string]) [T.either_ (T.var "t0") T.string, T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.either_ (T.either_ (T.var "t0") T.string) (T.var "t1")),
   checkTest "either of either (right)" []
     (right $ boolean True)
     (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
-    (T.forAlls ["t0"] $ T.either (T.var "t0") T.boolean),
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean),
   checkTest "either of list" []
     (left $ list [int32 1, int32 2])
     (tylam "t0" $ tyapps (left $ list [int32 1, int32 2]) [T.list T.int32, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either (T.list T.int32) (T.var "t0")),
+    (T.forAlls ["t0"] $ T.either_ (T.list T.int32) (T.var "t0")),
   checkTest "list of eithers" []
     (list [left $ string "a", right $ int32 1, left $ string "b"])
     (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
-    (T.list $ T.either T.string T.int32)]
+    (T.list $ T.either_ T.string T.int32)]
 
 eithersWithComplexTypesTests :: TTerm TestGroup
 eithersWithComplexTypesTests = subgroup "Eithers with complex types" [
@@ -363,7 +363,7 @@ eithersWithComplexTypesTests = subgroup "Eithers with complex types" [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
       "age">: int32 30]) [Core.typeVariable $ ref testTypePersonNameDef, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either (Core.typeVariable $ ref testTypePersonNameDef) (T.var "t0")),
+    (T.forAlls ["t0"] $ T.either_ (Core.typeVariable $ ref testTypePersonNameDef) (T.var "t0")),
   checkTest "either with record on right" []
     (right $ record (ref testTypePersonNameDef) [
       "firstName">: string "Bob",
@@ -373,11 +373,11 @@ eithersWithComplexTypesTests = subgroup "Eithers with complex types" [
       "firstName">: string "Bob",
       "lastName">: string "Jones",
       "age">: int32 25]) [T.var "t0", Core.typeVariable $ ref testTypePersonNameDef])
-    (T.forAlls ["t0"] $ T.either (T.var "t0") (Core.typeVariable $ ref testTypePersonNameDef)),
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable $ ref testTypePersonNameDef)),
   checkTest "either with tuple" []
     (left $ tuple [string "error", int32 404])
     (tylam "t0" $ tyapps (left $ tuple [string "error", int32 404]) [T.product [T.string, T.int32], T.var "t0"])
-    (T.forAlls ["t0"] $ T.either (T.product [T.string, T.int32]) (T.var "t0"))]
+    (T.forAlls ["t0"] $ T.either_ (T.product [T.string, T.int32]) (T.var "t0"))]
 
 ------ Eliminations ------
 
