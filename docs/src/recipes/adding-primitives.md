@@ -97,10 +97,10 @@ Add typed wrapper in `/hydra-haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs
 
 ```haskell
 -- In Hydra/Dsl/Lib/Chars.hs
-module Hydra.Dsl.Lib.Chars where
+module Hydra.Dsl.Meta.Lib.Chars where
 
 import Hydra.Phantoms
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
@@ -281,7 +281,7 @@ When adding a new primitive function:
   - [ ] Implementation in `Hydra.Lib.<Library>`
   - [ ] Name constant in `Hydra.Sources.Libraries`
   - [ ] Registration in `hydraLib<Library>` list
-  - [ ] DSL wrapper in `Hydra.Dsl.Lib.<Library>`
+  - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
 - [ ] **Java**
   - [ ] PrimitiveFunction class in `hydra.lib.<library>`
   - [ ] Import and registration in `Libraries.java`
