@@ -1,4 +1,4 @@
-package hydra.ext.json;
+package hydra.json;
 
 import hydra.core.Name;
 import hydra.json.Value;
@@ -160,7 +160,7 @@ public abstract class JsonDecoding {
 
             @Override
             public Double visit(Value.Number_ instance) {
-                return Double.parseDouble(instance.value);
+                return instance.value.doubleValue();
             }
         });
     }

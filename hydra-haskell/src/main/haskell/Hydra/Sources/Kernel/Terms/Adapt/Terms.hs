@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -56,21 +56,20 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals as AdaptLiterals
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
-import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Literals as Lits
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
+import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
+import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.terms") elements
-    [ExtractCore.module_, AdaptLiterals.module_, Lits.module_, Rewriting.module_,
-      Schemas.module_, ShowCore.module_]
+    [AdaptLiterals.module_, AdaptUtils.module_, Annotations.module_, ExtractCore.module_, Monads.module_,
+      Reflect.module_, Rewriting.module_, Schemas.module_, ShowCore.module_]
     kernelTypesModules $
     Just "Adapter framework for types and terms"
   where
@@ -179,12 +178,12 @@ functionProxyTypeDef :: TBinding (a -> Type)
 functionProxyTypeDef = define "functionProxyType" $
   doc "Generate a function proxy type for a given domain type" $
   constant (Core.typeUnion (Core.rowType (ref functionProxyNameDef) (list [
-    Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
-    Core.fieldType (Core.nameLift _Elimination_record) TTypes.string,
-    Core.fieldType (Core.nameLift _Elimination_union) TTypes.string,
-    Core.fieldType (Core.nameLift _Function_lambda) TTypes.string,
-    Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
-    Core.fieldType (Core.nameLift _Term_variable) TTypes.string])))
+    Core.fieldType (Core.nameLift _Elimination_wrap) MetaTypes.string,
+    Core.fieldType (Core.nameLift _Elimination_record) MetaTypes.string,
+    Core.fieldType (Core.nameLift _Elimination_union) MetaTypes.string,
+    Core.fieldType (Core.nameLift _Function_lambda) MetaTypes.string,
+    Core.fieldType (Core.nameLift _Function_primitive) MetaTypes.string,
+    Core.fieldType (Core.nameLift _Term_variable) MetaTypes.string])))
 
 functionToUnionDef :: TBinding TypeAdapter
 functionToUnionDef = define "functionToUnion" $
@@ -197,17 +196,17 @@ functionToUnionDef = define "functionToUnion" $
       _Function_elimination>>: "e" ~> cases _Elimination (var "e")
         Nothing [
         _Elimination_wrap>>: "name" ~> Core.termUnion (Core.injection (ref functionProxyNameDef)
-          (Core.field (Core.nameLift _Elimination_wrap) (TTerms.stringLift (unwrap _Name @@ var "name")))),
+          (Core.field (Core.nameLift _Elimination_wrap) (MetaTerms.stringLift (unwrap _Name @@ var "name")))),
         _Elimination_record>>: "r" ~> Core.termUnion (Core.injection (ref functionProxyNameDef)
-          (Core.field (Core.nameLift _Elimination_record) (TTerms.stringLift (ref ShowCore.termDef @@ var "term")))),
+          (Core.field (Core.nameLift _Elimination_record) (MetaTerms.stringLift (ref ShowCore.termDef @@ var "term")))),
         _Elimination_union>>: "u" ~> Core.termUnion (Core.injection (ref functionProxyNameDef)
-          (Core.field (Core.nameLift _Elimination_union) (TTerms.stringLift (ref ShowCore.termDef @@ var "term"))))],
+          (Core.field (Core.nameLift _Elimination_union) (MetaTerms.stringLift (ref ShowCore.termDef @@ var "term"))))],
       _Function_lambda>>: "l" ~> Core.termUnion (Core.injection (ref functionProxyNameDef)
-        (Core.field (Core.nameLift _Function_lambda) (TTerms.stringLift (ref ShowCore.termDef @@ var "term")))),
+        (Core.field (Core.nameLift _Function_lambda) (MetaTerms.stringLift (ref ShowCore.termDef @@ var "term")))),
       _Function_primitive>>: "name" ~> Core.termUnion (Core.injection (ref functionProxyNameDef)
-        (Core.field (Core.nameLift _Function_primitive) (TTerms.stringLift (unwrap _Name @@ var "name"))))],
+        (Core.field (Core.nameLift _Function_primitive) (MetaTerms.stringLift (unwrap _Name @@ var "name"))))],
     _Term_variable>>: "name" ~>
-      Core.termUnion (Core.injection (ref functionProxyNameDef) (Core.field (Core.nameLift _Term_variable) (TTerms.stringLift (unwrap _Name @@ var "name"))))]) $
+      Core.termUnion (Core.injection (ref functionProxyNameDef) (Core.field (Core.nameLift _Term_variable) (MetaTerms.stringLift (unwrap _Name @@ var "name"))))]) $
   "encode" <~ ("ad" ~> "term" ~>
     "strippedTerm" <~ ref Rewriting.deannotateTermDef @@ var "term" $
     Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ (var "encTerm" @@ var "term" @@ var "strippedTerm")) $
@@ -221,8 +220,8 @@ functionToUnionDef = define "functionToUnion" $
     "notFound" <~ ("fname" ~> Flows.fail (Strings.cat2 "unexpected field: " (unwrap _Name @@ var "fname"))) $
     "forCases" <~ ("fterm" ~> ref withGraphContextDef @@ (var "readFromString" @@ var "fterm")) $
     "forLambda" <~ ("fterm" ~> ref withGraphContextDef @@ (var "readFromString" @@ var "fterm")) $
-    "forWrapped" <~ ("fterm" ~> ref withGraphContextDef @@ (Flows.map ("s" ~> TTerms.unwrap (Core.name (var "s"))) (ref ExtractCore.stringDef @@ var "fterm"))) $
-    "forPrimitive" <~ ("fterm" ~> ref withGraphContextDef @@ (Flows.map ("s" ~> TTerms.primitiveLift (Core.name (var "s"))) (ref ExtractCore.stringDef @@ var "fterm"))) $
+    "forWrapped" <~ ("fterm" ~> ref withGraphContextDef @@ (Flows.map ("s" ~> MetaTerms.unwrap (Core.name (var "s"))) (ref ExtractCore.stringDef @@ var "fterm"))) $
+    "forPrimitive" <~ ("fterm" ~> ref withGraphContextDef @@ (Flows.map ("s" ~> MetaTerms.primitiveLift (Core.name (var "s"))) (ref ExtractCore.stringDef @@ var "fterm"))) $
     "forProjection" <~ ("fterm" ~> ref withGraphContextDef @@ (var "readFromString" @@ var "fterm")) $
     "forVariable" <~ ("fterm" ~> ref withGraphContextDef @@ (Flows.map ("s" ~> Core.termVariable (Core.name (var "s"))) (ref ExtractCore.stringDef @@ var "fterm"))) $
     "injTerm" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "term" $
@@ -244,12 +243,12 @@ functionToUnionDef = define "functionToUnion" $
       "unionType" <~ (
         "domAd" <<~ ref termAdapterDef @@ var "dom" $
         produce (Core.typeUnion (Core.rowType (ref functionProxyNameDef) (list [
-          Core.fieldType (Core.nameLift _Elimination_wrap) TTypes.string,
-          Core.fieldType (Core.nameLift _Elimination_record) TTypes.string,
-          Core.fieldType (Core.nameLift _Elimination_union) TTypes.string,
-          Core.fieldType (Core.nameLift _Function_lambda) TTypes.string,
-          Core.fieldType (Core.nameLift _Function_primitive) TTypes.string,
-          Core.fieldType (Core.nameLift _Term_variable) TTypes.string])))) $
+          Core.fieldType (Core.nameLift _Elimination_wrap) MetaTypes.string,
+          Core.fieldType (Core.nameLift _Elimination_record) MetaTypes.string,
+          Core.fieldType (Core.nameLift _Elimination_union) MetaTypes.string,
+          Core.fieldType (Core.nameLift _Function_lambda) MetaTypes.string,
+          Core.fieldType (Core.nameLift _Function_primitive) MetaTypes.string,
+          Core.fieldType (Core.nameLift _Term_variable) MetaTypes.string])))) $
       "ut" <<~ var "unionType" $
       "ad" <<~ ref termAdapterDef @@ var "ut" $
       produce (Compute.adapter
@@ -279,7 +278,7 @@ maybeToListDef = define "maybeToList" $
   "encode" <~ ("ad" ~> "term" ~> cases _Term (var "term")
     Nothing [
     _Term_maybe>>: "m" ~> Maybes.maybe
-      (produce (TTerms.list []))
+      (produce (MetaTerms.list []))
       ("r" ~>
         "encoded" <<~ Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "r" $
         produce (Core.termList (list [var "encoded"])))
@@ -376,7 +375,7 @@ passFunctionDef = define "passFunction" $
   "toOptionAd" <~ ("dom" ~> "cod" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom")
     (Just (produce nothing)) [
     _Type_maybe >>: "ot" ~>
-      Flows.map (unaryFunction just) (ref termAdapterDef @@ TTypes.function (var "ot") (var "cod"))]) $
+      Flows.map (unaryFunction just) (ref termAdapterDef @@ MetaTypes.function (var "ot") (var "cod"))]) $
   "getCoder" <~ ("caseAds" ~> "fname" ~> Maybes.maybe
     (ref AdaptUtils.idCoderDef)
     (unaryFunction Compute.adapterCoder)
@@ -421,7 +420,7 @@ passFunctionDef = define "passFunction" $
     "lossy" <~ Logic.or
       (Compute.adapterIsLossy (var "codAd"))
       (Logic.ors (Lists.map ("tuple2" ~> Compute.adapterIsLossy (second (var "tuple2"))) (Maps.toList (var "caseAds")))) $
-    "target" <~ TTypes.function (Compute.adapterTarget (var "domAd")) (Compute.adapterTarget (var "codAd")) $
+    "target" <~ MetaTypes.function (Compute.adapterTarget (var "domAd")) (Compute.adapterTarget (var "codAd")) $
     produce $ Compute.adapter (var "lossy") (var "t") (var "target")
       (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "codAd" @@ var "caseAds"))) $
   cases _Type (var "t")
@@ -442,7 +441,7 @@ passListDef = define "passList" $
     produce (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
       (var "t")
-      (TTypes.list (Compute.adapterTarget (var "ad")))
+      (MetaTypes.list (Compute.adapterTarget (var "ad")))
       (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "ad")))) $
   cases _Type (var "t")
     Nothing [
@@ -492,7 +491,7 @@ passMapDef = define "passMap" $
     produce (Compute.adapter
       (Logic.or (Compute.adapterIsLossy (var "kad")) (Compute.adapterIsLossy (var "vad")))
       (var "t")
-      (TTypes.map (Compute.adapterTarget (var "kad")) (Compute.adapterTarget (var "vad")))
+      (MetaTypes.map (Compute.adapterTarget (var "kad")) (Compute.adapterTarget (var "vad")))
       (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "kad" @@ var "vad")))) $
   cases _Type (var "t")
     Nothing [
@@ -581,7 +580,7 @@ passSetDef = define "passSet" $
       produce (Compute.adapter
         (Compute.adapterIsLossy (var "ad"))
         (var "t")
-        (TTypes.set (Compute.adapterTarget (var "ad")))
+        (MetaTypes.set (Compute.adapterTarget (var "ad")))
         (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "ad")))]
 
 passSumDef :: TBinding TypeAdapter
@@ -683,7 +682,7 @@ setToListDef = define "setToList" $
     "listTerm" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "term" $
     var "forListTerm" @@ var "listTerm") $
   "forSetType" <~ ("st" ~>
-    "ad" <<~ ref termAdapterDef @@ (TTypes.list (var "st")) $
+    "ad" <<~ ref termAdapterDef @@ (MetaTypes.list (var "st")) $
     produce (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
       (var "t")
@@ -823,11 +822,11 @@ termAdapterDef = define "termAdapter" $
   "constraints" <~ ("cx" ~> Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx"))) $
   "supported" <~ ("cx" ~> ref AdaptUtils.typeIsSupportedDef @@ (var "constraints" @@ var "cx")) $
   "variantIsSupported" <~ ("cx" ~> "t" ~>
-    Sets.member (ref Variants.typeVariantDef @@ var "t") (Coders.languageConstraintsTypeVariants (var "constraints" @@ var "cx"))) $
+    Sets.member (ref Reflect.typeVariantDef @@ var "t") (Coders.languageConstraintsTypeVariants (var "constraints" @@ var "cx"))) $
   "supportedAtTopLevel" <~ ("cx" ~> "t" ~> Logic.and
     (var "variantIsSupported" @@ var "cx" @@ var "t")
     (Coders.languageConstraintsTypes (var "constraints" @@ var "cx") @@ var "t")) $
-  "pass" <~ ("t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t"))
+  "pass" <~ ("t" ~> cases _TypeVariant (ref Reflect.typeVariantDef @@ (ref Rewriting.deannotateTypeDef @@ var "t"))
     Nothing [
     _TypeVariant_annotated>>: constant (list []),
     _TypeVariant_application>>: constant (list [ref passApplicationDef]),
@@ -847,7 +846,7 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_unit>>: constant (list [ref passUnitDef]),
     _TypeVariant_variable>>: constant (list []),
     _TypeVariant_wrap>>: constant (list [ref passWrappedDef])]) $
-  "trySubstitution" <~ ("t" ~> cases _TypeVariant (ref Variants.typeVariantDef @@ var "t")
+  "trySubstitution" <~ ("t" ~> cases _TypeVariant (ref Reflect.typeVariantDef @@ var "t")
     Nothing [
     _TypeVariant_annotated>>: constant (list []),
     _TypeVariant_application>>: constant (list [ref simplifyApplicationDef]),

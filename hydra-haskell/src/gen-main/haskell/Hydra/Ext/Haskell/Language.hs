@@ -6,7 +6,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Meta as Meta
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -28,22 +28,22 @@ haskellLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Meta.EliminationVariantProduct,
-      Meta.EliminationVariantRecord,
-      Meta.EliminationVariantUnion,
-      Meta.EliminationVariantWrap])
+      Variants.EliminationVariantProduct,
+      Variants.EliminationVariantRecord,
+      Variants.EliminationVariantUnion,
+      Variants.EliminationVariantWrap])
     literalVariants = (Sets.fromList [
-      Meta.LiteralVariantBoolean,
-      Meta.LiteralVariantFloat,
-      Meta.LiteralVariantInteger,
-      Meta.LiteralVariantString])
+      Variants.LiteralVariantBoolean,
+      Variants.LiteralVariantFloat,
+      Variants.LiteralVariantInteger,
+      Variants.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeFloat32,
       Core.FloatTypeFloat64])
     functionVariants = (Sets.fromList [
-      Meta.FunctionVariantElimination,
-      Meta.FunctionVariantLambda,
-      Meta.FunctionVariantPrimitive])
+      Variants.FunctionVariantElimination,
+      Variants.FunctionVariantLambda,
+      Variants.FunctionVariantPrimitive])
     integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint,
       Core.IntegerTypeInt8,
@@ -51,39 +51,39 @@ haskellLanguage = Coders.Language {
       Core.IntegerTypeInt32,
       Core.IntegerTypeInt64])
     termVariants = (Sets.fromList [
-      Meta.TermVariantApplication,
-      Meta.TermVariantFunction,
-      Meta.TermVariantLet,
-      Meta.TermVariantList,
-      Meta.TermVariantLiteral,
-      Meta.TermVariantMap,
-      Meta.TermVariantMaybe,
-      Meta.TermVariantPair,
-      Meta.TermVariantProduct,
-      Meta.TermVariantRecord,
-      Meta.TermVariantSet,
-      Meta.TermVariantUnion,
-      Meta.TermVariantUnit,
-      Meta.TermVariantVariable,
-      Meta.TermVariantWrap])
+      Variants.TermVariantApplication,
+      Variants.TermVariantFunction,
+      Variants.TermVariantLet,
+      Variants.TermVariantList,
+      Variants.TermVariantLiteral,
+      Variants.TermVariantMap,
+      Variants.TermVariantMaybe,
+      Variants.TermVariantPair,
+      Variants.TermVariantProduct,
+      Variants.TermVariantRecord,
+      Variants.TermVariantSet,
+      Variants.TermVariantUnion,
+      Variants.TermVariantUnit,
+      Variants.TermVariantVariable,
+      Variants.TermVariantWrap])
     typeVariants = (Sets.fromList [
-      Meta.TypeVariantAnnotated,
-      Meta.TypeVariantApplication,
-      Meta.TypeVariantEither,
-      Meta.TypeVariantFunction,
-      Meta.TypeVariantForall,
-      Meta.TypeVariantList,
-      Meta.TypeVariantLiteral,
-      Meta.TypeVariantMap,
-      Meta.TypeVariantMaybe,
-      Meta.TypeVariantPair,
-      Meta.TypeVariantProduct,
-      Meta.TypeVariantRecord,
-      Meta.TypeVariantSet,
-      Meta.TypeVariantUnion,
-      Meta.TypeVariantUnit,
-      Meta.TypeVariantVariable,
-      Meta.TypeVariantWrap])
+      Variants.TypeVariantAnnotated,
+      Variants.TypeVariantApplication,
+      Variants.TypeVariantEither,
+      Variants.TypeVariantFunction,
+      Variants.TypeVariantForall,
+      Variants.TypeVariantList,
+      Variants.TypeVariantLiteral,
+      Variants.TypeVariantMap,
+      Variants.TypeVariantMaybe,
+      Variants.TypeVariantPair,
+      Variants.TypeVariantProduct,
+      Variants.TypeVariantRecord,
+      Variants.TypeVariantSet,
+      Variants.TypeVariantUnion,
+      Variants.TypeVariantUnit,
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantWrap])
     typePredicate = (\_ -> True)
 
 -- | Created on 2025-02-28 using GHCi 9.6.6

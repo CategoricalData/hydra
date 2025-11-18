@@ -23,13 +23,13 @@ import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.monads
+import hydra.reflect
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
 import hydra.show.meta
 import hydra.substitution
 import hydra.typing
-import hydra.variants
 
 def all_equal[T0](els: frozenlist[T0]) -> bool:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), True, hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, hydra.lib.equality.equal(t, hydra.lib.lists.head(els)))), True, hydra.lib.lists.tail(els)))
@@ -141,7 +141,7 @@ def type_lists_effectively_equal(tx: hydra.typing.TypeContext, tlist1: frozenlis
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2)), False)
 
 def type_of_literal[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.Type]:
-    t = cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.variants.literal_type(lit)))
+    t = cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.reflect.literal_type(lit)))
     return apply_type_arguments_to_type(tx, type_args, t)
 
 def type_of_primitive[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.Type]:
@@ -253,7 +253,7 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
                 return type_of_wrapped_term(tx, type_args, v117)
             
             case _:
-                return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.meta.term_variant(hydra.variants.term_variant(term)))))
+                return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.meta.term_variant(hydra.reflect.term_variant(term)))))
     return hydra.monads.with_trace(hydra.lib.strings.cat(("checking type of: ", hydra.show.core.term(term), " (vars: ", hydra.formatting.show_list((lambda v1: v1.value), hydra.lib.sets.to_list(tx.variables)), ", typeArgs: ", hydra.formatting.show_list(hydra.show.core.type, type_args), ")")), check())
 
 def type_of_annotated_term[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], at: hydra.core.AnnotatedTerm) -> hydra.compute.Flow[T0, hydra.core.Type]:

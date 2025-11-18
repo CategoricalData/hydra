@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -157,14 +157,14 @@ makeElementsDef :: TBinding (Bool -> Namespace -> String -> G.Pattern -> [(Strin
 makeElementsDef = define "makeElements" $
   doc "Create elements from pattern" $
   "omitTrivial" ~> "ns" ~> "lname" ~> "pat" ~>
-  "trivial" <~ Logic.ifElse (var "omitTrivial") (list []) (list [tuple2 (var "lname") TTypes.unit]) $
+  "trivial" <~ Logic.ifElse (var "omitTrivial") (list []) (list [tuple2 (var "lname") MetaTypes.unit]) $
 
   "descend" <~ ("n" ~> "f" ~> "p" ~>
     "cpairs" <~ ref makeElementsDef @@ false @@ var "ns" @@ (ref childNameDef @@ var "lname" @@ var "n") @@ var "p" $
     var "f" @@ Logic.ifElse (ref isComplexDef @@ var "p")
       (Lists.cons (tuple2 (var "lname") (Core.typeVariable (ref toNameDef @@ var "ns" @@ (first (Lists.head (var "cpairs")))))) (var "cpairs"))
       (Logic.ifElse (Lists.null (var "cpairs"))
-        (list [tuple2 (var "lname") TTypes.unit])
+        (list [tuple2 (var "lname") MetaTypes.unit])
         (Lists.cons (tuple2 (var "lname") (second (Lists.head (var "cpairs")))) (Lists.tail (var "cpairs"))))) $
 
   "mod" <~ ("n" ~> "f" ~> "p" ~> var "descend" @@ var "n" @@
@@ -181,12 +181,12 @@ makeElementsDef = define "makeElements" $
       _Pattern_nil>>: constant (var "trivial"),
       _Pattern_nonterminal>>: "s" ~> list [tuple2 (var "lname") (Core.typeVariable (
         ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")))],
-      _Pattern_option>>: "p" ~> var "mod" @@ "Option" @@ (unaryFunction TTypes.optional) @@ var "p",
-      _Pattern_plus>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction TTypes.list) @@ var "p",
-      _Pattern_regex>>: constant (list [tuple2 (var "lname") TTypes.string]),
+      _Pattern_option>>: "p" ~> var "mod" @@ "Option" @@ (unaryFunction MetaTypes.optional) @@ var "p",
+      _Pattern_plus>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p",
+      _Pattern_regex>>: constant (list [tuple2 (var "lname") MetaTypes.string]),
       _Pattern_sequence>>: "pats" ~> var "forRecordOrUnion" @@ true @@
         ("fields" ~> Core.typeRecord (Core.rowType (ref Constants.placeholderNameDef) (var "fields"))) @@ var "pats",
-      _Pattern_star>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction TTypes.list) @@ var "p"]
+      _Pattern_star>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p"]
     @@ var "pat"),
 
     "forRecordOrUnion">: ("isRecord" ~> "construct" ~> "pats" ~>

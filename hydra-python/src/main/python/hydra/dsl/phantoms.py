@@ -12,7 +12,7 @@ import hydra.constants
 import hydra.dsl.terms as terms
 import hydra.dsl.annotations as annotations
 import hydra.formatting
-import hydra.meta
+import hydra.classes
 import hydra.util
 from hydra.core import Field, Name, Term, Type
 from hydra.module import Module, Namespace, QualifiedName
@@ -516,7 +516,7 @@ def variant(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
 def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Eq type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.meta.TypeClass.EQUALITY])}),
+        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.EQUALITY])}),
         term
     )
 
@@ -524,7 +524,7 @@ def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
 def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Ord type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.meta.TypeClass.ORDERING])}),
+        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.ORDERING])}),
         term
     )
 

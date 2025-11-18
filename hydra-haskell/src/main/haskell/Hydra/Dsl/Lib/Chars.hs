@@ -3,7 +3,7 @@
 module Hydra.Dsl.Lib.Chars where
 
 import Hydra.Phantoms
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 

@@ -29,22 +29,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I

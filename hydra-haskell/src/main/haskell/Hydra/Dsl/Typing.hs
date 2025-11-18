@@ -1,7 +1,7 @@
 module Hydra.Dsl.Typing where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M

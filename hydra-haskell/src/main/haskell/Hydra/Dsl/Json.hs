@@ -1,7 +1,7 @@
 module Hydra.Dsl.Json where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import Hydra.Json
 
 import qualified Data.Map as M

@@ -25,6 +25,7 @@ import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.monads
+import hydra.reflect
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
@@ -33,7 +34,6 @@ import hydra.sorting
 import hydra.substitution
 import hydra.typing
 import hydra.unification
-import hydra.variants
 
 def bind_constraints[T0, T1](cx: hydra.typing.InferenceContext, f: Callable[[hydra.typing.TypeSubst], hydra.compute.Flow[T0, T1]], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T0, T1]:
     return hydra.lib.flows.bind(hydra.unification.unify_type_constraints(cx.schema_types, constraints), (lambda s: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s), (lambda _: f(s)))))
@@ -121,7 +121,7 @@ def generalize(cx: hydra.typing.InferenceContext, typ: hydra.core.Type) -> hydra
     return hydra.core.TypeScheme(vars, typ)
 
 def infer_type_of_literal[T0, T1](_: T0, lit: hydra.core.Literal) -> hydra.compute.Flow[T1, hydra.typing.InferenceResult]:
-    return hydra.lib.flows.pure(hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermLiteral(lit)), cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.variants.literal_type(lit))), hydra.substitution.id_type_subst))
+    return hydra.lib.flows.pure(hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermLiteral(lit)), cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.reflect.literal_type(lit))), hydra.substitution.id_type_subst))
 
 # The trivial inference rule for the unit term.
 infer_type_of_unit = hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.substitution.id_type_subst)

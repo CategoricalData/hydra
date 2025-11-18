@@ -2,9 +2,6 @@
 
 package hydra.graph;
 
-import hydra.core.Term;
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -33,7 +30,7 @@ public class Graph implements Serializable {
   /**
    * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
    */
-  public final java.util.Map<hydra.core.Name, Maybe<Term>> environment;
+  public final java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment;
   
   /**
    * The typing environment of the graph
@@ -53,9 +50,9 @@ public class Graph implements Serializable {
   /**
    * The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
    */
-  public final Maybe<Graph> schema;
+  public final hydra.util.Maybe<hydra.graph.Graph> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.core.Binding> elements, java.util.Map<hydra.core.Name, Maybe<Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, Maybe<Graph> schema) {
+  public Graph (java.util.Map<hydra.core.Name, hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Maybe<hydra.graph.Graph> schema) {
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((environment));
     java.util.Objects.requireNonNull((types));
@@ -89,7 +86,7 @@ public class Graph implements Serializable {
     return new Graph(elements, environment, types, body, primitives, schema);
   }
   
-  public Graph withEnvironment(java.util.Map<hydra.core.Name, Maybe<Term>> environment) {
+  public Graph withEnvironment(java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment) {
     java.util.Objects.requireNonNull((environment));
     return new Graph(elements, environment, types, body, primitives, schema);
   }
@@ -109,7 +106,7 @@ public class Graph implements Serializable {
     return new Graph(elements, environment, types, body, primitives, schema);
   }
   
-  public Graph withSchema(Maybe<Graph> schema) {
+  public Graph withSchema(hydra.util.Maybe<hydra.graph.Graph> schema) {
     java.util.Objects.requireNonNull((schema));
     return new Graph(elements, environment, types, body, primitives, schema);
   }

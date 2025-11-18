@@ -29,22 +29,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import qualified Hydra.Sources.Kernel.Terms.All             as KernelTerms
 import qualified Hydra.Sources.Kernel.Types.All             as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals  as AdaptLiterals
@@ -69,6 +69,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
@@ -82,7 +83,6 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
 import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
@@ -105,23 +105,23 @@ haskellLanguageDef :: TBinding Language
 haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
-    Meta.eliminationVariantProduct,
-    Meta.eliminationVariantRecord,
-    Meta.eliminationVariantUnion,
-    Meta.eliminationVariantWrap],
+    Variants.eliminationVariantProduct,
+    Variants.eliminationVariantRecord,
+    Variants.eliminationVariantUnion,
+    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
-    Meta.literalVariantBoolean,
-    Meta.literalVariantFloat,
-    Meta.literalVariantInteger,
-    Meta.literalVariantString],
+    Variants.literalVariantBoolean,
+    Variants.literalVariantFloat,
+    Variants.literalVariantInteger,
+    Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [
     -- Bigfloat is excluded for now
     Core.floatTypeFloat32, -- Float
     Core.floatTypeFloat64], -- Double
   "functionVariants">: Sets.fromList $ list [
-    Meta.functionVariantElimination,
-    Meta.functionVariantLambda,
-    Meta.functionVariantPrimitive],
+    Variants.functionVariantElimination,
+    Variants.functionVariantLambda,
+    Variants.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- Integer
     Core.integerTypeInt8, -- Int8
@@ -129,39 +129,39 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     Core.integerTypeInt32, -- Int
     Core.integerTypeInt64], -- Int64
   "termVariants">: Sets.fromList $ list [
-    Meta.termVariantApplication,
-    Meta.termVariantFunction,
-    Meta.termVariantLet,
-    Meta.termVariantList,
-    Meta.termVariantLiteral,
-    Meta.termVariantMap,
-    Meta.termVariantMaybe,
-    Meta.termVariantPair,
-    Meta.termVariantProduct,
-    Meta.termVariantRecord,
-    Meta.termVariantSet,
-    Meta.termVariantUnion,
-    Meta.termVariantUnit,
-    Meta.termVariantVariable,
-    Meta.termVariantWrap],
+    Variants.termVariantApplication,
+    Variants.termVariantFunction,
+    Variants.termVariantLet,
+    Variants.termVariantList,
+    Variants.termVariantLiteral,
+    Variants.termVariantMap,
+    Variants.termVariantMaybe,
+    Variants.termVariantPair,
+    Variants.termVariantProduct,
+    Variants.termVariantRecord,
+    Variants.termVariantSet,
+    Variants.termVariantUnion,
+    Variants.termVariantUnit,
+    Variants.termVariantVariable,
+    Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [
-    Meta.typeVariantAnnotated,
-    Meta.typeVariantApplication,
-    Meta.typeVariantEither,
-    Meta.typeVariantFunction,
-    Meta.typeVariantForall,
-    Meta.typeVariantList,
-    Meta.typeVariantLiteral,
-    Meta.typeVariantMap,
-    Meta.typeVariantMaybe,
-    Meta.typeVariantPair,
-    Meta.typeVariantProduct,
-    Meta.typeVariantRecord,
-    Meta.typeVariantSet,
-    Meta.typeVariantUnion,
-    Meta.typeVariantUnit,
-    Meta.typeVariantVariable,
-    Meta.typeVariantWrap],
+    Variants.typeVariantAnnotated,
+    Variants.typeVariantApplication,
+    Variants.typeVariantEither,
+    Variants.typeVariantFunction,
+    Variants.typeVariantForall,
+    Variants.typeVariantList,
+    Variants.typeVariantLiteral,
+    Variants.typeVariantMap,
+    Variants.typeVariantMaybe,
+    Variants.typeVariantPair,
+    Variants.typeVariantProduct,
+    Variants.typeVariantRecord,
+    Variants.typeVariantSet,
+    Variants.typeVariantUnion,
+    Variants.typeVariantUnit,
+    Variants.typeVariantVariable,
+    Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
     (Coders.languageName $ string "hydra.ext.haskell")

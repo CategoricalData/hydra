@@ -2,10 +2,7 @@
 
 package hydra.core;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * A tuple elimination; a projection from an integer-indexed product
@@ -32,9 +29,9 @@ public class TupleProjection implements Serializable {
   /**
    * An optional domain for the projection; this is a list of component types
    */
-  public final Maybe<List<Type>> domain;
+  public final hydra.util.Maybe<java.util.List<hydra.core.Type>> domain;
   
-  public TupleProjection (Integer arity, Integer index, Maybe<List<Type>> domain) {
+  public TupleProjection (Integer arity, Integer index, hydra.util.Maybe<java.util.List<hydra.core.Type>> domain) {
     java.util.Objects.requireNonNull((arity));
     java.util.Objects.requireNonNull((index));
     java.util.Objects.requireNonNull((domain));
@@ -67,7 +64,7 @@ public class TupleProjection implements Serializable {
     return new TupleProjection(arity, index, domain);
   }
   
-  public TupleProjection withDomain(Maybe<List<Type>> domain) {
+  public TupleProjection withDomain(hydra.util.Maybe<java.util.List<hydra.core.Type>> domain) {
     java.util.Objects.requireNonNull((domain));
     return new TupleProjection(arity, index, domain);
   }

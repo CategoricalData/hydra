@@ -2,8 +2,6 @@
 
 package hydra.module;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -19,14 +17,14 @@ public class QualifiedName implements Serializable {
   /**
    * The optional namespace
    */
-  public final Maybe<Namespace> namespace;
+  public final hydra.util.Maybe<hydra.module.Namespace> namespace;
   
   /**
    * The local name
    */
   public final String local;
   
-  public QualifiedName (Maybe<Namespace> namespace, String local) {
+  public QualifiedName (hydra.util.Maybe<hydra.module.Namespace> namespace, String local) {
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((local));
     this.namespace = namespace;
@@ -47,7 +45,7 @@ public class QualifiedName implements Serializable {
     return 2 * namespace.hashCode() + 3 * local.hashCode();
   }
   
-  public QualifiedName withNamespace(Maybe<Namespace> namespace) {
+  public QualifiedName withNamespace(hydra.util.Maybe<hydra.module.Namespace> namespace) {
     java.util.Objects.requireNonNull((namespace));
     return new QualifiedName(namespace, local);
   }

@@ -20,5 +20,5 @@ module Hydra.Minimal (
 ) where
 
 import Hydra.Core
-import Hydra.Variants
+import Hydra.Reflect
 import Hydra.Dsl.Literals

@@ -1,6 +1,5 @@
-package hydra.ext.json;
+package hydra.json;
 
-import hydra.json.Value;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

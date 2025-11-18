@@ -6,8 +6,8 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Meta as Meta
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -30,11 +30,11 @@ protobufLanguage = Coders.Language {
   where 
     eliminationVariants = (Sets.fromList [])
     literalVariants = (Sets.fromList [
-      Meta.LiteralVariantBinary,
-      Meta.LiteralVariantBoolean,
-      Meta.LiteralVariantFloat,
-      Meta.LiteralVariantInteger,
-      Meta.LiteralVariantString])
+      Variants.LiteralVariantBinary,
+      Variants.LiteralVariantBoolean,
+      Variants.LiteralVariantFloat,
+      Variants.LiteralVariantInteger,
+      Variants.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeFloat32,
       Core.FloatTypeFloat64])
@@ -45,23 +45,23 @@ protobufLanguage = Coders.Language {
       Core.IntegerTypeUint32,
       Core.IntegerTypeUint64])
     termVariants = (Sets.fromList [
-      Meta.TermVariantList,
-      Meta.TermVariantLiteral,
-      Meta.TermVariantMap,
-      Meta.TermVariantMaybe,
-      Meta.TermVariantRecord,
-      Meta.TermVariantUnion,
-      Meta.TermVariantUnit])
+      Variants.TermVariantList,
+      Variants.TermVariantLiteral,
+      Variants.TermVariantMap,
+      Variants.TermVariantMaybe,
+      Variants.TermVariantRecord,
+      Variants.TermVariantUnion,
+      Variants.TermVariantUnit])
     typeVariants = (Sets.fromList [
-      Meta.TypeVariantAnnotated,
-      Meta.TypeVariantList,
-      Meta.TypeVariantLiteral,
-      Meta.TypeVariantMap,
-      Meta.TypeVariantMaybe,
-      Meta.TypeVariantRecord,
-      Meta.TypeVariantUnion,
-      Meta.TypeVariantUnit,
-      Meta.TypeVariantVariable])
+      Variants.TypeVariantAnnotated,
+      Variants.TypeVariantList,
+      Variants.TypeVariantLiteral,
+      Variants.TypeVariantMap,
+      Variants.TypeVariantMaybe,
+      Variants.TypeVariantRecord,
+      Variants.TypeVariantUnion,
+      Variants.TypeVariantUnit,
+      Variants.TypeVariantVariable])
     typePredicate = (\typ -> (\x -> case x of
       Core.TypeMap v1 ->  
         let valuesType = (Core.mapTypeValues v1) 

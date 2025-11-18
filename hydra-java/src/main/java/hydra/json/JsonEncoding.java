@@ -1,7 +1,9 @@
-package hydra.ext.json;
+package hydra.json;
 
 import hydra.core.Name;
 import hydra.json.Value;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -37,7 +39,7 @@ public abstract class JsonEncoding {
    * @return the JSON value
    */
   protected static Value toJson(double d) {
-    return new Value.Number_(String.valueOf(d));
+    return new Value.Number_(BigDecimal.valueOf(d));
   }
 
   /**
@@ -47,7 +49,7 @@ public abstract class JsonEncoding {
    * @return the JSON value
    */
   protected static Value toJson(int i) {
-    return new Value.Number_(String.valueOf(i));
+    return new Value.Number_(BigDecimal.valueOf(i));
   }
 
   /**

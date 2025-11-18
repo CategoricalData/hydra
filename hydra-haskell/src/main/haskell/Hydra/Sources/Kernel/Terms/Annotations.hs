@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -55,21 +55,20 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core as EncodeCore
+import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
+import qualified Hydra.Sources.Kernel.Terms.Decode.Core  as DecodeCore
+import qualified Hydra.Sources.Kernel.Terms.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.annotations") elements
-    [DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, ShowCore.module_,
-      Variants.module_, Monads.module_]
+    [Constants.module_, DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, Monads.module_,
+      Rewriting.module_, ShowCore.module_]
     kernelTypesModules $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -312,7 +311,7 @@ putCountDef = define "putCount" $
 resetCountDef :: TBinding (Name -> Flow s ())
 resetCountDef = define "resetCount" $
   doc "Reset counter to zero" $
-  "key" ~> ref putAttrDef @@ var "key" @@ TTerms.int32 0
+  "key" ~> ref putAttrDef @@ var "key" @@ MetaTerms.int32 0
 
 setAnnotationDef :: TBinding (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotationDef = define "setAnnotation" $
@@ -364,8 +363,8 @@ setTypeClassesDef = define "setTypeClasses" $
   "m" ~> "term" ~>
   "encodeClass" <~ ("tc" ~> cases _TypeClass (var "tc")
     Nothing [
-    _TypeClass_equality>>: constant (TTerms.unitVariantPhantom _TypeClass _TypeClass_equality),
-    _TypeClass_ordering>>: constant (TTerms.unitVariantPhantom _TypeClass _TypeClass_ordering)]) $
+    _TypeClass_equality>>: constant (MetaTerms.unitVariantPhantom _TypeClass _TypeClass_equality),
+    _TypeClass_ordering>>: constant (MetaTerms.unitVariantPhantom _TypeClass _TypeClass_ordering)]) $
   "encodePair" <~ ("nameClasses" ~>
     "name" <~ first (var "nameClasses") $
     "classes" <~ second (var "nameClasses") $

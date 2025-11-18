@@ -162,7 +162,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       (primitive name)
-      (inject functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
+      (inject functionProxyName "primitive" (string $ unName name)) -- Note: the function name is not dereferenced
 
 --  H.it "Projections (when unsupported) become variant terms" $
 --    QC.property $ \fname -> checkDataAdapter
@@ -192,7 +192,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])
       False
-      (inject eitherStringOrInt8TypeName $ field "right" $ int8 i)
+      (inject eitherStringOrInt8TypeName "right" (int8 i))
       (record eitherStringOrInt8TypeName [
         field "left" $ optional Nothing,
         field "right" $ optional $ Just $ int16 $ fromIntegral i])

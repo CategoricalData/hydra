@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import qualified Hydra.Sources.Kernel.Terms.All             as KernelTerms
 import qualified Hydra.Sources.Kernel.Types.All             as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals  as AdaptLiterals
@@ -71,6 +71,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
@@ -84,7 +85,6 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
 import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
@@ -107,25 +107,25 @@ csharpLanguageDef :: TBinding Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
   "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-    Meta.eliminationVariantProduct,
-    Meta.eliminationVariantRecord,
-    Meta.eliminationVariantUnion,
-    Meta.eliminationVariantWrap],
+    Variants.eliminationVariantProduct,
+    Variants.eliminationVariantRecord,
+    Variants.eliminationVariantUnion,
+    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
-    Meta.literalVariantBinary, -- byte[]
-    Meta.literalVariantBoolean, -- bool
-    Meta.literalVariantFloat, -- (see float types)
-    Meta.literalVariantInteger, -- (see integer types)
-    Meta.literalVariantString], -- String/string
+    Variants.literalVariantBinary, -- byte[]
+    Variants.literalVariantBoolean, -- bool
+    Variants.literalVariantFloat, -- (see float types)
+    Variants.literalVariantInteger, -- (see integer types)
+    Variants.literalVariantString], -- String/string
   "floatTypes">: Sets.fromList $ list [
     -- See: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
     -- Note: the other C# floating point type, decimal, has no equivalent in Hydra
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
   "functionVariants">: Sets.fromList $ list [
-    Meta.functionVariantElimination,
-    Meta.functionVariantLambda,
-    Meta.functionVariantPrimitive],
+    Variants.functionVariantElimination,
+    Variants.functionVariantLambda,
+    Variants.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
     -- See https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
     -- Note: the other two C# integral types, nint and nuint, have no equivalents in Hydra
@@ -138,34 +138,34 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
     Core.integerTypeUint32, -- uint
     Core.integerTypeUint64], -- ulong
   "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-    Meta.termVariantApplication,
-    Meta.termVariantFunction,
-    Meta.termVariantLet,
-    Meta.termVariantList,
-    Meta.termVariantLiteral,
-    Meta.termVariantMap,
-    Meta.termVariantMaybe,
-    Meta.termVariantProduct,
-    Meta.termVariantRecord,
-    Meta.termVariantSet,
-    Meta.termVariantUnion,
-    Meta.termVariantVariable,
-    Meta.termVariantWrap],
+    Variants.termVariantApplication,
+    Variants.termVariantFunction,
+    Variants.termVariantLet,
+    Variants.termVariantList,
+    Variants.termVariantLiteral,
+    Variants.termVariantMap,
+    Variants.termVariantMaybe,
+    Variants.termVariantProduct,
+    Variants.termVariantRecord,
+    Variants.termVariantSet,
+    Variants.termVariantUnion,
+    Variants.termVariantVariable,
+    Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-    Meta.typeVariantAnnotated,
-    Meta.typeVariantApplication,
-    Meta.typeVariantFunction,
-    Meta.typeVariantForall,
-    Meta.typeVariantList,
-    Meta.typeVariantLiteral,
-    Meta.typeVariantMap,
-    Meta.typeVariantMaybe,
-    Meta.typeVariantProduct,
-    Meta.typeVariantRecord,
-    Meta.typeVariantSet,
-    Meta.typeVariantUnion,
-    Meta.typeVariantVariable,
-    Meta.typeVariantWrap],
+    Variants.typeVariantAnnotated,
+    Variants.typeVariantApplication,
+    Variants.typeVariantFunction,
+    Variants.typeVariantForall,
+    Variants.typeVariantList,
+    Variants.typeVariantLiteral,
+    Variants.typeVariantMap,
+    Variants.typeVariantMaybe,
+    Variants.typeVariantProduct,
+    Variants.typeVariantRecord,
+    Variants.typeVariantSet,
+    Variants.typeVariantUnion,
+    Variants.typeVariantVariable,
+    Variants.typeVariantWrap],
   "typePredicate">: constant true] $ -- TODO: verify whether all are supported
   Coders.language
     (Coders.languageName $ string "hydra.ext.csharp")

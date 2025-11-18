@@ -4,7 +4,7 @@ module Hydra.Dsl.Lib.Flows where
 
 import Hydra.Compute
 import Hydra.Phantoms
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries

@@ -1,13 +1,13 @@
 -- | A basis for other DSLs which deal with term-encoded expressions.
 
-module Hydra.Dsl.TBase (
-  module Hydra.Dsl.Phantoms,
-  module Hydra.Dsl.TBase,
+module Hydra.Dsl.Meta.Base (
+  module Hydra.Dsl.Meta.Phantoms,
+  module Hydra.Dsl.Meta.Base,
   module Hydra.Sources.Libraries,
 ) where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms(definitionInModule, el, firstClassType, opt, ref, variant)
+import Hydra.Dsl.Meta.Phantoms(definitionInModule, el, firstClassType, opt, ref, variant)
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Sources.Libraries

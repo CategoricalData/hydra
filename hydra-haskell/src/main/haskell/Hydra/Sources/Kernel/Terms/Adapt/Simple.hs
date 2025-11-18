@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -55,22 +55,20 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Inference as Inference
-import qualified Hydra.Sources.Kernel.Terms.Literals as Lits
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Graph as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Inference   as Inference
+import qualified Hydra.Sources.Kernel.Terms.Literals    as Literals
+import qualified Hydra.Sources.Kernel.Terms.Reduction   as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect     as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.simple") elements
-    [DecodeCore.module_, Inference.module_, Lits.module_, Monads.module_, Reduction.module_, Rewriting.module_, Schemas.module_,
-      ShowCore.module_, ShowGraph.module_, Variants.module_]
+    [Inference.module_, Literals.module_, Reduction.module_, Reflect.module_, Rewriting.module_, Schemas.module_,
+      ShowCore.module_, ShowGraph.module_]
     kernelTypesModules $
     Just "Simple, one-way adapters for types and terms"
   where
@@ -209,15 +207,15 @@ adaptLiteralDef = define "adaptLiteral" $
     _Literal_boolean>>: "b" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
-        ref Lits.bigintToIntegerValueDef @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
+        ref Literals.bigintToIntegerValueDef @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
     _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: "ft" ~> Core.literalFloat $
-        ref Lits.bigfloatToFloatValueDef @@ var "ft" @@ (ref Lits.floatValueToBigfloatDef @@ var "f")],
+        ref Literals.bigfloatToFloatValueDef @@ var "ft" @@ (ref Literals.floatValueToBigfloatDef @@ var "f")],
     _Literal_integer>>: "i" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
-        ref Lits.bigintToIntegerValueDef @@ var "it" @@ (ref Lits.integerValueToBigintDef @@ var "i")]]
+        ref Literals.bigintToIntegerValueDef @@ var "it" @@ (ref Literals.integerValueToBigintDef @@ var "i")]]
 
 adaptLiteralTypeDef :: TBinding (LanguageConstraints -> LiteralType -> Maybe LiteralType)
 adaptLiteralTypeDef = define "adaptLiteralType" $
@@ -243,7 +241,7 @@ adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
   "tryType" <~ ("lt" ~> optCases (ref adaptLiteralTypeDef @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ tuple2 (var "lt") (var "lt2"))) $
-  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (ref Variants.literalTypesDef)
+  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (ref Reflect.literalTypesDef)
 
 adaptLiteralValueDef :: TBinding (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
 adaptLiteralValueDef = define "adaptLiteralValue" $
@@ -270,7 +268,7 @@ adaptTermDef = define "adaptTerm" $
     "forSupported">: ("term" ~> cases _Term (var "term")
       (Just $ produce $ just $ var "term") [
       _Term_literal>>: "l" ~>
-        "lt" <~ ref Variants.literalTypeDef @@ var "l" $
+        "lt" <~ ref Reflect.literalTypeDef @@ var "l" $
         produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
           (var "term")
           (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")]),
@@ -287,7 +285,7 @@ adaptTermDef = define "adaptTerm" $
       var "tryAlts" @@ var "alts"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
-        (ref Variants.termVariantDef @@ var "term")
+        (ref Reflect.termVariantDef @@ var "term")
         (Coders.languageConstraintsTermVariants $ var "constraints") $
       Logic.ifElse (var "supportedVariant")
         (var "forSupported" @@ var "term")
@@ -321,7 +319,7 @@ adaptTypeDef = define "adaptType" $
     var "tryAlts" @@ var "alts"),
   "tryType">: ("typ" ~>
     "supportedVariant" <~ Sets.member
-      (ref Variants.typeVariantDef @@ var "typ")
+      (ref Reflect.typeVariantDef @@ var "typ")
       (Coders.languageConstraintsTypeVariants $ var "constraints") $
     Logic.ifElse (var "supportedVariant")
       (var "forSupported" @@ var "typ")
@@ -389,7 +387,7 @@ literalTypeSupportedDef = define "literalTypeSupported" $
       _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")]) $
   Logic.ifElse
     (Sets.member
-      (ref Variants.literalTypeVariantDef @@ var "lt")
+      (ref Reflect.literalTypeVariantDef @@ var "lt")
       (Coders.languageConstraintsLiteralVariants $ var "constraints"))
     (var "forType" @@ var "lt")
     false

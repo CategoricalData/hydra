@@ -75,9 +75,9 @@ char = int32 . C.ord
 
 comparison :: Comparison -> Term
 comparison t = case t of
-  ComparisonEqualTo -> unitVariant _Comparison _Comparison_equalTo
-  ComparisonLessThan -> unitVariant _Comparison _Comparison_lessThan
-  ComparisonGreaterThan -> unitVariant _Comparison _Comparison_greaterThan
+  ComparisonEqualTo -> injectUnit _Comparison _Comparison_equalTo
+  ComparisonLessThan -> injectUnit _Comparison _Comparison_lessThan
+  ComparisonGreaterThan -> injectUnit _Comparison _Comparison_greaterThan
 
 -- | Compose two functions (apply g then f) to create a new function
 -- Example: compose (var "stringLength") (var "toString")
@@ -124,17 +124,17 @@ identity :: Term
 identity = lambda "x_" $ var "x_"
 
 -- | Create a union value by injecting a value into a specific variant
--- Example: inject (Name "Result") ("success">: int32 42)
+-- Example: inject (Name "Result") (Name "success") (int32 42)
 -- This creates a "Result" union with the "success" variant containing value 42
 -- Use this to construct values of union types at runtime
-inject :: Name -> Field -> Term
-inject tname = TermUnion . Injection tname
+inject :: Name -> Name -> Term -> Term
+inject tname fname term = TermUnion $ Injection tname $ Field fname term
 
 -- | Create a unit variant of a union (convenience function)
 -- Example: injectUnit (Name "Result") (Name "success")
 -- Equivalent to inject but automatically uses unit as the value
 injectUnit :: Name -> Name -> Term
-injectUnit tname fname = inject tname (Field fname unit)
+injectUnit tname fname = inject tname fname unit
 
 -- | Create an int8 literal
 -- Example: int8 127
@@ -357,11 +357,6 @@ uint64 = literal . Literals.uint64
 unit :: Term
 unit = TermUnit
 
--- | Create a unit variant of a union
--- Example: unitVariant (Name "Result") (Name "success")
-unitVariant :: Name -> Name -> Term
-unitVariant tname fname = variant tname fname unit
-
 -- | Create a untyped tuple projection function
 -- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple
 untuple :: Int -> Int -> Term
@@ -376,11 +371,6 @@ unwrap = TermFunction . FunctionElimination . EliminationWrap
 -- Example: var "x"
 var :: String -> Term
 var = TermVariable . Name
-
--- | Create a union variant
--- Example: variant (Name "Result") (Name "success") (string "ok")
-variant :: Name -> Name -> Term -> Term
-variant tname fname term = TermUnion $ Injection tname $ Field fname term
 
 -- | Create a wrapped term
 -- Example: wrap (Name "Email") (string "user@example.com")

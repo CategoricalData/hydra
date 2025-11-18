@@ -33,22 +33,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import qualified Hydra.Sources.Kernel.Terms.All             as KernelTerms
 import qualified Hydra.Sources.Kernel.Types.All             as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals  as AdaptLiterals
@@ -73,6 +73,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
@@ -86,7 +87,6 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
 import           Prelude hiding ((++))
 import qualified Data.Int                                   as I
 import qualified Data.List                                  as L
@@ -109,23 +109,23 @@ cppLanguageDef :: TBinding Language
 cppLanguageDef = cppLanguageDefinition "cppLanguage" $
   doc "Language constraints for C++" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
-    Meta.eliminationVariantProduct,
-    Meta.eliminationVariantRecord,
-    Meta.eliminationVariantUnion,
-    Meta.eliminationVariantWrap],
+    Variants.eliminationVariantProduct,
+    Variants.eliminationVariantRecord,
+    Variants.eliminationVariantUnion,
+    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
-    Meta.literalVariantBinary,  -- char arrays, std::byte arrays
-    Meta.literalVariantBoolean, -- bool
-    Meta.literalVariantFloat,   -- float, double
-    Meta.literalVariantInteger, -- int, long, etc.
-    Meta.literalVariantString], -- std::string
+    Variants.literalVariantBinary,  -- char arrays, std::byte arrays
+    Variants.literalVariantBoolean, -- bool
+    Variants.literalVariantFloat,   -- float, double
+    Variants.literalVariantInteger, -- int, long, etc.
+    Variants.literalVariantString], -- std::string
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,      -- float
     Core.floatTypeFloat64],     -- double
   "functionVariants">: Sets.fromList $ list [
-    Meta.functionVariantElimination,
-    Meta.functionVariantLambda,
-    Meta.functionVariantPrimitive],
+    Variants.functionVariantElimination,
+    Variants.functionVariantLambda,
+    Variants.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt8,       -- char, int8_t
     Core.integerTypeInt16,      -- short, int16_t
@@ -133,33 +133,33 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Core.integerTypeInt64,      -- long, long long, int64_t
     Core.integerTypeBigint],    -- custom big integer implementation
   "termVariants">: Sets.fromList $ list [
-    Meta.termVariantApplication,
-    Meta.termVariantFunction,
-    Meta.termVariantLet,
-    Meta.termVariantList,       -- std::vector
-    Meta.termVariantLiteral,
-    Meta.termVariantMap,        -- std::map
-    Meta.termVariantMaybe,   -- std::optional
-    Meta.termVariantProduct,    -- struct with unnamed fields
-    Meta.termVariantRecord,     -- struct with named fields
-    Meta.termVariantSet,        -- std::set
-    Meta.termVariantUnion,      -- std::variant or enum
-    Meta.termVariantVariable,
-    Meta.termVariantWrap],      -- wrapper class
+    Variants.termVariantApplication,
+    Variants.termVariantFunction,
+    Variants.termVariantLet,
+    Variants.termVariantList,       -- std::vector
+    Variants.termVariantLiteral,
+    Variants.termVariantMap,        -- std::map
+    Variants.termVariantMaybe,   -- std::optional
+    Variants.termVariantProduct,    -- struct with unnamed fields
+    Variants.termVariantRecord,     -- struct with named fields
+    Variants.termVariantSet,        -- std::set
+    Variants.termVariantUnion,      -- std::variant or enum
+    Variants.termVariantVariable,
+    Variants.termVariantWrap],      -- wrapper class
   "typeVariants">: Sets.fromList $ list [
-    Meta.typeVariantApplication, -- template instantiation
-    Meta.typeVariantFunction,    -- function types
-    Meta.typeVariantForall,      -- templates
-    Meta.typeVariantList,        -- std::vector
-    Meta.typeVariantLiteral,     -- primitive types
-    Meta.typeVariantMap,         -- std::map
-    Meta.typeVariantMaybe,    -- std::optional
-    Meta.typeVariantProduct,     -- anonymous structs
-    Meta.typeVariantRecord,      -- structs
-    Meta.typeVariantSet,         -- std::set
-    Meta.typeVariantUnion,       -- std::variant, enum
-    Meta.typeVariantVariable,    -- type parameters
-    Meta.typeVariantWrap],       -- wrapper class
+    Variants.typeVariantApplication, -- template instantiation
+    Variants.typeVariantFunction,    -- function types
+    Variants.typeVariantForall,      -- templates
+    Variants.typeVariantList,        -- std::vector
+    Variants.typeVariantLiteral,     -- primitive types
+    Variants.typeVariantMap,         -- std::map
+    Variants.typeVariantMaybe,    -- std::optional
+    Variants.typeVariantProduct,     -- anonymous structs
+    Variants.typeVariantRecord,      -- structs
+    Variants.typeVariantSet,         -- std::set
+    Variants.typeVariantUnion,       -- std::variant, enum
+    Variants.typeVariantVariable,    -- type parameters
+    Variants.typeVariantWrap],       -- wrapper class
   "typePredicate">: constant true] $ -- TODO: refine this with C++ specific constraints
   Coders.language
     (Coders.languageName $ string "hydra.ext.cpp")

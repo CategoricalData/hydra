@@ -13,9 +13,9 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Util as Util
@@ -87,7 +87,7 @@ literalTypeIsSupported constraints lt =
           Core.LiteralTypeFloat v1 -> (floatTypeIsSupported constraints v1)
           Core.LiteralTypeInteger v1 -> (integerTypeIsSupported constraints v1)
           _ -> True) lt)
-  in (Logic.and (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
+  in (Logic.and (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
 
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
@@ -115,7 +115,7 @@ typeIsSupported constraints t =
   let base = (Rewriting.deannotateType t)
   in  
     let isVariable = (\v -> (\x -> case x of
-            Meta.TypeVariantVariable -> True
+            Variants.TypeVariantVariable -> True
             _ -> False) v)
     in  
       let isSupportedVariant = (\v -> Logic.or (isVariable v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
@@ -138,7 +138,7 @@ typeIsSupported constraints t =
                 Core.TypeUnit -> True
                 Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeBody v1))
                 Core.TypeVariable _ -> True) base)
-        in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Variants.typeVariant base)) (isSupported base)))
+        in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Reflect.typeVariant base)) (isSupported base)))
 
 unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)
 unidirectionalCoder m = Compute.Coder {

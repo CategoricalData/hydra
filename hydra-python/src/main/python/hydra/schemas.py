@@ -24,10 +24,10 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.meta
 import hydra.module
 import hydra.monads
 import hydra.names
+import hydra.reflect
 import hydra.rewriting
 import hydra.show.core
 import hydra.sorting
@@ -275,9 +275,9 @@ def type_dependencies(with_schema: bool, transform: Callable[[hydra.core.Type], 
 def is_serializable(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
     r"""Check if an element is serializable (no function types in dependencies)."""
     
-    def variants(typ: hydra.core.Type) -> frozenlist[hydra.meta.TypeVariant]:
-        return hydra.lib.lists.map(hydra.variants.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
-    return hydra.lib.flows.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map(variants, hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.meta.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(False, cast(Callable[[hydra.core.Type], hydra.core.Type], hydra.lib.equality.identity), el.name))
+    def variants(typ: hydra.core.Type) -> frozenlist[hydra.variants.TypeVariant]:
+        return hydra.lib.lists.map(hydra.reflect.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
+    return hydra.lib.flows.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map(variants, hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.variants.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(False, cast(Callable[[hydra.core.Type], hydra.core.Type], hydra.lib.equality.identity), el.name))
 
 def module_dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace."""
