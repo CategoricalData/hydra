@@ -310,7 +310,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
 def field(field: hydra.core.Field) -> str:
     fname = field.name.value
     fterm = field.term
-    return hydra.lib.strings.cat2(fname, hydra.lib.strings.cat2("=", term(fterm)))
+    return hydra.lib.strings.cat((fname, "=", term(fterm)))
 
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
     r"""Show a list of fields as a string."""

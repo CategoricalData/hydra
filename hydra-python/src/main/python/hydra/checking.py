@@ -44,7 +44,7 @@ def check_type_variables[T0](tx: hydra.typing.TypeContext, typ: hydra.core.Type)
                 return check_type_variables(hydra.typing.TypeContext(tx.types, hydra.lib.sets.insert(ft.parameter, vars), tx.inference_context), ft.body)
             
             case hydra.core.TypeVariable(value=v):
-                return hydra.lib.logic.if_else(hydra.lib.sets.member(v, vars), hydra.lib.flows.pure(None), hydra.lib.logic.if_else(hydra.lib.maps.member(v, cx.schema_types), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound type variable \"", v.value, "\" in ", hydra.show.core.type(typ))))))
+                return hydra.lib.logic.if_else(hydra.lib.sets.member(v, vars), hydra.lib.flows.pure(None), hydra.lib.logic.if_else(hydra.lib.maps.member(v, cx.schema_types), hydra.lib.flows.pure(None), hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound type variable \"", v.value, "\" in ", hydra.show.core.type(typ), ". Local variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.sets.to_list(vars))), "}, schema variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(cx.schema_types))), "}")))))
             
             case _:
                 return dflt
@@ -165,7 +165,7 @@ def type_of_unwrap[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname), (lambda schema_type: (svars := schema_type.variables, sbody := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.wrapped_type(tname, sbody), (lambda wrapped: (subst := hydra.typing.TypeSubst(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(hydra.lib.lists.zip(svars, type_args)))), swrapped := hydra.substitution.subst_in_type(subst, wrapped), hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, type_args), swrapped)))))[2])))[2]))
 
 def type_of_variable[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.Type]:
-    return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound variable: ", name.value))), cast(Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], hydra.schemas.instantiate_type), hydra.lib.maps.lookup(name, tx.types)), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
+    return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound variable: ", name.value, ". Variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(tx.types))), "}"))), cast(Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], hydra.schemas.instantiate_type), hydra.lib.maps.lookup(name, tx.types)), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))
 
 def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
     def check() -> hydra.compute.Flow[T0, hydra.core.Type]:
