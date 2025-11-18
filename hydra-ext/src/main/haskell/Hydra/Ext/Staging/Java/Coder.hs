@@ -739,11 +739,11 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermMaybe mt -> case mt of
           Nothing -> pure $ javaMethodInvocationToJavaExpression $
-            methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "empty") []
+            methodInvocationStatic (Java.Identifier "hydra.util.Maybe") (Java.Identifier "nothing") []
           Just term1 -> do
             expr <- encode term1
             return $ javaMethodInvocationToJavaExpression $
-              methodInvocationStatic (Java.Identifier "hydra.util.Opt") (Java.Identifier "of") [expr]
+              methodInvocationStatic (Java.Identifier "hydra.util.Maybe") (Java.Identifier "just") [expr]
 
         TermPair (t1, t2) -> do
           jterm1 <- encode t1
@@ -985,7 +985,7 @@ encodeType aliases t =  case deannotateType t of
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
     TypeMaybe ot -> do
       jot <- encode ot >>= javaTypeToJavaReferenceType
-      return $ javaRefType [jot] hydraUtilPackageName "Opt"
+      return $ javaRefType [jot] hydraUtilPackageName "Maybe"
     TypeSet st -> do
       jst <- encode st >>= javaTypeToJavaReferenceType
       return $ javaRefType [jst] javaUtilPackageName "Set"
