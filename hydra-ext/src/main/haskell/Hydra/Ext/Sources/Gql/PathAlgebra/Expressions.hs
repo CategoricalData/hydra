@@ -33,12 +33,14 @@ import qualified Data.Map                               as M
 import qualified Data.Set                               as S
 import qualified Data.Maybe                             as Y
 
+import           Hydra.Sources.Kernel.Types.All
+
 
 pathAlgExprNs = Namespace "com.gdblab.pathAlgebra.expressions"
 expr = typeref pathAlgExprNs
 
 pathAlgebraExpressionsModule :: Module
-pathAlgebraExpressionsModule = Module pathAlgExprNs elements [] [] $
+pathAlgebraExpressionsModule = Module pathAlgExprNs elements [] kernelTypesModules $
     Just "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"
   where
     def = datatype pathAlgExprNs
