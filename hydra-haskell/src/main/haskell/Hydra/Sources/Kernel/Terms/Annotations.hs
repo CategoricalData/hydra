@@ -363,8 +363,8 @@ setTypeClassesDef = define "setTypeClasses" $
   "m" ~> "term" ~>
   "encodeClass" <~ ("tc" ~> cases _TypeClass (var "tc")
     Nothing [
-    _TypeClass_equality>>: constant (MetaTerms.unitVariantPhantom _TypeClass _TypeClass_equality),
-    _TypeClass_ordering>>: constant (MetaTerms.unitVariantPhantom _TypeClass _TypeClass_ordering)]) $
+    _TypeClass_equality>>: constant (MetaTerms.injectUnitPhantom _TypeClass _TypeClass_equality),
+    _TypeClass_ordering>>: constant (MetaTerms.injectUnitPhantom _TypeClass _TypeClass_ordering)]) $
   "encodePair" <~ ("nameClasses" ~>
     "name" <~ first (var "nameClasses") $
     "classes" <~ second (var "nameClasses") $

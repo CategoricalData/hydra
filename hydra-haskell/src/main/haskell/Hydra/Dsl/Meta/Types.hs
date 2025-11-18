@@ -56,7 +56,7 @@ field s = fieldType (name s)
 -- | Create a term-encoded FloatType representation
 -- Example: float FloatTypeFloat64
 float :: FloatType -> TTerm FloatType
-float t = Phantoms.unitVariant _FloatType $ case t of
+float t = Phantoms.injectUnit _FloatType $ case t of
   FloatTypeBigfloat -> _FloatType_bigfloat
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
@@ -129,7 +129,7 @@ int64 = typeLiteral $ literalTypeInteger integerTypeInt64
 -- | Create a term-encoded IntegerType representation
 -- Example: integer IntegerTypeInt32
 integer :: IntegerType -> TTerm IntegerType
-integer t = Phantoms.unitVariant _IntegerType $ case t of
+integer t = Phantoms.injectUnit _IntegerType $ case t of
   IntegerTypeBigint -> _IntegerType_bigint
   IntegerTypeInt8 -> _IntegerType_int8
   IntegerTypeInt16 -> _IntegerType_int16

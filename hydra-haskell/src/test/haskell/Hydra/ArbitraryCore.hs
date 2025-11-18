@@ -189,7 +189,7 @@ arbitraryTerm typ n = case typ of
       let fn = fieldTypeName f
       let Name fnStr = fn
       ft <- arbitraryTerm (fieldTypeType f) n'
-      return $ inject n fnStr ft
+      return $ inject n (Name fnStr) ft
     TypeUnit -> pure TermUnit
   where
     n' = decr n
@@ -275,7 +275,7 @@ shrinkers typ = trivialShrinker ++ case typ of
         promoteType = (st, \(TermSet els) -> S.toList els)
         shrinkType = (\(t, m) -> (Types.set t, \(TermSet els) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
     TypeUnion (RowType name sfields) -> dropFields
-        ++ shrinkFieldNames (TypeUnion . RowType name) (\fs -> let Field (Name fn) ft = L.head fs in inject name fn ft) (\(TermUnion (Injection _ f)) -> [f]) sfields
+        ++ shrinkFieldNames (TypeUnion . RowType name) (\fs -> let Field (Name fn) ft = L.head fs in inject name (Name fn) ft) (\(TermUnion (Injection _ f)) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO

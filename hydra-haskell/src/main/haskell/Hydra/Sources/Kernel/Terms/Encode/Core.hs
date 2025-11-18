@@ -130,7 +130,7 @@ encodedCase :: Name -> Name -> TTerm (a -> Term) -> Field
 encodedCase tname fname enc = field fname $ lambda "v" $ encodedVariant tname fname (enc @@ var "v")
 
 encodedEither :: TTerm (Prelude.Either a b) -> TTerm Term
-encodedEither = variant _Term _Term_either
+encodedEither = inject _Term _Term_either
 
 encodedField :: Name -> TTerm Term -> TTerm Term
 encodedField fname term = encodedFieldRaw (encodedName fname) term
@@ -149,19 +149,19 @@ encodedInjection tname fname term = TTerm $ Terms.record _Injection [
   field _Injection_field $ encodedField fname term]
 
 encodedInt32 :: TTerm Int -> TTerm Term
-encodedInt32 v = encodedIntegerValue $ variant _IntegerValue _IntegerValue_int32 v
+encodedInt32 v = encodedIntegerValue $ inject _IntegerValue _IntegerValue_int32 v
 
 encodedIntegerValue :: TTerm IntegerValue -> TTerm Term
 encodedIntegerValue = encodedLiteral . Core.literalInteger
 
 encodedList :: TTerm [a] -> TTerm Term
-encodedList = variant _Term _Term_list
+encodedList = inject _Term _Term_list
 
 encodedLiteral :: TTerm Literal -> TTerm Term
-encodedLiteral = variant _Term _Term_literal
+encodedLiteral = inject _Term _Term_literal
 
 encodedMap :: TTerm (M.Map k v) -> TTerm Term
-encodedMap = variant _Term _Term_map
+encodedMap = inject _Term _Term_map
 
 encodedName :: Name -> TTerm Name
 encodedName = wrap _Name . string . unName
@@ -170,31 +170,31 @@ encodedWrappedTerm :: Name -> TTerm Term -> TTerm Term
 encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
 
 encodedWrappedTermRaw :: TTerm Name -> TTerm Term -> TTerm Term
-encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.variant _Term _Term_wrap $ Terms.record _WrappedTerm [
+encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.inject _Term _Term_wrap $ Terms.record _WrappedTerm [
   Field _WrappedTerm_typeName name,
   Field _WrappedTerm_body term]
 
 encodedOptional :: TTerm (Maybe a) -> TTerm Term
-encodedOptional = variant _Term _Term_maybe
+encodedOptional = inject _Term _Term_maybe
 
 encodedPair :: TTerm (a, b) -> TTerm Term
-encodedPair = variant _Term _Term_pair
+encodedPair = inject _Term _Term_pair
 
 encodedRecord :: Name -> [Field] -> TTerm Term
-encodedRecord tname fields = TTerm $ Terms.variant _Term _Term_record $ Terms.record _Record [
+encodedRecord tname fields = TTerm $ Terms.inject _Term _Term_record $ Terms.record _Record [
     field _Record_typeName $ encodedName tname,
     field _Record_fields $ list (encField <$> fields)]
   where
     encField (Field fname term) = encodedField fname $ TTerm term
 
 encodedSet :: TTerm (S.Set a) -> TTerm Term
-encodedSet = variant _Term _Term_set
+encodedSet = inject _Term _Term_set
 
 encodedString :: TTerm String -> TTerm Term
-encodedString = encodedLiteral . variant _Literal _Literal_string
+encodedString = encodedLiteral . inject _Literal _Literal_string
 
 encodedUnion :: TTerm Term -> TTerm Term
-encodedUnion = variant _Term _Term_union
+encodedUnion = inject _Term _Term_union
 
 encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
@@ -202,14 +202,14 @@ encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname te
 annotatedTermDef :: TBinding (AnnotatedTerm -> Term)
 annotatedTermDef = define "AnnotatedTerm" $
   doc "Encode an annotated term as a term" $
-  "a" ~> variant _Term _Term_annotated (record _AnnotatedTerm [
+  "a" ~> inject _Term _Term_annotated (record _AnnotatedTerm [
     field _AnnotatedTerm_body (ref termDef @@ (Core.annotatedTermBody (var "a"))),
     field _AnnotatedTerm_annotation (Core.annotatedTermAnnotation (var "a"))])
 
 annotatedTypeDef :: TBinding (AnnotatedType -> Term)
 annotatedTypeDef = define "AnnotatedType" $
   doc "Encode an annotated type as a term" $
-  "at" ~> variant _Term _Term_annotated (record _AnnotatedTerm [
+  "at" ~> inject _Term _Term_annotated (record _AnnotatedTerm [
     field _AnnotatedTerm_body (ref typeDef @@ (Core.annotatedTypeBody (var "at"))),
     field _AnnotatedTerm_annotation (Core.annotatedTypeAnnotation (var "at"))])
 
@@ -270,7 +270,7 @@ floatTypeDef = define "FloatType" $
       _FloatType_float32,
       _FloatType_float64])
   where
-    cs fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ unitVariant _FloatType fname
+    cs fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ injectUnit _FloatType fname
 
 floatValueDef :: TBinding (FloatValue -> Term)
 floatValueDef = define "FloatValue" $
@@ -281,7 +281,7 @@ floatValueDef = define "FloatValue" $
     _FloatValue_float64])
   where
     varField fname = field fname $ lambda "v" $ encodedVariant _FloatValue fname $ encodedFloatValue $
-      variant _FloatValue fname $ var "v"
+      inject _FloatValue fname $ var "v"
 
 eitherTypeDef :: TBinding (EitherType -> Term)
 eitherTypeDef = define "EitherType" $
@@ -335,7 +335,7 @@ integerTypeDef = define "IntegerType" $
       _IntegerType_uint32,
       _IntegerType_uint64])
   where
-    cs fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ unitVariant _IntegerType fname
+    cs fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ injectUnit _IntegerType fname
 
 integerValueDef :: TBinding (IntegerValue -> Term)
 integerValueDef = define "IntegerValue" $
@@ -352,7 +352,7 @@ integerValueDef = define "IntegerValue" $
     _IntegerValue_uint64])
   where
     varField fname = field fname $ lambda "v" $ encodedVariant _IntegerValue fname $ encodedIntegerValue $
-      variant _IntegerValue fname $ var "v"
+      inject _IntegerValue fname $ var "v"
 
 lambdaDef :: TBinding (Lambda -> Term)
 lambdaDef = define "Lambda" $
@@ -407,7 +407,7 @@ literalTypeDef = define "LiteralType" $
     csunit _LiteralType_string]
   where
     cs fname fun = field fname $ lambda "v" $ encodedVariant _LiteralType fname (ref fun @@ var "v")
-    csunit fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ variant _LiteralType fname unit
+    csunit fname = field fname $ constant $ TTerm $ EncodeCore.term $ unTTerm $ inject _LiteralType fname unit
 
 mapTypeDef :: TBinding (MapType -> Term)
 mapTypeDef = define "MapType" $
@@ -496,7 +496,7 @@ typeDef :: TBinding (Type -> Term)
 typeDef = define "Type" $
   doc "Encode a type as a term (epsilon encoding)" $
   match _Type Nothing [
-    field _Type_annotated $ lambda "v" $ variant _Term _Term_annotated $ record _AnnotatedTerm [
+    field _Type_annotated $ lambda "v" $ inject _Term _Term_annotated $ record _AnnotatedTerm [
       field _AnnotatedTerm_body $ ref typeDef @@ (Core.annotatedTypeBody $ var "v"),
       field _AnnotatedTerm_annotation $ Core.annotatedTypeAnnotation $ var "v"],
     csref _Type_application applicationTypeDef,

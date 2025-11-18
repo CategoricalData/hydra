@@ -347,8 +347,8 @@ uint64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueUint64
 unit :: TTerm Term
 unit = Core.termUnit
 
-unitVariantPhantom :: Name -> Name -> TTerm Term
-unitVariantPhantom tname fname = variantPhantom tname fname Core.termUnit
+injectUnitPhantom :: Name -> Name -> TTerm Term
+injectUnitPhantom tname fname = injectPhantom tname fname Core.termUnit
 
 -- | Create a term-encoded tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple
@@ -381,8 +381,8 @@ varNamePhantom = TTerm . TermVariable
 varPhantom :: String -> TTerm a
 varPhantom = TTerm . TermVariable . Name
 
-variantPhantom :: Name -> Name -> TTerm Term -> TTerm Term
-variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term
+injectPhantom :: Name -> Name -> TTerm Term -> TTerm Term
+injectPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift tname) $ Core.field (Core.nameLift fname) term
 
 -- | Create a term-encoded wrapped term (newtype)
 -- Example: wrap (name "Email") (string "user@example.com")
@@ -472,6 +472,6 @@ tuple5 t1 t2 t3 t4 t5 = tuple [t1, t2, t3, t4, t5]
 -- Example: comparison ComparisonEqualTo
 comparison :: Comparison -> TTerm Term
 comparison t = case t of
-  ComparisonEqualTo -> Phantoms.unitVariant _Comparison _Comparison_equalTo
-  ComparisonLessThan -> Phantoms.unitVariant _Comparison _Comparison_lessThan
-  ComparisonGreaterThan -> Phantoms.unitVariant _Comparison _Comparison_greaterThan
+  ComparisonEqualTo -> Phantoms.injectUnit _Comparison _Comparison_equalTo
+  ComparisonLessThan -> Phantoms.injectUnit _Comparison _Comparison_lessThan
+  ComparisonGreaterThan -> Phantoms.injectUnit _Comparison _Comparison_greaterThan

@@ -9,41 +9,41 @@ import qualified Data.Maybe as Y
 
 
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
-eliminationVariant v = unitVariant _EliminationVariant $ case v of
+eliminationVariant v = injectUnit _EliminationVariant $ case v of
   EliminationVariantProduct -> _EliminationVariant_product
   EliminationVariantRecord -> _EliminationVariant_record
   EliminationVariantUnion -> _EliminationVariant_union
   EliminationVariantWrap -> _EliminationVariant_wrap
 
 eliminationVariantProduct :: TTerm EliminationVariant
-eliminationVariantProduct = unitVariant _EliminationVariant _EliminationVariant_product
+eliminationVariantProduct = injectUnit _EliminationVariant _EliminationVariant_product
 
 eliminationVariantRecord :: TTerm EliminationVariant
-eliminationVariantRecord = unitVariant _EliminationVariant _EliminationVariant_record
+eliminationVariantRecord = injectUnit _EliminationVariant _EliminationVariant_record
 
 eliminationVariantUnion :: TTerm EliminationVariant
-eliminationVariantUnion = unitVariant _EliminationVariant _EliminationVariant_union
+eliminationVariantUnion = injectUnit _EliminationVariant _EliminationVariant_union
 
 eliminationVariantWrap :: TTerm EliminationVariant
-eliminationVariantWrap = unitVariant _EliminationVariant _EliminationVariant_wrap
+eliminationVariantWrap = injectUnit _EliminationVariant _EliminationVariant_wrap
 
 functionVariant :: FunctionVariant -> TTerm FunctionVariant
-functionVariant v = unitVariant _FunctionVariant $ case v of
+functionVariant v = injectUnit _FunctionVariant $ case v of
   FunctionVariantElimination -> _FunctionVariant_elimination
   FunctionVariantLambda -> _FunctionVariant_lambda
   FunctionVariantPrimitive -> _FunctionVariant_primitive
 
 functionVariantElimination :: TTerm FunctionVariant
-functionVariantElimination = unitVariant _FunctionVariant _FunctionVariant_elimination
+functionVariantElimination = injectUnit _FunctionVariant _FunctionVariant_elimination
 
 functionVariantLambda :: TTerm FunctionVariant
-functionVariantLambda = unitVariant _FunctionVariant _FunctionVariant_lambda
+functionVariantLambda = injectUnit _FunctionVariant _FunctionVariant_lambda
 
 functionVariantPrimitive :: TTerm FunctionVariant
-functionVariantPrimitive = unitVariant _FunctionVariant _FunctionVariant_primitive
+functionVariantPrimitive = injectUnit _FunctionVariant _FunctionVariant_primitive
 
 literalVariant :: LiteralVariant -> TTerm LiteralVariant
-literalVariant v = unitVariant _LiteralVariant $ case v of
+literalVariant v = injectUnit _LiteralVariant $ case v of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
   LiteralVariantFloat -> _LiteralVariant_float
@@ -51,22 +51,22 @@ literalVariant v = unitVariant _LiteralVariant $ case v of
   LiteralVariantString -> _LiteralVariant_string
 
 literalVariantBinary :: TTerm LiteralVariant
-literalVariantBinary = unitVariant _LiteralVariant _LiteralVariant_binary
+literalVariantBinary = injectUnit _LiteralVariant _LiteralVariant_binary
 
 literalVariantBoolean :: TTerm LiteralVariant
-literalVariantBoolean = unitVariant _LiteralVariant _LiteralVariant_boolean
+literalVariantBoolean = injectUnit _LiteralVariant _LiteralVariant_boolean
 
 literalVariantFloat :: TTerm LiteralVariant
-literalVariantFloat = unitVariant _LiteralVariant _LiteralVariant_float
+literalVariantFloat = injectUnit _LiteralVariant _LiteralVariant_float
 
 literalVariantInteger :: TTerm LiteralVariant
-literalVariantInteger = unitVariant _LiteralVariant _LiteralVariant_integer
+literalVariantInteger = injectUnit _LiteralVariant _LiteralVariant_integer
 
 literalVariantString :: TTerm LiteralVariant
-literalVariantString = unitVariant _LiteralVariant _LiteralVariant_string
+literalVariantString = injectUnit _LiteralVariant _LiteralVariant_string
 
 termVariant :: TermVariant -> TTerm TermVariant
-termVariant v = unitVariant _TermVariant $ case v of
+termVariant v = injectUnit _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
   TermVariantEither -> _TermVariant_either
@@ -89,67 +89,67 @@ termVariant v = unitVariant _TermVariant $ case v of
   TermVariantWrap -> _TermVariant_wrap
 
 termVariantAnnotated :: TTerm TermVariant
-termVariantAnnotated = unitVariant _TermVariant _TermVariant_annotated
+termVariantAnnotated = injectUnit _TermVariant _TermVariant_annotated
 
 termVariantApplication :: TTerm TermVariant
-termVariantApplication = unitVariant _TermVariant _TermVariant_application
+termVariantApplication = injectUnit _TermVariant _TermVariant_application
 
 termVariantEither :: TTerm TermVariant
-termVariantEither = unitVariant _TermVariant _TermVariant_either
+termVariantEither = injectUnit _TermVariant _TermVariant_either
 
 termVariantFunction :: TTerm TermVariant
-termVariantFunction = unitVariant _TermVariant _TermVariant_function
+termVariantFunction = injectUnit _TermVariant _TermVariant_function
 
 termVariantLet :: TTerm TermVariant
-termVariantLet = unitVariant _TermVariant _TermVariant_let
+termVariantLet = injectUnit _TermVariant _TermVariant_let
 
 termVariantList :: TTerm TermVariant
-termVariantList = unitVariant _TermVariant _TermVariant_list
+termVariantList = injectUnit _TermVariant _TermVariant_list
 
 termVariantLiteral :: TTerm TermVariant
-termVariantLiteral = unitVariant _TermVariant _TermVariant_literal
+termVariantLiteral = injectUnit _TermVariant _TermVariant_literal
 
 termVariantMap :: TTerm TermVariant
-termVariantMap = unitVariant _TermVariant _TermVariant_map
+termVariantMap = injectUnit _TermVariant _TermVariant_map
 
 termVariantMaybe :: TTerm TermVariant
-termVariantMaybe = unitVariant _TermVariant _TermVariant_maybe
+termVariantMaybe = injectUnit _TermVariant _TermVariant_maybe
 
 termVariantPair :: TTerm TermVariant
-termVariantPair = unitVariant _TermVariant _TermVariant_pair
+termVariantPair = injectUnit _TermVariant _TermVariant_pair
 
 termVariantProduct :: TTerm TermVariant
-termVariantProduct = unitVariant _TermVariant _TermVariant_product
+termVariantProduct = injectUnit _TermVariant _TermVariant_product
 
 termVariantRecord :: TTerm TermVariant
-termVariantRecord = unitVariant _TermVariant _TermVariant_record
+termVariantRecord = injectUnit _TermVariant _TermVariant_record
 
 termVariantSet :: TTerm TermVariant
-termVariantSet = unitVariant _TermVariant _TermVariant_set
+termVariantSet = injectUnit _TermVariant _TermVariant_set
 
 termVariantSum :: TTerm TermVariant
-termVariantSum = unitVariant _TermVariant _TermVariant_sum
+termVariantSum = injectUnit _TermVariant _TermVariant_sum
 
 termVariantTypeLambda :: TTerm TermVariant
-termVariantTypeLambda = unitVariant _TermVariant _TermVariant_typeLambda
+termVariantTypeLambda = injectUnit _TermVariant _TermVariant_typeLambda
 
 termVariantTypeApplication :: TTerm TermVariant
-termVariantTypeApplication = unitVariant _TermVariant _TermVariant_typeApplication
+termVariantTypeApplication = injectUnit _TermVariant _TermVariant_typeApplication
 
 termVariantUnion :: TTerm TermVariant
-termVariantUnion = unitVariant _TermVariant _TermVariant_union
+termVariantUnion = injectUnit _TermVariant _TermVariant_union
 
 termVariantUnit :: TTerm TermVariant
-termVariantUnit = unitVariant _TermVariant _TermVariant_unit
+termVariantUnit = injectUnit _TermVariant _TermVariant_unit
 
 termVariantVariable :: TTerm TermVariant
-termVariantVariable = unitVariant _TermVariant _TermVariant_variable
+termVariantVariable = injectUnit _TermVariant _TermVariant_variable
 
 termVariantWrap :: TTerm TermVariant
-termVariantWrap = unitVariant _TermVariant _TermVariant_wrap
+termVariantWrap = injectUnit _TermVariant _TermVariant_wrap
 
 typeVariant :: TypeVariant -> TTerm TypeVariant
-typeVariant v = unitVariant _TypeVariant $ case v of
+typeVariant v = injectUnit _TypeVariant $ case v of
   TypeVariantAnnotated -> _TypeVariant_annotated
   TypeVariantApplication -> _TypeVariant_application
   TypeVariantEither -> _TypeVariant_either
@@ -169,55 +169,55 @@ typeVariant v = unitVariant _TypeVariant $ case v of
   TypeVariantWrap -> _TypeVariant_wrap
 
 typeVariantAnnotated :: TTerm TypeVariant
-typeVariantAnnotated = unitVariant _TypeVariant _TypeVariant_annotated
+typeVariantAnnotated = injectUnit _TypeVariant _TypeVariant_annotated
 
 typeVariantApplication :: TTerm TypeVariant
-typeVariantApplication = unitVariant _TypeVariant _TypeVariant_application
+typeVariantApplication = injectUnit _TypeVariant _TypeVariant_application
 
 typeVariantEither :: TTerm TypeVariant
-typeVariantEither = unitVariant _TypeVariant _TypeVariant_either
+typeVariantEither = injectUnit _TypeVariant _TypeVariant_either
 
 typeVariantFunction :: TTerm TypeVariant
-typeVariantFunction = unitVariant _TypeVariant _TypeVariant_function
+typeVariantFunction = injectUnit _TypeVariant _TypeVariant_function
 
 typeVariantForall :: TTerm TypeVariant
-typeVariantForall = unitVariant _TypeVariant _TypeVariant_forall
+typeVariantForall = injectUnit _TypeVariant _TypeVariant_forall
 
 typeVariantList :: TTerm TypeVariant
-typeVariantList = unitVariant _TypeVariant _TypeVariant_list
+typeVariantList = injectUnit _TypeVariant _TypeVariant_list
 
 typeVariantLiteral :: TTerm TypeVariant
-typeVariantLiteral = unitVariant _TypeVariant _TypeVariant_literal
+typeVariantLiteral = injectUnit _TypeVariant _TypeVariant_literal
 
 typeVariantMap :: TTerm TypeVariant
-typeVariantMap = unitVariant _TypeVariant _TypeVariant_map
+typeVariantMap = injectUnit _TypeVariant _TypeVariant_map
 
 typeVariantMaybe :: TTerm TypeVariant
-typeVariantMaybe = unitVariant _TypeVariant _TypeVariant_maybe
+typeVariantMaybe = injectUnit _TypeVariant _TypeVariant_maybe
 
 typeVariantPair :: TTerm TypeVariant
-typeVariantPair = unitVariant _TypeVariant _TypeVariant_pair
+typeVariantPair = injectUnit _TypeVariant _TypeVariant_pair
 
 typeVariantProduct :: TTerm TypeVariant
-typeVariantProduct = unitVariant _TypeVariant _TypeVariant_product
+typeVariantProduct = injectUnit _TypeVariant _TypeVariant_product
 
 typeVariantRecord :: TTerm TypeVariant
-typeVariantRecord = unitVariant _TypeVariant _TypeVariant_record
+typeVariantRecord = injectUnit _TypeVariant _TypeVariant_record
 
 typeVariantSet :: TTerm TypeVariant
-typeVariantSet = unitVariant _TypeVariant _TypeVariant_set
+typeVariantSet = injectUnit _TypeVariant _TypeVariant_set
 
 typeVariantSum :: TTerm TypeVariant
-typeVariantSum = unitVariant _TypeVariant _TypeVariant_sum
+typeVariantSum = injectUnit _TypeVariant _TypeVariant_sum
 
 typeVariantUnion :: TTerm TypeVariant
-typeVariantUnion = unitVariant _TypeVariant _TypeVariant_union
+typeVariantUnion = injectUnit _TypeVariant _TypeVariant_union
 
 typeVariantUnit :: TTerm TypeVariant
-typeVariantUnit = unitVariant _TypeVariant _TypeVariant_unit
+typeVariantUnit = injectUnit _TypeVariant _TypeVariant_unit
 
 typeVariantVariable :: TTerm TypeVariant
-typeVariantVariable = unitVariant _TypeVariant _TypeVariant_variable
+typeVariantVariable = injectUnit _TypeVariant _TypeVariant_variable
 
 typeVariantWrap :: TTerm TypeVariant
-typeVariantWrap = unitVariant _TypeVariant _TypeVariant_wrap
+typeVariantWrap = injectUnit _TypeVariant _TypeVariant_wrap

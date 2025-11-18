@@ -14,17 +14,17 @@ accessorEdge source path target = record _AccessorEdge [
   _AccessorEdge_path>>: path,
   _AccessorEdge_target>>: target]
 
-accessorEdgeSource = unitVariant _AccessorEdge _AccessorEdge_source
-accessorEdgePath = unitVariant _AccessorEdge _AccessorEdge_path
-accessorEdgeTarget = unitVariant _AccessorEdge _AccessorEdge_target
+accessorEdgeSource = injectUnit _AccessorEdge _AccessorEdge_source
+accessorEdgePath = injectUnit _AccessorEdge _AccessorEdge_path
+accessorEdgeTarget = injectUnit _AccessorEdge _AccessorEdge_target
 
 accessorGraph :: TTerm [AccessorNode] -> TTerm [AccessorEdge] -> TTerm AccessorGraph
 accessorGraph nodes edges = record _AccessorGraph [
   _AccessorGraph_nodes>>: nodes,
   _AccessorGraph_edges>>: edges]
 
-accessorGraphNodes = unitVariant _AccessorGraph _AccessorGraph_nodes
-accessorGraphEdges = unitVariant _AccessorGraph _AccessorGraph_edges
+accessorGraphNodes = injectUnit _AccessorGraph _AccessorGraph_nodes
+accessorGraphEdges = injectUnit _AccessorGraph _AccessorGraph_edges
 
 accessorNode :: TTerm Name -> TTerm String -> TTerm String -> TTerm AccessorNode
 accessorNode name label id = record _AccessorNode [
@@ -32,72 +32,72 @@ accessorNode name label id = record _AccessorNode [
   _AccessorNode_label>>: label,
   _AccessorNode_id>>: id]
 
-accessorNodeName = unitVariant _AccessorNode _AccessorNode_name
-accessorNodeLabel = unitVariant _AccessorNode _AccessorNode_label
-accessorNodeId = unitVariant _AccessorNode _AccessorNode_id
+accessorNodeName = injectUnit _AccessorNode _AccessorNode_name
+accessorNodeLabel = injectUnit _AccessorNode _AccessorNode_label
+accessorNodeId = injectUnit _AccessorNode _AccessorNode_id
 
 accessorPath :: TTerm [TermAccessor] -> TTerm AccessorPath
 accessorPath path = wrap _AccessorPath path
 
 termAccessorAnnotatedBody :: TTerm TermAccessor
-termAccessorAnnotatedBody = unitVariant _TermAccessor _TermAccessor_annotatedBody
+termAccessorAnnotatedBody = injectUnit _TermAccessor _TermAccessor_annotatedBody
 
 termAccessorApplicationFunction :: TTerm TermAccessor
-termAccessorApplicationFunction = unitVariant _TermAccessor _TermAccessor_applicationFunction
+termAccessorApplicationFunction = injectUnit _TermAccessor _TermAccessor_applicationFunction
 
 termAccessorApplicationArgument :: TTerm TermAccessor
-termAccessorApplicationArgument = unitVariant _TermAccessor _TermAccessor_applicationArgument
+termAccessorApplicationArgument = injectUnit _TermAccessor _TermAccessor_applicationArgument
 
 termAccessorLambdaBody :: TTerm TermAccessor
-termAccessorLambdaBody = unitVariant _TermAccessor _TermAccessor_lambdaBody
+termAccessorLambdaBody = injectUnit _TermAccessor _TermAccessor_lambdaBody
 
 termAccessorUnionCasesDefault :: TTerm TermAccessor
-termAccessorUnionCasesDefault = unitVariant _TermAccessor _TermAccessor_unionCasesDefault
+termAccessorUnionCasesDefault = injectUnit _TermAccessor _TermAccessor_unionCasesDefault
 
 termAccessorUnionCasesBranch :: TTerm Name -> TTerm TermAccessor
-termAccessorUnionCasesBranch = variant _TermAccessor _TermAccessor_unionCasesBranch
+termAccessorUnionCasesBranch = inject _TermAccessor _TermAccessor_unionCasesBranch
 
 termAccessorLetEnvironment :: TTerm TermAccessor
-termAccessorLetEnvironment = unitVariant _TermAccessor _TermAccessor_letBody
+termAccessorLetEnvironment = injectUnit _TermAccessor _TermAccessor_letBody
 
 termAccessorLetBinding :: TTerm Name -> TTerm TermAccessor
-termAccessorLetBinding = variant _TermAccessor _TermAccessor_letBinding
+termAccessorLetBinding = inject _TermAccessor _TermAccessor_letBinding
 
 termAccessorListElement :: TTerm Int -> TTerm TermAccessor
-termAccessorListElement = variant _TermAccessor _TermAccessor_listElement
+termAccessorListElement = inject _TermAccessor _TermAccessor_listElement
 
 termAccessorMapKey :: TTerm Int -> TTerm TermAccessor
-termAccessorMapKey = variant _TermAccessor _TermAccessor_mapKey
+termAccessorMapKey = inject _TermAccessor _TermAccessor_mapKey
 
 termAccessorMapValue :: TTerm Int -> TTerm TermAccessor
-termAccessorMapValue = variant _TermAccessor _TermAccessor_mapValue
+termAccessorMapValue = inject _TermAccessor _TermAccessor_mapValue
 
 termAccessorOptionalTerm :: TTerm TermAccessor
-termAccessorOptionalTerm = unitVariant _TermAccessor _TermAccessor_maybeTerm
+termAccessorOptionalTerm = injectUnit _TermAccessor _TermAccessor_maybeTerm
 
 termAccessorProductTerm :: TTerm Int -> TTerm TermAccessor
-termAccessorProductTerm = variant _TermAccessor _TermAccessor_productTerm
+termAccessorProductTerm = inject _TermAccessor _TermAccessor_productTerm
 
 termAccessorRecordField :: TTerm Name -> TTerm TermAccessor
-termAccessorRecordField = variant _TermAccessor _TermAccessor_recordField
+termAccessorRecordField = inject _TermAccessor _TermAccessor_recordField
 
 termAccessorSetElement :: TTerm Int -> TTerm TermAccessor
-termAccessorSetElement = variant _TermAccessor _TermAccessor_setElement
+termAccessorSetElement = inject _TermAccessor _TermAccessor_setElement
 
 termAccessorSumTerm :: TTerm TermAccessor
-termAccessorSumTerm = unitVariant _TermAccessor _TermAccessor_sumTerm
+termAccessorSumTerm = injectUnit _TermAccessor _TermAccessor_sumTerm
 
 termAccessorTypeLambdaBody :: TTerm TermAccessor
-termAccessorTypeLambdaBody = unitVariant _TermAccessor _TermAccessor_typeLambdaBody
+termAccessorTypeLambdaBody = injectUnit _TermAccessor _TermAccessor_typeLambdaBody
 
 termAccessorTypeApplicationTerm :: TTerm TermAccessor
-termAccessorTypeApplicationTerm = unitVariant _TermAccessor _TermAccessor_typeApplicationTerm
+termAccessorTypeApplicationTerm = injectUnit _TermAccessor _TermAccessor_typeApplicationTerm
 
 termAccessorInjectionTerm :: TTerm TermAccessor
-termAccessorInjectionTerm = unitVariant _TermAccessor _TermAccessor_injectionTerm
+termAccessorInjectionTerm = injectUnit _TermAccessor _TermAccessor_injectionTerm
 
 termAccessorWrappedTerm :: TTerm TermAccessor
-termAccessorWrappedTerm = unitVariant _TermAccessor _TermAccessor_wrappedTerm
+termAccessorWrappedTerm = injectUnit _TermAccessor _TermAccessor_wrappedTerm
 
 unAccessorPath :: TTerm AccessorPath -> TTerm [TermAccessor]
 unAccessorPath path = unwrap _AccessorPath @@ path

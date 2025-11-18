@@ -7,10 +7,10 @@ import qualified Data.Map as M
 
 
 definitionTerm :: TTerm TermDefinition -> TTerm Definition
-definitionTerm = variant _Definition _Definition_term
+definitionTerm = inject _Definition _Definition_term
 
 definitionType :: TTerm TypeDefinition -> TTerm Definition
-definitionType = variant _Definition _Definition_type
+definitionType = inject _Definition _Definition_type
 
 module_ :: TTerm Namespace -> TTerm [Binding] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
 module_ ns elems termDeps typeDeps desc = record _Module [
