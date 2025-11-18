@@ -55,12 +55,10 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-
 
 module_ :: Module
 module_ = Module (Namespace "hydra.show.meta") elements
-    [Annotations.module_]
+    []
     kernelTypesModules $
     Just "String representations of hydra.meta types"
   where
@@ -77,12 +75,14 @@ termVariantDef = define "termVariant" $
   match _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
     _TermVariant_application>>: constant $ string "application",
+    _TermVariant_either>>: constant $ string "either",
     _TermVariant_function>>: constant $ string "function",
     _TermVariant_let>>: constant $ string "let",
     _TermVariant_list>>: constant $ string "list",
     _TermVariant_literal>>: constant $ string "literal",
     _TermVariant_map>>: constant $ string "map",
     _TermVariant_maybe>>: constant $ string "maybe",
+    _TermVariant_pair>>: constant $ string "pair",
     _TermVariant_product>>: constant $ string "product",
     _TermVariant_record>>: constant $ string "record",
     _TermVariant_set>>: constant $ string "set",
@@ -100,12 +100,14 @@ typeVariantDef = define "typeVariant" $
   match _TypeVariant Nothing [
     _TypeVariant_annotated>>: constant $ string "annotated",
     _TypeVariant_application>>: constant $ string "application",
+    _TypeVariant_either>>: constant $ string "either",
     _TypeVariant_forall>>: constant $ string "forall",
     _TypeVariant_function>>: constant $ string "function",
     _TypeVariant_list>>: constant $ string "list",
     _TypeVariant_literal>>: constant $ string "literal",
     _TypeVariant_map>>: constant $ string "map",
     _TypeVariant_maybe>>: constant $ string "maybe",
+    _TypeVariant_pair>>: constant $ string "pair",
     _TypeVariant_product>>: constant $ string "product",
     _TypeVariant_record>>: constant $ string "record",
     _TypeVariant_set>>: constant $ string "set",
