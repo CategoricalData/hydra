@@ -64,8 +64,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 module_ :: Module
 module_ = Module (Namespace "hydra.decode.core") elements
-    [ExtractCore.module_, Monads.module_, Lexical.module_,
-      Rewriting.module_, ShowCore.module_]
+    [ExtractCore.module_, Lexical.module_, Monads.module_, Rewriting.module_, ShowCore.module_]
     kernelTypesModules $
     Just ("Decode hydra.core types from the hydra.core.Term type")
   where
