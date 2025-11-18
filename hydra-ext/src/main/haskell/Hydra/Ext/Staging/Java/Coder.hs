@@ -61,24 +61,6 @@ moduleToJava mod defs = withTrace ("encode module: " ++ unNamespace (moduleNames
   where
     forPair (name, unit) = (bindingNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
 
---moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
---moduleToPython mod defs = do
---  file <- encodeModule mod defs
---  let s = printExpr $ parenthesize $ PySer.encodeModule file
---  let path = namespaceToFilePath CaseConventionLowerSnake (FileExtension "py") $ moduleNamespace mod
---  return $ M.fromList [(path, s)]
-
-
-
-
----- | Old deprecated version using transformModule
---moduleToJavaDeprecated :: Module -> Flow Graph (M.Map FilePath String)
---moduleToJavaDeprecated mod = withTrace "encode module in Java" $ do
---    units <- moduleToJavaCompilationUnit mod
---    return $ M.fromList $ forPair <$> M.toList units
---  where
---    forPair (name, unit) = (bindingNameToFilePath name, printExpr $ parenthesize $ writeCompilationUnit unit)
-
 adaptTypeToJavaAndEncode :: Aliases -> Type -> Flow Graph Java.Type
 adaptTypeToJavaAndEncode = encodeType
 --adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
@@ -170,95 +152,6 @@ constructElementsInterface mod members = (elName, cu)
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
-
---constructModule :: Module
---  -> M.Map Type (Coder Graph Graph Term Java.Expression)
---  -> [(Binding, TypeApplicationTerm)]
---  -> Flow Graph (M.Map Name Java.CompilationUnit)
---constructModule mod coders pairs = do
---    let isTypePair = isNativeType . fst
---    let typePairs = L.filter isTypePair pairs
---    let dataPairs = L.filter (not . isTypePair) pairs
---    typeUnits <- CM.mapM typeToClass typePairs
---    dataMembers <- CM.mapM (termToInterfaceMember aliases coders) dataPairs
---    return $ M.fromList $ typeUnits ++ ([constructElementsInterface mod dataMembers | not (L.null dataMembers)])
---  where
---    pkg = javaPackageDeclaration $ moduleNamespace mod
---    aliases = importAliasesForModule mod
---
---    typeToClass pair@(el, _) = do
---      isSer <- isSerializable el
---      let imports = if isSer
---                    then [Java.ImportDeclarationSingleType $ Java.SingleTypeImportDeclaration $ javaTypeName $ Java.Identifier "java.io.Serializable"]
---                    else []
---      decl <- declarationForType isSer aliases pair
---      return (bindingName el,
---        Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
-
----- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
----- These functions must be capable of handling various combinations of let and lambda terms:
----- * Plain lambdas such as \x y -> x + y + 42
----- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
----- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
---termToInterfaceMember :: Aliases
---  -> M.Map Type (Coder Graph Graph Term Java.Expression)
---  -> (Binding, TypeApplicationTerm)
---  -> Flow Graph Java.InterfaceMemberDeclaration
---termToInterfaceMember aliases coders pair = withTrace ("element " ++ unName (bindingName el)) $ do
---    g <- getState
---    let expanded = contractTerm $ unshadowVariables $ etaExpandTerm g $ typeApplicationTermBody $ snd pair
---    case classifyDataTerm typ expanded of
---      JavaSymbolClassConstant -> termToConstant coders el expanded
---      JavaSymbolClassNullaryFunction -> termToNullaryMethod coders el expanded
---      JavaSymbolClassUnaryFunction -> termToUnaryMethod coders el expanded
---  where
---    el = fst pair
---    typ = typeApplicationTermType $ snd pair
---    tparams = javaTypeParametersForType typ
---    mname = sanitizeJavaName $ decapitalize $ localNameOf $ bindingName el
---
---    termToConstant coders el term = do
---      jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases typ
---      jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
---      let mods = []
---      let var = javaVariableDeclarator (javaVariableName $ bindingName el) $ Just $ Java.VariableInitializerExpression jterm
---      return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
---
---    termToNullaryMethod coders el term0 = do
---      g <- getState
---      tc <- graphToTypeContext g
---      let env = JavaEnvironment aliases tc
---      maybeLet env term0 forInnerTerm
---      where
---        forInnerTerm env2 term stmts = do
---          let aliases2 = javaEnvironmentAliases env2
---          result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 typ
---          jbody <- encodeTerm env2 term
---          let mods = [Java.InterfaceMethodModifierStatic]
---          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
---          return $ interfaceMethodDeclaration mods tparams mname [] result (Just $ stmts ++ [returnSt])
---
---    termToUnaryMethod coders el term = case deannotateType typ of
---      TypeFunction (FunctionType dom cod) -> do
---        g <- getState
---        tc <- graphToTypeContext g
---        let env = JavaEnvironment aliases tc
---        maybeLet env term $ \env2 term2 stmts2 -> case deannotateTerm term2 of
---          TermFunction (FunctionLambda (Lambda v _ body)) -> do
---            let aliases2 = javaEnvironmentAliases env2
---            jdom <- adaptTypeToJavaAndEncode aliases2 dom
---            jcod <- adaptTypeToJavaAndEncode aliases2 cod
---            let mods = [Java.InterfaceMethodModifierStatic]
---            let param = javaTypeToJavaFormalParameter jdom (Name $ unName v)
---            let result = javaTypeToJavaResult jcod
---            maybeLet env2 body $ \env3 term3 stmts3 -> do
---              jbody <- encodeTerm env3 term3
---              -- TODO: use coders
---              --jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
---              let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
---              return $ interfaceMethodDeclaration mods tparams mname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
---          _ -> unexpected "function term" $ show term
---      _ -> unexpected "function type" $ show typ
 
 declarationForRecordType :: Bool -> Bool -> Aliases -> [Java.TypeParameter] -> Name
   -> [FieldType] -> Flow Graph Java.ClassDeclaration
@@ -638,9 +531,9 @@ encodeElimination env marg dom cod elm = case elm of
                 innerBody = functionStructureBody fs
                 env2 = functionStructureEnvironment fs
             -- Convert bindings to Java block statements
-            bindingStmts <- bindingsToStatements env2 bindings
+            (bindingStmts, env3) <- bindingsToStatements env2 bindings
             -- Encode the body (now without nested lets)
-            jret <- encodeTerm env2 innerBody
+            jret <- encodeTerm env3 innerBody
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
             let allStmts = bindingStmts ++ [returnStmt]
             return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just allStmts)
@@ -662,8 +555,8 @@ encodeElimination env marg dom cod elm = case elm of
                     innerBody = functionStructureBody fs
                     env4 = functionStructureEnvironment fs
 
-                bindingStmts <- bindingsToStatements env4 bindings
-                jret <- encodeTerm env4 innerBody
+                (bindingStmts, env5) <- bindingsToStatements env4 bindings
+                jret <- encodeTerm env5 innerBody
 
                 let param = javaTypeToJavaFormalParameter jdom lambdaParam
                 let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
@@ -711,8 +604,8 @@ encodeFunction env dom cod fun = case fun of
               innerBody = functionStructureBody fs
               env3 = functionStructureEnvironment fs
 
-          bindingStmts <- bindingsToStatements env3 bindings
-          jbody <- encodeTerm env3 innerBody
+          (bindingStmts, env4) <- bindingsToStatements env3 bindings
+          jbody <- encodeTerm env4 innerBody
 
           lam' <- if L.null bindings
             then return $ javaLambda var jbody
@@ -908,10 +801,12 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
 -- | Convert a list of bindings to Java block statements, handling recursive bindings
 -- and performing topological sorting for correct declaration order.
-bindingsToStatements :: JavaEnvironment -> [Binding] -> Flow Graph [Java.BlockStatement]
+bindingsToStatements :: JavaEnvironment -> [Binding] -> Flow Graph ([Java.BlockStatement], JavaEnvironment)
 bindingsToStatements env bindings = if L.null bindings
-    then return []
-    else L.concat <$> CM.mapM toDeclStatements sorted
+    then return ([], envExtended)
+    else do
+      groups <- CM.mapM toDeclStatements sorted
+      return (L.concat groups, envExtended)
   where
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
@@ -936,10 +831,10 @@ bindingsToStatements env bindings = if L.null bindings
           [name] -> case M.lookup name allDeps of
             Nothing -> []
             Just deps -> if S.member name deps then [name] else []
-          _ -> names
+          _ -> names  -- Mutually recursive group
 
     -- Create environment with recursive vars marked in aliases
-    aliasesWithRecursive = aliases { aliasesRecursiveVars = recursiveVars }
+    aliasesWithRecursive = aliases { aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars }
     envExtended = env {
       javaEnvironmentTypeContext = tcExtended,
       javaEnvironmentAliases = aliasesWithRecursive
@@ -1011,14 +906,14 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
         aliases2 = javaEnvironmentAliases env2
 
     -- Convert bindings to Java block statements
-    bindingStmts <- bindingsToStatements env2 bindings
+    (bindingStmts, env3) <- bindingsToStatements env2 bindings
 
     -- Classify based on FunctionStructure
     case (params, bindings) of
       -- No parameters and no bindings -> constant field
       ([], []) -> do
         jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases2 cod
-        jbody <- encodeTerm env2 body
+        jbody <- encodeTerm env3 body
         let mods = []
         let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jbody
         return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
@@ -1026,7 +921,7 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
       -- No parameters but has bindings -> nullary static method
       ([], _) -> do
         result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 cod
-        jbody <- encodeTerm env2 body
+        jbody <- encodeTerm env3 body
         let mods = [Java.InterfaceMethodModifierStatic]
         let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
         return $ interfaceMethodDeclaration mods jparams jname [] result (Just $ bindingStmts ++ [returnSt])
@@ -1038,57 +933,14 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
             return $ javaTypeToJavaFormalParameter jdom (Name $ unName param)
           ) (zip doms params)
         result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 cod
-        jbody <- encodeTerm env2 body
+        jbody <- encodeTerm env3 body
         let mods = [Java.InterfaceMethodModifierStatic]
         let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
         return $ interfaceMethodDeclaration mods jparams jname jformalParams result (Just $ bindingStmts ++ [returnSt])
-
---    let tparams = javaTypeParametersForType typ
---    case classifyDataTerm typ term of
---      JavaSymbolClassConstant -> termToConstant typ
---      JavaSymbolClassNullaryFunction -> termToNullaryMethod typ jparams
---      JavaSymbolClassUnaryFunction -> termToUnaryMethod typ jparams
   where
     tc = javaEnvironmentTypeContext env
     jname = sanitizeJavaName $ decapitalize $ localNameOf name
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
-
-
---    termToConstant typ = do
---      jtype <- Java.UnannType <$> encodeType (javaEnvironmentAliases env) typ
---      jterm <- encodeTerm env term
---      let mods = []
---      let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jterm
---      return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
---
---    termToNullaryMethod typ jparams = maybeLet env term forInnerTerm
---      where
---        forInnerTerm env2 term2 stmts = do
---          let aliases2 = javaEnvironmentAliases env2
---          result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 typ
---          jbody <- encodeTerm env2 term2
---          let mods = [Java.InterfaceMethodModifierStatic]
---          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
---          return $ interfaceMethodDeclaration mods jparams jname [] result (Just $ stmts ++ [returnSt])
---
---    termToUnaryMethod typ jparams = case deannotateType typ of
---      TypeFunction (FunctionType dom cod) -> maybeLet env term $ \env2 term2 stmts2 -> case deannotateTerm term2 of
---          TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
---            let aliases2 = javaEnvironmentAliases env2
---            let tc2 = javaEnvironmentTypeContext env2
---            let tcWithLambda = extendTypeContextForLambda tc2 lam
---            let env2WithLambda = env2 { javaEnvironmentTypeContext = tcWithLambda }
---            jdom <- adaptTypeToJavaAndEncode aliases2 dom
---            jcod <- adaptTypeToJavaAndEncode aliases2 cod
---            let mods = [Java.InterfaceMethodModifierStatic]
---            let param = javaTypeToJavaFormalParameter jdom (Name $ unName v)
---            let result = javaTypeToJavaResult jcod
---            maybeLet env2WithLambda body $ \env3 term3 stmts3 -> do
---              jbody <- encodeTerm env3 term3
---              let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
---              return $ interfaceMethodDeclaration mods jparams jname [param] result (Just $ stmts2 ++ stmts3 ++ [returnSt])
---          _ -> unexpected "function term" $ show term2
---      _ -> unexpected "function type" $ show typ
 
 encodeType :: Aliases -> Type -> Flow Graph Java.Type
 encodeType aliases t =  case deannotateType t of
@@ -1292,86 +1144,6 @@ javaTypeParametersForType typ = toParam <$> vars
       TypeForall (ForallType v body) -> v:(boundVars body)
       _ -> []
     freeVars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
-
---maybeLet :: JavaEnvironment -> Term -> (JavaEnvironment -> Term -> [Java.BlockStatement] -> Flow Graph x) -> Flow Graph x
---maybeLet env term cons = helper Nothing [] term
---  where
---    aliases = javaEnvironmentAliases env
---    tc = javaEnvironmentTypeContext env
---    -- Note: let-flattening could be done at the top level for better efficiency
---    helper mtyp anns term = case flattenLetTerms term of
---      TermAnnotated (AnnotatedTerm term' ann) -> helper mtyp (ann:anns) term'
---      TermLet (Let bindings envTerm) -> do
---          stmts <- L.concat <$> CM.mapM toDeclStatements sorted
---          maybeLet envWithRecursive envTerm $ \env' tm stmts' -> cons env' (reannotate mtyp anns tm) (stmts ++ stmts')
---        where
---          aliasesWithRecursive = aliases { aliasesRecursiveVars = recursiveVars }
---          tcWithLet = extendTypeContextForLet tc (Let bindings envTerm)
---          envWithRecursive = env {
---            javaEnvironmentAliases = aliasesWithRecursive,
---            javaEnvironmentTypeContext = tcWithLet
---          }
---          toDeclStatements names = do
---            inits <- Y.catMaybes <$> CM.mapM toDeclInit names
---            impls <- CM.mapM toDeclStatement names
---            return $ inits ++ impls
---
---          toDeclInit name = if S.member name recursiveVars
---            then do
---              -- TODO: repeated
---              let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) bindings
---              typ <- typeOf tc [] value
---              jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
---              let id = variableToJavaIdentifier name
---
---              let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
---              let arid = Java.Identifier "java.util.concurrent.atomic.AtomicReference" -- TODO
---              let aid = Java.AnnotatedIdentifier [] arid
---              rt <- javaTypeToJavaReferenceType jtype
---              let targs = typeArgsOrDiamond [Java.TypeArgumentReference rt]
---              let ci = Java.ClassOrInterfaceTypeToInstantiate [aid] (Just targs)
---              let body = javaConstructorCall ci [] Nothing
---              let artype = javaRefType [rt] (Just pkg) "AtomicReference"
---              return $ Just $ variableDeclarationStatement aliasesWithRecursive artype id body
---            else pure Nothing
---
---          toDeclStatement name = do
---            -- TODO: repeated
---            let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) bindings
---            typ <- typeOf tc [] value
---            jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
---            let id = variableToJavaIdentifier name
---            rhs <- encodeTerm envWithRecursive value
---            return $ if S.member name recursiveVars
---              then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
---                methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
---              else variableDeclarationStatement aliasesWithRecursive jtype id rhs
---          bindingVars = S.fromList (bindingName <$> bindings)
---          recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
---            where
---              ifRec names = case names of
---                [name] -> case M.lookup name allDeps of
---                  Nothing -> []
---                  Just deps -> if S.member name deps
---                    then [name]
---                    else []
---                _ -> names
---          allDeps = M.fromList (toDeps <$> bindings)
---            where
---              toDeps (Binding key value _) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
---          sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
---            where
---              toDeps (key, deps) = (key, S.toList deps)
---      _ -> cons env (reannotate mtyp anns term) []
-
---moduleToJavaCompilationUnit :: Module -> Flow Graph (M.Map Name Java.CompilationUnit)
---moduleToJavaCompilationUnit mod = do
---  g <- getState
---  tc <- graphToTypeContext g
---  let aliases = importAliasesForModule mod
---  let env = JavaEnvironment aliases tc
---  let encode = encodeTerm env . contractTerm
---  transformModule javaLanguage encode constructModule mod
 
 noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
 noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
