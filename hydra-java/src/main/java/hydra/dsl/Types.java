@@ -15,7 +15,6 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.core.WrappedType;
-import hydra.util.Opt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,23 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import static hydra.dsl.Core.name;
-import static hydra.dsl.LiteralTypes.bigfloat;
-import static hydra.dsl.LiteralTypes.bigint;
-import static hydra.dsl.LiteralTypes.binary;
-import static hydra.dsl.LiteralTypes.boolean_;
-import static hydra.dsl.LiteralTypes.float32;
-import static hydra.dsl.LiteralTypes.float64;
-import static hydra.dsl.LiteralTypes.float_;
-import static hydra.dsl.LiteralTypes.int16;
-import static hydra.dsl.LiteralTypes.int32;
-import static hydra.dsl.LiteralTypes.int64;
-import static hydra.dsl.LiteralTypes.int8;
-import static hydra.dsl.LiteralTypes.integer;
-import static hydra.dsl.LiteralTypes.string;
-import static hydra.dsl.LiteralTypes.uint16;
-import static hydra.dsl.LiteralTypes.uint32;
-import static hydra.dsl.LiteralTypes.uint64;
-import static hydra.dsl.LiteralTypes.uint8;
 
 /**
  * A domain-specific language for constructing Hydra types in Java.

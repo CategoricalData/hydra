@@ -8,7 +8,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -49,7 +49,7 @@ public class FromMaybe extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(pure(args.get(0)), defaultTerm ->
             bind(Expect.optional(Flows::pure, args.get(1)), opt ->
-                pure(opt.isPresent() ? opt.get() : defaultTerm)));
+                pure(opt.isJust() ? opt.fromJust() : defaultTerm)));
     }
 
     /**
@@ -58,7 +58,7 @@ public class FromMaybe extends PrimitiveFunction {
      * @param defaultValue the default value to return if the optional is empty
      * @return a function that takes an optional and returns the value or default
      */
-    public static <X> Function<Opt<X>, X> apply(X defaultValue) {
+    public static <X> Function<Maybe<X>, X> apply(X defaultValue) {
         return (opt) -> apply(defaultValue, opt);
     }
 
@@ -69,7 +69,7 @@ public class FromMaybe extends PrimitiveFunction {
      * @param opt the optional value
      * @return the contained value if present, otherwise the default value
      */
-    public static <X> X apply(X defaultValue, Opt<X> opt) {
+    public static <X> X apply(X defaultValue, Maybe<X> opt) {
         return opt.orElse(defaultValue);
     }
 }

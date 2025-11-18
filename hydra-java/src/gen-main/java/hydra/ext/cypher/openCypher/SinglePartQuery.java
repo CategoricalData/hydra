@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class SinglePartQuery implements Serializable {
@@ -17,9 +19,9 @@ public class SinglePartQuery implements Serializable {
   
   public final java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.Return> return_;
+  public final Maybe<Return> return_;
   
-  public SinglePartQuery (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.util.Opt<hydra.ext.cypher.openCypher.Return> return_) {
+  public SinglePartQuery (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, Maybe<Return> return_) {
     java.util.Objects.requireNonNull((reading));
     java.util.Objects.requireNonNull((updating));
     java.util.Objects.requireNonNull((return_));
@@ -52,7 +54,7 @@ public class SinglePartQuery implements Serializable {
     return new SinglePartQuery(reading, updating, return_);
   }
   
-  public SinglePartQuery withReturn(hydra.util.Opt<hydra.ext.cypher.openCypher.Return> return_) {
+  public SinglePartQuery withReturn(Maybe<Return> return_) {
     java.util.Objects.requireNonNull((return_));
     return new SinglePartQuery(reading, updating, return_);
   }

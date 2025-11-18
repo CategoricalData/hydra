@@ -3,6 +3,7 @@ package hydra.dsl;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
+import hydra.util.Maybe;
 import hydra.util.Unit;
 import hydra.tools.FlowException;
 import hydra.tools.Function3;
@@ -15,7 +16,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import hydra.util.Opt;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -55,10 +55,10 @@ public interface Flows {
 
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, Function<A, B>> fs1 = mapping.value.apply(s0).apply(t0);
-            Opt<Function<A, B>> mf = fs1.value;
-            return mf.isPresent()
-                    ? map(mf.get(), input).value.apply(fs1.state).apply(fs1.trace)
-                    : new FlowState<>(Opt.empty(), fs1.state, fs1.trace);
+            Maybe<Function<A, B>> mf = fs1.value;
+            return mf.isJust()
+                    ? map(mf.fromJust(), input).value.apply(fs1.state).apply(fs1.trace)
+                    : new FlowState<>(Maybe.nothing(), fs1.state, fs1.trace);
         });
     }
 
@@ -77,10 +77,10 @@ public interface Flows {
 
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, A> fs1 = p.value.apply(s0).apply(t0);
-            Opt<A> a = fs1.value;
-            return a.isPresent()
-                    ? f.apply(a.get()).value.apply(fs1.state).apply(fs1.trace)
-                    : new FlowState<>(Opt.empty(), fs1.state, fs1.trace);
+            Maybe<A> a = fs1.value;
+            return a.isJust()
+                    ? f.apply(a.fromJust()).value.apply(fs1.state).apply(fs1.trace)
+                    : new FlowState<>(Maybe.nothing(), fs1.state, fs1.trace);
         });
     }
 
@@ -184,14 +184,14 @@ public interface Flows {
      * @param predicates the predicates to apply
      * @return a flow containing the input if all predicates pass, or a failure flow otherwise
      */
-    static <S, A> Flow<S, A> check(A input, Function<A, Opt<String>>... predicates) {
+    static <S, A> Flow<S, A> check(A input, Function<A, Maybe<String>>... predicates) {
         requireNonNull(input, "input");
         requireNonNull(predicates, "predicates");
 
-        for (Function<A, Opt<String>> predicate : predicates) {
-            Opt<String> msg = predicate.apply(input);
-            if (msg.isPresent()) {
-                return Flows.fail(msg.get());
+        for (Function<A, Maybe<String>> predicate : predicates) {
+            Maybe<String> msg = predicate.apply(input);
+            if (msg.isJust()) {
+                return Flows.fail(msg.fromJust());
             }
         }
 
@@ -247,7 +247,7 @@ public interface Flows {
             String errMsg = "Error: " + msg; // TODO: include stack trace
             List<String> messages = new ArrayList<>(trace.messages);
             messages.add(errMsg);
-            return new FlowState<>(Opt.empty(), s, trace.withMessages(messages));
+            return new FlowState<>(Maybe.nothing(), s, trace.withMessages(messages));
         });
     }
 
@@ -297,8 +297,8 @@ public interface Flows {
         requireNonNull(flow, "flow");
 
         FlowState<S, A> result = flow.value.apply(state).apply(EMPTY_TRACE);
-        if (result.value.isPresent()) {
-            return result.value.get();
+        if (result.value.isJust()) {
+            return result.value.fromJust();
         } else {
             throw new FlowException(result.trace);
         }
@@ -321,7 +321,7 @@ public interface Flows {
      * @return a flow containing the current state
      */
     static <S> Flow<S, S> getState() {
-        return new Flow<>(s0 -> t0 -> new FlowState<>(Opt.of(s0), s0, t0));
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Maybe.just(s0), s0, t0));
     }
 
     /**
@@ -437,11 +437,11 @@ public interface Flows {
      * @param f the monadic function to apply
      * @return a flow containing an optional result
      */
-    static <S, A, B> Flow<S, Opt<B>> mapM(Opt<A> xs, Function<A, Flow<S, B>> f) {
+    static <S, A, B> Flow<S, Maybe<B>> mapM(Maybe<A> xs, Function<A, Flow<S, B>> f) {
         requireNonNull(xs, "xs");
         requireNonNull(f, "f");
 
-        return xs.map(a -> map(f.apply(a), Opt::of)).orElseGet(() -> pure(Opt.empty()));
+        return xs.map(a -> map(f.apply(a), Maybe::just)).orElseGet(() -> pure(Maybe.nothing()));
     }
 
     /**
@@ -560,7 +560,7 @@ public interface Flows {
     static <S, A> Flow<S, A> pure(A obj) {
         requireNonNull(obj, "obj");
 
-        return new Flow<>(s -> trace -> new FlowState<>(Opt.of(obj), s, trace));
+        return new Flow<>(s -> trace -> new FlowState<>(Maybe.just(obj), s, trace));
     }
 
     /**
@@ -574,7 +574,7 @@ public interface Flows {
 
         // Note: for lack of a unit value other than null,
         // we use use a boolean as the ignorable value output of putState()
-        return new Flow<>(s0 -> t0 -> new FlowState<>(Opt.of(true), snew, t0));
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Maybe.just(true), snew, t0));
     }
 
     /**
@@ -585,12 +585,12 @@ public interface Flows {
      * @param category a description for error messages
      * @return a flow containing the value if present, or a failure flow if absent
      */
-    static <S, A> Flow<S, A> require(Opt<A> optValue, String category) {
+    static <S, A> Flow<S, A> require(Maybe<A> optValue, String category) {
         requireNonNull(optValue, "optValue");
         requireNonNull(category, "category");
 
-        return optValue.isPresent()
-                ? Flows.pure(optValue.get())
+        return optValue.isJust()
+                ? Flows.pure(optValue.fromJust())
                 : Flows.fail("require " + category + " is missing/null");
     }
 

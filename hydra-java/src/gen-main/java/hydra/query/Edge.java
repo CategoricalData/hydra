@@ -2,6 +2,9 @@
 
 package hydra.query;
 
+import hydra.core.Name;
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -24,14 +27,14 @@ public class Edge implements Serializable {
   /**
    * The field representing the out-projection of the edge. Defaults to 'out'.
    */
-  public final hydra.util.Opt<hydra.core.Name> out;
+  public final Maybe<Name> out;
   
   /**
    * The field representing the in-projection of the edge. Defaults to 'in'.
    */
-  public final hydra.util.Opt<hydra.core.Name> in;
+  public final Maybe<Name> in;
   
-  public Edge (hydra.core.Name type, hydra.util.Opt<hydra.core.Name> out, hydra.util.Opt<hydra.core.Name> in) {
+  public Edge (hydra.core.Name type, Maybe<Name> out, Maybe<Name> in) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((out));
     java.util.Objects.requireNonNull((in));
@@ -59,12 +62,12 @@ public class Edge implements Serializable {
     return new Edge(type, out, in);
   }
   
-  public Edge withOut(hydra.util.Opt<hydra.core.Name> out) {
+  public Edge withOut(Maybe<Name> out) {
     java.util.Objects.requireNonNull((out));
     return new Edge(type, out, in);
   }
   
-  public Edge withIn(hydra.util.Opt<hydra.core.Name> in) {
+  public Edge withIn(Maybe<Name> in) {
     java.util.Objects.requireNonNull((in));
     return new Edge(type, out, in);
   }

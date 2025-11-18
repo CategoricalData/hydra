@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import hydra.util.Opt;
+
+import hydra.util.Maybe;
+
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -78,7 +80,7 @@ public abstract class JsonEncoding {
    * @param mapping the function to map the element to a JSON value
    * @return the JSON value, or null if the optional is empty
    */
-  protected static <L> Value toJson(Opt<L> opt, Function<L, Value> mapping) {
+  protected static <L> Value toJson(Maybe<L> opt, Function<L, Value> mapping) {
     return opt.map(mapping).orElse(null);
   }
 
@@ -322,7 +324,7 @@ public abstract class JsonEncoding {
      * @param value the optional boolean value
      * @return this builder
      */
-    public ObjectBuilder putOpt(String key, Opt<Boolean> value) {
+    public ObjectBuilder putOpt(String key, Maybe<Boolean> value) {
       return putOpt(key, value, JsonEncoding::toJson);
     }
 
@@ -333,7 +335,7 @@ public abstract class JsonEncoding {
      * @param value the optional boolean value
      * @return this builder
      */
-    public ObjectBuilder putOpt(Name key, Opt<Boolean> value) {
+    public ObjectBuilder putOpt(Name key, Maybe<Boolean> value) {
       return putOpt(key, value, JsonEncoding::toJson);
     }
 
@@ -346,7 +348,7 @@ public abstract class JsonEncoding {
      * @param mapping the function to map the value to a JSON value
      * @return this builder
      */
-    public <L> ObjectBuilder putOpt(String key, Opt<L> value, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOpt(String key, Maybe<L> value, Function<L, Value> mapping) {
       return put(key, toJson(value, mapping));
     }
 
@@ -359,7 +361,7 @@ public abstract class JsonEncoding {
      * @param mapping the function to map the value to a JSON value
      * @return this builder
      */
-    public <L> ObjectBuilder putOpt(Name key, Opt<L> value, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOpt(Name key, Maybe<L> value, Function<L, Value> mapping) {
       return putOpt(key.value, value, mapping);
     }
 
@@ -372,7 +374,7 @@ public abstract class JsonEncoding {
      * @param mapping the function to map each element to a JSON value
      * @return this builder
      */
-    public <L> ObjectBuilder putOptSet(String key, Opt<Set<L>> values, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOptSet(String key, Maybe<Set<L>> values, Function<L, Value> mapping) {
       return put(key, toJson(new ArrayList<>(values.orElse(Collections.emptySet())), mapping));
     }
 
@@ -385,7 +387,7 @@ public abstract class JsonEncoding {
      * @param mapping the function to map each element to a JSON value
      * @return this builder
      */
-    public <L> ObjectBuilder putOptSet(Name key, Opt<Set<L>> values, Function<L, Value> mapping) {
+    public <L> ObjectBuilder putOptSet(Name key, Maybe<Set<L>> values, Function<L, Value> mapping) {
       return putOptSet(key.value, values, mapping);
     }
 

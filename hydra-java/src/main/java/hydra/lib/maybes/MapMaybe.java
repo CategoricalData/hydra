@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class MapMaybe extends PrimitiveFunction {
             List<Term> results = new ArrayList<>();
             for (Term item : inputList) {
                 Term maybeResult = Terms.apply(args.get(0), item);
-                Flow<Graph, Opt<Term>> optFlow = Expect.optional(Flows::pure, maybeResult);
+                Flow<Graph, Maybe<Term>> optFlow = Expect.optional(Flows::pure, maybeResult);
                 // Simplified implementation - just collect the maybes
                 results.add(maybeResult);
             }
@@ -70,7 +70,7 @@ public class MapMaybe extends PrimitiveFunction {
      * @param f the optional-returning function to map
      * @return a function that takes a list and returns a list of present values
      */
-    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Opt<Y>> f) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Maybe<Y>> f) {
         return (list) -> apply(f, list);
     }
 
@@ -82,11 +82,11 @@ public class MapMaybe extends PrimitiveFunction {
      * @param list the list to map over
      * @return a list containing only the present values from applying the function
      */
-    public static <X, Y> List<Y> apply(Function<X, Opt<Y>> f, List<X> list) {
+    public static <X, Y> List<Y> apply(Function<X, Maybe<Y>> f, List<X> list) {
         return list.stream()
             .map(f)
-            .filter(Opt::isPresent)
-            .map(Opt::get)
+            .filter(Maybe::isJust)
+            .map(Maybe::fromJust)
             .collect(Collectors.toList());
     }
 }

@@ -2,6 +2,9 @@
 
 package hydra.pg.query;
 
+import hydra.pg.model.VertexLabel;
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class VertexPattern implements Serializable {
@@ -15,15 +18,15 @@ public class VertexPattern implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
   
-  public final hydra.util.Opt<hydra.pg.query.Variable> variable;
+  public final Maybe<Variable> variable;
   
-  public final hydra.util.Opt<hydra.pg.model.VertexLabel> label;
+  public final Maybe<VertexLabel> label;
   
   public final java.util.List<hydra.pg.query.PropertyPattern> properties;
   
   public final java.util.List<hydra.pg.query.EdgeProjectionPattern> edges;
   
-  public VertexPattern (hydra.util.Opt<hydra.pg.query.Variable> variable, hydra.util.Opt<hydra.pg.model.VertexLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
+  public VertexPattern (Maybe<Variable> variable, Maybe<VertexLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
     java.util.Objects.requireNonNull((variable));
     java.util.Objects.requireNonNull((label));
     java.util.Objects.requireNonNull((properties));
@@ -48,12 +51,12 @@ public class VertexPattern implements Serializable {
     return 2 * variable.hashCode() + 3 * label.hashCode() + 5 * properties.hashCode() + 7 * edges.hashCode();
   }
   
-  public VertexPattern withVariable(hydra.util.Opt<hydra.pg.query.Variable> variable) {
+  public VertexPattern withVariable(Maybe<Variable> variable) {
     java.util.Objects.requireNonNull((variable));
     return new VertexPattern(variable, label, properties, edges);
   }
   
-  public VertexPattern withLabel(hydra.util.Opt<hydra.pg.model.VertexLabel> label) {
+  public VertexPattern withLabel(Maybe<VertexLabel> label) {
     java.util.Objects.requireNonNull((label));
     return new VertexPattern(variable, label, properties, edges);
   }

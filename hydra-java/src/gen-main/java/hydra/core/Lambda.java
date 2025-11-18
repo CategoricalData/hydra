@@ -2,6 +2,8 @@
 
 package hydra.core;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -24,14 +26,14 @@ public class Lambda implements Serializable {
   /**
    * An optional domain type for the lambda
    */
-  public final hydra.util.Opt<hydra.core.Type> domain;
+  public final Maybe<Type> domain;
   
   /**
    * The body of the lambda
    */
   public final hydra.core.Term body;
   
-  public Lambda (hydra.core.Name parameter, hydra.util.Opt<hydra.core.Type> domain, hydra.core.Term body) {
+  public Lambda (hydra.core.Name parameter, Maybe<Type> domain, hydra.core.Term body) {
     java.util.Objects.requireNonNull((parameter));
     java.util.Objects.requireNonNull((domain));
     java.util.Objects.requireNonNull((body));
@@ -59,7 +61,7 @@ public class Lambda implements Serializable {
     return new Lambda(parameter, domain, body);
   }
   
-  public Lambda withDomain(hydra.util.Opt<hydra.core.Type> domain) {
+  public Lambda withDomain(Maybe<Type> domain) {
     java.util.Objects.requireNonNull((domain));
     return new Lambda(parameter, domain, body);
   }

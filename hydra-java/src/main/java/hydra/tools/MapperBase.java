@@ -2,7 +2,7 @@ package hydra.tools;
 
 import java.util.ArrayList;
 import java.util.List;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -88,9 +88,9 @@ public abstract class MapperBase {
      * @param constructor the function to transform the intermediate value to the final type
      * @return an Optional containing the result, or empty if the intermediate value is null
      */
-    protected static <C1, C2, T> Opt<T> optional(C1 c1, Function<C1, C2> accessor, Function<C2, T> constructor) {
+    protected static <C1, C2, T> Maybe<T> optional(C1 c1, Function<C1, C2> accessor, Function<C2, T> constructor) {
         C2 c2 = accessor.apply(c1);
-        return c2 == null ? Opt.empty() : Opt.of(constructor.apply(c2));
+        return c2 == null ? Maybe.nothing() : Maybe.just(constructor.apply(c2));
     }
 
     /**
@@ -105,10 +105,10 @@ public abstract class MapperBase {
      * @param constructor the function to transform the element to the final type
      * @return an Optional containing the result, or empty if the list is null or the index is out of bounds
      */
-    protected static <C1, C2, T> Opt<T> optional(
+    protected static <C1, C2, T> Maybe<T> optional(
             C1 c1, int index, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
         List<C2> c2 = accessor.apply(c1);
-        return null == c2 || index >= c2.size() ? Opt.empty() : Opt.of(constructor.apply(c2.get(index)));
+        return null == c2 || index >= c2.size() ? Maybe.nothing() : Maybe.just(constructor.apply(c2.get(index)));
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class MapperBase {
      * @throws MapperException if the intermediate value is null
      */
     protected static <C1, C2, T> T required(C1 c1, Function<C1, C2> accessor, Function<C2, T> constructor) {
-        Opt<T> t = optional(c1, accessor, constructor);
+        Maybe<T> t = optional(c1, accessor, constructor);
         return t.orElseGet(() -> invalid("missing required field"));
     }
 
@@ -143,7 +143,7 @@ public abstract class MapperBase {
      */
     protected static <C1, C2, T> T required(
             C1 c1, int index, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
-        Opt<T> t = optional(c1, index, accessor, constructor);
+        Maybe<T> t = optional(c1, index, accessor, constructor);
         return t.orElseGet(() -> invalid("missing required field"));
     }
 
@@ -160,7 +160,7 @@ public abstract class MapperBase {
      * @throws MapperException if any transformed element is null
      */
     protected static <C1, C2, T> List<T> list(C1 c1, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
-        Opt<List<T>> result = optional(c1, accessor, c2s -> {
+        Maybe<List<T>> result = optional(c1, accessor, c2s -> {
             List<T> ts = new ArrayList<>();
             for (C2 c2 : c2s) {
                 T t = constructor.apply(c2);
@@ -222,7 +222,7 @@ public abstract class MapperBase {
      * @param parentConstructor the function to construct the parent type
      * @return a function that returns an Optional parent object
      */
-    protected static <C0, P0, C, P> Function<P0, Opt<P>> matchCase(
+    protected static <C0, P0, C, P> Function<P0, Maybe<P>> matchCase(
             Function<P0, C0> getter,
             Function<C0, C> childConstructor,
             Function<C, P> parentConstructor) {
@@ -239,10 +239,10 @@ public abstract class MapperBase {
      * @param parent the constant parent object to return if the extracted value is non-null
      * @return a function that returns an Optional parent object
      */
-    protected static <C0, P0, P> Function<P0, Opt<P>> matchCase(
+    protected static <C0, P0, P> Function<P0, Maybe<P>> matchCase(
             Function<P0, C0> getter,
             P parent) {
-        return ctx -> null == getter.apply(ctx) ? Opt.empty() : Opt.of(parent);
+        return ctx -> null == getter.apply(ctx) ? Maybe.nothing() : Maybe.just(parent);
     }
 
     /**

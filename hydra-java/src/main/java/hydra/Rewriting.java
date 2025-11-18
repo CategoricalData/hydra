@@ -18,7 +18,7 @@ import hydra.core.Term;
 import hydra.core.WrappedTerm;
 import hydra.dsl.Flows;
 import hydra.dsl.Terms;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 import hydra.util.Unit;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +136,7 @@ public interface Rewriting {
                 Term bodyA = instance.value.body;
                 return map(recurse.apply(bodyA),
                         term -> new hydra.core.Function.Lambda(
-                                new Lambda(instance.value.parameter, Opt.empty(), term)));
+                                new Lambda(instance.value.parameter, Maybe.nothing(), term)));
             }
 
             @Override
@@ -231,8 +231,8 @@ public interface Rewriting {
 
                     @Override
                     public Flow<S, Term> visit(Term.Maybe instance) {
-                        Opt<Term> termA = instance.value;
-                        Flow<S, Opt<Term>> termB = mapM(termA, recurse);
+                        Maybe<Term> termA = instance.value;
+                        Flow<S, Maybe<Term>> termB = mapM(termA, recurse);
                         return map(termB, Term.Maybe::new);
                     }
 

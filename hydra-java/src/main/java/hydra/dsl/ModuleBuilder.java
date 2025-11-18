@@ -1,18 +1,9 @@
 package hydra.dsl;
 
-import hydra.core.FieldType;
-import hydra.core.RowType;
-import hydra.core.Type;
 // import hydra.graph.Element; // TODO: restore when kernel terms modules are generated
-import hydra.module.Module;
 import hydra.module.Namespace;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import hydra.util.Opt;
+        import hydra.util.Maybe;
 
 // import static hydra.dsl.Modules.element; // TODO: restore when kernel terms modules are generated
 // import static hydra.dsl.Modules.qname; // TODO: restore when kernel terms modules are generated
@@ -24,7 +15,7 @@ import hydra.util.Opt;
  */
 public class ModuleBuilder {
     private final Namespace namespace;
-    private final Opt<String> description;
+    private final Maybe<String> description;
     // private final List<Element> elements = new ArrayList<Element>();
 
     /**
@@ -33,7 +24,7 @@ public class ModuleBuilder {
      * @param namespace the namespace for the module
      * @param description the optional description for the module
      */
-    public ModuleBuilder(Namespace namespace, Opt<String> description) {
+    public ModuleBuilder(Namespace namespace, Maybe<String> description) {
         this.namespace = namespace;
         this.description = description;
     }
@@ -45,7 +36,7 @@ public class ModuleBuilder {
      * @param description the description for the module
      */
     public ModuleBuilder(Namespace namespace, String description) {
-        this(namespace, Opt.of(description));
+        this(namespace, Maybe.just(description));
     }
 
     /**
@@ -54,7 +45,7 @@ public class ModuleBuilder {
      * @param namespace the namespace for the module
      */
     public ModuleBuilder(Namespace namespace) {
-        this(namespace, Opt.empty());
+        this(namespace, Maybe.nothing());
     }
 
     /**

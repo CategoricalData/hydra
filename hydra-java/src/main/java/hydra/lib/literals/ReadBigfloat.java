@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -59,11 +59,11 @@ public class ReadBigfloat extends PrimitiveFunction {
      * @param str the string to parse
      * @return an Opt containing the parsed BigDecimal, or empty if parsing fails
      */
-    public static Opt<BigDecimal> apply(String str) {
+    public static Maybe<BigDecimal> apply(String str) {
         try {
-            return Opt.of(new BigDecimal(str));
+            return Maybe.just(new BigDecimal(str));
         } catch (NumberFormatException e) {
-            return Opt.empty();
+            return Maybe.nothing();
         }
     }
 }

@@ -64,7 +64,7 @@ import hydra.tools.MapperBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import static hydra.pg.dsl.Queries.apply;
 import static hydra.pg.dsl.Queries.query;
@@ -313,8 +313,8 @@ public class FromCypher extends MapperBase {
         return new VertexPattern(
                 cypher.variable.map(FromCypher::from),
                 labelOf(cypher),
-                cypher.properties.isPresent()
-                        ? from(cypher.properties.get()) : Collections.emptyList(),
+                cypher.properties.isJust()
+                        ? from(cypher.properties.fromJust()) : Collections.emptyList(),
                 Collections.emptyList());
     }
 
@@ -338,7 +338,7 @@ public class FromCypher extends MapperBase {
      * @return the converted property graph Expression
      */
     public static Expression from(NonArithmeticOperatorExpression cypher) {
-        if (cypher.labels.isPresent()) {
+        if (cypher.labels.isJust()) {
             return unsupported();
         }
 
@@ -375,18 +375,18 @@ public class FromCypher extends MapperBase {
             PatternElementChain chain = cypher.get(i);
             VertexPattern vp = from(chain.node);
 
-            chain.relationship.detail.ifPresent(FromCypher::checkRelationshipDetail);
+            chain.relationship.detail.ifJust(FromCypher::checkRelationshipDetail);
 
             vp = null == cur
                     ? vp
                     : vp.withEdges(Collections.singletonList(cur));
             Direction dir = directionOf(chain.relationship);
-            Opt<EdgeLabel> label = labelOf(chain.relationship);
-            Opt<Properties> ps = chain.relationship.detail.flatMap(r -> r.properties);
-            List<PropertyPattern> props = ps.isPresent()
-                    ? from(ps.get())
+            Maybe<EdgeLabel> label = labelOf(chain.relationship);
+            Maybe<Properties> ps = chain.relationship.detail.flatMap(r -> r.properties);
+            List<PropertyPattern> props = ps.isJust()
+                    ? from(ps.fromJust())
                     : Collections.emptyList();
-            cur = new EdgeProjectionPattern(dir, label, props, Opt.of(vp));
+            cur = new EdgeProjectionPattern(dir, label, props, Maybe.just(vp));
         }
 
         return cur;
@@ -582,7 +582,7 @@ public class FromCypher extends MapperBase {
             subqueries.add(from(c));
         }
 
-        cypher.return_.ifPresent(r -> subqueries.add(query(from(r.value))));
+        cypher.return_.ifJust(r -> subqueries.add(query(from(r.value))));
 
         return apply(subqueries);
     }
@@ -620,7 +620,7 @@ public class FromCypher extends MapperBase {
      * @return the converted property graph Expression
      */
     public static Expression from(UnaryAddOrSubtractExpression cypher) {
-        return cypher.operator.isPresent()
+        return cypher.operator.isJust()
                 ? unsupported()
                 : from(cypher.expression);
     }
@@ -644,10 +644,10 @@ public class FromCypher extends MapperBase {
      * @throws MapperException if the relationship detail is not supported
      */
     private static void checkRelationshipDetail(RelationshipDetail cypher) {
-        if (cypher.range.isPresent()) {
+        if (cypher.range.isJust()) {
             throw new MapperException("not yet supported");
         }
-        if (cypher.variable.isPresent()) {
+        if (cypher.variable.isJust()) {
             throw new MapperException("not yet supported");
         }
     }
@@ -670,19 +670,19 @@ public class FromCypher extends MapperBase {
      * @param cypher the Cypher node pattern
      * @return the optional property graph VertexLabel
      */
-    private static Opt<VertexLabel> labelOf(NodePattern cypher) {
-        if (cypher.labels.isPresent()) {
-            List<NodeLabel> labels = cypher.labels.get().value;
+    private static Maybe<VertexLabel> labelOf(NodePattern cypher) {
+        if (cypher.labels.isJust()) {
+            List<NodeLabel> labels = cypher.labels.fromJust().value;
             if (labels.size() > 0) {
                 if (labels.size() > 1) {
                     return unsupported("multiple vertex labels per pattern not yet supported");
                 }
 
-                return Opt.of(new VertexLabel(labels.get(0).value));
+                return Maybe.just(new VertexLabel(labels.get(0).value));
             }
         }
 
-        return Opt.empty();
+        return Maybe.nothing();
     }
 
     /**
@@ -691,21 +691,21 @@ public class FromCypher extends MapperBase {
      * @param cypher the Cypher relationship pattern
      * @return the optional property graph EdgeLabel
      */
-    private static Opt<EdgeLabel> labelOf(RelationshipPattern cypher) {
-        if (cypher.detail.isPresent()) {
-            RelationshipDetail detail = cypher.detail.get();
-            if (detail.types.isPresent()) {
-                List<RelTypeName> types = detail.types.get().value;
+    private static Maybe<EdgeLabel> labelOf(RelationshipPattern cypher) {
+        if (cypher.detail.isJust()) {
+            RelationshipDetail detail = cypher.detail.fromJust();
+            if (detail.types.isJust()) {
+                List<RelTypeName> types = detail.types.fromJust().value;
                 if (types.size() > 0) {
                     if (types.size() > 1) {
                         return unsupported("multiple edge labels per pattern not yet supported");
                     }
 
-                    return Opt.of(new EdgeLabel(types.get(0).value));
+                    return Maybe.just(new EdgeLabel(types.get(0).value));
                 }
             }
         }
 
-        return Opt.empty();
+        return Maybe.nothing();
     }
 }

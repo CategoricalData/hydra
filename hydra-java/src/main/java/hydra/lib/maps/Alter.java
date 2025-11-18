@@ -10,7 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,12 +56,12 @@ public class Alter extends PrimitiveFunction {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
             Term key = args.get(1);
             Term f = args.get(0);
-            Opt<Term> currentValue = Lookup.apply(key, mp);
+            Maybe<Term> currentValue = Lookup.apply(key, mp);
             Term newOptValue = Terms.apply(f, Terms.optional(currentValue));
             return bind(Expect.optional(Flows::pure, newOptValue), newValue -> {
                 Map<Term, Term> result = new HashMap<>(mp);
-                if (newValue.isPresent()) {
-                    result.put(key, newValue.get());
+                if (newValue.isJust()) {
+                    result.put(key, newValue.fromJust());
                 } else {
                     result.remove(key);
                 }
@@ -78,7 +78,7 @@ public class Alter extends PrimitiveFunction {
      * @return a curried function that takes a key and a map and returns the modified map
      */
     public static <K, V> Function<K, Function<Map<K, V>, Map<K, V>>> apply(
-            Function<Opt<V>, Opt<V>> f) {
+            Function<Maybe<V>, Maybe<V>> f) {
         return key -> mp -> apply(f, key, mp);
     }
 
@@ -91,12 +91,12 @@ public class Alter extends PrimitiveFunction {
      * @param mp the map to alter
      * @return the modified map
      */
-    public static <K, V> Map<K, V> apply(Function<Opt<V>, Opt<V>> f, K key, Map<K, V> mp) {
+    public static <K, V> Map<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, Map<K, V> mp) {
         Map<K, V> result = new HashMap<>(mp);
-        Opt<V> currentValue = Lookup.apply(key, mp);
-        Opt<V> newValue = f.apply(currentValue);
-        if (newValue.isPresent()) {
-            result.put(key, newValue.get());
+        Maybe<V> currentValue = Lookup.apply(key, mp);
+        Maybe<V> newValue = f.apply(currentValue);
+        if (newValue.isJust()) {
+            result.put(key, newValue.fromJust());
         } else {
             result.remove(key);
         }

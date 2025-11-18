@@ -1,8 +1,8 @@
 package hydra.tools;
 
+import hydra.util.Maybe;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import hydra.util.Opt;
 import java.util.function.Function;
 
 /**
@@ -19,15 +19,15 @@ public class AntlrReaderBase extends MapperBase {
      * @return the result of the first matching function
      */
     protected static <P0 extends ParserRuleContext, P> P match(P0 ctx,
-                                                               Function<P0, Opt<P>>... funs) {
+                                                               Function<P0, Maybe<P>>... funs) {
         if (null != ctx.exception) {
             throw new MapperException(ctx.exception);
         }
 
-        for (Function<P0, Opt<P>> f : funs) {
-            Opt<P> res = f.apply(ctx);
-            if (res.isPresent()) {
-                return res.get();
+        for (Function<P0, Maybe<P>> f : funs) {
+            Maybe<P> res = f.apply(ctx);
+            if (res.isJust()) {
+                return res.fromJust();
             }
         }
         return invalid("union failed to match");

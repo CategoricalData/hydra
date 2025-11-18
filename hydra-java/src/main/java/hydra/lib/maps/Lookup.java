@@ -10,7 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class Lookup extends PrimitiveFunction {
      * @param k the key to look up
      * @return a function that takes a map and returns an optional value
      */
-    public static <K, V> Function<Map<K, V>, Opt<V>> apply(K k) {
+    public static <K, V> Function<Map<K, V>, Maybe<V>> apply(K k) {
         return mp -> apply(k, mp);
     }
 
@@ -72,8 +72,8 @@ public class Lookup extends PrimitiveFunction {
      * @param mp the map to search
      * @return an optional containing the value if found, or empty if not found
      */
-    public static <K, V> Opt<V> apply(K k, Map<K, V> mp) {
+    public static <K, V> Maybe<V> apply(K k, Map<K, V> mp) {
         V v = mp.get(k);
-        return v == null ? Opt.empty() : Opt.of(v);
+        return v == null ? Maybe.nothing() : Maybe.just(v);
     }
 }

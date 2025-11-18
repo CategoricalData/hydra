@@ -52,14 +52,15 @@ public class TestSuiteRunner extends HydraTestBase {
         }
 
         FlowState<Graph, Term> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
-        if (result.value.isPresent()) {
-            if (!result.value.get().equals(output)) {
+        if (result.value.isJust()) {
+            if (!result.value.fromJust().equals(output)) {
                 // First, assert that the pretty-printed strings for the results are the same;
                 // this provides more readable failure messages.
-                assertEquals(print(output), print(result.value.get()),
+                assertEquals(print(output), print(result.value.fromJust()),
                         "Original term does not reduce to expected term" + suffix);
                 // Now check that the terms are truly equal
-                assertEquals(output, result.value.get(), "Original term does not reduce to expected term" + suffix);
+                assertEquals(output, result.value.fromJust(),
+                        "Original term does not reduce to expected term" + suffix);
             }
         } else if (result.trace.messages.isEmpty()) {
             Assertions.fail("Reduction failed" + suffix);

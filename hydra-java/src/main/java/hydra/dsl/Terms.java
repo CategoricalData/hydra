@@ -3,14 +3,11 @@ package hydra.dsl;
 import hydra.compute.FlowState;
 import hydra.core.AnnotatedTerm;
 import hydra.core.Application;
-import hydra.core.ApplicationType;
 import hydra.core.Binding;
 import hydra.core.CaseStatement;
 import hydra.core.Elimination;
 import hydra.core.Field;
-import hydra.core.FieldType;
 import hydra.core.FloatValue;
-import hydra.core.ForallType;
 import hydra.core.Function;
 import hydra.core.Injection;
 import hydra.core.IntegerValue;
@@ -26,10 +23,9 @@ import hydra.core.TupleProjection;
 import hydra.core.Type;
 import hydra.core.TypeApplicationTerm;
 import hydra.core.TypeLambda;
-import hydra.core.TypeScheme;
 import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -42,23 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static hydra.dsl.Core.name;
-import static hydra.dsl.Literals.bigfloat;
-import static hydra.dsl.Literals.bigint;
-import static hydra.dsl.Literals.binary;
-import static hydra.dsl.Literals.boolean_;
-import static hydra.dsl.Literals.float32;
-import static hydra.dsl.Literals.float64;
-import static hydra.dsl.Literals.float_;
-import static hydra.dsl.Literals.int16;
-import static hydra.dsl.Literals.int32;
-import static hydra.dsl.Literals.int64;
-import static hydra.dsl.Literals.int8;
-import static hydra.dsl.Literals.integer;
-import static hydra.dsl.Literals.string;
-import static hydra.dsl.Literals.uint16;
-import static hydra.dsl.Literals.uint32;
 import static hydra.dsl.Literals.uint64;
-import static hydra.dsl.Literals.uint8;
 
 /**
  * A domain-specific language for constructing Hydra terms in Java.
@@ -414,7 +394,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambda(String param, Term body) {
-        return function(new Function.Lambda(new Lambda(name(param), Opt.empty(), body)));
+        return function(new Function.Lambda(new Lambda(name(param), Maybe.nothing(), body)));
     }
 
     /**
@@ -477,7 +457,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambdaTyped(String param, Type dom, Term body) {
-        return function(new Function.Lambda(new Lambda(name(param), Opt.of(dom), body)));
+        return function(new Function.Lambda(new Lambda(name(param), Maybe.just(dom), body)));
     }
 
     /**
@@ -604,7 +584,7 @@ public interface Terms {
      * @return the tuple projection term
      */
     static Term untuple(int arity, int idx) {
-        return elimination(new Elimination.Product(new TupleProjection(arity, idx, Opt.empty())));
+        return elimination(new Elimination.Product(new TupleProjection(arity, idx, Maybe.nothing())));
     }
 
     /**
@@ -614,7 +594,7 @@ public interface Terms {
      * @param types the optional list of element types
      * @return the tuple projection term
      */
-    static Term untuple(int arity, int idx, Opt<List<Type>> types) {
+    static Term untuple(int arity, int idx, Maybe<List<Type>> types) {
         return elimination(new Elimination.Product(new TupleProjection(arity, idx, types)));
     }
 
@@ -644,7 +624,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(Name typeName, Opt<Term> defaultCase, Field... fields) {
+    static Term match(Name typeName, Maybe<Term> defaultCase, Field... fields) {
         return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, Arrays.asList(fields))));
     }
 
@@ -655,7 +635,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(Name typeName, Opt<Term> defaultCase, List<Field> fields) {
+    static Term match(Name typeName, Maybe<Term> defaultCase, List<Field> fields) {
         return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, fields)));
     }
 
@@ -666,7 +646,7 @@ public interface Terms {
      * @param fields the case fields
      * @return the match term
      */
-    static Term match(String typeName, Opt<Term> defaultCase, Field... fields) {
+    static Term match(String typeName, Maybe<Term> defaultCase, Field... fields) {
         return match(name(typeName), defaultCase, fields);
     }
 
@@ -681,7 +661,7 @@ public interface Terms {
      * @return the let term
      */
     static Term let_(String varName, Term defined, Term body) {
-        Binding binding = new Binding(name(varName), defined, Opt.empty());
+        Binding binding = new Binding(name(varName), defined, Maybe.nothing());
         return new Term.Let(new Let(Collections.singletonList(binding), body));
     }
 
@@ -695,7 +675,7 @@ public interface Terms {
     static Term lets(List<Field> bindings, Term body) {
         List<Binding> letBindings = new ArrayList<>();
         for (Field f : bindings) {
-            letBindings.add(new Binding(f.name, f.term, Opt.empty()));
+            letBindings.add(new Binding(f.name, f.term, Maybe.nothing()));
         }
         return new Term.Let(new Let(letBindings, body));
     }
@@ -804,7 +784,7 @@ public interface Terms {
      * @param maybeTerm the optional term
      * @return the optional term
      */
-    static Term optional(Opt<Term> maybeTerm) {
+    static Term optional(Maybe<Term> maybeTerm) {
         return new Term.Maybe(maybeTerm);
     }
 
@@ -813,7 +793,7 @@ public interface Terms {
      * @return the nothing term
      */
     static Term nothing() {
-        return optional(Opt.empty());
+        return optional(Maybe.nothing());
     }
 
     /**
@@ -823,7 +803,7 @@ public interface Terms {
      * @return the just term
      */
     static Term just(Term elem) {
-        return optional(Opt.of(elem));
+        return optional(Maybe.just(elem));
     }
 
     /**

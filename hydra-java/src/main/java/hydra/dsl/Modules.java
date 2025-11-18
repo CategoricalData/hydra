@@ -2,15 +2,9 @@ package hydra.dsl;
 
 // import hydra.tier1.Tier1;
 // TODO: restore when kernel terms modules are generated
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.core.Type;
 // import hydra.graph.Element;
 // TODO: restore when kernel terms modules are generated
-import hydra.module.Module;
 import hydra.module.Namespace;
-import hydra.module.QualifiedName;
-import hydra.util.Opt;
 
 // import static hydra.coreEncoding.CoreEncoding.coreEncodeType;
 // TODO: restore when kernel terms modules are generated

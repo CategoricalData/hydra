@@ -37,7 +37,7 @@ public class PipeTest {
     public void checkFail() {
         Pipe<Integer> pipe1 = Pipe.fail("oops");
         FlowState<Unit, Integer> result1 = pipe1.flow.value.apply(new Unit()).apply(Flows.EMPTY_TRACE);
-        assertFalse(result1.value.isPresent());
+        assertFalse(result1.value.isJust());
         assertEquals(1, result1.trace.messages.size());
         assertEquals("Error: oops", result1.trace.messages.get(0));
 
@@ -46,7 +46,7 @@ public class PipeTest {
         List<String> strings = Arrays.asList("one", "two", "", "four");
         Pipe<List<Integer>> pipe2 = mapM(strings, nonzeroLen);
         FlowState<Unit, List<Integer>> result2 = pipe2.flow.value.apply(new Unit()).apply(Flows.EMPTY_TRACE);
-        assertFalse(result2.value.isPresent());
+        assertFalse(result2.value.isJust());
     }
 
     @Test
@@ -63,8 +63,8 @@ public class PipeTest {
         FlowState<Unit, Integer> result1 = pipe1.flow.value.apply(Flows.UNIT).apply(Flows.EMPTY_TRACE);
         FlowState<Unit, Double> result2 = pipe2.flow.value.apply(Flows.UNIT).apply(Flows.EMPTY_TRACE);
 
-        assertTrue(result1.value.isPresent());
-        assertFalse(result2.value.isPresent());
+        assertTrue(result1.value.isJust());
+        assertFalse(result2.value.isJust());
         assertEquals(3, result1.trace.messages.size());
         assertEquals(4, result2.trace.messages.size());
 
