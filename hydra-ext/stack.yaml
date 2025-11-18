@@ -5,8 +5,3 @@ packages:
   - ../hydra-haskell
 
 extra-deps:
-
-# TODO: temporary, for debugging
-build:
-  library-profiling: true
-  executable-profiling: true
