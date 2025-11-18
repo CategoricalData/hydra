@@ -706,13 +706,7 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermList els -> do
           jels <- CM.mapM encode els
-          targs <- if not (L.null jels)
-            then pure []
-            else if L.null tyapps
-            then fail $ "empty list without type application"
-            else do
-              rt <- javaTypeToJavaReferenceType $ L.head tyapps
-              return [Java.TypeArgumentReference rt]
+          targs <- collectionTypeArgs jels
           return $ javaMethodInvocationToJavaExpression $
             methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.List") (Java.Identifier "of") targs jels
 
@@ -798,6 +792,14 @@ encodeTerm env term0 = encodeInternal [] [] term0
           return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
+      where
+        collectionTypeArgs jels = if not (L.null jels)
+          then pure []
+          else if L.null tyapps
+          then fail $ "empty list without type application"
+          else do
+            rt <- javaTypeToJavaReferenceType $ L.head tyapps
+            return [Java.TypeArgumentReference rt]
 
 -- | Convert a list of bindings to Java block statements, handling recursive bindings
 -- and performing topological sorting for correct declaration order.
