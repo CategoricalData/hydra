@@ -1,4 +1,4 @@
-package hydra.ext.json;
+package hydra.json;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;

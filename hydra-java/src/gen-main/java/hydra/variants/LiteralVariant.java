@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.meta;
+package hydra.variants;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a literal constructor
  */
 public abstract class LiteralVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.LiteralVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.LiteralVariant");
   
   public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
   
@@ -64,7 +64,7 @@ public abstract class LiteralVariant implements Serializable {
     }
   }
   
-  public static final class Binary extends hydra.meta.LiteralVariant implements Serializable {
+  public static final class Binary extends hydra.variants.LiteralVariant implements Serializable {
     public final Boolean value;
     
     public Binary (Boolean value) {
@@ -92,7 +92,7 @@ public abstract class LiteralVariant implements Serializable {
     }
   }
   
-  public static final class Boolean_ extends hydra.meta.LiteralVariant implements Serializable {
+  public static final class Boolean_ extends hydra.variants.LiteralVariant implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -120,7 +120,7 @@ public abstract class LiteralVariant implements Serializable {
     }
   }
   
-  public static final class Float_ extends hydra.meta.LiteralVariant implements Serializable {
+  public static final class Float_ extends hydra.variants.LiteralVariant implements Serializable {
     public final Boolean value;
     
     public Float_ (Boolean value) {
@@ -148,7 +148,7 @@ public abstract class LiteralVariant implements Serializable {
     }
   }
   
-  public static final class Integer_ extends hydra.meta.LiteralVariant implements Serializable {
+  public static final class Integer_ extends hydra.variants.LiteralVariant implements Serializable {
     public final Boolean value;
     
     public Integer_ (Boolean value) {
@@ -176,7 +176,7 @@ public abstract class LiteralVariant implements Serializable {
     }
   }
   
-  public static final class String_ extends hydra.meta.LiteralVariant implements Serializable {
+  public static final class String_ extends hydra.variants.LiteralVariant implements Serializable {
     public final Boolean value;
     
     public String_ (Boolean value) {

@@ -8,8 +8,8 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Test.TestGraph
 
-import           Hydra.Dsl.TTerms as TTerms
-import qualified Hydra.Dsl.TTypes as T
+import           Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Types as T
 
 import qualified Data.Map as M
 import Prelude hiding (map, sum)

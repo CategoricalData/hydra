@@ -17,8 +17,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Meta as Meta
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
@@ -596,73 +596,73 @@ termAdapter typ =
   in  
     let supported = (\cx -> Utils.typeIsSupported (constraints cx))
     in  
-      let variantIsSupported = (\cx -> \t -> Sets.member (Variants.typeVariant t) (Coders.languageConstraintsTypeVariants (constraints cx)))
+      let variantIsSupported = (\cx -> \t -> Sets.member (Reflect.typeVariant t) (Coders.languageConstraintsTypeVariants (constraints cx)))
       in  
         let supportedAtTopLevel = (\cx -> \t -> Logic.and (variantIsSupported cx t) (Coders.languageConstraintsTypes (constraints cx) t))
         in  
           let pass = (\t -> (\x -> case x of
-                  Meta.TypeVariantAnnotated -> []
-                  Meta.TypeVariantApplication -> [
+                  Variants.TypeVariantAnnotated -> []
+                  Variants.TypeVariantApplication -> [
                     passApplication]
-                  Meta.TypeVariantEither -> [
+                  Variants.TypeVariantEither -> [
                     passEither]
-                  Meta.TypeVariantForall -> [
+                  Variants.TypeVariantForall -> [
                     passForall]
-                  Meta.TypeVariantFunction -> [
+                  Variants.TypeVariantFunction -> [
                     passFunction]
-                  Meta.TypeVariantList -> [
+                  Variants.TypeVariantList -> [
                     passList]
-                  Meta.TypeVariantLiteral -> [
+                  Variants.TypeVariantLiteral -> [
                     passLiteral]
-                  Meta.TypeVariantMap -> [
+                  Variants.TypeVariantMap -> [
                     passMap]
-                  Meta.TypeVariantMaybe -> [
+                  Variants.TypeVariantMaybe -> [
                     passOptional,
                     maybeToList]
-                  Meta.TypeVariantPair -> []
-                  Meta.TypeVariantProduct -> [
+                  Variants.TypeVariantPair -> []
+                  Variants.TypeVariantProduct -> [
                     passProduct]
-                  Meta.TypeVariantRecord -> [
+                  Variants.TypeVariantRecord -> [
                     passRecord]
-                  Meta.TypeVariantSet -> [
+                  Variants.TypeVariantSet -> [
                     passSet]
-                  Meta.TypeVariantSum -> [
+                  Variants.TypeVariantSum -> [
                     passSum]
-                  Meta.TypeVariantUnion -> [
+                  Variants.TypeVariantUnion -> [
                     passUnion]
-                  Meta.TypeVariantUnit -> [
+                  Variants.TypeVariantUnit -> [
                     passUnit]
-                  Meta.TypeVariantVariable -> []
-                  Meta.TypeVariantWrap -> [
-                    passWrapped]) (Variants.typeVariant (Rewriting.deannotateType t)))
+                  Variants.TypeVariantVariable -> []
+                  Variants.TypeVariantWrap -> [
+                    passWrapped]) (Reflect.typeVariant (Rewriting.deannotateType t)))
           in  
             let trySubstitution = (\t -> (\x -> case x of
-                    Meta.TypeVariantAnnotated -> []
-                    Meta.TypeVariantApplication -> [
+                    Variants.TypeVariantAnnotated -> []
+                    Variants.TypeVariantApplication -> [
                       simplifyApplication]
-                    Meta.TypeVariantEither -> []
-                    Meta.TypeVariantForall -> [
+                    Variants.TypeVariantEither -> []
+                    Variants.TypeVariantForall -> [
                       lambdaToMonotype]
-                    Meta.TypeVariantFunction -> [
+                    Variants.TypeVariantFunction -> [
                       functionToUnion]
-                    Meta.TypeVariantList -> []
-                    Meta.TypeVariantLiteral -> []
-                    Meta.TypeVariantMap -> []
-                    Meta.TypeVariantMaybe -> [
+                    Variants.TypeVariantList -> []
+                    Variants.TypeVariantLiteral -> []
+                    Variants.TypeVariantMap -> []
+                    Variants.TypeVariantMaybe -> [
                       maybeToList]
-                    Meta.TypeVariantPair -> []
-                    Meta.TypeVariantProduct -> []
-                    Meta.TypeVariantRecord -> []
-                    Meta.TypeVariantSet -> [
+                    Variants.TypeVariantPair -> []
+                    Variants.TypeVariantProduct -> []
+                    Variants.TypeVariantRecord -> []
+                    Variants.TypeVariantSet -> [
                       setToList]
-                    Meta.TypeVariantSum -> []
-                    Meta.TypeVariantUnion -> [
+                    Variants.TypeVariantSum -> []
+                    Variants.TypeVariantUnion -> [
                       unionToRecord]
-                    Meta.TypeVariantUnit -> [
+                    Variants.TypeVariantUnit -> [
                       unitToRecord]
-                    Meta.TypeVariantVariable -> []
-                    Meta.TypeVariantWrap -> [
-                      wrapToUnwrapped]) (Variants.typeVariant t))
+                    Variants.TypeVariantVariable -> []
+                    Variants.TypeVariantWrap -> [
+                      wrapToUnwrapped]) (Reflect.typeVariant t))
             in  
               let alts = (\cx -> \t -> Flows.mapList (\c -> c t) (Logic.ifElse (supportedAtTopLevel cx t) (pass t) (trySubstitution t)))
               in  

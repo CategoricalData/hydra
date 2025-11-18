@@ -19,13 +19,13 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Show.Meta as Meta
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
-import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -247,7 +247,7 @@ typeOf tx typeArgs term =
           Core.TermWrap v1 -> (typeOfWrappedTerm tx typeArgs v1)
           _ -> (Flows.fail (Strings.cat [
             "unsupported term variant in typeOf: ",
-            (Meta.termVariant (Variants.termVariant term))]))) term)
+            (Meta.termVariant (Reflect.termVariant term))]))) term)
   in (Monads.withTrace (Strings.cat [
     "checking type of: ",
     Core__.term term,
@@ -380,7 +380,7 @@ typeOfList tx typeArgs els = (Logic.ifElse (Lists.null els) (Logic.ifElse (Equal
 
 typeOfLiteral :: (Typing.TypeContext -> [Core.Type] -> Core.Literal -> Compute.Flow t0 Core.Type)
 typeOfLiteral tx typeArgs lit =  
-  let t = (Core.TypeLiteral (Variants.literalType lit))
+  let t = (Core.TypeLiteral (Reflect.literalType lit))
   in (applyTypeArgumentsToType tx typeArgs t)
 
 typeOfMap :: (Typing.TypeContext -> [Core.Type] -> M.Map Core.Term Core.Term -> Compute.Flow t0 Core.Type)

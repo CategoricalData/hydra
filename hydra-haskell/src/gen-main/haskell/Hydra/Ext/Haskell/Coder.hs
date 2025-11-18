@@ -4,6 +4,7 @@ module Hydra.Ext.Haskell.Coder where
 
 import qualified Hydra.Adapt.Modules as Modules
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
@@ -27,7 +28,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
@@ -362,7 +362,7 @@ encodeType namespaces typ =
       in (ref name)
     _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Rewriting.deannotateType typ)))
 
-encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Meta.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
+encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
@@ -370,8 +370,8 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
               let name = (fst tuple2) 
                   cls = (snd tuple2)
                   hname = (Utils.rawName ((\x -> case x of
-                          Meta.TypeClassEquality -> "Eq"
-                          Meta.TypeClassOrdering -> "Ord") cls))
+                          Classes.TypeClassEquality -> "Eq"
+                          Classes.TypeClassOrdering -> "Ord") cls))
                   htype = (Ast.TypeVariable (Utils.rawName (Core.unName name)))
               in (Ast.AssertionClass (Ast.ClassAssertion {
                 Ast.classAssertionName = hname,
@@ -408,10 +408,10 @@ findOrdVariables typ =
               _ -> names) (Rewriting.deannotateType t))
   in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
-getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Meta.TypeClass))
+getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Classes.TypeClass))
 getImplicitTypeClasses typ =  
   let toPair = (\name -> (name, (Sets.fromList [
-          Meta.TypeClassOrdering])))
+          Classes.TypeClassOrdering])))
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 moduleToHaskellModule :: (Module.Module -> Compute.Flow Graph.Graph Ast.Module)

@@ -2,7 +2,7 @@
 
 module Hydra.Dsl.Lib.Equality where
 
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import Hydra.Phantoms
 import Hydra.Util
 import qualified Hydra.Dsl.Terms as Terms

@@ -1,16 +1,16 @@
 -- | A domain-specific language for constructing term-encoded Hydra terms in Haskell;
 --   these functions enable you to build terms (programs) which build terms.
-module Hydra.Dsl.TTerms (
-  module Hydra.Dsl.TBase,
-  module Hydra.Dsl.TTerms,
+module Hydra.Dsl.Meta.Terms (
+  module Hydra.Dsl.Meta.Base,
+  module Hydra.Dsl.Meta.Terms,
 ) where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
-import Hydra.Dsl.TBase
-import qualified Hydra.Dsl.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Base
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -21,6 +21,11 @@ import Prelude hiding (map, product, sum)
 
 
 -- Operators
+
+-- | Function composition operator for term-encoded terms: f <.> g creates a function that applies g then f
+-- Example: var "stringLength" <.> var "toString"
+(<.>) :: TTerm Term -> TTerm Term -> TTerm Term
+f <.> g = compose f g
 
 -- | Function application operator for term-encoded terms
 -- Example: fun @@ arg
@@ -108,6 +113,11 @@ float64 = float64Lift . TTerm . Terms.float64
 float64Lift :: TTerm Double -> TTerm Term
 float64Lift = Core.termLiteral . Core.literalFloat . Core.floatValueFloat64
 
+-- | Create a term-encoded floating-point literal with specified precision
+-- Example: float (FloatValueFloat32 3.14)
+float :: TTerm FloatValue -> TTerm Term
+float = Core.termLiteral . Core.literalFloat
+
 -- | Create a term-encoded union injection
 -- Example: inject (name "Result") "success" (int32 42)
 inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
@@ -155,6 +165,11 @@ int64 = int64Lift . TTerm . Terms.int64
 -- Example: int64Lift (varPhantom "x" :: TTerm Int64)
 int64Lift :: TTerm Int64 -> TTerm Term
 int64Lift = Core.termLiteral . Core.literalInteger . Core.integerValueInt64
+
+-- | Create a term-encoded integer literal with specified bit width
+-- Example: integer (IntegerValueInt32 42)
+integer :: TTerm IntegerValue -> TTerm Term
+integer = Core.termLiteral . Core.literalInteger
 
 -- | Create a term-encoded 'Just' optional value
 -- Example: just (string "found")
@@ -374,6 +389,11 @@ variantPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift
 wrap :: TTerm Name -> TTerm Term -> TTerm Term
 wrap name = Core.termWrap . Core.wrappedTerm name
 
+-- | Attach an annotation to a term-encoded term
+-- Example: annot (Phantoms.map M.empty) (int32 42)
+annot :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
+annot annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
+
 -- | Create a term-encoded annotated term (term with type annotations)
 -- Example: annotated (int32 42) (Phantoms.map M.empty)
 annotated :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm Term
@@ -394,6 +414,11 @@ tyapp term typ = Core.termTypeApplication $ Core.typeApplicationTerm term typ
 tyapps :: TTerm Term -> [TTerm Type] -> TTerm Term
 tyapps = L.foldl tyapp
 
+-- | Apply type arguments to a polymorphic term (same as tyapps)
+-- Example: typeApplication (list []) [T.int32]
+typeApplication :: TTerm Term -> [TTerm Type] -> TTerm Term
+typeApplication = tyapps
+
 -- | Create a term-encoded type lambda (System F)
 -- Example: tylam "t0" (lambda "x" $ var "x")
 tylam :: String -> TTerm Term -> TTerm Term
@@ -404,12 +429,22 @@ tylam var body = Core.termTypeLambda $ Core.typeLambda (name var) body
 tylams :: [String] -> TTerm Term -> TTerm Term
 tylams vars body = L.foldl (\b v -> Core.termTypeLambda $ Core.typeLambda (name v) b) body $ L.reverse vars
 
+-- | Create term-encoded type lambda(s) (same as tylams)
+-- Example: typeLambda ["t0"] (lambda "x" $ var "x")
+typeLambda :: [String] -> TTerm Term -> TTerm Term
+typeLambda = tylams
+
 -- | Create a term-encoded let expression with type annotations on bindings
 -- Example: letsTyped [("x", int32 1, T.mono T.int32)] (var "x")
 letsTyped :: [(String, TTerm Term, TTerm TypeScheme)] -> TTerm Term -> TTerm Term
 letsTyped bindings body = Core.termLet $ Core.let_ (Phantoms.list $ toBinding bindings) body
   where
     toBinding = fmap (\(n, t, ts) -> Core.binding (name n) t (Phantoms.just ts))
+
+-- | Create a term-encoded literal from a Literal value
+-- Example: literal (LiteralInteger (IntegerValueInt32 42))
+literal :: TTerm Literal -> TTerm Term
+literal = Core.termLiteral
 
 -- | Create a term-encoded character literal via int32
 -- Example: char 'A'

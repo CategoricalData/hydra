@@ -2,15 +2,15 @@ module Hydra.Sources.Test.Inference.Simple (simpleTermsTests) where
 
 import Hydra.Kernel
 import Hydra.Testing
-import qualified Hydra.Dsl.Phantoms as Base
+import qualified Hydra.Dsl.Meta.Phantoms as Base
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Test.TestGraph
-import Hydra.Dsl.TTerms as TTerms
-import qualified Hydra.Dsl.TTypes as T
+import Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Types as T
 import Hydra.Sources.Test.Inference.Fundamentals
 
 import qualified Data.Map as M
@@ -156,7 +156,7 @@ testGroupForIndividualTerms = supergroup "Individual terms" [
           (string "lastName", string "Dent")])
         (T.map T.string T.string),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (TTerms.map Maps.empty)
+        (MetaTerms.map Maps.empty)
         ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
       expectPoly 3 [tag_disabledForMinimalInference]
         (lambdas ["x", "y"] $ mapTerm

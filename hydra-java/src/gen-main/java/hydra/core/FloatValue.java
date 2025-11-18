@@ -3,7 +3,6 @@
 package hydra.core;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * A floating-point literal value
@@ -53,9 +52,9 @@ public abstract class FloatValue implements Serializable {
    * An arbitrary-precision floating-point value
    */
   public static final class Bigfloat extends hydra.core.FloatValue implements Serializable {
-    public final BigDecimal value;
+    public final java.math.BigDecimal value;
     
-    public Bigfloat (BigDecimal value) {
+    public Bigfloat (java.math.BigDecimal value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

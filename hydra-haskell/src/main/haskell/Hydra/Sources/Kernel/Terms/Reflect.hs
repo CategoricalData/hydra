@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Kernel.Terms.Variants where
+module Hydra.Sources.Kernel.Terms.Reflect where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -57,10 +57,10 @@ import qualified Data.Maybe              as Y
 
 
 module_ :: Module
-module_ = Module (Namespace "hydra.variants") elements
+module_ = Module (Namespace "hydra.reflect") elements
     []
     kernelTypesModules $
-    Just ("Functions for working with term, type, and literal type variants, as well as numeric precision.")
+    Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [
       el eliminationVariantDef,
@@ -91,10 +91,10 @@ eliminationVariantDef :: TBinding (Elimination -> EliminationVariant)
 eliminationVariantDef = define "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   match _Elimination Nothing [
-    _Elimination_product>>: constant Meta.eliminationVariantProduct,
-    _Elimination_record>>: constant Meta.eliminationVariantRecord,
-    _Elimination_union>>: constant Meta.eliminationVariantUnion,
-    _Elimination_wrap>>: constant Meta.eliminationVariantWrap]
+    _Elimination_product>>: constant Variants.eliminationVariantProduct,
+    _Elimination_record>>: constant Variants.eliminationVariantRecord,
+    _Elimination_union>>: constant Variants.eliminationVariantUnion,
+    _Elimination_wrap>>: constant Variants.eliminationVariantWrap]
 
 eliminationVariantsDef :: TBinding [EliminationVariant]
 eliminationVariantsDef = define "eliminationVariants" $
@@ -133,9 +133,9 @@ functionVariantDef :: TBinding (Function -> FunctionVariant)
 functionVariantDef = define "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   match _Function Nothing [
-    _Function_elimination>>: constant Meta.functionVariantElimination,
-    _Function_lambda>>: constant Meta.functionVariantLambda,
-    _Function_primitive>>: constant Meta.functionVariantPrimitive]
+    _Function_elimination>>: constant Variants.functionVariantElimination,
+    _Function_lambda>>: constant Variants.functionVariantLambda,
+    _Function_primitive>>: constant Variants.functionVariantPrimitive]
 
 functionVariantsDef :: TBinding [FunctionVariant]
 functionVariantsDef = define "functionVariants" $
@@ -215,11 +215,11 @@ literalTypeVariantDef :: TBinding (LiteralType -> LiteralVariant)
 literalTypeVariantDef = define "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   match _LiteralType Nothing [
-    _LiteralType_binary>>:  constant $ Meta.literalVariantBinary,
-    _LiteralType_boolean>>: constant $ Meta.literalVariantBoolean,
-    _LiteralType_float>>:   constant $ Meta.literalVariantFloat,
-    _LiteralType_integer>>: constant $ Meta.literalVariantInteger,
-    _LiteralType_string>>:  constant $ Meta.literalVariantString]
+    _LiteralType_binary>>:  constant $ Variants.literalVariantBinary,
+    _LiteralType_boolean>>: constant $ Variants.literalVariantBoolean,
+    _LiteralType_float>>:   constant $ Variants.literalVariantFloat,
+    _LiteralType_integer>>: constant $ Variants.literalVariantInteger,
+    _LiteralType_string>>:  constant $ Variants.literalVariantString]
 
 literalTypesDef :: TBinding [LiteralType]
 literalTypesDef = define "literalTypes" $
@@ -252,26 +252,26 @@ termVariantDef :: TBinding (Term -> TermVariant)
 termVariantDef = define "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   match _Term Nothing [
-    _Term_annotated>>: constant Meta.termVariantAnnotated,
-    _Term_application>>: constant Meta.termVariantApplication,
-    _Term_either>>: constant Meta.termVariantEither,
-    _Term_function>>: constant Meta.termVariantFunction,
-    _Term_let>>: constant Meta.termVariantLet,
-    _Term_list>>: constant Meta.termVariantList,
-    _Term_literal>>: constant Meta.termVariantLiteral,
-    _Term_map>>: constant Meta.termVariantMap,
-    _Term_maybe>>: constant Meta.termVariantMaybe,
-    _Term_pair>>: constant Meta.termVariantPair,
-    _Term_product>>: constant Meta.termVariantProduct,
-    _Term_record>>: constant Meta.termVariantRecord,
-    _Term_set>>: constant Meta.termVariantSet,
-    _Term_sum>>: constant Meta.termVariantSum,
-    _Term_typeApplication>>: constant Meta.termVariantTypeApplication,
-    _Term_typeLambda>>: constant Meta.termVariantTypeLambda,
-    _Term_union>>: constant Meta.termVariantUnion,
-    _Term_unit>>: constant Meta.termVariantUnit,
-    _Term_variable>>: constant Meta.termVariantVariable,
-    _Term_wrap>>: constant Meta.termVariantWrap]
+    _Term_annotated>>: constant Variants.termVariantAnnotated,
+    _Term_application>>: constant Variants.termVariantApplication,
+    _Term_either>>: constant Variants.termVariantEither,
+    _Term_function>>: constant Variants.termVariantFunction,
+    _Term_let>>: constant Variants.termVariantLet,
+    _Term_list>>: constant Variants.termVariantList,
+    _Term_literal>>: constant Variants.termVariantLiteral,
+    _Term_map>>: constant Variants.termVariantMap,
+    _Term_maybe>>: constant Variants.termVariantMaybe,
+    _Term_pair>>: constant Variants.termVariantPair,
+    _Term_product>>: constant Variants.termVariantProduct,
+    _Term_record>>: constant Variants.termVariantRecord,
+    _Term_set>>: constant Variants.termVariantSet,
+    _Term_sum>>: constant Variants.termVariantSum,
+    _Term_typeApplication>>: constant Variants.termVariantTypeApplication,
+    _Term_typeLambda>>: constant Variants.termVariantTypeLambda,
+    _Term_union>>: constant Variants.termVariantUnion,
+    _Term_unit>>: constant Variants.termVariantUnit,
+    _Term_variable>>: constant Variants.termVariantVariable,
+    _Term_wrap>>: constant Variants.termVariantWrap]
 
 termVariantsDef :: TBinding [TermVariant]
 termVariantsDef = define "termVariants" $
@@ -301,24 +301,24 @@ typeVariantDef :: TBinding (Type -> TypeVariant)
 typeVariantDef = define "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   match _Type Nothing [
-    _Type_annotated>>: constant Meta.typeVariantAnnotated,
-    _Type_application>>: constant Meta.typeVariantApplication,
-    _Type_either>>: constant Meta.typeVariantEither,
-    _Type_function>>: constant Meta.typeVariantFunction,
-    _Type_forall>>: constant Meta.typeVariantForall,
-    _Type_list>>: constant Meta.typeVariantList,
-    _Type_literal>>: constant Meta.typeVariantLiteral,
-    _Type_map>>: constant Meta.typeVariantMap,
-    _Type_maybe>>: constant Meta.typeVariantMaybe,
-    _Type_pair>>: constant Meta.typeVariantPair,
-    _Type_product>>: constant Meta.typeVariantProduct,
-    _Type_record>>: constant Meta.typeVariantRecord,
-    _Type_set>>: constant Meta.typeVariantSet,
-    _Type_sum>>: constant Meta.typeVariantSum,
-    _Type_union>>: constant Meta.typeVariantUnion,
-    _Type_unit>>: constant Meta.typeVariantUnit,
-    _Type_variable>>: constant Meta.typeVariantVariable,
-    _Type_wrap>>: constant Meta.typeVariantWrap]
+    _Type_annotated>>: constant Variants.typeVariantAnnotated,
+    _Type_application>>: constant Variants.typeVariantApplication,
+    _Type_either>>: constant Variants.typeVariantEither,
+    _Type_function>>: constant Variants.typeVariantFunction,
+    _Type_forall>>: constant Variants.typeVariantForall,
+    _Type_list>>: constant Variants.typeVariantList,
+    _Type_literal>>: constant Variants.typeVariantLiteral,
+    _Type_map>>: constant Variants.typeVariantMap,
+    _Type_maybe>>: constant Variants.typeVariantMaybe,
+    _Type_pair>>: constant Variants.typeVariantPair,
+    _Type_product>>: constant Variants.typeVariantProduct,
+    _Type_record>>: constant Variants.typeVariantRecord,
+    _Type_set>>: constant Variants.typeVariantSet,
+    _Type_sum>>: constant Variants.typeVariantSum,
+    _Type_union>>: constant Variants.typeVariantUnion,
+    _Type_unit>>: constant Variants.typeVariantUnit,
+    _Type_variable>>: constant Variants.typeVariantVariable,
+    _Type_wrap>>: constant Variants.typeVariantWrap]
 
 typeVariantsDef :: TBinding [TypeVariant]
 typeVariantsDef = define "typeVariants" $

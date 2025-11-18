@@ -20,7 +20,7 @@ hydra.ext.gql
 hydra.ext.haskell.ast
 hydra.ext.java.language
 hydra.ext.java.syntax
-hydra.ext.json
+hydra.json
 hydra.ext.org.apache.avro.schema
 hydra.ext.org.graphql.syntax
 hydra.ext.org.json.schema

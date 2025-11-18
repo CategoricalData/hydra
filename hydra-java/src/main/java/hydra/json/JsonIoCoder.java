@@ -1,11 +1,11 @@
-package hydra.ext.json;
+package hydra.json;
 
 import com.cedarsoftware.util.io.JsonObject;
 import hydra.dsl.Flows;
 import hydra.compute.Coder;
 import hydra.compute.Flow;
-import hydra.json.Value;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
             public Flow<S, Object> visit(Value.Number_ instance) {
                 // Value.Number_ now stores the number as a String, so we parse it back to Double
                 try {
-                    return Flows.pure(Double.parseDouble(instance.value));
+                    return Flows.pure(instance.value.doubleValue());
                 } catch (NumberFormatException e) {
                     return Flows.fail("Invalid number format: " + instance.value, e);
                 }
@@ -98,7 +98,7 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
         } else if (value instanceof Boolean) {
             return Flows.pure(new Value.Boolean_((Boolean) value));
         } else if (value instanceof Number) {
-            return Flows.pure(new Value.Number_(String.valueOf(((Number) value).doubleValue())));
+            return Flows.pure(new Value.Number_(BigDecimal.valueOf(((Number) value).doubleValue())));
         } else {
             return Flows.unexpected("object, array, string, boolean, or number", value.getClass().getName());
         }

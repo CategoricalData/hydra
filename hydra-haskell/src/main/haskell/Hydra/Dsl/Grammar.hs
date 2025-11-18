@@ -1,7 +1,7 @@
 module Hydra.Dsl.Grammar where
 
 import Hydra.Kernel hiding (Pattern)
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import Hydra.Grammar
 
 import qualified Data.Map as M

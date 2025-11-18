@@ -14,20 +14,20 @@ import qualified Data.Map                        as M
 import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
-import qualified Hydra.Sources.Kernel.Types.Graph as Graph
-import qualified Hydra.Sources.Kernel.Types.Meta as Meta
+import qualified Hydra.Sources.Kernel.Types.Compute  as Compute
+import qualified Hydra.Sources.Kernel.Types.Graph    as Graph
+import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
 module_ :: Module
-module_ = Module ns elements [Graph.module_, Compute.module_, Meta.module_] [Core.module_] $
+module_ = Module ns elements [Graph.module_, Compute.module_, Variants.module_] [Core.module_] $
     Just "Abstractions for paired transformations between languages"
   where
     ns = Namespace "hydra.coders"
     core = typeref $ moduleNamespace Core.module_
     compute = typeref $ moduleNamespace Compute.module_
     graph = typeref $ moduleNamespace Graph.module_
-    meta = typeref $ moduleNamespace Meta.module_
+    variants = typeref $ moduleNamespace Variants.module_
     coders = typeref ns
 
     def = datatype ns
@@ -71,25 +71,25 @@ module_ = Module ns elements [Graph.module_, Compute.module_, Meta.module_] [Cor
         record [
           "eliminationVariants">:
             doc "All supported elimination variants" $
-            Types.set $ meta "EliminationVariant",
+            Types.set $ variants "EliminationVariant",
           "literalVariants">:
             doc "All supported literal variants" $
-            Types.set $ meta "LiteralVariant",
+            Types.set $ variants "LiteralVariant",
           "floatTypes">:
             doc "All supported float types" $
             Types.set $ core "FloatType",
           "functionVariants">:
             doc "All supported function variants" $
-            Types.set $ meta "FunctionVariant",
+            Types.set $ variants "FunctionVariant",
           "integerTypes">:
             doc "All supported integer types" $
             Types.set $ core "IntegerType",
           "termVariants">:
             doc "All supported term variants" $
-            Types.set $ meta "TermVariant",
+            Types.set $ variants "TermVariant",
           "typeVariants">:
             doc "All supported type variants" $
-            Types.set $ meta "TypeVariant",
+            Types.set $ variants "TypeVariant",
           "types">:
             doc "A logical set of types, as a predicate which tests a type for inclusion" $
             core "Type" --> boolean],

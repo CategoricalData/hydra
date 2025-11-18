@@ -25,6 +25,7 @@ import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
@@ -38,7 +39,6 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Variants        as Variants
 
 
 kernelTermsModules :: [Module]
@@ -65,6 +65,7 @@ kernelTermsModules = [
   Monads.module_,
   Names.module_,
   Reduction.module_,
+  Reflect.module_,
   Rewriting.module_,
   Schemas.module_,
   Serialization.module_,
@@ -77,5 +78,4 @@ kernelTermsModules = [
   Substitution.module_,
   Tarjan.module_,
   Templates.module_,
-  Unification.module_,
-  Variants.module_]
+  Unification.module_]

@@ -2,14 +2,14 @@ module Hydra.Sources.Test.Inference.NominalTypes (nominalTypesTests) where
 
 import Hydra.Kernel
 import Hydra.Testing
-import qualified Hydra.Dsl.Phantoms as Base
+import qualified Hydra.Dsl.Meta.Phantoms as Base
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Testing as Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Test.TestGraph
-import Hydra.Dsl.TTerms as TTerms
-import qualified Hydra.Dsl.TTypes as T
+import Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Types as T
 import Hydra.Sources.Test.Inference.Fundamentals
 
 import qualified Data.Map as M

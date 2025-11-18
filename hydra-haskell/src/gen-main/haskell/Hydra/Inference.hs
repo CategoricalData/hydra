@@ -21,6 +21,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
@@ -29,7 +30,6 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing_
 import qualified Hydra.Unification as Unification
-import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -613,7 +613,7 @@ inferTypeOfList cx = (inferTypeOfCollection cx (\x -> Core.TypeList x) (\x -> Co
 inferTypeOfLiteral :: (t0 -> Core.Literal -> Compute.Flow t1 Typing_.InferenceResult)
 inferTypeOfLiteral _ lit = (Flows.pure (Typing_.InferenceResult {
   Typing_.inferenceResultTerm = (Core.TermLiteral lit),
-  Typing_.inferenceResultType = (Core.TypeLiteral (Variants.literalType lit)),
+  Typing_.inferenceResultType = (Core.TypeLiteral (Reflect.literalType lit)),
   Typing_.inferenceResultSubst = Substitution.idTypeSubst}))
 
 inferTypeOfMap :: (Typing_.InferenceContext -> M.Map Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)

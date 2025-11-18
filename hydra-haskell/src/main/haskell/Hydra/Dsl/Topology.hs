@@ -1,7 +1,7 @@
 module Hydra.Dsl.Topology where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import Hydra.Topology as Topology
 
 import qualified Data.Map as M

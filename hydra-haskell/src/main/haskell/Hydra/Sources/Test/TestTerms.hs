@@ -5,13 +5,13 @@ module Hydra.Sources.Test.TestTerms where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Core          as Core
 import qualified Hydra.Dsl.Module        as DModule
-import qualified Hydra.Dsl.Phantoms      as Phantoms
-import qualified Hydra.Dsl.TTypes        as T
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types        as T
 import           Hydra.Sources.Test.TestTypes
 import           Prelude hiding ((++))
 import qualified Data.List               as L
 
-import           Hydra.Dsl.TTerms as TTerms
+import           Hydra.Dsl.Meta.Terms as MetaTerms
 
 
 -- Type alias to avoid confusion with DSL Module

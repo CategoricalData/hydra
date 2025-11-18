@@ -1,7 +1,7 @@
 module Hydra.Dsl.Accessors where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms
+import Hydra.Dsl.Meta.Phantoms
 import Hydra.Accessors
 
 import qualified Data.Map as M

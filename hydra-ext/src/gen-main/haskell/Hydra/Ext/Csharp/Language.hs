@@ -6,7 +6,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Meta as Meta
+import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -28,23 +28,23 @@ csharpLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Meta.EliminationVariantProduct,
-      Meta.EliminationVariantRecord,
-      Meta.EliminationVariantUnion,
-      Meta.EliminationVariantWrap])
+      Variants.EliminationVariantProduct,
+      Variants.EliminationVariantRecord,
+      Variants.EliminationVariantUnion,
+      Variants.EliminationVariantWrap])
     literalVariants = (Sets.fromList [
-      Meta.LiteralVariantBinary,
-      Meta.LiteralVariantBoolean,
-      Meta.LiteralVariantFloat,
-      Meta.LiteralVariantInteger,
-      Meta.LiteralVariantString])
+      Variants.LiteralVariantBinary,
+      Variants.LiteralVariantBoolean,
+      Variants.LiteralVariantFloat,
+      Variants.LiteralVariantInteger,
+      Variants.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeFloat32,
       Core.FloatTypeFloat64])
     functionVariants = (Sets.fromList [
-      Meta.FunctionVariantElimination,
-      Meta.FunctionVariantLambda,
-      Meta.FunctionVariantPrimitive])
+      Variants.FunctionVariantElimination,
+      Variants.FunctionVariantLambda,
+      Variants.FunctionVariantPrimitive])
     integerTypes = (Sets.fromList [
       Core.IntegerTypeInt8,
       Core.IntegerTypeInt16,
@@ -55,34 +55,34 @@ csharpLanguage = Coders.Language {
       Core.IntegerTypeUint32,
       Core.IntegerTypeUint64])
     termVariants = (Sets.fromList [
-      Meta.TermVariantApplication,
-      Meta.TermVariantFunction,
-      Meta.TermVariantLet,
-      Meta.TermVariantList,
-      Meta.TermVariantLiteral,
-      Meta.TermVariantMap,
-      Meta.TermVariantMaybe,
-      Meta.TermVariantProduct,
-      Meta.TermVariantRecord,
-      Meta.TermVariantSet,
-      Meta.TermVariantUnion,
-      Meta.TermVariantVariable,
-      Meta.TermVariantWrap])
+      Variants.TermVariantApplication,
+      Variants.TermVariantFunction,
+      Variants.TermVariantLet,
+      Variants.TermVariantList,
+      Variants.TermVariantLiteral,
+      Variants.TermVariantMap,
+      Variants.TermVariantMaybe,
+      Variants.TermVariantProduct,
+      Variants.TermVariantRecord,
+      Variants.TermVariantSet,
+      Variants.TermVariantUnion,
+      Variants.TermVariantVariable,
+      Variants.TermVariantWrap])
     typeVariants = (Sets.fromList [
-      Meta.TypeVariantAnnotated,
-      Meta.TypeVariantApplication,
-      Meta.TypeVariantFunction,
-      Meta.TypeVariantForall,
-      Meta.TypeVariantList,
-      Meta.TypeVariantLiteral,
-      Meta.TypeVariantMap,
-      Meta.TypeVariantMaybe,
-      Meta.TypeVariantProduct,
-      Meta.TypeVariantRecord,
-      Meta.TypeVariantSet,
-      Meta.TypeVariantUnion,
-      Meta.TypeVariantVariable,
-      Meta.TypeVariantWrap])
+      Variants.TypeVariantAnnotated,
+      Variants.TypeVariantApplication,
+      Variants.TypeVariantFunction,
+      Variants.TypeVariantForall,
+      Variants.TypeVariantList,
+      Variants.TypeVariantLiteral,
+      Variants.TypeVariantMap,
+      Variants.TypeVariantMaybe,
+      Variants.TypeVariantProduct,
+      Variants.TypeVariantRecord,
+      Variants.TypeVariantSet,
+      Variants.TypeVariantUnion,
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantWrap])
     typePredicate = (\_ -> True)
 
 -- | A set of reserved words in C#. Both the "keywords" and "contextual keywords" are drawn from section 6.4.4 of the C# documentation:

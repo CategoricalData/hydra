@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.meta;
+package hydra.variants;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of an elimination constructor
  */
 public abstract class EliminationVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.EliminationVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.EliminationVariant");
   
   public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
   
@@ -56,7 +56,7 @@ public abstract class EliminationVariant implements Serializable {
     }
   }
   
-  public static final class Product extends hydra.meta.EliminationVariant implements Serializable {
+  public static final class Product extends hydra.variants.EliminationVariant implements Serializable {
     public final Boolean value;
     
     public Product (Boolean value) {
@@ -84,7 +84,7 @@ public abstract class EliminationVariant implements Serializable {
     }
   }
   
-  public static final class Record extends hydra.meta.EliminationVariant implements Serializable {
+  public static final class Record extends hydra.variants.EliminationVariant implements Serializable {
     public final Boolean value;
     
     public Record (Boolean value) {
@@ -112,7 +112,7 @@ public abstract class EliminationVariant implements Serializable {
     }
   }
   
-  public static final class Union extends hydra.meta.EliminationVariant implements Serializable {
+  public static final class Union extends hydra.variants.EliminationVariant implements Serializable {
     public final Boolean value;
     
     public Union (Boolean value) {
@@ -140,7 +140,7 @@ public abstract class EliminationVariant implements Serializable {
     }
   }
   
-  public static final class Wrap extends hydra.meta.EliminationVariant implements Serializable {
+  public static final class Wrap extends hydra.variants.EliminationVariant implements Serializable {
     public final Boolean value;
     
     public Wrap (Boolean value) {

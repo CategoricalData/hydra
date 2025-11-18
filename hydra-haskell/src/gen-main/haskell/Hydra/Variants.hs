@@ -1,249 +1,190 @@
--- | Functions for working with term, type, and literal type variants, as well as numeric precision.
+-- | Variant types which describe the structure of Hydra core types and terms.
 
 module Hydra.Variants where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Meta as Meta
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination -> Meta.EliminationVariant)
-eliminationVariant x = case x of
-  Core.EliminationProduct _ -> Meta.EliminationVariantProduct
-  Core.EliminationRecord _ -> Meta.EliminationVariantRecord
-  Core.EliminationUnion _ -> Meta.EliminationVariantUnion
-  Core.EliminationWrap _ -> Meta.EliminationVariantWrap
+-- | The identifier of an elimination constructor
+data EliminationVariant = 
+  EliminationVariantProduct  |
+  EliminationVariantRecord  |
+  EliminationVariantUnion  |
+  EliminationVariantWrap 
+  deriving (Eq, Ord, Read, Show)
 
--- | All elimination variants (constructors), in a canonical order
-eliminationVariants :: [Meta.EliminationVariant]
-eliminationVariants = [
-  Meta.EliminationVariantProduct,
-  Meta.EliminationVariantRecord,
-  Meta.EliminationVariantUnion,
-  Meta.EliminationVariantWrap]
+_EliminationVariant = (Core.Name "hydra.variants.EliminationVariant")
 
--- | Find the precision of a given floating-point type
-floatTypePrecision :: (Core.FloatType -> Util.Precision)
-floatTypePrecision x = case x of
-  Core.FloatTypeBigfloat -> Util.PrecisionArbitrary
-  Core.FloatTypeFloat32 -> (Util.PrecisionBits 32)
-  Core.FloatTypeFloat64 -> (Util.PrecisionBits 64)
+_EliminationVariant_product = (Core.Name "product")
 
--- | All floating-point types in a canonical order
-floatTypes :: [Core.FloatType]
-floatTypes = [
-  Core.FloatTypeBigfloat,
-  Core.FloatTypeFloat32,
-  Core.FloatTypeFloat64]
+_EliminationVariant_record = (Core.Name "record")
 
--- | Find the float type for a given floating-point value
-floatValueType :: (Core.FloatValue -> Core.FloatType)
-floatValueType x = case x of
-  Core.FloatValueBigfloat _ -> Core.FloatTypeBigfloat
-  Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
-  Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
+_EliminationVariant_union = (Core.Name "union")
 
--- | Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function -> Meta.FunctionVariant)
-functionVariant x = case x of
-  Core.FunctionElimination _ -> Meta.FunctionVariantElimination
-  Core.FunctionLambda _ -> Meta.FunctionVariantLambda
-  Core.FunctionPrimitive _ -> Meta.FunctionVariantPrimitive
+_EliminationVariant_wrap = (Core.Name "wrap")
 
--- | All function variants (constructors), in a canonical order
-functionVariants :: [Meta.FunctionVariant]
-functionVariants = [
-  Meta.FunctionVariantElimination,
-  Meta.FunctionVariantLambda,
-  Meta.FunctionVariantPrimitive]
+-- | The identifier of a function constructor
+data FunctionVariant = 
+  FunctionVariantElimination  |
+  FunctionVariantLambda  |
+  FunctionVariantPrimitive 
+  deriving (Eq, Ord, Read, Show)
 
--- | Find whether a given integer type is signed (true) or unsigned (false)
-integerTypeIsSigned :: (Core.IntegerType -> Bool)
-integerTypeIsSigned x = case x of
-  Core.IntegerTypeBigint -> True
-  Core.IntegerTypeInt8 -> True
-  Core.IntegerTypeInt16 -> True
-  Core.IntegerTypeInt32 -> True
-  Core.IntegerTypeInt64 -> True
-  Core.IntegerTypeUint8 -> False
-  Core.IntegerTypeUint16 -> False
-  Core.IntegerTypeUint32 -> False
-  Core.IntegerTypeUint64 -> False
+_FunctionVariant = (Core.Name "hydra.variants.FunctionVariant")
 
--- | Find the precision of a given integer type
-integerTypePrecision :: (Core.IntegerType -> Util.Precision)
-integerTypePrecision x = case x of
-  Core.IntegerTypeBigint -> Util.PrecisionArbitrary
-  Core.IntegerTypeInt8 -> (Util.PrecisionBits 8)
-  Core.IntegerTypeInt16 -> (Util.PrecisionBits 16)
-  Core.IntegerTypeInt32 -> (Util.PrecisionBits 32)
-  Core.IntegerTypeInt64 -> (Util.PrecisionBits 64)
-  Core.IntegerTypeUint8 -> (Util.PrecisionBits 8)
-  Core.IntegerTypeUint16 -> (Util.PrecisionBits 16)
-  Core.IntegerTypeUint32 -> (Util.PrecisionBits 32)
-  Core.IntegerTypeUint64 -> (Util.PrecisionBits 64)
+_FunctionVariant_elimination = (Core.Name "elimination")
 
--- | All integer types, in a canonical order
-integerTypes :: [Core.IntegerType]
-integerTypes = [
-  Core.IntegerTypeBigint,
-  Core.IntegerTypeInt8,
-  Core.IntegerTypeInt16,
-  Core.IntegerTypeInt32,
-  Core.IntegerTypeInt64,
-  Core.IntegerTypeUint8,
-  Core.IntegerTypeUint16,
-  Core.IntegerTypeUint32,
-  Core.IntegerTypeUint64]
+_FunctionVariant_lambda = (Core.Name "lambda")
 
--- | Find the integer type for a given integer value
-integerValueType :: (Core.IntegerValue -> Core.IntegerType)
-integerValueType x = case x of
-  Core.IntegerValueBigint _ -> Core.IntegerTypeBigint
-  Core.IntegerValueInt8 _ -> Core.IntegerTypeInt8
-  Core.IntegerValueInt16 _ -> Core.IntegerTypeInt16
-  Core.IntegerValueInt32 _ -> Core.IntegerTypeInt32
-  Core.IntegerValueInt64 _ -> Core.IntegerTypeInt64
-  Core.IntegerValueUint8 _ -> Core.IntegerTypeUint8
-  Core.IntegerValueUint16 _ -> Core.IntegerTypeUint16
-  Core.IntegerValueUint32 _ -> Core.IntegerTypeUint32
-  Core.IntegerValueUint64 _ -> Core.IntegerTypeUint64
+_FunctionVariant_primitive = (Core.Name "primitive")
 
--- | Find the literal type for a given literal value
-literalType :: (Core.Literal -> Core.LiteralType)
-literalType x = case x of
-  Core.LiteralBinary _ -> Core.LiteralTypeBinary
-  Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v1 -> ((\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v1))
-  Core.LiteralInteger v1 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v1))
-  Core.LiteralString _ -> Core.LiteralTypeString
+-- | The identifier of a literal constructor
+data LiteralVariant = 
+  LiteralVariantBinary  |
+  LiteralVariantBoolean  |
+  LiteralVariantFloat  |
+  LiteralVariantInteger  |
+  LiteralVariantString 
+  deriving (Eq, Ord, Read, Show)
 
--- | Find the literal type variant (constructor) for a given literal value
-literalTypeVariant :: (Core.LiteralType -> Meta.LiteralVariant)
-literalTypeVariant x = case x of
-  Core.LiteralTypeBinary -> Meta.LiteralVariantBinary
-  Core.LiteralTypeBoolean -> Meta.LiteralVariantBoolean
-  Core.LiteralTypeFloat _ -> Meta.LiteralVariantFloat
-  Core.LiteralTypeInteger _ -> Meta.LiteralVariantInteger
-  Core.LiteralTypeString -> Meta.LiteralVariantString
+_LiteralVariant = (Core.Name "hydra.variants.LiteralVariant")
 
--- | All literal types, in a canonical order
-literalTypes :: [Core.LiteralType]
-literalTypes = (Lists.concat [
-  [
-    Core.LiteralTypeBinary,
-    Core.LiteralTypeBoolean],
-  Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes,
-  Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes,
-  [
-    Core.LiteralTypeString]])
+_LiteralVariant_binary = (Core.Name "binary")
 
--- | Find the literal variant (constructor) for a given literal value
-literalVariant :: (Core.Literal -> Meta.LiteralVariant)
-literalVariant arg_ = (literalTypeVariant (literalType arg_))
+_LiteralVariant_boolean = (Core.Name "boolean")
 
--- | All literal variants, in a canonical order
-literalVariants :: [Meta.LiteralVariant]
-literalVariants = [
-  Meta.LiteralVariantBinary,
-  Meta.LiteralVariantBoolean,
-  Meta.LiteralVariantFloat,
-  Meta.LiteralVariantInteger,
-  Meta.LiteralVariantString]
+_LiteralVariant_float = (Core.Name "float")
 
--- | Find the term variant (constructor) for a given term
-termVariant :: (Core.Term -> Meta.TermVariant)
-termVariant x = case x of
-  Core.TermAnnotated _ -> Meta.TermVariantAnnotated
-  Core.TermApplication _ -> Meta.TermVariantApplication
-  Core.TermEither _ -> Meta.TermVariantEither
-  Core.TermFunction _ -> Meta.TermVariantFunction
-  Core.TermLet _ -> Meta.TermVariantLet
-  Core.TermList _ -> Meta.TermVariantList
-  Core.TermLiteral _ -> Meta.TermVariantLiteral
-  Core.TermMap _ -> Meta.TermVariantMap
-  Core.TermMaybe _ -> Meta.TermVariantMaybe
-  Core.TermPair _ -> Meta.TermVariantPair
-  Core.TermProduct _ -> Meta.TermVariantProduct
-  Core.TermRecord _ -> Meta.TermVariantRecord
-  Core.TermSet _ -> Meta.TermVariantSet
-  Core.TermSum _ -> Meta.TermVariantSum
-  Core.TermTypeApplication _ -> Meta.TermVariantTypeApplication
-  Core.TermTypeLambda _ -> Meta.TermVariantTypeLambda
-  Core.TermUnion _ -> Meta.TermVariantUnion
-  Core.TermUnit -> Meta.TermVariantUnit
-  Core.TermVariable _ -> Meta.TermVariantVariable
-  Core.TermWrap _ -> Meta.TermVariantWrap
+_LiteralVariant_integer = (Core.Name "integer")
 
--- | All term (expression) variants, in a canonical order
-termVariants :: [Meta.TermVariant]
-termVariants = [
-  Meta.TermVariantAnnotated,
-  Meta.TermVariantApplication,
-  Meta.TermVariantEither,
-  Meta.TermVariantFunction,
-  Meta.TermVariantList,
-  Meta.TermVariantLiteral,
-  Meta.TermVariantMap,
-  Meta.TermVariantMaybe,
-  Meta.TermVariantPair,
-  Meta.TermVariantProduct,
-  Meta.TermVariantRecord,
-  Meta.TermVariantSet,
-  Meta.TermVariantSum,
-  Meta.TermVariantTypeLambda,
-  Meta.TermVariantTypeApplication,
-  Meta.TermVariantUnion,
-  Meta.TermVariantUnit,
-  Meta.TermVariantVariable,
-  Meta.TermVariantWrap]
+_LiteralVariant_string = (Core.Name "string")
 
--- | Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type -> Meta.TypeVariant)
-typeVariant x = case x of
-  Core.TypeAnnotated _ -> Meta.TypeVariantAnnotated
-  Core.TypeApplication _ -> Meta.TypeVariantApplication
-  Core.TypeEither _ -> Meta.TypeVariantEither
-  Core.TypeFunction _ -> Meta.TypeVariantFunction
-  Core.TypeForall _ -> Meta.TypeVariantForall
-  Core.TypeList _ -> Meta.TypeVariantList
-  Core.TypeLiteral _ -> Meta.TypeVariantLiteral
-  Core.TypeMap _ -> Meta.TypeVariantMap
-  Core.TypeMaybe _ -> Meta.TypeVariantMaybe
-  Core.TypePair _ -> Meta.TypeVariantPair
-  Core.TypeProduct _ -> Meta.TypeVariantProduct
-  Core.TypeRecord _ -> Meta.TypeVariantRecord
-  Core.TypeSet _ -> Meta.TypeVariantSet
-  Core.TypeSum _ -> Meta.TypeVariantSum
-  Core.TypeUnion _ -> Meta.TypeVariantUnion
-  Core.TypeUnit -> Meta.TypeVariantUnit
-  Core.TypeVariable _ -> Meta.TypeVariantVariable
-  Core.TypeWrap _ -> Meta.TypeVariantWrap
+-- | The identifier of a term expression constructor
+data TermVariant = 
+  TermVariantAnnotated  |
+  TermVariantApplication  |
+  TermVariantEither  |
+  TermVariantFunction  |
+  TermVariantLet  |
+  TermVariantList  |
+  TermVariantLiteral  |
+  TermVariantMap  |
+  TermVariantMaybe  |
+  TermVariantPair  |
+  TermVariantProduct  |
+  TermVariantRecord  |
+  TermVariantSet  |
+  TermVariantSum  |
+  TermVariantTypeApplication  |
+  TermVariantTypeLambda  |
+  TermVariantUnion  |
+  TermVariantUnit  |
+  TermVariantVariable  |
+  TermVariantWrap 
+  deriving (Eq, Ord, Read, Show)
 
--- | All type variants, in a canonical order
-typeVariants :: [Meta.TypeVariant]
-typeVariants = [
-  Meta.TypeVariantAnnotated,
-  Meta.TypeVariantApplication,
-  Meta.TypeVariantEither,
-  Meta.TypeVariantFunction,
-  Meta.TypeVariantForall,
-  Meta.TypeVariantList,
-  Meta.TypeVariantLiteral,
-  Meta.TypeVariantMap,
-  Meta.TypeVariantWrap,
-  Meta.TypeVariantMaybe,
-  Meta.TypeVariantPair,
-  Meta.TypeVariantProduct,
-  Meta.TypeVariantRecord,
-  Meta.TypeVariantSet,
-  Meta.TypeVariantSum,
-  Meta.TypeVariantUnion,
-  Meta.TypeVariantUnit,
-  Meta.TypeVariantVariable]
+_TermVariant = (Core.Name "hydra.variants.TermVariant")
+
+_TermVariant_annotated = (Core.Name "annotated")
+
+_TermVariant_application = (Core.Name "application")
+
+_TermVariant_either = (Core.Name "either")
+
+_TermVariant_function = (Core.Name "function")
+
+_TermVariant_let = (Core.Name "let")
+
+_TermVariant_list = (Core.Name "list")
+
+_TermVariant_literal = (Core.Name "literal")
+
+_TermVariant_map = (Core.Name "map")
+
+_TermVariant_maybe = (Core.Name "maybe")
+
+_TermVariant_pair = (Core.Name "pair")
+
+_TermVariant_product = (Core.Name "product")
+
+_TermVariant_record = (Core.Name "record")
+
+_TermVariant_set = (Core.Name "set")
+
+_TermVariant_sum = (Core.Name "sum")
+
+_TermVariant_typeApplication = (Core.Name "typeApplication")
+
+_TermVariant_typeLambda = (Core.Name "typeLambda")
+
+_TermVariant_union = (Core.Name "union")
+
+_TermVariant_unit = (Core.Name "unit")
+
+_TermVariant_variable = (Core.Name "variable")
+
+_TermVariant_wrap = (Core.Name "wrap")
+
+-- | The identifier of a type constructor
+data TypeVariant = 
+  TypeVariantAnnotated  |
+  TypeVariantApplication  |
+  TypeVariantEither  |
+  TypeVariantForall  |
+  TypeVariantFunction  |
+  TypeVariantList  |
+  TypeVariantLiteral  |
+  TypeVariantMap  |
+  TypeVariantMaybe  |
+  TypeVariantPair  |
+  TypeVariantProduct  |
+  TypeVariantRecord  |
+  TypeVariantSet  |
+  TypeVariantSum  |
+  TypeVariantUnion  |
+  TypeVariantUnit  |
+  TypeVariantVariable  |
+  TypeVariantWrap 
+  deriving (Eq, Ord, Read, Show)
+
+_TypeVariant = (Core.Name "hydra.variants.TypeVariant")
+
+_TypeVariant_annotated = (Core.Name "annotated")
+
+_TypeVariant_application = (Core.Name "application")
+
+_TypeVariant_either = (Core.Name "either")
+
+_TypeVariant_forall = (Core.Name "forall")
+
+_TypeVariant_function = (Core.Name "function")
+
+_TypeVariant_list = (Core.Name "list")
+
+_TypeVariant_literal = (Core.Name "literal")
+
+_TypeVariant_map = (Core.Name "map")
+
+_TypeVariant_maybe = (Core.Name "maybe")
+
+_TypeVariant_pair = (Core.Name "pair")
+
+_TypeVariant_product = (Core.Name "product")
+
+_TypeVariant_record = (Core.Name "record")
+
+_TypeVariant_set = (Core.Name "set")
+
+_TypeVariant_sum = (Core.Name "sum")
+
+_TypeVariant_union = (Core.Name "union")
+
+_TypeVariant_unit = (Core.Name "unit")
+
+_TypeVariant_variable = (Core.Name "variable")
+
+_TypeVariant_wrap = (Core.Name "wrap")

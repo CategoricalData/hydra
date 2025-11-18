@@ -2,8 +2,6 @@
 
 package hydra.compute;
 
-import hydra.util.Maybe;
-
 /**
  * The result of evaluating a Flow
  */
@@ -19,7 +17,7 @@ public class FlowState<S, V> {
   /**
    * The resulting value, or nothing in the case of failure
    */
-  public final Maybe<V> value;
+  public final hydra.util.Maybe<V> value;
   
   /**
    * The final state
@@ -31,7 +29,7 @@ public class FlowState<S, V> {
    */
   public final hydra.compute.Trace trace;
   
-  public FlowState (Maybe<V> value, S state, hydra.compute.Trace trace) {
+  public FlowState (hydra.util.Maybe<V> value, S state, hydra.compute.Trace trace) {
     java.util.Objects.requireNonNull((value));
     java.util.Objects.requireNonNull((state));
     java.util.Objects.requireNonNull((trace));
@@ -54,7 +52,7 @@ public class FlowState<S, V> {
     return 2 * value.hashCode() + 3 * state.hashCode() + 5 * trace.hashCode();
   }
   
-  public FlowState withValue(Maybe<V> value) {
+  public FlowState withValue(hydra.util.Maybe<V> value) {
     java.util.Objects.requireNonNull((value));
     return new FlowState(value, state, trace);
   }

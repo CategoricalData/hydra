@@ -1,6 +1,6 @@
 -- | A DSL for constructing literal terms using Haskell's built-in datatypes
 
-module Hydra.Dsl.PhantomLiterals where
+module Hydra.Dsl.Meta.Literals where
 
 import Hydra.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
