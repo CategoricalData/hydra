@@ -74,6 +74,9 @@ writeJava "../hydra-java/src/gen-test/java" testModules
 writePython "../hydra-python/src/gen-test/python" testModules"
 ```
 
+Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)). Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+
+
 ## Tools
 
 Miscellaneous tools include:

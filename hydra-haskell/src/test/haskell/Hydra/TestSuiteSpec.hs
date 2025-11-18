@@ -12,7 +12,7 @@ import Hydra.Testing
 import Hydra.Inference
 import Hydra.Test.TestSuite
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Dsl.Testing as Testing
+import qualified Hydra.Dsl.Meta.Testing as Testing
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H

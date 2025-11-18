@@ -5,7 +5,7 @@ import Hydra.Constants
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Util
-import Hydra.Dsl.Common
+import Hydra.Dsl.Meta.Common
 import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map, product, sum)

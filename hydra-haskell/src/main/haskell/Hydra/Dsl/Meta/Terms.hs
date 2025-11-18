@@ -7,7 +7,7 @@ module Hydra.Dsl.Meta.Terms (
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.Meta.Base
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms

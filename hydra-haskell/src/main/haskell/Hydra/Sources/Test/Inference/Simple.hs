@@ -3,10 +3,10 @@ module Hydra.Sources.Test.Inference.Simple (simpleTermsTests) where
 import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Dsl.Core as Core
-import Hydra.Dsl.Testing as Testing
+import qualified Hydra.Dsl.Meta.Core as Core
+import Hydra.Dsl.Meta.Testing as Testing
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Test.TestGraph
 import Hydra.Dsl.Meta.Terms as MetaTerms

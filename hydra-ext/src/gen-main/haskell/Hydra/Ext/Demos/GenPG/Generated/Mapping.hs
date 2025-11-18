@@ -8,9 +8,9 @@ import Hydra.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
 import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edgeNoId, graph, property, vertex)
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Maybes as Maybes
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import Hydra.Ext.Demos.GenPG.Generated.GraphSchema
 
 labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)

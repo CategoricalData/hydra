@@ -3,8 +3,8 @@
 module Hydra.Sources.Test.TestTerms where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Core          as Core
-import qualified Hydra.Dsl.Module        as DModule
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Module        as DModule
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types        as T
 import           Hydra.Sources.Test.TestTypes

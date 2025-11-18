@@ -5,20 +5,20 @@ module Hydra.Sources.Test.TestGraph (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Core          as Core
-import qualified Hydra.Dsl.Graph         as Graph
-import qualified Hydra.Dsl.Module        as DModule
-import qualified Hydra.Dsl.Lib.Chars     as Chars
-import qualified Hydra.Dsl.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Lib.Literals  as Literals
-import qualified Hydra.Dsl.Lib.Logic     as Logic
-import qualified Hydra.Dsl.Lib.Maps      as Maps
-import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Maybes    as Maybes
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Graph         as Graph
+import qualified Hydra.Dsl.Meta.Module        as DModule
+import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
+import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
+import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
+import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
+import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Meta.Lib.Math      as Math
+import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
-import qualified Hydra.Dsl.Lib.Sets      as Sets
-import           Hydra.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
+import           Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Types         as Types
 import           Hydra.Sources.Kernel.Types.All
