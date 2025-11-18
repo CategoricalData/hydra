@@ -33,6 +33,7 @@ from hydra.core import (
     Term,
     TermAnnotated,
     TermApplication,
+    TermEither,
     TermFunction,
     TermLet,
     TermList,
@@ -55,7 +56,7 @@ from hydra.core import (
     TypeScheme,
     WrappedTerm,
 )
-from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
+from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, Left, Right
 
 
 # Operators - TODO: find Python equivalents for these special syntax forms
@@ -115,17 +116,17 @@ def comparison(comp: hydra.util.Comparison) -> Term:
     """Construct a comparison term."""
     match comp:
         case hydra.util.Comparison.EQUAL_TO:
-            return unit_variant(
+            return inject_unit(
                 hydra.util.COMPARISON__NAME,
                 hydra.util.COMPARISON__EQUAL_TO__NAME
             )
         case hydra.util.Comparison.LESS_THAN:
-            return unit_variant(
+            return inject_unit(
                 hydra.util.COMPARISON__NAME,
                 hydra.util.COMPARISON__LESS_THAN__NAME
             )
         case hydra.util.Comparison.GREATER_THAN:
-            return unit_variant(
+            return inject_unit(
                 hydra.util.COMPARISON__NAME,
                 hydra.util.COMPARISON__GREATER_THAN__NAME
             )
@@ -188,9 +189,9 @@ def identity() -> Term:
     return lambda_("x_", var("x_"))
 
 
-def inject(tname: Name, field: Field) -> Term:
-    """Construct an inject term."""
-    return TermUnion(Injection(tname, field))
+def inject(tname: Name, fname: Name, term: Term) -> Term:
+    """Construct an injection term."""
+    return TermUnion(Injection(tname, Field(fname, term)))
 
 
 def int16(value: int) -> Term:
@@ -272,6 +273,11 @@ def lets_typed(bindings: Sequence[tuple[str, Term, TypeScheme]], env: Term) -> T
     return TermLet(Let(tuple([to_binding(b) for b in bindings]), env))
 
 
+def left(term: Term) -> Term:
+    """Construct a 'Left' either value."""
+    return TermEither(Left(term))
+
+
 def list_(terms: Sequence[Term]) -> Term:
     """Construct a list term."""
     return TermList(tuple(terms))
@@ -306,7 +312,7 @@ def match_with_variants(
     return match(
         tname,
         def_,
-        [Field(from_, constant(unit_variant(tname, to_))) for from_, to_ in pairs],
+        [Field(from_, constant(inject_unit(tname, to_))) for from_, to_ in pairs],
     )
 
 
@@ -345,6 +351,11 @@ def project(tname: Name, fname: Name) -> Term:
 def record(tname: Name, fields: Sequence[Field]) -> Term:
     """Construct a record term."""
     return TermRecord(Record(tname, tuple(fields)))
+
+
+def right(term: Term) -> Term:
+    """Construct a 'Right' either value."""
+    return TermEither(Right(term))
 
 
 def second() -> Term:
@@ -459,9 +470,9 @@ def unit() -> Term:
     return record(Name("_Unit"), [])
 
 
-def unit_variant(tname: Name, fname: Name) -> Term:
-    """Construct a unit variant term."""
-    return variant(tname, fname, unit())
+def inject_unit(tname: Name, fname: Name) -> Term:
+    """Construct a unit injection term."""
+    return inject(tname, fname, unit())
 
 
 def untuple(arity: int, idx: int, mtypes: Maybe[Sequence[Type]]) -> Term:
@@ -491,14 +502,11 @@ def var(name: str) -> Term:
     return TermVariable(Name(name))
 
 
-def variant(tname: Name, fname: Name, term: Term) -> Term:
-    """Construct a variant term."""
-    return TermUnion(Injection(tname, Field(fname, term)))
 
 
 def with_variant(tname: Name, fname: Name) -> Term:
     """Create a constant function that produces a unit variant."""
-    return constant(unit_variant(tname, fname))
+    return constant(inject_unit(tname, fname))
 
 
 def wrap(name: Name, term: Term) -> Term:
