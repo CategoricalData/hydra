@@ -495,11 +495,17 @@ encodeApplication env app@(Application lhs rhs) = do
     let hargs = L.take arity args  -- Head arguments: pass directly
         rargs = L.drop arity args  -- Remaining arguments: apply via .apply()
     -- Generate the initial call with head arguments
+    -- gatherArgs already stripped type applications, just remove any remaining annotations
     initialCall <- case deannotateTerm fun of
       TermFunction f -> case f of
         FunctionPrimitive name -> functionCall env True name hargs
         _ -> fallback
-      TermVariable name -> functionCall env False name hargs
+      TermVariable name ->
+        -- Check if this is a recursive let-bound variable
+        -- Recursive variables need curried construction with .get()
+        if isRecursiveVariable aliases name
+          then fallback  -- Use curried construction for recursive bindings
+          else functionCall env False name hargs  -- Direct call for library functions
       _ -> fallback
     -- Apply remaining arguments via .apply() for partial application
     applyRemaining initialCall rargs
@@ -507,7 +513,7 @@ encodeApplication env app@(Application lhs rhs) = do
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
     encode = encodeTerm env
-    (args, fun) = gatherApplications (TermApplication app)
+    (fun, args) = gatherArgs (TermApplication app) []
 
     -- Apply remaining arguments one at a time using .apply()
     applyRemaining exp remArgs = case remArgs of
@@ -680,37 +686,45 @@ encodeFunction :: JavaEnvironment -> Type -> Type -> Function -> Flow Graph Java
 encodeFunction env dom cod fun = case fun of
     FunctionElimination elm -> withTrace ("elimination (" ++ show (eliminationVariant elm) ++ ")") $ do
       encodeElimination env Nothing dom cod elm
-    FunctionLambda lam@(Lambda var _ body) -> withTrace ("lambda " ++ unName var) $ do
-      fs <- withTrace "analyze function term for lambda" $
-        analyzeJavaFunction env (TermFunction $ FunctionLambda lam)
-      let params = functionStructureParams fs
-          bindings = functionStructureBindings fs
-          innerBody = functionStructureBody fs
-          env2 = functionStructureEnvironment fs
+    FunctionLambda lam@(Lambda var _ body) -> withTrace ("lambda " ++ unName var) $ withLambda env lam $ \env2 -> do
+      -- For curried functions in Java, we need to check if body is also a lambda
+      -- If it is, encode it recursively to create nested Java lambdas
+      case deannotateTerm body of
+        TermFunction (FunctionLambda innerLam) -> do
+          -- Body is another lambda - recursively encode it
+          -- The type of body is a function type, so we need to extract dom' and cod'
+          bodyTyp <- typeOf (javaEnvironmentTypeContext env2) [] body
+          case deannotateType bodyTyp of
+            TypeFunction (FunctionType dom' cod') -> do
+              innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
+              let lam' = javaLambda var innerJavaLambda
+              -- Apply cast
+              jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
+              rt <- javaTypeToJavaReferenceType jtype
+              return $ javaCastExpressionToJavaExpression $
+                javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
+            _ -> fail $ "expected function type for lambda body, but got: " ++ show bodyTyp
+        _ -> do
+          -- Body is not a lambda - analyze and encode normally
+          fs <- withTrace "analyze function body" $ analyzeJavaFunction env2 body
+          let bindings = functionStructureBindings fs
+              innerBody = functionStructureBody fs
+              env3 = functionStructureEnvironment fs
 
-      -- Convert bindings to Java block statements
-      bindingStmts <- bindingsToStatements env2 bindings
+          bindingStmts <- bindingsToStatements env3 bindings
+          jbody <- encodeTerm env3 innerBody
 
-      -- Create the lambda based on whether we have bindings
-      lam' <- if L.null bindings
-        then do
-          jbody <- encodeTerm env2 innerBody
-          return $ javaLambda var jbody
-        else do
-          jbody <- encodeTerm env2 innerBody
-          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
-          return $ javaLambdaFromBlock var $ Java.Block $ bindingStmts ++ [returnSt]
+          lam' <- if L.null bindings
+            then return $ javaLambda var jbody
+            else do
+              let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+              return $ javaLambdaFromBlock var $ Java.Block $ bindingStmts ++ [returnSt]
 
-      -- Apply type cast (following the old pattern which always casts)
-      if needsCast innerBody
-        then do
+          -- Apply cast
           jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
-        else return lam'
-      where
-        needsCast _ = True -- TODO: try to discriminate between lambdas which really need a cast, and those which do not
     FunctionPrimitive name -> do
       -- For function primitives, generate a method reference like ClassName::apply
       let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
@@ -863,12 +877,13 @@ encodeTerm env term0 = encodeInternal [] [] term0
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
-        TermTypeApplication (TypeApplicationTerm body _) -> do
+        TermTypeApplication (TypeApplicationTerm body atyp) -> do
           -- Type applications in Java require casting to the appropriate type
           -- We encode the body (stripping type applications) and cast it to the inferred type
           typ <- withTrace "debug e" $ typeOf tc [] term0
           jtype <- encodeType aliases typ
-          jbody <- encodeInternal anns (jtype:tyapps) body
+          jatyp <- encodeType aliases atyp
+          jbody <- encodeInternal anns (jatyp:tyapps) body
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
@@ -911,7 +926,6 @@ bindingsToStatements env bindings = if L.null bindings
 
     -- Extend TypeContext with flattened bindings so they can reference each other
     tcExtended = extendTypeContextForLet tc (Let flattenedBindings (TermVariable $ Name "dummy"))
-    envExtended = env { javaEnvironmentTypeContext = tcExtended }
 
     bindingVars = S.fromList (bindingName <$> flattenedBindings)
 
@@ -923,6 +937,13 @@ bindingsToStatements env bindings = if L.null bindings
             Nothing -> []
             Just deps -> if S.member name deps then [name] else []
           _ -> names
+
+    -- Create environment with recursive vars marked in aliases
+    aliasesWithRecursive = aliases { aliasesRecursiveVars = recursiveVars }
+    envExtended = env {
+      javaEnvironmentTypeContext = tcExtended,
+      javaEnvironmentAliases = aliasesWithRecursive
+    }
 
     -- Build dependency graph
     allDeps = M.fromList (toDeps <$> flattenedBindings)
@@ -945,7 +966,7 @@ bindingsToStatements env bindings = if L.null bindings
       then do
         let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
         typ <- withTrace "debug f" $ typeOf tcExtended [] value
-        jtype <- adaptTypeToJavaAndEncode aliases typ
+        jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
         let id = variableToJavaIdentifier name
         let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
         let arid = Java.Identifier "java.util.concurrent.atomic.AtomicReference"
@@ -955,20 +976,20 @@ bindingsToStatements env bindings = if L.null bindings
         let ci = Java.ClassOrInterfaceTypeToInstantiate [aid] (Just targs)
         let body = javaConstructorCall ci [] Nothing
         let artype = javaRefType [rt] (Just pkg) "AtomicReference"
-        return $ Just $ variableDeclarationStatement aliases artype id body
+        return $ Just $ variableDeclarationStatement aliasesWithRecursive artype id body
       else pure Nothing
 
     -- Declare or set binding value
     toDeclStatement name = do
       let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
       typ <- withTrace "debug g" $ typeOf tcExtended [] value
-      jtype <- adaptTypeToJavaAndEncode aliases typ
+      jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
       let id = variableToJavaIdentifier name
       rhs <- encodeTerm envExtended value
       return $ if S.member name recursiveVars
         then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
           methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
-        else variableDeclarationStatement aliases jtype id rhs
+        else variableDeclarationStatement aliasesWithRecursive jtype id rhs
 
 -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
 -- These functions must be capable of handling various combinations of let and lambda terms:
