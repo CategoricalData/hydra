@@ -2,6 +2,8 @@
 
 package hydra.core;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -29,9 +31,9 @@ public class Binding implements Serializable {
   /**
    * The optional type of the bound term
    */
-  public final hydra.util.Opt<hydra.core.TypeScheme> type;
+  public final Maybe<TypeScheme> type;
   
-  public Binding (hydra.core.Name name, hydra.core.Term term, hydra.util.Opt<hydra.core.TypeScheme> type) {
+  public Binding (hydra.core.Name name, hydra.core.Term term, Maybe<TypeScheme> type) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((term));
     java.util.Objects.requireNonNull((type));
@@ -64,7 +66,7 @@ public class Binding implements Serializable {
     return new Binding(name, term, type);
   }
   
-  public Binding withType(hydra.util.Opt<hydra.core.TypeScheme> type) {
+  public Binding withType(Maybe<TypeScheme> type) {
     java.util.Objects.requireNonNull((type));
     return new Binding(name, term, type);
   }

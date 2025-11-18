@@ -7,10 +7,9 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
-import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -46,11 +45,11 @@ public class SafeHead extends PrimitiveFunction {
      * @param list the list to get the head from
      * @return an optional containing the first element, or empty if the list is empty
      */
-    public static <X> Opt<X> apply(List<X> list) {
+    public static <X> Maybe<X> apply(List<X> list) {
         if (list.isEmpty()) {
-            return Opt.empty();
+            return Maybe.nothing();
         } else {
-            return Opt.of(list.get(0));
+            return Maybe.just(list.get(0));
         }
     }
 }

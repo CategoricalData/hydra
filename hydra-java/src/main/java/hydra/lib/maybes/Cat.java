@@ -9,7 +9,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class Cat extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(x -> Expect.optional(Flows::pure, x), args.get(0)),
-                (Function<List<Opt<Term>>, Term>) optionals -> Terms.list(apply(optionals)));
+                (Function<List<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)));
     }
 
     /**
@@ -58,10 +58,10 @@ public class Cat extends PrimitiveFunction {
      * @param opt the list of optional values
      * @return a list containing only the present values
      */
-    public static <X> List<X> apply(List<Opt<X>> opt) {
+    public static <X> List<X> apply(List<Maybe<X>> opt) {
         List<X> result = new ArrayList<>();
-        for (Opt<X> x : opt) {
-            x.ifPresent(result::add);
+        for (Maybe<X> x : opt) {
+            x.ifJust(result::add);
         }
         return result;
     }

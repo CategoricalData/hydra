@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class With implements Serializable {
@@ -13,9 +15,9 @@ public class With implements Serializable {
   
   public final hydra.ext.cypher.openCypher.ProjectionBody projection;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where;
+  public final Maybe<Where> where;
   
-  public With (hydra.ext.cypher.openCypher.ProjectionBody projection, hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where) {
+  public With (hydra.ext.cypher.openCypher.ProjectionBody projection, Maybe<Where> where) {
     java.util.Objects.requireNonNull((projection));
     java.util.Objects.requireNonNull((where));
     this.projection = projection;
@@ -41,7 +43,7 @@ public class With implements Serializable {
     return new With(projection, where);
   }
   
-  public With withWhere(hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where) {
+  public With withWhere(Maybe<Where> where) {
     java.util.Objects.requireNonNull((where));
     return new With(projection, where);
   }

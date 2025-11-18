@@ -2,6 +2,8 @@
 
 package hydra.ext.org.w3.rdf.syntax;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -29,9 +31,9 @@ public class Literal implements Serializable {
   /**
    * An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
    */
-  public final hydra.util.Opt<hydra.ext.org.w3.rdf.syntax.LanguageTag> languageTag;
+  public final Maybe<LanguageTag> languageTag;
   
-  public Literal (String lexicalForm, hydra.ext.org.w3.rdf.syntax.Iri datatypeIri, hydra.util.Opt<hydra.ext.org.w3.rdf.syntax.LanguageTag> languageTag) {
+  public Literal (String lexicalForm, hydra.ext.org.w3.rdf.syntax.Iri datatypeIri, Maybe<LanguageTag> languageTag) {
     java.util.Objects.requireNonNull((lexicalForm));
     java.util.Objects.requireNonNull((datatypeIri));
     java.util.Objects.requireNonNull((languageTag));
@@ -64,7 +66,7 @@ public class Literal implements Serializable {
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
-  public Literal withLanguageTag(hydra.util.Opt<hydra.ext.org.w3.rdf.syntax.LanguageTag> languageTag) {
+  public Literal withLanguageTag(Maybe<LanguageTag> languageTag) {
     java.util.Objects.requireNonNull((languageTag));
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }

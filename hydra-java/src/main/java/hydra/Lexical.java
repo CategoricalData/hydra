@@ -6,7 +6,7 @@ import hydra.dsl.Flows;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import static hydra.dsl.Flows.bind;
 import static hydra.dsl.Flows.fail;
@@ -26,8 +26,8 @@ public class Lexical {
      * @param name the name of the primitive
      * @return an optional containing the primitive if found
      */
-    public static  Opt<Primitive> lookupPrimitive(Graph g, Name name) {
-        return Opt.ofNullable(g.primitives.get(name));
+    public static Maybe<Primitive> lookupPrimitive(Graph g, Name name) {
+        return Maybe.justNullable(g.primitives.get(name));
     }
 
     /**
@@ -37,7 +37,7 @@ public class Lexical {
      */
     public static  Flow<Graph, Primitive> requirePrimitive(Name name) {
         return bind(getState(), g -> {
-            Opt<Primitive> mprim = lookupPrimitive(g, name);
+            Maybe<Primitive> mprim = lookupPrimitive(g, name);
             return mprim.<Flow<Graph, Primitive>>map(Flows::pure)
                 .orElseGet(() -> fail("no such primitive function: " + name.value));
         });

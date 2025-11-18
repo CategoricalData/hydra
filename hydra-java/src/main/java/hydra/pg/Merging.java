@@ -7,6 +7,7 @@ import hydra.compute.StatelessAdapter;
 import hydra.compute.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
+import hydra.util.Maybe;
 import hydra.util.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
@@ -18,7 +19,7 @@ import hydra.pg.model.PropertyType;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
-import hydra.util.Opt;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -106,30 +107,30 @@ public class Merging {
         });
     }
 
-    private static <A> Opt<String> checkNontrivial(List<A> types) {
+    private static <A> Maybe<String> checkNontrivial(List<A> types) {
         return types.isEmpty()
-            ? Opt.of("No types provided")
-            : Opt.empty();
+            ? Maybe.just("No types provided")
+            : Maybe.nothing();
     }
 
-    private static <T> Opt<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
+    private static <T> Maybe<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
         Set<VertexLabel> labels = new HashSet<>();
         for (VertexType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Opt.of("Duplicate vertex label: " + type.label);
+                return Maybe.just("Duplicate vertex label: " + type.label);
             }
         }
-        return Opt.empty();
+        return Maybe.nothing();
     }
 
-    private static <T> Opt<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
+    private static <T> Maybe<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
         Set<EdgeLabel> labels = new HashSet<>();
         for (EdgeType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Opt.of("Duplicate edge label: " + type.label);
+                return Maybe.just("Duplicate edge label: " + type.label);
             }
         }
-        return Opt.empty();
+        return Maybe.nothing();
     }
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructMergedVertexCoder(

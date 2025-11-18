@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class NonArithmeticOperatorExpression implements Serializable {
@@ -17,9 +19,9 @@ public class NonArithmeticOperatorExpression implements Serializable {
   
   public final java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.NodeLabels> labels;
+  public final Maybe<NodeLabels> labels;
   
-  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Opt<hydra.ext.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, Maybe<NodeLabels> labels) {
     java.util.Objects.requireNonNull((atom));
     java.util.Objects.requireNonNull((listsAndLookups));
     java.util.Objects.requireNonNull((labels));
@@ -52,7 +54,7 @@ public class NonArithmeticOperatorExpression implements Serializable {
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
-  public NonArithmeticOperatorExpression withLabels(hydra.util.Opt<hydra.ext.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression withLabels(Maybe<NodeLabels> labels) {
     java.util.Objects.requireNonNull((labels));
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }

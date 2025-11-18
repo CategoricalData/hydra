@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -58,13 +58,13 @@ public class ReadBoolean extends PrimitiveFunction {
      * @param str the string to parse (must be "true" or "false")
      * @return an Opt containing the parsed Boolean, or empty if the string is neither "true" nor "false"
      */
-    public static Opt<Boolean> apply(String str) {
+    public static Maybe<Boolean> apply(String str) {
         if ("true".equals(str)) {
-            return Opt.of(true);
+            return Maybe.just(true);
         } else if ("false".equals(str)) {
-            return Opt.of(false);
+            return Maybe.just(false);
         } else {
-            return Opt.empty();
+            return Maybe.nothing();
         }
     }
 }

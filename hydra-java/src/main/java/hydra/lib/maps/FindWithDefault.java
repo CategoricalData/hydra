@@ -8,14 +8,13 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import static hydra.dsl.Flows.map;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 
@@ -50,7 +49,7 @@ public class FindWithDefault extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
                 (Function<Map<Term, Term>, Term>) mp -> {
-                    Opt<Term> result = Lookup.apply(args.get(1), mp);
+                    Maybe<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
                 });
     }

@@ -10,7 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -39,10 +39,10 @@ public class MapMaybe extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.optional(Flows::pure, args.get(1)), opt ->
-            opt.isPresent()
-                ? bind(pure(Terms.apply(args.get(0), opt.get())), result ->
-                    pure(Terms.optional(Opt.of(result))))
-                : pure(Terms.optional(Opt.empty())));
+            opt.isJust()
+                ? bind(pure(Terms.apply(args.get(0), opt.fromJust())), result ->
+                    pure(Terms.optional(Maybe.just(result))))
+                : pure(Terms.optional(Maybe.nothing())));
     }
 
     /**
@@ -53,7 +53,7 @@ public class MapMaybe extends PrimitiveFunction {
      * @param f the function
      * @return the flow of Maybe
      */
-    public static <S, X, Y> Function<Opt<X>, Flow<S, Opt<Y>>> apply(Function<X, Flow<S, Y>> f) {
+    public static <S, X, Y> Function<Maybe<X>, Flow<S, Maybe<Y>>> apply(Function<X, Flow<S, Y>> f) {
         return opt -> apply(f, opt);
     }
 
@@ -66,7 +66,7 @@ public class MapMaybe extends PrimitiveFunction {
      * @param opt the maybeValue
      * @return the flow of Maybe
      */
-    public static <S, X, Y> Flow<S, Opt<Y>> apply(Function<X, Flow<S, Y>> f, Opt<X> opt) {
+    public static <S, X, Y> Flow<S, Maybe<Y>> apply(Function<X, Flow<S, Y>> f, Maybe<X> opt) {
         return Flows.mapM(opt, f);
     }
 }

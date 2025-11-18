@@ -9,7 +9,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -48,8 +48,8 @@ public class Bind extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)),
-            arg -> arg.map(term -> Terms.optional(Opt.of(Terms.apply(args.get(1), term))))
-                .orElseGet(() -> Terms.optional(Opt.empty())));
+            arg -> arg.map(term -> Terms.optional(Maybe.just(Terms.apply(args.get(1), term))))
+                .orElseGet(() -> Terms.optional(Maybe.nothing())));
     }
 
     /**
@@ -59,7 +59,7 @@ public class Bind extends PrimitiveFunction {
      * @param optionalArg the optional value to bind
      * @return a function that takes a binding function and returns an optional result
      */
-    public static <X, Y> Function<Function<X, Opt<Y>>, Opt<Y>> apply(Opt<X> optionalArg) {
+    public static <X, Y> Function<Function<X, Maybe<Y>>, Maybe<Y>> apply(Maybe<X> optionalArg) {
         return (f) -> apply(optionalArg, f);
     }
 
@@ -71,9 +71,9 @@ public class Bind extends PrimitiveFunction {
      * @param f the binding function
      * @return the optional result of applying the binding function, or empty if the input is empty
      */
-    public static <X, Y> Opt<Y> apply(Opt<X> optionalArg, Function<X, Opt<Y>> f) {
-        return optionalArg.isPresent()
-            ? f.apply(optionalArg.get())
-            : Opt.empty();
+    public static <X, Y> Maybe<Y> apply(Maybe<X> optionalArg, Function<X, Maybe<Y>> f) {
+        return optionalArg.isJust()
+            ? f.apply(optionalArg.fromJust())
+            : Maybe.nothing();
     }
 }

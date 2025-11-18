@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class RangeExpression implements Serializable {
@@ -11,11 +13,11 @@ public class RangeExpression implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_END = new hydra.core.Name("end");
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> start;
+  public final Maybe<Expression> start;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> end;
+  public final Maybe<Expression> end;
   
-  public RangeExpression (hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> start, hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> end) {
+  public RangeExpression (Maybe<Expression> start, Maybe<Expression> end) {
     java.util.Objects.requireNonNull((start));
     java.util.Objects.requireNonNull((end));
     this.start = start;
@@ -36,12 +38,12 @@ public class RangeExpression implements Serializable {
     return 2 * start.hashCode() + 3 * end.hashCode();
   }
   
-  public RangeExpression withStart(hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> start) {
+  public RangeExpression withStart(Maybe<Expression> start) {
     java.util.Objects.requireNonNull((start));
     return new RangeExpression(start, end);
   }
   
-  public RangeExpression withEnd(hydra.util.Opt<hydra.ext.cypher.openCypher.Expression> end) {
+  public RangeExpression withEnd(Maybe<Expression> end) {
     java.util.Objects.requireNonNull((end));
     return new RangeExpression(start, end);
   }

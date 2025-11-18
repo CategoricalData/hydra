@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -49,8 +49,8 @@ public class Cases extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.optional(Flows::pure, args.get(0)), opt ->
-            opt.isPresent()
-                ? pure(Terms.apply(args.get(2), opt.get()))
+            opt.isJust()
+                ? pure(Terms.apply(args.get(2), opt.fromJust()))
                 : pure(args.get(1)));
     }
 
@@ -61,7 +61,7 @@ public class Cases extends PrimitiveFunction {
      * @param opt the optional value to match on
      * @return a function that takes a Nothing case handler and returns a function that takes a Just case handler
      */
-    public static <X, Y> Function<Y, Function<Function<X, Y>, Y>> apply(Opt<X> opt) {
+    public static <X, Y> Function<Y, Function<Function<X, Y>, Y>> apply(Maybe<X> opt) {
         return (nothingCase) -> (justCase) -> apply(opt, nothingCase, justCase);
     }
 
@@ -74,7 +74,7 @@ public class Cases extends PrimitiveFunction {
      * @param justCase the function to apply to the value if the optional is present
      * @return the result of applying the appropriate case handler
      */
-    public static <X, Y> Y apply(Opt<X> opt, Y nothingCase, Function<X, Y> justCase) {
-        return opt.isPresent() ? justCase.apply(opt.get()) : nothingCase;
+    public static <X, Y> Y apply(Maybe<X> opt, Y nothingCase, Function<X, Y> justCase) {
+        return opt.isJust() ? justCase.apply(opt.fromJust()) : nothingCase;
     }
 }

@@ -1,7 +1,8 @@
 package hydra.ext.gql;
 
 import hydra.tools.AntlrReaderBase;
-import hydra.util.Opt;
+import hydra.util.Maybe;
+
 import java.util.BitSet;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -84,14 +85,14 @@ public class GQLReader extends AntlrReaderBase {
    * @param query the GQL query string to parse
    * @return an optional error message (empty if parsing succeeds)
    */
-  public static Opt<String> tryQuery(String query) {
+  public static Maybe<String> tryQuery(String query) {
     try {
       read(query);
     } catch (GQLSyntaxError e) {
-      return Opt.of(e.getMessage());
+      return Maybe.just(e.getMessage());
     }
 
-    return Opt.empty();
+    return Maybe.nothing();
   }
 
   /**

@@ -2,6 +2,8 @@
 
 package hydra.testing;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -26,7 +28,7 @@ public class TestGroup implements Serializable {
   /**
    * An optional description of the group
    */
-  public final hydra.util.Opt<String> description;
+  public final Maybe<String> description;
   
   /**
    * Nested test groups
@@ -38,7 +40,7 @@ public class TestGroup implements Serializable {
    */
   public final java.util.List<hydra.testing.TestCaseWithMetadata> cases;
   
-  public TestGroup (String name, hydra.util.Opt<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
+  public TestGroup (String name, Maybe<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((description));
     java.util.Objects.requireNonNull((subgroups));
@@ -68,7 +70,7 @@ public class TestGroup implements Serializable {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withDescription(hydra.util.Opt<String> description) {
+  public TestGroup withDescription(Maybe<String> description) {
     java.util.Objects.requireNonNull((description));
     return new TestGroup(name, description, subgroups, cases);
   }

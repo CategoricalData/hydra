@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class YieldItem implements Serializable {
@@ -11,11 +13,11 @@ public class YieldItem implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.ProcedureResultField> field;
+  public final Maybe<ProcedureResultField> field;
   
   public final hydra.ext.cypher.openCypher.Variable variable;
   
-  public YieldItem (hydra.util.Opt<hydra.ext.cypher.openCypher.ProcedureResultField> field, hydra.ext.cypher.openCypher.Variable variable) {
+  public YieldItem (Maybe<ProcedureResultField> field, hydra.ext.cypher.openCypher.Variable variable) {
     java.util.Objects.requireNonNull((field));
     java.util.Objects.requireNonNull((variable));
     this.field = field;
@@ -36,7 +38,7 @@ public class YieldItem implements Serializable {
     return 2 * field.hashCode() + 3 * variable.hashCode();
   }
   
-  public YieldItem withField(hydra.util.Opt<hydra.ext.cypher.openCypher.ProcedureResultField> field) {
+  public YieldItem withField(Maybe<ProcedureResultField> field) {
     java.util.Objects.requireNonNull((field));
     return new YieldItem(field, variable);
   }
