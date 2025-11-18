@@ -9,7 +9,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -55,7 +55,7 @@ public class IsNothing extends PrimitiveFunction {
      * @param opt the optional value to check
      * @return true if the optional is empty, false otherwise
      */
-    public static <X> boolean apply(Opt<X> opt) {
-        return !opt.isPresent();
+    public static <X> boolean apply(Maybe<X> opt) {
+        return !opt.isJust();
     }
 }

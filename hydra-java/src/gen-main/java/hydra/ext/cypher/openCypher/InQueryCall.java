@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class InQueryCall implements Serializable {
@@ -13,9 +15,9 @@ public class InQueryCall implements Serializable {
   
   public final hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.YieldItems> yieldItems;
+  public final Maybe<YieldItems> yieldItems;
   
-  public InQueryCall (hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call, hydra.util.Opt<hydra.ext.cypher.openCypher.YieldItems> yieldItems) {
+  public InQueryCall (hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call, Maybe<YieldItems> yieldItems) {
     java.util.Objects.requireNonNull((call));
     java.util.Objects.requireNonNull((yieldItems));
     this.call = call;
@@ -41,7 +43,7 @@ public class InQueryCall implements Serializable {
     return new InQueryCall(call, yieldItems);
   }
   
-  public InQueryCall withYieldItems(hydra.util.Opt<hydra.ext.cypher.openCypher.YieldItems> yieldItems) {
+  public InQueryCall withYieldItems(Maybe<YieldItems> yieldItems) {
     java.util.Objects.requireNonNull((yieldItems));
     return new InQueryCall(call, yieldItems);
   }

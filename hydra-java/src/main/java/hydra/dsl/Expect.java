@@ -1,6 +1,5 @@
 package hydra.dsl;
 
-import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.Field;
 import hydra.core.FloatValue;
@@ -9,9 +8,8 @@ import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
-import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 import hydra.util.Tuple;
 
 import java.math.BigDecimal;
@@ -430,18 +428,18 @@ public class Expect {
      * @param term the term to decode
      * @return a Flow containing the decoded Opt
      */
-    public static <S, X> Flow<S, Opt<X>> optional(final Function<Term, Flow<S, X>> elems,
-                                                  final Term term) {
-        return term.accept(new Term.PartialVisitor<Flow<S, Opt<X>>>() {
+    public static <S, X> Flow<S, Maybe<X>> optional(final Function<Term, Flow<S, X>> elems,
+                                                    final Term term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, Maybe<X>>>() {
             @Override
-            public Flow<S, Opt<X>> otherwise(Term instance) {
+            public Flow<S, Maybe<X>> otherwise(Term instance) {
                 return wrongType("optional", term);
             }
 
             @Override
-            public Flow<S, Opt<X>> visit(Term.Maybe instance) {
-                return instance.value.isPresent() ? Flows.map(elems.apply(instance.value.get()), Opt::of)
-                        : pure(Opt.empty());
+            public Flow<S, Maybe<X>> visit(Term.Maybe instance) {
+                return instance.value.isJust() ? Flows.map(elems.apply(instance.value.fromJust()), Maybe::just)
+                        : pure(Maybe.nothing());
             }
         });
     }

@@ -1,10 +1,11 @@
 package hydra.dsl;
 
 import hydra.compute.Flow;
+import hydra.util.Maybe;
 import hydra.util.Unit;
 import hydra.tools.Function3;
 import hydra.tools.Function4;
-import hydra.util.Opt;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -354,7 +355,7 @@ public class Pipe<A> {
    * @param f the monadic function to apply
    * @return a pipe containing an optional result
    */
-  public static <A, B> Pipe<Opt<B>> mapM(Opt<A> xs, Function<A, Pipe<B>> f) {
+  public static <A, B> Pipe<Maybe<B>> mapM(Maybe<A> xs, Function<A, Pipe<B>> f) {
     return new Pipe<>(Flows.mapM(xs, x -> f.apply(x).flow));
   }
 
@@ -398,7 +399,7 @@ public class Pipe<A> {
    * @param predicates the predicates to check against the input value
    * @return a pipe containing the input value if all predicates pass, or a failure pipe otherwise
    */
-  public static <A> Pipe<A> check(A input, Function<A, Opt<String>>... predicates) {
+  public static <A> Pipe<A> check(A input, Function<A, Maybe<String>>... predicates) {
     return new Pipe<>(Flows.check(input, predicates));
   }
 

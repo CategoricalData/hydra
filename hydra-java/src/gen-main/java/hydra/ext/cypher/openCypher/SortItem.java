@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class SortItem implements Serializable {
@@ -13,9 +15,9 @@ public class SortItem implements Serializable {
   
   public final hydra.ext.cypher.openCypher.Expression expression;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.SortOrder> order;
+  public final Maybe<SortOrder> order;
   
-  public SortItem (hydra.ext.cypher.openCypher.Expression expression, hydra.util.Opt<hydra.ext.cypher.openCypher.SortOrder> order) {
+  public SortItem (hydra.ext.cypher.openCypher.Expression expression, Maybe<SortOrder> order) {
     java.util.Objects.requireNonNull((expression));
     java.util.Objects.requireNonNull((order));
     this.expression = expression;
@@ -41,7 +43,7 @@ public class SortItem implements Serializable {
     return new SortItem(expression, order);
   }
   
-  public SortItem withOrder(hydra.util.Opt<hydra.ext.cypher.openCypher.SortOrder> order) {
+  public SortItem withOrder(Maybe<SortOrder> order) {
     java.util.Objects.requireNonNull((order));
     return new SortItem(expression, order);
   }

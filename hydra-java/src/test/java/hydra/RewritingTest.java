@@ -11,7 +11,7 @@ import hydra.dsl.Flows;
 import java.util.List;
 
 import hydra.dsl.Terms;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -63,7 +63,7 @@ public class RewritingTest {
     @Test
     public void checkFailure() {
         FlowState<Integer, Term> resultState = applyFailOnSpecialAnnotation(listOfStates, 0);
-        assertFalse(resultState.value.isPresent());
+        assertFalse(resultState.value.isJust());
         assertEquals(1, resultState.trace.messages.size());
         assertTrue(resultState.trace.messages.get(0).startsWith("Error: "));
     }
@@ -73,10 +73,10 @@ public class RewritingTest {
         FlowState<Integer, Term> resultState = applyCapitalizeFieldNames(listOfStates);
 
         // Check modified fields
-        Opt<Term> result = resultState.value;
-        assertTrue(result.isPresent());
-        assertTrue(result.get() instanceof Term.Annotated);
-        Term list = ((Term.Annotated) result.get()).value.body;
+        Maybe<Term> result = resultState.value;
+        assertTrue(result.isJust());
+        assertTrue(result.fromJust() instanceof Term.Annotated);
+        Term list = ((Term.Annotated) result.fromJust()).value.body;
         assertTrue(list instanceof Term.List);
         List<Term> vals = ((Term.List) list).value;
         assertEquals(3, vals.size());

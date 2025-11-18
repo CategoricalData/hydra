@@ -436,9 +436,9 @@ public abstract class Term implements Serializable {
    * An optional value
    */
   public static final class Maybe extends hydra.core.Term implements Serializable {
-    public final hydra.util.Opt<hydra.core.Term> value;
+    public final hydra.util.Maybe<Term> value;
     
-    public Maybe (hydra.util.Opt<hydra.core.Term> value) {
+    public Maybe (hydra.util.Maybe<Term> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

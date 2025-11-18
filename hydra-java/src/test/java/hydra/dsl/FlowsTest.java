@@ -3,7 +3,7 @@ package hydra.dsl;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.util.Unit;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class FlowsTest {
     public void checkFail() {
         Flow<String, Integer> flow1 = Flows.fail("oops");
         FlowState<String, Integer> result1 = flow1.value.apply("").apply(EMPTY_TRACE);
-        assertFalse(result1.value.isPresent());
+        assertFalse(result1.value.isJust());
         assertEquals(1, result1.trace.messages.size());
         assertEquals("Error: oops", result1.trace.messages.get(0));
 
@@ -44,20 +44,20 @@ public class FlowsTest {
         List<String> strings = Arrays.asList("one", "two", "", "four");
         Flow<Boolean, List<Integer>> flow2 = mapM(strings, nonzeroLen);
         FlowState<Boolean, List<Integer>> result2 = flow2.value.apply(true).apply(EMPTY_TRACE);
-        assertFalse(result2.value.isPresent());
+        assertFalse(result2.value.isJust());
     }
 
     @Test
     public void checkGetAndPutState() {
         Flow<Integer, Integer> flow1 = bind(pure(42), value -> map(getState(), state -> value + state));
         FlowState<Integer, Integer> result1 = flow1.value.apply(10).apply(EMPTY_TRACE);
-        assertTrue(result1.value.isPresent());
-        assertEquals(52, result1.value.get());
+        assertTrue(result1.value.isJust());
+        assertEquals(52, result1.value.fromJust());
 
         Flow<Integer, Integer> flow2 = bind(pure(42), original -> bind(putState(100), ignored -> pure(original)));
         FlowState<Integer, Integer> result2 = flow2.value.apply(10).apply(EMPTY_TRACE);
-        assertTrue(result2.value.isPresent());
-        assertEquals(42, result2.value.get());
+        assertTrue(result2.value.isJust());
+        assertEquals(42, result2.value.fromJust());
         assertEquals(100, result2.state);
 
         Flow<String, Integer> flow3 = bind(pure(42), value -> bind(getState(), state -> {
@@ -66,7 +66,7 @@ public class FlowsTest {
         }));
         FlowState<String, Integer> result3 = flow3.value.apply("foo").apply(EMPTY_TRACE);
         assertEquals("foo;42", result3.state);
-        assertEquals(Opt.of(43), result3.value);
+        assertEquals(Maybe.just(43), result3.value);
     }
 
     @Test
@@ -125,11 +125,11 @@ public class FlowsTest {
         final FlowState<Unit, Integer> result3 = flow3.value.apply(UNIT).apply(EMPTY_TRACE);
         final FlowState<Unit, Integer> result4 = flow4.value.apply(UNIT).apply(EMPTY_TRACE);
 
-        assertTrue(result0.value.isPresent());
-        assertTrue(result1.value.isPresent());
-        assertTrue(result2.value.isPresent());
-        assertTrue(result3.value.isPresent());
-        assertFalse(result4.value.isPresent());
+        assertTrue(result0.value.isJust());
+        assertTrue(result1.value.isJust());
+        assertTrue(result2.value.isJust());
+        assertTrue(result3.value.isJust());
+        assertFalse(result4.value.isJust());
 
         assertEquals(0, result0.trace.messages.size());
         assertEquals(1, result1.trace.messages.size());

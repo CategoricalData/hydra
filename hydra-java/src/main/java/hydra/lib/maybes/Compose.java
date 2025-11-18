@@ -9,7 +9,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -50,8 +50,8 @@ public class Compose extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)),
-                arg -> arg.map(term -> Terms.optional(Opt.of(Terms.apply(args.get(1), term))))
-                        .orElseGet(() -> Terms.optional(Opt.empty())));
+                arg -> arg.map(term -> Terms.optional(Maybe.just(Terms.apply(args.get(1), term))))
+                        .orElseGet(() -> Terms.optional(Maybe.nothing())));
     }
 
     /**
@@ -62,7 +62,7 @@ public class Compose extends PrimitiveFunction {
      * @param left the first function to apply
      * @return a function that takes the second function and returns the composed function
      */
-    public static <A, B, C> Function<Function<B, Opt<C>>, Function<A, Opt<C>>> apply(Function<A, Opt<B>> left) {
+    public static <A, B, C> Function<Function<B, Maybe<C>>, Function<A, Maybe<C>>> apply(Function<A, Maybe<B>> left) {
         return right -> apply(left, right);
     }
 
@@ -75,10 +75,10 @@ public class Compose extends PrimitiveFunction {
      * @param right the second function to apply
      * @return a composed function that applies left then right, returning empty if either returns empty
      */
-    public static <A, B, C> Function<A, Opt<C>> apply(Function<A, Opt<B>> left, Function<B, Opt<C>> right) {
+    public static <A, B, C> Function<A, Maybe<C>> apply(Function<A, Maybe<B>> left, Function<B, Maybe<C>> right) {
         return a -> {
-            Opt<B> ob = left.apply(a);
-            return ob.isPresent() ? right.apply(ob.get()) : Opt.empty();
+            Maybe<B> ob = left.apply(a);
+            return ob.isJust() ? right.apply(ob.fromJust()) : Maybe.nothing();
         };
     }
 }

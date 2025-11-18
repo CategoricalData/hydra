@@ -2,6 +2,8 @@
 
 package hydra.ext.cypher.openCypher;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class Match implements Serializable {
@@ -17,9 +19,9 @@ public class Match implements Serializable {
   
   public final hydra.ext.cypher.openCypher.Pattern pattern;
   
-  public final hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where;
+  public final Maybe<Where> where;
   
-  public Match (Boolean optional, hydra.ext.cypher.openCypher.Pattern pattern, hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where) {
+  public Match (Boolean optional, hydra.ext.cypher.openCypher.Pattern pattern, Maybe<Where> where) {
     java.util.Objects.requireNonNull((optional));
     java.util.Objects.requireNonNull((pattern));
     java.util.Objects.requireNonNull((where));
@@ -52,7 +54,7 @@ public class Match implements Serializable {
     return new Match(optional, pattern, where);
   }
   
-  public Match withWhere(hydra.util.Opt<hydra.ext.cypher.openCypher.Where> where) {
+  public Match withWhere(Maybe<Where> where) {
     java.util.Objects.requireNonNull((where));
     return new Match(optional, pattern, where);
   }

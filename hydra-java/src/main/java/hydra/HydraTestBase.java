@@ -6,6 +6,7 @@ import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.util.Maybe;
 import hydra.util.Unit;
 import hydra.dsl.Flows;
 import hydra.dsl.Terms;
@@ -13,7 +14,7 @@ import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class HydraTestBase {
      */
     protected static <S, X> void assertFails(Flow<S, X> flow, S initialState) {
         FlowState<S, X> result = flow.value.apply(initialState).apply(EMPTY_TRACE);
-        assertTrue(!result.value.isPresent());
+        assertTrue(!result.value.isJust());
         //assertTrue(result.trace.messages.size() > 1);
     }
 
@@ -156,8 +157,8 @@ public class HydraTestBase {
      */
     protected static <S, X> void checkFlow(Flow<S, X> flow, S initialState, Consumer<X> consumer) {
         FlowState<S, X> result = flow.value.apply(initialState).apply(EMPTY_TRACE);
-        assertTrue(result.value.isPresent(), "Flow failed: " + result.trace.messages);
-        consumer.accept(result.value.get());
+        assertTrue(result.value.isJust(), "Flow failed: " + result.trace.messages);
+        consumer.accept(result.value.fromJust());
     }
 
     /**
@@ -177,7 +178,7 @@ public class HydraTestBase {
     protected static Graph emptyGraph() {
         Map<Name, hydra.core.Binding> elements = Collections.emptyMap();
         Map<Name, TypeScheme> types = Collections.emptyMap();
-        Map<Name, Opt<Term>> environment = Collections.emptyMap();
+        Map<Name, Maybe<Term>> environment = Collections.emptyMap();
         Term body = Terms.string("empty graph");
 
         Map<Name, Primitive> primitives = new HashMap<>();
@@ -185,7 +186,7 @@ public class HydraTestBase {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        Opt<Graph> schema = Opt.empty();
+        Maybe<Graph> schema = Maybe.nothing();
 
         return new Graph(elements, environment, types, body, primitives, schema);
     }

@@ -2,6 +2,8 @@
 
 package hydra.pg.query;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 public class Projection implements Serializable {
@@ -13,9 +15,9 @@ public class Projection implements Serializable {
   
   public final hydra.pg.query.Expression value;
   
-  public final hydra.util.Opt<hydra.pg.query.Variable> as;
+  public final Maybe<Variable> as;
   
-  public Projection (hydra.pg.query.Expression value, hydra.util.Opt<hydra.pg.query.Variable> as) {
+  public Projection (hydra.pg.query.Expression value, Maybe<Variable> as) {
     java.util.Objects.requireNonNull((value));
     java.util.Objects.requireNonNull((as));
     this.value = value;
@@ -41,7 +43,7 @@ public class Projection implements Serializable {
     return new Projection(value, as);
   }
   
-  public Projection withAs(hydra.util.Opt<hydra.pg.query.Variable> as) {
+  public Projection withAs(Maybe<Variable> as) {
     java.util.Objects.requireNonNull((as));
     return new Projection(value, as);
   }

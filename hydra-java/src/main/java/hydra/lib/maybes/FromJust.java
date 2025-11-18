@@ -8,7 +8,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Opt;
+import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
@@ -48,7 +48,7 @@ public class FromJust extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.optional(Flows::pure, args.get(0)),
-            opt -> opt.isPresent() ? pure(opt.get()) : Flows.fail("fromJust: Nothing"));
+            opt -> opt.isJust() ? pure(opt.fromJust()) : Flows.fail("fromJust: Nothing"));
     }
 
     /**
@@ -58,10 +58,10 @@ public class FromJust extends PrimitiveFunction {
      * @return the contained value
      * @throws RuntimeException if the optional is empty
      */
-    public static <X> X apply(Opt<X> opt) {
-        if (!opt.isPresent()) {
+    public static <X> X apply(Maybe<X> opt) {
+        if (!opt.isJust()) {
             throw new RuntimeException("fromJust: Nothing");
         }
-        return opt.get();
+        return opt.fromJust();
     }
 }

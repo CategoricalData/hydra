@@ -2,6 +2,8 @@
 
 package hydra.testing;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -31,14 +33,14 @@ public class TestCaseWithMetadata implements Serializable {
   /**
    * An optional description of the test
    */
-  public final hydra.util.Opt<String> description;
+  public final Maybe<String> description;
   
   /**
    * Zero or more tags for categorizing the test
    */
   public final java.util.List<hydra.testing.Tag> tags;
   
-  public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, hydra.util.Opt<String> description, java.util.List<hydra.testing.Tag> tags) {
+  public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, Maybe<String> description, java.util.List<hydra.testing.Tag> tags) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((case_));
     java.util.Objects.requireNonNull((description));
@@ -73,7 +75,7 @@ public class TestCaseWithMetadata implements Serializable {
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
   
-  public TestCaseWithMetadata withDescription(hydra.util.Opt<String> description) {
+  public TestCaseWithMetadata withDescription(Maybe<String> description) {
     java.util.Objects.requireNonNull((description));
     return new TestCaseWithMetadata(name, case_, description, tags);
   }

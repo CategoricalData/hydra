@@ -2,12 +2,16 @@
 
 package hydra.show.core;
 
+import hydra.core.Term;
+import hydra.core.Type;
+import hydra.util.Maybe;
+
 /**
  * String representations of hydra.core types
  */
 public interface Core {
-  static hydra.util.Opt<hydra.core.Term> readTerm(String s) {
-    return hydra.util.Opt.of(new hydra.core.Term.Literal(new hydra.core.Literal.String_((s))));
+  static Maybe<Term> readTerm(String s) {
+    return Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_((s))));
   }
   
   static String binding(hydra.core.Binding el) {
@@ -54,7 +58,7 @@ public interface Core {
       @Override
       public String visit(hydra.core.Elimination.Union cs) {
         java.util.List<hydra.core.Field> cases = (((cs)).value).cases;
-        hydra.util.Opt<hydra.core.Term> mdef = (((cs)).value).default_;
+        Maybe<Term> mdef = (((cs)).value).default_;
         java.util.List<hydra.core.Field> defaultField = hydra.lib.maybes.Maybe.apply(
           (java.util.List<hydra.core.Field>) (java.util.List.<hydra.core.Field>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.List.of(new hydra.core.Field(new hydra.core.Name("[default]"), (d)))),
@@ -303,7 +307,7 @@ public interface Core {
   
   static String lambda(hydra.core.Lambda l) {
     hydra.core.Term body = ((l)).body;
-    hydra.util.Opt<hydra.core.Type> mt = ((l)).domain;
+    Maybe<Type> mt = ((l)).domain;
     String typeStr = hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.core.Type, String>) (t -> hydra.lib.strings.Cat2.apply(

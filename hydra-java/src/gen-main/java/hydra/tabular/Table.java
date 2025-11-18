@@ -2,6 +2,8 @@
 
 package hydra.tabular;
 
+import hydra.util.Maybe;
+
 /**
  * A simple table as in a CSV file, having an optional header row and any number of data rows
  */
@@ -15,14 +17,14 @@ public class Table<V> {
   /**
    * The optional header row of the table. If present, the header must have the same number of cells as each data row.
    */
-  public final hydra.util.Opt<hydra.tabular.HeaderRow> header;
+  public final Maybe<HeaderRow> header;
   
   /**
    * The data rows of the table. Each row must have the same number of cells.
    */
   public final java.util.List<hydra.tabular.DataRow<V>> data;
   
-  public Table (hydra.util.Opt<hydra.tabular.HeaderRow> header, java.util.List<hydra.tabular.DataRow<V>> data) {
+  public Table (Maybe<HeaderRow> header, java.util.List<hydra.tabular.DataRow<V>> data) {
     java.util.Objects.requireNonNull((header));
     java.util.Objects.requireNonNull((data));
     this.header = header;
@@ -43,7 +45,7 @@ public class Table<V> {
     return 2 * header.hashCode() + 3 * data.hashCode();
   }
   
-  public Table withHeader(hydra.util.Opt<hydra.tabular.HeaderRow> header) {
+  public Table withHeader(Maybe<HeaderRow> header) {
     java.util.Objects.requireNonNull((header));
     return new Table(header, data);
   }

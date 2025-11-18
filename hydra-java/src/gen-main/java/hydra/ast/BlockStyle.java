@@ -2,6 +2,8 @@
 
 package hydra.ast;
 
+import hydra.util.Maybe;
+
 import java.io.Serializable;
 
 /**
@@ -19,7 +21,7 @@ public class BlockStyle implements Serializable {
   /**
    * An optional indentation string
    */
-  public final hydra.util.Opt<String> indent;
+  public final Maybe<String> indent;
   
   /**
    * Whether to place a newline before the content
@@ -31,7 +33,7 @@ public class BlockStyle implements Serializable {
    */
   public final Boolean newlineAfterContent;
   
-  public BlockStyle (hydra.util.Opt<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
+  public BlockStyle (Maybe<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
     java.util.Objects.requireNonNull((indent));
     java.util.Objects.requireNonNull((newlineBeforeContent));
     java.util.Objects.requireNonNull((newlineAfterContent));
@@ -54,7 +56,7 @@ public class BlockStyle implements Serializable {
     return 2 * indent.hashCode() + 3 * newlineBeforeContent.hashCode() + 5 * newlineAfterContent.hashCode();
   }
   
-  public BlockStyle withIndent(hydra.util.Opt<String> indent) {
+  public BlockStyle withIndent(Maybe<String> indent) {
     java.util.Objects.requireNonNull((indent));
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
