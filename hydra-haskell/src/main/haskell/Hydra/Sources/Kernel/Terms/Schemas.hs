@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -55,24 +55,24 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core as EncodeCore
-import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Names as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
+import qualified Hydra.Sources.Kernel.Terms.Decode.Core  as DecodeCore
+import qualified Hydra.Sources.Kernel.Terms.Encode.Core  as EncodeCore
+import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+import qualified Hydra.Sources.Kernel.Terms.Names        as Names
+import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.schemas") elements
-    [Annotations.module_, Constants.module_, DecodeCore.module_, EncodeCore.module_, Names.module_, Rewriting.module_,
-      ShowCore.module_, Sorting.module_, Substitution.module_, Variants.module_]
+    [Annotations.module_, Constants.module_, DecodeCore.module_, EncodeCore.module_, Lexical.module_, Monads.module_,
+      Names.module_, Reflect.module_, Rewriting.module_, ShowCore.module_, Sorting.module_, Substitution.module_]
     kernelTypesModules $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -384,12 +384,12 @@ isSerializableDef = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies)" $
   "el" ~>
   "variants" <~ ("typ" ~>
-    Lists.map (ref Variants.typeVariantDef) (ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@
+    Lists.map (ref Reflect.typeVariantDef) (ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list [] @@ var "typ")) $
   Flows.map
     ("deps" ~>
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
-      Logic.not (Sets.member Meta.typeVariantFunction (var "allVariants")))
+      Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (ref typeDependenciesDef @@ false @@ (unaryFunction Equality.identity) @@ Core.bindingName (var "el"))
 
 moduleDependencyNamespacesDef :: TBinding (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))

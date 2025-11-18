@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -55,16 +55,16 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
+import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils  as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.literals") elements
-    [ExtractCore.module_, Monads.module_, AdaptUtils.module_, ShowCore.module_, Variants.module_]
+    [AdaptUtils.module_, ExtractCore.module_, Monads.module_, Reflect.module_, ShowCore.module_]
     kernelTypesModules $
     Just "Adapter framework for literal types and terms"
   where
@@ -166,8 +166,8 @@ floatAdapterDef = define "floatAdapter" $
   "makeAdapter" <~ ("source" ~> "target" ~>
     "lossy" <~ Equality.equal
       (ref comparePrecisionDef
-        @@ (ref Variants.floatTypePrecisionDef @@ var "source")
-        @@ (ref Variants.floatTypePrecisionDef @@ var "target"))
+        @@ (ref Reflect.floatTypePrecisionDef @@ var "source")
+        @@ (ref Reflect.floatTypePrecisionDef @@ var "target"))
       Graph.comparisonGreaterThan $
     "step" <~ Compute.coder
       ("fv" ~> produce (ref convertFloatValueDef @@ var "target" @@ var "fv"))
@@ -202,14 +202,14 @@ integerAdapterDef = define "integerAdapter" $
   "interleave" <~ ("xs" ~> "ys" ~> Lists.concat (Lists.transpose (list [var "xs", var "ys"]))) $
   "signedOrdered" <~ Lists.filter
     ("v" ~> Logic.and
-      (ref Variants.integerTypeIsSignedDef @@ var "v")
-      (Logic.not (Equality.equal (ref Variants.integerTypePrecisionDef @@ var "v") Util.precisionArbitrary)))
-    (ref Variants.integerTypesDef) $
+      (ref Reflect.integerTypeIsSignedDef @@ var "v")
+      (Logic.not (Equality.equal (ref Reflect.integerTypePrecisionDef @@ var "v") Util.precisionArbitrary)))
+    (ref Reflect.integerTypesDef) $
   "unsignedOrdered" <~ Lists.filter
     ("v" ~> Logic.and
-      (Logic.not (ref Variants.integerTypeIsSignedDef @@ var "v"))
-      (Logic.not (Equality.equal (ref Variants.integerTypePrecisionDef @@ var "v") Util.precisionArbitrary)))
-    (ref Variants.integerTypesDef) $
+      (Logic.not (ref Reflect.integerTypeIsSignedDef @@ var "v"))
+      (Logic.not (Equality.equal (ref Reflect.integerTypePrecisionDef @@ var "v") Util.precisionArbitrary)))
+    (ref Reflect.integerTypesDef) $
   "signedPref" <~ var "interleave" @@ var "signedOrdered" @@ var "unsignedOrdered" $
   "unsignedPref" <~ var "interleave" @@ var "unsignedOrdered" @@ var "signedOrdered" $
   "signedNonPref" <~ Lists.reverse (var "unsignedPref") $
@@ -225,8 +225,8 @@ integerAdapterDef = define "integerAdapter" $
   "makeAdapter" <~ ("source" ~> "target" ~>
     "lossy" <~ Logic.not (Equality.equal
       (ref comparePrecisionDef
-        @@ (ref Variants.integerTypePrecisionDef @@ var "source")
-        @@ (ref Variants.integerTypePrecisionDef @@ var "target"))
+        @@ (ref Reflect.integerTypePrecisionDef @@ var "source")
+        @@ (ref Reflect.integerTypePrecisionDef @@ var "target"))
       Graph.comparisonLessThan) $
     "step" <~ Compute.coder
       ("iv" ~> produce (ref convertIntegerValueDef @@ var "target" @@ var "iv"))
@@ -291,7 +291,7 @@ literalAdapterDef = define "literalAdapter" $
     "cx" <<~ ref Monads.getStateDef $
     "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
     "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
-    "hasStrings" <~ Sets.member Meta.literalVariantString (Coders.languageConstraintsLiteralVariants (var "constraints")) $
+    "hasStrings" <~ Sets.member Variants.literalVariantString (Coders.languageConstraintsLiteralVariants (var "constraints")) $
     "withIntegers" <~ (
       "withAdapter" <~ ("adapter" ~>
         "step'" <~ Compute.adapterCoder (var "adapter") $

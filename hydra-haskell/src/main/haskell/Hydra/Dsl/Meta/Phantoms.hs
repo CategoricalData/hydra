@@ -1,13 +1,13 @@
 -- | Term-level DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions.
 -- The phantom types provide static type checking in Haskell prior to Hydra's runtime type checking.
-module Hydra.Dsl.Phantoms (
-  module Hydra.Dsl.Phantoms,
-  module Hydra.Dsl.PhantomLiterals,
+module Hydra.Dsl.Meta.Phantoms (
+  module Hydra.Dsl.Meta.Phantoms,
+  module Hydra.Dsl.Meta.Literals,
 ) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Common
-import Hydra.Dsl.PhantomLiterals
+import Hydra.Dsl.Meta.Literals
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
@@ -150,7 +150,7 @@ identity = TTerm Terms.identity
 -- | Create a union injection
 -- Example: inject (Name "Result") (Name "success") (string "ok")
 inject :: Name -> Name -> TTerm a -> TTerm b
-inject name fname (TTerm term) = TTerm $ Terms.inject name (Field fname term)
+inject name (Name fname) (TTerm term) = TTerm $ Terms.inject name fname term
 
 -- | Create a function that injects its argument into a union variant
 -- Example: injectLambda (Name "Result") (Name "success")
@@ -318,7 +318,7 @@ unit = TTerm Terms.unit
 -- | Create a unit variant of a union
 -- Example: unitVariant (Name "Result") (Name "success")
 unitVariant :: Name -> Name -> TTerm a
-unitVariant name fname = TTerm $ Terms.inject name $ Field fname Terms.unit
+unitVariant name (Name fname) = TTerm $ Terms.inject name fname Terms.unit
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple
@@ -338,7 +338,7 @@ var v = TTerm $ Terms.var v
 -- | Create a union variant
 -- Example: variant (Name "Result") (Name "success") (string "ok")
 variant :: Name -> Name -> TTerm a -> TTerm b
-variant name fname (TTerm term) = TTerm $ Terms.inject name $ Field fname term
+variant name (Name fname) (TTerm term) = TTerm $ Terms.inject name fname term
 
 -- | Associate the Eq type class with the inferred type of a term
 -- Example: withEq "t0" myTerm

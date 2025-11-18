@@ -1,8 +1,8 @@
-module Hydra.Dsl.Meta where
+module Hydra.Dsl.Variants where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms
-import Hydra.Meta
+import Hydra.Dsl.Meta.Phantoms
+import Hydra.Variants
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y

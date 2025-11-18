@@ -1,10 +1,10 @@
 module Hydra.Dsl.Coders where
 
 import Hydra.Kernel
-import Hydra.Dsl.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Dsl.Lib.Sets as Sets
-import qualified Hydra.Dsl.TTypes as T
+import qualified Hydra.Dsl.Meta.Types as T
 
 import qualified Data.Map as M
 import qualified Data.Set as S

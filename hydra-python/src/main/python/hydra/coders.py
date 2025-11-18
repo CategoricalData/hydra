@@ -11,7 +11,7 @@ from typing import Annotated, TypeVar
 import hydra.compute
 import hydra.core
 import hydra.graph
-import hydra.meta
+import hydra.variants
 
 S = TypeVar("S")
 T = TypeVar("T")
@@ -56,13 +56,13 @@ LANGUAGE__CONSTRAINTS__NAME = hydra.core.Name("constraints")
 class LanguageConstraints:
     r"""A set of constraints on valid type and term expressions, characterizing a language."""
     
-    elimination_variants: Annotated[frozenset[hydra.meta.EliminationVariant], "All supported elimination variants"]
-    literal_variants: Annotated[frozenset[hydra.meta.LiteralVariant], "All supported literal variants"]
+    elimination_variants: Annotated[frozenset[hydra.variants.EliminationVariant], "All supported elimination variants"]
+    literal_variants: Annotated[frozenset[hydra.variants.LiteralVariant], "All supported literal variants"]
     float_types: Annotated[frozenset[hydra.core.FloatType], "All supported float types"]
-    function_variants: Annotated[frozenset[hydra.meta.FunctionVariant], "All supported function variants"]
+    function_variants: Annotated[frozenset[hydra.variants.FunctionVariant], "All supported function variants"]
     integer_types: Annotated[frozenset[hydra.core.IntegerType], "All supported integer types"]
-    term_variants: Annotated[frozenset[hydra.meta.TermVariant], "All supported term variants"]
-    type_variants: Annotated[frozenset[hydra.meta.TypeVariant], "All supported type variants"]
+    term_variants: Annotated[frozenset[hydra.variants.TermVariant], "All supported term variants"]
+    type_variants: Annotated[frozenset[hydra.variants.TypeVariant], "All supported type variants"]
     types: Annotated[Callable[[hydra.core.Type], bool], "A logical set of types, as a predicate which tests a type for inclusion"]
 
 LANGUAGE_CONSTRAINTS__NAME = hydra.core.Name("hydra.coders.LanguageConstraints")

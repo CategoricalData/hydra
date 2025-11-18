@@ -5,6 +5,7 @@ import Hydra.Kernel
 
 import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
+import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
 import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
@@ -12,7 +13,7 @@ import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Meta        as Meta
+import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Module      as Module
 import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
@@ -29,6 +30,7 @@ kernelTypesModules :: [Module]
 kernelTypesModules = [
   Accessors.module_,
   Ast.module_,
+  Classes.module_,
   Coders.module_,
   Compute.module_,
   Constraints.module_,
@@ -36,7 +38,6 @@ kernelTypesModules = [
   Grammar.module_,
   Graph.module_,
   Json.module_,
-  Meta.module_,
   Module.module_,
   Phantoms.module_,
   Query.module_,
@@ -46,4 +47,5 @@ kernelTypesModules = [
   Topology.module_,
   Typing.module_,
   Util.module_,
+  Variants.module_,
   Workflow.module_]

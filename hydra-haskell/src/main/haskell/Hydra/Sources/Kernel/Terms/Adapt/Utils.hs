@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -56,15 +56,15 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Names as Names
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Names      as Names
+import qualified Hydra.Sources.Kernel.Terms.Reflect    as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting  as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.adapt.utils") elements
-    [Names.module_, Rewriting.module_, Variants.module_, ShowCore.module_]
+    [Formatting.module_, Names.module_, Reflect.module_, Rewriting.module_, ShowCore.module_]
     kernelTypesModules $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
@@ -162,7 +162,7 @@ literalTypeIsSupportedDef = define "literalTypeIsSupported" $
     _LiteralType_float>>: "ft" ~> ref floatTypeIsSupportedDef @@ var "constraints" @@ var "ft",
     _LiteralType_integer>>: "it" ~> ref integerTypeIsSupportedDef @@ var "constraints" @@ var "it"]) $
   Logic.and
-    (Sets.member (ref Variants.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants (var "constraints")))
+    (Sets.member (ref Reflect.literalTypeVariantDef @@ var "lt") (Coders.languageConstraintsLiteralVariants (var "constraints")))
     (var "isSupported" @@ var "lt")
 
 nameToFilePathDef :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
@@ -236,7 +236,7 @@ typeIsSupportedDef = define "typeIsSupported" $
   Logic.and
     (Coders.languageConstraintsTypes (var "constraints") @@ var "base")
     (Logic.and
-      (var "isSupportedVariant" @@ (ref Variants.typeVariantDef @@ var "base"))
+      (var "isSupportedVariant" @@ (ref Reflect.typeVariantDef @@ var "base"))
       (var "isSupported" @@ var "base"))
   where
     andAll = Lists.foldl (binaryFunction Logic.and) true

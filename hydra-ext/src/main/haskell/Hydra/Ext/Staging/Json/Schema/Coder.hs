@@ -27,6 +27,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Reflect as Reflect
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -136,7 +137,7 @@ encodeType optional typ = case typ of
         (simpleFields, nonsimpleFields) = L.partition isSimple $ Core.rowTypeFields rt
         isSimple (Core.FieldType _ ft) = EncodeCore.isUnitType $ Rewriting.deannotateType ft
     Core.TypeVariable name -> Monads.pure [referenceRestriction name]
-    _ -> Monads.fail $ "unsupported type variant: " ++ show (Variants.typeVariant typ)
+    _ -> Monads.fail $ "unsupported type variant: " ++ show (Reflect.typeVariant typ)
   where
     encodeRecordOrUnion union (Core.RowType _ fields) = do
         props <- M.fromList <$> CM.mapM encodeField fields

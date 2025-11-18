@@ -226,7 +226,7 @@ etaExpansionTests = TestGroup "eta expansion tests" (Just "Test cases for eta ex
             ((match (Name "UnionMonomorphic")
                 (Just $ string "other") [
                 "string">: lambdaTyped "s" Types.string $ var "s"])
-              @@ (inject (Name "UnionMonomorphic") $ Field (Name "string") ("foo"))),
+              @@ (inject (Name "UnionMonomorphic") "string" (string "foo"))),
           noChange "applied case statement in lambda"
             (lambdaTyped "x" (Types.var "UnionMonomorphic") $ (match (Name "UnionMonomorphic")
                 (Just $ string "other") [
@@ -255,7 +255,7 @@ etaExpansionTests = TestGroup "eta expansion tests" (Just "Test cases for eta ex
                  (match (Name "UnionMonomorphic")
                      (Just $ string "other") [
                      "string">: lambdaTyped "s" Types.string $ var "s"])
-                   @@ (inject (Name "UnionMonomorphic") $ Field (Name "string") ("foo")),
+                   @@ (inject (Name "UnionMonomorphic") "string" (string "foo")),
                  Types.mono $ Types.string)]
               ("ignored")),
           noChange "applied case statement in lambda"
@@ -291,7 +291,7 @@ etaExpansionTests = TestGroup "eta expansion tests" (Just "Test cases for eta ex
                tyapp (match (Name "UnionPolymorphicRecursive")
                    (Just $ string "other") [
                    "value">: lambdaTyped "i" Types.int32 $ primitive _literals_showInt32 @@ var "i"]) Types.int32
-                 @@ tyapp (inject (Name "UnionPolymorphicRecursive") $ Field (Name "value") $ int32 42) Types.int32,
+                 @@ tyapp (inject (Name "UnionPolymorphicRecursive") "value" (int32 42)) Types.int32,
                Types.mono $ Types.string)] $
               var "test"),
           noChange "applied UnionPolymorphicRecursive with int32 in lambda"

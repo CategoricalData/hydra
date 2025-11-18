@@ -169,9 +169,9 @@ public abstract class Value implements Serializable {
    * A numeric value
    */
   public static final class Number_ extends hydra.json.Value implements Serializable {
-    public final String value;
+    public final java.math.BigDecimal value;
     
-    public Number_ (String value) {
+    public Number_ (java.math.BigDecimal value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

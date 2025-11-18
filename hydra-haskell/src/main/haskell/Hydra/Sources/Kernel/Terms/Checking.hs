@@ -39,22 +39,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -63,24 +63,22 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
+import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Formatting   as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Meta    as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.checking") elements
-    [Constants.module_, ExtractCore.module_, Formatting.module_, Lexical.module_,
-      Rewriting.module_, Schemas.module_,
-      ShowCore.module_, ShowMeta.module_,
-      Substitution.module_, Variants.module_]
+    [Constants.module_, ExtractCore.module_, Formatting.module_, Lexical.module_, Reflect.module_, Rewriting.module_,
+      Schemas.module_, ShowCore.module_, ShowMeta.module_, Substitution.module_]
     kernelTypesModules $
     Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
   where
@@ -344,7 +342,7 @@ typeOfDef = define "typeOf" $
   "check" <~ (cases _Term (var "term")
     (Just $ Flows.fail $ Strings.cat $ list [
       "unsupported term variant in typeOf: ",
-      ref ShowMeta.termVariantDef @@ (ref Variants.termVariantDef @@ var "term")]) [
+      ref ShowMeta.termVariantDef @@ (ref Reflect.termVariantDef @@ var "term")]) [
     _Term_annotated>>: ref typeOfAnnotatedTermDef @@ var "tx" @@ var "typeArgs",
     _Term_application>>: ref typeOfApplicationDef @@ var "tx" @@ var "typeArgs",
     _Term_either>>: ref typeOfEitherDef @@ var "tx" @@ var "typeArgs",
@@ -564,7 +562,7 @@ typeOfLiteralDef :: TBinding (TypeContext -> [Type] -> Literal -> Flow s Type)
 typeOfLiteralDef = define "typeOfLiteral" $
   doc "Reconstruct the type of a literal" $
   "tx" ~> "typeArgs" ~> "lit" ~>
-  "t" <~ Core.typeLiteral (ref Variants.literalTypeDef @@ var "lit") $
+  "t" <~ Core.typeLiteral (ref Reflect.literalTypeDef @@ var "lit") $
   ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfMapDef :: TBinding (TypeContext -> [Type] -> M.Map Term Term -> Flow s Type)
@@ -756,7 +754,7 @@ typeOfUnwrapDef = define "typeOfUnwrap" $
   "wrapped" <<~ ref ExtractCore.wrappedTypeDef @@ var "tname" @@ var "sbody" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ ref Substitution.substInTypeDef @@ var "subst" @@ var "wrapped" $
-  produce $ TTypes.function
+  produce $ MetaTypes.function
     (ref Schemas.nominalApplicationDef @@ var "tname" @@ var "typeArgs")
     (var "swrapped")
 

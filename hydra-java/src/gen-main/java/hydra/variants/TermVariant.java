@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.meta;
+package hydra.variants;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The identifier of a term expression constructor
  */
 public abstract class TermVariant implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.meta.TermVariant");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.TermVariant");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
   
@@ -184,7 +184,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Annotated extends hydra.meta.TermVariant implements Serializable {
+  public static final class Annotated extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Annotated (Boolean value) {
@@ -212,7 +212,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Application extends hydra.meta.TermVariant implements Serializable {
+  public static final class Application extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Application (Boolean value) {
@@ -240,7 +240,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Either extends hydra.meta.TermVariant implements Serializable {
+  public static final class Either extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Either (Boolean value) {
@@ -268,7 +268,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Function extends hydra.meta.TermVariant implements Serializable {
+  public static final class Function extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Function (Boolean value) {
@@ -296,7 +296,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Let extends hydra.meta.TermVariant implements Serializable {
+  public static final class Let extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Let (Boolean value) {
@@ -324,7 +324,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class List extends hydra.meta.TermVariant implements Serializable {
+  public static final class List extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public List (Boolean value) {
@@ -352,7 +352,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Literal extends hydra.meta.TermVariant implements Serializable {
+  public static final class Literal extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Literal (Boolean value) {
@@ -380,7 +380,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Map extends hydra.meta.TermVariant implements Serializable {
+  public static final class Map extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Map (Boolean value) {
@@ -408,7 +408,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Maybe extends hydra.meta.TermVariant implements Serializable {
+  public static final class Maybe extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Maybe (Boolean value) {
@@ -436,7 +436,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Pair extends hydra.meta.TermVariant implements Serializable {
+  public static final class Pair extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Pair (Boolean value) {
@@ -464,7 +464,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Product extends hydra.meta.TermVariant implements Serializable {
+  public static final class Product extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Product (Boolean value) {
@@ -492,7 +492,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Record extends hydra.meta.TermVariant implements Serializable {
+  public static final class Record extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Record (Boolean value) {
@@ -520,7 +520,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Set extends hydra.meta.TermVariant implements Serializable {
+  public static final class Set extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Set (Boolean value) {
@@ -548,7 +548,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Sum extends hydra.meta.TermVariant implements Serializable {
+  public static final class Sum extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Sum (Boolean value) {
@@ -576,7 +576,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class TypeApplication extends hydra.meta.TermVariant implements Serializable {
+  public static final class TypeApplication extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public TypeApplication (Boolean value) {
@@ -604,7 +604,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class TypeLambda extends hydra.meta.TermVariant implements Serializable {
+  public static final class TypeLambda extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public TypeLambda (Boolean value) {
@@ -632,7 +632,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Union extends hydra.meta.TermVariant implements Serializable {
+  public static final class Union extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Union (Boolean value) {
@@ -660,7 +660,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Unit extends hydra.meta.TermVariant implements Serializable {
+  public static final class Unit extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Unit (Boolean value) {
@@ -688,7 +688,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Variable extends hydra.meta.TermVariant implements Serializable {
+  public static final class Variable extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Variable (Boolean value) {
@@ -716,7 +716,7 @@ public abstract class TermVariant implements Serializable {
     }
   }
   
-  public static final class Wrap extends hydra.meta.TermVariant implements Serializable {
+  public static final class Wrap extends hydra.variants.TermVariant implements Serializable {
     public final Boolean value;
     
     public Wrap (Boolean value) {

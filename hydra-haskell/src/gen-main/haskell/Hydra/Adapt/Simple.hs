@@ -19,10 +19,10 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals_
 import qualified Hydra.Module as Module
 import qualified Hydra.Reduction as Reduction
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -133,7 +133,7 @@ adaptLiteralType constraints lt =
 adaptLiteralTypesMap :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType)
 adaptLiteralTypesMap constraints =  
   let tryType = (\lt -> Maybes.maybe Nothing (\lt2 -> Just (lt, lt2)) (adaptLiteralType constraints lt))
-  in (Maps.fromList (Maybes.cat (Lists.map tryType Variants.literalTypes)))
+  in (Maps.fromList (Maybes.cat (Lists.map tryType Reflect.literalTypes)))
 
 adaptLiteralValue :: (Ord t0) => (M.Map t0 Core.LiteralType -> t0 -> Core.Literal -> Core.Literal)
 adaptLiteralValue litmap lt l = (Maybes.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap))
@@ -152,7 +152,7 @@ adaptTerm constraints litmap term0 =
   let rewrite = (\recurse -> \term0 ->  
           let forSupported = (\term -> (\x -> case x of
                   Core.TermLiteral v1 ->  
-                    let lt = (Variants.literalType v1)
+                    let lt = (Reflect.literalType v1)
                     in (Flows.pure (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v1)))))
                   _ -> (Flows.pure (Just term))) term) 
               forUnsupported = (\term ->  
@@ -160,7 +160,7 @@ adaptTerm constraints litmap term0 =
                           tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (forNonNull alts))
                       in (Flows.bind (termAlternatives term) (\alts -> tryAlts alts)))
               tryTerm = (\term ->  
-                      let supportedVariant = (Sets.member (Variants.termVariant term) (Coders.languageConstraintsTermVariants constraints))
+                      let supportedVariant = (Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                       in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
           in (Flows.bind (recurse term0) (\term1 -> Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat [
             "no alternatives for term: ",
@@ -178,7 +178,7 @@ adaptType constraints litmap type0 =
                 let alts = (typeAlternatives typ)
                 in (tryAlts alts))
       tryType = (\typ ->  
-              let supportedVariant = (Sets.member (Variants.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
+              let supportedVariant = (Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
               in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ)))
   in  
     let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Maybes.maybe (Flows.fail (Strings.cat [
@@ -213,7 +213,7 @@ literalTypeSupported constraints lt =
           Core.LiteralTypeFloat v1 -> (Sets.member v1 (Coders.languageConstraintsFloatTypes constraints))
           Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
           _ -> True) lt)
-  in (Logic.ifElse (Sets.member (Variants.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
+  in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
 schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))

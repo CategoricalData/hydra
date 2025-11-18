@@ -29,12 +29,12 @@ public class LanguageConstraints implements Serializable {
   /**
    * All supported elimination variants
    */
-  public final java.util.Set<hydra.meta.EliminationVariant> eliminationVariants;
+  public final java.util.Set<hydra.variants.EliminationVariant> eliminationVariants;
   
   /**
    * All supported literal variants
    */
-  public final java.util.Set<hydra.meta.LiteralVariant> literalVariants;
+  public final java.util.Set<hydra.variants.LiteralVariant> literalVariants;
   
   /**
    * All supported float types
@@ -44,7 +44,7 @@ public class LanguageConstraints implements Serializable {
   /**
    * All supported function variants
    */
-  public final java.util.Set<hydra.meta.FunctionVariant> functionVariants;
+  public final java.util.Set<hydra.variants.FunctionVariant> functionVariants;
   
   /**
    * All supported integer types
@@ -54,19 +54,19 @@ public class LanguageConstraints implements Serializable {
   /**
    * All supported term variants
    */
-  public final java.util.Set<hydra.meta.TermVariant> termVariants;
+  public final java.util.Set<hydra.variants.TermVariant> termVariants;
   
   /**
    * All supported type variants
    */
-  public final java.util.Set<hydra.meta.TypeVariant> typeVariants;
+  public final java.util.Set<hydra.variants.TypeVariant> typeVariants;
   
   /**
    * A logical set of types, as a predicate which tests a type for inclusion
    */
   public final java.util.function.Function<hydra.core.Type, Boolean> types;
   
-  public LanguageConstraints (java.util.Set<hydra.meta.EliminationVariant> eliminationVariants, java.util.Set<hydra.meta.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.meta.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.meta.TermVariant> termVariants, java.util.Set<hydra.meta.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type, Boolean> types) {
+  public LanguageConstraints (java.util.Set<hydra.variants.EliminationVariant> eliminationVariants, java.util.Set<hydra.variants.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.variants.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.variants.TermVariant> termVariants, java.util.Set<hydra.variants.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type, Boolean> types) {
     java.util.Objects.requireNonNull((eliminationVariants));
     java.util.Objects.requireNonNull((literalVariants));
     java.util.Objects.requireNonNull((floatTypes));
@@ -99,12 +99,12 @@ public class LanguageConstraints implements Serializable {
     return 2 * eliminationVariants.hashCode() + 3 * literalVariants.hashCode() + 5 * floatTypes.hashCode() + 7 * functionVariants.hashCode() + 11 * integerTypes.hashCode() + 13 * termVariants.hashCode() + 17 * typeVariants.hashCode() + 19 * types.hashCode();
   }
   
-  public LanguageConstraints withEliminationVariants(java.util.Set<hydra.meta.EliminationVariant> eliminationVariants) {
+  public LanguageConstraints withEliminationVariants(java.util.Set<hydra.variants.EliminationVariant> eliminationVariants) {
     java.util.Objects.requireNonNull((eliminationVariants));
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withLiteralVariants(java.util.Set<hydra.meta.LiteralVariant> literalVariants) {
+  public LanguageConstraints withLiteralVariants(java.util.Set<hydra.variants.LiteralVariant> literalVariants) {
     java.util.Objects.requireNonNull((literalVariants));
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
@@ -114,7 +114,7 @@ public class LanguageConstraints implements Serializable {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withFunctionVariants(java.util.Set<hydra.meta.FunctionVariant> functionVariants) {
+  public LanguageConstraints withFunctionVariants(java.util.Set<hydra.variants.FunctionVariant> functionVariants) {
     java.util.Objects.requireNonNull((functionVariants));
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
@@ -124,12 +124,12 @@ public class LanguageConstraints implements Serializable {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withTermVariants(java.util.Set<hydra.meta.TermVariant> termVariants) {
+  public LanguageConstraints withTermVariants(java.util.Set<hydra.variants.TermVariant> termVariants) {
     java.util.Objects.requireNonNull((termVariants));
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withTypeVariants(java.util.Set<hydra.meta.TypeVariant> typeVariants) {
+  public LanguageConstraints withTypeVariants(java.util.Set<hydra.variants.TypeVariant> typeVariants) {
     java.util.Objects.requireNonNull((typeVariants));
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }

@@ -2,8 +2,6 @@
 
 package hydra.module;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -45,9 +43,9 @@ public class Module implements Serializable {
   /**
    * An optional human-readable description of the module
    */
-  public final Maybe<String> description;
+  public final hydra.util.Maybe<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, Maybe<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, hydra.util.Maybe<String> description) {
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((termDependencies));
@@ -94,7 +92,7 @@ public class Module implements Serializable {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withDescription(Maybe<String> description) {
+  public Module withDescription(hydra.util.Maybe<String> description) {
     java.util.Objects.requireNonNull((description));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }

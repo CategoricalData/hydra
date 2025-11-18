@@ -6,9 +6,9 @@ module Hydra.Sources.Test.Checking where
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Dsl.Testing
-import Hydra.Dsl.TTerms as TTerms
-import qualified Hydra.Dsl.TTypes as T
-import qualified Hydra.Dsl.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Core as Core
 import Hydra.Sources.Test.TestGraph
 
@@ -1958,43 +1958,43 @@ setsTests = supergroup "Sets" [
 monomorphicSetsTests :: TTerm TestGroup
 monomorphicSetsTests = subgroup "Monomorphic sets" [
   checkTest "empty set" []
-    (TTerms.set [])
-    (tylam "t0" $ tyapp (TTerms.set []) (T.var "t0"))
+    (MetaTerms.set [])
+    (tylam "t0" $ tyapp (MetaTerms.set []) (T.var "t0"))
     (T.forAll "t0" $ T.set $ T.var "t0"),
   noChange "int set"
-    (TTerms.set [int32 1, int32 2, int32 3])
+    (MetaTerms.set [int32 1, int32 2, int32 3])
     (T.set T.int32),
   noChange "string set"
-    (TTerms.set [string "apple", string "banana", string "cherry"])
+    (MetaTerms.set [string "apple", string "banana", string "cherry"])
     (T.set T.string),
   noChange "single element set"
-    (TTerms.set [boolean True])
+    (MetaTerms.set [boolean True])
     (T.set T.boolean)]
 
 polymorphicSetsTests :: TTerm TestGroup
 polymorphicSetsTests = subgroup "Polymorphic sets" [
   checkTest "set from lambda" []
-    (lambda "x" $ TTerms.set [var "x"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ TTerms.set [var "x"])
+    (lambda "x" $ MetaTerms.set [var "x"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ MetaTerms.set [var "x"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
   checkTest "set with repeated variable" []
-    (lambda "x" $ TTerms.set [var "x", var "x"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ TTerms.set [var "x", var "x"])
+    (lambda "x" $ MetaTerms.set [var "x", var "x"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ MetaTerms.set [var "x", var "x"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.set $ T.var "t0")),
   checkTest "set from two variables" []
-    (lambda "x" $ lambda "y" $ TTerms.set [var "x", var "y"])
-    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ TTerms.set [var "x", var "y"])
+    (lambda "x" $ lambda "y" $ MetaTerms.set [var "x", var "y"])
+    (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t0") $ MetaTerms.set [var "x", var "y"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.function (T.var "t0") (T.set $ T.var "t0")))]
 
 setsInComplexContextsTests :: TTerm TestGroup
 setsInComplexContextsTests = subgroup "Sets in complex contexts" [
   noChange "set in tuple"
-    (tuple [TTerms.set [int32 1, int32 2], string "context"])
+    (tuple [MetaTerms.set [int32 1, int32 2], string "context"])
     (T.product [T.set T.int32, T.string]),
   checkTest "set in let binding" []
-    (lets ["numbers">: TTerms.set [int32 10, int32 20, int32 30]] $
+    (lets ["numbers">: MetaTerms.set [int32 10, int32 20, int32 30]] $
       var "numbers")
-    (letsTyped [("numbers", TTerms.set [int32 10, int32 20, int32 30],
+    (letsTyped [("numbers", MetaTerms.set [int32 10, int32 20, int32 30],
       T.mono $ T.set T.int32)] $
       var "numbers")
     (T.set T.int32)]
@@ -2002,37 +2002,37 @@ setsInComplexContextsTests = subgroup "Sets in complex contexts" [
 nestedSetsTests :: TTerm TestGroup
 nestedSetsTests = subgroup "Nested sets" [
   noChange "set of lists"
-    (TTerms.set [
+    (MetaTerms.set [
       list [string "a", string "b"],
       list [string "c", string "d"]])
     (T.set $ T.list T.string),
   noChange "set of tuples"
-    (TTerms.set [
+    (MetaTerms.set [
       tuple [int32 1, int32 2],
       tuple [int32 3, int32 4]])
     (T.set $ T.product [T.int32, T.int32]),
   noChange "set of sets"
-    (TTerms.set [TTerms.set [string "nested"]])
+    (MetaTerms.set [MetaTerms.set [string "nested"]])
     (T.set $ T.set T.string)]
 
 setsWithComplexTypesTests :: TTerm TestGroup
 setsWithComplexTypesTests = subgroup "Sets with complex types" [
   noChange "set of records"
-    (TTerms.set [record (ref testTypePersonNameDef) [
+    (MetaTerms.set [record (ref testTypePersonNameDef) [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
       "age">: int32 30]])
     (T.set $ Core.typeVariable $ ref testTypePersonNameDef),
   checkTest "set of optionals" []
-    (TTerms.set [
+    (MetaTerms.set [
       optional $ just $ int32 42,
       optional nothing])
-    (TTerms.set [
+    (MetaTerms.set [
       optional $ just $ int32 42,
       tyapp (optional nothing) T.int32])
     (T.set $ T.optional T.int32),
   noChange "set of maps"
-    (TTerms.set [TTerms.map $ Phantoms.map $ M.singleton (string "key") (int32 42)])
+    (MetaTerms.set [MetaTerms.map $ Phantoms.map $ M.singleton (string "key") (int32 42)])
     (T.set $ T.map T.string T.int32)]
 
 ------ Sums ------
@@ -2169,7 +2169,7 @@ multiParameterPolymorphicInjectionsTests = subgroup "Multi-parameter polymorphic
     (T.forAll "t0" $ T.applys (Core.typeVariable $ ref testTypeEitherNameDef) [T.var "t0", T.list (T.apply (Core.typeVariable $ ref testTypeLatLonPolyNameDef) T.int32)]),
   checkTest "either in triple in map with shared type variables" []
     (lambda "x0" $ lambda "x1" $ lambda "x2" $
-      TTerms.map $ Phantoms.map $ M.singleton (string "key") $
+      MetaTerms.map $ Phantoms.map $ M.singleton (string "key") $
         record (ref testTypeTripleNameDef) [
           "first">: inject (ref testTypeEitherNameDef) "left" (var "x0"),
           "second">: inject (ref testTypeEitherNameDef) "left" (var "x0"),
@@ -2178,7 +2178,7 @@ multiParameterPolymorphicInjectionsTests = subgroup "Multi-parameter polymorphic
       lambdaTyped "x0" (T.var "t0") $
       lambdaTyped "x1" (T.var "t1") $
       lambdaTyped "x2" (T.var "t2") $
-      TTerms.map $ Phantoms.map $ M.singleton (string "key") $
+      MetaTerms.map $ Phantoms.map $ M.singleton (string "key") $
         tyapps (record (ref testTypeTripleNameDef) [
           "first">: tyapps (inject (ref testTypeEitherNameDef) "left" (var "x0")) [T.var "t0", T.var "t3"],
           "second">: tyapps (inject (ref testTypeEitherNameDef) "left" (var "x0")) [T.var "t0", T.var "t4"],

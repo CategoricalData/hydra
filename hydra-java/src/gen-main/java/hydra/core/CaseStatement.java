@@ -2,8 +2,6 @@
 
 package hydra.core;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -26,14 +24,14 @@ public class CaseStatement implements Serializable {
   /**
    * An optional default case, used if none of the explicit cases match
    */
-  public final Maybe<Term> default_;
+  public final hydra.util.Maybe<hydra.core.Term> default_;
   
   /**
    * A list of case alternatives, one per union field
    */
   public final java.util.List<hydra.core.Field> cases;
   
-  public CaseStatement (hydra.core.Name typeName, Maybe<Term> default_, java.util.List<hydra.core.Field> cases) {
+  public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, java.util.List<hydra.core.Field> cases) {
     java.util.Objects.requireNonNull((typeName));
     java.util.Objects.requireNonNull((default_));
     java.util.Objects.requireNonNull((cases));
@@ -61,7 +59,7 @@ public class CaseStatement implements Serializable {
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withDefault(Maybe<Term> default_) {
+  public CaseStatement withDefault(hydra.util.Maybe<hydra.core.Term> default_) {
     java.util.Objects.requireNonNull((default_));
     return new CaseStatement(typeName, default_, cases);
   }

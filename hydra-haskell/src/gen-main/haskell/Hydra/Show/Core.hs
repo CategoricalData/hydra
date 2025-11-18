@@ -41,16 +41,12 @@ binding el =
 -- | Show an elimination as a string
 elimination :: (Core.Elimination -> String)
 elimination elm = ((\x -> case x of
-  Core.EliminationProduct v1 ->  
-    let arity = (Core.tupleProjectionArity v1)
-    in  
-      let index = (Core.tupleProjectionIndex v1)
-      in (Strings.cat [
-        "[",
-        Literals.showInt32 index,
-        "/",
-        Literals.showInt32 arity,
-        "]"])
+  Core.EliminationProduct v1 -> (Strings.cat [
+    "[",
+    Literals.showInt32 (Core.tupleProjectionIndex v1),
+    "/",
+    Literals.showInt32 (Core.tupleProjectionArity v1),
+    "]"])
   Core.EliminationRecord v1 ->  
     let tname = (Core.unName (Core.projectionTypeName v1))
     in  
@@ -91,7 +87,10 @@ field field =
   let fname = (Core.unName (Core.fieldName field))
   in  
     let fterm = (Core.fieldTerm field)
-    in (Strings.cat2 fname (Strings.cat2 "=" (term fterm)))
+    in (Strings.cat [
+      fname,
+      "=",
+      (term fterm)])
 
 fieldType :: (Core.FieldType -> String)
 fieldType ft =  

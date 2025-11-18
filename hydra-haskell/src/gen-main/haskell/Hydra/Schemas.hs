@@ -20,10 +20,10 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Meta as Meta
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core___
 import qualified Hydra.Sorting as Sorting
@@ -237,10 +237,10 @@ isEnumType typ = ((\x -> case x of
 -- | Check if an element is serializable (no function types in dependencies)
 isSerializable :: (Core.Binding -> Compute.Flow Graph.Graph Bool)
 isSerializable el =  
-  let variants = (\typ -> Lists.map Variants.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
+  let variants = (\typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
   in (Flows.map (\deps ->  
     let allVariants = (Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps))))
-    in (Logic.not (Sets.member Meta.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity (Core.bindingName el)))
+    in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity (Core.bindingName el)))
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))

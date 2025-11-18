@@ -3,12 +3,12 @@ module Hydra.Dsl.Testing where
 
 import Hydra.Kernel
 import Hydra.Testing as Testing
-import Hydra.Dsl.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Core as Core
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.TTerms as TTerms
-import qualified Hydra.Dsl.TTypes as T
+import qualified Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Types as T
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -23,7 +23,7 @@ expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
 
 expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly params typ
 
-groupRef = TTerms.varNamePhantom . bindingName
+groupRef = MetaTerms.varNamePhantom . bindingName
 
 infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)

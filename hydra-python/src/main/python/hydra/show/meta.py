@@ -4,120 +4,132 @@ r"""String representations of hydra.meta types."""
 
 from __future__ import annotations
 import hydra.core
-import hydra.meta
+import hydra.variants
 
-def term_variant(v1: hydra.meta.TermVariant) -> str:
+def term_variant(v1: hydra.variants.TermVariant) -> str:
     r"""Show a term variant as a string."""
     
     match v1:
-        case hydra.meta.TermVariant.ANNOTATED:
+        case hydra.variants.TermVariant.ANNOTATED:
             return "annotated"
         
-        case hydra.meta.TermVariant.APPLICATION:
+        case hydra.variants.TermVariant.APPLICATION:
             return "application"
         
-        case hydra.meta.TermVariant.FUNCTION:
+        case hydra.variants.TermVariant.EITHER:
+            return "either"
+        
+        case hydra.variants.TermVariant.FUNCTION:
             return "function"
         
-        case hydra.meta.TermVariant.LET:
+        case hydra.variants.TermVariant.LET:
             return "let"
         
-        case hydra.meta.TermVariant.LIST:
+        case hydra.variants.TermVariant.LIST:
             return "list"
         
-        case hydra.meta.TermVariant.LITERAL:
+        case hydra.variants.TermVariant.LITERAL:
             return "literal"
         
-        case hydra.meta.TermVariant.MAP:
+        case hydra.variants.TermVariant.MAP:
             return "map"
         
-        case hydra.meta.TermVariant.MAYBE:
+        case hydra.variants.TermVariant.MAYBE:
             return "maybe"
         
-        case hydra.meta.TermVariant.PRODUCT:
+        case hydra.variants.TermVariant.PAIR:
+            return "pair"
+        
+        case hydra.variants.TermVariant.PRODUCT:
             return "product"
         
-        case hydra.meta.TermVariant.RECORD:
+        case hydra.variants.TermVariant.RECORD:
             return "record"
         
-        case hydra.meta.TermVariant.SET:
+        case hydra.variants.TermVariant.SET:
             return "set"
         
-        case hydra.meta.TermVariant.SUM:
+        case hydra.variants.TermVariant.SUM:
             return "sum"
         
-        case hydra.meta.TermVariant.TYPE_LAMBDA:
+        case hydra.variants.TermVariant.TYPE_LAMBDA:
             return "typeLambda"
         
-        case hydra.meta.TermVariant.TYPE_APPLICATION:
+        case hydra.variants.TermVariant.TYPE_APPLICATION:
             return "typeApplication"
         
-        case hydra.meta.TermVariant.UNION:
+        case hydra.variants.TermVariant.UNION:
             return "union"
         
-        case hydra.meta.TermVariant.UNIT:
+        case hydra.variants.TermVariant.UNIT:
             return "unit"
         
-        case hydra.meta.TermVariant.VARIABLE:
+        case hydra.variants.TermVariant.VARIABLE:
             return "variable"
         
-        case hydra.meta.TermVariant.WRAP:
+        case hydra.variants.TermVariant.WRAP:
             return "wrap"
         
         case _:
-            raise TypeError("Unsupported TermVariant")
+            raise AssertionError("Unreachable: all variants handled")
 
-def type_variant(v1: hydra.meta.TypeVariant) -> str:
+def type_variant(v1: hydra.variants.TypeVariant) -> str:
     r"""Show a type variant as a string."""
     
     match v1:
-        case hydra.meta.TypeVariant.ANNOTATED:
+        case hydra.variants.TypeVariant.ANNOTATED:
             return "annotated"
         
-        case hydra.meta.TypeVariant.APPLICATION:
+        case hydra.variants.TypeVariant.APPLICATION:
             return "application"
         
-        case hydra.meta.TypeVariant.FORALL:
+        case hydra.variants.TypeVariant.EITHER:
+            return "either"
+        
+        case hydra.variants.TypeVariant.FORALL:
             return "forall"
         
-        case hydra.meta.TypeVariant.FUNCTION:
+        case hydra.variants.TypeVariant.FUNCTION:
             return "function"
         
-        case hydra.meta.TypeVariant.LIST:
+        case hydra.variants.TypeVariant.LIST:
             return "list"
         
-        case hydra.meta.TypeVariant.LITERAL:
+        case hydra.variants.TypeVariant.LITERAL:
             return "literal"
         
-        case hydra.meta.TypeVariant.MAP:
+        case hydra.variants.TypeVariant.MAP:
             return "map"
         
-        case hydra.meta.TypeVariant.MAYBE:
+        case hydra.variants.TypeVariant.MAYBE:
             return "maybe"
         
-        case hydra.meta.TypeVariant.PRODUCT:
+        case hydra.variants.TypeVariant.PAIR:
+            return "pair"
+        
+        case hydra.variants.TypeVariant.PRODUCT:
             return "product"
         
-        case hydra.meta.TypeVariant.RECORD:
+        case hydra.variants.TypeVariant.RECORD:
             return "record"
         
-        case hydra.meta.TypeVariant.SET:
+        case hydra.variants.TypeVariant.SET:
             return "set"
         
-        case hydra.meta.TypeVariant.SUM:
+        case hydra.variants.TypeVariant.SUM:
             return "sum"
         
-        case hydra.meta.TypeVariant.UNION:
+        case hydra.variants.TypeVariant.UNION:
             return "union"
         
-        case hydra.meta.TypeVariant.UNIT:
+        case hydra.variants.TypeVariant.UNIT:
             return "unit"
         
-        case hydra.meta.TypeVariant.VARIABLE:
+        case hydra.variants.TypeVariant.VARIABLE:
             return "variable"
         
-        case hydra.meta.TypeVariant.WRAP:
+        case hydra.variants.TypeVariant.WRAP:
             return "wrap"
         
         case _:
-            raise TypeError("Unsupported TypeVariant")
+            raise AssertionError("Unreachable: all variants handled")

@@ -21,6 +21,7 @@ module Hydra.Kernel (
   module Hydra.Annotations,
   module Hydra.Arity,
   module Hydra.Checking,
+  module Hydra.Classes,
   module Hydra.Coders,
   module Hydra.Compute,
   module Hydra.Constants,
@@ -33,12 +34,12 @@ module Hydra.Kernel (
   module Hydra.Inference,
   module Hydra.Lexical,
   module Hydra.Literals,
-  module Hydra.Meta,
   module Hydra.Module,
   module Hydra.Phantoms,
   module Hydra.Names,
   module Hydra.Query,
   module Hydra.Reduction,
+  module Hydra.Reflect,
   module Hydra.Relational,
   module Hydra.Rewriting,
   module Hydra.Schemas,
@@ -64,6 +65,7 @@ import Hydra.Adapt.Utils
 import Hydra.Annotations
 import Hydra.Arity
 import Hydra.Checking
+import Hydra.Classes
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
@@ -76,12 +78,12 @@ import Hydra.Graph
 import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
-import Hydra.Meta
 import Hydra.Module
 import Hydra.Phantoms
 import Hydra.Names
 import Hydra.Query
 import Hydra.Reduction
+import Hydra.Reflect
 import Hydra.Relational
 import Hydra.Rewriting
 import Hydra.Schemas

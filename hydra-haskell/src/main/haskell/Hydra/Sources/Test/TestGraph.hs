@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Maybes    as Maybes
-import qualified Hydra.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Terms         as Terms
@@ -29,8 +29,8 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Dsl.TTypes as T
-import           Hydra.Dsl.TTerms as TTerms
+import qualified Hydra.Dsl.Meta.Types as T
+import           Hydra.Dsl.Meta.Terms as MetaTerms
 import           Hydra.Sources.Test.TestTerms
 import           Hydra.Sources.Test.TestTypes
 

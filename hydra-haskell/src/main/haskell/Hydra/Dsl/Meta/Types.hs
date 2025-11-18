@@ -1,15 +1,15 @@
 -- | A domain-specific language for constructing term-encoded Hydra types in Haskell;
 --   these functions enable you to build terms (programs) which build types.
 
-module Hydra.Dsl.TTypes (
-  module Hydra.Dsl.TBase,
-  module Hydra.Dsl.TTypes,
+module Hydra.Dsl.Meta.Types (
+  module Hydra.Dsl.Meta.Base,
+  module Hydra.Dsl.Meta.Types,
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Core as Core hiding (name, unName)
-import Hydra.Dsl.TBase
+import Hydra.Dsl.Meta.Base
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -145,6 +145,11 @@ integer t = Phantoms.unitVariant _IntegerType $ case t of
 list :: TTerm Type -> TTerm Type
 list = typeList
 
+-- | Create a term-encoded literal type from a LiteralType value
+-- Example: literal (literalTypeInteger integerTypeInt32)
+literal :: TTerm LiteralType -> TTerm Type
+literal = typeLiteral
+
 -- | Create a term-encoded map/dictionary type
 -- Example: map string int32
 map :: TTerm Type -> TTerm Type -> TTerm Type
@@ -256,7 +261,7 @@ enum tname names = union tname $ (\n -> (name n, unit)) <$> names
 -- In future versions, this may include validation constraints
 -- Example: nonNegativeInt32
 nonNegativeInt32 :: TTerm Type
-nonNegativeInt32 = Hydra.Dsl.TTypes.int32
+nonNegativeInt32 = Hydra.Dsl.Meta.Types.int32
 
 -- | Attach an annotation to a term-encoded type
 -- Example: annot annotationMap myType

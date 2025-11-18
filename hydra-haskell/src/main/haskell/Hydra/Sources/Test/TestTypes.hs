@@ -10,8 +10,8 @@ import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.List               as L
 
-import qualified Hydra.Dsl.TTypes as T
-import           Hydra.Dsl.TTerms as TTerms
+import qualified Hydra.Dsl.Meta.Types as T
+import           Hydra.Dsl.Meta.Terms as MetaTerms
 
 
 testTypesModule :: Module

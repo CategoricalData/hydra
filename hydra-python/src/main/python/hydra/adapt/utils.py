@@ -17,9 +17,9 @@ import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.meta
 import hydra.module
 import hydra.names
+import hydra.reflect
 import hydra.rewriting
 import hydra.show.core
 import hydra.util
@@ -74,7 +74,7 @@ def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt:
             
             case _:
                 return True
-    return hydra.lib.logic.and_(hydra.lib.sets.member(hydra.variants.literal_type_variant(lt), constraints.literal_variants), is_supported(lt))
+    return hydra.lib.logic.and_(hydra.lib.sets.member(hydra.reflect.literal_type_variant(lt), constraints.literal_variants), is_supported(lt))
 
 def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
     r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
@@ -92,14 +92,14 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
     r"""Check if type is supported by language constraints."""
     
     base = hydra.rewriting.deannotate_type(t)
-    def is_variable(v: hydra.meta.TypeVariant) -> bool:
+    def is_variable(v: hydra.variants.TypeVariant) -> bool:
         match v:
-            case hydra.meta.TypeVariant.VARIABLE:
+            case hydra.variants.TypeVariant.VARIABLE:
                 return True
             
             case _:
                 return False
-    def is_supported_variant(v: hydra.meta.TypeVariant) -> bool:
+    def is_supported_variant(v: hydra.variants.TypeVariant) -> bool:
         return hydra.lib.logic.or_(is_variable(v), hydra.lib.sets.member(v, constraints.type_variants))
     def is_supported(base: hydra.core.Type) -> bool:
         match base:
@@ -156,7 +156,7 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             
             case _:
                 raise TypeError("Unsupported Type")
-    return hydra.lib.logic.and_(constraints.types(base), hydra.lib.logic.and_(is_supported_variant(hydra.variants.type_variant(base)), is_supported(base)))
+    return hydra.lib.logic.and_(constraints.types(base), hydra.lib.logic.and_(is_supported_variant(hydra.reflect.type_variant(base)), is_supported(base)))
 
 def unidirectional_coder[T0, T1, T2, T3](m: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Coder[T1, T3, T0, T2]:
     return cast(hydra.compute.Coder[T1, T3, T0, T2], hydra.compute.Coder(m, (lambda _: hydra.lib.flows.fail("inbound mapping is unsupported"))))

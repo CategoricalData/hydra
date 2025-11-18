@@ -6,7 +6,7 @@ import Hydra.Core (Term)
 import Hydra.Pg.Model (Vertex, Edge)
 import Hydra.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
-import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Maybes as Maybes

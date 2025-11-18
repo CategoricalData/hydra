@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Kernel.Types.Meta where
+module Hydra.Sources.Kernel.Types.Variants where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
@@ -17,9 +17,9 @@ import qualified Data.Maybe                      as Y
 
 module_ :: Module
 module_ = Module ns elements [Core.module_] [Core.module_] $
-    Just ("Metadata and reflection types which describe the structure of Hydra core types and terms.")
+    Just ("Variant types which describe the structure of Hydra core types and terms.")
   where
-    ns = Namespace "hydra.meta"
+    ns = Namespace "hydra.variants"
     core = typeref $ moduleNamespace Core.module_
     meta = typeref ns
     def = datatype ns
@@ -73,12 +73,6 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "unit",
           "variable",
           "wrap"],
-
-      def "TypeClass" $
-        doc "Any of a small number of built-in type classes" $
-        enum [
-          "equality",
-          "ordering"],
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $

@@ -31,22 +31,22 @@ import qualified Hydra.Dsl.Lib.Sets      as Sets
 import           Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
-import qualified Hydra.Dsl.Meta          as Meta
+import qualified Hydra.Dsl.Meta.Base     as MetaBase
+import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
+import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Module        as Module
-import           Hydra.Dsl.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Testing       as Testing
-import qualified Hydra.Dsl.TBase         as TBase
 import qualified Hydra.Dsl.Terms         as Terms
 import qualified Hydra.Dsl.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Topology      as Topology
-import qualified Hydra.Dsl.TTerms        as TTerms
-import qualified Hydra.Dsl.TTypes        as TTypes
 import qualified Hydra.Dsl.Types         as Types
 import qualified Hydra.Dsl.Typing        as Typing
 import qualified Hydra.Dsl.Util          as Util
+import qualified Hydra.Dsl.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
@@ -55,27 +55,26 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Checking as Checking
+import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Checking     as Checking
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
-import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
-import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Typing as ShowTyping
-import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Typing  as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
-import qualified Hydra.Sources.Kernel.Terms.Unification as Unification
-import qualified Hydra.Sources.Kernel.Terms.Variants as Variants
+import qualified Hydra.Sources.Kernel.Terms.Unification  as Unification
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.inference") elements
-    [Annotations.module_, Checking.module_, Lexical.module_, Schemas.module_,
-      ShowCore.module_, ShowTyping.module_,
-      Sorting.module_, Unification.module_, Variants.module_]
+    [Annotations.module_, Checking.module_, ExtractCore.module_, Lexical.module_, Monads.module_, Reflect.module_,
+      Rewriting.module_, Schemas.module_, ShowCore.module_, ShowTyping.module_, Sorting.module_, Substitution.module_,
+      Unification.module_]
     kernelTypesModules $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
@@ -326,7 +325,7 @@ inferTypeOfDef = define "inferTypeOf" $
   -- Top-level let term which allows us to easily extract an inferred type scheme
   "letTerm" <~ Core.termLet (Core.let_
     (list [Core.binding (Core.name $ string "ignoredVariableName") (var "term") nothing])
-    (TTerms.string "ignoredBody")) $
+    (MetaTerms.string "ignoredBody")) $
   "forBindings" <~ ("bindings" ~>
     "binding" <~ Lists.head (var "bindings") $
     "term1" <~ Core.bindingTerm (var "binding") $
@@ -752,7 +751,7 @@ inferTypeOfLiteralDef = define "inferTypeOfLiteral" $
   "_" ~> "lit" ~>
   produce $ Typing.inferenceResult
     (Core.termLiteral $ var "lit")
-    (Core.typeLiteral $ ref Variants.literalTypeDef @@ var "lit")
+    (Core.typeLiteral $ ref Reflect.literalTypeDef @@ var "lit")
     (ref Substitution.idTypeSubstDef)
 
 inferTypeOfMapDef :: TBinding (InferenceContext -> M.Map Term Term -> Flow s InferenceResult)
