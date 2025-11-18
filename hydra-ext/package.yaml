@@ -31,16 +31,13 @@ library:
     - src/gen-main/haskell
     - ../hydra-haskell/src/main/haskell
     - ../hydra-haskell/src/gen-main/haskell
-  # TODO: temporary, for debugging
   ghc-options: [-rtsopts]
-  ghc-prof-options: [-fprof-auto, -fprof-auto-calls]
 
 executables:
   hydra-ext-debug:
     source-dirs: debug
     main: Main.hs
     ghc-options: [-rtsopts]
-    ghc-prof-options: [-fprof-auto, -fprof-auto-calls]
     dependencies:
       - base
       - hydra-ext
