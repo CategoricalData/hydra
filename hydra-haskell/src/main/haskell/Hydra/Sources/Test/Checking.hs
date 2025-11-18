@@ -2211,7 +2211,7 @@ unionEliminationsTests = supergroup "Union eliminations" [
   recursiveUnionEliminationsTests]
 
 simpleUnitVariantEliminationsTests :: TTerm TestGroup
-simpleUnitVariantEliminationsTests = subgroup "Simple unit variant eliminations" [
+simpleUnitVariantEliminationsTests = subgroup "Simple unit inject eliminations" [
   checkTest "match Comparison with all cases" []
     (match (ref testTypeComparisonNameDef) nothing [
       "lessThan">: lambda "x" (string "less"),
@@ -3148,9 +3148,9 @@ checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms
 noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
 noChange name term typ = checkTest name [] term term typ
 
--- Create a TestCase variant for type checking
+-- Create a TestCase inject for type checking
 testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = variant _TestCase _TestCase_typeChecking
+testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
 
 -- Create a TypeCheckingTestCase record
 typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase

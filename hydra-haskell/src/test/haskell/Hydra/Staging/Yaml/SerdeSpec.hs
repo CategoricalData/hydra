@@ -92,7 +92,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization yamlStringCoder
       (TypeApplicationTerm
-        (inject testTypeName "left" (string "test"))
+        (inject testTypeName (Name "left") (string "test"))
         (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32]))
       "left: test\n"
 

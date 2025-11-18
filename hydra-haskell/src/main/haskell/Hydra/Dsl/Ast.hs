@@ -11,16 +11,16 @@ import qualified Data.Int as I
 -- Associativity
 
 associativityNone :: TTerm Associativity
-associativityNone = unitVariant _Associativity _Associativity_none
+associativityNone = injectUnit _Associativity _Associativity_none
 
 associativityLeft :: TTerm Associativity
-associativityLeft = unitVariant _Associativity _Associativity_left
+associativityLeft = injectUnit _Associativity _Associativity_left
 
 associativityRight :: TTerm Associativity
-associativityRight = unitVariant _Associativity _Associativity_right
+associativityRight = injectUnit _Associativity _Associativity_right
 
 associativityBoth :: TTerm Associativity
-associativityBoth = unitVariant _Associativity _Associativity_both
+associativityBoth = injectUnit _Associativity _Associativity_both
 
 -- BlockStyle
 
@@ -72,16 +72,16 @@ bracketsClose b = project _Brackets _Brackets_close @@ b
 -- Expr (sum type)
 
 exprConst :: TTerm Symbol -> TTerm Expr
-exprConst sym = variant _Expr _Expr_const sym
+exprConst sym = inject _Expr _Expr_const sym
 
 exprIndent :: TTerm IndentedExpression -> TTerm Expr
-exprIndent ind = variant _Expr _Expr_indent ind
+exprIndent ind = inject _Expr _Expr_indent ind
 
 exprOp :: TTerm OpExpr -> TTerm Expr
-exprOp op = variant _Expr _Expr_op op
+exprOp op = inject _Expr _Expr_op op
 
 exprBrackets :: TTerm BracketExpr -> TTerm Expr
-exprBrackets be = variant _Expr _Expr_brackets be
+exprBrackets be = inject _Expr _Expr_brackets be
 
 -- IndentedExpression
 
@@ -99,10 +99,10 @@ indentedExpressionExpr ie = project _IndentedExpression _IndentedExpression_expr
 -- IndentStyle (sum type)
 
 indentStyleAllLines :: TTerm String -> TTerm IndentStyle
-indentStyleAllLines s = variant _IndentStyle _IndentStyle_allLines s
+indentStyleAllLines s = inject _IndentStyle _IndentStyle_allLines s
 
 indentStyleSubsequentLines :: TTerm String -> TTerm IndentStyle
-indentStyleSubsequentLines s = variant _IndentStyle _IndentStyle_subsequentLines s
+indentStyleSubsequentLines s = inject _IndentStyle _IndentStyle_subsequentLines s
 
 -- Op
 
@@ -174,16 +174,16 @@ unSymbol s = unwrap _Symbol @@ s
 -- Ws (sum type)
 
 wsNone :: TTerm Ws
-wsNone = unitVariant _Ws _Ws_none
+wsNone = injectUnit _Ws _Ws_none
 
 wsSpace :: TTerm Ws
-wsSpace = unitVariant _Ws _Ws_space
+wsSpace = injectUnit _Ws _Ws_space
 
 wsBreak :: TTerm Ws
-wsBreak = unitVariant _Ws _Ws_break
+wsBreak = injectUnit _Ws _Ws_break
 
 wsBreakAndIndent :: TTerm String -> TTerm Ws
-wsBreakAndIndent s = variant _Ws _Ws_breakAndIndent s
+wsBreakAndIndent s = inject _Ws _Ws_breakAndIndent s
 
 wsDoubleBreak :: TTerm Ws
-wsDoubleBreak = unitVariant _Ws _Ws_doubleBreak
+wsDoubleBreak = injectUnit _Ws _Ws_doubleBreak

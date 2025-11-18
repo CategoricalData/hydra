@@ -28,32 +28,32 @@ individualEncoderTestCases = do
     H.it "string literal type" $ do
       H.shouldBe
         (strip $ EncodeCore.literalType LiteralTypeString :: Term)
-        (strip $ unitVariant _LiteralType _LiteralType_string)
+        (strip $ injectUnit _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
         (strip $ EncodeCore.type_ Types.string :: Term)
-        (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
+        (strip $ inject _Type _Type_literal (injectUnit _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
         (strip $ EncodeCore.type_ Types.int32 :: Term)
-        (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
+        (strip $ inject _Type _Type_literal (inject _LiteralType _LiteralType_integer $ injectUnit _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (strip $ EncodeCore.type_ (TypeRecord $ RowType (Name "Example")
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
-        (strip $ variant _Type _Type_record $
+        (strip $ inject _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ wrap _Name $ string "Example",
             Field _RowType_fields $ list [
               record _FieldType [
                 Field _FieldType_name $ wrap _Name $ string "something",
-                Field _FieldType_type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
+                Field _FieldType_type $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string],
               record _FieldType [
                 Field _FieldType_name $ wrap _Name $ string "nothing",
-                Field _FieldType_type $ unitVariant _Type _Type_unit]]])
+                Field _FieldType_type $ injectUnit _Type _Type_unit]]])
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -62,30 +62,30 @@ individualDecoderTestCases = do
     H.it "float32 literal type" $ do
       shouldSucceedWith
         (DecodeCore.literalType
-          (variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
+          (inject _LiteralType _LiteralType_float $ injectUnit _FloatType _FloatType_float32))
         (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
       shouldSucceedWith
         (DecodeCore.type_
-          (variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
+          (inject _Type _Type_literal $ inject _LiteralType _LiteralType_float $ injectUnit _FloatType _FloatType_float32))
         Types.float32
 
     H.it "union type" $ do
       shouldSucceedWith
         (DecodeCore.type_ $
-          variant _Type _Type_union $ record _RowType [
+          inject _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ wrap _Name $ string (unName testTypeName),
             Field _RowType_fields $
               list [
                 record _FieldType [
                   Field _FieldType_name $ wrap _Name $ string "left",
-                  Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_integer $
-                    unitVariant _IntegerType _IntegerType_int64],
+                  Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
+                    injectUnit _IntegerType _IntegerType_int64],
                 record _FieldType [
                   Field _FieldType_name $ wrap _Name $ string "right",
-                  Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $
-                    unitVariant _FloatType _FloatType_float64]]])
+                  Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_float $
+                    injectUnit _FloatType _FloatType_float64]]])
           (TypeUnion $ RowType testTypeName [
             Types.field "left" Types.int64,
             Types.field "right" Types.float64])
@@ -95,10 +95,10 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      shouldFail (DecodeCore.type_ $ variant untyped (Name "unknownField") $ list [])
+      shouldFail (DecodeCore.type_ $ inject untyped (Name "unknownField") $ list [])
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      shouldFail (DecodeCore.type_ $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
+      shouldFail (DecodeCore.type_ $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_integer)
 
 metadataIsPreserved :: H.SpecWith ()
 metadataIsPreserved = do

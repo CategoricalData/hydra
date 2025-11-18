@@ -67,11 +67,11 @@ encodeCaseWithMetadata (TestCaseWithMetadata name tcase mdesc tags) = Terms.reco
   Field _TestCaseWithMetadata_description $ Terms.optional (Terms.string <$> mdesc),
   Field _TestCaseWithMetadata_tags $ Terms.list (Terms.string . unTag <$> tags)]
 encodeCase tcase = case tcase of
-  TestCaseCaseConversion ccase -> Terms.variant _TestCase _TestCase_caseConversion $ encodeCaseConversionTestCase ccase
-  TestCaseEtaExpansion ecase -> Terms.variant _TestCase _TestCase_etaExpansion $ encodeEtaExpansionTestCase ecase
-  TestCaseEvaluation ecase -> Terms.variant _TestCase _TestCase_evaluation $ encodeEvaluationTestCase ecase
-  TestCaseInference icase -> Terms.variant _TestCase _TestCase_inference $ encodeInferenceTestCase icase
-encodeCaseConvention c = Terms.unitVariant _CaseConvention $ case c of
+  TestCaseCaseConversion ccase -> Terms.inject _TestCase _TestCase_caseConversion $ encodeCaseConversionTestCase ccase
+  TestCaseEtaExpansion ecase -> Terms.inject _TestCase _TestCase_etaExpansion $ encodeEtaExpansionTestCase ecase
+  TestCaseEvaluation ecase -> Terms.inject _TestCase _TestCase_evaluation $ encodeEvaluationTestCase ecase
+  TestCaseInference icase -> Terms.inject _TestCase _TestCase_inference $ encodeInferenceTestCase icase
+encodeCaseConvention c = Terms.injectUnit _CaseConvention $ case c of
   CaseConventionLowerSnake -> _CaseConvention_lowerSnake
   CaseConventionUpperSnake -> _CaseConvention_upperSnake
   CaseConventionCamel -> _CaseConvention_camel
@@ -85,7 +85,7 @@ encodeEtaExpansionTestCase (EtaExpansionTestCase input output) = Terms.record _E
   Field _EtaExpansionTestCase_input $ EncodeCore.term input,
   Field _EtaExpansionTestCase_output $ EncodeCore.term output]
 encodeEvaluationTestCase (EvaluationTestCase style input output) = Terms.record _EvaluationTestCase [
-  Field _EvaluationTestCase_evaluationStyle $ Terms.variant _EvaluationStyle (case style of
+  Field _EvaluationTestCase_evaluationStyle $ Terms.inject _EvaluationStyle (case style of
     EvaluationStyleEager -> _EvaluationStyle_eager
     EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
   Field _EvaluationTestCase_input $ EncodeCore.term input,
@@ -113,10 +113,10 @@ inferenceTestCase input output = Phantoms.record _InferenceTestCase [
   _InferenceTestCase_output>>: output]
 
 testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
-testCaseInference = variant _TestCase _TestCase_inference
+testCaseInference = inject _TestCase _TestCase_inference
 
 testCaseInferenceFailure :: TTerm InferenceFailureTestCase -> TTerm TestCase
-testCaseInferenceFailure = variant _TestCase _TestCase_inferenceFailure
+testCaseInferenceFailure = inject _TestCase _TestCase_inferenceFailure
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
