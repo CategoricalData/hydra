@@ -123,6 +123,31 @@ public class Expect {
     }
 
     /**
+     * Decode an Either value from a term.
+     * @param <S> the state type
+     * @param <L> the left value type
+     * @param <R> the right value type
+     * @param term the term to decode
+     * @return a Flow containing the decoded Either value
+     */
+    public static <S, L, R> Flow<S, hydra.util.Either<L, R>> either(final Term term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, hydra.util.Either<L, R>>>() {
+            @Override
+            public Flow<S, hydra.util.Either<L, R>> otherwise(Term instance) {
+                return wrongType("either", term);
+            }
+
+            @Override
+            public Flow<S, hydra.util.Either<L, R>> visit(Term.Either instance) {
+                // Cast Either<Term, Term> to Either<Object, Object>
+                @SuppressWarnings("unchecked")
+                hydra.util.Either<L, R> result = (hydra.util.Either<L, R>) instance.value;
+                return pure(result);
+            }
+        });
+    }
+
+    /**
      * Retrieve and decode a field from a map of field names to terms.
      * @param <S> the state type
      * @param <X> the decoded value type
