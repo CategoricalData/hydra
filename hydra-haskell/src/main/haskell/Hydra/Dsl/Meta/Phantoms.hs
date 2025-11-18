@@ -6,7 +6,7 @@ module Hydra.Dsl.Meta.Phantoms (
 ) where
 
 import Hydra.Kernel
-import Hydra.Dsl.Common
+import Hydra.Dsl.Meta.Common
 import Hydra.Dsl.Meta.Literals
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann

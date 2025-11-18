@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import Any, TypeVar, cast, get_type_hints, overload
 
 from hydra.core import Name
-from hydra.dsl.phantoms import primitive1
+from hydra.dsl.meta.phantoms import primitive1
 from hydra.dsl.prims import int32, prim1, string
 from hydra.graph import TermCoder
 from hydra.phantoms import TTerm

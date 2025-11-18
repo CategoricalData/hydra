@@ -8,7 +8,7 @@ module Hydra.Dsl.Meta.Types (
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Core as Core hiding (name, unName)
+import Hydra.Dsl.Meta.Core as Core hiding (name, unName)
 import Hydra.Dsl.Meta.Base
 
 import qualified Data.List as L

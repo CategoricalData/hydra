@@ -2,7 +2,7 @@
 module Hydra.Dsl.Types where
 
 import Hydra.Core
-import Hydra.Dsl.Common
+import Hydra.Dsl.Meta.Common
 import Hydra.Constants
 
 import qualified Data.List as L

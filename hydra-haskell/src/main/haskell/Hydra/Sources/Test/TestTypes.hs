@@ -3,8 +3,8 @@
 module Hydra.Sources.Test.TestTypes where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Core          as Core
-import qualified Hydra.Dsl.Module        as DModule
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Module        as DModule
 import qualified Hydra.Dsl.Types         as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))

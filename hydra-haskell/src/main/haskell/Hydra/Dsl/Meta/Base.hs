@@ -9,7 +9,7 @@ module Hydra.Dsl.Meta.Base (
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms(definitionInModule, el, firstClassType, opt, ref)
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Sources.Libraries
 
 import qualified Data.Map as M
