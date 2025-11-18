@@ -1,4 +1,4 @@
-import hydra.dsl.grammar as dsl
+import hydra.dsl.meta.grammar as dsl
 from hydra.grammar import (
     Grammar,
     Pattern,

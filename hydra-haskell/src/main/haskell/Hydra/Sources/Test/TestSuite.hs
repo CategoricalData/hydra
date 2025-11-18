@@ -6,7 +6,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Dsl.Meta.Phantoms as Base
-import Hydra.Dsl.Testing
+import Hydra.Dsl.Meta.Testing
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 

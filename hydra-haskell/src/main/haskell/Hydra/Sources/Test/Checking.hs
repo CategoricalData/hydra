@@ -5,11 +5,11 @@ module Hydra.Sources.Test.Checking where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
-import Hydra.Dsl.Testing
+import Hydra.Dsl.Meta.Testing
 import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Dsl.Meta.Types as T
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Core as Core
+import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Sources.Test.TestGraph
 
 import Prelude hiding (map, product, sum)

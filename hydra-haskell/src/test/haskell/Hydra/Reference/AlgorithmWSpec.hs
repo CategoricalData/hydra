@@ -22,7 +22,7 @@ import qualified Hydra.TestUtils as TU
 import Hydra.Testing
 import Hydra.TestSuiteSpec
 import Hydra.Test.TestSuite
-import qualified Hydra.Dsl.Testing as Testing
+import qualified Hydra.Dsl.Meta.Testing as Testing
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

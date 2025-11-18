@@ -7,14 +7,14 @@ module Hydra.Ext.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Lib.Lists as Lists
-import Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Dsl.Meta.Lib.Lists as Lists
+import Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import Hydra.Generation
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 import System.IO
 import qualified Control.Monad as CM
