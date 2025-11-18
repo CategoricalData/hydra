@@ -706,21 +706,25 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermList els -> do
           jels <- CM.mapM encode els
-          targs <- collectionTypeArgs jels
+          targs <- if L.null jels
+            then takeTypeArgs "list" 1
+            else pure []
           return $ javaMethodInvocationToJavaExpression $
             methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.List") (Java.Identifier "of") targs jels
 
         TermLiteral l -> pure $ encodeLiteral l
 
-        TermEither et -> case et of
-          Left term1 -> do
-            expr <- encode term1
-            return $ javaMethodInvocationToJavaExpression $
-              methodInvocationStatic (Java.Identifier "hydra.util.Either") (Java.Identifier "left") [expr]
-          Right term1 -> do
-            expr <- encode term1
-            return $ javaMethodInvocationToJavaExpression $
-              methodInvocationStatic (Java.Identifier "hydra.util.Either") (Java.Identifier "right") [expr]
+        TermEither et -> do
+          targs <- takeTypeArgs "either" 2
+          case et of
+            Left term1 -> do
+              expr <- encode term1
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "left") targs [expr]
+            Right term1 -> do
+              expr <- encode term1
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "right") targs [expr]
 
         TermMap m -> do
           jkeys <- CM.mapM encode $ M.keys m
@@ -733,7 +737,7 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermMaybe mt -> case mt of
           Nothing -> do
-            targs <- collectionTypeArgs []
+            targs <- takeTypeArgs "maybe" 1
             return $ javaMethodInvocationToJavaExpression $
               methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Maybe") (Java.Identifier "nothing") targs []
           Just term1 -> do
@@ -795,13 +799,11 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
       where
-        collectionTypeArgs jels = if not (L.null jels)
-          then pure []
-          else if L.null tyapps
-          then fail $ "empty list without type application"
+        takeTypeArgs label n = if L.length tyapps < n
+          then fail $ "needed " ++ show n ++ " type arguments for " ++ label ++ ", found " ++ show (L.length tyapps)
           else do
-            rt <- javaTypeToJavaReferenceType $ L.head tyapps
-            return [Java.TypeArgumentReference rt]
+            rt <- CM.mapM javaTypeToJavaReferenceType $ L.take n tyapps
+            return $ fmap Java.TypeArgumentReference rt
 
 -- | Convert a list of bindings to Java block statements, handling recursive bindings
 -- and performing topological sorting for correct declaration order.
