@@ -360,17 +360,17 @@ public interface Terms {
         return comp.accept(new Comparison.Visitor<Term>() {
             @Override
             public Term visit(Comparison.EqualTo instance) {
-                return unitVariant(name("hydra.mantle.Comparison"), name("equalTo"));
+                return injectUnit(name("hydra.mantle.Comparison"), name("equalTo"));
             }
 
             @Override
             public Term visit(Comparison.LessThan instance) {
-                return unitVariant(name("hydra.mantle.Comparison"), name("lessThan"));
+                return injectUnit(name("hydra.mantle.Comparison"), name("lessThan"));
             }
 
             @Override
             public Term visit(Comparison.GreaterThan instance) {
-                return unitVariant(name("hydra.mantle.Comparison"), name("greaterThan"));
+                return injectUnit(name("hydra.mantle.Comparison"), name("greaterThan"));
             }
         });
     }
@@ -1012,8 +1012,31 @@ public interface Terms {
     }
 
     /**
+     * Create an injection with a field name and value.
+     * Example: inject(name("Result"), name("success"), string("ok"))
+     * @param typeName the union type name
+     * @param fieldName the field name
+     * @param term the field value
+     * @return the injection term
+     */
+    static Term inject(Name typeName, Name fieldName, Term term) {
+        return inject(typeName, new Field(fieldName, term));
+    }
+
+    /**
+     * Create an injection with a field name and value.
+     * @param typeName the union type name
+     * @param fieldName the field name
+     * @param term the field value
+     * @return the injection term
+     */
+    static Term inject(String typeName, String fieldName, Term term) {
+        return inject(name(typeName), name(fieldName), term);
+    }
+
+    /**
      * Create a unit-valued injection, similar to an enum value.
-     * Example: inject(name("Result"), name("success"))
+     * Example: injectUnit(name("Result"), name("success"))
      * @param typeName the union type name
      * @param fieldName the field name
      * @return the injection term
@@ -1023,47 +1046,13 @@ public interface Terms {
     }
 
     /**
-     * Create a union variant.
-     * Example: variant(name("Result"), name("success"), string("ok"))
+     * Create a unit-valued injection.
      * @param typeName the union type name
      * @param fieldName the field name
-     * @param term the field value
-     * @return the variant term
+     * @return the injection term
      */
-    static Term variant(Name typeName, Name fieldName, Term term) {
-        return inject(typeName, new Field(fieldName, term));
-    }
-
-    /**
-     * Create a union variant.
-     * @param typeName the union type name
-     * @param fieldName the field name
-     * @param term the field value
-     * @return the variant term
-     */
-    static Term variant(String typeName, String fieldName, Term term) {
-        return variant(name(typeName), name(fieldName), term);
-    }
-
-    /**
-     * Create a unit variant of a union.
-     * Example: unitVariant(name("Result"), name("success"))
-     * @param typeName the union type name
-     * @param fieldName the field name
-     * @return the unit variant term
-     */
-    static Term unitVariant(Name typeName, Name fieldName) {
-        return variant(typeName, fieldName, unit());
-    }
-
-    /**
-     * Create a unit variant.
-     * @param typeName the union type name
-     * @param fieldName the field name
-     * @return the unit variant term
-     */
-    static Term unitVariant(String typeName, String fieldName) {
-        return unitVariant(name(typeName), name(fieldName));
+    static Term injectUnit(String typeName, String fieldName) {
+        return injectUnit(name(typeName), name(fieldName));
     }
 
     // ===== Wrapped terms =====
