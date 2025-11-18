@@ -10,12 +10,11 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import java.util.AbstractMap;
+import hydra.util.Tuple;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.boolean_;
@@ -54,7 +53,7 @@ public class Span extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that splits a list when the predicate becomes false
      */
-    public static <X> Function<List<X>, Map.Entry<List<X>, List<X>>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, Tuple.Tuple2<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -65,12 +64,12 @@ public class Span extends PrimitiveFunction {
      * @param lst the list to split
      * @return a pair of lists, split at the first element where predicate is false
      */
-    public static <X> Map.Entry<List<X>, List<X>> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> Tuple.Tuple2<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
         int i = 0;
-        while (i < lst.size() && pred.test(lst.get(i))) {
+        while (i < lst.size() && pred.apply(lst.get(i))) {
             i++;
         }
-        return new AbstractMap.SimpleEntry<>(new ArrayList<>(lst.subList(0, i)),
+        return new Tuple.Tuple2<>(new ArrayList<>(lst.subList(0, i)),
             new ArrayList<>(lst.subList(i, lst.size())));
     }
 }
