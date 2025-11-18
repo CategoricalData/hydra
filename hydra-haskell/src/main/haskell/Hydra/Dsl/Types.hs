@@ -41,10 +41,7 @@ apply :: Type -> Type -> Type
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 
 -- | Apply a type to multiple type arguments
--- Example: applyMany [var "Either", string, int32]
-applyMany :: [Type] -> Type
-applyMany ts = L.foldl apply (L.head ts) (L.tail ts)
-
+-- Example: applys (var "Either") [string, int32]
 applys :: Type -> [Type] -> Type
 applys t ts = L.foldl apply t ts
 

@@ -77,9 +77,9 @@ bigfloat :: TTerm Type
 bigfloat = typeLiteral $ literalTypeFloat $ float FloatTypeBigfloat
 
 -- | Create a term-encoded either type
--- Example: either string int32
-either :: TTerm Type -> TTerm Type -> TTerm Type
-either l r = typeEither $ eitherType l r
+-- Example: either_ string int32
+either_ :: TTerm Type -> TTerm Type -> TTerm Type
+either_ l r = typeEither $ eitherType l r
 
 -- | Create a term-encoded universal quantification (polymorphic type)
 -- Example: forAll "a" (var "a" --> var "a")
@@ -245,3 +245,20 @@ var = typeVariable . name
 
 wrap :: TTerm Name -> TTerm Type -> TTerm Type
 wrap name t = typeWrap $ wrappedType name t
+
+-- | Create a term-encoded enum type with the given variant names (conventionally in camelCase)
+-- Example: enum (name "Color") ["red", "green", "blue"]
+enum :: TTerm Name -> [String] -> TTerm Type
+enum tname names = union tname $ (\n -> (name n, unit)) <$> names
+
+-- | Term-encoded non-negative 32-bit integer type
+-- Currently an alias for int32; intended for semantic annotation
+-- In future versions, this may include validation constraints
+-- Example: nonNegativeInt32
+nonNegativeInt32 :: TTerm Type
+nonNegativeInt32 = Hydra.Dsl.TTypes.int32
+
+-- | Attach an annotation to a term-encoded type
+-- Example: annot annotationMap myType
+annot :: TTerm (M.Map Name Term) -> TTerm Type -> TTerm Type
+annot ann typ = typeAnnotated $ annotatedType typ ann
