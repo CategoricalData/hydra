@@ -732,8 +732,10 @@ encodeTerm env term0 = encodeInternal [] [] term0
             methodInvocationStatic (Java.Identifier "java.util.Map") (Java.Identifier "ofEntries") pairExprs
 
         TermMaybe mt -> case mt of
-          Nothing -> pure $ javaMethodInvocationToJavaExpression $
-            methodInvocationStatic (Java.Identifier "hydra.util.Maybe") (Java.Identifier "nothing") []
+          Nothing -> do
+            targs <- collectionTypeArgs []
+            return $ javaMethodInvocationToJavaExpression $
+              methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Maybe") (Java.Identifier "nothing") targs []
           Just term1 -> do
             expr <- encode term1
             return $ javaMethodInvocationToJavaExpression $
