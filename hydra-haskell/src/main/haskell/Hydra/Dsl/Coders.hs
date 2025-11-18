@@ -26,10 +26,10 @@ adapterContextAdapters :: TTerm AdapterContext -> TTerm (M.Map Name (Adapter Ada
 adapterContextAdapters c = project _AdapterContext _AdapterContext_adapters @@ c
 
 coderDirectionEncode :: TTerm CoderDirection
-coderDirectionEncode = unitVariant _CoderDirection _CoderDirection_encode
+coderDirectionEncode = injectUnit _CoderDirection _CoderDirection_encode
 
 coderDirectionDecode :: TTerm CoderDirection
-coderDirectionDecode = unitVariant _CoderDirection _CoderDirection_decode
+coderDirectionDecode = injectUnit _CoderDirection _CoderDirection_decode
 
 language :: TTerm LanguageName -> TTerm LanguageConstraints -> TTerm Language
 language name constraints = record _Language [
@@ -100,5 +100,5 @@ languageConstraintsTypeVariants lc = project _LanguageConstraints _LanguageConst
 languageConstraintsTypes :: TTerm LanguageConstraints -> TTerm (Type -> Bool)
 languageConstraintsTypes lc = project _LanguageConstraints _LanguageConstraints_types @@ lc
 
-traversalOrderPre = unitVariant _TraversalOrder _TraversalOrder_pre
-traversalOrderPost = unitVariant _TraversalOrder _TraversalOrder_post
+traversalOrderPre = injectUnit _TraversalOrder _TraversalOrder_pre
+traversalOrderPost = injectUnit _TraversalOrder _TraversalOrder_post

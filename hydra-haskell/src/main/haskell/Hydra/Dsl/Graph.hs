@@ -7,13 +7,13 @@ import qualified Data.Map as M
 
 
 comparisonLessThan :: TTerm Comparison
-comparisonLessThan = unitVariant _Comparison _Comparison_lessThan
+comparisonLessThan = injectUnit _Comparison _Comparison_lessThan
 
 comparisonEqualTo :: TTerm Comparison
-comparisonEqualTo = unitVariant _Comparison _Comparison_equalTo
+comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 
 comparisonGreaterThan :: TTerm Comparison
-comparisonGreaterThan = unitVariant _Comparison _Comparison_greaterThan
+comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
 
 graph :: TTerm (M.Map Name Binding)
     -> TTerm (M.Map Name (Maybe Term))
@@ -127,7 +127,7 @@ primitiveWithType p newType = Hydra.Dsl.Graph.primitive
     (Hydra.Dsl.Graph.primitiveImplementation p)
 
 typeClassEquality :: TTerm TypeClass
-typeClassEquality = unitVariant _TypeClass _TypeClass_equality
+typeClassEquality = injectUnit _TypeClass _TypeClass_equality
 
 typeClassOrdering :: TTerm TypeClass
-typeClassOrdering = unitVariant _TypeClass _TypeClass_ordering
+typeClassOrdering = injectUnit _TypeClass _TypeClass_ordering

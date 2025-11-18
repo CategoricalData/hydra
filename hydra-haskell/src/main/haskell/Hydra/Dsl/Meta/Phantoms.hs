@@ -150,7 +150,7 @@ identity = TTerm Terms.identity
 -- | Create a union injection
 -- Example: inject (Name "Result") (Name "success") (string "ok")
 inject :: Name -> Name -> TTerm a -> TTerm b
-inject name (Name fname) (TTerm term) = TTerm $ Terms.inject name fname term
+inject name fname (TTerm term) = TTerm $ Terms.inject name fname term
 
 -- | Create a function that injects its argument into a union variant
 -- Example: injectLambda (Name "Result") (Name "success")
@@ -316,9 +316,9 @@ unit :: TTerm a
 unit = TTerm Terms.unit
 
 -- | Create a unit variant of a union
--- Example: unitVariant (Name "Result") (Name "success")
-unitVariant :: Name -> Name -> TTerm a
-unitVariant name (Name fname) = TTerm $ Terms.inject name fname Terms.unit
+-- Example: injectUnit (Name "Result") (Name "success")
+injectUnit :: Name -> Name -> TTerm a
+injectUnit name fname = TTerm $ Terms.inject name fname Terms.unit
 
 -- | Create a tuple projection function
 -- Example: untuple 3 1 extracts the second element of a 3-tuple
@@ -334,11 +334,6 @@ unwrap = TTerm . Terms.unwrap
 -- Example: var "x"
 var :: String -> TTerm a
 var v = TTerm $ Terms.var v
-
--- | Create a union variant
--- Example: variant (Name "Result") (Name "success") (string "ok")
-variant :: Name -> Name -> TTerm a -> TTerm b
-variant name (Name fname) (TTerm term) = TTerm $ Terms.inject name fname term
 
 -- | Associate the Eq type class with the inferred type of a term
 -- Example: withEq "t0" myTerm

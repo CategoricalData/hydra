@@ -89,7 +89,7 @@ define = definitionInModule module_
 
 eliminationVariantDef :: TBinding (Elimination -> EliminationVariant)
 eliminationVariantDef = define "eliminationVariant" $
-  doc "Find the elimination variant (constructor) for a given elimination term" $
+  doc "Find the elimination inject (constructor) for a given elimination term" $
   match _Elimination Nothing [
     _Elimination_product>>: constant Variants.eliminationVariantProduct,
     _Elimination_record>>: constant Variants.eliminationVariantRecord,
@@ -99,7 +99,7 @@ eliminationVariantDef = define "eliminationVariant" $
 eliminationVariantsDef :: TBinding [EliminationVariant]
 eliminationVariantsDef = define "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  list $ unitVariant _EliminationVariant <$> [
+  list $ injectUnit _EliminationVariant <$> [
     _EliminationVariant_product,
     _EliminationVariant_record,
     _EliminationVariant_union,
@@ -116,7 +116,7 @@ floatTypePrecisionDef = define "floatTypePrecision" $
 floatTypesDef :: TBinding [FloatType]
 floatTypesDef = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  list $ unitVariant _FloatType <$> [
+  list $ injectUnit _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
     _FloatType_float64]
@@ -131,7 +131,7 @@ floatValueTypeDef = define "floatValueType" $
 
 functionVariantDef :: TBinding (Function -> FunctionVariant)
 functionVariantDef = define "functionVariant" $
-  doc "Find the function variant (constructor) for a given function" $
+  doc "Find the function inject (constructor) for a given function" $
   match _Function Nothing [
     _Function_elimination>>: constant Variants.functionVariantElimination,
     _Function_lambda>>: constant Variants.functionVariantLambda,
@@ -140,7 +140,7 @@ functionVariantDef = define "functionVariant" $
 functionVariantsDef :: TBinding [FunctionVariant]
 functionVariantsDef = define "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-  list $ unitVariant _FunctionVariant <$> [
+  list $ injectUnit _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
@@ -176,7 +176,7 @@ integerTypePrecisionDef = define "integerTypePrecision" $
 integerTypesDef :: TBinding [IntegerType]
 integerTypesDef = define "integerTypes" $
   doc "All integer types, in a canonical order" $
-  list $ unitVariant _IntegerType <$> [
+  list $ injectUnit _IntegerType <$> [
     _IntegerType_bigint,
     _IntegerType_int8,
     _IntegerType_int16,
@@ -205,15 +205,15 @@ literalTypeDef :: TBinding (Literal -> LiteralType)
 literalTypeDef = define "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal Nothing [
-    _Literal_binary>>: constant $ variant _LiteralType _LiteralType_binary unit,
-    _Literal_boolean>>: constant $ variant _LiteralType _LiteralType_boolean unit,
+    _Literal_binary>>: constant $ inject _LiteralType _LiteralType_binary unit,
+    _Literal_boolean>>: constant $ inject _LiteralType _LiteralType_boolean unit,
     _Literal_float>>: injectLambda _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
     _Literal_integer>>: injectLambda _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
-    _Literal_string>>: constant $ variant _LiteralType _LiteralType_string unit]
+    _Literal_string>>: constant $ inject _LiteralType _LiteralType_string unit]
 
 literalTypeVariantDef :: TBinding (LiteralType -> LiteralVariant)
 literalTypeVariantDef = define "literalTypeVariant" $
-  doc "Find the literal type variant (constructor) for a given literal value" $
+  doc "Find the literal type inject (constructor) for a given literal value" $
   match _LiteralType Nothing [
     _LiteralType_binary>>:  constant $ Variants.literalVariantBinary,
     _LiteralType_boolean>>: constant $ Variants.literalVariantBoolean,
@@ -235,13 +235,13 @@ literalTypesDef = define "literalTypes" $
 
 literalVariantDef :: TBinding (Literal -> LiteralVariant)
 literalVariantDef = define "literalVariant" $
-  doc "Find the literal variant (constructor) for a given literal value" $
+  doc "Find the literal inject (constructor) for a given literal value" $
   ref literalTypeVariantDef <.> ref literalTypeDef
 
 literalVariantsDef :: TBinding [LiteralVariant]
 literalVariantsDef = define "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  list $ unitVariant _LiteralVariant <$> [
+  list $ injectUnit _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
     _LiteralVariant_float,
@@ -250,7 +250,7 @@ literalVariantsDef = define "literalVariants" $
 
 termVariantDef :: TBinding (Term -> TermVariant)
 termVariantDef = define "termVariant" $
-  doc "Find the term variant (constructor) for a given term" $
+  doc "Find the term inject (constructor) for a given term" $
   match _Term Nothing [
     _Term_annotated>>: constant Variants.termVariantAnnotated,
     _Term_application>>: constant Variants.termVariantApplication,
@@ -276,7 +276,7 @@ termVariantDef = define "termVariant" $
 termVariantsDef :: TBinding [TermVariant]
 termVariantsDef = define "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  list $ unitVariant _TermVariant <$> [
+  list $ injectUnit _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
     _TermVariant_either,
@@ -299,7 +299,7 @@ termVariantsDef = define "termVariants" $
 
 typeVariantDef :: TBinding (Type -> TypeVariant)
 typeVariantDef = define "typeVariant" $
-  doc "Find the type variant (constructor) for a given type" $
+  doc "Find the type inject (constructor) for a given type" $
   match _Type Nothing [
     _Type_annotated>>: constant Variants.typeVariantAnnotated,
     _Type_application>>: constant Variants.typeVariantApplication,
@@ -323,7 +323,7 @@ typeVariantDef = define "typeVariant" $
 typeVariantsDef :: TBinding [TypeVariant]
 typeVariantsDef = define "typeVariants" $
   doc "All type variants, in a canonical order" $
-  list $ unitVariant _TypeVariant <$> [
+  list $ injectUnit _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
     _TypeVariant_either,

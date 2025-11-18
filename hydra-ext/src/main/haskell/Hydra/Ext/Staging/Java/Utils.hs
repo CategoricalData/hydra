@@ -410,10 +410,10 @@ methodInvocation lhs methodName = Java.MethodInvocation header
   where
     header = case lhs of
       Nothing -> Java.MethodInvocation_HeaderSimple $ Java.MethodName methodName
-      Just either -> Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
+      Just either -> Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex inject targs methodName
         where
           targs = []
-          variant = case either of
+          inject = case either of
             Left name -> Java.MethodInvocation_VariantExpression name
             Right prim -> Java.MethodInvocation_VariantPrimary prim
 
@@ -425,8 +425,8 @@ methodInvocationStatic self methodName = methodInvocation (Just $ Left name) met
 methodInvocationStaticWithTypeArgs :: Java.Identifier -> Java.Identifier -> [Java.TypeArgument] -> [Java.Expression] -> Java.MethodInvocation
 methodInvocationStaticWithTypeArgs self methodName targs = Java.MethodInvocation header
   where
-    header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
-    variant = Java.MethodInvocation_VariantExpression name
+    header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex inject targs methodName
+    inject = Java.MethodInvocation_VariantExpression name
     name = Java.ExpressionName Nothing self
 
 nameToJavaClassType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType

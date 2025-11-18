@@ -581,7 +581,7 @@ encodeTermInline env noCast term = case deannotateTerm term of
               return [parg]
 
           -- Explicitly casting to the union type avoids occasional Python type errors in which the narrower,
-          -- variant type is assumed (e.g. hydra.core.TermList instead of hydra.core.Term).
+          -- inject type is assumed (e.g. hydra.core.TermList instead of hydra.core.Term).
           -- This is in addition to the cast expressions we create for type application terms.
           updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True }
           return $ castTo (typeVariableReference env tname) $

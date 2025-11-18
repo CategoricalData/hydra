@@ -120,16 +120,16 @@ caseStatementCases :: TTerm CaseStatement -> TTerm [Field]
 caseStatementCases cs = Phantoms.project _CaseStatement _CaseStatement_cases @@ cs
 
 eliminationProduct :: TTerm TupleProjection -> TTerm Elimination
-eliminationProduct = variant _Elimination _Elimination_product
+eliminationProduct = inject _Elimination _Elimination_product
 
 eliminationRecord :: TTerm Projection -> TTerm Elimination
-eliminationRecord = variant _Elimination _Elimination_record
+eliminationRecord = inject _Elimination _Elimination_record
 
 eliminationUnion :: TTerm CaseStatement -> TTerm Elimination
-eliminationUnion = variant _Elimination _Elimination_union
+eliminationUnion = inject _Elimination _Elimination_union
 
 eliminationWrap :: TTerm Name -> TTerm Elimination
-eliminationWrap = variant _Elimination _Elimination_wrap
+eliminationWrap = inject _Elimination _Elimination_wrap
 
 field :: TTerm Name -> TTerm Term -> TTerm Field
 field name term = Phantoms.record _Field [
@@ -154,13 +154,13 @@ fieldTypeType :: TTerm FieldType -> TTerm Type
 fieldTypeType ft = Phantoms.project _FieldType _FieldType_type @@ ft
 
 floatTypeBigfloat :: TTerm FloatType
-floatTypeBigfloat = unitVariant _FloatType _FloatType_bigfloat
+floatTypeBigfloat = injectUnit _FloatType _FloatType_bigfloat
 
 floatTypeFloat32 :: TTerm FloatType
-floatTypeFloat32 = unitVariant _FloatType _FloatType_float32
+floatTypeFloat32 = injectUnit _FloatType _FloatType_float32
 
 floatTypeFloat64 :: TTerm FloatType
-floatTypeFloat64 = unitVariant _FloatType _FloatType_float64
+floatTypeFloat64 = injectUnit _FloatType _FloatType_float64
 
 floatValueBigfloat :: TTerm Double -> TTerm FloatValue
 floatValueBigfloat = inject _FloatValue _FloatValue_bigfloat
@@ -183,13 +183,13 @@ forallTypeBody :: TTerm ForallType -> TTerm Type
 forallTypeBody ft = Phantoms.project _ForallType _ForallType_body @@ ft
 
 functionElimination :: TTerm Elimination -> TTerm Function
-functionElimination = variant _Function _Function_elimination
+functionElimination = inject _Function _Function_elimination
 
 functionLambda :: TTerm Lambda -> TTerm Function
-functionLambda = variant _Function _Function_lambda
+functionLambda = inject _Function _Function_lambda
 
 functionPrimitive :: TTerm Name -> TTerm Function
-functionPrimitive = variant _Function _Function_primitive
+functionPrimitive = inject _Function _Function_primitive
 
 functionType :: TTerm Type -> TTerm Type -> TTerm FunctionType
 functionType domain codomain = Phantoms.record _FunctionType [
@@ -214,31 +214,31 @@ injectionField :: TTerm Injection -> TTerm Field
 injectionField inj = Phantoms.project _Injection _Injection_field @@ inj
 
 integerTypeBigint :: TTerm IntegerType
-integerTypeBigint = unitVariant _IntegerType _IntegerType_bigint
+integerTypeBigint = injectUnit _IntegerType _IntegerType_bigint
 
 integerTypeInt8 :: TTerm IntegerType
-integerTypeInt8 = unitVariant _IntegerType _IntegerType_int8
+integerTypeInt8 = injectUnit _IntegerType _IntegerType_int8
 
 integerTypeInt16 :: TTerm IntegerType
-integerTypeInt16 = unitVariant _IntegerType _IntegerType_int16
+integerTypeInt16 = injectUnit _IntegerType _IntegerType_int16
 
 integerTypeInt32 :: TTerm IntegerType
-integerTypeInt32 = unitVariant _IntegerType _IntegerType_int32
+integerTypeInt32 = injectUnit _IntegerType _IntegerType_int32
 
 integerTypeInt64 :: TTerm IntegerType
-integerTypeInt64 = unitVariant _IntegerType _IntegerType_int64
+integerTypeInt64 = injectUnit _IntegerType _IntegerType_int64
 
 integerTypeUint8 :: TTerm IntegerType
-integerTypeUint8 = unitVariant _IntegerType _IntegerType_uint8
+integerTypeUint8 = injectUnit _IntegerType _IntegerType_uint8
 
 integerTypeUint16 :: TTerm IntegerType
-integerTypeUint16 = unitVariant _IntegerType _IntegerType_uint16
+integerTypeUint16 = injectUnit _IntegerType _IntegerType_uint16
 
 integerTypeUint32 :: TTerm IntegerType
-integerTypeUint32 = unitVariant _IntegerType _IntegerType_uint32
+integerTypeUint32 = injectUnit _IntegerType _IntegerType_uint32
 
 integerTypeUint64 :: TTerm IntegerType
-integerTypeUint64 = unitVariant _IntegerType _IntegerType_uint64
+integerTypeUint64 = injectUnit _IntegerType _IntegerType_uint64
 
 integerValueBigint :: TTerm Integer -> TTerm IntegerValue
 integerValueBigint = inject _IntegerValue _IntegerValue_bigint
@@ -300,34 +300,34 @@ letWithBody :: TTerm Let -> TTerm Term -> TTerm Let
 letWithBody l body = let_ (Hydra.Dsl.Core.letBindings l) body
 
 literalBinary :: TTerm String -> TTerm Literal
-literalBinary = variant _Literal _Literal_binary
+literalBinary = inject _Literal _Literal_binary
 
 literalBoolean :: TTerm Bool -> TTerm Literal
-literalBoolean = variant _Literal _Literal_boolean
+literalBoolean = inject _Literal _Literal_boolean
 
 literalFloat :: TTerm FloatValue -> TTerm Literal
-literalFloat = variant _Literal _Literal_float
+literalFloat = inject _Literal _Literal_float
 
 literalInteger :: TTerm IntegerValue -> TTerm Literal
-literalInteger = variant _Literal _Literal_integer
+literalInteger = inject _Literal _Literal_integer
 
 literalString :: TTerm String -> TTerm Literal
-literalString = variant _Literal _Literal_string
+literalString = inject _Literal _Literal_string
 
 literalTypeBinary :: TTerm LiteralType
-literalTypeBinary = unitVariant _LiteralType _LiteralType_binary
+literalTypeBinary = injectUnit _LiteralType _LiteralType_binary
 
 literalTypeBoolean :: TTerm LiteralType
-literalTypeBoolean = unitVariant _LiteralType _LiteralType_boolean
+literalTypeBoolean = injectUnit _LiteralType _LiteralType_boolean
 
 literalTypeFloat :: TTerm FloatType -> TTerm LiteralType
-literalTypeFloat = variant _LiteralType _LiteralType_float
+literalTypeFloat = inject _LiteralType _LiteralType_float
 
 literalTypeInteger :: TTerm IntegerType -> TTerm LiteralType
-literalTypeInteger = variant _LiteralType _LiteralType_integer
+literalTypeInteger = inject _LiteralType _LiteralType_integer
 
 literalTypeString :: TTerm LiteralType
-literalTypeString = unitVariant _LiteralType _LiteralType_string
+literalTypeString = injectUnit _LiteralType _LiteralType_string
 
 mapType :: TTerm Type -> TTerm Type -> TTerm MapType
 mapType keys values = Phantoms.record _MapType [
@@ -395,64 +395,64 @@ sumTerm :: TTerm Sum -> TTerm Term
 sumTerm s = Phantoms.project _Sum _Sum_term @@ s
 
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
-termAnnotated = variant _Term _Term_annotated
+termAnnotated = inject _Term _Term_annotated
 
 termApplication :: TTerm Application -> TTerm Term
-termApplication = variant _Term _Term_application
+termApplication = inject _Term _Term_application
 
 termEither :: TTerm (Either Term Term) -> TTerm Term
-termEither = variant _Term _Term_either
+termEither = inject _Term _Term_either
 
 termFunction :: TTerm Function -> TTerm Term
-termFunction = variant _Term _Term_function
+termFunction = inject _Term _Term_function
 
 termLet :: TTerm Let -> TTerm Term
-termLet = variant _Term _Term_let
+termLet = inject _Term _Term_let
 
 termList :: TTerm [Term] -> TTerm Term
-termList = variant _Term _Term_list
+termList = inject _Term _Term_list
 
 termLiteral :: TTerm Literal -> TTerm Term
-termLiteral = variant _Term _Term_literal
+termLiteral = inject _Term _Term_literal
 
 termMap :: TTerm (M.Map Term Term) -> TTerm Term
-termMap = variant _Term _Term_map
+termMap = inject _Term _Term_map
 
 termMaybe :: TTerm (Maybe Term) -> TTerm Term
-termMaybe = variant _Term _Term_maybe
+termMaybe = inject _Term _Term_maybe
 
 termPair :: TTerm (Term, Term) -> TTerm Term
-termPair = variant _Term _Term_pair
+termPair = inject _Term _Term_pair
 
 termProduct :: TTerm [Term] -> TTerm Term
-termProduct = variant _Term _Term_product
+termProduct = inject _Term _Term_product
 
 termRecord :: TTerm Record -> TTerm Term
-termRecord = variant _Term _Term_record
+termRecord = inject _Term _Term_record
 
 termSet :: TTerm (S.Set Term) -> TTerm Term
-termSet = variant _Term _Term_set
+termSet = inject _Term _Term_set
 
 termSum :: TTerm Sum -> TTerm Term
-termSum = variant _Term _Term_sum
+termSum = inject _Term _Term_sum
 
 termTypeLambda :: TTerm TypeLambda -> TTerm Term
-termTypeLambda = variant _Term _Term_typeLambda
+termTypeLambda = inject _Term _Term_typeLambda
 
 termTypeApplication :: TTerm TypeApplicationTerm -> TTerm Term
-termTypeApplication = variant _Term _Term_typeApplication
+termTypeApplication = inject _Term _Term_typeApplication
 
 termUnion :: TTerm Injection -> TTerm Term
-termUnion = variant _Term _Term_union
+termUnion = inject _Term _Term_union
 
 termUnit :: TTerm Term
-termUnit = unitVariant _Term _Term_unit
+termUnit = injectUnit _Term _Term_unit
 
 termVariable :: TTerm Name -> TTerm Term
-termVariable = variant _Term _Term_variable
+termVariable = inject _Term _Term_variable
 
 termWrap :: TTerm WrappedTerm -> TTerm Term
-termWrap = variant _Term _Term_wrap
+termWrap = inject _Term _Term_wrap
 
 tupleProjection :: TTerm Int -> TTerm Int -> TTerm (Maybe [Type]) -> TTerm TupleProjection
 tupleProjection arity idx mdom = Phantoms.record _TupleProjection [
@@ -481,40 +481,40 @@ typeLambdaBody :: TTerm TypeLambda -> TTerm Term
 typeLambdaBody ta = Phantoms.project _TypeLambda _TypeLambda_body @@ ta
 
 typeAnnotated :: TTerm AnnotatedType -> TTerm Type
-typeAnnotated = variant _Type _Type_annotated
+typeAnnotated = inject _Type _Type_annotated
 
 typeApplication :: TTerm ApplicationType -> TTerm Type
-typeApplication = variant _Type _Type_application
+typeApplication = inject _Type _Type_application
 
 typeEither :: TTerm EitherType -> TTerm Type
-typeEither = variant _Type _Type_either
+typeEither = inject _Type _Type_either
 
 typeForall :: TTerm ForallType -> TTerm Type
-typeForall = variant _Type _Type_forall
+typeForall = inject _Type _Type_forall
 
 typeFunction :: TTerm FunctionType -> TTerm Type
-typeFunction = variant _Type _Type_function
+typeFunction = inject _Type _Type_function
 
 typeList :: TTerm Type -> TTerm Type
-typeList = variant _Type _Type_list
+typeList = inject _Type _Type_list
 
 typeLiteral :: TTerm LiteralType -> TTerm Type
-typeLiteral = variant _Type _Type_literal
+typeLiteral = inject _Type _Type_literal
 
 typeMap :: TTerm MapType -> TTerm Type
-typeMap = variant _Type _Type_map
+typeMap = inject _Type _Type_map
 
 typeMaybe :: TTerm Type -> TTerm Type
-typeMaybe = variant _Type _Type_maybe
+typeMaybe = inject _Type _Type_maybe
 
 typePair :: TTerm PairType -> TTerm Type
-typePair = variant _Type _Type_pair
+typePair = inject _Type _Type_pair
 
 typeProduct :: TTerm [Type] -> TTerm Type
-typeProduct = variant _Type _Type_product
+typeProduct = inject _Type _Type_product
 
 typeRecord :: TTerm RowType -> TTerm Type
-typeRecord = variant _Type _Type_record
+typeRecord = inject _Type _Type_record
 
 typeScheme :: TTerm [Name] -> TTerm Type -> TTerm TypeScheme
 typeScheme variables body = Phantoms.record _TypeScheme [
@@ -528,22 +528,22 @@ typeSchemeType :: TTerm TypeScheme -> TTerm Type
 typeSchemeType ts = Phantoms.project _TypeScheme _TypeScheme_type @@ ts
 
 typeSet :: TTerm Type -> TTerm Type
-typeSet = variant _Type _Type_set
+typeSet = inject _Type _Type_set
 
 typeSum :: TTerm [Type] -> TTerm Type
-typeSum = variant _Type _Type_sum
+typeSum = inject _Type _Type_sum
 
 typeUnion :: TTerm RowType -> TTerm Type
-typeUnion = variant _Type _Type_union
+typeUnion = inject _Type _Type_union
 
 typeUnit :: TTerm Type
-typeUnit = unitVariant _Type _Type_unit
+typeUnit = injectUnit _Type _Type_unit
 
 typeVariable :: TTerm Name -> TTerm Type
-typeVariable = variant _Type _Type_variable
+typeVariable = inject _Type _Type_variable
 
 typeWrap :: TTerm WrappedType -> TTerm Type
-typeWrap = variant _Type _Type_wrap
+typeWrap = inject _Type _Type_wrap
 
 typeApplicationTerm :: TTerm Term -> TTerm Type -> TTerm TypeApplicationTerm
 typeApplicationTerm body type_ = Phantoms.record _TypeApplicationTerm [

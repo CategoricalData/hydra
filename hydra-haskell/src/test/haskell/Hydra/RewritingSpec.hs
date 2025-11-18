@@ -820,9 +820,9 @@ testRewriteFunctionReachesSubterms functionName function = H.describe ("Test tha
       (Terms.map $ M.fromList [(bar, bar), (baz, baz)])
 
   H.describe "Unions and injections" $ do
-    checkRewrite "string in union variant value"
-      (variant (Name "Result") (Name "success") foo)
-      (variant (Name "Result") (Name "success") bar)
+    checkRewrite "string in union inject value"
+      (inject (Name "Result") (Name "success") foo)
+      (inject (Name "Result") (Name "success") bar)
 
   H.describe "Sums" $ do
     checkRewrite "string in sum term"

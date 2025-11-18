@@ -104,8 +104,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       stringOrIntType
       stringOrIntType
       False
-      (variant stringOrIntName (Name "right") $ int32 int)
-      (variant stringOrIntName (Name "right") $ int32 int)
+      (inject stringOrIntName (Name "right") $ int32 int)
+      (inject stringOrIntName (Name "right") $ int32 int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkDataAdapter
@@ -155,16 +155,16 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (optional $ string <$> ms)
       (list $ Y.maybe [] (\s -> [string s]) ms)
 
-  H.it "Primitive function references (when unsupported) become variant terms" $
+  H.it "Primitive function references (when unsupported) become inject terms" $
     QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       concatType
       (functionProxyType Types.string)
       False
       (primitive name)
-      (inject functionProxyName "primitive" (string $ unName name)) -- Note: the function name is not dereferenced
+      (inject functionProxyName (Name "primitive") (string $ unName name)) -- Note: the function name is not dereferenced
 
---  H.it "Projections (when unsupported) become variant terms" $
+--  H.it "Projections (when unsupported) become inject terms" $
 --    QC.property $ \fname -> checkDataAdapter
 --      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
 --      exampleProjectionType
@@ -192,7 +192,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])
       False
-      (inject eitherStringOrInt8TypeName "right" (int8 i))
+      (inject eitherStringOrInt8TypeName (Name "right") (int8 i))
       (record eitherStringOrInt8TypeName [
         field "left" $ optional Nothing,
         field "right" $ optional $ Just $ int16 $ fromIntegral i])

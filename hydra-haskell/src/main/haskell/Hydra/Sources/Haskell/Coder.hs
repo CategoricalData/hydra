@@ -827,7 +827,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
         _Type_record>>: lambda "rt" $
           bind "cons" (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
           Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
+            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list [],
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: list [var "cons"],
@@ -835,7 +835,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
         _Type_union>>: lambda "rt" $
           bind "cons" (Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt")) $
           Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_data,
+            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list [],
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: var "cons",
@@ -845,7 +845,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
           "wt">: Core.wrappedTypeBody $ var "wrapped"] $
           bind "cons" (var "newtypeCons" @@ var "el" @@ var "wt") $
             Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: unitVariant H._DataOrNewtype H._DataOrNewtype_newtype,
+              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
               H._DataDeclaration_context>>: list [],
               H._DataDeclaration_head>>: var "hd",
               H._DataDeclaration_constructors>>: list [var "cons"],
