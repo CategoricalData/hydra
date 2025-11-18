@@ -11,7 +11,7 @@ import hydra.util
 import hydra.variants
 
 def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.EliminationVariant:
-    r"""Find the elimination variant (constructor) for a given elimination term."""
+    r"""Find the elimination inject (constructor) for a given elimination term."""
     
     match v1:
         case hydra.core.EliminationProduct():
@@ -68,7 +68,7 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
             raise AssertionError("Unreachable: all variants handled")
 
 def function_variant(v1: hydra.core.Function) -> hydra.variants.FunctionVariant:
-    r"""Find the function variant (constructor) for a given function."""
+    r"""Find the function inject (constructor) for a given function."""
     
     match v1:
         case hydra.core.FunctionElimination():
@@ -214,7 +214,7 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVariant:
-    r"""Find the literal type variant (constructor) for a given literal value."""
+    r"""Find the literal type inject (constructor) for a given literal value."""
     
     match v1:
         case hydra.core.LiteralTypeBinary():
@@ -239,7 +239,7 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVa
 literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
-    r"""Find the literal variant (constructor) for a given literal value."""
+    r"""Find the literal inject (constructor) for a given literal value."""
     
     return literal_type_variant(literal_type(arg_))
 
@@ -247,7 +247,7 @@ def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
 literal_variants = (hydra.variants.LiteralVariant.BINARY, hydra.variants.LiteralVariant.BOOLEAN, hydra.variants.LiteralVariant.FLOAT, hydra.variants.LiteralVariant.INTEGER, hydra.variants.LiteralVariant.STRING)
 
 def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
-    r"""Find the term variant (constructor) for a given term."""
+    r"""Find the term inject (constructor) for a given term."""
     
     match v1:
         case hydra.core.TermAnnotated():
@@ -317,7 +317,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
 term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.FUNCTION, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.PRODUCT, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.SUM, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
-    r"""Find the type variant (constructor) for a given type."""
+    r"""Find the type inject (constructor) for a given type."""
     
     match v1:
         case hydra.core.TypeAnnotated():

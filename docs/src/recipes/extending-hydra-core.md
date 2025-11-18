@@ -293,7 +293,7 @@ elements = [
 If using library functions:
 
 ```haskell
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 ```
 
 ---
@@ -374,7 +374,7 @@ _Term_either>>: "e" ~> Eithers.either_
 **Add import:**
 
 ```haskell
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 ```
 
 **Verification:** Check your constructor appears in the file:
@@ -407,7 +407,7 @@ _Term_either>>: "et" ~> Eithers.either_
   (var "et")
 ```
 
-Add import: `import qualified Hydra.Dsl.Lib.Eithers as Eithers`
+Add import: `import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers`
 
 #### 5.2: Other traversal files
 

@@ -68,7 +68,7 @@ either :: TTerm Type -> TTerm Type -> TTerm Type
 either leftType rightType = Core.typeFunction _Either [leftType, rightType]
 ```
 
-Pattern: Import `qualified Hydra.Dsl.Core as Core`, use `Core.*` functions, return `TTerm` phantom types.
+Pattern: Import `qualified Hydra.Dsl.Meta.Core as Core`, use `Core.*` functions, return `TTerm` phantom types.
 
 **Note**: As Hydra matures, DSL extensions should become increasingly rare.
 Most new tests can be written using existing DSL functions.
