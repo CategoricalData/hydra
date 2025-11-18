@@ -10,13 +10,11 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.dsl.Types;
+import hydra.util.Tuple;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import static hydra.dsl.Flows.bind;
@@ -61,7 +59,7 @@ public class Zip extends PrimitiveFunction {
      * @param lst1 the first list
      * @return a function that zips the first list with a second list
      */
-    public static <X, Y> Function<List<Y>, List<Map.Entry<X, Y>>> apply(List<X> lst1) {
+    public static <X, Y> Function<List<Y>, List<Tuple.Tuple2<X, Y>>> apply(List<X> lst1) {
         return lst2 -> apply(lst1, lst2);
     }
 
@@ -73,11 +71,11 @@ public class Zip extends PrimitiveFunction {
      * @param lst2 the second list
      * @return a list of pairs containing elements from both lists
      */
-    public static <X, Y> List<Map.Entry<X, Y>> apply(List<X> lst1, List<Y> lst2) {
-        List<Map.Entry<X, Y>> result = new ArrayList<>();
+    public static <X, Y> List<Tuple.Tuple2<X, Y>> apply(List<X> lst1, List<Y> lst2) {
+        List<Tuple.Tuple2<X, Y>> result = new ArrayList<>();
         int minSize = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < minSize; i++) {
-            result.add(new AbstractMap.SimpleEntry<>(lst1.get(i), lst2.get(i)));
+            result.add(new Tuple.Tuple2<>(lst1.get(i), lst2.get(i)));
         }
         return result;
     }
