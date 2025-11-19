@@ -10,6 +10,25 @@ a few artifacts in Java and Python.
 JavaDocs for Hydra-Ext can be found [here](https://categoricaldata.github.io/hydra/hydra-ext/javadoc),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext).
 
+## Code Organization
+
+Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code Organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-Organization) for details).
+
+- **`src/main/haskell/`** - Hand-written source code
+  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.)
+  - `Hydra/Ext/Sources/` - Domain models and language syntax definitions
+  - `Hydra/Ext/Demos/` - Demonstration applications
+  - `Hydra/Ext/Tools/` - Analysis and transformation utilities
+
+- **`src/gen-main/haskell/`** - Generated Haskell APIs
+  - Generated from domain models using `writeHaskell`
+  - Provides typed Haskell interfaces to external formats
+
+- **`src/gen-main/java/`** (not checked in) - Generated Java APIs
+  - Can be generated using `writeJava "src/gen-main/java" hydraExtModules`
+
+Note: Only generated Haskell is checked into version control for space reasons. Java can be generated on demand.
+
 ## Coders
 
 Hydra-Ext contains the following two-level coders:
