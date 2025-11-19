@@ -9,7 +9,7 @@ Releases are available [on Hackage](https://hackage.haskell.org/package/hydra).
 
 ## Code Organization
 
-Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern (see [Code Organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-Organization) for details).
+Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/haskell/`** - Hand-written source code
   - `Hydra/Dsl/` - DSL syntax definitions

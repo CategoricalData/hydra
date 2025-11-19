@@ -9,7 +9,7 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Code Organization
 
-Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code Organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-Organization) for details).
+Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/java/`** - Hand-written Java code
   - `hydra/lib/` - Primitive function implementations
