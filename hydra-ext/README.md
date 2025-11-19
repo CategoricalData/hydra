@@ -12,7 +12,7 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Code Organization
 
-Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code Organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-Organization) for details).
+Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/haskell/`** - Hand-written source code
   - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.)
