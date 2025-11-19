@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.
 
 module Hydra.Ext.Com.Microsoft.Kusto.Kql where

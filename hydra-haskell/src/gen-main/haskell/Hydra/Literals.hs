@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Conversion functions for literal values.
 
 module Hydra.Literals where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Decoding functions for JSON data
 
 module Hydra.Ext.Org.Json.Decoding where

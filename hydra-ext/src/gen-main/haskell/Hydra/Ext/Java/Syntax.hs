@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Java syntax module. Based on the Oracle Java SE 12 BNF:
 -- |   https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html
 -- | Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.

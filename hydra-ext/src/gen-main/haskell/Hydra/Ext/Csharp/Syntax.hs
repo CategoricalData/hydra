@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:
 -- |   https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar
 

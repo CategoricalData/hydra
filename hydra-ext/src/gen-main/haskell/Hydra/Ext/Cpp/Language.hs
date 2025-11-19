@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints and reserved words for C++
 
 module Hydra.Ext.Cpp.Language where

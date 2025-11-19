@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Additional adapter utilities, above and beyond the generated ones.
 
 module Hydra.Adapt.Utils where

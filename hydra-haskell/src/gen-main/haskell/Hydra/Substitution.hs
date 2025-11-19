@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Variable substitution in type and term expressions.
 
 module Hydra.Substitution where

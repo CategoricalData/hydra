@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A JSON syntax model. See the BNF at https://www.json.org
 
 module Hydra.Json where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A module for tier-0 constants.
 
 module Hydra.Constants where

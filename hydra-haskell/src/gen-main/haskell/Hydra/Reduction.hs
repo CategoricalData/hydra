@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for reducing terms and types, i.e. performing computations.
 
 module Hydra.Reduction where

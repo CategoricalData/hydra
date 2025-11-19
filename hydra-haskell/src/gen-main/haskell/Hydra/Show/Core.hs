@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.core types
 
 module Hydra.Show.Core where

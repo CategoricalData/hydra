@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for Hydra transformation workflows
 
 module Hydra.Workflow where

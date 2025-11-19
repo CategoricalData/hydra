@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A basic Datalog model
 
 module Hydra.Ext.Datalog.Syntax where

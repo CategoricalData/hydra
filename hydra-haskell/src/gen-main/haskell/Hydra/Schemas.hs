@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Various functions for dereferencing and decoding schema types.
 
 module Hydra.Schemas where

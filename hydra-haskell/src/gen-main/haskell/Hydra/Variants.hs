@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Variant types which describe the structure of Hydra core types and terms.
 
 module Hydra.Variants where

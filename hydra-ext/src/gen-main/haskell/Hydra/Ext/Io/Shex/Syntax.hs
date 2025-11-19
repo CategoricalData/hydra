@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Shex model. Based on the BNF at:
 -- |   https://github.com/shexSpec/grammar/blob/master/bnf
 

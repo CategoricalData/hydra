@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | The Apache Atlas meta-model
 -- | Based on the the org.apache.atlas.model package in the master branch as of 2022-06-01
 -- |   https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model

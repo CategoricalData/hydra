@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for the Parquet format. Based on the Thrift-based specification at:
 -- |   https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift
 

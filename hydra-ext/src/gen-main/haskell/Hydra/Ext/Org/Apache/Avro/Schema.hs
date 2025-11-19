@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for Avro schemas. Based on the Avro 1.11.1 specification:
 -- |   https://avro.apache.org/docs/1.11.1/specification
 

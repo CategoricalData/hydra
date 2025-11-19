@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A C++ syntax model, focusing on features for representing algebraic data types and declarative computations
 
 module Hydra.Ext.Cpp.Syntax where

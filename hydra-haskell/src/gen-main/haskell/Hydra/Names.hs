@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for working with qualified names.
 
 module Hydra.Names where

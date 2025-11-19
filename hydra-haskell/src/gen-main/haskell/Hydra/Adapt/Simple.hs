@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Simple, one-way adapters for types and terms
 
 module Hydra.Adapt.Simple where

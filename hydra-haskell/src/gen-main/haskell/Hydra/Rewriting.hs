@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for type and term rewriting and analysis.
 
 module Hydra.Rewriting where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.
 
 module Hydra.Core where

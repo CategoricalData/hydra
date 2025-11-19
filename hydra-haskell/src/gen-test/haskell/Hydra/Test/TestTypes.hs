@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Type definitions for the test suite
 
 module Hydra.Test.TestTypes where

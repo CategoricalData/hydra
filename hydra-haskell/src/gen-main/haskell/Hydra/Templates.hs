@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A utility which instantiates a nonrecursive type with default values
 
 module Hydra.Templates where

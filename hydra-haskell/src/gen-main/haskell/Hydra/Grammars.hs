@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A utility for converting a BNF grammar to a Hydra module.
 
 module Hydra.Grammars where

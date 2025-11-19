@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints and reserved words for C Sharp (C#)
 
 module Hydra.Ext.Csharp.Language where
