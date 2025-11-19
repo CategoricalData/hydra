@@ -7,6 +7,29 @@ This package contains Hydra's Java API and Java sources specifically.
 JavaDocs for Hydra-Java can be found [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java).
 
+## Code Organization
+
+Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code Organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-Organization) for details).
+
+- **`src/main/java/`** - Hand-written Java code
+  - `hydra/lib/` - Primitive function implementations
+  - `hydra/util/` - Core utilities (Either, Maybe, Tuple, Unit, etc.)
+  - `hydra/tools/` - Framework classes (PrimitiveFunction, MapperBase, etc.)
+  - `hydra/Rewriting.java`, `hydra/Reduction.java` - Core algorithms
+  - Language-specific parsers and extensions
+
+- **`src/gen-main/java/`** - Generated Java code
+  - `hydra/core/` - Core types (Term, Type, Literal, etc.)
+  - `hydra/graph/`, `hydra/module/` - Graph and module structures
+  - `hydra/coders/`, `hydra/compute/` - Type adapters and computational abstractions
+  - Generated from Haskell DSL sources using `writeJava` in hydra-ext
+
+- **`src/gen-test/java/`** - Generated test suite
+  - Common tests ensuring parity with Haskell and Python
+  - Generated using `writeJava "../hydra-java/src/gen-test/java" testModules`
+
+To regenerate the Java code, see the [Hydra-Ext README](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/README.md#code-generation).
+
 ## Build
 
 Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`.
