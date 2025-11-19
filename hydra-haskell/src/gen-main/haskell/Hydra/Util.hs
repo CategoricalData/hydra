@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | General-purpose utility types used across Hydra.
 
 module Hydra.Util where

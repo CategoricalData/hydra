@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for working with term accessors.
 
 module Hydra.Show.Accessors where

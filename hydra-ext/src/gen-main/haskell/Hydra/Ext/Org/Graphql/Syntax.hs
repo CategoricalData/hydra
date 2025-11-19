@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A GraphQL model. Based on the (extended) BNF at:
 -- |   https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary
 

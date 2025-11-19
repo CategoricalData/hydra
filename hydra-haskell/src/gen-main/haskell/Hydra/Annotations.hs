@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for reading and writing type and term annotations
 
 module Hydra.Annotations where

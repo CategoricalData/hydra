@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A simple, untyped tabular data model, suitable for CSVs and TSVs
 
 module Hydra.Tabular where

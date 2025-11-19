@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints and reserved words for Haskell
 
 module Hydra.Ext.Haskell.Language where

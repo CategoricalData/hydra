@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.
 
 module Hydra.Ext.Org.Geojson.Model where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A common model for pattern-matching queries over property graphs
 
 module Hydra.Pg.Query where

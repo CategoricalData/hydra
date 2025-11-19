@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | An RDF 1.1 syntax model
 
 module Hydra.Ext.Org.W3.Rdf.Syntax where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Algebraic expression trees for the path algebra by Angles et al., extended for GQL support
 
 module Com.Gdblab.PathAlgebra.Expressions where

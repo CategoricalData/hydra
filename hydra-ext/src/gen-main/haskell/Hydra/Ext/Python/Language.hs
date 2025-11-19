@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints and reserved words for Python 3
 
 module Hydra.Ext.Python.Language where

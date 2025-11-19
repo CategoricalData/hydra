@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions dealing with arguments and arity.
 
 module Hydra.Arity where

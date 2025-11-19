@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for working with Hydra's 'flow' and other monads.
 
 module Hydra.Monads where

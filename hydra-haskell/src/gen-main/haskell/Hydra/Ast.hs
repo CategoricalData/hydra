@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model which provides a common syntax tree for Hydra serializers
 
 module Hydra.Ast where

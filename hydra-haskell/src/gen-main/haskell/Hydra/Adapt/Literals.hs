@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Adapter framework for literal types and terms
 
 module Hydra.Adapt.Literals where

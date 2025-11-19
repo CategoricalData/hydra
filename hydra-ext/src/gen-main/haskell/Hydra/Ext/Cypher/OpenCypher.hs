@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:
 -- |   https://opencypher.org/resources/
 

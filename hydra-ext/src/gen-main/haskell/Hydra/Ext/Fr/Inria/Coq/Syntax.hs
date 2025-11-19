@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for Coq core and extensions. Based on the Coq 8.15 grammar:
 -- |   https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary
 

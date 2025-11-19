@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Haskell syntax model, loosely based on Language.Haskell.Tools.AST
 
 module Hydra.Ext.Haskell.Ast where

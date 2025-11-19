@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.
 -- | See: https://www.w3.org/TR/xmlschema-2
 -- | Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply

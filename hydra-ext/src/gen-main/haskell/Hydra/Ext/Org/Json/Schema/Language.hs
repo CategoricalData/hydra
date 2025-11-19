@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints for JSON Schema
 
 module Hydra.Ext.Org.Json.Schema.Language where

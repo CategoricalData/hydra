@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar
 
 module Hydra.Ext.Org.Json.Schema where

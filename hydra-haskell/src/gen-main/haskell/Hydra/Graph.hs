@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | The extension to graphs of Hydra's core type system (hydra.core)
 
 module Hydra.Graph where
