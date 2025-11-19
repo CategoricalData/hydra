@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Extraction and validation for hydra.core types
 
 module Hydra.Extract.Core where

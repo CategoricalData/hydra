@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | String formatting types and functions.
 
 module Hydra.Formatting where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for term access patterns
 
 module Hydra.Accessors where

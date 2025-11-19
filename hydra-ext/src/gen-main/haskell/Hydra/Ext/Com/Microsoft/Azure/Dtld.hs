@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | An Azure Digital Twin Definition Language (DTLD) model. Based on:
 -- |   https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language
 -- | DTLD features which are not currently included in this model:

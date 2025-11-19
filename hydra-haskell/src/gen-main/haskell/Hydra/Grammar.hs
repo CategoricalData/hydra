@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A common API for BNF-based grammars, specifying context-free languages
 
 module Hydra.Grammar where

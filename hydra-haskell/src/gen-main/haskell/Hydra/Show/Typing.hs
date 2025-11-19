@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.typing types
 
 module Hydra.Show.Typing where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A SHACL syntax model. See https://www.w3.org/TR/shacl
 
 module Hydra.Ext.Org.W3.Shacl.Model where

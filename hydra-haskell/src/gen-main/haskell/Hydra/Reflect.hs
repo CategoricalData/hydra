@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Reflection functions for working with term, type, and literal type variants, as well as numeric precision.
 
 module Hydra.Reflect where
@@ -12,7 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Find the elimination variant (constructor) for a given elimination term
+-- | Find the elimination inject (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Variants.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationProduct _ -> Variants.EliminationVariantProduct
@@ -49,7 +51,7 @@ floatValueType x = case x of
   Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
--- | Find the function variant (constructor) for a given function
+-- | Find the function inject (constructor) for a given function
 functionVariant :: (Core.Function -> Variants.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionElimination _ -> Variants.FunctionVariantElimination
@@ -124,7 +126,7 @@ literalType x = case x of
   Core.LiteralInteger v1 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v1))
   Core.LiteralString _ -> Core.LiteralTypeString
 
--- | Find the literal type variant (constructor) for a given literal value
+-- | Find the literal type inject (constructor) for a given literal value
 literalTypeVariant :: (Core.LiteralType -> Variants.LiteralVariant)
 literalTypeVariant x = case x of
   Core.LiteralTypeBinary -> Variants.LiteralVariantBinary
@@ -144,7 +146,7 @@ literalTypes = (Lists.concat [
   [
     Core.LiteralTypeString]])
 
--- | Find the literal variant (constructor) for a given literal value
+-- | Find the literal inject (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Variants.LiteralVariant)
 literalVariant arg_ = (literalTypeVariant (literalType arg_))
 
@@ -157,7 +159,7 @@ literalVariants = [
   Variants.LiteralVariantInteger,
   Variants.LiteralVariantString]
 
--- | Find the term variant (constructor) for a given term
+-- | Find the term inject (constructor) for a given term
 termVariant :: (Core.Term -> Variants.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Variants.TermVariantAnnotated
@@ -204,7 +206,7 @@ termVariants = [
   Variants.TermVariantVariable,
   Variants.TermVariantWrap]
 
--- | Find the type variant (constructor) for a given type
+-- | Find the type inject (constructor) for a given type
 typeVariant :: (Core.Type -> Variants.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Variants.TypeVariantAnnotated

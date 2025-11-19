@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for validating property graphs against property graph schemas
 
 module Hydra.Pg.Validation where

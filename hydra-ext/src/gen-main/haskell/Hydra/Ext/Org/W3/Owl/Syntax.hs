@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax
 
 module Hydra.Ext.Org.W3.Owl.Syntax where

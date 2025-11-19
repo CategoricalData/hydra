@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Entry point for Hydra's adapter (type/term rewriting) framework
 
 module Hydra.Adapt.Modules where

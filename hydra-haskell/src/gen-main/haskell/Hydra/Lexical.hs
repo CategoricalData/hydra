@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A module for lexical operations over graphs.
 
 module Hydra.Lexical where

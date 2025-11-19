@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A module defining the graph used in the test suite.
 
 module Hydra.Test.TestGraph where

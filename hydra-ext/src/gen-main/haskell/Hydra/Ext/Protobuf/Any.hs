@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto
 
 module Hydra.Ext.Protobuf.Any where

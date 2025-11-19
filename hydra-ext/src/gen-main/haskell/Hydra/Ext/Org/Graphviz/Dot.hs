@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html
 
 module Hydra.Ext.Org.Graphviz.Dot where

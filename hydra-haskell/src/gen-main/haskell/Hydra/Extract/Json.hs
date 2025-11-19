@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for extracting values from JSON objects
 
 module Hydra.Extract.Json where

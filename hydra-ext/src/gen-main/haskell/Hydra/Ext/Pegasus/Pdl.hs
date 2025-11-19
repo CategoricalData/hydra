@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A model for PDL (Pegasus Data Language) schemas. Based on the specification at:
 -- |   https://linkedin.github.io/rest.li/pdl_schema
 

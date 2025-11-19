@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | See https://ossf.github.io/osv-schema
 
 module Hydra.Ext.Dev.Osv.Schema where

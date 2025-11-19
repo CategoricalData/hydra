@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Decode hydra.core types from the hydra.core.Term type
 
 module Hydra.Decode.Core where

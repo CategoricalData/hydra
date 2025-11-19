@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | AST operators for Haskell
 
 module Hydra.Ext.Haskell.Operators where

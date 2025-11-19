@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation
 
 module Hydra.Ext.TypeScript.Model where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A basic YAML representation model. Based on:
 -- |   https://yaml.org/spec/1.2/spec.html
 -- | The Serialization and Presentation properties of YAML,

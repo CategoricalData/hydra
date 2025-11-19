@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Type inference following Algorithm W, extended for nominal terms and types
 
 module Hydra.Inference where

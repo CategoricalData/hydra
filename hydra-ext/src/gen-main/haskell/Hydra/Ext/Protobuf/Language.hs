@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints for Protobuf v3
 
 module Hydra.Ext.Protobuf.Language where

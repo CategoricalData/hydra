@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Scala syntax model based on Scalameta (https://scalameta.org)
 
 module Hydra.Ext.Scala.Meta where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for encoding Hydra modules as Haskell modules
 
 module Hydra.Ext.Haskell.Coder where

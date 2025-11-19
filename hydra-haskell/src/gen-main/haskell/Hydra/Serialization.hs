@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.
 
 module Hydra.Serialization where

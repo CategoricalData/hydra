@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for working with Haskell syntax trees
 
 module Hydra.Ext.Haskell.Utils where

@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30).
 
 module Hydra.Ext.Org.Apache.Tinkerpop.Gremlin where

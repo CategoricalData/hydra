@@ -1,3 +1,5 @@
+-- Note: this is an automatically generated file. Do not edit.
+
 -- | Type checking and type reconstruction (type-of) for the results of Hydra unification and inference
 
 module Hydra.Checking where
