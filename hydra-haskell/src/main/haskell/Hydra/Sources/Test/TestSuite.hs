@@ -1,70 +1,48 @@
-module Hydra.Sources.Test.TestSuite (testSuiteModule) where
+{-# LANGUAGE OverloadedStrings #-}
+
+module Hydra.Sources.Test.TestSuite where
 
 import Hydra.Kernel
-import Hydra.Testing
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Kernel.Terms.All
-import Hydra.Dsl.Meta.Phantoms as Base
-import Hydra.Dsl.Meta.Testing
-import qualified Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-
-import Hydra.Sources.Test.Lib.Lists
-import Hydra.Sources.Test.Lib.Strings
-import Hydra.Sources.Test.Formatting
-import Hydra.Sources.Test.Inference.InferenceSuite
-import Hydra.Sources.Test.TestGraph
-import Hydra.Sources.Test.EtaExpansion
-import Hydra.Sources.Test.Checking.CheckingSuite
-
+import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Sources.Kernel.Types.All
+import Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List as L
+import qualified Data.Map  as M
+
+-- Additional imports
+import qualified Hydra.Sources.Test.Lib.Lists as Lists
+import qualified Hydra.Sources.Test.Lib.Strings as Strings
+import qualified Hydra.Sources.Test.Checking.All as CheckingAll
+import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
+import qualified Hydra.Sources.Test.Formatting as Formatting
+import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 
 
-testSuiteNs = Namespace "hydra.test.testSuite"
-
-testSuiteModule :: Module
-testSuiteModule = Module testSuiteNs elements
-    [testGraphModule]
-    KernelTypes.kernelTypesModules $
+module_ :: Module
+module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypesModules $
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
-    elements = [
-      allTestsEl,
-      checkingTestsEl,
-      etaExpansionTestsEl,
-      formattingTestsEl,
-      inferenceTestsEl,
-      listPrimitiveTestsEl,
-      primitiveTestsEl,
-      stringPrimitiveTestsEl]
+    elements = [el allTestsDef]
+    modules = [
+      CheckingAll.module_,
+      EtaExpansion.module_,
+      Formatting.module_,
+      InferenceAll.module_,
+      Lists.module_, Strings.module_] -- TODO
 
-allTestsEl :: Binding
-allTestsEl = encodedTestGroupToBinding testSuiteNs "allTests" $ tgroup "All tests" Nothing subgroups []
+allTestsDef :: TBinding TestGroup
+allTestsDef = definitionInModule module_ "allTests" $
+    doc "The group of all common tests" $
+    Testing.testGroup "common" nothing (list subgroups) (list [])
   where
-    subgroups = fmap groupRef [
-      checkingTestsEl,
-      etaExpansionTestsEl,
-      formattingTestsEl,
-      inferenceTestsEl,
-      primitiveTestsEl]
-
-checkingTestsEl = encodedTestGroupToBinding testSuiteNs "checkingTests" checkingTests
-
-etaExpansionTestsEl = testGroupToBinding testSuiteNs "etaExpansionTests" etaExpansionTests
-
-formattingTestsEl = testGroupToBinding testSuiteNs "formattingTests" formattingTests
-
-inferenceTestsEl = encodedTestGroupToBinding testSuiteNs "inferenceTests" inferenceTests
-
-listPrimitiveTestsEl = testGroupToBinding testSuiteNs "listPrimitiveTests" listPrimitiveTests
-
-primitiveTestsEl = encodedTestGroupToBinding testSuiteNs "primitiveTests" $
-    tgroup "Primitive functions" (Just "Test cases for primitive functions") primGroups []
-  where
-    primGroups = fmap groupRef [
-      listPrimitiveTestsEl,
-      stringPrimitiveTestsEl]
-
-stringPrimitiveTestsEl = testGroupToBinding testSuiteNs "stringPrimitiveTests" stringPrimitiveTests
+    subgroups = [
+      ref CheckingAll.allTestsDef,
+      ref EtaExpansion.allTestsDef,
+      ref Formatting.allTestsDef,
+      ref InferenceAll.allTestsDef]

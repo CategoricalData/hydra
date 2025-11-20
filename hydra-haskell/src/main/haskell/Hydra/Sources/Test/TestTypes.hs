@@ -14,8 +14,8 @@ import qualified Hydra.Dsl.Meta.Types as T
 import           Hydra.Dsl.Meta.Terms as MetaTerms
 
 
-testTypesModule :: Module
-testTypesModule = Module (Namespace "hydra.test.testTypes") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.test.testTypes") elements
     []
     kernelTypesModules
     (Just "Type definitions for the test suite")
@@ -91,11 +91,11 @@ testTypesModule = Module (Namespace "hydra.test.testTypes") elements
       el stringOrIntTypeDef,
       el testTypeNameDef]
 
-testTypesDefinition :: String -> TTerm a -> TBinding a
-testTypesDefinition = definitionInModule testTypesModule
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-testTypesType :: String -> TTerm Type -> TBinding Type
-testTypesType name = testTypesDefinition name . firstClassType
+defineType :: String -> TTerm Type -> TBinding Type
+defineType name = define name . firstClassType
 
 -- Helper to create fully qualified names within this module
 testTypesName :: String -> TTerm Name
@@ -104,332 +104,332 @@ testTypesName localName = name localName
 
 -- Type name definitions
 testTypeBuddyListANameDef :: TBinding Name
-testTypeBuddyListANameDef = testTypesDefinition "testTypeBuddyListAName" $
+testTypeBuddyListANameDef = define "testTypeBuddyListAName" $
   testTypesName "BuddyListA"
 
 testTypeBuddyListBNameDef :: TBinding Name
-testTypeBuddyListBNameDef = testTypesDefinition "testTypeBuddyListBName" $
+testTypeBuddyListBNameDef = define "testTypeBuddyListBName" $
   testTypesName "BuddyListB"
 
 testTypeComparisonNameDef :: TBinding Name
-testTypeComparisonNameDef = testTypesDefinition "testTypeComparisonName" $
+testTypeComparisonNameDef = define "testTypeComparisonName" $
   testTypesName "Comparison"
 
 testTypeEitherNameDef :: TBinding Name
-testTypeEitherNameDef = testTypesDefinition "testTypeEitherName" $
+testTypeEitherNameDef = define "testTypeEitherName" $
   testTypesName "Either"
 
 testTypeFlowNameDef :: TBinding Name
-testTypeFlowNameDef = testTypesDefinition "testTypeFlowName" $
+testTypeFlowNameDef = define "testTypeFlowName" $
   name "hydra.compute.Flow"
 
 testTypeFlowStateNameDef :: TBinding Name
-testTypeFlowStateNameDef = testTypesDefinition "testTypeFlowStateName" $
+testTypeFlowStateNameDef = define "testTypeFlowStateName" $
   name "hydra.compute.FlowState"
 
 testTypeHydraLiteralTypeNameDef :: TBinding Name
-testTypeHydraLiteralTypeNameDef = testTypesDefinition "testTypeHydraLiteralTypeName" $
+testTypeHydraLiteralTypeNameDef = define "testTypeHydraLiteralTypeName" $
   testTypesName "HydraLiteralType"
 
 testTypeHydraTypeNameDef :: TBinding Name
-testTypeHydraTypeNameDef = testTypesDefinition "testTypeHydraTypeName" $
+testTypeHydraTypeNameDef = define "testTypeHydraTypeName" $
   testTypesName "HydraType"
 
 testTypeIntListNameDef :: TBinding Name
-testTypeIntListNameDef = testTypesDefinition "testTypeIntListName" $
+testTypeIntListNameDef = define "testTypeIntListName" $
   testTypesName "IntList"
 
 testTypeLatLonNameDef :: TBinding Name
-testTypeLatLonNameDef = testTypesDefinition "testTypeLatLonName" $
+testTypeLatLonNameDef = define "testTypeLatLonName" $
   testTypesName "LatLon"
 
 testTypeLatLonPolyNameDef :: TBinding Name
-testTypeLatLonPolyNameDef = testTypesDefinition "testTypeLatLonPolyName" $
+testTypeLatLonPolyNameDef = define "testTypeLatLonPolyName" $
   testTypesName "LatLonPoly"
 
 testTypeListNameDef :: TBinding Name
-testTypeListNameDef = testTypesDefinition "testTypeListName" $
+testTypeListNameDef = define "testTypeListName" $
   testTypesName "List"
 
 testTypeNumberNameDef :: TBinding Name
-testTypeNumberNameDef = testTypesDefinition "testTypeNumberName" $
+testTypeNumberNameDef = define "testTypeNumberName" $
   testTypesName "Number"
 
 testTypePersonNameDef :: TBinding Name
-testTypePersonNameDef = testTypesDefinition "testTypePersonName" $
+testTypePersonNameDef = define "testTypePersonName" $
   testTypesName "Person"
 
 testTypePersonOrSomethingNameDef :: TBinding Name
-testTypePersonOrSomethingNameDef = testTypesDefinition "testTypePersonOrSomethingName" $
+testTypePersonOrSomethingNameDef = define "testTypePersonOrSomethingName" $
   testTypesName "PersonOrSomething"
 
 testTypePolymorphicWrapperNameDef :: TBinding Name
-testTypePolymorphicWrapperNameDef = testTypesDefinition "testTypePolymorphicWrapperName" $
+testTypePolymorphicWrapperNameDef = define "testTypePolymorphicWrapperName" $
   testTypesName "PolymorphicWrapper"
 
 testTypeSimpleNumberNameDef :: TBinding Name
-testTypeSimpleNumberNameDef = testTypesDefinition "testTypeSimpleNumberName" $
+testTypeSimpleNumberNameDef = define "testTypeSimpleNumberName" $
   testTypesName "SimpleNumber"
 
 testTypeStringAliasNameDef :: TBinding Name
-testTypeStringAliasNameDef = testTypesDefinition "testTypeStringAliasName" $
+testTypeStringAliasNameDef = define "testTypeStringAliasName" $
   testTypesName "StringAlias"
 
 testTypeSymmetricTripleNameDef :: TBinding Name
-testTypeSymmetricTripleNameDef = testTypesDefinition "testTypeSymmetricTripleName" $
+testTypeSymmetricTripleNameDef = define "testTypeSymmetricTripleName" $
   testTypesName "SymmetricTriple"
 
 testTypeTimestampNameDef :: TBinding Name
-testTypeTimestampNameDef = testTypesDefinition "testTypeTimestampName" $
+testTypeTimestampNameDef = define "testTypeTimestampName" $
   testTypesName "Timestamp"
 
 testTypeTraceNameDef :: TBinding Name
-testTypeTraceNameDef = testTypesDefinition "testTypeTraceName" $
+testTypeTraceNameDef = define "testTypeTraceName" $
   name "hydra.compute.Trace"
 
 testTypeTripleNameDef :: TBinding Name
-testTypeTripleNameDef = testTypesDefinition "testTypeTripleName" $
+testTypeTripleNameDef = define "testTypeTripleName" $
   testTypesName "Triple"
 
 testTypeUnionMonomorphicNameDef :: TBinding Name
-testTypeUnionMonomorphicNameDef = testTypesDefinition "testTypeUnionMonomorphicName" $
+testTypeUnionMonomorphicNameDef = define "testTypeUnionMonomorphicName" $
   testTypesName "UnionMonomorphic"
 
 testTypeUnionPolymorphicRecursiveNameDef :: TBinding Name
-testTypeUnionPolymorphicRecursiveNameDef = testTypesDefinition "testTypeUnionPolymorphicRecursiveName" $
+testTypeUnionPolymorphicRecursiveNameDef = define "testTypeUnionPolymorphicRecursiveName" $
   testTypesName "UnionPolymorphicRecursive"
 
 testTypeUnitNameDef :: TBinding Name
-testTypeUnitNameDef = testTypesDefinition "testTypeUnitName" $
+testTypeUnitNameDef = define "testTypeUnitName" $
   testTypesName "Unit"
 
 -- Type definitions
 testTypeBuddyListADef :: TBinding Type
-testTypeBuddyListADef = testTypesType "testTypeBuddyListA" $
+testTypeBuddyListADef = defineType "testTypeBuddyListA" $
   T.forAll "a" $ T.record (ref testTypeBuddyListANameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListBNameDef) (T.var "a")]
 
 testTypeBuddyListBDef :: TBinding Type
-testTypeBuddyListBDef = testTypesType "testTypeBuddyListB" $
+testTypeBuddyListBDef = defineType "testTypeBuddyListB" $
   T.forAll "a" $ T.record (ref testTypeBuddyListBNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "a")]
 
 testTypeComparisonDef :: TBinding Type
-testTypeComparisonDef = testTypesType "testTypeComparison" $
+testTypeComparisonDef = defineType "testTypeComparison" $
   T.union (ref testTypeComparisonNameDef) [
     "lessThan">: T.unit,
     "equalTo">: T.unit,
     "greaterThan">: T.unit]
 
 testTypeEitherDef :: TBinding Type
-testTypeEitherDef = testTypesType "testTypeEither" $
+testTypeEitherDef = defineType "testTypeEither" $
   T.forAll "a" $ T.forAll "b" $ T.union (ref testTypeEitherNameDef) [
     "left">: T.var "a",
     "right">: T.var "b"]
 
 testTypeFlowDef :: TBinding Type
-testTypeFlowDef = testTypesType "testTypeFlow" $
+testTypeFlowDef = defineType "testTypeFlow" $
   T.forAll "s" $ T.forAll "a" $ T.record (ref testTypeFlowNameDef) [
     "value">: T.function (T.var "s") (T.apply (T.apply (Core.typeVariable $ ref testTypeFlowStateNameDef) (T.var "s")) (T.var "a"))]
 
 testTypeFlowStateDef :: TBinding Type
-testTypeFlowStateDef = testTypesType "testTypeFlowState" $
+testTypeFlowStateDef = defineType "testTypeFlowState" $
   T.forAll "s" $ T.forAll "a" $ T.record (ref testTypeFlowStateNameDef) [
     "value">: T.optional (T.var "a"),
     "state">: T.var "s",
     "trace">: Core.typeVariable $ ref testTypeTraceNameDef]
 
 testTypeHydraLiteralTypeDef :: TBinding Type
-testTypeHydraLiteralTypeDef = testTypesType "testTypeHydraLiteralType" $
+testTypeHydraLiteralTypeDef = defineType "testTypeHydraLiteralType" $
   T.union (ref testTypeHydraLiteralTypeNameDef) [
     "boolean">: T.boolean,
     "string">: T.string]
 
 testTypeHydraTypeDef :: TBinding Type
-testTypeHydraTypeDef = testTypesType "testTypeHydraType" $
+testTypeHydraTypeDef = defineType "testTypeHydraType" $
   T.union (ref testTypeHydraTypeNameDef) [
     "literal">: Core.typeVariable $ ref testTypeHydraLiteralTypeNameDef,
     "list">: Core.typeVariable $ ref testTypeHydraTypeNameDef]
 
 testTypeIntListDef :: TBinding Type
-testTypeIntListDef = testTypesType "testTypeIntList" $
+testTypeIntListDef = defineType "testTypeIntList" $
   T.record (ref testTypeIntListNameDef) [
     "head">: T.int32,
     "tail">: T.optional $ Core.typeVariable $ ref testTypeIntListNameDef]
 
 testTypeLatLonDef :: TBinding Type
-testTypeLatLonDef = testTypesType "testTypeLatLon" $
+testTypeLatLonDef = defineType "testTypeLatLon" $
   T.record (ref testTypeLatLonNameDef) [
     "lat">: T.float32,
     "lon">: T.float32]
 
 testTypeLatLonPolyDef :: TBinding Type
-testTypeLatLonPolyDef = testTypesType "testTypeLatLonPoly" $
+testTypeLatLonPolyDef = defineType "testTypeLatLonPoly" $
   T.forAll "a" $ T.record (ref testTypeLatLonPolyNameDef) [
     "lat">: T.var "a",
     "lon">: T.var "a"]
 
 testTypeListDef :: TBinding Type
-testTypeListDef = testTypesType "testTypeList" $
+testTypeListDef = defineType "testTypeList" $
   T.forAll "a" $ T.record (ref testTypeListNameDef) [
     "head">: T.var "a",
     "tail">: T.optional $
       T.apply (Core.typeVariable $ ref testTypeListNameDef) (T.var "a")]
 
 testTypeNumberDef :: TBinding Type
-testTypeNumberDef = testTypesType "testTypeNumber" $
+testTypeNumberDef = defineType "testTypeNumber" $
   T.union (ref testTypeNumberNameDef) [
     "int">: T.int32,
     "float">: T.float32]
 
 testTypePersonDef :: TBinding Type
-testTypePersonDef = testTypesType "testTypePerson" $
+testTypePersonDef = defineType "testTypePerson" $
   T.record (ref testTypePersonNameDef) [
     "firstName">: T.string,
     "lastName">: T.string,
     "age">: T.int32]
 
 testTypePersonOrSomethingDef :: TBinding Type
-testTypePersonOrSomethingDef = testTypesType "testTypePersonOrSomething" $
+testTypePersonOrSomethingDef = defineType "testTypePersonOrSomething" $
   T.forAll "a" $ T.union (ref testTypePersonOrSomethingNameDef) [
     "person">: Core.typeVariable $ ref testTypePersonNameDef,
     "other">: T.var "a"]
 
 testTypePolymorphicWrapperDef :: TBinding Type
-testTypePolymorphicWrapperDef = testTypesType "testTypePolymorphicWrapper" $
+testTypePolymorphicWrapperDef = defineType "testTypePolymorphicWrapper" $
   T.forAll "a" $ Core.typeWrap $ Core.wrappedType (ref testTypePolymorphicWrapperNameDef) (T.list $ T.var "a")
 
 testTypeSimpleNumberDef :: TBinding Type
-testTypeSimpleNumberDef = testTypesType "testTypeSimpleNumber" $
+testTypeSimpleNumberDef = defineType "testTypeSimpleNumber" $
   T.union (ref testTypeSimpleNumberNameDef) [
     "int">: T.int32,
     "float">: T.float32]
 
 testTypeStringAliasDef :: TBinding Type
-testTypeStringAliasDef = testTypesType "testTypeStringAlias" $
+testTypeStringAliasDef = defineType "testTypeStringAlias" $
   Core.typeWrap $ Core.wrappedType (ref testTypeStringAliasNameDef) T.string
 
 testTypeSymmetricTripleDef :: TBinding Type
-testTypeSymmetricTripleDef = testTypesType "testTypeSymmetricTriple" $
+testTypeSymmetricTripleDef = defineType "testTypeSymmetricTriple" $
   T.forAlls ["v", "e"] $ T.wrap (ref testTypeSymmetricTripleNameDef) $
     T.applys (Core.typeVariable $ ref testTypeTripleNameDef) [T.var "v", T.var "e", T.var "v"]
 
 testTypeTimestampDef :: TBinding Type
-testTypeTimestampDef = testTypesType "testTypeTimestamp" $
+testTypeTimestampDef = defineType "testTypeTimestamp" $
   T.union (ref testTypeTimestampNameDef) [
     "unixTimeMillis">: T.uint64,
     "date">: T.string]
 
 testTypeTraceDef :: TBinding Type
-testTypeTraceDef = testTypesType "testTypeTrace" $
+testTypeTraceDef = defineType "testTypeTrace" $
   T.record (ref testTypeTraceNameDef) [
     "stack">: T.list T.string,
     "messages">: T.list T.string,
     "other">: T.map T.string T.string]
 
 testTypeTripleDef :: TBinding Type
-testTypeTripleDef = testTypesType "testTypeTriple" $
+testTypeTripleDef = defineType "testTypeTriple" $
   T.forAll "a" $ T.forAll "b" $ T.forAll "c" $ T.record (ref testTypeTripleNameDef) [
     "first">: T.var "a",
     "second">: T.var "b",
     "third">: T.var "c"]
 
 testTypeUnionMonomorphicDef :: TBinding Type
-testTypeUnionMonomorphicDef = testTypesType "testTypeUnionMonomorphic" $
+testTypeUnionMonomorphicDef = defineType "testTypeUnionMonomorphic" $
   T.union (ref testTypeUnionMonomorphicNameDef) [
     "bool">: T.boolean,
     "string">: T.string,
     "unit">: T.unit]
 
 testTypeUnionPolymorphicRecursiveDef :: TBinding Type
-testTypeUnionPolymorphicRecursiveDef = testTypesType "testTypeUnionPolymorphicRecursive" $
+testTypeUnionPolymorphicRecursiveDef = defineType "testTypeUnionPolymorphicRecursive" $
   T.forAll "a" $ T.union (ref testTypeUnionPolymorphicRecursiveNameDef) [
     "bool">: T.boolean,
     "value">: T.var "a",
     "other">: T.apply (Core.typeVariable $ ref testTypeUnionPolymorphicRecursiveNameDef) (T.var "a")]
 
 testTypeUnitDef :: TBinding Type
-testTypeUnitDef = testTypesType "testTypeUnit" $
+testTypeUnitDef = defineType "testTypeUnit" $
   T.record (ref testTypeUnitNameDef) []
 
 -- Additional type utilities for tests
 
 concatTypeDef :: TBinding Type
-concatTypeDef = testTypesType "concatType" $
+concatTypeDef = defineType "concatType" $
   T.function T.string $ T.function T.string T.string
 
 compareStringsTypeDef :: TBinding Type
-compareStringsTypeDef = testTypesType "compareStringsType" $
+compareStringsTypeDef = defineType "compareStringsType" $
   T.function T.string T.string
 
 eitherStringOrInt8TypeNameDef :: TBinding Name
-eitherStringOrInt8TypeNameDef = testTypesDefinition "eitherStringOrInt8TypeName" $
+eitherStringOrInt8TypeNameDef = define "eitherStringOrInt8TypeName" $
   testTypesName "EitherStringOrInt8"
 
 eitherStringOrInt8TypeDef :: TBinding Type
-eitherStringOrInt8TypeDef = testTypesType "eitherStringOrInt8Type" $
+eitherStringOrInt8TypeDef = defineType "eitherStringOrInt8Type" $
   T.union (ref eitherStringOrInt8TypeNameDef) [
     "left">: T.string,
     "right">: Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8]
 
 exampleProjectionTypeDef :: TBinding Type
-exampleProjectionTypeDef = testTypesType "exampleProjectionType" $
+exampleProjectionTypeDef = defineType "exampleProjectionType" $
   T.function (Core.typeVariable $ ref testTypePersonNameDef) T.string
 
 listOfInt8sTypeDef :: TBinding Type
-listOfInt8sTypeDef = testTypesType "listOfInt8sType" $
+listOfInt8sTypeDef = defineType "listOfInt8sType" $
   T.list (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
 
 listOfInt16sTypeDef :: TBinding Type
-listOfInt16sTypeDef = testTypesType "listOfInt16sType" $
+listOfInt16sTypeDef = defineType "listOfInt16sType" $
   T.list T.int16
 
 listOfListsOfStringsTypeDef :: TBinding Type
-listOfListsOfStringsTypeDef = testTypesType "listOfListsOfStringsType" $
+listOfListsOfStringsTypeDef = defineType "listOfListsOfStringsType" $
   T.list $ T.list T.string
 
 listOfSetOfStringsTypeDef :: TBinding Type
-listOfSetOfStringsTypeDef = testTypesType "listOfSetOfStringsType" $
+listOfSetOfStringsTypeDef = defineType "listOfSetOfStringsType" $
   T.list $ T.set T.string
 
 listOfStringsTypeDef :: TBinding Type
-listOfStringsTypeDef = testTypesType "listOfStringsType" $
+listOfStringsTypeDef = defineType "listOfStringsType" $
   T.list T.string
 
 mapOfStringsToIntsTypeDef :: TBinding Type
-mapOfStringsToIntsTypeDef = testTypesType "mapOfStringsToIntsType" $
+mapOfStringsToIntsTypeDef = defineType "mapOfStringsToIntsType" $
   T.map T.string T.int32
 
 optionalInt8TypeDef :: TBinding Type
-optionalInt8TypeDef = testTypesType "optionalInt8Type" $
+optionalInt8TypeDef = defineType "optionalInt8Type" $
   T.optional (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
 
 optionalInt16TypeDef :: TBinding Type
-optionalInt16TypeDef = testTypesType "optionalInt16Type" $
+optionalInt16TypeDef = defineType "optionalInt16Type" $
   T.optional T.int16
 
 optionalStringTypeDef :: TBinding Type
-optionalStringTypeDef = testTypesType "optionalStringType" $
+optionalStringTypeDef = defineType "optionalStringType" $
   T.optional T.string
 
 setOfStringsTypeDef :: TBinding Type
-setOfStringsTypeDef = testTypesType "setOfStringsType" $
+setOfStringsTypeDef = defineType "setOfStringsType" $
   T.set T.string
 
 stringOrIntNameDef :: TBinding Name
-stringOrIntNameDef = testTypesDefinition "stringOrIntName" $
+stringOrIntNameDef = define "stringOrIntName" $
   testTypesName "StringOrInt"
 
 stringOrIntTypeDef :: TBinding Type
-stringOrIntTypeDef = testTypesType "stringOrIntType" $
+stringOrIntTypeDef = defineType "stringOrIntType" $
   T.union (ref stringOrIntNameDef) [
     "left">: T.string,
     "right">: T.int32]
 
 testTypeNameDef :: TBinding Name
-testTypeNameDef = testTypesDefinition "testTypeName" $
+testTypeNameDef = define "testTypeName" $
   testTypesName "Test"

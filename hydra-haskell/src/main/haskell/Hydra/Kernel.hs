@@ -49,6 +49,7 @@ module Hydra.Kernel (
   module Hydra.Substitution,
   module Hydra.Tabular,
   module Hydra.Templates,
+  module Hydra.Testing,
   module Hydra.Typing,
   module Hydra.Unification,
   module Hydra.Util,
@@ -93,6 +94,7 @@ import Hydra.Sorting
 import Hydra.Substitution
 import Hydra.Tabular
 import Hydra.Templates
+import Hydra.Testing
 import Hydra.Typing
 import Hydra.Unification
 import Hydra.Util
