@@ -47,6 +47,21 @@ _CaseConversionTestCase_fromString = (Core.Name "fromString")
 
 _CaseConversionTestCase_toString = (Core.Name "toString")
 
+-- | A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language
+data DelegatedEvaluationTestCase = 
+  DelegatedEvaluationTestCase {
+    -- | The first of two terms which should evaluate to the same expression
+    delegatedEvaluationTestCaseInput :: Core.Term,
+    -- | The second of two terms which should evaluate to the same expression
+    delegatedEvaluationTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_DelegatedEvaluationTestCase = (Core.Name "hydra.testing.DelegatedEvaluationTestCase")
+
+_DelegatedEvaluationTestCase_input = (Core.Name "input")
+
+_DelegatedEvaluationTestCase_output = (Core.Name "output")
+
 -- | A test case which performs eta expansion (adding missing lambda abstractions) on a given term and compares the result with the expected result
 data EtaExpansionTestCase = 
   EtaExpansionTestCase {
@@ -119,6 +134,8 @@ _Tag = (Core.Name "hydra.testing.Tag")
 data TestCase = 
   -- | A case conversion test
   TestCaseCaseConversion CaseConversionTestCase |
+  -- | A delegated evaluation test
+  TestCaseDelegatedEvaluation DelegatedEvaluationTestCase |
   -- | An eta expansion test
   TestCaseEtaExpansion EtaExpansionTestCase |
   -- | A term evaluation test
@@ -136,6 +153,8 @@ data TestCase =
 _TestCase = (Core.Name "hydra.testing.TestCase")
 
 _TestCase_caseConversion = (Core.Name "caseConversion")
+
+_TestCase_delegatedEvaluation = (Core.Name "delegatedEvaluation")
 
 _TestCase_etaExpansion = (Core.Name "etaExpansion")
 
