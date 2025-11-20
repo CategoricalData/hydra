@@ -66,6 +66,11 @@ testGroupForLet = supergroup "Let terms" [
         (lets [
           "foo">: int32 42]
           $ var "foo")
+        T.int32,
+      expectMono 2 []
+        (lets [
+            "foo">: int32 42]
+          $ var "foo")
         T.int32],
     subgroup "Multiple references to a let-bound term" [
       expectMono 1 []
@@ -119,31 +124,44 @@ testGroupForLet = supergroup "Let terms" [
 
     subgroup "Let-polymorphism" [
       expectPoly 1 []
+        (lets ["x">: float32 42.0] $ lambdas ["y", "z"] $ var "x")
+        ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32)),
+      -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
+      expectMono 2 []
+        (lets [
+            "square">: lambda "z" $ primitive _math_mul @@ var "z" @@ var "z"] $
+          lambdas ["f", "x", "y"] $ primitive _logic_ifElse
+              @@ (var "f" @@ (var "square" @@ var "x") @@ var "y")
+              @@ (var "f" @@ var "x" @@ (var "f" @@ var "x" @@ var "y"))
+              @@ (var "f" @@ var "x" @@ var "y"))
+        (T.functionMany [
+          T.functionMany [T.int32, T.boolean, T.boolean], T.int32, T.boolean, T.boolean]),
+      expectPoly 3 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" $ var "id" @@ (var "id" @@ var "x"))
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
-      expectMono 2 []
+      expectMono 4 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ var "id" @@ (list [var "id" @@ int32 42]))
         (T.list T.int32),
-      expectPoly 3 []
+      expectPoly 5 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ lambda "x" (var "id" @@ (list [var "id" @@ var "x"])))
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
-      expectMono 4 []
+      expectMono 6 []
         (lets [
           "id">: lambda "x" $ var "x"]
           $ tuple2 (var "id" @@ int32 42) (var "id" @@ string "foo"))
         (T.tuple2 T.int32 T.string),
-      expectMono 5 []
+      expectMono 7 []
         (lets [
           "list">: lambda "x" $ list [var "x"]]
           $ tuple2 (var "list" @@ int32 42) (var "list" @@ string "foo"))
         (T.tuple2 (T.list T.int32) (T.list T.string)),
-      expectPoly 6 [tag_disabled]
+      expectPoly 8 [tag_disabled]
         (lets [
           "singleton">: lambda "x" $ list [var "x"],
           "f">: lambda "x" $ lambda "y" $ primitive _lists_cons
@@ -152,14 +170,14 @@ testGroupForLet = supergroup "Let terms" [
           "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
           $ var "f")
         ["t0"] (T.list $ T.tuple2 T.int32 (T.var "t0")),
-      expectMono 7 [tag_disabledForMinimalInference]
+      expectMono 9 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "fortytwo">: var "id" @@ int32 42,
           "foo">: var "id" @@ string "foo"]
           $ tuple2 (var "fortytwo") (var "foo"))
         (T.tuple2 T.int32 T.string),
-      expectMono 8 [tag_disabledForMinimalInference]
+      expectMono 10 [tag_disabledForMinimalInference]
         (lets [
           "fortytwo">: var "id" @@ int32 42,
           "id">: lambda "x" $ var "x",
@@ -411,6 +429,14 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
     subgroup "Mixed expressions with lambdas, constants, and primitive functions" [
       expectMono 1 []
         (lambda "x" $ (primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1))
+        (T.function T.int32 T.int32)],
+
+    subgroup "Application terms" [
+      expectMono 1 []
+        ((lambda "x" $ var "x") @@ string "foo")
+        T.string,
+      expectMono 2 []
+        (lambda "x" $ primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1)
         (T.function T.int32 T.int32)]]
 
 testGroupForPrimitives :: TTerm TestGroup

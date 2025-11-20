@@ -9,7 +9,6 @@ import Hydra.Sources.Test.Inference.Failures
 import Hydra.Sources.Test.Inference.Fundamentals
 import Hydra.Sources.Test.Inference.KernelExamples
 import Hydra.Sources.Test.Inference.NominalTypes
-import Hydra.Sources.Test.Inference.Simple
 
 
 inferenceTests :: TTerm TestGroup
@@ -19,5 +18,4 @@ inferenceTests = supergroup "Inference tests" [
   failureTests,
   fundamentalsTests,
   kernelExamplesTests,
-  nominalTypesTests,
-  simpleTermsTests]
+  nominalTypesTests]
