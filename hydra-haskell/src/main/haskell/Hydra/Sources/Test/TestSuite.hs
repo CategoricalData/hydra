@@ -16,7 +16,7 @@ import Hydra.Sources.Test.Formatting
 import Hydra.Sources.Test.Inference.InferenceSuite
 import Hydra.Sources.Test.TestGraph
 import Hydra.Sources.Test.EtaExpansion
-import Hydra.Sources.Test.Checking
+import Hydra.Sources.Test.Checking.CheckingSuite
 
 import qualified Data.List as L
 
