@@ -79,16 +79,34 @@ testGroupForEithers = supergroup "Either terms" [
         ["t0"] (T.tuple2 (T.list $ T.either_ T.string T.int32) (T.list $ T.var "t0"))]]
 
 testGroupForFolds :: TTerm TestGroup
-testGroupForFolds = subgroup "List eliminations (folds)" [
-    expectMono 1 [tag_disabledForMinimalInference]
-      foldAdd
-      (T.functionMany [T.int32, T.list T.int32, T.int32]),
-    expectMono 2 [tag_disabledForMinimalInference]
-      (foldAdd @@ int32 0)
-      (T.function (T.list T.int32) T.int32),
-    expectMono 3 [tag_disabledForMinimalInference]
-      (foldAdd @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
-      T.int32]
+testGroupForFolds = supergroup "Eliminations" [
+    subgroup "List eliminations (folds)" [
+      expectMono 1 [tag_disabledForMinimalInference]
+        foldAdd
+        (T.functionMany [T.int32, T.list T.int32, T.int32]),
+      expectMono 2 [tag_disabledForMinimalInference]
+        (foldAdd @@ int32 0)
+        (T.function (T.list T.int32) T.int32),
+      expectMono 3 [tag_disabledForMinimalInference]
+        (foldAdd @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
+        T.int32],
+
+    subgroup "Optional eliminations" [
+      expectMono 1 [tag_disabledForMinimalInference]
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate))
+        (T.function (T.optional T.int32) T.int32),
+      expectMono 2 [tag_disabledForMinimalInference]
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate) @@ (optional (just $ int32 137)))
+        T.int32,
+      expectMono 3 [tag_disabledForMinimalInference]
+        (primitive _maybes_maybe @@ (int32 42) @@ (primitive _math_negate) @@ optional nothing)
+        T.int32,
+      expectPoly 4 [tag_disabledForMinimalInference]
+        (lambda "x" $ primitive _maybes_maybe @@ (var "x") @@ (primitive _maybes_pure) @@ var "x")
+        ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
+      expectPoly 5 [tag_disabledForMinimalInference]
+        (primitive _maybes_maybe @@ (list []) @@ (lambda "x" $ list [var "x"]))
+        ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))]]
   where
     foldAdd = primitive _lists_foldl @@ primitive _math_add
 
@@ -132,7 +150,11 @@ testGroupForMaps = subgroup "Map terms" [
       (T.map T.string T.string),
     expectPoly 2 [tag_disabledForMinimalInference]
       (mapTerm [])
-      ["t0", "t1"] (T.map (T.var "t0") (T.var "t1"))]
+      ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
+    expectPoly 3 [tag_disabledForMinimalInference]
+      (lambdas ["x", "y"] $ mapTerm
+        [(var "x", float64 0.1), (var "y", float64 0.2)])
+      ["t0"] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
 
 testGroupForOptionals :: TTerm TestGroup
 testGroupForOptionals = subgroup "Optional terms" [
