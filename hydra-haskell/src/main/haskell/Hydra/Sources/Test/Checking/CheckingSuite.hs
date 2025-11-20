@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | Type checking test cases for the common test suite
-module Hydra.Sources.Test.Checking where
+module Hydra.Sources.Test.Checking.CheckingSuite where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
