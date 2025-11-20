@@ -43,7 +43,21 @@ testGroupForProjections = supergroup "Projections" [
     subgroup "Record eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
         (project (ref testTypePersonNameDef) (name "firstName"))
-        (T.function (Core.typeVariable $ ref testTypePersonNameDef) T.string)]]
+        (T.function (Core.typeVariable $ ref testTypePersonNameDef) T.string)],
+
+    subgroup "Tuple projections" [
+      expectPoly 1 [tag_disabledForMinimalInference]
+        (untuple 2 0)
+        ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
+      expectMono 2 [tag_disabledForMinimalInference]
+        (untuple 2 1 @@ tuple2 (int32 42) (string "foo"))
+        T.string,
+      expectPoly 3 [tag_disabledForMinimalInference]
+        (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
+        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+      expectPoly 4 [tag_disabledForMinimalInference]
+        (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
+        ["t0"] (T.function (T.var "t0") T.int32)]]
 
 testGroupForRecords :: TTerm TestGroup
 testGroupForRecords = supergroup "Records" [
