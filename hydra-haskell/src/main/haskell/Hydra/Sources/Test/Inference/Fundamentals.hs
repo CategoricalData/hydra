@@ -1,31 +1,52 @@
-module Hydra.Sources.Test.Inference.Fundamentals (fundamentalsTests) where
+module Hydra.Sources.Test.Inference.Fundamentals where
 
+-- Standard imports for kernel tests
 import Hydra.Kernel
-import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Testing as Testing
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Test.TestGraph
-
-import           Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List as L
+import qualified Data.Map  as M
 
-import qualified Data.Map as M
-import Prelude hiding (map, sum)
 
+module_ :: Module
+module_ = Module (Namespace "hydra.test.inference.fundamentals") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Inference tests for fundamental language features")
+  where
+    elements = [
+      el allTestsDef,
+      el testGroupForLambdasDef,
+      el testGroupForLetDef,
+      el testGroupForLiteralsDef,
+      el testGroupForPathologicalTermsDef,
+      el testGroupForPolymorphismDef,
+      el testGroupForPrimitivesDef]
 
-fundamentalsTests :: TTerm TestGroup
-fundamentalsTests = supergroup "Fundamentals" [
-  testGroupForLambdas,
-  testGroupForLet,
-  testGroupForLiterals,
-  testGroupForPathologicalTerms,
-  testGroupForPolymorphism,
-  testGroupForPrimitives]
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-testGroupForLambdas :: TTerm TestGroup
-testGroupForLambdas = supergroup "Lambdas" [
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Fundamental language feature tests" $
+  supergroup "Fundamentals" [
+    ref testGroupForLambdasDef,
+    ref testGroupForLetDef,
+    ref testGroupForLiteralsDef,
+    ref testGroupForPathologicalTermsDef,
+    ref testGroupForPolymorphismDef,
+    ref testGroupForPrimitivesDef]
+
+testGroupForLambdasDef :: TBinding TestGroup
+testGroupForLambdasDef = define "testGroupForLambdas" $
+  supergroup "Lambdas" [
     subgroup "Simple lambdas" [
       expectPoly 1 []
         (lambda "x" $ var "x")
@@ -47,8 +68,9 @@ testGroupForLambdas = supergroup "Lambdas" [
         (lambda "x" $ lambda "x" $ primitive _math_add @@ var "x" @@ int32 42)
         ["t0"] (T.function (T.var "t0") (T.function T.int32 T.int32))]]
 
-testGroupForLet :: TTerm TestGroup
-testGroupForLet = supergroup "Let terms" [
+testGroupForLetDef :: TBinding TestGroup
+testGroupForLetDef = define "testGroupForLet" $
+  supergroup "Let terms" [
 
     subgroup "Simple" [
       expectPoly 1  []
@@ -302,8 +324,9 @@ testGroupForLet = supergroup "Let terms" [
     s = primitive _math_negate
     p = primitive _math_negate
 
-testGroupForLiterals :: TTerm TestGroup
-testGroupForLiterals = subgroup "Literals" [
+testGroupForLiteralsDef :: TBinding TestGroup
+testGroupForLiteralsDef = define "testGroupForLiterals" $
+  subgroup "Literals" [
     expectMono 1 []
       (int32 42)
       T.int32,
@@ -317,8 +340,9 @@ testGroupForLiterals = subgroup "Literals" [
       (float64 42.0)
       T.float64]
 
-testGroupForPathologicalTerms :: TTerm TestGroup
-testGroupForPathologicalTerms = supergroup "Pathological terms" [
+testGroupForPathologicalTermsDef :: TBinding TestGroup
+testGroupForPathologicalTermsDef = define "testGroupForPathologicalTerms" $
+  supergroup "Pathological terms" [
 
     subgroup "Recursion" [
       expectPoly 1 []
@@ -374,8 +398,9 @@ testGroupForPathologicalTerms = supergroup "Pathological terms" [
           $ var "build" @@ int32 0)
         (T.list T.int32)]]
 
-testGroupForPolymorphism :: TTerm TestGroup
-testGroupForPolymorphism = supergroup "Polymorphism" [
+testGroupForPolymorphismDef :: TBinding TestGroup
+testGroupForPolymorphismDef = define "testGroupForPolymorphism" $
+  supergroup "Polymorphism" [
 
     subgroup "Simple lists and optionals" [
       expectPoly 1 []
@@ -439,8 +464,9 @@ testGroupForPolymorphism = supergroup "Polymorphism" [
         (lambda "x" $ primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1)
         (T.function T.int32 T.int32)]]
 
-testGroupForPrimitives :: TTerm TestGroup
-testGroupForPrimitives = supergroup "Primitives" [
+testGroupForPrimitivesDef :: TBinding TestGroup
+testGroupForPrimitivesDef = define "testGroupForPrimitives" $
+  supergroup "Primitives" [
 
     subgroup "Monomorphic primitive functions" [
       expectMono 1 []

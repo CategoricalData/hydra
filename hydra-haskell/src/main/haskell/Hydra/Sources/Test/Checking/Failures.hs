@@ -3,23 +3,40 @@
 -- | Type checking failure test cases
 module Hydra.Sources.Test.Checking.Failures where
 
-import Hydra.Kernel hiding (map)
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Dsl.Meta.Types as T
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+-- Standard imports for kernel tests
+import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core as Core
-import Hydra.Sources.Test.TestGraph
-
-import Prelude hiding (map, product, sum)
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List as L
-import qualified Data.Map as M
+import qualified Data.Map  as M
 
 
-failuresTests :: TTerm TestGroup
-failuresTests = supergroup "Failures" [
-  failOnUntypedTests]
+module_ :: Module
+module_ = Module (Namespace "hydra.test.checking.failures") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Type checking failure test cases")
+  where
+    elements = [
+      el allTestsDef,
+      el failOnUntypedTestsDef,
+      el untypedLambdasTestsDef]
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
+
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Type checking failure test cases" $
+  supergroup "Failures" [
+    ref failOnUntypedTestsDef]
 
 ------ Helper functions ------
 
@@ -45,13 +62,15 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Fail on untyped (pre-inference) terms ------
 
-failOnUntypedTests :: TTerm TestGroup
-failOnUntypedTests = supergroup "Fail on untyped (pre-inference) terms" [
-  untypedLambdasTests]
+failOnUntypedTestsDef :: TBinding TestGroup
+failOnUntypedTestsDef = define "failOnUntypedTests" $
+  supergroup "Fail on untyped (pre-inference) terms" [
+    ref untypedLambdasTestsDef]
 
-untypedLambdasTests :: TTerm TestGroup
-untypedLambdasTests = subgroup "Untyped lambdas" [
-  -- Note: The original HSpec test for this section was a failure test (typeOfShouldFail)
-  -- which tested that typeOf fails on untyped terms. The TTerm DSL format may need
-  -- a different mechanism for representing failure tests.
-  ]
+untypedLambdasTestsDef :: TBinding TestGroup
+untypedLambdasTestsDef = define "untypedLambdasTests" $
+  subgroup "Untyped lambdas" [
+    -- Note: The original HSpec test for this section was a failure test (typeOfShouldFail)
+    -- which tested that typeOf fails on untyped terms. The TTerm DSL format may need
+    -- a different mechanism for representing failure tests.
+    ]

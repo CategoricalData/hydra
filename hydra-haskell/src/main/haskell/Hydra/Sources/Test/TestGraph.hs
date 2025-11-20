@@ -1,8 +1,4 @@
-module Hydra.Sources.Test.TestGraph (
-  module Hydra.Sources.Test.TestGraph,
-  module Hydra.Sources.Test.TestTerms,
-  module Hydra.Sources.Test.TestTypes,
-) where
+module Hydra.Sources.Test.TestGraph where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -31,60 +27,61 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Dsl.Meta.Types as T
 import           Hydra.Dsl.Meta.Terms as MetaTerms
-import           Hydra.Sources.Test.TestTerms
-import           Hydra.Sources.Test.TestTypes
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
 
-testGraphDefinition :: String -> TTerm a -> TBinding a
-testGraphDefinition = definitionInModule testGraphModule
 
-testGraphModule :: HydraModule
-testGraphModule = Module (Namespace "hydra.test.testGraph") elements
-    [testTermsModule, testTypesModule]
+module_ :: Module
+module_ = Module (Namespace "hydra.test.testGraph") elements
+    [TestTerms.module_, TestTypes.module_]
     kernelTypesModules $
     Just ("A module defining the graph used in the test suite.")
   where
-    elements = [
-      el testTermsDef,
-      el testTypesDef,
-      el testNamespaceDef,
-      el testSchemaNamespaceDef]
+   elements = [
+     el testTermsDef,
+     el testTypesDef,
+     el testNamespaceDef,
+     el testSchemaNamespaceDef]
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
 testTermsDef :: TBinding (M.Map Name Term)
-testTermsDef = testGraphDefinition "testTerms" $
+testTermsDef = define "testTerms" $
   Maps.fromList $ Phantoms.list [
-    Phantoms.tuple2 (name "testDataArthur") (ref testDataArthurDef)]
+    Phantoms.tuple2 (name "testDataArthur") (ref TestTerms.testDataArthurDef)]
 
 testNamespaceDef :: TBinding Namespace
-testNamespaceDef = testGraphDefinition "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
+testNamespaceDef = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
 
 testTypesDef :: TBinding (M.Map Name Type)
-testTypesDef = testGraphDefinition "testTypes" $
+testTypesDef = define "testTypes" $
   Maps.fromList $ Phantoms.list [
-    Phantoms.tuple2 (ref testTypeBuddyListANameDef) (ref testTypeBuddyListADef),
-    Phantoms.tuple2 (ref testTypeBuddyListBNameDef) (ref testTypeBuddyListBDef),
-    Phantoms.tuple2 (ref testTypeComparisonNameDef) (ref testTypeComparisonDef),
-    Phantoms.tuple2 (ref testTypeEitherNameDef) (ref testTypeEitherDef),
-    Phantoms.tuple2 (ref testTypeFlowNameDef) (ref testTypeFlowDef),
-    Phantoms.tuple2 (ref testTypeFlowStateNameDef) (ref testTypeFlowStateDef),
-    Phantoms.tuple2 (ref testTypeHydraLiteralTypeNameDef) (ref testTypeHydraLiteralTypeDef),
-    Phantoms.tuple2 (ref testTypeHydraTypeNameDef) (ref testTypeHydraTypeDef),
-    Phantoms.tuple2 (ref testTypeIntListNameDef) (ref testTypeIntListDef),
-    Phantoms.tuple2 (ref testTypeLatLonNameDef) (ref testTypeLatLonDef),
-    Phantoms.tuple2 (ref testTypeLatLonPolyNameDef) (ref testTypeLatLonPolyDef),
-    Phantoms.tuple2 (ref testTypeListNameDef) (ref testTypeListDef),
-    Phantoms.tuple2 (ref testTypeNumberNameDef) (ref testTypeNumberDef),
-    Phantoms.tuple2 (ref testTypePersonNameDef) (ref testTypePersonDef),
-    Phantoms.tuple2 (ref testTypePersonOrSomethingNameDef) (ref testTypePersonOrSomethingDef),
-    Phantoms.tuple2 (ref testTypePolymorphicWrapperNameDef) (ref testTypePolymorphicWrapperDef),
-    Phantoms.tuple2 (ref testTypeSimpleNumberNameDef) (ref testTypeSimpleNumberDef),
-    Phantoms.tuple2 (ref testTypeStringAliasNameDef) (ref testTypeStringAliasDef),
-    Phantoms.tuple2 (ref testTypeSymmetricTripleNameDef) (ref testTypeSymmetricTripleDef),
-    Phantoms.tuple2 (ref testTypeTimestampNameDef) (ref testTypeTimestampDef),
-    Phantoms.tuple2 (ref testTypeTraceNameDef) (ref testTypeTraceDef),
-    Phantoms.tuple2 (ref testTypeTripleNameDef) (ref testTypeTripleDef),
-    Phantoms.tuple2 (ref testTypeUnionMonomorphicNameDef) (ref testTypeUnionMonomorphicDef),
-    Phantoms.tuple2 (ref testTypeUnionPolymorphicRecursiveNameDef) (ref testTypeUnionPolymorphicRecursiveDef),
-    Phantoms.tuple2 (ref testTypeUnitNameDef) (ref testTypeUnitDef)]
+    Phantoms.tuple2 (ref TestTypes.testTypeBuddyListANameDef) (ref TestTypes.testTypeBuddyListADef),
+    Phantoms.tuple2 (ref TestTypes.testTypeBuddyListBNameDef) (ref TestTypes.testTypeBuddyListBDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeComparisonNameDef) (ref TestTypes.testTypeComparisonDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeEitherNameDef) (ref TestTypes.testTypeEitherDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeFlowNameDef) (ref TestTypes.testTypeFlowDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeFlowStateNameDef) (ref TestTypes.testTypeFlowStateDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeHydraLiteralTypeNameDef) (ref TestTypes.testTypeHydraLiteralTypeDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeHydraTypeNameDef) (ref TestTypes.testTypeHydraTypeDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeIntListNameDef) (ref TestTypes.testTypeIntListDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeLatLonNameDef) (ref TestTypes.testTypeLatLonDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeLatLonPolyNameDef) (ref TestTypes.testTypeLatLonPolyDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeListNameDef) (ref TestTypes.testTypeListDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeNumberNameDef) (ref TestTypes.testTypeNumberDef),
+    Phantoms.tuple2 (ref TestTypes.testTypePersonNameDef) (ref TestTypes.testTypePersonDef),
+    Phantoms.tuple2 (ref TestTypes.testTypePersonOrSomethingNameDef) (ref TestTypes.testTypePersonOrSomethingDef),
+    Phantoms.tuple2 (ref TestTypes.testTypePolymorphicWrapperNameDef) (ref TestTypes.testTypePolymorphicWrapperDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeSimpleNumberNameDef) (ref TestTypes.testTypeSimpleNumberDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeStringAliasNameDef) (ref TestTypes.testTypeStringAliasDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeSymmetricTripleNameDef) (ref TestTypes.testTypeSymmetricTripleDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeTimestampNameDef) (ref TestTypes.testTypeTimestampDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeTraceNameDef) (ref TestTypes.testTypeTraceDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeTripleNameDef) (ref TestTypes.testTypeTripleDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeUnionMonomorphicNameDef) (ref TestTypes.testTypeUnionMonomorphicDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) (ref TestTypes.testTypeUnionPolymorphicRecursiveDef),
+    Phantoms.tuple2 (ref TestTypes.testTypeUnitNameDef) (ref TestTypes.testTypeUnitDef)]
 
 testSchemaNamespaceDef :: TBinding Namespace
-testSchemaNamespaceDef = testGraphDefinition "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"
+testSchemaNamespaceDef = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"

@@ -1,35 +1,58 @@
-module Hydra.Sources.Test.Inference.AlgebraicTypes (algebraicTypesTests) where
+module Hydra.Sources.Test.Inference.AlgebraicTypes where
 
+-- Standard imports for kernel tests
 import Hydra.Kernel
-import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Testing as Testing
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Test.TestGraph
-import Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Types as T
-import Hydra.Sources.Test.Inference.Fundamentals
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List as L
+import qualified Data.Map  as M
 
-import qualified Data.Map as M
-import Prelude hiding (either, map, sum)
 
+module_ :: Module
+module_ = Module (Namespace "hydra.test.inference.algebraicTypes") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Inference tests for algebraic data types")
+  where
+    elements = [
+      el allTestsDef,
+      el testGroupForEithersDef,
+      el testGroupForFoldsDef,
+      el testGroupForListsDef,
+      el testGroupForMapsDef,
+      el testGroupForOptionalsDef,
+      el testGroupForPairsDef,
+      el testGroupForProductsDef,
+      el testGroupForSetsDef,
+      el testGroupForSumsDef]
 
-algebraicTypesTests :: TTerm TestGroup
-algebraicTypesTests = supergroup "Algebraic terms" [
-  testGroupForEithers,
-  testGroupForFolds,
-  testGroupForLists,
-  testGroupForMaps,
-  testGroupForOptionals,
-  testGroupForPairs,
-  testGroupForProducts,
-  testGroupForSets,
-  testGroupForSums]
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-testGroupForEithers :: TTerm TestGroup
-testGroupForEithers = supergroup "Either terms" [
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Algebraic data type tests" $
+  supergroup "Algebraic terms" [
+    ref testGroupForEithersDef,
+    ref testGroupForFoldsDef,
+    ref testGroupForListsDef,
+    ref testGroupForMapsDef,
+    ref testGroupForOptionalsDef,
+    ref testGroupForPairsDef,
+    ref testGroupForProductsDef,
+    ref testGroupForSetsDef,
+    ref testGroupForSumsDef]
+
+testGroupForEithersDef :: TBinding TestGroup
+testGroupForEithersDef = define "testGroupForEithers" $
+  supergroup "Either terms" [
     subgroup "Left values" [
       expectMono 1 []
         (list [left $ string "error", right $ int32 42])
@@ -78,8 +101,9 @@ testGroupForEithers = supergroup "Either terms" [
         (tuple2 (list [left $ string "error", right $ int32 42]) (list []))
         ["t0"] (T.tuple2 (T.list $ T.either_ T.string T.int32) (T.list $ T.var "t0"))]]
 
-testGroupForFolds :: TTerm TestGroup
-testGroupForFolds = supergroup "Eliminations" [
+testGroupForFoldsDef :: TBinding TestGroup
+testGroupForFoldsDef = define "testGroupForFolds" $
+  supergroup "Eliminations" [
     subgroup "List eliminations (folds)" [
       expectMono 1 [tag_disabledForMinimalInference]
         foldAdd
@@ -110,8 +134,9 @@ testGroupForFolds = supergroup "Eliminations" [
   where
     foldAdd = primitive _lists_foldl @@ primitive _math_add
 
-testGroupForLists :: TTerm TestGroup
-testGroupForLists = supergroup "List terms" [
+testGroupForListsDef :: TBinding TestGroup
+testGroupForListsDef = define "testGroupForLists" $
+  supergroup "List terms" [
     subgroup "List of strings" [
       expectMono 1 []
         (list [string "foo", string "bar"])
@@ -141,8 +166,9 @@ testGroupForLists = supergroup "List terms" [
         (lambda "x" (list [var "x", string "foo", var "x"]))
         (T.function T.string (T.list T.string))]]
 
-testGroupForMaps :: TTerm TestGroup
-testGroupForMaps = subgroup "Map terms" [
+testGroupForMapsDef :: TBinding TestGroup
+testGroupForMapsDef = define "testGroupForMaps" $
+  subgroup "Map terms" [
     expectMono 1 [tag_disabledForMinimalInference]
       (mapTerm [
         (string "firstName", string "Arthur"),
@@ -156,8 +182,9 @@ testGroupForMaps = subgroup "Map terms" [
         [(var "x", float64 0.1), (var "y", float64 0.2)])
       ["t0"] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
 
-testGroupForOptionals :: TTerm TestGroup
-testGroupForOptionals = subgroup "Optional terms" [
+testGroupForOptionalsDef :: TBinding TestGroup
+testGroupForOptionalsDef = define "testGroupForOptionals" $
+  subgroup "Optional terms" [
     expectMono 1 [tag_disabledForMinimalInference]
       (optional $ just $ int32 42)
       (T.optional T.int32),
@@ -165,8 +192,9 @@ testGroupForOptionals = subgroup "Optional terms" [
       (optional nothing)
       ["t0"] (T.optional $ T.var "t0")]
 
-testGroupForPairs :: TTerm TestGroup
-testGroupForPairs = supergroup "Pair terms" [
+testGroupForPairsDef :: TBinding TestGroup
+testGroupForPairsDef = define "testGroupForPairs" $
+  supergroup "Pair terms" [
     subgroup "Monotyped pairs" [
       expectMono 1 [tag_disabledForMinimalInference]
         (pair (string "foo") (int32 42))
@@ -207,8 +235,9 @@ testGroupForPairs = supergroup "Pair terms" [
         (list [pair (list []) (string "foo")])
         ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)]]
 
-testGroupForProducts :: TTerm TestGroup
-testGroupForProducts = supergroup "Product terms" [
+testGroupForProductsDef :: TBinding TestGroup
+testGroupForProductsDef = define "testGroupForProducts" $
+  supergroup "Product terms" [
     subgroup "Empty products" [
       expectMono 1 []
         (tuple [])
@@ -244,8 +273,9 @@ testGroupForProducts = supergroup "Product terms" [
         (tuple2 (list []) (list []))
         ["t0", "t1"] (T.tuple2 (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 
-testGroupForSets :: TTerm TestGroup
-testGroupForSets = subgroup "Set terms" [
+testGroupForSetsDef :: TBinding TestGroup
+testGroupForSetsDef = define "testGroupForSets" $
+  subgroup "Set terms" [
     expectMono 1 [tag_disabledForMinimalInference]
       (set [true])
       (T.set T.boolean),
@@ -253,20 +283,21 @@ testGroupForSets = subgroup "Set terms" [
       (set [set []])
       ["t0"] (T.set $ T.set $ T.var "t0")]
 
-testGroupForSums :: TTerm TestGroup
-testGroupForSums = supergroup "Sum terms" [
+testGroupForSumsDef :: TBinding TestGroup
+testGroupForSumsDef = define "testGroupForSums" $
+  supergroup "Sum terms" [
     subgroup "Singleton sum terms" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (sum 0 1 (string "foo"))
+        (Terms.sum 0 1 (string "foo"))
         (T.sum [T.string]),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (sum 0 1 (list []))
+        (Terms.sum 0 1 (list []))
         ["t0"] (T.sum [T.list $ T.var "t0"])],
 
     subgroup "Non-singleton sum terms" [
       expectPoly 1 [tag_disabledForMinimalInference]
-        (sum 0 2 (string "foo"))
+        (Terms.sum 0 2 (string "foo"))
         ["t0"] (T.sum [T.string, T.var "t0"]),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (sum 1 2 (string "foo"))
+        (Terms.sum 1 2 (string "foo"))
         ["t0"] (T.sum [T.var "t0", T.string])]]

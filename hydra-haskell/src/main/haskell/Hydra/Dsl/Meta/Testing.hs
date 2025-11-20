@@ -96,6 +96,14 @@ encodeInferenceTestCase (InferenceTestCase input output) = Terms.record _Inferen
 
 ----------------------------------------
 
+caseConversionTestCase :: TTerm CaseConvention -> TTerm CaseConvention -> TTerm String -> TTerm String -> TTerm CaseConversionTestCase
+caseConversionTestCase fromConvention toConvention fromString toString =
+  Phantoms.record _CaseConversionTestCase [
+    _CaseConversionTestCase_fromConvention>>: fromConvention,
+    _CaseConversionTestCase_toConvention>>: toConvention,
+    _CaseConversionTestCase_fromString>>: fromString,
+    _CaseConversionTestCase_toString>>: toString]
+
 encodedTestGroupToBinding :: Namespace -> String -> TTerm TestGroup -> Binding
 encodedTestGroupToBinding ns lname group = Binding name (unTTerm group)
     $ Just $ TypeScheme [] typ
@@ -107,10 +115,21 @@ inferenceFailureTestCase :: TTerm Term -> TTerm InferenceFailureTestCase
 inferenceFailureTestCase input = Phantoms.record _InferenceFailureTestCase [
   _InferenceFailureTestCase_input>>: input]
 
+etaExpansionTestCase :: TTerm Term -> TTerm Term -> TTerm EtaExpansionTestCase
+etaExpansionTestCase input output = Phantoms.record _EtaExpansionTestCase [
+  _EtaExpansionTestCase_input>>: input,
+  _EtaExpansionTestCase_output>>: output]
+
 inferenceTestCase :: TTerm Term -> TTerm TypeScheme -> TTerm InferenceTestCase
 inferenceTestCase input output = Phantoms.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
   _InferenceTestCase_output>>: output]
+
+testCaseCaseConversion :: TTerm CaseConversionTestCase -> TTerm TestCase
+testCaseCaseConversion = inject _TestCase _TestCase_caseConversion
+
+testCaseEtaExpansion :: TTerm EtaExpansionTestCase -> TTerm TestCase
+testCaseEtaExpansion = inject _TestCase _TestCase_etaExpansion
 
 testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
 testCaseInference = inject _TestCase _TestCase_inference

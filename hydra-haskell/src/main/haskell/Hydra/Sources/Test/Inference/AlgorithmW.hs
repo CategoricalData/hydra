@@ -1,28 +1,43 @@
-module Hydra.Sources.Test.Inference.AlgorithmW (algorithmWTests) where
+module Hydra.Sources.Test.Inference.AlgorithmW where
 
+-- Standard imports for kernel tests
 import Hydra.Kernel
-import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Testing as Testing
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Test.TestGraph
-import Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Types as T
-import Hydra.Sources.Test.Inference.Fundamentals
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List as L
+import qualified Data.Map  as M
 
-import qualified Data.Map as M
-import Prelude hiding (map, sum)
 
+module_ :: Module
+module_ = Module (Namespace "hydra.test.inference.algorithmW") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Algorithm W inference tests")
+  where
+    elements = [
+      el allTestsDef,
+      el testGroupForSystemFDef]
 
-algorithmWTests :: TTerm TestGroup
-algorithmWTests = supergroup "Algorithm W test cases" [
-  testGroupForSystemF]
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
+
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Algorithm W test cases" $
+  supergroup "Algorithm W test cases" [
+    ref testGroupForSystemFDef]
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
-testGroupForSystemF :: TTerm TestGroup
-testGroupForSystemF = subgroup "STLC to System F" [
+testGroupForSystemFDef :: TBinding TestGroup
+testGroupForSystemFDef = define "testGroupForSystemF" $
+  subgroup "STLC to System F" [
 
 --  --Untyped input:
 --  --	(\x. x)
