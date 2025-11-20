@@ -1,49 +1,69 @@
-module Hydra.Sources.Test.Inference.NominalTypes (nominalTypesTests) where
+module Hydra.Sources.Test.Inference.NominalTypes where
 
+-- Standard imports for kernel tests
 import Hydra.Kernel
-import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Testing as Testing
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Test.TestGraph
-import Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Types as T
-import Hydra.Sources.Test.Inference.Fundamentals
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List as L
+import qualified Data.Map  as M
 
-import qualified Data.Map as M
-import Prelude hiding (map, sum)
 
+module_ :: Module
+module_ = Module (Namespace "hydra.test.inference.nominalTypes") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Inference tests for nominal types")
+  where
+    elements = [
+      el allTestsDef,
+      el testGroupForCaseStatementsDef,
+      el testGroupForProjectionsDef,
+      el testGroupForRecordsDef,
+      el testGroupForVariantsDef,
+      el testGroupForWrappersDef]
 
-nominalTypesTests :: TTerm TestGroup
-nominalTypesTests = supergroup "Nominal terms" [
-  testGroupForCaseStatements,
-  testGroupForProjections,
-  testGroupForRecords,
-  testGroupForVariants,
-  testGroupForWrappers]
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-testGroupForCaseStatements :: TTerm TestGroup
-testGroupForCaseStatements = subgroup "Case statements" [
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Nominal type tests" $
+  supergroup "Nominal terms" [
+    ref testGroupForCaseStatementsDef,
+    ref testGroupForProjectionsDef,
+    ref testGroupForRecordsDef,
+    ref testGroupForVariantsDef,
+    ref testGroupForWrappersDef]
+
+testGroupForCaseStatementsDef :: TBinding TestGroup
+testGroupForCaseStatementsDef = define "testGroupForCaseStatements" $
+  subgroup "Case statements" [
     expectMono 1 [tag_disabledForMinimalInference]
-      (match (ref testTypeSimpleNumberNameDef) nothing [
+      (match (ref TestTypes.testTypeSimpleNumberNameDef) nothing [
         "int">: lambda "x" $ var "x",
         "float">: lambda "x" $ int32 42])
-      (T.function (Core.typeVariable $ ref testTypeSimpleNumberNameDef) T.int32),
+      (T.function (Core.typeVariable $ ref TestTypes.testTypeSimpleNumberNameDef) T.int32),
     expectMono 2 [tag_disabledForMinimalInference]
-      (match (ref testTypeUnionMonomorphicNameDef) nothing [
+      (match (ref TestTypes.testTypeUnionMonomorphicNameDef) nothing [
         "bool">: constant true,
         "string">: constant false,
         "unit">: constant false])
-      (T.function (Core.typeVariable $ ref testTypeUnionMonomorphicNameDef) T.boolean)]
+      (T.function (Core.typeVariable $ ref TestTypes.testTypeUnionMonomorphicNameDef) T.boolean)]
 
-testGroupForProjections :: TTerm TestGroup
-testGroupForProjections = supergroup "Projections" [
+testGroupForProjectionsDef :: TBinding TestGroup
+testGroupForProjectionsDef = define "testGroupForProjections" $
+  supergroup "Projections" [
     subgroup "Record eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (project (ref testTypePersonNameDef) (name "firstName"))
-        (T.function (Core.typeVariable $ ref testTypePersonNameDef) T.string)],
+        (project (ref TestTypes.testTypePersonNameDef) (name "firstName"))
+        (T.function (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) T.string)],
 
     subgroup "Tuple projections" [
       expectPoly 1 [tag_disabledForMinimalInference]
@@ -59,130 +79,133 @@ testGroupForProjections = supergroup "Projections" [
         (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
         ["t0"] (T.function (T.var "t0") T.int32)]]
 
-testGroupForRecords :: TTerm TestGroup
-testGroupForRecords = supergroup "Records" [
+testGroupForRecordsDef :: TBinding TestGroup
+testGroupForRecordsDef = define "testGroupForRecords" $
+  supergroup "Records" [
 
     subgroup "Simple records" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (record (ref testTypeLatLonNameDef) [
+        (record (ref TestTypes.testTypeLatLonNameDef) [
           "lat">: float32 37.7749,
           "lon">: float32 $ negate 122.4194])
-        (Core.typeVariable (ref testTypeLatLonNameDef)),
+        (Core.typeVariable (ref TestTypes.testTypeLatLonNameDef)),
       expectMono 2 [tag_disabledForMinimalInference]
-        (record (ref testTypeLatLonPolyNameDef) [
+        (record (ref TestTypes.testTypeLatLonPolyNameDef) [
           "lat">: float32 37.7749,
           "lon">: float32 $ negate 122.4194])
-        (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32),
+        (T.apply (Core.typeVariable (ref TestTypes.testTypeLatLonPolyNameDef)) T.float32),
       expectMono 3 [tag_disabledForMinimalInference]
-        (lambda "lon" (record (ref testTypeLatLonPolyNameDef) [
+        (lambda "lon" (record (ref TestTypes.testTypeLatLonPolyNameDef) [
           "lat">: float32 37.7749,
           "lon">: var "lon"]))
-        (T.function T.float32 (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) T.float32)),
+        (T.function T.float32 (T.apply (Core.typeVariable (ref TestTypes.testTypeLatLonPolyNameDef)) T.float32)),
       expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "latlon" (record (ref testTypeLatLonPolyNameDef) [
+        (lambda "latlon" (record (ref TestTypes.testTypeLatLonPolyNameDef) [
           "lat">: var "latlon",
           "lon">: var "latlon"]))
-        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref testTypeLatLonPolyNameDef)) (T.var "t0"))),
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref TestTypes.testTypeLatLonPolyNameDef)) (T.var "t0"))),
       expectMono 5 [tag_disabledForMinimalInference]
-        (ref testDataArthurDef)
-        (Core.typeVariable (ref testTypePersonNameDef))],
+        (ref TestTerms.testDataArthurDef)
+        (Core.typeVariable (ref TestTypes.testTypePersonNameDef))],
 
     subgroup "Record instances of simply recursive record types" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (record (ref testTypeIntListNameDef) [
+        (record (ref TestTypes.testTypeIntListNameDef) [
           "head">: int32 42,
-          "tail">: optional $ just (record (ref testTypeIntListNameDef) [
+          "tail">: optional $ just (record (ref TestTypes.testTypeIntListNameDef) [
             "head">: int32 43,
             "tail">: optional nothing])])
-        (Core.typeVariable (ref testTypeIntListNameDef)),
+        (Core.typeVariable (ref TestTypes.testTypeIntListNameDef)),
       expectMono 2 [tag_disabledForMinimalInference]
-        ((lambda "x" $ record (ref testTypeIntListNameDef) [
+        ((lambda "x" $ record (ref TestTypes.testTypeIntListNameDef) [
           "head">: var "x",
-          "tail">: optional $ just (record (ref testTypeIntListNameDef) [
+          "tail">: optional $ just (record (ref TestTypes.testTypeIntListNameDef) [
             "head">: var "x",
             "tail">: optional nothing])]) @@ int32 42)
-        (Core.typeVariable (ref testTypeIntListNameDef)),
+        (Core.typeVariable (ref TestTypes.testTypeIntListNameDef)),
       expectMono 3 [tag_disabledForMinimalInference]
-        (record (ref testTypeListNameDef) [
+        (record (ref TestTypes.testTypeListNameDef) [
           "head">: int32 42,
-          "tail">: optional $ just (record (ref testTypeListNameDef) [
+          "tail">: optional $ just (record (ref TestTypes.testTypeListNameDef) [
             "head">: int32 43,
             "tail">: optional nothing])])
-        (T.apply (Core.typeVariable (ref testTypeListNameDef)) T.int32),
+        (T.apply (Core.typeVariable (ref TestTypes.testTypeListNameDef)) T.int32),
       expectMono 4 [tag_disabledForMinimalInference]
-        ((lambda "x" $ record (ref testTypeListNameDef) [
+        ((lambda "x" $ record (ref TestTypes.testTypeListNameDef) [
           "head">: var "x",
-          "tail">: optional $ just (record (ref testTypeListNameDef) [
+          "tail">: optional $ just (record (ref TestTypes.testTypeListNameDef) [
             "head">: var "x",
             "tail">: optional nothing])]) @@ int32 42)
-        (T.apply (Core.typeVariable (ref testTypeListNameDef)) T.int32),
+        (T.apply (Core.typeVariable (ref TestTypes.testTypeListNameDef)) T.int32),
       expectPoly 5 [tag_disabledForMinimalInference]
-        (lambda "x" $ record (ref testTypeListNameDef) [
+        (lambda "x" $ record (ref TestTypes.testTypeListNameDef) [
           "head">: var "x",
-          "tail">: optional $ just (record (ref testTypeListNameDef) [
+          "tail">: optional $ just (record (ref TestTypes.testTypeListNameDef) [
             "head">: var "x",
             "tail">: optional nothing])])
-        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref testTypeListNameDef)) (T.var "t0")))],
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable (ref TestTypes.testTypeListNameDef)) (T.var "t0")))],
 
     subgroup "Record instances of mutually recursive record types" [
       expectMono 1 [tag_disabledForMinimalInference]
-        ((lambda "x" $ record (ref testTypeBuddyListANameDef) [
+        ((lambda "x" $ record (ref TestTypes.testTypeBuddyListANameDef) [
           "head">: var "x",
-          "tail">: optional $ just $ record (ref testTypeBuddyListBNameDef) [
+          "tail">: optional $ just $ record (ref TestTypes.testTypeBuddyListBNameDef) [
             "head">: var "x",
             "tail">: optional nothing]]) @@ int32 42)
-        (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) T.int32),
+        (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) T.int32),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (lambda "x" $ record (ref testTypeBuddyListANameDef) [
+        (lambda "x" $ record (ref TestTypes.testTypeBuddyListANameDef) [
           "head">: var "x",
-          "tail">: optional $ just $ record (ref testTypeBuddyListBNameDef) [
+          "tail">: optional $ just $ record (ref TestTypes.testTypeBuddyListBNameDef) [
             "head">: var "x",
             "tail">: optional nothing]])
-        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) (T.var "t0")))]]
+        ["t0"] (T.function (T.var "t0") (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) (T.var "t0")))]]
 
-testGroupForVariants :: TTerm TestGroup
-testGroupForVariants = supergroup "Variant terms" [
+testGroupForVariantsDef :: TBinding TestGroup
+testGroupForVariantsDef = define "testGroupForVariants" $
+  supergroup "Variant terms" [
 
     subgroup "Variants" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (inject (ref testTypeTimestampNameDef) "unixTimeMillis" $ uint64 1638200308368)
-        (Core.typeVariable (ref testTypeTimestampNameDef)),
+        (inject (ref TestTypes.testTypeTimestampNameDef) "unixTimeMillis" $ uint64 1638200308368)
+        (Core.typeVariable (ref TestTypes.testTypeTimestampNameDef)),
       expectMono 2 [tag_disabledForMinimalInference]
-        (inject (ref testTypeUnionMonomorphicNameDef) "string" $ string "bar")
-        (Core.typeVariable (ref testTypeUnionMonomorphicNameDef))],
+        (inject (ref TestTypes.testTypeUnionMonomorphicNameDef) "string" $ string "bar")
+        (Core.typeVariable (ref TestTypes.testTypeUnionMonomorphicNameDef))],
 --    TODO: inference failure test cases
 --      H.it "test #3" $
 --        expectFailure
---          (inject testTypeUnionMonomorphicName $ Field (Name "string") $ int32 42)
+--          (inject TestTypes.testTypeUnionMonomorphicName $ Field (Name "string") $ int32 42)
 
     subgroup "Polymorphic and recursive variants" [
       expectPoly 1 [tag_disabledForMinimalInference]
-        (inject (ref testTypeUnionPolymorphicRecursiveNameDef) "bool" true)
-        ["t0"] (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) (T.var "t0")),
+        (inject (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) "bool" true)
+        ["t0"] (T.apply (Core.typeVariable (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef)) (T.var "t0")),
       expectMono 2 [tag_disabledForMinimalInference]
-        (inject (ref testTypeUnionPolymorphicRecursiveNameDef) "value" $ string "foo")
-        (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) T.string),
+        (inject (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) "value" $ string "foo")
+        (T.apply (Core.typeVariable (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef)) T.string),
       expectMono 3 [tag_disabledForMinimalInference]
         (lets [
-          "other">: inject (ref testTypeUnionPolymorphicRecursiveNameDef) "value" $ int32 42]
-          $ inject (ref testTypeUnionPolymorphicRecursiveNameDef) "other" $ var "other")
-        (T.apply (Core.typeVariable (ref testTypeUnionPolymorphicRecursiveNameDef)) T.int32)]]
+          "other">: inject (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) "value" $ int32 42]
+          $ inject (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) "other" $ var "other")
+        (T.apply (Core.typeVariable (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef)) T.int32)]]
 
-testGroupForWrappers :: TTerm TestGroup
-testGroupForWrappers = supergroup "Wrapper introductions and eliminations" [
+testGroupForWrappersDef :: TBinding TestGroup
+testGroupForWrappersDef = define "testGroupForWrappers" $
+  supergroup "Wrapper introductions and eliminations" [
 
     subgroup "Wrapper introductions" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (wrap (ref testTypeStringAliasNameDef) $ string "foo")
-        (Core.typeVariable $ ref testTypeStringAliasNameDef),
+        (wrap (ref TestTypes.testTypeStringAliasNameDef) $ string "foo")
+        (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef),
       expectMono 2 [tag_disabledForMinimalInference]
-        (lambda "v" $ wrap (ref testTypeStringAliasNameDef) $ var "v")
-        (T.function T.string (Core.typeVariable $ ref testTypeStringAliasNameDef))],
+        (lambda "v" $ wrap (ref TestTypes.testTypeStringAliasNameDef) $ var "v")
+        (T.function T.string (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef))],
 
     subgroup "Wrapper eliminations" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (unwrap (ref testTypeStringAliasNameDef))
-        (T.function (Core.typeVariable $ ref testTypeStringAliasNameDef) T.string),
+        (unwrap (ref TestTypes.testTypeStringAliasNameDef))
+        (T.function (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) T.string),
       expectMono 2 [tag_disabledForMinimalInference]
-        (unwrap (ref testTypeStringAliasNameDef) @@ (wrap (ref testTypeStringAliasNameDef) $ string "foo"))
+        (unwrap (ref TestTypes.testTypeStringAliasNameDef) @@ (wrap (ref TestTypes.testTypeStringAliasNameDef) $ string "foo"))
         T.string]]

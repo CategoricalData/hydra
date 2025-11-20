@@ -1,13 +1,48 @@
-module Hydra.Sources.Test.Formatting (formattingTests) where
+{-# LANGUAGE OverloadedStrings #-}
+
+module Hydra.Sources.Test.Formatting where
 
 import Hydra.Kernel
-import Hydra.Dsl.Tests
-import Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Sources.Kernel.Types.All
+import Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List as L
+import qualified Data.Map  as M
+
+import qualified Hydra.Dsl.Meta.Util as Util
+import qualified Hydra.Show.Util as ShowUtil
 
 
-formattingTests :: TestGroup
-formattingTests = TestGroup "formatting tests" Nothing [] cases
+module_ :: Module
+module_ = Module (Namespace "hydra.test.formatting") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Test cases for string formatting and case conversion")
+  where
+    elements = [
+      el allTestsDef,
+      el caseConversionTestsDef]
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
+
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+    doc "Test cases for hydra.formatting" $
+    Testing.testGroup (string "formatting") nothing (list subgroups) (list [])
+  where
+    subgroups = [
+      ref caseConversionTestsDef]
+
+caseConversionTestsDef :: TBinding TestGroup
+caseConversionTestsDef = define "caseConversionTests" $
+  doc "Test cases for case conversion" $
+  Testing.testGroup (string "case conversion") nothing (list []) (list cases)
   where
     cases = [
       -- from lower_snake_case
@@ -34,13 +69,19 @@ formattingTests = TestGroup "formatting tests" Nothing [] cases
       testCase 15 CaseConventionPascal CaseConventionCamel "AHelloWorld42A4242aB" "aHelloWorld42A4242aB",
       testCase 16 CaseConventionPascal CaseConventionPascal "AHelloWorld42A4242aB" "AHelloWorld42A4242aB"]
 
-    testCase i fromConvention toConvention fromString toString = TestCaseWithMetadata name tcase Nothing []
-      where
-        tcase = TestCaseCaseConversion $ CaseConversionTestCase fromConvention toConvention fromString toString
-        name = "#" ++ show i ++ " (" ++ showConvention fromConvention ++ " -> " ++ showConvention toConvention ++ ")"
+-- Helpers
 
-    showConvention c = case c of
-      CaseConventionLowerSnake -> "lower_snake_case"
-      CaseConventionUpperSnake -> "UPPER_SNAKE_CASE"
-      CaseConventionCamel -> "camelCase"
-      CaseConventionPascal -> "PascalCase"
+testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm TestCaseWithMetadata
+testCase i fromConvention toConvention fromString toString = Testing.testCaseWithMetadata name tcase nothing (list [])
+  where
+    tcase = Testing.testCaseCaseConversion $ Testing.caseConversionTestCase
+      (metaConv fromConvention)
+      (metaConv toConvention)
+      (string fromString)
+      (string toString)
+    name = string $ "#" ++ show i ++ " (" ++ ShowUtil.caseConvention fromConvention ++ " -> " ++ ShowUtil.caseConvention toConvention ++ ")"
+    metaConv conv = case conv of
+      CaseConventionLowerSnake -> Util.caseConventionLowerSnake
+      CaseConventionUpperSnake -> Util.caseConventionUpperSnake
+      CaseConventionCamel -> Util.caseConventionCamel
+      CaseConventionPascal -> Util.caseConventionPascal

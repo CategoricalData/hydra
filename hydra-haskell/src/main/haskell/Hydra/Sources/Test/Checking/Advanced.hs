@@ -3,24 +3,45 @@
 -- | Advanced type checking test cases: annotated terms and flows
 module Hydra.Sources.Test.Checking.Advanced where
 
-import Hydra.Kernel hiding (map)
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Dsl.Meta.Types as T
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+-- Standard imports for kernel tests
+import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core as Core
-import Hydra.Sources.Test.TestGraph
-
-import Prelude hiding (map, product, sum)
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List as L
-import qualified Data.Map as M
+import qualified Data.Map  as M
 
 
-advancedTests :: TTerm TestGroup
-advancedTests = supergroup "Advanced" [
-  annotatedTermsTests,
-  flowsTests]
+module_ :: Module
+module_ = Module (Namespace "hydra.test.checking.advanced") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Advanced type checking test cases: annotated terms and flows")
+  where
+    elements = [
+      el allTestsDef,
+      el annotatedTermsTestsDef,
+      el topLevelAnnotationsTestsDef,
+      el nestedAnnotationsTestsDef,
+      el annotationsInComplexContextsTestsDef,
+      el flowsTestsDef,
+      el flowsWithFailureAcrossLetBindingsTestsDef]
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
+
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  Phantoms.doc "Advanced type checking test cases" $
+  supergroup "Advanced" [
+    ref annotatedTermsTestsDef,
+    ref flowsTestsDef]
 
 ------ Helper functions ------
 
@@ -46,67 +67,71 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Annotated terms ------
 
-annotatedTermsTests :: TTerm TestGroup
-annotatedTermsTests = supergroup "Annotated terms" [
-  topLevelAnnotationsTests,
-  nestedAnnotationsTests,
-  annotationsInComplexContextsTests]
+annotatedTermsTestsDef :: TBinding TestGroup
+annotatedTermsTestsDef = define "annotatedTermsTests" $
+  supergroup "Annotated terms" [
+    ref topLevelAnnotationsTestsDef,
+    ref nestedAnnotationsTestsDef,
+    ref annotationsInComplexContextsTestsDef]
 
-topLevelAnnotationsTests :: TTerm TestGroup
-topLevelAnnotationsTests = subgroup "Top-level annotations" [
-  noChange "annotated literal"
-    (annotated (int32 42) mapTermEmpty)
-    T.int32,
-  noChange "annotated list"
-    (annotated (list [string "a", string "b"]) mapTermEmpty)
-    (T.list T.string),
-  noChange "annotated record"
-    (annotated (record (ref testTypePersonNameDef) [
-      "firstName">: string "John",
-      "lastName">: string "Doe",
-      "age">: int32 25]) mapTermEmpty)
-    (Core.typeVariable $ ref testTypePersonNameDef),
-  checkTest "annotated lambda" []
-    (annotated (lambda "x" $ var "x") mapTermEmpty)
-    (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
-    (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
+topLevelAnnotationsTestsDef :: TBinding TestGroup
+topLevelAnnotationsTestsDef = define "topLevelAnnotationsTests" $
+  subgroup "Top-level annotations" [
+    noChange "annotated literal"
+      (annotated (int32 42) mapTermEmpty)
+      T.int32,
+    noChange "annotated list"
+      (annotated (list [string "a", string "b"]) mapTermEmpty)
+      (T.list T.string),
+    noChange "annotated record"
+      (annotated (record (ref TestTypes.testTypePersonNameDef) [
+        "firstName">: string "John",
+        "lastName">: string "Doe",
+        "age">: int32 25]) mapTermEmpty)
+      (Core.typeVariable $ ref TestTypes.testTypePersonNameDef),
+    checkTest "annotated lambda" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty)
+      (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
+      (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
 
-nestedAnnotationsTests :: TTerm TestGroup
-nestedAnnotationsTests = subgroup "Nested annotations" [
-  noChange "annotation within annotation"
-    (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
-    T.int32,
-  noChange "annotated terms in tuple"
-    (tuple [annotated (int32 1) mapTermEmpty,
-            annotated (string "hello") mapTermEmpty])
-    (T.product [T.int32, T.string]),
-  checkTest "annotated term in function application" []
-    (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-    (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
-    T.int32]
+nestedAnnotationsTestsDef :: TBinding TestGroup
+nestedAnnotationsTestsDef = define "nestedAnnotationsTests" $
+  subgroup "Nested annotations" [
+    noChange "annotation within annotation"
+      (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
+      T.int32,
+    noChange "annotated terms in tuple"
+      (tuple [annotated (int32 1) mapTermEmpty,
+              annotated (string "hello") mapTermEmpty])
+      (T.product [T.int32, T.string]),
+    checkTest "annotated term in function application" []
+      (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
+      T.int32]
 
-annotationsInComplexContextsTests :: TTerm TestGroup
-annotationsInComplexContextsTests = subgroup "Annotations in complex contexts" [
-  checkTest "annotated let binding" []
-    (lets ["x">: annotated (int32 5) mapTermEmpty,
-           "y">: annotated (string "world") mapTermEmpty] $
-      annotated (tuple [var "x", var "y"]) mapTermEmpty)
-    (letsTyped [("x", annotated (int32 5) mapTermEmpty, T.mono T.int32),
-                ("y", annotated (string "world") mapTermEmpty, T.mono T.string)] $
-      annotated (tuple [var "x", var "y"]) mapTermEmpty)
-    (T.product [T.int32, T.string]),
-  noChange "annotated record fields"
-    (record (ref testTypePersonNameDef) [
-      "firstName">: annotated (string "Alice") mapTermEmpty,
-      "lastName">: annotated (string "Smith") mapTermEmpty,
-      "age">: annotated (int32 30) mapTermEmpty])
-    (Core.typeVariable $ ref testTypePersonNameDef),
-  checkTest "annotated function in application" []
-    (lets ["add">: annotated (primitive _math_add) mapTermEmpty] $
-      var "add" @@ annotated (int32 10) mapTermEmpty @@ annotated (int32 20) mapTermEmpty)
-    (letsTyped [("add", annotated (primitive _math_add) mapTermEmpty, T.mono $ T.function T.int32 (T.function T.int32 T.int32))] $
-      var "add" @@ (annotated (int32 10) mapTermEmpty) @@ (annotated (int32 20) mapTermEmpty))
-    T.int32]
+annotationsInComplexContextsTestsDef :: TBinding TestGroup
+annotationsInComplexContextsTestsDef = define "annotationsInComplexContextsTests" $
+  subgroup "Annotations in complex contexts" [
+    checkTest "annotated let binding" []
+      (lets ["x">: annotated (int32 5) mapTermEmpty,
+             "y">: annotated (string "world") mapTermEmpty] $
+        annotated (tuple [var "x", var "y"]) mapTermEmpty)
+      (letsTyped [("x", annotated (int32 5) mapTermEmpty, T.mono T.int32),
+                  ("y", annotated (string "world") mapTermEmpty, T.mono T.string)] $
+        annotated (tuple [var "x", var "y"]) mapTermEmpty)
+      (T.product [T.int32, T.string]),
+    noChange "annotated record fields"
+      (record (ref TestTypes.testTypePersonNameDef) [
+        "firstName">: annotated (string "Alice") mapTermEmpty,
+        "lastName">: annotated (string "Smith") mapTermEmpty,
+        "age">: annotated (int32 30) mapTermEmpty])
+      (Core.typeVariable $ ref TestTypes.testTypePersonNameDef),
+    checkTest "annotated function in application" []
+      (lets ["add">: annotated (primitive _math_add) mapTermEmpty] $
+        var "add" @@ annotated (int32 10) mapTermEmpty @@ annotated (int32 20) mapTermEmpty)
+      (letsTyped [("add", annotated (primitive _math_add) mapTermEmpty, T.mono $ T.function T.int32 (T.function T.int32 T.int32))] $
+        var "add" @@ (annotated (int32 10) mapTermEmpty) @@ (annotated (int32 20) mapTermEmpty))
+      T.int32]
 
 --    expectTermWithType "annotated function in application"
 --      (lets ["add">: annotated (primitive _math_add) M.empty] $
@@ -115,48 +140,48 @@ annotationsInComplexContextsTests = subgroup "Annotations in complex contexts" [
 --        var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
 --      Types.int32
 
-
-
 ------ Flows ------
 
-flowsTests :: TTerm TestGroup
-flowsTests = supergroup "Flows" [
-  flowsWithFailureAcrossLetBindingsTests]
+flowsTestsDef :: TBinding TestGroup
+flowsTestsDef = define "flowsTests" $
+  supergroup "Flows" [
+    ref flowsWithFailureAcrossLetBindingsTestsDef]
 
-flowsWithFailureAcrossLetBindingsTests :: TTerm TestGroup
-flowsWithFailureAcrossLetBindingsTests = subgroup "Flows with failure across let bindings" [
-  checkTest "mutually referential failure functions with Flow monad" []
-    (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $
-             primitive _logic_ifElse @@ var "b" @@
-               (var "unexpected" @@ string "oops") @@
-               (var "unexpected" @@ var "s"),
-           "unexpected">: lambda "s" $ primitive _flows_fail @@ var "s"] $
-      var "conditionalUnexpected")
-    (tylams ["t0", "t1", "t2"] $
-      letsTyped [
-        ("conditionalUnexpected",
-         tylams ["t3", "t4", "t5"] $
-         lambdaTyped "s" T.string $
-         lambdaTyped "b" T.boolean $
-         lambdaTyped "ignored" (T.var "t3") $
-         tyapp (primitive _logic_ifElse) (T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]) @@ var "b" @@
-           (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ string "oops") @@
-           (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ var "s"),
-         T.poly ["t3", "t4", "t5"] $
-           T.function T.string $
-           T.function T.boolean $
-           T.function (T.var "t3") $
-           T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]),
-        ("unexpected",
-         tylams ["t3", "t4"] $
-         lambdaTyped "s" T.string $
-           tyapps (primitive _flows_fail) [T.var "t3", T.var "t4"] @@ var "s",
-         T.poly ["t3", "t4"] $
-           T.function T.string $
-           T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t3", T.var "t4"])] $
-      tyapps (var "conditionalUnexpected") [T.var "t0", T.var "t1", T.var "t2"])
-    (T.forAlls ["t0", "t1", "t2"] $
-      T.function T.string $
-      T.function T.boolean $
-      T.function (T.var "t0") $
-      T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t1", T.var "t2"])]
+flowsWithFailureAcrossLetBindingsTestsDef :: TBinding TestGroup
+flowsWithFailureAcrossLetBindingsTestsDef = define "flowsWithFailureAcrossLetBindingsTests" $
+  subgroup "Flows with failure across let bindings" [
+    checkTest "mutually referential failure functions with Flow monad" []
+      (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $
+               primitive _logic_ifElse @@ var "b" @@
+                 (var "unexpected" @@ string "oops") @@
+                 (var "unexpected" @@ var "s"),
+             "unexpected">: lambda "s" $ primitive _flows_fail @@ var "s"] $
+        var "conditionalUnexpected")
+      (tylams ["t0", "t1", "t2"] $
+        letsTyped [
+          ("conditionalUnexpected",
+           tylams ["t3", "t4", "t5"] $
+           lambdaTyped "s" T.string $
+           lambdaTyped "b" T.boolean $
+           lambdaTyped "ignored" (T.var "t3") $
+           tyapp (primitive _logic_ifElse) (T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]) @@ var "b" @@
+             (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ string "oops") @@
+             (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ var "s"),
+           T.poly ["t3", "t4", "t5"] $
+             T.function T.string $
+             T.function T.boolean $
+             T.function (T.var "t3") $
+             T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]),
+          ("unexpected",
+           tylams ["t3", "t4"] $
+           lambdaTyped "s" T.string $
+             tyapps (primitive _flows_fail) [T.var "t3", T.var "t4"] @@ var "s",
+           T.poly ["t3", "t4"] $
+             T.function T.string $
+             T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t3", T.var "t4"])] $
+        tyapps (var "conditionalUnexpected") [T.var "t0", T.var "t1", T.var "t2"])
+      (T.forAlls ["t0", "t1", "t2"] $
+        T.function T.string $
+        T.function T.boolean $
+        T.function (T.var "t0") $
+        T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t1", T.var "t2"])]

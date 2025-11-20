@@ -3,28 +3,69 @@
 -- | Algebraic type checking test cases: unit, pairs, products, eithers, sums, optionals
 module Hydra.Sources.Test.Checking.AlgebraicTypes where
 
-import Hydra.Kernel hiding (map)
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Dsl.Meta.Types as T
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+-- Standard imports for kernel tests
+import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Dsl.Meta.Terms as Terms
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core as Core
-import Hydra.Sources.Test.TestGraph
-
-import Prelude hiding (map, product, sum)
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List as L
-import qualified Data.Map as M
+import qualified Data.Map  as M
 
 
-algebraicTypesTests :: TTerm TestGroup
-algebraicTypesTests = supergroup "Algebraic types" [
-  unitTests,
-  pairsTests,
-  productsTests,
-  eithersTests,
-  sumsTests,
-  optionalsTests]
+module_ :: Module
+module_ = Module (Namespace "hydra.test.checking.algebraicTypes") elements
+    [TestGraph.module_]
+    kernelTypesModules
+    (Just "Algebraic type checking test cases: unit, pairs, products, eithers, sums, optionals")
+  where
+    elements = [
+      el allTestsDef,
+      el unitTestsDef,
+      el unitTermTestsDef,
+      el unitTermInPolymorphicContextTestsDef,
+      el pairsTestsDef,
+      el basicPairsTestsDef,
+      el polymorphicPairsTestsDef,
+      el pairsInComplexContextsTestsDef,
+      el nestedPairsTestsDef,
+      el pairsWithComplexTypesTestsDef,
+      el productsTestsDef,
+      el monomorphicProductsTestsDef,
+      el polymorphicProductsTestsDef,
+      el nestedProductsTestsDef,
+      el eithersTestsDef,
+      el leftValuesTestsDef,
+      el rightValuesTestsDef,
+      el polymorphicEithersTestsDef,
+      el eithersInComplexContextsTestsDef,
+      el nestedEithersTestsDef,
+      el eithersWithComplexTypesTestsDef,
+      el sumsTestsDef,
+      el optionalsTestsDef,
+      el monomorphicOptionalsTestsDef,
+      el polymorphicOptionalsTestsDef,
+      el optionalsInComplexContextsTestsDef,
+      el nestedOptionalsTestsDef,
+      el optionalsWithComplexTypesTestsDef]
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
+
+allTestsDef :: TBinding TestGroup
+allTestsDef = define "allTests" $
+  supergroup "Algebraic types" [
+  ref unitTestsDef,
+  ref pairsTestsDef,
+  ref productsTestsDef,
+  ref eithersTestsDef,
+  ref sumsTestsDef,
+  ref optionalsTestsDef]
 
 ------ Helper functions ------
 
@@ -50,19 +91,22 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Unit ------
 
-unitTests :: TTerm TestGroup
-unitTests = supergroup "Unit" [
-  unitTermTests,
-  unitTermInPolymorphicContextTests]
+unitTestsDef :: TBinding TestGroup
+unitTestsDef = define "unitTests" $
+  supergroup "Unit" [
+  ref unitTermTestsDef,
+  ref unitTermInPolymorphicContextTestsDef]
 
-unitTermTests :: TTerm TestGroup
-unitTermTests = subgroup "Unit term" [
+unitTermTestsDef :: TBinding TestGroup
+unitTermTestsDef = define "unitTermTests" $
+  subgroup "Unit term" [
   noChange "unit literal"
     unit
     T.unit]
 
-unitTermInPolymorphicContextTests :: TTerm TestGroup
-unitTermInPolymorphicContextTests = subgroup "Unit term in polymorphic context" [
+unitTermInPolymorphicContextTestsDef :: TBinding TestGroup
+unitTermInPolymorphicContextTestsDef = define "unitTermInPolymorphicContextTests" $
+  subgroup "Unit term in polymorphic context" [
   checkTest "unit from lambda" []
     (lambda "x" unit)
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") unit)
@@ -73,16 +117,18 @@ unitTermInPolymorphicContextTests = subgroup "Unit term in polymorphic context" 
 
 ------ Pairs ------
 
-pairsTests :: TTerm TestGroup
-pairsTests = supergroup "Pairs" [
-  basicPairsTests,
-  polymorphicPairsTests,
-  pairsInComplexContextsTests,
-  nestedPairsTests,
-  pairsWithComplexTypesTests]
+pairsTestsDef :: TBinding TestGroup
+pairsTestsDef = define "pairsTests" $
+  supergroup "Pairs" [
+  ref basicPairsTestsDef,
+  ref polymorphicPairsTestsDef,
+  ref pairsInComplexContextsTestsDef,
+  ref nestedPairsTestsDef,
+  ref pairsWithComplexTypesTestsDef]
 
-basicPairsTests :: TTerm TestGroup
-basicPairsTests = subgroup "Basic pairs" [
+basicPairsTestsDef :: TBinding TestGroup
+basicPairsTestsDef = define "basicPairsTests" $
+  subgroup "Basic pairs" [
   checkTest "pair of int and string" []
     (pair (int32 42) (string "hello"))
     (tyapps (pair (int32 42) (string "hello")) [T.int32, T.string])
@@ -96,8 +142,9 @@ basicPairsTests = subgroup "Basic pairs" [
     (tyapps (pair (boolean False) (int32 100)) [T.boolean, T.int32])
     (T.pair T.boolean T.int32)]
 
-polymorphicPairsTests :: TTerm TestGroup
-polymorphicPairsTests = subgroup "Polymorphic pairs" [
+polymorphicPairsTestsDef :: TBinding TestGroup
+polymorphicPairsTestsDef = define "polymorphicPairsTests" $
+  subgroup "Polymorphic pairs" [
   checkTest "pair from lambda (first element)" []
     (lambda "x" $ pair (var "x") (string "constant"))
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapps (pair (var "x") (string "constant")) [T.var "t0", T.string])
@@ -115,8 +162,9 @@ polymorphicPairsTests = subgroup "Polymorphic pairs" [
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapps (pair (var "x") (var "x")) [T.var "t0", T.var "t0"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))]
 
-pairsInComplexContextsTests :: TTerm TestGroup
-pairsInComplexContextsTests = subgroup "Pairs in complex contexts" [
+pairsInComplexContextsTestsDef :: TBinding TestGroup
+pairsInComplexContextsTestsDef = define "pairsInComplexContextsTests" $
+  subgroup "Pairs in complex contexts" [
   checkTest "pair in tuple" []
     (tuple [pair (int32 1) (string "one"), boolean True])
     (tuple [tyapps (pair (int32 1) (string "one")) [T.int32, T.string], boolean True])
@@ -132,8 +180,9 @@ pairsInComplexContextsTests = subgroup "Pairs in complex contexts" [
       var "result")
     (T.pair T.int32 T.string)]
 
-nestedPairsTests :: TTerm TestGroup
-nestedPairsTests = subgroup "Nested pairs" [
+nestedPairsTestsDef :: TBinding TestGroup
+nestedPairsTestsDef = define "nestedPairsTests" $
+  subgroup "Nested pairs" [
   checkTest "pair of pairs" []
     (pair (pair (int32 1) (string "one")) (pair (boolean True) (int32 2)))
     (tyapps (pair (tyapps (pair (int32 1) (string "one")) [T.int32, T.string]) (tyapps (pair (boolean True) (int32 2)) [T.boolean, T.int32])) [T.pair T.int32 T.string, T.pair T.boolean T.int32])
@@ -154,8 +203,9 @@ personRecord fName lName age' =
     "lastName" >: string lName,
     "age" >: int32 age']
 
-pairsWithComplexTypesTests :: TTerm TestGroup
-pairsWithComplexTypesTests = subgroup "Pairs with complex types" [
+pairsWithComplexTypesTestsDef :: TBinding TestGroup
+pairsWithComplexTypesTestsDef = define "pairsWithComplexTypesTests" $
+  subgroup "Pairs with complex types" [
   checkTest "pair with record on first" []
     (pair (personRecord "Alice" "Smith" 30) (int32 1))
     (tyapps (pair (personRecord "Alice" "Smith" 30) (int32 1)) [T.var "Person", T.int32])
@@ -171,14 +221,16 @@ pairsWithComplexTypesTests = subgroup "Pairs with complex types" [
 
 ------ Products ------
 
-productsTests :: TTerm TestGroup
-productsTests = supergroup "Products" [
-  monomorphicProductsTests,
-  polymorphicProductsTests,
-  nestedProductsTests]
+productsTestsDef :: TBinding TestGroup
+productsTestsDef = define "productsTests" $
+  supergroup "Products" [
+  ref monomorphicProductsTestsDef,
+  ref polymorphicProductsTestsDef,
+  ref nestedProductsTestsDef]
 
-monomorphicProductsTests :: TTerm TestGroup
-monomorphicProductsTests = subgroup "Monomorphic products" [
+monomorphicProductsTestsDef :: TBinding TestGroup
+monomorphicProductsTestsDef = define "monomorphicProductsTests" $
+  subgroup "Monomorphic products" [
   noChange "empty tuple"
     (tuple [])
     (T.product []),
@@ -195,8 +247,9 @@ monomorphicProductsTests = subgroup "Monomorphic products" [
     (tuple [unit, string "test", bigint 100])
     (T.product [T.unit, T.string, T.bigint])]
 
-polymorphicProductsTests :: TTerm TestGroup
-polymorphicProductsTests = subgroup "Polymorphic products" [
+polymorphicProductsTestsDef :: TBinding TestGroup
+polymorphicProductsTestsDef = define "polymorphicProductsTests" $
+  subgroup "Polymorphic products" [
   checkTest "lambda with var" []
     (lambda "x" $ tuple [var "x", string "foo"])
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tuple [var "x", string "foo"])
@@ -210,8 +263,9 @@ polymorphicProductsTests = subgroup "Polymorphic products" [
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tuple [var "x", var "x"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.product [T.var "t0", T.var "t0"]))]
 
-nestedProductsTests :: TTerm TestGroup
-nestedProductsTests = subgroup "Nested products" [
+nestedProductsTestsDef :: TBinding TestGroup
+nestedProductsTestsDef = define "nestedProductsTests" $
+  subgroup "Nested products" [
   noChange "tuple in tuple"
     (tuple [tuple [int32 1], string "foo"])
     (T.product [T.product [T.int32], T.string]),
@@ -222,17 +276,19 @@ nestedProductsTests = subgroup "Nested products" [
 
 ------ Eithers ------
 
-eithersTests :: TTerm TestGroup
-eithersTests = supergroup "Eithers" [
-  leftValuesTests,
-  rightValuesTests,
-  polymorphicEithersTests,
-  eithersInComplexContextsTests,
-  nestedEithersTests,
-  eithersWithComplexTypesTests]
+eithersTestsDef :: TBinding TestGroup
+eithersTestsDef = define "eithersTests" $
+  supergroup "Eithers" [
+  ref leftValuesTestsDef,
+  ref rightValuesTestsDef,
+  ref polymorphicEithersTestsDef,
+  ref eithersInComplexContextsTestsDef,
+  ref nestedEithersTestsDef,
+  ref eithersWithComplexTypesTestsDef]
 
-leftValuesTests :: TTerm TestGroup
-leftValuesTests = subgroup "Left values" [
+leftValuesTestsDef :: TBinding TestGroup
+leftValuesTestsDef = define "leftValuesTests" $
+  subgroup "Left values" [
   checkTest "left int" []
     (left $ int32 42)
     (tylam "t0" $ tyapps (left $ int32 42) [T.int32, T.var "t0"])
@@ -246,8 +302,9 @@ leftValuesTests = subgroup "Left values" [
     (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
     (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
 
-rightValuesTests :: TTerm TestGroup
-rightValuesTests = subgroup "Right values" [
+rightValuesTestsDef :: TBinding TestGroup
+rightValuesTestsDef = define "rightValuesTests" $
+  subgroup "Right values" [
   checkTest "right int" []
     (right $ int32 42)
     (tylam "t0" $ tyapps (right $ int32 42) [T.var "t0", T.int32])
@@ -261,8 +318,9 @@ rightValuesTests = subgroup "Right values" [
     (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean)]
 
-polymorphicEithersTests :: TTerm TestGroup
-polymorphicEithersTests = subgroup "Polymorphic eithers" [
+polymorphicEithersTestsDef :: TBinding TestGroup
+polymorphicEithersTestsDef = define "polymorphicEithersTests" $
+  subgroup "Polymorphic eithers" [
   checkTest "left from lambda" []
     (lambda "x" $ left $ var "x")
     (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ tyapps (left $ var "x") [T.var "t0", T.var "t1"])
@@ -282,8 +340,9 @@ polymorphicEithersTests = subgroup "Polymorphic eithers" [
         tyapps (right $ var "x") [T.var "t0", T.var "t0"])
     (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
 
-eithersInComplexContextsTests :: TTerm TestGroup
-eithersInComplexContextsTests = subgroup "Eithers in complex contexts" [
+eithersInComplexContextsTestsDef :: TBinding TestGroup
+eithersInComplexContextsTestsDef = define "eithersInComplexContextsTests" $
+  subgroup "Eithers in complex contexts" [
   checkTest "either in tuple" []
     (tuple [left $ string "error", int32 100])
     (tylam "t0" $ tuple [tyapps (left $ string "error") [T.string, T.var "t0"], int32 100])
@@ -299,8 +358,9 @@ eithersInComplexContextsTests = subgroup "Eithers in complex contexts" [
       tyapp (var "result") (T.var "t0"))
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32)]
 
-nestedEithersTests :: TTerm TestGroup
-nestedEithersTests = subgroup "Nested eithers" [
+nestedEithersTestsDef :: TBinding TestGroup
+nestedEithersTestsDef = define "nestedEithersTests" $
+  subgroup "Nested eithers" [
   checkTest "either of either (left left)" []
     (left $ left $ int32 1)
     (tylams ["t0", "t1"] $ tyapps (left $ tyapps (left $ int32 1) [T.int32, T.var "t0"]) [T.either_ T.int32 (T.var "t0"), T.var "t1"])
@@ -322,28 +382,29 @@ nestedEithersTests = subgroup "Nested eithers" [
     (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
     (T.list $ T.either_ T.string T.int32)]
 
-eithersWithComplexTypesTests :: TTerm TestGroup
-eithersWithComplexTypesTests = subgroup "Eithers with complex types" [
+eithersWithComplexTypesTestsDef :: TBinding TestGroup
+eithersWithComplexTypesTestsDef = define "eithersWithComplexTypesTests" $
+  subgroup "Eithers with complex types" [
   checkTest "either with record on left" []
-    (left $ record (ref testTypePersonNameDef) [
+    (left $ record (ref TestTypes.testTypePersonNameDef) [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
       "age">: int32 30])
-    (tylam "t0" $ tyapps (left $ record (ref testTypePersonNameDef) [
+    (tylam "t0" $ tyapps (left $ record (ref TestTypes.testTypePersonNameDef) [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
-      "age">: int32 30]) [Core.typeVariable $ ref testTypePersonNameDef, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ (Core.typeVariable $ ref testTypePersonNameDef) (T.var "t0")),
+      "age">: int32 30]) [Core.typeVariable $ ref TestTypes.testTypePersonNameDef, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) (T.var "t0")),
   checkTest "either with record on right" []
-    (right $ record (ref testTypePersonNameDef) [
+    (right $ record (ref TestTypes.testTypePersonNameDef) [
       "firstName">: string "Bob",
       "lastName">: string "Jones",
       "age">: int32 25])
-    (tylam "t0" $ tyapps (right $ record (ref testTypePersonNameDef) [
+    (tylam "t0" $ tyapps (right $ record (ref TestTypes.testTypePersonNameDef) [
       "firstName">: string "Bob",
       "lastName">: string "Jones",
-      "age">: int32 25]) [T.var "t0", Core.typeVariable $ ref testTypePersonNameDef])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable $ ref testTypePersonNameDef)),
+      "age">: int32 25]) [T.var "t0", Core.typeVariable $ ref TestTypes.testTypePersonNameDef])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable $ ref TestTypes.testTypePersonNameDef)),
   checkTest "either with tuple" []
     (left $ tuple [string "error", int32 404])
     (tylam "t0" $ tyapps (left $ tuple [string "error", int32 404]) [T.product [T.string, T.int32], T.var "t0"])
@@ -351,21 +412,24 @@ eithersWithComplexTypesTests = subgroup "Eithers with complex types" [
 
 ------ Sums ------
 
-sumsTests :: TTerm TestGroup
-sumsTests = subgroup "Sums" []
+sumsTestsDef :: TBinding TestGroup
+sumsTestsDef = define "sumsTests" $
+  subgroup "Sums" []
 
 ------ Optionals ------
 
-optionalsTests :: TTerm TestGroup
-optionalsTests = supergroup "Optionals" [
-  monomorphicOptionalsTests,
-  polymorphicOptionalsTests,
-  optionalsInComplexContextsTests,
-  nestedOptionalsTests,
-  optionalsWithComplexTypesTests]
+optionalsTestsDef :: TBinding TestGroup
+optionalsTestsDef = define "optionalsTests" $
+  supergroup "Optionals" [
+  ref monomorphicOptionalsTestsDef,
+  ref polymorphicOptionalsTestsDef,
+  ref optionalsInComplexContextsTestsDef,
+  ref nestedOptionalsTestsDef,
+  ref optionalsWithComplexTypesTestsDef]
 
-monomorphicOptionalsTests :: TTerm TestGroup
-monomorphicOptionalsTests = subgroup "Monomorphic optionals" [
+monomorphicOptionalsTestsDef :: TBinding TestGroup
+monomorphicOptionalsTestsDef = define "monomorphicOptionalsTests" $
+  subgroup "Monomorphic optionals" [
   checkTest "nothing" []
     (optional nothing)
     (tylam "t0" $ tyapp (optional nothing) (T.var "t0"))
@@ -380,8 +444,9 @@ monomorphicOptionalsTests = subgroup "Monomorphic optionals" [
     (optional $ just $ boolean True)
     (T.optional T.boolean)]
 
-polymorphicOptionalsTests :: TTerm TestGroup
-polymorphicOptionalsTests = subgroup "Polymorphic optionals" [
+polymorphicOptionalsTestsDef :: TBinding TestGroup
+polymorphicOptionalsTestsDef = define "polymorphicOptionalsTests" $
+  subgroup "Polymorphic optionals" [
   checkTest "optional from lambda" []
     (lambda "x" $ optional $ just $ var "x")
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ optional $ just $ var "x")
@@ -401,23 +466,24 @@ polymorphicOptionalsTests = subgroup "Polymorphic optionals" [
         (tyapp (optional nothing) (T.var "t0")))
     (T.forAlls ["t0"] $ T.function (T.var "t0") (T.function T.boolean (T.optional $ T.var "t0")))]
 
-optionalsInComplexContextsTests :: TTerm TestGroup
-optionalsInComplexContextsTests = subgroup "Optionals in complex contexts" [
+optionalsInComplexContextsTestsDef :: TBinding TestGroup
+optionalsInComplexContextsTestsDef = define "optionalsInComplexContextsTests" $
+  subgroup "Optionals in complex contexts" [
   noChange "optional in tuple"
     (tuple [optional $ just $ int32 100, string "context"])
     (T.product [T.optional T.int32, T.string]),
   checkTest "optional in record" []
-    (record (ref testTypeBuddyListANameDef) [
+    (record (ref TestTypes.testTypeBuddyListANameDef) [
       "head">: string "first",
-      "tail">: optional $ just $ record (ref testTypeBuddyListBNameDef) [
+      "tail">: optional $ just $ record (ref TestTypes.testTypeBuddyListBNameDef) [
         "head">: string "second",
         "tail">: optional nothing]])
-    (tyapp (record (ref testTypeBuddyListANameDef) [
+    (tyapp (record (ref TestTypes.testTypeBuddyListANameDef) [
       "head">: string "first",
-      "tail">: optional $ just $ tyapp (record (ref testTypeBuddyListBNameDef) [
+      "tail">: optional $ just $ tyapp (record (ref TestTypes.testTypeBuddyListBNameDef) [
         "head">: string "second",
-        "tail">: tyapp (optional nothing) (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) T.string)]) T.string]) T.string)
-    (T.apply (Core.typeVariable $ ref testTypeBuddyListANameDef) T.string),
+        "tail">: tyapp (optional nothing) (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) T.string)]) T.string]) T.string)
+    (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) T.string),
   checkTest "optional in let binding" []
     (lets ["maybeValue" >: optional $ just $ int32 42] $
       var "maybeValue")
@@ -425,8 +491,9 @@ optionalsInComplexContextsTests = subgroup "Optionals in complex contexts" [
       var "maybeValue")
     (T.optional T.int32)]
 
-nestedOptionalsTests :: TTerm TestGroup
-nestedOptionalsTests = subgroup "Nested optionals" [
+nestedOptionalsTestsDef :: TBinding TestGroup
+nestedOptionalsTestsDef = define "nestedOptionalsTests" $
+  subgroup "Nested optionals" [
   noChange "optional of optional"
     (optional $ just $ optional $ just $ string "nested")
     (T.optional $ T.optional T.string),
@@ -438,8 +505,9 @@ nestedOptionalsTests = subgroup "Nested optionals" [
     (list [optional $ just $ string "a", tyapp (optional nothing) T.string, optional $ just $ string "b"])
     (T.list $ T.optional T.string)]
 
-optionalsWithComplexTypesTests :: TTerm TestGroup
-optionalsWithComplexTypesTests = subgroup "Optionals with complex types" [
+optionalsWithComplexTypesTestsDef :: TBinding TestGroup
+optionalsWithComplexTypesTestsDef = define "optionalsWithComplexTypesTests" $
+  subgroup "Optionals with complex types" [
   noChange "optional tuple"
     (optional $ just $ tuple [int32 10, string "test"])
     (T.optional $ T.product [T.int32, T.string]),
