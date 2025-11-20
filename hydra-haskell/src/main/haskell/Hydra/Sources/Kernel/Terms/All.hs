@@ -34,6 +34,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta       as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Show.Util       as ShowUtil
 import qualified Hydra.Sources.Kernel.Terms.Sorting         as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
@@ -74,6 +75,7 @@ kernelTermsModules = [
   ShowGraph.module_,
   ShowMeta.module_,
   ShowTyping.module_,
+  ShowUtil.module_,
   Sorting.module_,
   Substitution.module_,
   Tarjan.module_,
