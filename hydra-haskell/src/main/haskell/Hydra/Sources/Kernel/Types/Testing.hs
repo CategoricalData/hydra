@@ -49,6 +49,18 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
             doc "The expected output string" $
             string],
 
+      def "DelegatedEvaluationTestCase" $
+        doc ("A test case in which we delegate evaluation of an input term and an expected output term"
+          <> " to a target programming language like Haskell, Java, or Python, checking whether the term evaluates"
+          <> " as expected when translated into that language") $
+        record [
+          "input">:
+            doc "The first of two terms which should evaluate to the same expression" $
+            core "Term",
+          "output">:
+            doc "The second of two terms which should evaluate to the same expression" $
+            core "Term"],
+
       def "EtaExpansionTestCase" $
         doc ("A test case which performs eta expansion (adding missing lambda abstractions) on a given term"
           <> " and compares the result with the expected result") $
@@ -100,6 +112,9 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
           "caseConversion">:
             doc "A case conversion test" $
             testing "CaseConversionTestCase",
+          "delegatedEvaluation">:
+            doc "A delegated evaluation test" $
+            testing "DelegatedEvaluationTestCase",
           "etaExpansion">:
             doc "An eta expansion test" $
             testing "EtaExpansionTestCase",
