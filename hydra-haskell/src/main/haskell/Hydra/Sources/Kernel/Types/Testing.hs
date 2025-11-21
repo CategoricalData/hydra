@@ -14,16 +14,22 @@ import qualified Data.Map                        as M
 import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
+import qualified Hydra.Sources.Kernel.Types.Coders as Coders
+import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 module_ :: Module
-module_ = Module ns elements [Util.module_] [Core.module_] $
+module_ = Module ns elements [Coders.module_, Compute.module_, Module.module_, Util.module_] [Core.module_] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra.testing"
     def = datatype ns
+    coders = typeref $ moduleNamespace Coders.module_
+    compute = typeref $ moduleNamespace Compute.module_
     core = typeref $ moduleNamespace Core.module_
+    modulemod = typeref $ moduleNamespace Module.module_
     util = typeref $ moduleNamespace Util.module_
     testing = typeref ns
 
@@ -105,6 +111,40 @@ module_ = Module ns elements [Util.module_] [Core.module_] $
       def "Tag" $
         doc "A tag for categorizing test cases" $
         wrap string,
+
+      def "TestCodec" $
+        doc "A codec for generating compiled test files from test groups into a target programming language" $
+        record [
+          "language">:
+            doc "The name of the target programming language" $
+            coders "LanguageName",
+          "fileExtension">:
+            doc "The file extension for test files (e.g., 'hs', 'java', 'py')" $
+            modulemod "FileExtension",
+          "encodeTerm">:
+            doc "A function for encoding Hydra terms into the target language" $
+            function (core "Term") (either_ (compute "Trace") string),
+          "formatTestName">:
+            doc "A function for formatting test case names according to the target language's conventions" $
+            function string string,
+          "formatModuleName">:
+            doc "A function for formatting module names according to the target language's conventions" $
+            function (modulemod "Namespace") string,
+          "testCaseTemplate">:
+            doc "A template string for individual test case assertions" $
+            string,
+          "testGroupTemplate">:
+            doc "A template string for wrapping a group of test cases" $
+            string,
+          "moduleTemplate">:
+            doc "A template string for the overall test module structure" $
+            string,
+          "importTemplate">:
+            doc "A template string for import/include statements" $
+            string,
+          "findImports">:
+            doc "A function that determines the necessary imports for a given set of dependencies" $
+            function (list (core "Term")) (list string)],
 
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
