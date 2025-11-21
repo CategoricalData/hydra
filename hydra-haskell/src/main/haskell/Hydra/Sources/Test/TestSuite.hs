@@ -34,7 +34,7 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       EtaExpansion.module_,
       Formatting.module_,
       InferenceAll.module_,
-      Lists.module_, Strings.module_] -- TODO
+      Lists.module_, Strings.module_]
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
@@ -45,4 +45,6 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref CheckingAll.allTestsDef,
       ref EtaExpansion.allTestsDef,
       ref Formatting.allTestsDef,
-      ref InferenceAll.allTestsDef]
+      ref InferenceAll.allTestsDef,
+      ref Lists.allTestsDef,
+      ref Strings.allTestsDef]
