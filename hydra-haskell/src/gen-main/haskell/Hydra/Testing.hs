@@ -4,7 +4,10 @@
 
 module Hydra.Testing where
 
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Module as Module
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -129,6 +132,52 @@ newtype Tag =
   deriving (Eq, Ord, Read, Show)
 
 _Tag = (Core.Name "hydra.testing.Tag")
+
+-- | A codec for generating compiled test files from test groups in a target programming language
+data TestCodec = 
+  TestCodec {
+    -- | The name of the target programming language
+    testCodecLanguage :: Coders.LanguageName,
+    -- | The file extension for test files (e.g., 'hs', 'java', 'py')
+    testCodecFileExtension :: Module.FileExtension,
+    -- | A function for encoding Hydra terms into the target language
+    testCodecEncodeTerm :: (Core.Term -> Either Compute.Trace String),
+    -- | A function for formatting test case names according to the target language's conventions
+    testCodecFormatTestName :: (String -> String),
+    -- | A function for formatting module names according to the target language's conventions
+    testCodecFormatModuleName :: (Module.Namespace -> String),
+    -- | A template string for individual test case assertions
+    testCodecTestCaseTemplate :: String,
+    -- | A template string for wrapping a group of test cases
+    testCodecTestGroupTemplate :: String,
+    -- | A template string for the overall test module structure
+    testCodecModuleTemplate :: String,
+    -- | A template string for import/include statements
+    testCodecImportTemplate :: String,
+    -- | A function that determines the necessary imports for a given set of dependencies
+    testCodecFindImports :: (S.Set Core.Name -> [String])}
+
+_TestCodec = (Core.Name "hydra.testing.TestCodec")
+
+_TestCodec_language = (Core.Name "language")
+
+_TestCodec_fileExtension = (Core.Name "fileExtension")
+
+_TestCodec_encodeTerm = (Core.Name "encodeTerm")
+
+_TestCodec_formatTestName = (Core.Name "formatTestName")
+
+_TestCodec_formatModuleName = (Core.Name "formatModuleName")
+
+_TestCodec_testCaseTemplate = (Core.Name "testCaseTemplate")
+
+_TestCodec_testGroupTemplate = (Core.Name "testGroupTemplate")
+
+_TestCodec_moduleTemplate = (Core.Name "moduleTemplate")
+
+_TestCodec_importTemplate = (Core.Name "importTemplate")
+
+_TestCodec_findImports = (Core.Name "findImports")
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
