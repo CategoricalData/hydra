@@ -8,6 +8,8 @@ import qualified Hydra.Test.Checking.All as All
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Inference.All as All_
+import qualified Hydra.Test.Lib.Lists as Lists
+import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -24,5 +26,7 @@ allTests = Testing.TestGroup {
     All.allTests,
     EtaExpansion.allTests,
     Formatting.allTests,
-    All_.allTests],
+    All_.allTests,
+    Lists.allTests,
+    Strings.allTests],
   Testing.testGroupCases = []}
