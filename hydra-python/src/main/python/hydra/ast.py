@@ -26,7 +26,7 @@ ASSOCIATIVITY__LEFT__NAME = hydra.core.Name("left")
 ASSOCIATIVITY__RIGHT__NAME = hydra.core.Name("right")
 ASSOCIATIVITY__BOTH__NAME = hydra.core.Name("both")
 
-@dataclass
+@dataclass(frozen=True)
 class BlockStyle:
     r"""Formatting option for code blocks."""
     
@@ -39,7 +39,7 @@ BLOCK_STYLE__INDENT__NAME = hydra.core.Name("indent")
 BLOCK_STYLE__NEWLINE_BEFORE_CONTENT__NAME = hydra.core.Name("newlineBeforeContent")
 BLOCK_STYLE__NEWLINE_AFTER_CONTENT__NAME = hydra.core.Name("newlineAfterContent")
 
-@dataclass
+@dataclass(frozen=True)
 class BracketExpr:
     r"""An expression enclosed by brackets."""
     
@@ -52,7 +52,7 @@ BRACKET_EXPR__BRACKETS__NAME = hydra.core.Name("brackets")
 BRACKET_EXPR__ENCLOSED__NAME = hydra.core.Name("enclosed")
 BRACKET_EXPR__STYLE__NAME = hydra.core.Name("style")
 
-@dataclass
+@dataclass(frozen=True)
 class Brackets:
     r"""Matching open and close bracket symbols."""
     
@@ -84,7 +84,7 @@ EXPR__INDENT__NAME = hydra.core.Name("indent")
 EXPR__OP__NAME = hydra.core.Name("op")
 EXPR__BRACKETS__NAME = hydra.core.Name("brackets")
 
-@dataclass
+@dataclass(frozen=True)
 class IndentedExpression:
     r"""An expression indented in a certain style."""
     
@@ -108,7 +108,7 @@ INDENT_STYLE__NAME = hydra.core.Name("hydra.ast.IndentStyle")
 INDENT_STYLE__ALL_LINES__NAME = hydra.core.Name("allLines")
 INDENT_STYLE__SUBSEQUENT_LINES__NAME = hydra.core.Name("subsequentLines")
 
-@dataclass
+@dataclass(frozen=True)
 class Op:
     r"""An operator symbol."""
     
@@ -123,7 +123,7 @@ OP__PADDING__NAME = hydra.core.Name("padding")
 OP__PRECEDENCE__NAME = hydra.core.Name("precedence")
 OP__ASSOCIATIVITY__NAME = hydra.core.Name("associativity")
 
-@dataclass
+@dataclass(frozen=True)
 class OpExpr:
     r"""An operator expression."""
     
@@ -136,7 +136,7 @@ OP_EXPR__OP__NAME = hydra.core.Name("op")
 OP_EXPR__LHS__NAME = hydra.core.Name("lhs")
 OP_EXPR__RHS__NAME = hydra.core.Name("rhs")
 
-@dataclass
+@dataclass(frozen=True)
 class Padding:
     r"""Left and right padding for an operator."""
     

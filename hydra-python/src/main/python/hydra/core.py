@@ -14,7 +14,7 @@ class Name(Node[str]):
 
 NAME__NAME = Name("hydra.core.Name")
 
-@dataclass
+@dataclass(frozen=True)
 class AnnotatedTerm:
     r"""A term together with an annotation."""
     
@@ -25,7 +25,7 @@ ANNOTATED_TERM__NAME = Name("hydra.core.AnnotatedTerm")
 ANNOTATED_TERM__BODY__NAME = Name("body")
 ANNOTATED_TERM__ANNOTATION__NAME = Name("annotation")
 
-@dataclass
+@dataclass(frozen=True)
 class AnnotatedType:
     r"""A type together with an annotation."""
     
@@ -36,7 +36,7 @@ ANNOTATED_TYPE__NAME = Name("hydra.core.AnnotatedType")
 ANNOTATED_TYPE__BODY__NAME = Name("body")
 ANNOTATED_TYPE__ANNOTATION__NAME = Name("annotation")
 
-@dataclass
+@dataclass(frozen=True)
 class Application:
     r"""A term which applies a function to an argument."""
     
@@ -47,7 +47,7 @@ APPLICATION__NAME = Name("hydra.core.Application")
 APPLICATION__FUNCTION__NAME = Name("function")
 APPLICATION__ARGUMENT__NAME = Name("argument")
 
-@dataclass
+@dataclass(frozen=True)
 class ApplicationType:
     r"""The type-level analog of an application term."""
     
@@ -58,7 +58,7 @@ APPLICATION_TYPE__NAME = Name("hydra.core.ApplicationType")
 APPLICATION_TYPE__FUNCTION__NAME = Name("function")
 APPLICATION_TYPE__ARGUMENT__NAME = Name("argument")
 
-@dataclass
+@dataclass(frozen=True)
 class Binding:
     r"""A field with an optional type scheme, used to bind variables to terms in a 'let' expression."""
     
@@ -71,7 +71,7 @@ BINDING__NAME__NAME = Name("name")
 BINDING__TERM__NAME = Name("term")
 BINDING__TYPE__NAME = Name("type")
 
-@dataclass
+@dataclass(frozen=True)
 class CaseStatement:
     r"""A union elimination; a case statement."""
     
@@ -84,7 +84,7 @@ CASE_STATEMENT__TYPE_NAME__NAME = Name("typeName")
 CASE_STATEMENT__DEFAULT__NAME = Name("default")
 CASE_STATEMENT__CASES__NAME = Name("cases")
 
-@dataclass
+@dataclass(frozen=True)
 class EitherType:
     r"""A type which provides a choice between a 'left' type and a 'right' type."""
     
@@ -95,7 +95,7 @@ EITHER_TYPE__NAME = Name("hydra.core.EitherType")
 EITHER_TYPE__LEFT__NAME = Name("left")
 EITHER_TYPE__RIGHT__NAME = Name("right")
 
-@dataclass
+@dataclass(frozen=True)
 class PairType:
     r"""A type which pairs a 'first' type and a 'second' type."""
     
@@ -127,7 +127,7 @@ ELIMINATION__RECORD__NAME = Name("record")
 ELIMINATION__UNION__NAME = Name("union")
 ELIMINATION__WRAP__NAME = Name("wrap")
 
-@dataclass
+@dataclass(frozen=True)
 class Field:
     r"""A name/term tuple2."""
     
@@ -138,7 +138,7 @@ FIELD__NAME = Name("hydra.core.Field")
 FIELD__NAME__NAME = Name("name")
 FIELD__TERM__NAME = Name("term")
 
-@dataclass
+@dataclass(frozen=True)
 class FieldType:
     r"""A name/type tuple2."""
     
@@ -183,7 +183,7 @@ FLOAT_VALUE__BIGFLOAT__NAME = Name("bigfloat")
 FLOAT_VALUE__FLOAT32__NAME = Name("float32")
 FLOAT_VALUE__FLOAT64__NAME = Name("float64")
 
-@dataclass
+@dataclass(frozen=True)
 class ForallType:
     r"""A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."""
     
@@ -211,7 +211,7 @@ FUNCTION__ELIMINATION__NAME = Name("elimination")
 FUNCTION__LAMBDA__NAME = Name("lambda")
 FUNCTION__PRIMITIVE__NAME = Name("primitive")
 
-@dataclass
+@dataclass(frozen=True)
 class FunctionType:
     r"""A function type, also known as an arrow type."""
     
@@ -222,7 +222,7 @@ FUNCTION_TYPE__NAME = Name("hydra.core.FunctionType")
 FUNCTION_TYPE__DOMAIN__NAME = Name("domain")
 FUNCTION_TYPE__CODOMAIN__NAME = Name("codomain")
 
-@dataclass
+@dataclass(frozen=True)
 class Injection:
     r"""An instance of a union type; i.e. a string-indexed generalization of inl() or inr()."""
     
@@ -315,7 +315,7 @@ INTEGER_VALUE__UINT16__NAME = Name("uint16")
 INTEGER_VALUE__UINT32__NAME = Name("uint32")
 INTEGER_VALUE__UINT64__NAME = Name("uint64")
 
-@dataclass
+@dataclass(frozen=True)
 class Lambda:
     r"""A function abstraction (lambda)."""
     
@@ -328,7 +328,7 @@ LAMBDA__PARAMETER__NAME = Name("parameter")
 LAMBDA__DOMAIN__NAME = Name("domain")
 LAMBDA__BODY__NAME = Name("body")
 
-@dataclass
+@dataclass(frozen=True)
 class Let:
     r"""A set of (possibly recursive) 'let' bindings together with a body in which they are bound."""
     
@@ -389,7 +389,7 @@ LITERAL_TYPE__FLOAT__NAME = Name("float")
 LITERAL_TYPE__INTEGER__NAME = Name("integer")
 LITERAL_TYPE__STRING__NAME = Name("string")
 
-@dataclass
+@dataclass(frozen=True)
 class MapType:
     r"""A map type."""
     
@@ -400,7 +400,7 @@ MAP_TYPE__NAME = Name("hydra.core.MapType")
 MAP_TYPE__KEYS__NAME = Name("keys")
 MAP_TYPE__VALUES__NAME = Name("values")
 
-@dataclass
+@dataclass(frozen=True)
 class Projection:
     r"""A record elimination; a projection."""
     
@@ -411,7 +411,7 @@ PROJECTION__NAME = Name("hydra.core.Projection")
 PROJECTION__TYPE_NAME__NAME = Name("typeName")
 PROJECTION__FIELD__NAME = Name("field")
 
-@dataclass
+@dataclass(frozen=True)
 class Record:
     r"""A record, or labeled tuple; a map of field names to terms."""
     
@@ -422,7 +422,7 @@ RECORD__NAME = Name("hydra.core.Record")
 RECORD__TYPE_NAME__NAME = Name("typeName")
 RECORD__FIELDS__NAME = Name("fields")
 
-@dataclass
+@dataclass(frozen=True)
 class RowType:
     r"""A labeled record or union type."""
     
@@ -433,7 +433,7 @@ ROW_TYPE__NAME = Name("hydra.core.RowType")
 ROW_TYPE__TYPE_NAME__NAME = Name("typeName")
 ROW_TYPE__FIELDS__NAME = Name("fields")
 
-@dataclass
+@dataclass(frozen=True)
 class Sum:
     r"""The unlabeled equivalent of an Injection term."""
     
@@ -531,7 +531,7 @@ TERM__UNIT__NAME = Name("unit")
 TERM__VARIABLE__NAME = Name("variable")
 TERM__WRAP__NAME = Name("wrap")
 
-@dataclass
+@dataclass(frozen=True)
 class TupleProjection:
     r"""A tuple elimination; a projection from an integer-indexed product."""
     
@@ -621,7 +621,7 @@ TYPE__UNIT__NAME = Name("unit")
 TYPE__VARIABLE__NAME = Name("variable")
 TYPE__WRAP__NAME = Name("wrap")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeApplicationTerm:
     r"""A term applied to a type; a type application."""
     
@@ -632,7 +632,7 @@ TYPE_APPLICATION_TERM__NAME = Name("hydra.core.TypeApplicationTerm")
 TYPE_APPLICATION_TERM__BODY__NAME = Name("body")
 TYPE_APPLICATION_TERM__TYPE__NAME = Name("type")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeLambda:
     r"""A System F type abstraction term."""
     
@@ -643,7 +643,7 @@ TYPE_LAMBDA__NAME = Name("hydra.core.TypeLambda")
 TYPE_LAMBDA__PARAMETER__NAME = Name("parameter")
 TYPE_LAMBDA__BODY__NAME = Name("body")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeScheme:
     r"""A type expression together with free type variables occurring in the expression."""
     
@@ -654,7 +654,7 @@ TYPE_SCHEME__NAME = Name("hydra.core.TypeScheme")
 TYPE_SCHEME__VARIABLES__NAME = Name("variables")
 TYPE_SCHEME__TYPE__NAME = Name("type")
 
-@dataclass
+@dataclass(frozen=True)
 class WrappedTerm:
     r"""A term wrapped in a type name."""
     
@@ -665,7 +665,7 @@ WRAPPED_TERM__NAME = Name("hydra.core.WrappedTerm")
 WRAPPED_TERM__TYPE_NAME__NAME = Name("typeName")
 WRAPPED_TERM__BODY__NAME = Name("body")
 
-@dataclass
+@dataclass(frozen=True)
 class WrappedType:
     r"""A type wrapped in a type name; a newtype."""
     

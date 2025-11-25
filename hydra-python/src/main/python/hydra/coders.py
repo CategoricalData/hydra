@@ -17,7 +17,7 @@ S = TypeVar("S")
 T = TypeVar("T")
 V = TypeVar("V")
 
-@dataclass
+@dataclass(frozen=True)
 class AdapterContext:
     r"""An evaluation context together with a source language and a target language."""
     
@@ -41,7 +41,7 @@ CODER_DIRECTION__NAME = hydra.core.Name("hydra.coders.CoderDirection")
 CODER_DIRECTION__ENCODE__NAME = hydra.core.Name("encode")
 CODER_DIRECTION__DECODE__NAME = hydra.core.Name("decode")
 
-@dataclass
+@dataclass(frozen=True)
 class Language:
     r"""A named language together with language-specific constraints."""
     
@@ -52,7 +52,7 @@ LANGUAGE__NAME = hydra.core.Name("hydra.coders.Language")
 LANGUAGE__NAME__NAME = hydra.core.Name("name")
 LANGUAGE__CONSTRAINTS__NAME = hydra.core.Name("constraints")
 
-@dataclass
+@dataclass(frozen=True)
 class LanguageConstraints:
     r"""A set of constraints on valid type and term expressions, characterizing a language."""
     

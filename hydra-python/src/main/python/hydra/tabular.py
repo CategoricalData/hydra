@@ -20,7 +20,7 @@ class HeaderRow(Node[frozenlist[str]]):
 
 HEADER_ROW__NAME = hydra.core.Name("hydra.tabular.HeaderRow")
 
-@dataclass
+@dataclass(frozen=True)
 class Table(Generic[V]):
     r"""A simple table as in a CSV file, having an optional header row and any number of data rows."""
     

@@ -32,7 +32,7 @@ COMPARISON_CONSTRAINT__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
 COMPARISON_CONSTRAINT__LESS_THAN_OR_EQUAL__NAME = hydra.core.Name("lessThanOrEqual")
 COMPARISON_CONSTRAINT__GREATER_THAN_OR_EQUAL__NAME = hydra.core.Name("greaterThanOrEqual")
 
-@dataclass
+@dataclass(frozen=True)
 class Edge:
     r"""An abstract edge based on a record type."""
     
@@ -45,7 +45,7 @@ EDGE__TYPE__NAME = hydra.core.Name("type")
 EDGE__OUT__NAME = hydra.core.Name("out")
 EDGE__IN__NAME = hydra.core.Name("in")
 
-@dataclass
+@dataclass(frozen=True)
 class GraphPattern:
     r"""A query pattern which matches within a designated component subgraph."""
     
@@ -115,7 +115,7 @@ PATTERN__CONJUNCTION__NAME = hydra.core.Name("conjunction")
 PATTERN__DISJUNCTION__NAME = hydra.core.Name("disjunction")
 PATTERN__GRAPH__NAME = hydra.core.Name("graph")
 
-@dataclass
+@dataclass(frozen=True)
 class Query:
     r"""A SELECT-style graph pattern matching query."""
     
@@ -126,7 +126,7 @@ QUERY__NAME = hydra.core.Name("hydra.query.Query")
 QUERY__VARIABLES__NAME = hydra.core.Name("variables")
 QUERY__PATTERNS__NAME = hydra.core.Name("patterns")
 
-@dataclass
+@dataclass(frozen=True)
 class Range:
     r"""A range from min to max, inclusive."""
     
@@ -170,7 +170,7 @@ REGEX_QUANTIFIER__EXACTLY__NAME = hydra.core.Name("exactly")
 REGEX_QUANTIFIER__AT_LEAST__NAME = hydra.core.Name("atLeast")
 REGEX_QUANTIFIER__RANGE__NAME = hydra.core.Name("range")
 
-@dataclass
+@dataclass(frozen=True)
 class RegexSequence:
     r"""A path with a regex quantifier."""
     
@@ -198,7 +198,7 @@ STEP__EDGE__NAME = hydra.core.Name("edge")
 STEP__PROJECT__NAME = hydra.core.Name("project")
 STEP__COMPARE__NAME = hydra.core.Name("compare")
 
-@dataclass
+@dataclass(frozen=True)
 class TriplePattern:
     r"""A subject/predicate/object pattern."""
     

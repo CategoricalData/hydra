@@ -29,7 +29,7 @@ class FileExtension(Node[str]):
 
 FILE_EXTENSION__NAME = hydra.core.Name("hydra.module.FileExtension")
 
-@dataclass
+@dataclass(frozen=True)
 class Library:
     r"""A library of primitive functions."""
     
@@ -42,7 +42,7 @@ LIBRARY__NAMESPACE__NAME = hydra.core.Name("namespace")
 LIBRARY__PREFIX__NAME = hydra.core.Name("prefix")
 LIBRARY__PRIMITIVES__NAME = hydra.core.Name("primitives")
 
-@dataclass
+@dataclass(frozen=True)
 class Module:
     r"""A logical collection of elements in the same namespace, having dependencies on zero or more other modules."""
     
@@ -64,7 +64,7 @@ class Namespace(Node[str]):
 
 NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 
-@dataclass
+@dataclass(frozen=True)
 class Namespaces(Generic[N]):
     r"""A mapping from namespaces to values of type n, with a focus on one namespace."""
     
@@ -75,7 +75,7 @@ NAMESPACES__NAME = hydra.core.Name("hydra.module.Namespaces")
 NAMESPACES__FOCUS__NAME = hydra.core.Name("focus")
 NAMESPACES__MAPPING__NAME = hydra.core.Name("mapping")
 
-@dataclass
+@dataclass(frozen=True)
 class QualifiedName:
     r"""A qualified name consisting of an optional namespace together with a mandatory local name."""
     
@@ -86,7 +86,7 @@ QUALIFIED_NAME__NAME = hydra.core.Name("hydra.module.QualifiedName")
 QUALIFIED_NAME__NAMESPACE__NAME = hydra.core.Name("namespace")
 QUALIFIED_NAME__LOCAL__NAME = hydra.core.Name("local")
 
-@dataclass
+@dataclass(frozen=True)
 class TermDefinition:
     r"""A term-level definition, including a name, a term, and the type of the term."""
     
@@ -99,7 +99,7 @@ TERM_DEFINITION__NAME__NAME = hydra.core.Name("name")
 TERM_DEFINITION__TERM__NAME = hydra.core.Name("term")
 TERM_DEFINITION__TYPE__NAME = hydra.core.Name("type")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeDefinition:
     r"""A type-level definition, including a name and the type."""
     
