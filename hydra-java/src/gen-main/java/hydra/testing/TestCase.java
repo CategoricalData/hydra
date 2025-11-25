@@ -12,6 +12,8 @@ public abstract class TestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_CASE_CONVERSION = new hydra.core.Name("caseConversion");
   
+  public static final hydra.core.Name FIELD_NAME_DELEGATED_EVALUATION = new hydra.core.Name("delegatedEvaluation");
+  
   public static final hydra.core.Name FIELD_NAME_ETA_EXPANSION = new hydra.core.Name("etaExpansion");
   
   public static final hydra.core.Name FIELD_NAME_EVALUATION = new hydra.core.Name("evaluation");
@@ -33,6 +35,8 @@ public abstract class TestCase implements Serializable {
   public interface Visitor<R> {
     R visit(CaseConversion instance) ;
     
+    R visit(DelegatedEvaluation instance) ;
+    
     R visit(EtaExpansion instance) ;
     
     R visit(Evaluation instance) ;
@@ -52,6 +56,10 @@ public abstract class TestCase implements Serializable {
     }
     
     default R visit(CaseConversion instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(DelegatedEvaluation instance) {
       return otherwise((instance));
     }
     
@@ -97,6 +105,37 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       CaseConversion o = (CaseConversion) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A delegated evaluation test
+   */
+  public static final class DelegatedEvaluation extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.DelegatedEvaluationTestCase value;
+    
+    public DelegatedEvaluation (hydra.testing.DelegatedEvaluationTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof DelegatedEvaluation)) {
+        return false;
+      }
+      DelegatedEvaluation o = (DelegatedEvaluation) (other);
       return value.equals(o.value);
     }
     
