@@ -7,8 +7,7 @@ category:     Data
 synopsis:     Graph programming language
 description:  >
   Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
-  between labeled hypergraphs and typed lambda calculus:
-  in Hydra, "graphs are programs, and programs are graphs".
+  between labeled hypergraphs and typed lambda calculus: in Hydra, "graphs are programs, and programs are graphs".
   The language is designed to be embedded in other programming languages -- currently Haskell, Java, and Python.
   Hydra transforms data, schemas, and functional programs into multiple other languages in a way which maintains type safety.
   It is self-hosting in Haskell -- it generates its own executable source code from Hydra sources -- and it is
@@ -38,6 +37,25 @@ library:
   source-dirs:
     - src/main/haskell
     - src/gen-main/haskell
+
+executables:
+  update-generation-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-generation-tests
+      - src/gen-test/haskell
+    dependencies:
+      - hydra
+      - hspec
+
+  update-kernel-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-kernel-tests
+      - src/gen-test/haskell
+    dependencies:
+      - hydra
+      - hspec
 
 tests:
   hydra-test:
