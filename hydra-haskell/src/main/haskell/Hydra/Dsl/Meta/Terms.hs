@@ -232,21 +232,6 @@ optional = Core.termMaybe
 pair :: TTerm Term -> TTerm Term -> TTerm Term
 pair t1 t2 = Core.termPair $ Phantoms.tuple2 t1 t2
 
--- | Create a term-encoded 2-tuple
--- Example: tuple2 (string "name") (int32 42)
-tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
-tuple2 t1 t2 = tuple [t1, t2]
-
--- | Create a term-encoded 3-tuple
--- Example: triple (int32 1) (string "test") (boolean True)
-triple :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-triple t1 t2 t3 = tuple [t1, t2, t3]
-
--- | Create a term-encoded 4-tuple
--- Example: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)
-tuple4 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-tuple4 t1 t2 t3 t4 = tuple [t1, t2, t3, t4]
-
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> TTerm Term
@@ -462,6 +447,21 @@ compose f g = lambda "arg_" $ f @@ (g @@ var "arg_")
 -- Example: identity
 identity :: TTerm Term
 identity = lambda "x_" $ var "x_"
+
+-- | Create a term-encoded 2-tuple
+-- Example: tuple2 (string "name") (int32 42)
+tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
+tuple2 t1 t2 = tuple [t1, t2]
+
+-- | Create a term-encoded 3-tuple
+-- Example: triple (int32 1) (string "test") (boolean True)
+triple :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+triple t1 t2 t3 = tuple [t1, t2, t3]
+
+-- | Create a term-encoded 4-tuple
+-- Example: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)
+tuple4 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+tuple4 t1 t2 t3 t4 = tuple [t1, t2, t3, t4]
 
 -- | Create a term-encoded 5-tuple
 -- Example: tuple5 (int32 1) (string "a") (boolean True) (float32 3.14) (int32 42)

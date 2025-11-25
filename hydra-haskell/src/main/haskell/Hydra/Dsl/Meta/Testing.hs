@@ -25,6 +25,13 @@ expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly p
 
 groupRef = MetaTerms.varNamePhantom . bindingName
 
+primCase :: String -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMetadata
+primCase cname primName args output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseEvaluation $ evaluationTestCase evaluationStyleEager input output)
+  nothing (Phantoms.list [])
+  where
+    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive primName) args
+
 infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
   (testCaseInferenceFailure $ inferenceFailureTestCase term) nothing (Phantoms.list $ tag . unTag <$> tags)
@@ -125,11 +132,26 @@ inferenceTestCase input output = Phantoms.record _InferenceTestCase [
   _InferenceTestCase_input>>: input,
   _InferenceTestCase_output>>: output]
 
+evaluationStyleEager :: TTerm EvaluationStyle
+evaluationStyleEager = Phantoms.injectUnit _EvaluationStyle _EvaluationStyle_eager
+
+evaluationStyleLazy :: TTerm EvaluationStyle
+evaluationStyleLazy = Phantoms.injectUnit _EvaluationStyle _EvaluationStyle_lazy
+
+evaluationTestCase :: TTerm EvaluationStyle -> TTerm Term -> TTerm Term -> TTerm EvaluationTestCase
+evaluationTestCase style input output = Phantoms.record _EvaluationTestCase [
+  _EvaluationTestCase_evaluationStyle>>: style,
+  _EvaluationTestCase_input>>: input,
+  _EvaluationTestCase_output>>: output]
+
 testCaseCaseConversion :: TTerm CaseConversionTestCase -> TTerm TestCase
 testCaseCaseConversion = inject _TestCase _TestCase_caseConversion
 
 testCaseEtaExpansion :: TTerm EtaExpansionTestCase -> TTerm TestCase
 testCaseEtaExpansion = inject _TestCase _TestCase_etaExpansion
+
+testCaseEvaluation :: TTerm EvaluationTestCase -> TTerm TestCase
+testCaseEvaluation = inject _TestCase _TestCase_evaluation
 
 testCaseInference :: TTerm InferenceTestCase -> TTerm TestCase
 testCaseInference = inject _TestCase _TestCase_inference
