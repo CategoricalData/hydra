@@ -47,17 +47,17 @@ allTestsDef :: TBinding TestGroup
 allTestsDef = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
-  --    listsApply, -- TODO: compiled test generator doesn't support primitives as function arguments
+      listsApply,
       listsAt,
       listsBind,
       listsConcat,
       listsConcat2,
       listsCons,
       listsDrop,
-  --    listsDropWhile, -- TODO
+      listsDropWhile,
       listsElem,
-  --    listsFilter, -- TODO
-  --    listsFoldl, -- TODO
+      listsFilter,
+      listsFoldl,
       listsGroup,
       listsHead,
       listsInit,
@@ -74,13 +74,13 @@ allTestsDef = define "allTests" $
       listsSafeHead,
       listsSingleton,
       listsSort,
-  --    listsSortOn, -- TODO
-  --    listsSpan, -- TODO
+      listsSortOn,
+      listsSpan,
       listsTail,
       listsTake,
       listsTranspose,
-      listsZip]
-  --    listsZipWith] -- TODO
+      listsZip,
+      listsZipWith]
     where
       listsApply = supergroup "apply" [
         subgroup "string transformations" [
@@ -156,7 +156,7 @@ allTestsDef = define "allTests" $
         test "drop no elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 0)) [1, 2, 3] [1, 2, 3],
         test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] []]
         where
-          test name pred lst result = primCase name _lists_dropWhile [pred, intList lst] (intList result)
+          test name pred lst result = primCaseWithTags name [tag_requiresInterp] _lists_dropWhile [pred, intList lst] (intList result)
   
       listsElem = subgroup "elem" [
         testInt "element present" 2 [1, 2, 3] True,
@@ -177,7 +177,7 @@ allTestsDef = define "allTests" $
         test "filter no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] [],
         test "empty list" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [] []]
         where
-          test name pred lst result = primCase name _lists_filter [pred, intList lst] (intList result)
+          test name pred lst result = primCaseWithTags name [tag_requiresInterp] _lists_filter [pred, intList lst] (intList result)
   
       listsFoldl = subgroup "foldl" [
         test "sum with addition" (primitive _math_add) 0 [1, 2, 3, 4] 10,
@@ -186,7 +186,7 @@ allTestsDef = define "allTests" $
         test "single element" (primitive _math_add) 10 [5] 15,
         test "subtraction fold" (primitive _math_sub) 10 [1, 2, 3] 4]
         where
-          test name op acc lst result = primCase name _lists_foldl [op, MetaTerms.int32 acc, intList lst] (MetaTerms.int32 result)
+          test name op acc lst result = primCaseWithTags name [tag_requiresInterp] _lists_foldl [op, MetaTerms.int32 acc, intList lst] (MetaTerms.int32 result)
   
       listsGroup = subgroup "group" [
         test "consecutive duplicates" [1, 1, 2, 2, 2, 3, 1] [[1, 1], [2, 2, 2], [3], [1]],
@@ -349,10 +349,10 @@ allTestsDef = define "allTests" $
        testStr "empty string list" (primitive _strings_length) [] [],
        testStr "single string element" (primitive _strings_length) ["test"] ["test"],
        testInt "sort by negation" (primitive _math_negate) [1, 3, 2] [3, 2, 1],
-       testInt "sort by absolute value" (primitive _math_negate) [-1, -3, 2] [-1, 2, -3]]
+       testInt "sort by absolute value" (primitive _math_abs) [-1, -3, 2] [-1, 2, -3]]
        where
-         testStr name keyFn lst result = primCase name _lists_sortOn [keyFn, stringList lst] (stringList result)
-         testInt name keyFn lst result = primCase name _lists_sortOn [keyFn, intList lst] (intList result)
+         testStr name keyFn lst result = primCaseWithTags name [tag_requiresInterp] _lists_sortOn [keyFn, stringList lst] (stringList result)
+         testInt name keyFn lst result = primCaseWithTags name [tag_requiresInterp] _lists_sortOn [keyFn, intList lst] (intList result)
   
       listsSpan = subgroup "span" [
         test "span less than 3" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 3)) [1, 2, 3, 1, 2] ([1, 2], [3, 1, 2]),
@@ -360,7 +360,7 @@ allTestsDef = define "allTests" $
         test "span no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
         test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] ([], [])]
         where
-          test name pred lst (prefix, suffix) = primCase name _lists_span [pred, intList lst] (tuple2 (intList prefix) (intList suffix))
+          test name pred lst (prefix, suffix) = primCaseWithTags name [tag_requiresInterp] _lists_span [pred, intList lst] (tuple2 (intList prefix) (intList suffix))
   
       listsTail = subgroup "tail" [
         testInt "multiple elements" [1, 2, 3, 4] [2, 3, 4],
@@ -406,7 +406,7 @@ allTestsDef = define "allTests" $
         testInt "second list shorter" (primitive _math_add) [1, 2, 3] [4, 5] [5, 7],
         testInt "empty first list" (primitive _math_add) [] [1, 2, 3] [],
         testInt "empty second list" (primitive _math_add) [1, 2, 3] [] [],
-        testStr "string concatenation" (primitive _strings_cat2) ["a", "b"] ["1", "2"] ["a1", "b1"]]
+        testStr "string concatenation" (primitive _strings_cat2) ["a", "b"] ["1", "2"] ["a1", "b2"]]
         where
-          testInt name op lst1 lst2 result = primCase name _lists_zipWith [op, intList lst1, intList lst2] (intList result)
-          testStr name op lst1 lst2 result = primCase name _lists_zipWith [op, stringList lst1, stringList lst2] (stringList result)
+          testInt name op lst1 lst2 result = primCaseWithTags name [tag_requiresInterp] _lists_zipWith [op, intList lst1, intList lst2] (intList result)
+          testStr name op lst1 lst2 result = primCaseWithTags name [tag_requiresInterp] _lists_zipWith [op, stringList lst1, stringList lst2] (stringList result)
