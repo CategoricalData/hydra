@@ -220,9 +220,8 @@ def schema_graph_to_typing_environment[T0](g: hydra.graph.Graph) -> hydra.comput
 def graph_to_inference_context[T0](graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.InferenceContext]:
     schema = hydra.lib.maybes.from_maybe(graph, graph.schema)
     prim_types = cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (p.name, p.type)), hydra.lib.maps.elems(graph.primitives))))
-    def var_types[T1, T2]() -> FrozenDict[T1, T2]:
-        return cast(FrozenDict[T1, T2], hydra.lib.maps.empty())
-    return hydra.lib.flows.bind(schema_graph_to_typing_environment(schema), (lambda schema_types: hydra.lib.flows.pure(hydra.typing.InferenceContext(schema_types, prim_types, cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], var_types), False))))
+    var_types = cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), hydra.lib.maps.elems(graph.elements)))))
+    return hydra.lib.flows.bind(schema_graph_to_typing_environment(schema), (lambda schema_types: hydra.lib.flows.pure(hydra.typing.InferenceContext(schema_types, prim_types, var_types, False))))
 
 def graph_to_type_context[T0](graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.TypeContext]:
     return hydra.lib.flows.bind(graph_to_inference_context(graph), (lambda ix: hydra.lib.flows.pure(hydra.typing.TypeContext(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.empty()), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), ix))))
