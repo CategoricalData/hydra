@@ -74,6 +74,25 @@ deduplicateCaseVariables cases = L.reverse $ snd $ L.foldl rewriteCase (M.empty,
             rewritten = TermFunction $ FunctionLambda $ Lambda v2 (Just dom) (alphaConvert v v2 body)
       _ -> (countByName, (Field fname fterm):done)
 
+-- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
+wrapInNullaryLambda :: Py.Expression -> Py.Expression
+wrapInNullaryLambda expr = Py.ExpressionLambda $ Py.Lambda emptyParams expr
+  where
+    emptyParams = Py.LambdaParameters {
+      Py.lambdaParametersSlashNoDefault = Nothing,
+      Py.lambdaParametersParamNoDefault = [],
+      Py.lambdaParametersParamWithDefault = [],
+      Py.lambdaParametersStarEtc = Nothing
+    }
+
+-- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
+wrapLazyArguments :: Name -> [Py.Expression] -> [Py.Expression]
+wrapLazyArguments name args
+  | name == Name "hydra.lib.logic.ifElse" && length args == 3 =
+      -- For if_else, wrap arguments 2 and 3 (the then/else branches)
+      [args !! 0, wrapInNullaryLambda (args !! 1), wrapInNullaryLambda (args !! 2)]
+  | otherwise = args
+
 encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
     PyGraph g _ <- getState
@@ -118,7 +137,7 @@ encodeApplication env app = do
                 -- Note: additional arguments here would be an error
                 return $ withRest $
                   projectFromExpression firstArg $ Py.Name "value"
-            FunctionPrimitive name -> encodeVariable env name hargs
+            FunctionPrimitive name -> encodeVariable env name (wrapLazyArguments name hargs)
             _ -> def
           where
             withRest e = if L.null restArgs
@@ -799,11 +818,6 @@ encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph P
 encodeVariable env name args = do
   PyGraph g _ <- getState
 
---  if name == Name "hydra.lib.maps.fromList"
---    then fail $ "args = " ++ show args
---      ++ "\n\tel = " ++ show (lookupElement g name)
---    else pure ()
-
   return $ if L.null args
     then case lookupElement g name of
       -- Lambda-bound variables, as well as primitive functions
@@ -812,11 +826,12 @@ encodeVariable env name args = do
         Just prim -> if primitiveArity prim == 0
           then asFunctionCall
           else asVariable
-      -- Let-bound variables
-      Just el -> if isFunctionCall el
---      Just el -> if isNullaryFunction el
+      -- Let-bound variables (elements)
+      -- Call if it's a wrapped term (monadic thunk)
+      Just el@(Binding _ _term (Just _ts)) -> if isFunctionCall el
         then asFunctionCall
         else asVariable
+      Just _ -> asVariable
      else asFunctionCall
   where
     asVariable = termVariableReference env name

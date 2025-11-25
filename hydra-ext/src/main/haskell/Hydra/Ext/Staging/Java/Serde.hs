@@ -7,6 +7,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
+import qualified Data.Char as Chr
 import Data.Char (ord, toUpper)
 import Numeric (showHex)
 
@@ -132,7 +133,19 @@ writeCastExpression_Primitive :: Java.CastExpression_Primitive -> Ast.Expr
 writeCastExpression_Primitive _ = cst "TODO:CastExpression_Primitive"
 
 writeCharacterLiteral :: Int -> Ast.Expr
-writeCharacterLiteral _ = cst "TODO:CharacterLiteral"
+writeCharacterLiteral c = cst $ "'" ++ escapeChar (Chr.chr c) ++ "'"
+  where
+    escapeChar ch = case ch of
+      '\'' -> "\\'"
+      '\\' -> "\\\\"
+      '\n' -> "\\n"
+      '\r' -> "\\r"
+      '\t' -> "\\t"
+      _ -> if ord ch >= 32 && ord ch < 127
+           then [ch]
+           else "\\u" ++ L.take (4 - L.length hex) "0000" ++ hex
+             where hex = showHex (ord ch) ""
+    ord = Chr.ord
 
 writeClassBody :: Java.ClassBody -> Ast.Expr
 writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $
@@ -353,7 +366,7 @@ writeFieldModifier m = case m of
   Java.FieldModifierVolatile -> cst "volatile"
 
 writeFloatingPointLiteral :: Java.FloatingPointLiteral -> Ast.Expr
-writeFloatingPointLiteral _ = cst "TODO:FloatingPointLiteral"
+writeFloatingPointLiteral (Java.FloatingPointLiteral d) = cst $ show d
 
 writeFloatingPointType :: Java.FloatingPointType -> Ast.Expr
 writeFloatingPointType _ = cst "TODO:FloatingPointType"

@@ -90,7 +90,7 @@ def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozen
             
             case _:
                 return False
-    return hydra.lib.logic.if_else(is_record, hydra.lib.lists.filter((lambda p: hydra.lib.logic.not_(is_constant(p))), pats), pats)
+    return hydra.lib.logic.if_else(is_record, (lambda : hydra.lib.lists.filter((lambda p: hydra.lib.logic.not_(is_constant(p))), pats)), (lambda : pats))
 
 def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> bool:
     r"""Check if patterns are nontrivial."""
@@ -103,7 +103,7 @@ def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> b
             
             case _:
                 return False
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(min_pats), 1), is_labeled(hydra.lib.lists.head(min_pats)), True)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(min_pats), 1), (lambda : is_labeled(hydra.lib.lists.head(min_pats))), (lambda : True))
 
 def is_complex(pat: hydra.grammar.Pattern) -> bool:
     r"""Check if pattern is complex."""
@@ -129,16 +129,16 @@ def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
 def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
     r"""Create elements from pattern."""
     
-    trivial = hydra.lib.logic.if_else(omit_trivial, cast(frozenlist[Tuple[str, hydra.core.Type]], ()), ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),))
+    trivial = hydra.lib.logic.if_else(omit_trivial, (lambda : cast(frozenlist[Tuple[str, hydra.core.Type]], ())), (lambda : ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),)))
     def descend[T0](n: str, f: Callable[[frozenlist[Tuple[str, hydra.core.Type]]], T0], p: hydra.grammar.Pattern) -> T0:
         cpairs = make_elements(False, ns, child_name(lname, n), p)
-        return f(hydra.lib.logic.if_else(is_complex(p), hydra.lib.lists.cons((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, hydra.lib.lists.head(cpairs)[0])))), cpairs), hydra.lib.logic.if_else(hydra.lib.lists.null(cpairs), ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),), hydra.lib.lists.cons((lname, hydra.lib.lists.head(cpairs)[1]), hydra.lib.lists.tail(cpairs)))))
+        return f(hydra.lib.logic.if_else(is_complex(p), (lambda : hydra.lib.lists.cons((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, hydra.lib.lists.head(cpairs)[0])))), cpairs)), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(cpairs), (lambda : ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),)), (lambda : hydra.lib.lists.cons((lname, hydra.lib.lists.head(cpairs)[1]), hydra.lib.lists.tail(cpairs)))))))
     def mod(n: str, f: Callable[[hydra.core.Type], hydra.core.Type], p: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
         return descend(n, (lambda pairs: hydra.lib.lists.cons((lname, f(hydra.lib.lists.head(pairs)[1])), hydra.lib.lists.tail(pairs))), p)
     def for_pat(pat2: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
         match pat2:
             case hydra.grammar.PatternAlternatives(value=pats):
-                return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats)
+                return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(hydra.constants.placeholder_name(), fields)))), pats)
             
             case hydra.grammar.PatternConstant():
                 return trivial
@@ -165,7 +165,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
                 return ((lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))),)
             
             case hydra.grammar.PatternSequence(value=pats2):
-                return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats2)
+                return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name(), fields)))), pats2)
             
             case hydra.grammar.PatternStar(value=p3):
                 return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p3)
@@ -180,7 +180,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
         field_pairs = hydra.lib.lists.zip_with(to_field, field_names, min_pats)
         fields = hydra.lib.lists.map((lambda v1: v1[0]), field_pairs)
         els = hydra.lib.lists.concat(hydra.lib.lists.map((lambda v1: v1[1]), field_pairs))
-        return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), hydra.lib.lists.cons((lname, construct(fields)), els), for_pat(hydra.lib.lists.head(min_pats)))
+        return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), (lambda : hydra.lib.lists.cons((lname, construct(fields)), els)), (lambda : for_pat(hydra.lib.lists.head(min_pats))))
     return for_pat(pat)
 
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:

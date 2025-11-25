@@ -21,7 +21,7 @@ def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
     r"""Split a dot-separated name into a namespace and local name."""
     
     parts = hydra.lib.lists.reverse(hydra.lib.strings.split_on(".", name.value))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Nothing()), name.value), hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts)))))), hydra.lib.lists.head(parts)))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts)), (lambda : hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Nothing()), name.value)), (lambda : hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(hydra.module.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts)))))), hydra.lib.lists.head(parts))))
 
 def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydra.core.Name) -> str:
     r"""Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""
@@ -55,7 +55,7 @@ def qname(ns: hydra.module.Namespace, name: str) -> hydra.core.Name:
 def unique_label(visited: frozenset[str], l: str) -> str:
     r"""Generate a unique label by appending a suffix if the label is already in use."""
     
-    return hydra.lib.logic.if_else(hydra.lib.sets.member(l, visited), unique_label(visited, hydra.lib.strings.cat2(l, "'")), l)
+    return hydra.lib.logic.if_else(hydra.lib.sets.member(l, visited), (lambda : unique_label(visited, hydra.lib.strings.cat2(l, "'"))), (lambda : l))
 
 def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
     r"""Convert a qualified name to a dot-separated name."""

@@ -21,6 +21,7 @@ import qualified Hydra.Sources.Test.Lib.Lists as Lists
 import qualified Hydra.Sources.Test.Lib.Literals as Literals
 import qualified Hydra.Sources.Test.Lib.Logic as Logic
 import qualified Hydra.Sources.Test.Lib.Math as Math
+import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
 import qualified Hydra.Sources.Test.Checking.All as CheckingAll
 import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
@@ -45,6 +46,7 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       Literals.module_,
       Logic.module_,
       Math.module_,
+      Maybes.module_,
       Strings.module_]
 
 allTestsDef :: TBinding TestGroup
@@ -63,4 +65,5 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref Literals.allTestsDef,
       ref Logic.allTestsDef,
       ref Math.allTestsDef,
+      ref Maybes.allTestsDef,
       ref Strings.allTestsDef]

@@ -250,7 +250,7 @@ def literal(l: hydra.core.Literal) -> str:
             return "[binary]"
         
         case hydra.core.LiteralBoolean(value=b):
-            return hydra.lib.logic.if_else(b, "true", "false")
+            return hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false"))
         
         case hydra.core.LiteralFloat(value=fv):
             return float(fv)
@@ -270,7 +270,7 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
     vars = ts.variables
     body = ts.type
     var_names = hydra.lib.lists.map((lambda v1: v1.value), vars)
-    fa = hydra.lib.logic.if_else(hydra.lib.lists.null(vars), "", hydra.lib.strings.cat(("∀[", hydra.lib.strings.intercalate(",", var_names), "].")))
+    fa = hydra.lib.logic.if_else(hydra.lib.lists.null(vars), (lambda : ""), (lambda : hydra.lib.strings.cat(("∀[", hydra.lib.strings.intercalate(",", var_names), "]."))))
     return hydra.lib.strings.cat(("(", fa, type(body), ")"))
 
 def binding(el: hydra.core.Binding) -> str:

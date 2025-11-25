@@ -7,8 +7,8 @@ package hydra.show.typing;
  */
 public interface Typing {
   static String typeConstraint(hydra.typing.TypeConstraint tc) {
-    hydra.core.Type ltyp = ((tc)).left;
-    hydra.core.Type rtyp = ((tc)).right;
+    hydra.core.Type ltyp = ((hydra.typing.TypeConstraint) ((tc))).left;
+    hydra.core.Type rtyp = ((hydra.typing.TypeConstraint) ((tc))).right;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       hydra.show.core.Core.type((ltyp)),
       "\u2261",
