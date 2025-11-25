@@ -78,6 +78,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el foldOverTypeDef,
      el freeTypeVariablesInTermDef,
      el freeVariablesInTermDef,
+--     el freeVariablesInTermOptDef,
      el freeVariablesInTypeDef,
      el freeVariablesInTypeOrderedDef,
      el freeVariablesInTypeSchemeSimpleDef,
@@ -89,6 +90,7 @@ module_ = Module (Namespace "hydra.rewriting") elements
      el liftLambdaAboveLetDef,
      el mapBeneathTypeAnnotationsDef,
      el normalizeTypeVariablesInTermDef,
+     el pruneLetDef,
      el removeTermAnnotationsDef,
      el removeTypeAnnotationsDef,
      el removeTypesFromTermDef,
@@ -321,9 +323,9 @@ freeVariablesInTermDef :: TBinding (Term -> S.Set Name)
 freeVariablesInTermDef = define "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   "term" ~>
-  "dfltVars" <~ Phantoms.fold ("s" ~> "t" ~> Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
-    @@ Sets.empty
-    @@ (ref subtermsDef @@ var "term") $
+  "dfltVars" <~ Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (ref freeVariablesInTermDef @@ var "t"))
+    Sets.empty
+    (ref subtermsDef @@ var "term") $
   cases _Term (var "term")
     (Just $ var "dfltVars") [
     _Term_function>>: match _Function (Just $ var "dfltVars") [
@@ -334,6 +336,37 @@ freeVariablesInTermDef = define "freeVariablesInTerm" $
       (var "dfltVars")
       (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l")))),
     _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
+
+--freeVariablesInTermOptDef :: TBinding (Term -> S.Set Name)
+--freeVariablesInTermOptDef = define "freeVariablesInTermOpt" $
+--  doc ("A possibly more efficient function to find the free variables (i.e. variables not bound by a lambda or let) in a term") $
+--  "term0" ~>
+--  "gather" ~> ("s" ~> "locallyBound" ~> "term"  ~>
+--    "dflt" <~ (Lists.foldl
+--      ("s1" ~> "term1" ~> var "gather" @@ var "s1" @@ var "locallyBound" @@ var "term1")
+--      (var "s")
+--      (ref subtermsDef @@ var "term")) $
+--    cases _Term (var "term")
+--      (Just $ var "dflt") [
+--      _Term_function>>: "f" ~> cases _Function (var "f")
+--        (Just $ var "dflt") [
+--        _Function_lambda>>: "l" ~> var "gather" @@ var "s"
+--          @@ (S.insert (Core.lambdaParameter $ var "l") (var "locallyBound"))
+--          @@ (Core.lambdaBody $ var "l")],
+--      _Term_let>>: "l" ~>
+--        "locallyBound1" <~ S.union (var "locallyBound") (Sets.fromList $ Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l")) $
+--        "forBinding" <~ ("s1" ~> "b" ~> var "gather" @@ var "s1" @@ var "locallyBound1" @@ (Core.bindingTerm $ var "b")) $
+--        Lists.foldl
+--          (var "forBinding")
+--          (var "gather"
+--            @@ var "s"
+--            @@ var "locallyBound1"
+--            @@ (Core.letBody $ var "l"))
+--          (Core.letBindings $ var "l"),
+--      _Term_variable>>: "name" ~> Logic.ifElse (Sets.member (var "name") (var "locallyBound"))
+--        (var "s")
+--        (Sets.insert (var "name") (var "s"))]) $
+--  "gather" @@ Sets.empty @@ Sets.empty @@ var "term0"
 
 freeVariablesInTypeDef :: TBinding (Type -> S.Set Name)
 freeVariablesInTypeDef = define "freeVariablesInType" $
@@ -569,6 +602,26 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
     ref rewriteTermDef @@ var "rewrite" @@ var "term0") $
   -- initial state: ((emptySubst, emptyBound), next=0)
   var "rewriteWithSubst" @@ (tuple2 (tuple2 Maps.empty Sets.empty) (int32 0)) @@ var "term"
+
+pruneLetDef :: TBinding (Let -> Let)
+pruneLetDef = define "pruneLet" $
+  doc ("Given a let expression, remove any unused bindings. The resulting expression is still a let,"
+    <> " even if has no remaining bindings") $
+  "l" ~>
+  "bindingMap" <~ Maps.fromList (Lists.map
+    ("b" ~> tuple2 (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") $
+  "rootName" <~ Core.name (string "[[[root]]]") $
+  "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
+      (ref freeVariablesInTermDef @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
+        (Core.letBody $ var "l")
+        (Maybes.fromJust $ Maps.lookup (var "n") (var "bindingMap"))))) $
+  "reachable" <~ ref Sorting.findReachableNodesDef @@ var "adj" @@ var "rootName" $
+  "prunedBindings" <~ Lists.filter
+    ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
+    (Core.letBindings $ var "l") $
+  Core.let_
+    (var "prunedBindings")
+    (Core.letBody $ var "l")
 
 removeTermAnnotationsDef :: TBinding (Term -> Term)
 removeTermAnnotationsDef = define "removeTermAnnotations" $

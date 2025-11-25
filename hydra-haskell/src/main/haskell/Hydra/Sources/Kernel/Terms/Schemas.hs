@@ -336,7 +336,9 @@ graphToInferenceContextDef = define "graphToInferenceContext" $
   "primTypes" <~ Maps.fromList (Lists.map
     ("p" ~> tuple2 (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
     (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
-  "varTypes" <~ Maps.empty $
+  "varTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
+    ("b" ~> Maybes.map ("ts" ~> tuple2 (Core.bindingName $ var "b") (var "ts")) $ Core.bindingType $ var "b")
+    (Maps.elems $ Graph.graphElements $ var "graph")) $
   "schemaTypes" <<~ ref schemaGraphToTypingEnvironmentDef @@ var "schema" $
   produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
 
