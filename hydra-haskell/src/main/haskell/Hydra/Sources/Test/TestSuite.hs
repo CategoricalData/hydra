@@ -15,7 +15,10 @@ import qualified Data.List as L
 import qualified Data.Map  as M
 
 -- Additional imports
+import qualified Hydra.Sources.Test.Lib.Chars as Chars
+import qualified Hydra.Sources.Test.Lib.Equality as Equality
 import qualified Hydra.Sources.Test.Lib.Lists as Lists
+import qualified Hydra.Sources.Test.Lib.Literals as Literals
 import qualified Hydra.Sources.Test.Lib.Logic as Logic
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
@@ -36,7 +39,13 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       EtaExpansion.module_,
       Formatting.module_,
       InferenceAll.module_,
-      Lists.module_, Logic.module_, Math.module_, Strings.module_]
+      Chars.module_,
+      Equality.module_,
+      Lists.module_,
+      Literals.module_,
+      Logic.module_,
+      Math.module_,
+      Strings.module_]
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
@@ -48,7 +57,10 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref EtaExpansion.allTestsDef,
       ref Formatting.allTestsDef,
       ref InferenceAll.allTestsDef,
+      ref Chars.allTestsDef,
+      ref Equality.allTestsDef,
       ref Lists.allTestsDef,
+      ref Literals.allTestsDef,
       ref Logic.allTestsDef,
       ref Math.allTestsDef,
       ref Strings.allTestsDef]

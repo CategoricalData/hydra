@@ -8,7 +8,10 @@ import qualified Hydra.Test.Checking.All as All
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Inference.All as All_
+import qualified Hydra.Test.Lib.Chars as Chars
+import qualified Hydra.Test.Lib.Equality as Equality
 import qualified Hydra.Test.Lib.Lists as Lists
+import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
 import qualified Hydra.Test.Lib.Math as Math
 import qualified Hydra.Test.Lib.Strings as Strings
@@ -29,7 +32,10 @@ allTests = Testing.TestGroup {
     EtaExpansion.allTests,
     Formatting.allTests,
     All_.allTests,
+    Chars.allTests,
+    Equality.allTests,
     Lists.allTests,
+    Literals.allTests,
     Logic.allTests,
     Math.allTests,
     Strings.allTests],
