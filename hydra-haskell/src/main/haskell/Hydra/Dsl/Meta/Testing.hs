@@ -16,6 +16,7 @@ import qualified Data.Map as M
 
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
+tag_requiresInterp = Tag "requiresInterp"
 
 expectFailure i tags term = infFailureTest ("#" ++ show i) tags term
 
@@ -26,9 +27,12 @@ expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly p
 groupRef = MetaTerms.varNamePhantom . bindingName
 
 primCase :: String -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMetadata
-primCase cname primName args output = testCaseWithMetadata (Phantoms.string cname)
+primCase cname primName args output = primCaseWithTags cname [] primName args output
+
+primCaseWithTags :: String -> [Tag] -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMetadata
+primCaseWithTags cname tags primName args output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseEvaluation $ evaluationTestCase evaluationStyleEager input output)
-  nothing (Phantoms.list [])
+  nothing (Phantoms.list $ tag . unTag <$> tags)
   where
     input = L.foldl (MetaTerms.@@) (MetaTerms.primitive primName) args
 
@@ -42,6 +46,7 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
+isRequiresInterp tcase = tag_requiresInterp `L.elem` Testing.testCaseWithMetadataTags tcase
 
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
 mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
