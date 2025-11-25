@@ -34,10 +34,26 @@ library:
   ghc-options: [-rtsopts]
 
 executables:
-  hydra-ext-debug:
-    source-dirs: debug
+  update-java-kernel:
     main: Main.hs
+    source-dirs:
+      - src/exec/update-java-kernel
     ghc-options: [-rtsopts]
     dependencies:
-      - base
+      - hydra-ext
+
+  update-java-kernel-types:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-java-kernel-types
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
+  update-python-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-python-kernel
+    ghc-options: [-rtsopts]
+    dependencies:
       - hydra-ext
