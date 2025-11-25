@@ -471,7 +471,12 @@ encodeRecordType env name (RowType _ tfields) comment = do
   where
     (tparamList, tparamMap) = pythonEnvironmentBoundTypeVariables env
     args = fmap (\a -> pyExpressionsToPyArgs [a]) $ genericArg tparamList
-    decs = Py.Decorators [pyNameToPyNamedExpression $ Py.Name "dataclass"]
+    decs = Py.Decorators [dataclassDecorator]
+      where
+        dataclassDecorator = Py.NamedExpressionSimple dataclassCall
+        dataclassCall = pyPrimaryToPyExpression $ primaryWithRhs (pyNameToPyPrimary $ Py.Name "dataclass") $
+          Py.PrimaryRhsCall $ Py.Args [] [Py.KwargOrStarredKwarg frozenKwarg] []
+        frozenKwarg = Py.Kwarg (Py.Name "frozen") (pyAtomToPyExpression Py.AtomTrue)
 
 encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
 encodeTermAssignment env name term comment = do
