@@ -16,7 +16,7 @@ type Graph = FrozenDict[Vertex, frozenlist[Vertex]]
 
 GRAPH__NAME = hydra.core.Name("hydra.topology.Graph")
 
-@dataclass
+@dataclass(frozen=True)
 class OrderingIsomorphism(Generic[A]):
     encode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from source ordering to target ordering"]
     decode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from target ordering to source ordering"]
@@ -25,7 +25,7 @@ ORDERING_ISOMORPHISM__NAME = hydra.core.Name("hydra.topology.OrderingIsomorphism
 ORDERING_ISOMORPHISM__ENCODE__NAME = hydra.core.Name("encode")
 ORDERING_ISOMORPHISM__DECODE__NAME = hydra.core.Name("decode")
 
-@dataclass
+@dataclass(frozen=True)
 class TarjanState:
     counter: Annotated[int, "Next available index for vertices in the DFS traversal"]
     indices: Annotated[FrozenDict[Vertex, int], "Mapping from vertices to their indices in the DFS traversal"]

@@ -8,7 +8,7 @@ from hydra.dsl.python import Node, frozenlist
 from typing import Annotated
 import hydra.core
 
-@dataclass
+@dataclass(frozen=True)
 class AccessorEdge:
     r"""An edge in an accessor graph, connecting two nodes via a path."""
     
@@ -21,7 +21,7 @@ ACCESSOR_EDGE__SOURCE__NAME = hydra.core.Name("source")
 ACCESSOR_EDGE__PATH__NAME = hydra.core.Name("path")
 ACCESSOR_EDGE__TARGET__NAME = hydra.core.Name("target")
 
-@dataclass
+@dataclass(frozen=True)
 class AccessorGraph:
     r"""A graph of accessor nodes and edges, representing term access patterns."""
     
@@ -32,7 +32,7 @@ ACCESSOR_GRAPH__NAME = hydra.core.Name("hydra.accessors.AccessorGraph")
 ACCESSOR_GRAPH__NODES__NAME = hydra.core.Name("nodes")
 ACCESSOR_GRAPH__EDGES__NAME = hydra.core.Name("edges")
 
-@dataclass
+@dataclass(frozen=True)
 class AccessorNode:
     r"""A node in an accessor graph, representing a term or subterm."""
     

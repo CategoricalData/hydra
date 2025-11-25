@@ -8,7 +8,7 @@ from hydra.dsl.python import FrozenDict, Node
 from typing import Annotated
 import hydra.core
 
-@dataclass
+@dataclass(frozen=True)
 class InferenceContext:
     r"""The context provided to type inference, including various typing enviroments."""
     
@@ -23,7 +23,7 @@ INFERENCE_CONTEXT__PRIMITIVE_TYPES__NAME = hydra.core.Name("primitiveTypes")
 INFERENCE_CONTEXT__DATA_TYPES__NAME = hydra.core.Name("dataTypes")
 INFERENCE_CONTEXT__DEBUG__NAME = hydra.core.Name("debug")
 
-@dataclass
+@dataclass(frozen=True)
 class InferenceResult:
     r"""The result of applying inference rules to a term."""
     
@@ -41,7 +41,7 @@ class TermSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Term]"]):
 
 TERM_SUBST__NAME = hydra.core.Name("hydra.typing.TermSubst")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeConstraint:
     r"""An assertion that two types can be unified into a single type."""
     
@@ -54,7 +54,7 @@ TYPE_CONSTRAINT__LEFT__NAME = hydra.core.Name("left")
 TYPE_CONSTRAINT__RIGHT__NAME = hydra.core.Name("right")
 TYPE_CONSTRAINT__COMMENT__NAME = hydra.core.Name("comment")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeContext:
     r"""A typing environment used for type reconstruction (typeOf) over System F terms."""
     

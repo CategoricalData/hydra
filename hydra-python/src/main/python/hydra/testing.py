@@ -26,7 +26,7 @@ EVALUATION_STYLE__NAME = hydra.core.Name("hydra.testing.EvaluationStyle")
 EVALUATION_STYLE__EAGER__NAME = hydra.core.Name("eager")
 EVALUATION_STYLE__LAZY__NAME = hydra.core.Name("lazy")
 
-@dataclass
+@dataclass(frozen=True)
 class CaseConversionTestCase:
     r"""A test case which checks that strings are converted between different case conventions correctly."""
     
@@ -41,7 +41,7 @@ CASE_CONVERSION_TEST_CASE__TO_CONVENTION__NAME = hydra.core.Name("toConvention")
 CASE_CONVERSION_TEST_CASE__FROM_STRING__NAME = hydra.core.Name("fromString")
 CASE_CONVERSION_TEST_CASE__TO_STRING__NAME = hydra.core.Name("toString")
 
-@dataclass
+@dataclass(frozen=True)
 class DelegatedEvaluationTestCase:
     r"""A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language."""
     
@@ -52,7 +52,7 @@ DELEGATED_EVALUATION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.DelegatedE
 DELEGATED_EVALUATION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 DELEGATED_EVALUATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
-@dataclass
+@dataclass(frozen=True)
 class EtaExpansionTestCase:
     r"""A test case which performs eta expansion (adding missing lambda abstractions) on a given term and compares the result with the expected result."""
     
@@ -63,7 +63,7 @@ ETA_EXPANSION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.EtaExpansionTestC
 ETA_EXPANSION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 ETA_EXPANSION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
-@dataclass
+@dataclass(frozen=True)
 class EvaluationTestCase:
     r"""A test case which evaluates (reduces) a given term and compares it with the expected result."""
     
@@ -76,7 +76,7 @@ EVALUATION_TEST_CASE__EVALUATION_STYLE__NAME = hydra.core.Name("evaluationStyle"
 EVALUATION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 EVALUATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
-@dataclass
+@dataclass(frozen=True)
 class InferenceFailureTestCase:
     r"""A test case providing a term for which type inference is expected to fail."""
     
@@ -85,7 +85,7 @@ class InferenceFailureTestCase:
 INFERENCE_FAILURE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.InferenceFailureTestCase")
 INFERENCE_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 
-@dataclass
+@dataclass(frozen=True)
 class InferenceTestCase:
     r"""A test case which performs type inference on a given term and compares the result with an expected type scheme."""
     
@@ -101,7 +101,7 @@ class Tag(Node[str]):
 
 TAG__NAME = hydra.core.Name("hydra.testing.Tag")
 
-@dataclass
+@dataclass(frozen=True)
 class TestCodec:
     r"""A codec for generating compiled test files from test groups into a target programming language."""
     
@@ -167,7 +167,7 @@ TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
 TEST_CASE__TYPE_CHECKING__NAME = hydra.core.Name("typeChecking")
 TEST_CASE__TYPE_CHECKING_FAILURE__NAME = hydra.core.Name("typeCheckingFailure")
 
-@dataclass
+@dataclass(frozen=True)
 class TestCaseWithMetadata:
     r"""One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags."""
     
@@ -182,7 +182,7 @@ TEST_CASE_WITH_METADATA__CASE__NAME = hydra.core.Name("case")
 TEST_CASE_WITH_METADATA__DESCRIPTION__NAME = hydra.core.Name("description")
 TEST_CASE_WITH_METADATA__TAGS__NAME = hydra.core.Name("tags")
 
-@dataclass
+@dataclass(frozen=True)
 class TestGroup:
     r"""A collection of test cases with a name and optional description."""
     
@@ -197,7 +197,7 @@ TEST_GROUP__DESCRIPTION__NAME = hydra.core.Name("description")
 TEST_GROUP__SUBGROUPS__NAME = hydra.core.Name("subgroups")
 TEST_GROUP__CASES__NAME = hydra.core.Name("cases")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeCheckingTestCase:
     r"""A test case which performs type checking on a given term and compares the result with an expected annotated term and type."""
     
@@ -210,7 +210,7 @@ TYPE_CHECKING_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 TYPE_CHECKING_TEST_CASE__OUTPUT_TERM__NAME = hydra.core.Name("outputTerm")
 TYPE_CHECKING_TEST_CASE__OUTPUT_TYPE__NAME = hydra.core.Name("outputType")
 
-@dataclass
+@dataclass(frozen=True)
 class TypeCheckingFailureTestCase:
     r"""A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases."""
     

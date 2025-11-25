@@ -8,7 +8,7 @@ from typing import Annotated
 import hydra.core
 import hydra.query
 
-@dataclass
+@dataclass(frozen=True)
 class PathEquation:
     r"""A declared equivalence between two abstract paths in a graph."""
     
@@ -19,7 +19,7 @@ PATH_EQUATION__NAME = hydra.core.Name("hydra.constraints.PathEquation")
 PATH_EQUATION__LEFT__NAME = hydra.core.Name("left")
 PATH_EQUATION__RIGHT__NAME = hydra.core.Name("right")
 
-@dataclass
+@dataclass(frozen=True)
 class PatternImplication:
     r"""A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."""
     

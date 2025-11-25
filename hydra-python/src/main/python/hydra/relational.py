@@ -16,7 +16,7 @@ class ColumnName(Node[str]):
 
 COLUMN_NAME__NAME = hydra.core.Name("hydra.relational.ColumnName")
 
-@dataclass
+@dataclass(frozen=True)
 class ColumnSchema(Generic[T]):
     r"""An abstract specification of the domain represented by a column in a relation; a role."""
     
@@ -27,7 +27,7 @@ COLUMN_SCHEMA__NAME = hydra.core.Name("hydra.relational.ColumnSchema")
 COLUMN_SCHEMA__NAME__NAME = hydra.core.Name("name")
 COLUMN_SCHEMA__DOMAIN__NAME = hydra.core.Name("domain")
 
-@dataclass
+@dataclass(frozen=True)
 class ForeignKey:
     r"""A mapping from certain columns of a source relation to primary key columns of a target relation."""
     
@@ -53,7 +53,7 @@ class RelationName(Node[str]):
 
 RELATION_NAME__NAME = hydra.core.Name("hydra.relational.RelationName")
 
-@dataclass
+@dataclass(frozen=True)
 class RelationSchema(Generic[T]):
     r"""An abstract relation; the name and columns of a relation without its actual data."""
     
