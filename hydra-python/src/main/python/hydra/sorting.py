@@ -11,6 +11,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.sets
 import hydra.tarjan
 import hydra.topology
 
@@ -22,6 +23,12 @@ def create_ordering_isomorphism[T0, T1](source_ord: frozenlist[T0], target_ord: 
         mp = cast(FrozenDict[T0, T2], hydra.lib.maps.from_list(hydra.lib.lists.zip(target_ord, els)))
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, mp)), source_ord))
     return cast(hydra.topology.OrderingIsomorphism[T1], hydra.topology.OrderingIsomorphism(cast(Callable[[frozenlist[T1]], frozenlist[T1]], source_to_target_mapping), cast(Callable[[frozenlist[T1]], frozenlist[T1]], target_to_source_mapping)))
+
+def find_reachable_nodes[T0](adj: Callable[[T0], frozenset[T0]], root: T0) -> frozenset[T0]:
+    def visit(visited: frozenset[T0], node: T0) -> frozenset[T0]:
+        to_visit = hydra.lib.sets.difference(adj(node), visited)
+        return hydra.lib.logic.if_else(hydra.lib.sets.null(to_visit), visited, hydra.lib.lists.foldl((lambda v, n: visit(hydra.lib.sets.insert(n, v), n)), visited, hydra.lib.sets.to_list(to_visit)))
+    return visit(hydra.lib.sets.singleton(root), root)
 
 def topological_sort_components[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> frozenlist[frozenlist[T0]]:
     graph_result = hydra.tarjan.adjacency_lists_to_graph(pairs)
