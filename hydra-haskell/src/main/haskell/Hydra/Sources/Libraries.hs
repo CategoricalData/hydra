@@ -66,7 +66,7 @@ _chars_toLower    = qname _hydra_lib_chars "toLower" :: Name
 _chars_toUpper    = qname _hydra_lib_chars "toUpper" :: Name
 
 hydraLibChars :: Library
-hydraLibChars = standardLibrary _hydra_lib_strings [
+hydraLibChars = standardLibrary _hydra_lib_chars [
   prim1 _chars_isAlphaNum Chars.isAlphaNum [] int32 boolean,
   prim1 _chars_isLower Chars.isLower [] int32 boolean,
   prim1 _chars_isSpace Chars.isSpace [] int32 boolean,
