@@ -12,7 +12,7 @@ import hydra.core
 
 A = TypeVar("A")
 
-@dataclass
+@dataclass(frozen=True)
 class Graph:
     r"""A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
@@ -31,7 +31,7 @@ GRAPH__BODY__NAME = hydra.core.Name("body")
 GRAPH__PRIMITIVES__NAME = hydra.core.Name("primitives")
 GRAPH__SCHEMA__NAME = hydra.core.Name("schema")
 
-@dataclass
+@dataclass(frozen=True)
 class Primitive:
     r"""A built-in function."""
     
@@ -44,7 +44,7 @@ PRIMITIVE__NAME__NAME = hydra.core.Name("name")
 PRIMITIVE__TYPE__NAME = hydra.core.Name("type")
 PRIMITIVE__IMPLEMENTATION__NAME = hydra.core.Name("implementation")
 
-@dataclass
+@dataclass(frozen=True)
 class TermCoder(Generic[A]):
     r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     

@@ -10,7 +10,7 @@ import hydra.core
 
 A = TypeVar("A")
 
-@dataclass
+@dataclass(frozen=True)
 class TBinding(Generic[A]):
     r"""An association of a named term (element) with a phantom type."""
     

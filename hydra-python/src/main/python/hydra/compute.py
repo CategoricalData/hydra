@@ -18,7 +18,7 @@ V = TypeVar("V")
 V1 = TypeVar("V1")
 V2 = TypeVar("V2")
 
-@dataclass
+@dataclass(frozen=True)
 class Adapter(Generic[S1, S2, T1, T2, V1, V2]):
     r"""A two-level bidirectional encoder which adapts types to types and terms to terms."""
     
@@ -33,7 +33,7 @@ ADAPTER__SOURCE__NAME = hydra.core.Name("source")
 ADAPTER__TARGET__NAME = hydra.core.Name("target")
 ADAPTER__CODER__NAME = hydra.core.Name("coder")
 
-@dataclass
+@dataclass(frozen=True)
 class Bicoder(Generic[S1, S2, T1, T2, V1, V2]):
     r"""A two-level encoder and decoder, operating both at a type level and an instance (data) level."""
     
@@ -44,7 +44,7 @@ BICODER__NAME = hydra.core.Name("hydra.compute.Bicoder")
 BICODER__ENCODE__NAME = hydra.core.Name("encode")
 BICODER__DECODE__NAME = hydra.core.Name("decode")
 
-@dataclass
+@dataclass(frozen=True)
 class Coder(Generic[S1, S2, V1, V2]):
     r"""An encoder and decoder; a bidirectional flow between two types."""
     
@@ -60,7 +60,7 @@ class Flow(Node["Callable[[S, Trace], FlowState[S, V]]"], Generic[S, V]):
 
 FLOW__NAME = hydra.core.Name("hydra.compute.Flow")
 
-@dataclass
+@dataclass(frozen=True)
 class FlowState(Generic[S, V]):
     r"""The result of evaluating a Flow."""
     
@@ -73,7 +73,7 @@ FLOW_STATE__VALUE__NAME = hydra.core.Name("value")
 FLOW_STATE__STATE__NAME = hydra.core.Name("state")
 FLOW_STATE__TRACE__NAME = hydra.core.Name("trace")
 
-@dataclass
+@dataclass(frozen=True)
 class Trace:
     r"""A container for logging and error information."""
     

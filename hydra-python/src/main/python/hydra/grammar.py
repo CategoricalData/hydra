@@ -23,7 +23,7 @@ class Label(Node[str]):
 
 LABEL__NAME = hydra.core.Name("hydra.grammar.Label")
 
-@dataclass
+@dataclass(frozen=True)
 class LabeledPattern:
     r"""A pattern together with a name (label)."""
     
@@ -83,7 +83,7 @@ PATTERN__REGEX__NAME = hydra.core.Name("regex")
 PATTERN__SEQUENCE__NAME = hydra.core.Name("sequence")
 PATTERN__STAR__NAME = hydra.core.Name("star")
 
-@dataclass
+@dataclass(frozen=True)
 class Production:
     r"""A BNF production."""
     

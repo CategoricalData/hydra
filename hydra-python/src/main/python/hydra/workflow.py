@@ -15,7 +15,7 @@ import hydra.module
 A = TypeVar("A")
 S = TypeVar("S")
 
-@dataclass
+@dataclass(frozen=True)
 class HydraSchemaSpec:
     r"""The specification of a Hydra schema, provided as a set of modules and a distinguished type."""
     
@@ -26,7 +26,7 @@ HYDRA_SCHEMA_SPEC__NAME = hydra.core.Name("hydra.workflow.HydraSchemaSpec")
 HYDRA_SCHEMA_SPEC__MODULES__NAME = hydra.core.Name("modules")
 HYDRA_SCHEMA_SPEC__TYPE_NAME__NAME = hydra.core.Name("typeName")
 
-@dataclass
+@dataclass(frozen=True)
 class LastMile(Generic[S, A]):
     r"""The last mile of a transformation, which encodes and serializes terms to a file."""
     
@@ -56,7 +56,7 @@ SCHEMA_SPEC__HYDRA__NAME = hydra.core.Name("hydra")
 SCHEMA_SPEC__FILE__NAME = hydra.core.Name("file")
 SCHEMA_SPEC__PROVIDED__NAME = hydra.core.Name("provided")
 
-@dataclass
+@dataclass(frozen=True)
 class TransformWorkflow:
     r"""The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory."""
     
