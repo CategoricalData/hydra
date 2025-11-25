@@ -3,11 +3,16 @@
 r"""A model for unit testing."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Maybe, Node, frozenlist
 from typing import Annotated
+import hydra.coders
+import hydra.compute
 import hydra.core
+import hydra.graph
+import hydra.module
 import hydra.util
 
 class EvaluationStyle(Enum):
@@ -35,6 +40,17 @@ CASE_CONVERSION_TEST_CASE__FROM_CONVENTION__NAME = hydra.core.Name("fromConventi
 CASE_CONVERSION_TEST_CASE__TO_CONVENTION__NAME = hydra.core.Name("toConvention")
 CASE_CONVERSION_TEST_CASE__FROM_STRING__NAME = hydra.core.Name("fromString")
 CASE_CONVERSION_TEST_CASE__TO_STRING__NAME = hydra.core.Name("toString")
+
+@dataclass
+class DelegatedEvaluationTestCase:
+    r"""A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language."""
+    
+    input: Annotated[hydra.core.Term, "The first of two terms which should evaluate to the same expression"]
+    output: Annotated[hydra.core.Term, "The second of two terms which should evaluate to the same expression"]
+
+DELEGATED_EVALUATION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.DelegatedEvaluationTestCase")
+DELEGATED_EVALUATION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+DELEGATED_EVALUATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 @dataclass
 class EtaExpansionTestCase:
@@ -85,8 +101,40 @@ class Tag(Node[str]):
 
 TAG__NAME = hydra.core.Name("hydra.testing.Tag")
 
+@dataclass
+class TestCodec:
+    r"""A codec for generating compiled test files from test groups into a target programming language."""
+    
+    language: Annotated[hydra.coders.LanguageName, "The name of the target programming language"]
+    file_extension: Annotated[hydra.module.FileExtension, "The file extension for test files (e.g., 'hs', 'java', 'py')"]
+    encode_term: Annotated[Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, str]], "A function for encoding Hydra terms into the target language"]
+    encode_type: Annotated[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, str]], "A function for encoding Hydra types into the target language"]
+    format_test_name: Annotated[Callable[[str], str], "A function for formatting test case names according to the target language's conventions"]
+    format_module_name: Annotated[Callable[[hydra.module.Namespace], str], "A function for formatting module names according to the target language's conventions"]
+    test_case_template: Annotated[str, "A template string for individual test case assertions"]
+    test_group_template: Annotated[str, "A template string for wrapping a group of test cases"]
+    module_template: Annotated[str, "A template string for the overall test module structure"]
+    import_template: Annotated[str, "A template string for import/include statements"]
+    find_imports: Annotated[Callable[[frozenset[hydra.core.Name]], frozenlist[str]], "A function that determines the necessary imports for a given set of dependencies"]
+
+TEST_CODEC__NAME = hydra.core.Name("hydra.testing.TestCodec")
+TEST_CODEC__LANGUAGE__NAME = hydra.core.Name("language")
+TEST_CODEC__FILE_EXTENSION__NAME = hydra.core.Name("fileExtension")
+TEST_CODEC__ENCODE_TERM__NAME = hydra.core.Name("encodeTerm")
+TEST_CODEC__ENCODE_TYPE__NAME = hydra.core.Name("encodeType")
+TEST_CODEC__FORMAT_TEST_NAME__NAME = hydra.core.Name("formatTestName")
+TEST_CODEC__FORMAT_MODULE_NAME__NAME = hydra.core.Name("formatModuleName")
+TEST_CODEC__TEST_CASE_TEMPLATE__NAME = hydra.core.Name("testCaseTemplate")
+TEST_CODEC__TEST_GROUP_TEMPLATE__NAME = hydra.core.Name("testGroupTemplate")
+TEST_CODEC__MODULE_TEMPLATE__NAME = hydra.core.Name("moduleTemplate")
+TEST_CODEC__IMPORT_TEMPLATE__NAME = hydra.core.Name("importTemplate")
+TEST_CODEC__FIND_IMPORTS__NAME = hydra.core.Name("findImports")
+
 class TestCaseCaseConversion(Node["CaseConversionTestCase"]):
     r"""A case conversion test."""
+
+class TestCaseDelegatedEvaluation(Node["DelegatedEvaluationTestCase"]):
+    r"""A delegated evaluation test."""
 
 class TestCaseEtaExpansion(Node["EtaExpansionTestCase"]):
     r"""An eta expansion test."""
@@ -107,10 +155,11 @@ class TestCaseTypeCheckingFailure(Node["TypeCheckingFailureTestCase"]):
     r"""A type checking failure test (currently unused)."""
 
 # A simple test case with an input and an expected output.
-type TestCase = TestCaseCaseConversion | TestCaseEtaExpansion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseTypeChecking | TestCaseTypeCheckingFailure
+type TestCase = TestCaseCaseConversion | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseTypeChecking | TestCaseTypeCheckingFailure
 
 TEST_CASE__NAME = hydra.core.Name("hydra.testing.TestCase")
 TEST_CASE__CASE_CONVERSION__NAME = hydra.core.Name("caseConversion")
+TEST_CASE__DELEGATED_EVALUATION__NAME = hydra.core.Name("delegatedEvaluation")
 TEST_CASE__ETA_EXPANSION__NAME = hydra.core.Name("etaExpansion")
 TEST_CASE__EVALUATION__NAME = hydra.core.Name("evaluation")
 TEST_CASE__INFERENCE__NAME = hydra.core.Name("inference")
