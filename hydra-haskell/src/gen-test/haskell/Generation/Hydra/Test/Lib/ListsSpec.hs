@@ -1,0 +1,1007 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.lists"},ModuleName {unModuleName = "Lists"})
+-- DEBUG: Namespace mappings:
+-- [(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.lib.lists"},ModuleName {unModuleName = "Lists"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
+
+module Generation.Hydra.Test.Lib.ListsSpec where
+
+import Hydra.Kernel
+import qualified Test.Hspec as H
+import qualified Hydra.Lib.Equality as Equality
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Strings as Strings
+
+spec :: H.Spec
+spec = H.describe "hydra.lib.lists primitives" $ do
+  H.it "first element" $ H.shouldBe
+    (Lists.at 0 [
+      1,
+      2,
+      3])
+    (1)
+  H.it "middle element" $ H.shouldBe
+    (Lists.at 1 [
+      1,
+      2,
+      3])
+    (2)
+  H.it "last element" $ H.shouldBe
+    (Lists.at 2 [
+      1,
+      2,
+      3])
+    (3)
+  H.it "single element list" $ H.shouldBe
+    (Lists.at 0 [
+      42])
+    (42)
+  H.it "string list access" $ H.shouldBe
+    (Lists.at 1 [
+      "hello",
+      "world"])
+    ("world")
+  H.it "negation function" $ H.shouldBe
+    (Lists.bind [
+      1,
+      2,
+      3,
+      4] (\x -> Lists.pure (Math.negate x)))
+    ([
+      (-1),
+      (-2),
+      (-3),
+      (-4)])
+  H.it "empty list" $ H.shouldBe
+    (Lists.bind [] (\x -> Lists.pure (Math.negate x)))
+    ([])
+  H.it "single element" $ H.shouldBe
+    (Lists.bind [
+      5] (\x -> Lists.pure (Math.negate x)))
+    ([
+      (-5)])
+  H.it "duplicate elements" $ H.shouldBe
+    (Lists.bind [
+      1,
+      1,
+      2] (\x -> Lists.pure (Math.negate x)))
+    ([
+      (-1),
+      (-1),
+      (-2)])
+  H.it "multiple non-empty lists" $ H.shouldBe
+    (Lists.concat [
+      [
+        1,
+        2,
+        3],
+      [
+        4,
+        5],
+      [
+        6,
+        7,
+        8]])
+    ([
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8])
+  H.it "empty lists included" $ H.shouldBe
+    (Lists.concat [
+      [],
+      [
+        1,
+        2],
+      [],
+      [
+        3]])
+    ([
+      1,
+      2,
+      3])
+  H.it "single list" $ H.shouldBe
+    (Lists.concat [
+      [
+        1,
+        2,
+        3]])
+    ([
+      1,
+      2,
+      3])
+  H.it "all empty lists" $ H.shouldBe
+    (Lists.concat [
+      [],
+      [],
+      []])
+    ([] :: [String])
+  H.it "empty list of lists" $ H.shouldBe
+    (Lists.concat [])
+    ([] :: [String])
+  H.it "two non-empty lists" $ H.shouldBe
+    (Lists.concat2 [
+      1,
+      2] [
+      3,
+      4])
+    ([
+      1,
+      2,
+      3,
+      4])
+  H.it "first list empty" $ H.shouldBe
+    (Lists.concat2 [] [
+      1,
+      2])
+    ([
+      1,
+      2])
+  H.it "second list empty" $ H.shouldBe
+    (Lists.concat2 [
+      1,
+      2] [])
+    ([
+      1,
+      2])
+  H.it "both lists empty" $ H.shouldBe
+    (Lists.concat2 [] [])
+    ([] :: [String])
+  H.it "single elements" $ H.shouldBe
+    (Lists.concat2 [
+      1] [
+      2])
+    ([
+      1,
+      2])
+  H.it "string lists" $ H.shouldBe
+    (Lists.concat2 [
+      "a",
+      "b"] [
+      "c",
+      "d"])
+    ([
+      "a",
+      "b",
+      "c",
+      "d"])
+  H.it "cons to non-empty list" $ H.shouldBe
+    (Lists.cons 1 [
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "cons to empty list" $ H.shouldBe
+    (Lists.cons 1 [])
+    ([
+      1])
+  H.it "cons negative number" $ H.shouldBe
+    (Lists.cons (-1) [
+      2,
+      3])
+    ([
+      (-1),
+      2,
+      3])
+  H.it "cons string" $ H.shouldBe
+    (Lists.cons "hello" [
+      "world"])
+    ([
+      "hello",
+      "world"])
+  H.it "drop from beginning" $ H.shouldBe
+    (Lists.drop 2 [
+      1,
+      2,
+      3,
+      4,
+      5])
+    ([
+      3,
+      4,
+      5])
+  H.it "drop zero elements" $ H.shouldBe
+    (Lists.drop 0 [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "drop all elements" $ H.shouldBe
+    (Lists.drop 3 [
+      1,
+      2,
+      3])
+    ([])
+  H.it "drop more than length" $ H.shouldBe
+    (Lists.drop 5 [
+      1,
+      2])
+    ([])
+  H.it "drop from empty list" $ H.shouldBe
+    (Lists.drop 3 [])
+    ([] :: [String])
+  H.it "drop negative amount" $ H.shouldBe
+    (Lists.drop (-1) [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "element present" $ H.shouldBe
+    (Lists.elem 2 [
+      1,
+      2,
+      3])
+    (True)
+  H.it "element not present" $ H.shouldBe
+    (Lists.elem 4 [
+      1,
+      2,
+      3])
+    (False)
+  H.it "empty list" $ H.shouldBe
+    (Lists.elem 1 [])
+    (False)
+  H.it "single element present" $ H.shouldBe
+    (Lists.elem 1 [
+      1])
+    (True)
+  H.it "single element not present" $ H.shouldBe
+    (Lists.elem 2 [
+      1])
+    (False)
+  H.it "duplicate elements" $ H.shouldBe
+    (Lists.elem 2 [
+      1,
+      2,
+      2,
+      3])
+    (True)
+  H.it "string element present" $ H.shouldBe
+    (Lists.elem "hello" [
+      "world",
+      "hello",
+      "test"])
+    (True)
+  H.it "string element not present" $ H.shouldBe
+    (Lists.elem "missing" [
+      "world",
+      "hello"])
+    (False)
+  H.it "consecutive duplicates" $ H.shouldBe
+    (Lists.group [
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      1])
+    ([
+      [
+        1,
+        1],
+      [
+        2,
+        2,
+        2],
+      [
+        3],
+      [
+        1]])
+  H.it "no duplicates" $ H.shouldBe
+    (Lists.group [
+      1,
+      2,
+      3])
+    ([
+      [
+        1],
+      [
+        2],
+      [
+        3]])
+  H.it "all same" $ H.shouldBe
+    (Lists.group [
+      1,
+      1,
+      1])
+    ([
+      [
+        1,
+        1,
+        1]])
+  H.it "empty list" $ H.shouldBe
+    (Lists.group [])
+    ([] :: [[String]])
+  H.it "single element" $ H.shouldBe
+    (Lists.group [
+      1])
+    ([
+      [
+        1]])
+  H.it "three element list" $ H.shouldBe
+    (Lists.head [
+      1,
+      2,
+      3])
+    (1)
+  H.it "single element list" $ H.shouldBe
+    (Lists.head [
+      42])
+    (42)
+  H.it "negative numbers" $ H.shouldBe
+    (Lists.head [
+      (-1),
+      (-2),
+      (-3)])
+    ((-1))
+  H.it "string list" $ H.shouldBe
+    (Lists.head [
+      "hello",
+      "world"])
+    ("hello")
+  H.it "multiple elements" $ H.shouldBe
+    (Lists.init [
+      1,
+      2,
+      3,
+      4])
+    ([
+      1,
+      2,
+      3])
+  H.it "two elements" $ H.shouldBe
+    (Lists.init [
+      1,
+      2])
+    ([
+      1])
+  H.it "single element" $ H.shouldBe
+    (Lists.init [
+      1])
+    ([])
+  H.it "string list" $ H.shouldBe
+    (Lists.init [
+      "a",
+      "b",
+      "c"])
+    ([
+      "a",
+      "b"])
+  H.it "double zero separator" $ H.shouldBe
+    (Lists.intercalate [
+      0,
+      0] [
+      [
+        1,
+        2,
+        3],
+      [
+        4,
+        5],
+      [
+        6,
+        7,
+        8]])
+    ([
+      1,
+      2,
+      3,
+      0,
+      0,
+      4,
+      5,
+      0,
+      0,
+      6,
+      7,
+      8])
+  H.it "empty separator" $ H.shouldBe
+    (Lists.intercalate [] [
+      [
+        1,
+        2],
+      [
+        3,
+        4]])
+    ([
+      1,
+      2,
+      3,
+      4])
+  H.it "single element separator" $ H.shouldBe
+    (Lists.intercalate [
+      99] [
+      [
+        1],
+      [
+        2],
+      [
+        3]])
+    ([
+      1,
+      99,
+      2,
+      99,
+      3])
+  H.it "empty list of lists" $ H.shouldBe
+    (Lists.intercalate [
+      0] [])
+    ([])
+  H.it "single list" $ H.shouldBe
+    (Lists.intercalate [
+      0] [
+      [
+        1,
+        2,
+        3]])
+    ([
+      1,
+      2,
+      3])
+  H.it "lists with empty lists" $ H.shouldBe
+    (Lists.intercalate [
+      0] [
+      [],
+      [
+        1],
+      []])
+    ([
+      0,
+      1,
+      0])
+  H.it "string interspersion" $ H.shouldBe
+    (Lists.intersperse "and" [
+      "one",
+      "two",
+      "three"])
+    ([
+      "one",
+      "and",
+      "two",
+      "and",
+      "three"])
+  H.it "single element" $ H.shouldBe
+    (Lists.intersperse "x" [
+      "only"])
+    ([
+      "only"])
+  H.it "empty list" $ H.shouldBe
+    (Lists.intersperse "x" [])
+    ([])
+  H.it "two elements" $ H.shouldBe
+    (Lists.intersperse "+" [
+      "a",
+      "b"])
+    ([
+      "a",
+      "+",
+      "b"])
+  H.it "number interspersion" $ H.shouldBe
+    (Lists.intersperse 0 [
+      1,
+      2,
+      3])
+    ([
+      1,
+      0,
+      2,
+      0,
+      3])
+  H.it "three element list" $ H.shouldBe
+    (Lists.last [
+      1,
+      2,
+      3])
+    (3)
+  H.it "single element list" $ H.shouldBe
+    (Lists.last [
+      42])
+    (42)
+  H.it "negative numbers" $ H.shouldBe
+    (Lists.last [
+      (-1),
+      (-2),
+      (-3)])
+    ((-3))
+  H.it "string list" $ H.shouldBe
+    (Lists.last [
+      "hello",
+      "world"])
+    ("world")
+  H.it "three elements" $ H.shouldBe
+    (Lists.length [
+      1,
+      2,
+      3])
+    (3)
+  H.it "empty list" $ H.shouldBe
+    (Lists.length [])
+    (0)
+  H.it "single element" $ H.shouldBe
+    (Lists.length [
+      42])
+    (1)
+  H.it "many elements" $ H.shouldBe
+    (Lists.length [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10])
+    (10)
+  H.it "string list" $ H.shouldBe
+    (Lists.length [
+      "a",
+      "b",
+      "c"])
+    (3)
+  H.it "string to uppercase" $ H.shouldBe
+    (Lists.map Strings.toUpper [
+      "one",
+      "two"])
+    ([
+      "ONE",
+      "TWO"])
+  H.it "empty list" $ H.shouldBe
+    (Lists.map Strings.toUpper [])
+    ([])
+  H.it "single element" $ H.shouldBe
+    (Lists.map Strings.toUpper [
+      "hello"])
+    ([
+      "HELLO"])
+  H.it "number negation" $ H.shouldBe
+    (Lists.map Math.negate [
+      1,
+      2,
+      3])
+    ([
+      (-1),
+      (-2),
+      (-3)])
+  H.it "identity function" $ H.shouldBe
+    (Lists.map Equality.identity [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "remove duplicates" $ H.shouldBe
+    (Lists.nub [
+      1,
+      2,
+      1,
+      3,
+      2,
+      4])
+    ([
+      1,
+      2,
+      3,
+      4])
+  H.it "no duplicates" $ H.shouldBe
+    (Lists.nub [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "all duplicates" $ H.shouldBe
+    (Lists.nub [
+      1,
+      1,
+      1])
+    ([
+      1])
+  H.it "empty list" $ H.shouldBe
+    (Lists.nub [])
+    ([] :: [String])
+  H.it "single element" $ H.shouldBe
+    (Lists.nub [
+      1])
+    ([
+      1])
+  H.it "string duplicates" $ H.shouldBe
+    (Lists.nub [
+      "a",
+      "b",
+      "a",
+      "c"])
+    ([
+      "a",
+      "b",
+      "c"])
+  H.it "empty int list" $ H.shouldBe
+    (Lists.null [])
+    (True)
+  H.it "single element" $ H.shouldBe
+    (Lists.null [
+      1])
+    (False)
+  H.it "multiple elements" $ H.shouldBe
+    (Lists.null [
+      1,
+      2,
+      3])
+    (False)
+  H.it "empty string list" $ H.shouldBe
+    (Lists.null [])
+    (True)
+  H.it "non-empty string list" $ H.shouldBe
+    (Lists.null [
+      "a"])
+    (False)
+  H.it "string element" $ H.shouldBe
+    (Lists.pure "one")
+    ([
+      "one"])
+  H.it "empty string" $ H.shouldBe
+    (Lists.pure "")
+    ([
+      ""])
+  H.it "number element" $ H.shouldBe
+    (Lists.pure 42)
+    ([
+      42])
+  H.it "negative number" $ H.shouldBe
+    (Lists.pure (-5))
+    ([
+      (-5)])
+  H.it "replicate three times" $ H.shouldBe
+    (Lists.replicate 3 42)
+    ([
+      42,
+      42,
+      42])
+  H.it "replicate zero times" $ H.shouldBe
+    (Lists.replicate 0 1)
+    ([])
+  H.it "replicate once" $ H.shouldBe
+    (Lists.replicate 1 99)
+    ([
+      99])
+  H.it "replicate string" $ H.shouldBe
+    (Lists.replicate 2 "hello")
+    ([
+      "hello",
+      "hello"])
+  H.it "multiple elements" $ H.shouldBe
+    (Lists.reverse [
+      1,
+      2,
+      3,
+      4])
+    ([
+      4,
+      3,
+      2,
+      1])
+  H.it "single element" $ H.shouldBe
+    (Lists.reverse [
+      1])
+    ([
+      1])
+  H.it "empty list" $ H.shouldBe
+    (Lists.reverse [])
+    ([] :: [String])
+  H.it "two elements" $ H.shouldBe
+    (Lists.reverse [
+      1,
+      2])
+    ([
+      2,
+      1])
+  H.it "string list" $ H.shouldBe
+    (Lists.reverse [
+      "a",
+      "b",
+      "c"])
+    ([
+      "c",
+      "b",
+      "a"])
+  H.it "non-empty int list" $ H.shouldBe
+    (Lists.safeHead [
+      1,
+      2,
+      3])
+    (Just 1)
+  H.it "empty int list" $ H.shouldBe
+    (Lists.safeHead [])
+    (Nothing :: Maybe String)
+  H.it "single element" $ H.shouldBe
+    (Lists.safeHead [
+      42])
+    (Just 42)
+  H.it "non-empty string list" $ H.shouldBe
+    (Lists.safeHead [
+      "hello",
+      "world"])
+    (Just "hello")
+  H.it "empty string list" $ H.shouldBe
+    (Lists.safeHead [])
+    (Nothing :: Maybe String)
+  H.it "number element" $ H.shouldBe
+    (Lists.singleton 42)
+    ([
+      42])
+  H.it "negative number" $ H.shouldBe
+    (Lists.singleton (-1))
+    ([
+      (-1)])
+  H.it "zero" $ H.shouldBe
+    (Lists.singleton 0)
+    ([
+      0])
+  H.it "string element" $ H.shouldBe
+    (Lists.singleton "hello")
+    ([
+      "hello"])
+  H.it "unsorted numbers" $ H.shouldBe
+    (Lists.sort [
+      3,
+      1,
+      4,
+      1,
+      5])
+    ([
+      1,
+      1,
+      3,
+      4,
+      5])
+  H.it "already sorted" $ H.shouldBe
+    (Lists.sort [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "reverse sorted" $ H.shouldBe
+    (Lists.sort [
+      3,
+      2,
+      1])
+    ([
+      1,
+      2,
+      3])
+  H.it "single element" $ H.shouldBe
+    (Lists.sort [
+      1])
+    ([
+      1])
+  H.it "empty list" $ H.shouldBe
+    (Lists.sort [])
+    ([] :: [String])
+  H.it "duplicates" $ H.shouldBe
+    (Lists.sort [
+      2,
+      1,
+      2,
+      3,
+      1])
+    ([
+      1,
+      1,
+      2,
+      2,
+      3])
+  H.it "string sort" $ H.shouldBe
+    (Lists.sort [
+      "zebra",
+      "apple",
+      "banana"])
+    ([
+      "apple",
+      "banana",
+      "zebra"])
+  H.it "multiple elements" $ H.shouldBe
+    (Lists.tail [
+      1,
+      2,
+      3,
+      4])
+    ([
+      2,
+      3,
+      4])
+  H.it "two elements" $ H.shouldBe
+    (Lists.tail [
+      1,
+      2])
+    ([
+      2])
+  H.it "single element" $ H.shouldBe
+    (Lists.tail [
+      1])
+    ([])
+  H.it "string list" $ H.shouldBe
+    (Lists.tail [
+      "a",
+      "b",
+      "c"])
+    ([
+      "b",
+      "c"])
+  H.it "take from beginning" $ H.shouldBe
+    (Lists.take 2 [
+      1,
+      2,
+      3,
+      4,
+      5])
+    ([
+      1,
+      2])
+  H.it "take zero elements" $ H.shouldBe
+    (Lists.take 0 [
+      1,
+      2,
+      3])
+    ([])
+  H.it "take all elements" $ H.shouldBe
+    (Lists.take 3 [
+      1,
+      2,
+      3])
+    ([
+      1,
+      2,
+      3])
+  H.it "take more than length" $ H.shouldBe
+    (Lists.take 5 [
+      1,
+      2])
+    ([
+      1,
+      2])
+  H.it "take from empty list" $ H.shouldBe
+    (Lists.take 3 [])
+    ([] :: [String])
+  H.it "take negative amount" $ H.shouldBe
+    (Lists.take (-1) [
+      1,
+      2,
+      3])
+    ([])
+  H.it "square matrix" $ H.shouldBe
+    (Lists.transpose [
+      [
+        1,
+        2,
+        3],
+      [
+        4,
+        5,
+        6]])
+    ([
+      [
+        1,
+        4],
+      [
+        2,
+        5],
+      [
+        3,
+        6]])
+  H.it "empty lists" $ H.shouldBe
+    (Lists.transpose [])
+    ([] :: [[String]])
+  H.it "single row" $ H.shouldBe
+    (Lists.transpose [
+      [
+        1,
+        2,
+        3]])
+    ([
+      [
+        1],
+      [
+        2],
+      [
+        3]])
+  H.it "single column" $ H.shouldBe
+    (Lists.transpose [
+      [
+        1],
+      [
+        2],
+      [
+        3]])
+    ([
+      [
+        1,
+        2,
+        3]])
+  H.it "ragged matrix" $ H.shouldBe
+    (Lists.transpose [
+      [
+        1,
+        2],
+      [
+        3],
+      [
+        4,
+        5,
+        6]])
+    ([
+      [
+        1,
+        3,
+        4],
+      [
+        2,
+        5],
+      [
+        6]])
+  H.it "equal length lists" $ H.shouldBe
+    (Lists.zip [
+      1,
+      2,
+      3] [
+      "a",
+      "b",
+      "c"])
+    ([
+      (1, "a"),
+      (2, "b"),
+      (3, "c")])
+  H.it "first list shorter" $ H.shouldBe
+    (Lists.zip [
+      1,
+      2] [
+      "a",
+      "b",
+      "c"])
+    ([
+      (1, "a"),
+      (2, "b")])
+  H.it "second list shorter" $ H.shouldBe
+    (Lists.zip [
+      1,
+      2,
+      3] [
+      "a",
+      "b"])
+    ([
+      (1, "a"),
+      (2, "b")])
+  H.it "empty first list" $ H.shouldBe
+    (Lists.zip [] [
+      "a",
+      "b"])
+    ([] :: [(String, String)])
+  H.it "empty second list" $ H.shouldBe
+    (Lists.zip [
+      1,
+      2] [])
+    ([] :: [(Int, String)])
+  H.it "both empty lists" $ H.shouldBe
+    (Lists.zip [] [])
+    ([] :: [(String, String)])

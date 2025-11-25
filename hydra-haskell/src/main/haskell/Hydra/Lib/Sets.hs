@@ -33,6 +33,7 @@ member = S.member
 null :: S.Set x -> Bool
 null = S.null
 
+-- Consider renaming this to Sets.pure, or creating an alias
 singleton :: x -> S.Set x
 singleton = S.singleton
 
