@@ -88,6 +88,12 @@ public class TestSuiteRunner extends HydraTestBase {
             }
 
             @Override
+            public Object visit(TestCase.DelegatedEvaluation instance) {
+                // TODO
+                return null;
+            }
+
+            @Override
             public Object visit(TestCase.EtaExpansion instance) {
                 // TODO
                 return null;
