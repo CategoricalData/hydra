@@ -47,7 +47,7 @@ allTestsDef :: TBinding TestGroup
 allTestsDef = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
-      listsApply,
+  --    listsApply, -- TODO: compiled test generator doesn't support primitives as function arguments
       listsAt,
       listsBind,
       listsConcat,
