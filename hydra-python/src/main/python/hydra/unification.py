@@ -28,11 +28,11 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
     def cannot_unify[T1, T2]() -> hydra.compute.Flow[T1, T2]:
         return hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("cannot unify ", hydra.show.core.type(sleft))), " with ")), hydra.show.core.type(sright))))
     def assert_equal[T1, T2]() -> hydra.compute.Flow[T1, frozenlist[T2]]:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(sleft, sright), hydra.lib.flows.pure(cast(frozenlist[T2], ())), cast(hydra.compute.Flow[T1, frozenlist[T2]], cannot_unify))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(sleft, sright), (lambda : hydra.lib.flows.pure(cast(frozenlist[T2], ()))), (lambda : cast(hydra.compute.Flow[T1, frozenlist[T2]], cannot_unify)))
     def join_list[T1](lefts: frozenlist[hydra.core.Type], rights: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]]:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lefts), hydra.lib.lists.length(rights)), hydra.lib.flows.pure(hydra.lib.lists.zip_with(join_one, lefts, rights)), cast(hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]], cannot_unify))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lefts), hydra.lib.lists.length(rights)), (lambda : hydra.lib.flows.pure(hydra.lib.lists.zip_with(join_one, lefts, rights))), (lambda : cast(hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)))
     def join_row_types[T1](left2: hydra.core.RowType, right2: hydra.core.RowType) -> hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(left2.type_name.value, right2.type_name.value), hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), left2.fields)), hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), right2.fields))), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value)), hydra.lib.lists.map((lambda v1: v1.name), left2.fields), hydra.lib.lists.map((lambda v1: v1.name), right2.fields))))), join_list(hydra.lib.lists.map((lambda v1: v1.type), left2.fields), hydra.lib.lists.map((lambda v1: v1.type), right2.fields)), cast(hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]], cannot_unify))
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(left2.type_name.value, right2.type_name.value), hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), left2.fields)), hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), right2.fields))), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value)), hydra.lib.lists.map((lambda v1: v1.name), left2.fields), hydra.lib.lists.map((lambda v1: v1.name), right2.fields))))), (lambda : join_list(hydra.lib.lists.map((lambda v1: v1.type), left2.fields), hydra.lib.lists.map((lambda v1: v1.type), right2.fields))), (lambda : cast(hydra.compute.Flow[T1, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)))
     match sleft:
         case hydra.core.TypeApplication(value=l):
             match sright:
@@ -144,7 +144,7 @@ def join_types[T0](left: hydra.core.Type, right: hydra.core.Type, comment: str) 
         case hydra.core.TypeWrap(value=l13):
             match sright:
                 case hydra.core.TypeWrap(value=r):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(l13.type_name.value, r.type_name.value), hydra.lib.flows.pure((join_one(l13.body, r.body),)), cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify))
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(l13.type_name.value, r.type_name.value), (lambda : hydra.lib.flows.pure((join_one(l13.body, r.body),))), (lambda : cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)))
                 
                 case _:
                     return cast(hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]], cannot_unify)
@@ -175,7 +175,7 @@ def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0]
                 return hydra.substitution.compose_type_subst(subst, s)
             return hydra.lib.flows.map(with_result, unify_type_constraints(schema_types, hydra.substitution.substitute_in_constraints(subst, rest)))
         def try_binding(v: hydra.core.Name, t: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
-            return hydra.lib.logic.if_else(variable_occurs_in_type(v, t), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Variable ", v.value)), " appears free in type ")), hydra.show.core.type(t))), " (")), comment)), ")"))), bind(v, t))
+            return hydra.lib.logic.if_else(variable_occurs_in_type(v, t), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Variable ", v.value)), " appears free in type ")), hydra.show.core.type(t))), " (")), comment)), ")")))), (lambda : bind(v, t)))
         def no_vars() -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
             def with_constraints(constraints2: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
                 return unify_type_constraints(schema_types, hydra.lib.lists.concat2(constraints2, rest))
@@ -186,19 +186,19 @@ def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0]
                     return try_binding(name, sleft)
                 
                 case _:
-                    return no_vars()
+                    return no_vars
         match sleft:
             case hydra.core.TypeVariable(value=name):
                 match sright:
                     case hydra.core.TypeVariable(value=name2):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), unify_type_constraints(schema_types, rest), hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Attempted to unify schema names ", name.value)), " and ")), name2.value)), " (")), comment)), ")"))), bind(name2, sleft)), bind(name, sright)))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), (lambda : unify_type_constraints(schema_types, rest)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("Attempted to unify schema names ", name.value)), " and ")), name2.value)), " (")), comment)), ")")))), (lambda : bind(name2, sleft)))), (lambda : bind(name, sright)))))
                     
                     case _:
                         return try_binding(name, sright)
             
             case _:
-                return dflt()
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), hydra.lib.flows.pure(hydra.substitution.id_type_subst), with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints)))
+                return dflt
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : hydra.lib.flows.pure(hydra.substitution.id_type_subst())), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))
 
 def unify_type_lists[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0], l: frozenlist[hydra.core.Type], r: frozenlist[hydra.core.Type], comment: str) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
     def to_constraint(l2: hydra.core.Type, r2: hydra.core.Type) -> hydra.typing.TypeConstraint:

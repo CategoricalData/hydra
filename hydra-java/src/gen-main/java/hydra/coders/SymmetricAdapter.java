@@ -10,9 +10,9 @@ public class SymmetricAdapter<S, T, V> {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final hydra.compute.Adapter<S, S, T, T, V, V> value;
+  public final hydra.compute.Adapter<Object, Object, Object, Object, Object, Object> value;
   
-  public SymmetricAdapter (hydra.compute.Adapter<S, S, T, T, V, V> value) {
+  public SymmetricAdapter (hydra.compute.Adapter<Object, Object, Object, Object, Object, Object> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

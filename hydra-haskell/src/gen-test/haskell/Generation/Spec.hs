@@ -10,6 +10,7 @@ import qualified Generation.Hydra.Test.Lib.ListsSpec as Generation_Hydra_Test_Li
 import qualified Generation.Hydra.Test.Lib.LiteralsSpec as Generation_Hydra_Test_Lib_LiteralsSpec
 import qualified Generation.Hydra.Test.Lib.LogicSpec as Generation_Hydra_Test_Lib_LogicSpec
 import qualified Generation.Hydra.Test.Lib.MathSpec as Generation_Hydra_Test_Lib_MathSpec
+import qualified Generation.Hydra.Test.Lib.MaybesSpec as Generation_Hydra_Test_Lib_MaybesSpec
 import qualified Generation.Hydra.Test.Lib.StringsSpec as Generation_Hydra_Test_Lib_StringsSpec
 
 spec :: H.Spec
@@ -21,4 +22,5 @@ spec = do
     Generation_Hydra_Test_Lib_LiteralsSpec.spec
     Generation_Hydra_Test_Lib_LogicSpec.spec
     Generation_Hydra_Test_Lib_MathSpec.spec
+    Generation_Hydra_Test_Lib_MaybesSpec.spec
     Generation_Hydra_Test_Lib_StringsSpec.spec

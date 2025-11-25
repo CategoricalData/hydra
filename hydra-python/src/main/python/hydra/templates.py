@@ -111,7 +111,7 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly)
         
         case hydra.core.TypeList(value=et):
-            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ())))), hydra.lib.flows.bind(inst(et), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList((e,)))))))
+            return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ()))))), (lambda : hydra.lib.flows.bind(inst(et), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList((e,))))))))
         
         case hydra.core.TypeLiteral(value=lt):
             return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermLiteral(for_literal(lt))))
@@ -119,10 +119,10 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
         case hydra.core.TypeMap(value=mt):
             kt = mt.keys
             vt = mt.values
-            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.empty())))), hydra.lib.flows.bind(inst(kt), (lambda ke: hydra.lib.flows.bind(inst(vt), (lambda ve: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.singleton(ke, ve)))))))))
+            return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.empty()))))), (lambda : hydra.lib.flows.bind(inst(kt), (lambda ke: hydra.lib.flows.bind(inst(vt), (lambda ve: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.singleton(ke, ve))))))))))
         
         case hydra.core.TypeMaybe(value=ot):
-            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing())))), hydra.lib.flows.bind(inst(ot), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(e))))))))
+            return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing()))))), (lambda : hydra.lib.flows.bind(inst(ot), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(e)))))))))
         
         case hydra.core.TypeProduct(value=types):
             return hydra.lib.flows.bind(hydra.lib.flows.map_list(inst, types), (lambda es: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermProduct(es)))))
@@ -135,7 +135,7 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             return hydra.lib.flows.bind(hydra.lib.flows.map_list(to_field, fields), (lambda dfields: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, dfields))))))
         
         case hydra.core.TypeSet(value=et2):
-            return hydra.lib.logic.if_else(minimal, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(cast(frozenset[hydra.core.Term], hydra.lib.sets.empty())))), hydra.lib.flows.bind(inst(et2), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,))))))))
+            return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(cast(frozenset[hydra.core.Term], hydra.lib.sets.empty()))))), (lambda : hydra.lib.flows.bind(inst(et2), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,)))))))))
         
         case hydra.core.TypeVariable(value=tname):
             return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), inst, hydra.lib.maps.lookup(tname, schema))

@@ -65,6 +65,132 @@ adaptTypeToJavaAndEncode :: Aliases -> Type -> Flow Graph Java.Type
 adaptTypeToJavaAndEncode = encodeType
 --adaptTypeToJavaAndEncode aliases = adaptTypeToLanguageAndEncode javaLanguage (encodeType aliases)
 
+-- | Encode a type for use in local variable declarations.
+-- For types containing type variables that are out of scope, we use raw types
+-- to avoid mismatches. For simple nominal types, we use their full names.
+adaptTypeForLocalBinding :: Aliases -> Type -> Flow Graph Java.Type
+adaptTypeForLocalBinding aliases t =
+  let stripped = stripForalls t
+  in encodeTypeForLocal aliases stripped
+  where
+    stripForalls typ = case deannotateType typ of
+      TypeForall (ForallType _ body) -> stripForalls body
+      TypeAnnotated (AnnotatedType inner ann) -> TypeAnnotated (AnnotatedType (stripForalls inner) ann)
+      other -> other
+
+-- | Encode a type for local variable declarations.
+-- For types containing polymorphic type variables (not in scope as method type params),
+-- we use Object to avoid type mismatches. Named type references are preserved.
+--
+-- Key insight: In Hydra, named type references are represented as TypeVariable
+-- with fully qualified names (e.g., TypeVariable "hydra.core.Type").
+-- Polymorphic type variables have short names like "a", "s", "t".
+encodeTypeForLocal :: Aliases -> Type -> Flow Graph Java.Type
+encodeTypeForLocal aliases t = case deannotateType t of
+    -- Function types: if no polymorphic type vars, use full encoding
+    TypeFunction ft@(FunctionType dom cod) ->
+      if hasOutOfScopeTypeVars t
+        then do
+          -- Use raw Function type for polymorphic functions
+          jdom <- encodeTypeForLocal aliases dom >>= javaTypeToJavaReferenceType
+          jcod <- encodeTypeForLocal aliases cod >>= javaTypeToJavaReferenceType
+          return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
+        else encodeType aliases t  -- No polymorphic vars, use full encoding
+    -- Type variables: check if in scope or is a named type reference
+    TypeVariable name ->
+      if isInScope name || isNamedTypeRef name
+        then encodeType aliases t   -- In-scope type param or named type -> keep it
+        else pure $ javaRefType [] Nothing "Object"  -- Out-of-scope polymorphic var -> Object
+    -- Parameterized types: strip type arguments if they contain out-of-scope type vars
+    TypeApplication (ApplicationType lhs rhs) ->
+      if hasOutOfScopeTypeVars rhs
+        then encodeTypeForLocal aliases lhs  -- Strip the type argument
+        else encodeType aliases t            -- Keep full type
+    -- Container types: use Object as type arguments to preserve type structure while erasing polymorphic vars
+    TypeList et -> do
+      jet <- encodeTypeForLocal aliases et >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jet] javaUtilPackageName "List"
+    TypeMap (MapType kt vt) -> do
+      jkt <- encodeTypeForLocal aliases kt >>= javaTypeToJavaReferenceType
+      jvt <- encodeTypeForLocal aliases vt >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
+    TypeMaybe et -> do
+      jet <- encodeTypeForLocal aliases et >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jet] hydraUtilPackageName "Maybe"
+    TypeSet et -> do
+      jet <- encodeTypeForLocal aliases et >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jet] javaUtilPackageName "Set"
+    TypeEither (EitherType lt rt) -> do
+      jlt <- encodeTypeForLocal aliases lt >>= javaTypeToJavaReferenceType
+      jrt <- encodeTypeForLocal aliases rt >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jlt, jrt] hydraUtilPackageName "Either"
+    TypePair (PairType lt rt) -> do
+      jlt <- encodeTypeForLocal aliases lt >>= javaTypeToJavaReferenceType
+      jrt <- encodeTypeForLocal aliases rt >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jlt, jrt] hydraUtilPackageName "Tuple.Tuple2"
+    TypeProduct types -> do
+      jts <- mapM (\t' -> encodeTypeForLocal aliases t' >>= javaTypeToJavaReferenceType) types
+      return $ javaRefType jts hydraUtilPackageName $ "Tuple.Tuple" ++ (show $ length types)
+    -- Nominal types: use full encoding
+    _ -> encodeType aliases t
+  where
+    -- Check if a type variable is in scope as a method-level type parameter
+    isInScope name = S.member name (aliasesInScopeTypeParams aliases)
+
+    -- Named type references have fully qualified names containing a dot (package separator)
+    -- e.g., "hydra.core.Type", "hydra.typing.TypeConstraint"
+    isNamedTypeRef (Name v) = '.' `L.elem` v
+
+    -- Check for out-of-scope polymorphic type variables
+    hasOutOfScopeTypeVars typ = case deannotateType typ of
+      TypeVariable name -> not (isInScope name) && not (isNamedTypeRef name)
+      TypeApplication (ApplicationType lhs rhs) -> hasOutOfScopeTypeVars lhs || hasOutOfScopeTypeVars rhs
+      TypeFunction (FunctionType dom cod) -> hasOutOfScopeTypeVars dom || hasOutOfScopeTypeVars cod
+      TypeForall (ForallType _ body) -> hasOutOfScopeTypeVars body
+      TypeList et -> hasOutOfScopeTypeVars et
+      TypeMap (MapType kt vt) -> hasOutOfScopeTypeVars kt || hasOutOfScopeTypeVars vt
+      TypeMaybe et -> hasOutOfScopeTypeVars et
+      TypeEither (EitherType lt rt) -> hasOutOfScopeTypeVars lt || hasOutOfScopeTypeVars rt
+      TypePair (PairType lt rt) -> hasOutOfScopeTypeVars lt || hasOutOfScopeTypeVars rt
+      TypeSet st -> hasOutOfScopeTypeVars st
+      TypeProduct types -> L.any hasOutOfScopeTypeVars types
+      TypeRecord (RowType _ fields) -> L.any (hasOutOfScopeTypeVars . fieldTypeType) fields
+      TypeUnion (RowType _ fields) -> L.any (hasOutOfScopeTypeVars . fieldTypeType) fields
+      TypeWrap (WrappedType _ inner) -> hasOutOfScopeTypeVars inner
+      _ -> False
+
+-- | Encode a type using raw types (no type arguments).
+-- This is used for local bindings with polymorphic types.
+encodeTypeRaw :: Aliases -> Type -> Flow Graph Java.Type
+encodeTypeRaw aliases t = case deannotateType t of
+    TypeApplication (ApplicationType lhs _) -> encodeRaw lhs  -- Strip type arguments
+    TypeFunction (FunctionType dom cod) -> do
+      -- For functions, we still need to encode domain and codomain, but as raw types
+      jdom <- encodeRaw dom >>= javaTypeToJavaReferenceType
+      jcod <- encodeRaw cod >>= javaTypeToJavaReferenceType
+      return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
+    TypeForall (ForallType _ body) -> encodeRaw body
+    TypeList _ -> pure $ javaRefType [] javaUtilPackageName "List"
+    TypeLiteral lt -> encodeLiteralType lt
+    TypeEither _ -> pure $ javaRefType [] hydraUtilPackageName "Either"
+    TypeMap _ -> pure $ javaRefType [] javaUtilPackageName "Map"
+    TypePair _ -> pure $ javaRefType [] hydraUtilPackageName "Tuple.Tuple2"
+    TypeProduct types -> pure $ javaRefType [] hydraUtilPackageName $ "Tuple.Tuple" ++ (show $ length types)
+    TypeRecord (RowType _Unit []) -> unit
+    TypeRecord (RowType name _) -> pure $
+      Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing  -- No type args
+    TypeMaybe _ -> pure $ javaRefType [] hydraUtilPackageName "Maybe"
+    TypeSet _ -> pure $ javaRefType [] javaUtilPackageName "Set"
+    TypeUnion (RowType name _) -> pure $
+      Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing  -- No type args
+    TypeVariable _ -> pure $ javaRefType [] Nothing "Object"  -- Free type var -> Object
+    TypeWrap (WrappedType name _) -> pure $
+      Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing  -- No type args
+    _ -> encodeType aliases t  -- Fallback to regular encoding
+  where
+    encodeRaw = encodeTypeRaw aliases
+    unit = return $ javaRefType [] javaLangPackageName "Void"
+
 addComment :: Java.ClassBodyDeclaration -> FieldType -> Flow Graph Java.ClassBodyDeclarationWithComments
 addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
 
@@ -409,11 +535,28 @@ encodeApplication env app@(Application lhs rhs) = do
     (fun, args) = gatherArgs (TermApplication app) []
 
     -- Apply remaining arguments one at a time using .apply()
+    -- When chaining .apply() calls on a local variable (which may have raw Function type),
+    -- each .apply() returns Object, so we need to cast the result back to Function to enable
+    -- subsequent .apply() calls. We do NOT cast the arguments - that would erase lambda parameter types.
     applyRemaining exp remArgs = case remArgs of
       [] -> pure exp
       (h:r) -> do
         jarg <- encode h
-        applyRemaining (apply exp jarg) r
+        let isLocalFun = case getUnderlyingVariable fun of
+              Just name -> isLocalVariable name
+              _ -> False
+        let appliedExp = apply exp jarg
+        -- If there are more arguments and the function is a local variable,
+        -- cast the result to Function to enable the next .apply() call
+        -- (needed because raw Function's .apply() returns Object)
+        let rawFunctionType = javaRefType [] javaUtilFunctionPackageName "Function"
+        appliedExp' <- if not (L.null r) && isLocalFun
+              then do
+                rt <- javaTypeToJavaReferenceType rawFunctionType
+                return $ javaCastExpressionToJavaExpression $
+                       javaCastExpression rt (javaExpressionToJavaUnaryExpression appliedExp)
+              else return appliedExp
+        applyRemaining appliedExp' r
 
     fallback = withTrace "fallback" $ do
 --        if Y.isNothing (getTermType lhs)
@@ -468,14 +611,25 @@ encodeElimination env marg dom cod elm = case elm of
   EliminationRecord (Projection _ fname) -> do
     jdomr <- adaptTypeToJavaAndEncode aliases dom >>= javaTypeToJavaReferenceType
     jexp <- case marg of
-      Nothing -> pure $ javaLambda var jbody
-        where
-          var = Name "r"
-          jbody = javaExpressionNameToJavaExpression $
-            fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unName fname)
-      Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
-        where
-          qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+      Nothing -> do
+        -- Generate: r -> ((RecordType) r).field
+        -- The cast is needed because when this lambda is wrapped in multiple casts
+        -- (as can happen with polymorphic local bindings), the parameter 'r' may
+        -- be inferred as Object. The explicit cast ensures field access works.
+        let var = Name "r"
+            varExpr = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
+            castExpr = javaCastExpressionToJavaExpression $
+              javaCastExpression jdomr (javaExpressionToJavaUnaryExpression varExpr)
+            qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary castExpr
+            jbody = javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
+        pure $ javaLambda var jbody
+      Just jarg -> do
+        -- Add a cast to the record type to handle cases where the argument might be typed as Object
+        -- (e.g., in polymorphic local bindings with raw types)
+        let castExpr = javaCastExpressionToJavaExpression $
+              javaCastExpression jdomr (javaExpressionToJavaUnaryExpression jarg)
+            qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary castExpr
+        pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
     return jexp
   EliminationProduct (TupleProjection arity idx _) -> if arity > javaMaxTupleLength
       then fail $ "Tuple eliminations of arity greater than " ++ show javaMaxTupleLength ++ " are unsupported"
@@ -579,7 +733,7 @@ encodeFunction :: JavaEnvironment -> Type -> Type -> Function -> Flow Graph Java
 encodeFunction env dom cod fun = case fun of
     FunctionElimination elm -> withTrace ("elimination (" ++ show (eliminationVariant elm) ++ ")") $ do
       encodeElimination env Nothing dom cod elm
-    FunctionLambda lam@(Lambda var _ body) -> withTrace ("lambda " ++ unName var) $ withLambda env lam $ \env2 -> do
+    FunctionLambda lam@(Lambda var _ body) -> withTrace ("lambda " ++ unName var) $ withLambdaRename env lam $ \env2 javaVar -> do
       -- For curried functions in Java, we need to check if body is also a lambda
       -- If it is, encode it recursively to create nested Java lambdas
       case deannotateTerm body of
@@ -590,9 +744,9 @@ encodeFunction env dom cod fun = case fun of
           case deannotateType bodyTyp of
             TypeFunction (FunctionType dom' cod') -> do
               innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
-              let lam' = javaLambda var innerJavaLambda
-              -- Apply cast
-              jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
+              let lam' = javaLambda javaVar innerJavaLambda
+              -- Apply cast (use same encoding as local binding variable types)
+              jtype <- adaptTypeForLocalBinding aliases (TypeFunction $ FunctionType dom cod)
               rt <- javaTypeToJavaReferenceType jtype
               return $ javaCastExpressionToJavaExpression $
                 javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
@@ -608,13 +762,13 @@ encodeFunction env dom cod fun = case fun of
           jbody <- encodeTerm env4 innerBody
 
           lam' <- if L.null bindings
-            then return $ javaLambda var jbody
+            then return $ javaLambda javaVar jbody
             else do
               let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
-              return $ javaLambdaFromBlock var $ Java.Block $ bindingStmts ++ [returnSt]
+              return $ javaLambdaFromBlock javaVar $ Java.Block $ bindingStmts ++ [returnSt]
 
-          -- Apply cast
-          jtype <- adaptTypeToJavaAndEncode aliases (TypeFunction $ FunctionType dom cod)
+          -- Apply cast (use same encoding as local binding variable types)
+          jtype <- adaptTypeForLocalBinding aliases (TypeFunction $ FunctionType dom cod)
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
@@ -693,7 +847,19 @@ encodeTerm env term0 = encodeInternal [] [] term0
     encodeInternal anns tyapps term = case term of
         TermAnnotated (AnnotatedTerm term' ann) -> encodeInternal (ann:anns) tyapps term'
 
-        TermApplication app -> withTrace "encode application" $ encodeApplication env app
+        TermApplication app -> withTrace "encode application" $ do
+          jresult <- encodeApplication env app
+          -- Check if we need to cast the result for polymorphic local function calls
+          let (fun, _) = gatherArgs (TermApplication app) []
+          case getUnderlyingVariable fun of
+            Just name | isLocalVariable name -> do
+              -- This might be a polymorphic local - cast result to expected type
+              resultTyp <- withTrace "app result type" $ typeOf tc [] term0
+              jtype <- encodeType aliases resultTyp
+              rt <- javaTypeToJavaReferenceType jtype
+              let rawRt = javaReferenceTypeToRawType rt
+              return $ javaDoubleCastExpressionToJavaExpression rawRt rt (javaExpressionToJavaUnaryExpression jresult)
+            _ -> pure jresult
 
         TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
           t <- withTrace "debug d" $ typeOf tc [] term0
@@ -702,7 +868,28 @@ encodeTerm env term0 = encodeInternal [] [] term0
               encodeFunction env dom cod f
             _ -> encodeNullaryConstant env t f
 
-        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ ShowCore.term term
+        TermLet lt@(Let bindings body) -> withLet env lt $ \env2 -> do
+          -- Encode let expressions as IIFEs (Immediately Invoked Function Expressions):
+          -- let x = e1 in body  =>  ((Function<Void, RetType>) (ignored -> { T x = e1; return body; })).apply(null)
+          (bindingStmts, env3) <- bindingsToStatements env2 bindings
+          jbody <- encodeTerm env3 body
+          bodyTyp <- withTrace "debug h" $ typeOf (javaEnvironmentTypeContext env3) [] body
+          jbodyType <- adaptTypeForLocalBinding aliases bodyTyp
+          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+          let block = Java.Block $ bindingStmts ++ [returnSt]
+          let unusedVar = Name "_iife_"
+          let lambda = javaLambdaFromBlock unusedVar block
+          -- Cast to Function<Void, ReturnType>
+          jbodyRt <- javaTypeToJavaReferenceType jbodyType
+          let voidRt = javaTypeVariable "Void"
+          let funcType = javaRefType [voidRt, jbodyRt] javaUtilFunctionPackageName "Function"
+          funcRt <- javaTypeToJavaReferenceType funcType
+          let castLambda = javaCastExpressionToJavaExpression $
+                javaCastExpression funcRt (javaExpressionToJavaUnaryExpression lambda)
+          -- Apply with null
+          let nullArg = javaIdentifierToJavaExpression $ Java.Identifier "null"
+          return $ javaMethodInvocationToJavaExpression $
+            methodInvocation (Just $ Right $ javaExpressionToJavaPrimary castLambda) (Java.Identifier applyMethodName) [nullArg]
 
         TermList els -> do
           jels <- CM.mapM encode els
@@ -778,8 +965,11 @@ encodeTerm env term0 = encodeInternal [] [] term0
           jatyp <- encodeType aliases atyp
           jbody <- encodeInternal anns (jatyp:tyapps) body
           rt <- javaTypeToJavaReferenceType jtype
-          return $ javaCastExpressionToJavaExpression $
-            javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
+          -- Always use double-cast for parameterized types to handle Java's invariant generics.
+          -- This is needed because Java doesn't allow direct casts between incompatible
+          -- parameterized types like Set<Object> to Set<Name>.
+          let rawRt = javaReferenceTypeToRawType rt
+          return $ javaDoubleCastExpressionToJavaExpression rawRt rt (javaExpressionToJavaUnaryExpression jbody)
 
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
@@ -796,6 +986,9 @@ encodeTerm env term0 = encodeInternal [] [] term0
         TermWrap (WrappedTerm tname arg) -> do
           jarg <- encode arg
           return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases tname) Nothing) [jarg] Nothing
+
+        TermTypeLambda tl@(TypeLambda _ body) -> withTypeLambda env tl $ \env2 ->
+          encodeTerm env2 body
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
       where
@@ -840,11 +1033,39 @@ bindingsToStatements env bindings = if L.null bindings
           _ -> names  -- Mutually recursive group
 
     -- Create environment with recursive vars marked in aliases
-    aliasesWithRecursive = aliases { aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars }
+    -- Note: aliasesPolymorphicLocals will be populated when processing statements
+    -- Also add binding variables to in-scope set to prevent lambda parameter shadowing
+    aliasesWithRecursive = aliases {
+      aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars,
+      aliasesInScopeJavaVars = S.union bindingVars (aliasesInScopeJavaVars aliases)
+    }
     envExtended = env {
       javaEnvironmentTypeContext = tcExtended,
       javaEnvironmentAliases = aliasesWithRecursive
     }
+
+    -- Check if a type has out-of-scope type variables (polymorphic)
+    isPolymorphicType typ = hasOutOfScopeTypeVars typ
+      where
+        inScope = aliasesInScopeTypeParams aliasesWithRecursive
+        isInScopeLocal name = S.member name inScope
+        isNamedTypeRef (Name v) = '.' `L.elem` v
+        hasOutOfScopeTypeVars t = case deannotateType t of
+          TypeVariable name -> not (isInScopeLocal name) && not (isNamedTypeRef name)
+          TypeApplication (ApplicationType lhs rhs) -> hasOutOfScopeTypeVars lhs || hasOutOfScopeTypeVars rhs
+          TypeFunction (FunctionType dom cod) -> hasOutOfScopeTypeVars dom || hasOutOfScopeTypeVars cod
+          TypeForall (ForallType _ body) -> hasOutOfScopeTypeVars body
+          TypeList et -> hasOutOfScopeTypeVars et
+          TypeMap (MapType kt vt) -> hasOutOfScopeTypeVars kt || hasOutOfScopeTypeVars vt
+          TypeMaybe et -> hasOutOfScopeTypeVars et
+          TypeEither (EitherType lt rt) -> hasOutOfScopeTypeVars lt || hasOutOfScopeTypeVars rt
+          TypePair (PairType lt rt) -> hasOutOfScopeTypeVars lt || hasOutOfScopeTypeVars rt
+          TypeSet st -> hasOutOfScopeTypeVars st
+          TypeProduct types -> L.any hasOutOfScopeTypeVars types
+          TypeRecord (RowType _ fields) -> L.any (hasOutOfScopeTypeVars . fieldTypeType) fields
+          TypeUnion (RowType _ fields) -> L.any (hasOutOfScopeTypeVars . fieldTypeType) fields
+          TypeWrap (WrappedType _ inner) -> hasOutOfScopeTypeVars inner
+          _ -> False
 
     -- Build dependency graph
     allDeps = M.fromList (toDeps <$> flattenedBindings)
@@ -867,7 +1088,7 @@ bindingsToStatements env bindings = if L.null bindings
       then do
         let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
         typ <- withTrace "debug f" $ typeOf tcExtended [] value
-        jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
+        jtype <- adaptTypeForLocalBinding aliasesWithRecursive typ
         let id = variableToJavaIdentifier name
         let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
         let arid = Java.Identifier "java.util.concurrent.atomic.AtomicReference"
@@ -884,7 +1105,7 @@ bindingsToStatements env bindings = if L.null bindings
     toDeclStatement name = do
       let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
       typ <- withTrace "debug g" $ typeOf tcExtended [] value
-      jtype <- adaptTypeToJavaAndEncode aliasesWithRecursive typ
+      jtype <- adaptTypeForLocalBinding aliasesWithRecursive typ
       let id = variableToJavaIdentifier name
       rhs <- encodeTerm envExtended value
       return $ if S.member name recursiveVars
@@ -909,20 +1130,36 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
         cod = functionStructureCodomain fs
         env2 = functionStructureEnvironment fs
     let jparams = fmap toParam tparams
-        aliases2 = javaEnvironmentAliases env2
+        -- Set in-scope type parameters so encodeType knows which type variables are valid
+        -- Also add method parameters to in-scope vars to avoid lambda parameter shadowing
+        aliases2 = (javaEnvironmentAliases env2) {
+          aliasesInScopeTypeParams = S.fromList tparams,
+          aliasesInScopeJavaVars = S.union (S.fromList params) (aliasesInScopeJavaVars $ javaEnvironmentAliases env2)
+        }
+        env2' = env2 { javaEnvironmentAliases = aliases2 }
 
     -- Convert bindings to Java block statements
-    (bindingStmts, env3) <- bindingsToStatements env2 bindings
+    (bindingStmts, env3) <- bindingsToStatements env2' bindings
 
     -- Classify based on FunctionStructure
+    -- Note: if there are type parameters, we MUST generate a method, not a field,
+    -- because Java interface fields can't have type parameters.
     case (params, bindings) of
-      -- No parameters and no bindings -> constant field
-      ([], []) -> do
-        jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases2 cod
-        jbody <- encodeTerm env3 body
-        let mods = []
-        let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jbody
-        return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+      -- No parameters and no bindings -> constant field (unless there are type params)
+      ([], []) -> if L.null tparams
+        then do
+          jtype <- Java.UnannType <$> adaptTypeToJavaAndEncode aliases2 cod
+          jbody <- encodeTerm env3 body
+          let mods = []
+          let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jbody
+          return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+        else do
+          -- Nullary static method with type parameters
+          result <- javaTypeToJavaResult <$> adaptTypeToJavaAndEncode aliases2 cod
+          jbody <- encodeTerm env3 body
+          let mods = [Java.InterfaceMethodModifierStatic]
+          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+          return $ interfaceMethodDeclaration mods jparams jname [] result (Just [returnSt])
 
       -- No parameters but has bindings -> nullary static method
       ([], _) -> do
@@ -1001,11 +1238,18 @@ encodeType aliases t =  case deannotateType t of
     TypeWrap (WrappedType name _) -> forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
-    forReference name = pure $ if isLambdaBoundVariable name
+    forReference name = pure $ if isInScope name
+        -- Type variable is a method-level type parameter, use it directly
         then variableReference name
-        else nameReference name
+        -- Type variable is not in scope (from inner forall), replace with Object
+        else if isLambdaBoundVariable name
+          then objectReference
+          else nameReference name
+    -- Check if the type variable is in the set of in-scope type parameters
+    isInScope name = S.member name (aliasesInScopeTypeParams aliases)
     nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
     variableReference name = Java.TypeReference $ javaTypeVariable $ unName name
+    objectReference = javaRefType [] Nothing "Object"
     encode = encodeType aliases
     unit = return $ javaRefType [] javaLangPackageName "Void"
 
@@ -1048,13 +1292,15 @@ encodeVariable env name =
     else do
       cls <- classifyDataReference name
       return $ case cls of
-        JavaSymbolLocalVariable -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
+        JavaSymbolLocalVariable -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases javaName
         JavaSymbolClassConstant -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
         JavaSymbolClassNullaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name -- TODO
         JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
   where
     aliases = javaEnvironmentAliases env
-    jid = javaIdentifier $ unName name
+    -- Look up renamed variable name (for lambda parameters that were renamed to avoid shadowing)
+    javaName = lookupJavaVarName aliases name
+    jid = javaIdentifier $ unName javaName
 
 fieldToNullCheckStatement :: FieldType -> Java.BlockStatement
 fieldToNullCheckStatement field = Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $ Java.MethodInvocation header [arg]
@@ -1069,33 +1315,54 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
 
 functionCall :: JavaEnvironment -> Bool -> Name -> [Term] -> Flow Graph Java.Expression
 functionCall env isPrim name args = do
---    if name == Name "hydra.lib.maybes.maybe"
---    then fail $ "args: " ++ L.intercalate ", " (fmap ShowCore.term args)
---    else pure ()
-
-    -- When there are no arguments and it's a primitive, use a method reference instead of calling .apply()
-    if isPrim && L.null args
-    then do
-      -- Generate method reference like ClassName::apply
-      let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
-      let suffix = ".apply"
-      let className = take (length classWithApply - length suffix) classWithApply
-      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::apply"
-    else do
-      jargs <- CM.mapM (encodeTerm env) args
-      if isLocalVariable name
-        then do
-          prim <- javaExpressionToJavaPrimary <$> encodeVariable env name
-          return $ javaMethodInvocationToJavaExpression $
-            methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
-        else do
-          let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
-          return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+    if isLocalVariable name
+      then do
+        -- Local variables hold curried Function objects, which take one argument at a time
+        -- So we need to chain .apply() calls: f.apply(a).apply(b).apply(c)
+        -- For polymorphic locals, we need to cast function-typed arguments to raw types
+        base <- encodeVariable env name
+        applyCurried base args
+      else do
+        -- For library/primitive functions, call the static method directly
+        -- Note: we always call .apply() even for nullary primitives like sets.Empty
+        -- Method references (ClassName::apply) should only be used when explicitly needed
+        jargs <- CM.mapM (encodeTerm env) args
+        let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+        return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
   where
     aliases = javaEnvironmentAliases env
+    tc = javaEnvironmentTypeContext env
+    -- Apply arguments one at a time to a curried function
+    -- When there are remaining arguments, cast the intermediate result to Function
+    -- (needed because raw Function's .apply() returns Object, not Function)
+    -- Note: we do NOT cast the arguments themselves - that would erase lambda parameter types
+    applyCurried :: Java.Expression -> [Term] -> Flow Graph Java.Expression
+    applyCurried exp [] = pure exp
+    applyCurried exp (h:r) = do
+      jarg <- encodeTerm env h
+      let prim = javaExpressionToJavaPrimary exp
+      let call = javaMethodInvocationToJavaExpression $
+            methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) [jarg]
+      -- If there are more arguments, cast the result to Function (type erasure issue)
+      let rawFunctionType = javaRefType [] javaUtilFunctionPackageName "Function"
+      call' <- if not (L.null r)
+            then do
+              rt <- javaTypeToJavaReferenceType rawFunctionType
+              return $ javaCastExpressionToJavaExpression $
+                     javaCastExpression rt (javaExpressionToJavaUnaryExpression call)
+            else return call
+      applyCurried call' r
 
 getCodomain :: M.Map Name Term -> Flow Graph Type
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
+
+-- | Extract the variable name from a term, stripping annotations and type applications
+getUnderlyingVariable :: Term -> Maybe Name
+getUnderlyingVariable term = case deannotateTerm term of
+  TermVariable name -> Just name
+  TermTypeApplication (TypeApplicationTerm body _) -> getUnderlyingVariable body
+  TermTypeLambda (TypeLambda _ body) -> getUnderlyingVariable body
+  _ -> Nothing
 
 getFunctionType :: M.Map Name Term -> Flow Graph FunctionType
 getFunctionType ann = do
@@ -1185,10 +1452,30 @@ typeArgsOrDiamond args = if supportsDiamondOperator javaFeatures
   then Java.TypeArgumentsOrDiamondDiamond
   else Java.TypeArgumentsOrDiamondArguments args
 
--- TODO: use these
+-- | Process a lambda, handling variable renaming for Java's restriction on shadowing
+-- Returns the (possibly renamed) Java name to use for the parameter, and runs continuation with updated environment
+withLambdaRename :: JavaEnvironment -> Lambda -> (JavaEnvironment -> Name -> Flow s a) -> Flow s a
+withLambdaRename env lam continuation =
+  let tc = javaEnvironmentTypeContext env
+      tc' = extendTypeContextForLambda tc lam
+      aliases = javaEnvironmentAliases env
+      paramName = lambdaParameter lam
+      -- Generate unique name if there's a conflict with in-scope vars
+      javaName = uniqueVarName aliases paramName
+      -- Lambda parameters shadow any outer recursive vars with the same name
+      aliases' = aliases {
+        aliasesRecursiveVars = S.delete paramName (aliasesRecursiveVars aliases),
+        aliasesInScopeJavaVars = S.insert javaName (aliasesInScopeJavaVars aliases),
+        aliasesVarRenames = if javaName /= paramName
+          then M.insert paramName javaName (aliasesVarRenames aliases)
+          else aliasesVarRenames aliases
+      }
+      env' = env { javaEnvironmentTypeContext = tc', javaEnvironmentAliases = aliases' }
+  in continuation env' javaName
 
+-- Legacy wrapper - use withLambdaRename for new code
 withLambda :: JavaEnvironment -> Lambda -> (JavaEnvironment -> Flow s a) -> Flow s a
-withLambda = withLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
+withLambda env lam continuation = withLambdaRename env lam (\env' _ -> continuation env')
 
 withLet :: JavaEnvironment -> Let -> (JavaEnvironment -> Flow s a) -> Flow s a
 withLet = withLetContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })

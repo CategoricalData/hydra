@@ -114,7 +114,7 @@ def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[h
                     case hydra.core.FunctionElimination(value=elimination):
                         match elimination:
                             case hydra.core.EliminationUnion(value=cs):
-                                return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), hydra.lib.flows.pure(cs), hydra.monads.unexpected(hydra.lib.strings.cat(("case statement for type ", name.value)), hydra.show.core.term(term)))
+                                return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : hydra.lib.flows.pure(cs)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("case statement for type ", name.value)), hydra.show.core.term(term))))
                             
                             case _:
                                 return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
@@ -130,7 +130,7 @@ def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.co
     r"""Extract a specific case handler from a case statement term."""
     
     field_name = hydra.core.Name(n)
-    return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), hydra.lib.flows.fail("not enough cases"), hydra.lib.flows.pure(hydra.lib.lists.head(matching))))[1]))
+    return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : hydra.lib.flows.fail("not enough cases")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching)))))[1]))
 
 def either_term[T0, T1](left_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], right_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
@@ -153,7 +153,7 @@ def either_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.E
 
 def field[T0](fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fields: frozenlist[hydra.core.Field]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
     matching_fields = hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, fname.value)), fields)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat(("field ", fname.value)), " not found"))), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields), 1), hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(hydra.lib.lists.head(matching_fields).term), (lambda stripped: mapping(stripped))), hydra.lib.flows.fail(hydra.lib.strings.cat(("multiple fields named ", fname.value)))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat((hydra.lib.strings.cat(("field ", fname.value)), " not found")))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields), 1), (lambda : hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(hydra.lib.lists.head(matching_fields).term), (lambda stripped: mapping(stripped)))), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("multiple fields named ", fname.value)))))))
 
 def float32_value[T0](v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
     match v:
@@ -201,7 +201,7 @@ def injection(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.comput
     def extract[T0](term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Field]:
         match term:
             case hydra.core.TermUnion(value=injection):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, expected.value), hydra.lib.flows.pure(injection.field), hydra.monads.unexpected(hydra.lib.strings.cat(("injection of type ", expected.value)), injection.type_name.value))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, expected.value), (lambda : hydra.lib.flows.pure(injection.field)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("injection of type ", expected.value)), injection.type_name.value)))
             
             case _:
                 return hydra.monads.unexpected("injection", hydra.show.core.term(term))
@@ -302,7 +302,7 @@ def let_binding(n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph
     r"""Extract a binding with the given name from a let term."""
     
     name = hydra.core.Name(n)
-    return hydra.lib.flows.bind(let_term(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name.value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), hydra.lib.flows.fail(hydra.lib.strings.cat(("no such binding: ", n))), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term), hydra.lib.flows.fail(hydra.lib.strings.cat(("multiple bindings named ", n))))))[1]))
+    return hydra.lib.flows.bind(let_term(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no such binding: ", n)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("multiple bindings named ", n))))))))[1]))
 
 def list(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Term]]:
     r"""Extract a list of terms from a term."""
@@ -319,7 +319,7 @@ def list(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenl
 def list_head(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Extract the first element of a list term."""
     
-    return hydra.lib.flows.bind(list(term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), hydra.lib.flows.fail("empty list"), hydra.lib.flows.pure(hydra.lib.lists.head(l)))))
+    return hydra.lib.flows.bind(list(term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : hydra.lib.flows.fail("empty list")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(l))))))
 
 def list_of[T0](f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[T0]]:
     return hydra.lib.flows.bind(list(term), (lambda els: hydra.lib.flows.map_list(f, els)))
@@ -376,7 +376,7 @@ def maybe_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Ty
             return hydra.monads.unexpected("maybe type", hydra.show.core.type(typ))
 
 def n_args[T0, T1](name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra.compute.Flow[T1, None]:
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), hydra.lib.flows.pure(None), hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value))), hydra.lib.literals.show_int32(hydra.lib.lists.length(args))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), (lambda : hydra.lib.flows.pure(None)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value))), hydra.lib.literals.show_int32(hydra.lib.lists.length(args)))))
 
 def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], vf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
@@ -385,7 +385,7 @@ def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.
                 return hydra.lib.flows.bind(kf(p[0]), (lambda k_val: hydra.lib.flows.bind(vf(p[1]), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
             
             case hydra.core.TermProduct(value=terms):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val)))))), hydra.monads.unexpected("tuple2", hydra.show.core.term(term)))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))), (lambda : hydra.monads.unexpected("tuple2", hydra.show.core.term(term))))
             
             case _:
                 return hydra.monads.unexpected("product", hydra.show.core.term(term))
@@ -415,13 +415,13 @@ def term_record(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph,
 def record(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Field]]:
     r"""Extract a record's fields from a term."""
     
-    return hydra.lib.flows.bind(term_record(term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), hydra.lib.flows.pure(record.fields), hydra.monads.unexpected(hydra.lib.strings.cat(("record of type ", expected.value)), record.type_name.value))))
+    return hydra.lib.flows.bind(term_record(term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : hydra.lib.flows.pure(record.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("record of type ", expected.value)), record.type_name.value)))))
 
 def record_type[T0](ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
     stripped = hydra.rewriting.deannotate_type(typ)
     match stripped:
         case hydra.core.TypeRecord(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name.value, ename.value), hydra.lib.flows.pure(row_type.fields), hydra.monads.unexpected(hydra.lib.strings.cat(("record of type ", ename.value)), hydra.lib.strings.cat(("record of type ", row_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name.value, ename.value), (lambda : hydra.lib.flows.pure(row_type.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("record of type ", ename.value)), hydra.lib.strings.cat(("record of type ", row_type.type_name.value)))))
         
         case _:
             return hydra.monads.unexpected("record type", hydra.show.core.type(typ))
@@ -479,7 +479,7 @@ def tuple2[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.grap
                 return hydra.lib.flows.bind(kf(p[0]), (lambda k_val: hydra.lib.flows.bind(vf(p[1]), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
             
             case hydra.core.TermProduct(value=terms):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val)))))), hydra.monads.unexpected("tuple2", hydra.show.core.term(term)))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))), (lambda : hydra.monads.unexpected("tuple2", hydra.show.core.term(term))))
             
             case _:
                 return hydra.monads.unexpected("product", hydra.show.core.term(term))
@@ -541,7 +541,7 @@ def union_type[T0](ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.comput
     stripped = hydra.rewriting.deannotate_type(typ)
     match stripped:
         case hydra.core.TypeUnion(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name, ename), hydra.lib.flows.pure(row_type.fields), hydra.monads.unexpected(hydra.lib.strings.cat(("union of type ", ename.value)), hydra.lib.strings.cat(("union of type ", row_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name, ename), (lambda : hydra.lib.flows.pure(row_type.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("union of type ", ename.value)), hydra.lib.strings.cat(("union of type ", row_type.type_name.value)))))
         
         case _:
             return hydra.monads.unexpected("union type", hydra.show.core.type(typ))
@@ -568,7 +568,7 @@ def wrap(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flo
     def extract[T0](term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_term.type_name.value, expected.value), hydra.lib.flows.pure(wrapped_term.body), hydra.monads.unexpected(hydra.lib.strings.cat(("wrapper of type ", expected.value)), wrapped_term.type_name.value))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_term.type_name.value, expected.value), (lambda : hydra.lib.flows.pure(wrapped_term.body)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("wrapper of type ", expected.value)), wrapped_term.type_name.value)))
             
             case _:
                 return hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.strings.cat(("wrap(", expected.value)), ")")), hydra.show.core.term(term))
@@ -578,7 +578,7 @@ def wrapped_type[T0](ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.comp
     stripped = hydra.rewriting.deannotate_type(typ)
     match stripped:
         case hydra.core.TypeWrap(value=wrapped_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_type.type_name.value, ename.value), hydra.lib.flows.pure(wrapped_type.body), hydra.monads.unexpected(hydra.lib.strings.cat(("wrapped type ", ename.value)), hydra.lib.strings.cat(("wrapped type ", wrapped_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_type.type_name.value, ename.value), (lambda : hydra.lib.flows.pure(wrapped_type.body)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("wrapped type ", ename.value)), hydra.lib.strings.cat(("wrapped type ", wrapped_type.type_name.value)))))
         
         case _:
             return hydra.monads.unexpected("wrapped type", hydra.show.core.type(typ))

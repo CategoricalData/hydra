@@ -10,9 +10,9 @@ public class Row<V> {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<V> value;
+  public final java.util.List<Object> value;
   
-  public Row (java.util.List<V> value) {
+  public Row (java.util.List<Object> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

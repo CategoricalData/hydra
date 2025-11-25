@@ -17,19 +17,19 @@ public class LastMile<S, A> {
   /**
    * An encoder for terms to a list of output objects
    */
-  public final java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder;
+  public final java.util.function.Function<hydra.core.Type, hydra.compute.Flow<Object, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<Object, java.util.List<Object>>>>>> encoder;
   
   /**
    * A function which serializes a list of output objects to a string representation
    */
-  public final java.util.function.Function<java.util.List<A>, hydra.compute.Flow<S, String>> serializer;
+  public final java.util.function.Function<java.util.List<Object>, hydra.compute.Flow<Object, String>> serializer;
   
   /**
    * A file extension for the generated file(s)
    */
   public final String fileExtension;
   
-  public LastMile (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder, java.util.function.Function<java.util.List<A>, hydra.compute.Flow<S, String>> serializer, String fileExtension) {
+  public LastMile (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<Object, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<Object, java.util.List<Object>>>>>> encoder, java.util.function.Function<java.util.List<Object>, hydra.compute.Flow<Object, String>> serializer, String fileExtension) {
     java.util.Objects.requireNonNull((encoder));
     java.util.Objects.requireNonNull((serializer));
     java.util.Objects.requireNonNull((fileExtension));
@@ -52,12 +52,12 @@ public class LastMile<S, A> {
     return 2 * encoder.hashCode() + 3 * serializer.hashCode() + 5 * fileExtension.hashCode();
   }
   
-  public LastMile withEncoder(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder) {
+  public LastMile withEncoder(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<Object, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<Object, java.util.List<Object>>>>>> encoder) {
     java.util.Objects.requireNonNull((encoder));
     return new LastMile(encoder, serializer, fileExtension);
   }
   
-  public LastMile withSerializer(java.util.function.Function<java.util.List<A>, hydra.compute.Flow<S, String>> serializer) {
+  public LastMile withSerializer(java.util.function.Function<java.util.List<Object>, hydra.compute.Flow<Object, String>> serializer) {
     java.util.Objects.requireNonNull((serializer));
     return new LastMile(encoder, serializer, fileExtension);
   }

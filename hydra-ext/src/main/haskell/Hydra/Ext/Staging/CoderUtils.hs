@@ -34,6 +34,7 @@ import Hydra.Typing
 import qualified Hydra.Show.Core as ShowCore
 
 import qualified Data.List as L
+import Debug.Trace
 
 
 -- | A structured representation of a function term's components, replacing ad-hoc tuples.
@@ -157,15 +158,46 @@ gatherArgs term args = case deannotateTerm term of
 --
 -- Note: This also checks if the type has arity > 0, but that check is currently commented out.
 isFunctionCall :: Binding -> Bool
-isFunctionCall (Binding _ term (Just ts)) = isCaseStatement || isLet
-  where
-    term1 = deannotateAndDetypeTerm term
-    isLet = case term1 of
-      TermLet _ -> True
-      _ -> False
-    isCaseStatement = case fst (gatherArgs term1 []) of
-      TermFunction (FunctionElimination (EliminationUnion _)) -> True
-      _ -> False
+isFunctionCall (Binding name term (Just ts)) =
+  let term1 = deannotateAndDetypeTerm term
+      -- Only apply these checks for arity-0 functions
+      isArityZero = typeSchemeArity ts == 0
+      -- Check if it's a wrapped term (e.g., Flow monad) - these are thunks that need to be called
+      isWrapped = case term1 of
+        TermWrap _ -> True
+        _ -> False
+      result = isArityZero && isWrapped
+      termConstructor = case term1 of
+        TermAnnotated _ -> "TermAnnotated"
+        TermApplication _ -> "TermApplication"
+        TermFunction _ -> "TermFunction"
+        TermLet _ -> "TermLet"
+        TermList _ -> "TermList"
+        TermLiteral _ -> "TermLiteral"
+        TermMap _ -> "TermMap"
+        TermMaybe _ -> "TermMaybe"
+        TermPair _ -> "TermPair"
+        TermProduct _ -> "TermProduct"
+        TermRecord _ -> "TermRecord"
+        TermSet _ -> "TermSet"
+        TermSum _ -> "TermSum"
+        TermTypeApplication _ -> "TermTypeApplication"
+        TermTypeLambda _ -> "TermTypeLambda"
+        TermUnion _ -> "TermUnion"
+        TermUnit -> "TermUnit"
+        TermVariable _ -> "TermVariable"
+        TermWrap _ -> "TermWrap"
+        TermEither _ -> "TermEither"
+      -- Debug output for specific problematic bindings
+      _ = if name `elem` [Name "idTypeSubst", Name "emptyTrace", Name "initialState"] && isArityZero
+          then trace ("DEBUG isFunctionCall: name=" ++ show name ++
+                      ", arity=" ++ show (typeSchemeArity ts) ++
+                      ", isWrapped=" ++ show isWrapped ++
+                      ", termConstructor=" ++ termConstructor ++
+                      ", result=" ++ show result) ()
+          else ()
+  in result
+isFunctionCall _ = False
 
 -- | Determines whether a term can be encoded as a simple assignment (without type annotation).
 -- This heuristic helps decide whether we need explicit type signatures in the target language.

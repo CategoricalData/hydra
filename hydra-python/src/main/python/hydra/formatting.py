@@ -22,7 +22,7 @@ def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     
     list = hydra.lib.strings.to_list(s)
     first_letter = mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
-    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), s, hydra.lib.strings.cat2(first_letter, hydra.lib.strings.from_list(hydra.lib.lists.tail(list))))
+    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : s), (lambda : hydra.lib.strings.cat2(first_letter, hydra.lib.strings.from_list(hydra.lib.lists.tail(list)))))
 
 def capitalize(v1: str) -> str:
     r"""Capitalize the first letter of a string."""
@@ -40,15 +40,15 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
     def parts() -> frozenlist[str]:
         def by_caps() -> frozenlist[str]:
             def split_on_uppercase(acc: frozenlist[frozenlist[int]], c: int) -> frozenlist[frozenlist[int]]:
-                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (cast(frozenlist[int], ()),), cast(frozenlist[frozenlist[int]], ())), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
+                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (lambda : (cast(frozenlist[int], ()),)), (lambda : cast(frozenlist[frozenlist[int]], ()))), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
             return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, (cast(frozenlist[int], ()),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         by_underscores = hydra.lib.strings.split_on("_", original)
         match from_:
             case hydra.util.CaseConvention.CAMEL:
-                return by_caps()
+                return by_caps
             
             case hydra.util.CaseConvention.PASCAL:
-                return by_caps()
+                return by_caps
             
             case hydra.util.CaseConvention.LOWER_SNAKE:
                 return by_underscores
@@ -60,16 +60,16 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
                 raise AssertionError("Unreachable: all variants handled")
     match to:
         case hydra.util.CaseConvention.CAMEL:
-            return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts())))
+            return decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts)))
         
         case hydra.util.CaseConvention.PASCAL:
-            return hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts()))
+            return hydra.lib.strings.cat(hydra.lib.lists.map((lambda arg_: capitalize(hydra.lib.strings.to_lower(arg_))), parts))
         
         case hydra.util.CaseConvention.LOWER_SNAKE:
-            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_lower, parts()))
+            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_lower, parts))
         
         case hydra.util.CaseConvention.UPPER_SNAKE:
-            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_upper, parts()))
+            return hydra.lib.strings.intercalate("_", hydra.lib.lists.map(hydra.lib.strings.to_upper, parts))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -92,7 +92,7 @@ def convert_case_pascal_to_upper_snake(v1: str) -> str:
 def escape_with_underscore(reserved: frozenset[str], s: str) -> str:
     r"""Escape reserved words by appending an underscore."""
     
-    return hydra.lib.logic.if_else(hydra.lib.sets.member(s, reserved), hydra.lib.strings.cat((s, "_")), s)
+    return hydra.lib.logic.if_else(hydra.lib.sets.member(s, reserved), (lambda : hydra.lib.strings.cat((s, "_"))), (lambda : s))
 
 def indent_lines(s: str) -> str:
     r"""Indent each line of a string with four spaces."""
@@ -114,7 +114,7 @@ def non_alnum_to_underscores(input: str) -> str:
     def replace(p: Tuple[frozenlist[int], bool], c: int) -> Tuple[frozenlist[int], bool]:
         s = p[0]
         b = p[1]
-        return hydra.lib.logic.if_else(is_alnum(c), (hydra.lib.lists.cons(c, s), False), hydra.lib.logic.if_else(b, (s, True), (hydra.lib.lists.cons(95, s), True)))
+        return hydra.lib.logic.if_else(is_alnum(c), (lambda : (hydra.lib.lists.cons(c, s), False)), (lambda : hydra.lib.logic.if_else(b, (lambda : (s, True)), (lambda : (hydra.lib.lists.cons(95, s), True)))))
     result = hydra.lib.lists.foldl(replace, (cast(frozenlist[int], ()), False), hydra.lib.strings.to_list(input))
     return hydra.lib.strings.from_list(hydra.lib.lists.reverse(result[0]))
 
@@ -147,5 +147,5 @@ def wrap_line(maxlen: int, input: str) -> str:
         span_result = hydra.lib.lists.span((lambda c: hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.equality.equal(c, 32)), hydra.lib.logic.not_(hydra.lib.equality.equal(c, 9)))), hydra.lib.lists.reverse(trunc))
         prefix = hydra.lib.lists.reverse(span_result[1])
         suffix = hydra.lib.lists.reverse(span_result[0])
-        return hydra.lib.logic.if_else(hydra.lib.equality.lte(hydra.lib.lists.length(rem), maxlen), hydra.lib.lists.reverse(hydra.lib.lists.cons(rem, prev)), hydra.lib.logic.if_else(hydra.lib.lists.null(prefix), helper(hydra.lib.lists.cons(trunc, prev), hydra.lib.lists.drop(maxlen, rem)), helper(hydra.lib.lists.cons(hydra.lib.lists.init(prefix), prev), hydra.lib.lists.concat2(suffix, hydra.lib.lists.drop(maxlen, rem)))))
+        return hydra.lib.logic.if_else(hydra.lib.equality.lte(hydra.lib.lists.length(rem), maxlen), (lambda : hydra.lib.lists.reverse(hydra.lib.lists.cons(rem, prev))), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(prefix), (lambda : helper(hydra.lib.lists.cons(trunc, prev), hydra.lib.lists.drop(maxlen, rem))), (lambda : helper(hydra.lib.lists.cons(hydra.lib.lists.init(prefix), prev), hydra.lib.lists.concat2(suffix, hydra.lib.lists.drop(maxlen, rem)))))))
     return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper(cast(frozenlist[frozenlist[int]], ()), hydra.lib.strings.to_list(input))))

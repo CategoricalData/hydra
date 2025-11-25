@@ -10,9 +10,9 @@ public class Relationship<V> {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value;
+  public final java.util.Set<java.util.Map<hydra.relational.ColumnName, Object>> value;
   
-  public Relationship (java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value) {
+  public Relationship (java.util.Set<java.util.Map<hydra.relational.ColumnName, Object>> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }
