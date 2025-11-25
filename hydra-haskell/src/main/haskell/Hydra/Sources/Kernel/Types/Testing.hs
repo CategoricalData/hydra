@@ -16,18 +16,20 @@ import qualified Data.Maybe                      as Y
 
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 module_ :: Module
-module_ = Module ns elements [Coders.module_, Compute.module_, Module.module_, Util.module_] [Core.module_] $
+module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Module.module_, Util.module_] [Core.module_] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra.testing"
     def = datatype ns
     coders = typeref $ moduleNamespace Coders.module_
     compute = typeref $ moduleNamespace Compute.module_
+    graph = typeref $ moduleNamespace Graph.module_
     core = typeref $ moduleNamespace Core.module_
     modulemod = typeref $ moduleNamespace Module.module_
     util = typeref $ moduleNamespace Util.module_
@@ -123,7 +125,10 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Module.module_, U
             modulemod "FileExtension",
           "encodeTerm">:
             doc "A function for encoding Hydra terms into the target language" $
-            function (core "Term") (either_ (compute "Trace") string),
+            function (core "Term") (compute "Flow" @@ graph "Graph" @@ string),
+          "encodeType">:
+            doc "A function for encoding Hydra types into the target language" $
+            function (core "Type") (compute "Flow" @@ graph "Graph" @@ string),
           "formatTestName">:
             doc "A function for formatting test case names according to the target language's conventions" $
             function string string,
@@ -144,7 +149,7 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Module.module_, U
             string,
           "findImports">:
             doc "A function that determines the necessary imports for a given set of dependencies" $
-            function (list (core "Term")) (list string)],
+            function (set $ core "Name") (list string)],
 
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
