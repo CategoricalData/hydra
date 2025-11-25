@@ -18,7 +18,15 @@ data Aliases = Aliases {
   aliasesCurrentNamespace :: Namespace,
   aliasesPackages :: PackageMap,
   aliasesBranchVars :: S.Set Name,
-  aliasesRecursiveVars :: S.Set Name } deriving Show
+  aliasesRecursiveVars :: S.Set Name,
+  -- | Type parameters that are in scope (from method-level type parameters)
+  aliasesInScopeTypeParams :: S.Set Name,
+  -- | Local variables that have polymorphic types (declared with raw types)
+  aliasesPolymorphicLocals :: S.Set Name,
+  -- | All in-scope Java variable names (for avoiding lambda parameter shadowing)
+  aliasesInScopeJavaVars :: S.Set Name,
+  -- | Variable renames for avoiding shadowing (maps Hydra name to Java name)
+  aliasesVarRenames :: M.Map Name Name } deriving Show
 
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
 addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
@@ -54,7 +62,7 @@ fieldNameToJavaVariableDeclaratorId :: Name -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (Name n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForModule :: Module -> Aliases
-importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty
+importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty S.empty S.empty S.empty M.empty
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -94,6 +102,29 @@ javaCastExpression rt expr = Java.CastExpressionNotPlusMinus $ Java.CastExpressi
 javaCastExpressionToJavaExpression :: Java.CastExpression -> Java.Expression
 javaCastExpressionToJavaExpression = javaUnaryExpressionToJavaExpression . Java.UnaryExpressionOther .
   Java.UnaryExpressionNotPlusMinusCast
+
+-- | Double-cast expression for bypassing Java's generic type variance checking.
+-- When casting from a raw type (or type with Object) to a parameterized type,
+-- we need to first cast to the raw type, then to the target parameterized type.
+-- Example: (Function<Type,Type>) (Function) rawVar
+javaDoubleCastExpression :: Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression
+javaDoubleCastExpression rawRt targetRt expr =
+  let firstCast = javaCastExpressionToJavaExpression $ javaCastExpression rawRt expr
+  in javaCastExpression targetRt (javaExpressionToJavaUnaryExpression firstCast)
+
+javaDoubleCastExpressionToJavaExpression :: Java.ReferenceType -> Java.ReferenceType -> Java.UnaryExpression -> Java.Expression
+javaDoubleCastExpressionToJavaExpression rawRt targetRt expr =
+  javaCastExpressionToJavaExpression $ javaDoubleCastExpression rawRt targetRt expr
+
+-- | Extract the raw type (without type arguments) from a reference type.
+-- For java.util.function.Function<A,B>, returns java.util.function.Function
+javaReferenceTypeToRawType :: Java.ReferenceType -> Java.ReferenceType
+javaReferenceTypeToRawType rt = case rt of
+  Java.ReferenceTypeClassOrInterface (Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id _)) ->
+    Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $ Java.ClassType anns qual id []
+  Java.ReferenceTypeClassOrInterface (Java.ClassOrInterfaceTypeInterface (Java.InterfaceType (Java.ClassType anns qual id _))) ->
+    Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeInterface $ Java.InterfaceType $ Java.ClassType anns qual id []
+  _ -> rt  -- Keep as is for type variables and arrays
 
 javaClassDeclaration :: Aliases -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
    -> Maybe Name -> [Java.InterfaceType] -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration
@@ -551,7 +582,7 @@ variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVari
 variableToJavaIdentifier :: Name -> Java.Identifier
 variableToJavaIdentifier (Name var) = Java.Identifier $ if var == ignoredVariable
   then "ignored"
-  else var -- TODO: escape
+  else sanitizeJavaName var
 
 variantClassName :: Bool -> Name -> Name -> Name
 variantClassName qualify elName (Name fname) = unqualifyName (QualifiedName ns local1)
@@ -564,3 +595,38 @@ variantClassName qualify elName (Name fname) = unqualifyName (QualifiedName ns l
 
 visitorTypeVariable :: Java.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"
+
+-- | Look up the Java variable name for a Hydra variable, applying any renames
+lookupJavaVarName :: Aliases -> Name -> Name
+lookupJavaVarName aliases name = case M.lookup name (aliasesVarRenames aliases) of
+  Just renamed -> renamed
+  Nothing -> name
+
+-- | Generate a unique variable name that doesn't conflict with in-scope names
+uniqueVarName :: Aliases -> Name -> Name
+uniqueVarName aliases name@(Name base) =
+  if S.member name (aliasesInScopeJavaVars aliases)
+    then findUnique 2
+    else name
+  where
+    findUnique n =
+      let candidate = Name (base ++ show n)
+      in if S.member candidate (aliasesInScopeJavaVars aliases)
+         then findUnique (n + 1)
+         else candidate
+
+-- | Add a variable to the in-scope set and return updated aliases
+addInScopeVar :: Name -> Aliases -> Aliases
+addInScopeVar name aliases = aliases {
+  aliasesInScopeJavaVars = S.insert name (aliasesInScopeJavaVars aliases)
+}
+
+-- | Add multiple variables to the in-scope set
+addInScopeVars :: [Name] -> Aliases -> Aliases
+addInScopeVars names aliases = L.foldl (flip addInScopeVar) aliases names
+
+-- | Register a variable rename
+addVarRename :: Name -> Name -> Aliases -> Aliases
+addVarRename original renamed aliases = aliases {
+  aliasesVarRenames = M.insert original renamed (aliasesVarRenames aliases)
+}

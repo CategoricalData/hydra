@@ -82,4 +82,18 @@ public class ZipWith extends PrimitiveFunction {
         }
         return result;
     }
+
+    /**
+     * Combines two lists using a curried function.
+     * @param <X> the first list element type
+     * @param <Y> the second list element type
+     * @param <Z> the result element type
+     * @param f the combining function (curried)
+     * @param lst1 the first list
+     * @param lst2 the second list
+     * @return a list of elements created by applying the function to pairs
+     */
+    public static <X, Y, Z> List<Z> apply(Function<X, Function<Y, Z>> f, List<X> lst1, List<Y> lst2) {
+        return apply((x, y) -> f.apply(x).apply(y), lst1, lst2);
+    }
 }

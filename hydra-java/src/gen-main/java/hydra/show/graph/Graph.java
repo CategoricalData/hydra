@@ -7,7 +7,7 @@ package hydra.show.graph;
  */
 public interface Graph {
   static String graph(hydra.graph.Graph graph) {
-    java.util.List<hydra.core.Binding> elements = hydra.lib.maps.Elems.apply(((graph)).elements);
+    java.util.List<hydra.core.Binding> elements = hydra.lib.maps.Elems.apply(((hydra.graph.Graph) ((graph))).elements);
     java.util.List<String> elementStrs = hydra.lib.lists.Map.apply(
       (hydra.show.core.Core::binding),
       (elements));

@@ -15,14 +15,14 @@ public class Coder<S1, S2, V1, V2> {
   /**
    * A function from source values to a flow of target values
    */
-  public final java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode;
+  public final java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> encode;
   
   /**
    * A function from target values to a flow of source values
    */
-  public final java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode;
+  public final java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> decode;
   
-  public Coder (java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode, java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+  public Coder (java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> encode, java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> decode) {
     java.util.Objects.requireNonNull((encode));
     java.util.Objects.requireNonNull((decode));
     this.encode = encode;
@@ -43,12 +43,12 @@ public class Coder<S1, S2, V1, V2> {
     return 2 * encode.hashCode() + 3 * decode.hashCode();
   }
   
-  public Coder withEncode(java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode) {
+  public Coder withEncode(java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> encode) {
     java.util.Objects.requireNonNull((encode));
     return new Coder(encode, decode);
   }
   
-  public Coder withDecode(java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+  public Coder withDecode(java.util.function.Function<Object, hydra.compute.Flow<Object, Object>> decode) {
     java.util.Objects.requireNonNull((decode));
     return new Coder(encode, decode);
   }

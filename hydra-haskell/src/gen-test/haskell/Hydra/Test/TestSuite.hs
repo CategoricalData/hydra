@@ -14,6 +14,7 @@ import qualified Hydra.Test.Lib.Lists as Lists
 import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
 import qualified Hydra.Test.Lib.Math as Math
+import qualified Hydra.Test.Lib.Maybes as Maybes
 import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -38,5 +39,6 @@ allTests = Testing.TestGroup {
     Literals.allTests,
     Logic.allTests,
     Math.allTests,
+    Maybes.allTests,
     Strings.allTests],
   Testing.testGroupCases = []}

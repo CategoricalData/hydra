@@ -20,9 +20,9 @@ public class Table<V> {
   /**
    * The data rows of the table. Each row must have the same number of cells.
    */
-  public final java.util.List<hydra.tabular.DataRow<V>> data;
+  public final java.util.List<hydra.tabular.DataRow<Object>> data;
   
-  public Table (hydra.util.Maybe<hydra.tabular.HeaderRow> header, java.util.List<hydra.tabular.DataRow<V>> data) {
+  public Table (hydra.util.Maybe<hydra.tabular.HeaderRow> header, java.util.List<hydra.tabular.DataRow<Object>> data) {
     java.util.Objects.requireNonNull((header));
     java.util.Objects.requireNonNull((data));
     this.header = header;
@@ -48,7 +48,7 @@ public class Table<V> {
     return new Table(header, data);
   }
   
-  public Table withData(java.util.List<hydra.tabular.DataRow<V>> data) {
+  public Table withData(java.util.List<hydra.tabular.DataRow<Object>> data) {
     java.util.Objects.requireNonNull((data));
     return new Table(header, data);
   }

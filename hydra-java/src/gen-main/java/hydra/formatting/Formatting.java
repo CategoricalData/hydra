@@ -16,8 +16,8 @@ public interface Formatting {
     java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>> splitOnUppercase = (java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>>) (acc -> (java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.apply(
         hydra.lib.chars.IsUpper.apply((c)),
-        java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
-        (java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of())),
+        java.util.List.of((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of()))),
+        (java.util.List<java.util.List<Integer>>) ((java.util.List) (java.util.List.<java.util.List<Integer>>of()))),
       hydra.lib.lists.Cons.apply(
         hydra.lib.lists.Cons.apply(
           (c),
@@ -27,7 +27,7 @@ public interface Formatting {
       (hydra.lib.strings.FromList::apply),
       hydra.lib.lists.Foldl.apply(
         (splitOnUppercase),
-        java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
+        java.util.List.of((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of()))),
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(hydra.formatting.Formatting.decapitalize((original))))));
     java.util.List<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
       "_",
@@ -147,7 +147,7 @@ public interface Formatting {
   
   static String mapFirstLetter(java.util.function.Function<String, String> mapping, String s) {
     java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
-    String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
+    String firstLetter = (String) ((String) (((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))))));
     return hydra.lib.logic.IfElse.apply(
       hydra.lib.strings.Null.apply((s)),
       (s),
@@ -184,7 +184,7 @@ public interface Formatting {
       Boolean b = ((p)).object2;
       java.util.List<Integer> s = ((p)).object1;
       return hydra.lib.logic.IfElse.apply(
-        ((isAlnum)).apply((c)),
+        (Boolean) ((Boolean) (((isAlnum)).apply((c)))),
         new hydra.util.Tuple.Tuple2(hydra.lib.lists.Cons.apply(
           (c),
           (s)), false),
@@ -197,7 +197,7 @@ public interface Formatting {
     }));
     hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean> result = hydra.lib.lists.Foldl.apply(
       (replace),
-      new hydra.util.Tuple.Tuple2((java.util.List<Integer>) (java.util.List.<Integer>of()), false),
+      new hydra.util.Tuple.Tuple2((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of())), false),
       hydra.lib.strings.ToList.apply((input)));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(((result)).object1));
   }
@@ -291,8 +291,8 @@ public interface Formatting {
             (c),
             9)))),
         hydra.lib.lists.Reverse.apply((trunc)));
-      java.util.List<Integer> prefix = hydra.lib.lists.Reverse.apply(spanResult.object2);
-      java.util.List<Integer> suffix = hydra.lib.lists.Reverse.apply(spanResult.object1);
+      java.util.List<Integer> prefix = hydra.lib.lists.Reverse.apply(((spanResult)).object2);
+      java.util.List<Integer> suffix = hydra.lib.lists.Reverse.apply(((spanResult)).object1);
       return hydra.lib.logic.IfElse.apply(
         hydra.lib.equality.Lte.apply(
           hydra.lib.lists.Length.apply((rem)),
@@ -302,21 +302,21 @@ public interface Formatting {
           (prev))),
         hydra.lib.logic.IfElse.apply(
           hydra.lib.lists.Null.apply((prefix)),
-          ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+          (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply(hydra.lib.lists.Cons.apply(
             (trunc),
-            (prev)))).apply(hydra.lib.lists.Drop.apply(
+            (prev)))))).apply(hydra.lib.lists.Drop.apply(
             (maxlen),
-            (rem))),
-          ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+            (rem))))),
+          (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply(hydra.lib.lists.Cons.apply(
             hydra.lib.lists.Init.apply((prefix)),
-            (prev)))).apply(hydra.lib.lists.Concat2.apply(
+            (prev)))))).apply(hydra.lib.lists.Concat2.apply(
             (suffix),
             hydra.lib.lists.Drop.apply(
               (maxlen),
-              (rem))))));
+              (rem))))))));
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
       java.util.List.of(10),
-      ((helper.get()).apply((java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of()))).apply(hydra.lib.strings.ToList.apply((input)))));
+      (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply((java.util.List<java.util.List<Integer>>) ((java.util.List) (java.util.List.<java.util.List<Integer>>of())))))).apply(hydra.lib.strings.ToList.apply((input)))))));
   }
 }

@@ -10,9 +10,9 @@ public class Flow<S, V> {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<S, V>>> value;
+  public final java.util.function.Function<Object, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<Object, Object>>> value;
   
-  public Flow (java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<S, V>>> value) {
+  public Flow (java.util.function.Function<Object, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<Object, Object>>> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

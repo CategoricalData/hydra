@@ -147,7 +147,8 @@ from hydra.core import *
 from hydra.grammar import *
 from hydra.graph import *
 from hydra.json import *
-from hydra.mantle import *
+# from hydra.meta import *  # meta module no longer exists after refactoring
+from hydra.util import *
 from hydra.module import *
 from hydra.phantoms import *
 from hydra.query import *
