@@ -201,7 +201,7 @@ graphToInferenceContext graph =
   in  
     let primTypes = (Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, (Graph.primitiveType p))) (Maps.elems (Graph.graphPrimitives graph))))
     in  
-      let varTypes = Maps.empty
+      let varTypes = (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) (Maps.elems (Graph.graphElements graph)))))
       in (Flows.bind (schemaGraphToTypingEnvironment schema) (\schemaTypes -> Flows.pure (Typing.InferenceContext {
         Typing.inferenceContextSchemaTypes = schemaTypes,
         Typing.inferenceContextPrimitiveTypes = primTypes,

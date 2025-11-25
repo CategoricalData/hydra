@@ -8,6 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -28,6 +29,13 @@ createOrderingIsomorphism sourceOrd targetOrd =
     in Topology.OrderingIsomorphism {
       Topology.orderingIsomorphismEncode = sourceToTargetMapping,
       Topology.orderingIsomorphismDecode = targetToSourceMapping}
+
+findReachableNodes :: (Ord t0) => ((t0 -> S.Set t0) -> t0 -> S.Set t0)
+findReachableNodes adj root =  
+  let visit = (\visited -> \node ->  
+          let toVisit = (Sets.difference (adj node) visited)
+          in (Logic.ifElse (Sets.null toVisit) visited (Lists.foldl (\v -> \n -> visit (Sets.insert n v) n) visited (Sets.toList toVisit))))
+  in (visit (Sets.singleton root) root)
 
 topologicalSort :: (Ord t0) => ([(t0, [t0])] -> Either [[t0]] [t0])
 topologicalSort pairs =  

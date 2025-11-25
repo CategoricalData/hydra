@@ -68,6 +68,7 @@ module_ = Module (Namespace "hydra.sorting") elements
   where
    elements = [
      el createOrderingIsomorphismDef,
+     el findReachableNodesDef,
      el topologicalSortDef,
      el topologicalSortComponentsDef,
      el topologicalSortNodesDef]
@@ -85,6 +86,21 @@ createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
     "mp" <~ Maps.fromList (Lists.zip (var "targetOrd") (var "els")) $
     Maybes.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "mp")) (var "sourceOrd")) $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
+
+-- Note: not a sorting function
+findReachableNodesDef :: TBinding ((a -> S.Set a) -> a -> S.Set a)
+findReachableNodesDef = define "findReachableNodes" $
+  doc "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)" $
+  "adj" ~> "root" ~>
+  "visit" <~ ("visited" ~> "node" ~>
+    "toVisit" <~ Sets.difference (var "adj" @@ var "node") (var "visited") $
+    Logic.ifElse (Sets.null $ var "toVisit")
+      (var "visited")
+      (Lists.foldl
+        ("v" ~> "n" ~> var "visit" @@ Sets.insert (var "n") (var "v") @@ var "n")
+        (var "visited")
+        (Sets.toList $ var "toVisit"))) $
+  var "visit" @@ Sets.singleton (var "root") @@ var "root"
 
 topologicalSortDef :: TBinding ([(a, [a])] -> Either [[a]] [a])
 topologicalSortDef = define "topologicalSort" $
