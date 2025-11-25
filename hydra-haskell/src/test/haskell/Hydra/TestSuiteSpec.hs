@@ -27,7 +27,7 @@ import qualified Data.Maybe as Y
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
 
 defaultTestRunner :: TestRunner
-defaultTestRunner desc tcase = if Testing.isDisabled tcase
+defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequiresInterp tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) ->

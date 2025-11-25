@@ -86,6 +86,32 @@ findHaskellImports namespaces names = L.map makeImport (M.toList filteredMapping
     nsToModuleName (Namespace ns) =
       Strings.intercalate "." $ Lists.map Formatting.capitalize (Strings.splitOn "." ns)
 
+-- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
+generateTestGroupHierarchy :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> Int -> TestGroup -> Flow Graph String
+generateTestGroupHierarchy infContext namespaces codec depth testGroup = do
+  -- Generate test cases at the current level with proper indentation
+  testCaseLinesRaw <- mapM (generateTestCaseWithCodec infContext namespaces codec depth) (testGroupCases testGroup)
+  let indent = replicate (depth * 2) ' '
+      indentTestCase = L.map (indent ++)
+      testCaseLines = fmap indentTestCase testCaseLinesRaw
+      testCasesStr = L.intercalate "\n" (concat testCaseLines)
+
+  -- Generate H.describe blocks for each subgroup
+  subgroupStrs <- mapM generateSubgroupBlock (testGroupSubgroups testGroup)
+  let subgroupsStr = L.intercalate "\n" subgroupStrs
+
+  -- Combine test cases and subgroups
+  return $ testCasesStr ++ (if null testCasesStr || null subgroupsStr then "" else "\n") ++ subgroupsStr
+  where
+    generateSubgroupBlock :: TestGroup -> Flow Graph String
+    generateSubgroupBlock subgroup = do
+      let indent = replicate (depth * 2) ' '
+      -- Recursively generate content for this subgroup at depth+1 (nested inside this H.describe)
+      subgroupContent <- generateTestGroupHierarchy infContext namespaces codec (depth + 1) subgroup
+      let groupName = testGroupName subgroup
+      -- Generate the H.describe block with proper indentation
+      return $ indent ++ "H.describe " ++ show groupName ++ " $ do\n" ++ subgroupContent
+
 -- | Generic test file generation using a TestCodec
 generateTestFileWithCodec :: TestCodec -> Module -> TestGroup -> Namespaces H.ModuleName -> Flow Graph (FilePath, String)
 generateTestFileWithCodec codec testModule testGroup namespaces = do
@@ -96,11 +122,11 @@ generateTestFileWithCodec codec testModule testGroup namespaces = do
 
   infContext <- graphToInferenceContext g
 
-  -- Generate test cases using the codec's encodeTerm
-  testCases <- mapM (generateTestCaseWithCodec infContext namespaces codec) (collectTestCases testGroup)
+  -- Generate test hierarchy preserving the structure
+  testBody <- generateTestGroupHierarchy infContext namespaces codec 1 testGroup
 
   -- Build the complete test module
-  let testModuleContent = buildTestModuleWithCodec codec testModule testGroup (concat testCases) namespaces
+  let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces
 
   -- Use the codec's file extension for the path
   -- Append "Spec" to the namespace for hspec-discover compatibility
@@ -114,8 +140,8 @@ generateTestFileWithCodec codec testModule testGroup namespaces = do
   return (filePath, testModuleContent)
 
 -- | Generate a single test case using a TestCodec
-generateTestCaseWithCodec :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> TestCaseWithMetadata -> Flow Graph [String]
-generateTestCaseWithCodec infContext namespaces codec (TestCaseWithMetadata name tcase _ _) = case tcase of
+generateTestCaseWithCodec :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Flow Graph [String]
+generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadata name tcase _ _) = case tcase of
   TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
 
     inputCode <- testCodecEncodeTerm codec input
@@ -125,9 +151,10 @@ generateTestCaseWithCodec infContext namespaces codec (TestCaseWithMetadata name
     let formattedName = testCodecFormatTestName codec name
         -- Helper to indent continuation lines to maintain alignment with opening paren
         indentLines n s = L.intercalate ("\n" ++ replicate n ' ') (L.lines s)
-        -- The opening paren is at column 4, so indent continuation lines by 4 spaces
-        indentedInputCode = indentLines 4 inputCode
-        indentedOutputCode = indentLines 4 outputCode
+        -- Continuation lines need: depth*2 (base indent) + 2 ("  (" prefix) + 2 (alignment)
+        continuationIndent = depth * 2 + 4
+        indentedInputCode = indentLines continuationIndent inputCode
+        indentedOutputCode = indentLines continuationIndent outputCode
 
     -- Check if output needs a type annotation (only when BOTH input and output are polymorphic)
     graph <- getState
@@ -137,9 +164,9 @@ generateTestCaseWithCodec infContext namespaces codec (TestCaseWithMetadata name
           Nothing -> (indentedInputCode, indentedOutputCode)
 
     return [
-      "  H.it " ++ show formattedName ++ " $ H.shouldBe",
-      "    (" ++ finalInputCode ++ ")",
-      "    (" ++ finalOutputCode ++ ")"]
+      "H.it " ++ show formattedName ++ " $ H.shouldBe",
+      "  (" ++ finalInputCode ++ ")",
+      "  (" ++ finalOutputCode ++ ")"]
 
   _ -> return []  -- Skip non-delegated tests (shouldn't happen after transform)
 
@@ -173,8 +200,8 @@ isTriviallyPolymorphic term = case term of
   _ -> False
 
 -- | Build the complete test module using a TestCodec
-buildTestModuleWithCodec :: TestCodec -> Module -> TestGroup -> [String] -> Namespaces H.ModuleName -> String
-buildTestModuleWithCodec codec testModule testGroup testCases namespaces = header ++ testBody ++ "\n"
+buildTestModuleWithCodec :: TestCodec -> Module -> TestGroup -> String -> Namespaces H.ModuleName -> String
+buildTestModuleWithCodec codec testModule testGroup testBody namespaces = header ++ testBody ++ "\n"
   where
     -- Append "Spec" to module name for hspec-discover compatibility
     Namespace ns = moduleNamespace testModule
@@ -213,7 +240,6 @@ buildTestModuleWithCodec codec testModule testGroup testCases namespaces = heade
         "spec :: H.Spec",
         "spec = H.describe " ++ show groupName ++ " $ do"
       ])
-    testBody = L.intercalate "\n" testCases
 
 -- | Convert namespace to Haskell module name
 -- Uses the same logic as the Haskell coder's importName function
