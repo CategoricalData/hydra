@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Staging.Testing.Generation.Transform (collectTestCases)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..))
+import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import qualified Hydra.Ext.Haskell.Coder as HaskellCoder
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
 import qualified Hydra.Ext.Haskell.Serde as HaskellSerde
@@ -217,7 +217,11 @@ buildTestModuleWithCodec codec testModule testGroup testBody namespaces = header
     -- Standard imports that are always needed for Haskell
     standardImports = [
       "import Hydra.Kernel",
-      "import qualified Test.Hspec as H"]
+      "import qualified Test.Hspec as H",
+      "import qualified Data.List as L",
+      "import qualified Data.Map as M",
+      "import qualified Data.Set as S",
+      "import qualified Data.Maybe as Y"]
 
     allImports = standardImports ++ domainImports
 
