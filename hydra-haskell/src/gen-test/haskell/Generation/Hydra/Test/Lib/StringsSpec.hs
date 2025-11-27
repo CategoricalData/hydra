@@ -8,6 +8,10 @@ module Generation.Hydra.Test.Lib.StringsSpec where
 
 import Hydra.Kernel
 import qualified Test.Hspec as H
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
+import qualified Data.Maybe as Y
 import qualified Hydra.Lib.Strings as Strings
 
 spec :: H.Spec
@@ -104,7 +108,7 @@ spec = H.describe "hydra.lib.strings primitives" $ do
     H.it "multi-byte unicode" $ H.shouldBe
       (Strings.charAt 0 "\19990")
       (19990)
-    H.it "second of combining tuple2" $ H.shouldBe
+    H.it "second of combining pair" $ H.shouldBe
       (Strings.charAt 1 "e\769")
       (769)
   H.describe "fromList" $ do
