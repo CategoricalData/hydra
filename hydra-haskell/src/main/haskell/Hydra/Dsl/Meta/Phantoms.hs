@@ -127,11 +127,6 @@ exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
 field :: Name -> TTerm a -> Field
 field fname (TTerm val) = Field fname val
 
--- | First element projection function for pairs
--- Example: first $ pair (string "foo") (string "bar")
-first :: TTerm (a, b) -> TTerm a
-first pair = TTerm (Terms.untuple 2 0) @@ pair
-
 -- | Mark a type as first-class
 -- Example: firstClassType (record ...)
 firstClassType :: TTerm Type -> TTerm Type
@@ -237,10 +232,10 @@ opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
 optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
 optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
 
--- | Create a 2-tuple
--- Example: tuple2 (string "age") (int32 32)
-tuple2 :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
-tuple2 (TTerm l) (TTerm r) = TTerm $ Terms.tuple2 l r
+-- | Create a pair
+-- Example: pair (string "age") (int32 32)
+pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
+pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
 
 -- | Primitive function by name
 -- Example: primitive (Name "hydra.lib.strings.length")
@@ -279,11 +274,6 @@ record name fields = TTerm $ Terms.record name fields
 -- Example: ref (definitionInModule myModule "addInts")
 ref :: TBinding a -> TTerm a
 ref (TBinding name _) = TTerm (TermVariable name)
-
--- | Second element projection function for pairs
--- Example: second $ pair (string "foo") (string "bar")
-second :: TTerm (a, b) -> TTerm b
-second pair = TTerm (Terms.untuple 2 1) @@ pair
 
 -- | Create a set of terms
 -- Example: set [string "a", string "b", string "c"]

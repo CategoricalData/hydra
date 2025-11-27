@@ -467,7 +467,7 @@ termDef = define "Term" $
     ecase _Term_literal (ref literalDef),
     ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref termDef @@ ref termDef @@ var "v"),
     ecase2 _Term_maybe $ encodedOptional (primitive _maybes_map @@ ref termDef @@ var "v"),
-    ecase2 _Term_pair $ encodedPair (tuple2 (ref termDef @@ (first $ var "v")) (ref termDef @@ (second $ var "v"))),
+    ecase2 _Term_pair $ encodedPair (pair (ref termDef @@ (Pairs.first $ var "v")) (ref termDef @@ (Pairs.second $ var "v"))),
     ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref termDef @@ var "v"),
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",

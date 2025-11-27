@@ -95,8 +95,8 @@ allTestsDef = define "allTests" $
                 (list [project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName"), toLower])
                 (list [lambda "v1" $ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName") @@ var "v1", toLower]),
               testCase "projection in a tuple"
-                (tuple2 (project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName")) ( string "default"))
-                (tuple2 (lambda "v1" $ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName") @@ var "v1") ( string "default")),
+                (pair (project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName")) ( string "default"))
+                (pair (lambda "v1" $ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName") @@ var "v1") ( string "default")),
               testCase "projection in let binding"
                 (lets ["getter">: project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName")] (var "getter"))
                 (lets ["getter">: lambda "v1" $ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName") @@ var "v1"] (var "getter")),

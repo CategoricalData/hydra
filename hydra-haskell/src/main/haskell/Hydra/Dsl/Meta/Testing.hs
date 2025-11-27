@@ -36,6 +36,14 @@ primCaseWithTags cname tags primName args output = testCaseWithMetadata (Phantom
   where
     input = L.foldl (MetaTerms.@@) (MetaTerms.primitive primName) args
 
+evalCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+evalCase cname input output = evalCaseWithTags cname [] input output
+
+evalCaseWithTags :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+evalCaseWithTags cname tags input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseEvaluation $ evaluationTestCase evaluationStyleEager input output)
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+
 infFailureTest :: String -> [Tag] -> TTerm Term -> TTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
   (testCaseInferenceFailure $ inferenceFailureTestCase term) nothing (Phantoms.list $ tag . unTag <$> tags)

@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -36,8 +37,8 @@ applicationPattern name args = (Ast.PatternApplication (Ast.ApplicationPattern {
 elementReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Ast.Name)
 elementReference namespaces name =  
   let namespacePair = (Module.namespacesFocus namespaces) 
-      gname = (fst namespacePair)
-      gmod = (Ast.unModuleName (snd namespacePair))
+      gname = (Pairs.first namespacePair)
+      gmod = (Ast.unModuleName (Pairs.second namespacePair))
       namespacesMap = (Module.namespacesMapping namespaces)
       qname = (Names.qualifyName name)
       local = (Module.qualifiedNameLocal qname)
@@ -75,7 +76,7 @@ namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True T
       nssPairs = (Lists.map toPair nssAsList)
       emptyState = (Maps.empty, Sets.empty)
       finalState = (Lists.foldl addPair emptyState nssPairs)
-      resultMap = (fst finalState)
+      resultMap = (Pairs.first finalState)
       toModuleName = (\namespace ->  
               let namespaceStr = (Module.unNamespace namespace) 
                   parts = (Strings.splitOn "." namespaceStr)
@@ -84,10 +85,10 @@ namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True T
               in (Ast.ModuleName capitalized))
       toPair = (\name -> (name, (toModuleName name)))
       addPair = (\state -> \namePair ->  
-              let currentMap = (fst state) 
-                  currentSet = (snd state)
-                  name = (fst namePair)
-                  alias = (snd namePair)
+              let currentMap = (Pairs.first state) 
+                  currentSet = (Pairs.second state)
+                  name = (Pairs.first namePair)
+                  alias = (Pairs.second namePair)
                   aliasStr = (Ast.unModuleName alias)
               in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Ast.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet))))
   in (Flows.pure (Module.Namespaces {
@@ -168,7 +169,7 @@ unpackForallType cx t = ((\x -> case x of
     let v = (Core.forallTypeParameter v1) 
         tbody = (Core.forallTypeBody v1)
         recursiveResult = (unpackForallType cx tbody)
-        vars = (fst recursiveResult)
-        finalType = (snd recursiveResult)
+        vars = (Pairs.first recursiveResult)
+        finalType = (Pairs.second recursiveResult)
     in (Lists.cons v vars, finalType)
   _ -> ([], t)) (Rewriting.deannotateType t))

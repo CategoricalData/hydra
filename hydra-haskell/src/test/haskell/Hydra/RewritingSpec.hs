@@ -62,9 +62,9 @@ checkFoldOverTerm = do
           (traverse TraversalOrderPost node2)
           ["b", "d", "c", "a"]
   where
-    node label children = Terms.tuple2 (Terms.string label) (Terms.list children)
+    node label children = Terms.pair (Terms.string label) (Terms.list children)
     labelOf term = case term of
-      TermProduct [TermLiteral (LiteralString label), _] -> Just label
+      TermPair (TermLiteral (LiteralString label), _) -> Just label
       _ -> Nothing
     traverse :: TraversalOrder -> Term -> [String]
     traverse order = Y.catMaybes . foldOverTerm order (\l t -> l ++ [labelOf t]) []
@@ -371,7 +371,7 @@ testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
         (lets ["x">: int32 42] (var "x"))
 
       noChange "let without lambda in body"
-        (lets ["x">: int32 42, "y">: string "hello"] (tuple2 (var "x") (var "y")))
+        (lets ["x">: int32 42, "y">: string "hello"] (pair (var "x") (var "y")))
 
       noChange "lambda with let in body"
         (lambda "y" $ lets ["x">: int32 42] (var "x"))
@@ -497,18 +497,18 @@ testLiftLambdaAboveLet = H.describe "liftLambdaAboveLet" $ do
             var "f")
 
         liftsTo "let-lambda inside a pair"
-          (tuple2
+          (pair
             (lets ["x">: int32 42] $ lambda "y" $ var "x")
             (string "test"))
-          (tuple2
+          (pair
             (lambda "y" $ lets ["x">: int32 42] $ var "x")
             (string "test"))
 
         liftsTo "let-lambda in both elements of a pair"
-          (tuple2
+          (pair
             (lets ["x">: int32 1] $ lambda "y" $ var "x")
             (lets ["z">: int32 2] $ lambda "w" $ var "z"))
-          (tuple2
+          (pair
             (lambda "y" $ lets ["x">: int32 1] $ var "x")
             (lambda "w" $ lets ["z">: int32 2] $ var "z"))
 
@@ -592,13 +592,13 @@ testNormalizeTypeVariablesInTerm = do
             ("id2", Just ft1t1, lambdaTyped "x" t1 $ var "x")])])
       H.it "No shadowing, locally free type variable" $ changesTo
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [Types.var "a", Types.var "b", Types.tuple2 (Types.var "a") (Types.var "b")]), lambdaTyped "x" (Types.var "a") $ lambdaTyped "y" (Types.var "b") $
+          ("fun1", Just (Types.poly ["a", "b"] $ Types.functionMany [Types.var "a", Types.var "b", Types.pair (Types.var "a") (Types.var "b")]), lambdaTyped "x" (Types.var "a") $ lambdaTyped "y" (Types.var "b") $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["c"] $ Types.function (Types.var "c") $ Types.tuple2 (Types.var "c") (Types.var "b")), lambdaTyped "z" (Types.var "c") $ tuple2 (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["c"] $ Types.function (Types.var "c") $ Types.pair (Types.var "c") (Types.var "b")), lambdaTyped "z" (Types.var "c") $ pair (var "z") (var "y"))])])
         (tlet (var "fun1" @@ string "foo" @@ int32 42) [
-          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, Types.tuple2 t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
+          ("fun1", Just (Types.poly ["t0", "t1"] $ Types.functionMany [t0, t1, Types.pair t0 t1]), lambdaTyped "x" t0 $ lambdaTyped "y" t1 $
             tlet (var "fun2" @@ var "x") [
-              ("fun2", Just (Types.poly ["t2"] $ Types.function t2 $ Types.tuple2 t2 t1), lambdaTyped "z" t2 $ tuple2 (var "z") (var "y"))])])
+              ("fun2", Just (Types.poly ["t2"] $ Types.function t2 $ Types.pair t2 t1), lambdaTyped "z" t2 $ pair (var "z") (var "y"))])])
   where
     normalize = normalizeTypeVariablesInTerm
     changesTo term1 term2 = H.shouldBe (normalize term1) term2
@@ -738,8 +738,8 @@ testRewriteFunctionReachesSubterms functionName function = H.describe ("Test tha
       (record (Name "Data") ["a">: bar, "b">: baz, "c">: bar])
 
     checkRewrite "string in tuple"
-      (tuple2 foo (int32 42))
-      (tuple2 bar (int32 42))
+      (pair foo (int32 42))
+      (pair bar (int32 42))
 
   H.describe "Let bindings" $ do
     checkRewrite "string in let binding value"

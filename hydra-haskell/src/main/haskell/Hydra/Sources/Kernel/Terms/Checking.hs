@@ -279,8 +279,8 @@ checkTypeSubstDef = define "checkTypeSubst" $
     ("v" ~> Maybes.maybe false (var "isNominal") $
       ref Lexical.dereferenceSchemaTypeDef @@ var "v" @@ (Typing.inferenceContextSchemaTypes $ var "cx"))
     (Sets.toList $ var "suspectVars")) $
-  "badPairs" <~ Lists.filter ("p" ~> Sets.member (first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
-  "printPair" <~ ("p" ~> (Core.unName $ first $ var "p") ++ " --> " ++ (ref ShowCore.typeDef @@ second (var "p"))) $
+  "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
+  "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ " --> " ++ (ref ShowCore.typeDef @@ Pairs.second (var "p"))) $
   Logic.ifElse (Sets.null $ var "badVars")
     (produce $ var "subst")
     (Flows.fail $ "Schema type(s) incorrectly unified: {"
@@ -405,7 +405,7 @@ typeOfApplicationDef = define "typeOfApplication" $
       ref ShowCore.typeDef @@ var "tfun",
       ")",
       ". types: ", Strings.intercalate ", " (Lists.map
-        ("p" ~> Strings.cat $ list [Core.unName (first $ var "p"), ": ", ref ShowCore.typeDef @@ (second $ var "p")]) $
+        ("p" ~> Strings.cat $ list [Core.unName (Pairs.first $ var "p"), ": ", ref ShowCore.typeDef @@ (Pairs.second $ var "p")]) $
         Maps.toList $ Typing.typeContextTypes $ var "tx")]) [
     -- These forall types can arise from bindUnboundTypeVariables
     _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")) @@ var "targ",
@@ -573,11 +573,11 @@ typeOfMapDef = define "typeOfMap" $
     "pairs" <~ Maps.toList (var "m") $
     "kt" <<~ Flows.bind
       (Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) $
-        Lists.map (unaryFunction first) (var "pairs"))
+        Lists.map (unaryFunction Pairs.first) (var "pairs"))
       (ref checkSameTypeDef @@ var "tx" @@ string "map keys") $
     "vt" <<~ Flows.bind
       (Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) $
-        Lists.map (unaryFunction second) (var "pairs"))
+        Lists.map (unaryFunction Pairs.second) (var "pairs"))
       (ref checkSameTypeDef @@ var "tx" @@ string "map values") $
     exec (ref checkTypeVariablesDef @@ var "tx" @@ var "kt") $
     exec (ref checkTypeVariablesDef @@ var "tx" @@ var "vt") $
@@ -614,16 +614,16 @@ typeOfMaybeDef = define "typeOfMaybe" $
 
 typeOfPairDef :: TBinding (TypeContext -> [Type] -> (Term, Term) -> Flow s Type)
 typeOfPairDef = define "typeOfPair" $
-  doc "Reconstruct the type of a tuple2" $
+  doc "Reconstruct the type of a pair" $
   "tx" ~> "typeArgs" ~> "p" ~>
   "checkLength" <~ (
     "n" <~ Lists.length (var "typeArgs") $
     Logic.ifElse (Equality.equal (var "n") (int32 2))
       (Flows.pure unit)
-      (Flows.fail $ "tuple2 type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
+      (Flows.fail $ "pair type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
   exec (var "checkLength") $
-  "pairFst" <~ first (var "p") $
-  "pairSnd" <~ second (var "p") $
+  "pairFst" <~ Pairs.first (var "p") $
+  "pairSnd" <~ Pairs.second (var "p") $
   "firstType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "pairFst" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "firstType") $
   "secondType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "pairSnd" $

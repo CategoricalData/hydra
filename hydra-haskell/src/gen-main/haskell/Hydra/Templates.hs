@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -26,9 +27,9 @@ import qualified Data.Set as S
 graphToSchema :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 graphToSchema g =  
   let toPair = (\nameAndEl ->  
-          let name = (fst nameAndEl)
+          let name = (Pairs.first nameAndEl)
           in  
-            let el = (snd nameAndEl)
+            let el = (Pairs.second nameAndEl)
             in (Flows.bind (Monads.withTrace "graph to schema" (Core_.type_ (Core.bindingTerm el))) (\t -> Flows.pure (name, t))))
   in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
 

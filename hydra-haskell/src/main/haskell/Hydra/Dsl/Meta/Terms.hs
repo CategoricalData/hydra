@@ -90,9 +90,6 @@ false = boolean False
 field :: String -> TTerm Term -> TTerm Field
 field s = Core.field (name s)
 
-first :: TTerm Term -> TTerm Term
-first pair = untuple 2 0 @@ pair
-
 -- | Create a term-encoded 32-bit floating point literal
 -- Example: float32 3.14
 float32 :: Float -> TTerm Term
@@ -230,7 +227,7 @@ optional = Core.termMaybe
 -- | Create a term-encoded pair
 -- Example: pair (string "name") (int32 42)
 pair :: TTerm Term -> TTerm Term -> TTerm Term
-pair t1 t2 = Core.termPair $ Phantoms.tuple2 t1 t2
+pair t1 t2 = Core.termPair $ Phantoms.pair t1 t2
 
 -- | Create a term-encoded primitive function reference
 -- Example: primitive (Name "hydra.lib.strings.length")
@@ -257,9 +254,6 @@ record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField 
 -- Example: right (int32 42)
 right :: TTerm Term -> TTerm Term
 right t = Core.termEither $ Phantoms.right t
-
-second :: TTerm Term -> TTerm Term
-second pair = untuple 2 1 @@ pair
 
 -- | Create a term-encoded set
 -- Example: set [string "a", string "b", string "c"]
@@ -289,6 +283,11 @@ true = boolean True
 -- Example: tuple [string "name", int32 42, boolean True]
 tuple :: [TTerm Term] -> TTerm Term
 tuple = Core.termProduct . Phantoms.list
+
+-- | Create a term-encoded 2-tuple
+-- Example: tuple2 (string "name") (int32 42)
+tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
+tuple2 t1 t2 = tuple [t1, t2]
 
 -- | Create a term-encoded 8-bit unsigned integer literal
 -- Example: uint8 255
@@ -447,11 +446,6 @@ compose f g = lambda "arg_" $ f @@ (g @@ var "arg_")
 -- Example: identity
 identity :: TTerm Term
 identity = lambda "x_" $ var "x_"
-
--- | Create a term-encoded 2-tuple
--- Example: tuple2 (string "name") (int32 42)
-tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
-tuple2 t1 t2 = tuple [t1, t2]
 
 -- | Create a term-encoded 3-tuple
 -- Example: triple (int32 1) (string "test") (boolean True)

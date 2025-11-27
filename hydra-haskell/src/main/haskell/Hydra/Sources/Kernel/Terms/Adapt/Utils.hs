@@ -197,26 +197,25 @@ typeIsSupportedDef = define "typeIsSupported" $
   "isSupported" <~ ("base" ~> cases _Type (var "base")
     Nothing [
     _Type_annotated>>: "at" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.annotatedTypeBody (var "at"),
-    _Type_application>>: "app" ~>
-      Logic.and
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
-    _Type_either>>: "et" ~>
-      Logic.and
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeLeft (var "et"))
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeRight (var "et")),
+    _Type_application>>: "app" ~> Logic.and
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeFunction (var "app"))
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.applicationTypeArgument (var "app")),
+    _Type_either>>: "et" ~> Logic.and
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeLeft (var "et"))
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.eitherTypeRight (var "et")),
     _Type_forall>>: "ft" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.forallTypeBody (var "ft"),
-    _Type_function>>: "ft" ~>
-      Logic.and
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
+    _Type_function>>: "ft" ~> Logic.and
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeDomain (var "ft"))
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.functionTypeCodomain (var "ft")),
     _Type_list>>: "lt" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "lt",
     _Type_literal>>: "at" ~> ref literalTypeIsSupportedDef @@ var "constraints" @@ var "at",
-    _Type_map>>: "mt" ~>
-      Logic.and
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
-        (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
+    _Type_map>>: "mt" ~> Logic.and
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeKeys (var "mt"))
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.mapTypeValues (var "mt")),
     _Type_maybe>>: "ot" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "ot",
+    _Type_pair>>: "pt" ~> Logic.and
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.pairTypeFirst (var "pt"))
+      (ref typeIsSupportedDef @@ var "constraints" @@ Core.pairTypeSecond (var "pt")),
     _Type_product>>: "types" ~>
       andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
     _Type_record>>: "rt" ~>

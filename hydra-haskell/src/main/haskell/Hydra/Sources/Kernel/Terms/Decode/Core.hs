@@ -80,6 +80,7 @@ module_ = Module (Namespace "hydra.decode.core") elements
      el literalTypeDef,
      el mapTypeDef,
      el nameDef,
+     el pairTypeDef,
      el rowTypeDef,
      el stringDef,
      el typeDef,
@@ -128,9 +129,9 @@ floatTypeDef = define "floatType" $
   "term0" ~>
   trace ("dbg 1") $
   ref Lexical.matchEnumDef @@ Core.nameLift _FloatType @@ list [
-    tuple2 (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
-    tuple2 (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
-    tuple2 (Core.nameLift _FloatType_float64) Core.floatTypeFloat64] @@ var "term0"
+    pair (Core.nameLift _FloatType_bigfloat) Core.floatTypeBigfloat,
+    pair (Core.nameLift _FloatType_float32) Core.floatTypeFloat32,
+    pair (Core.nameLift _FloatType_float64) Core.floatTypeFloat64] @@ var "term0"
 
 forallTypeDef :: TBinding (Term -> Flow Graph ForallType)
 forallTypeDef = define "forallType" $
@@ -154,15 +155,15 @@ integerTypeDef = define "integerType" $
   "term0" ~>
   trace ("dbg 1") $
   ref Lexical.matchEnumDef @@ Core.nameLift _IntegerType @@ list [
-    tuple2 (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
-    tuple2 (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
-    tuple2 (Core.nameLift _IntegerType_int16) Core.integerTypeInt16,
-    tuple2 (Core.nameLift _IntegerType_int32) Core.integerTypeInt32,
-    tuple2 (Core.nameLift _IntegerType_int64) Core.integerTypeInt64,
-    tuple2 (Core.nameLift _IntegerType_uint8) Core.integerTypeUint8,
-    tuple2 (Core.nameLift _IntegerType_uint16) Core.integerTypeUint16,
-    tuple2 (Core.nameLift _IntegerType_uint32) Core.integerTypeUint32,
-    tuple2 (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64] @@ var "term0"
+    pair (Core.nameLift _IntegerType_bigint) Core.integerTypeBigint,
+    pair (Core.nameLift _IntegerType_int8) Core.integerTypeInt8,
+    pair (Core.nameLift _IntegerType_int16) Core.integerTypeInt16,
+    pair (Core.nameLift _IntegerType_int32) Core.integerTypeInt32,
+    pair (Core.nameLift _IntegerType_int64) Core.integerTypeInt64,
+    pair (Core.nameLift _IntegerType_uint8) Core.integerTypeUint8,
+    pair (Core.nameLift _IntegerType_uint16) Core.integerTypeUint16,
+    pair (Core.nameLift _IntegerType_uint32) Core.integerTypeUint32,
+    pair (Core.nameLift _IntegerType_uint64) Core.integerTypeUint64] @@ var "term0"
 
 literalTypeDef :: TBinding (Term -> Flow Graph LiteralType)
 literalTypeDef = define "literalType" $
@@ -172,10 +173,10 @@ literalTypeDef = define "literalType" $
   ref Lexical.matchUnionDef @@ Core.nameLift _LiteralType @@ list [
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_binary @@ Core.literalTypeBinary,
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_boolean @@ Core.literalTypeBoolean,
-    tuple2
+    pair
      (Core.nameLift _LiteralType_float)
      (lambda "ft" $ Flows.map (unaryFunction Core.literalTypeFloat) (ref floatTypeDef @@ var "ft")),
-    tuple2
+    pair
       (Core.nameLift _LiteralType_integer)
       (lambda "it" $ Flows.map (unaryFunction Core.literalTypeInteger) (ref integerTypeDef @@ var "it")),
     ref Lexical.matchUnitFieldDef @@ Core.nameLift _LiteralType_string @@ Core.literalTypeString] @@ var "term0"
@@ -194,6 +195,14 @@ nameDef = define "name" $
   lambda "term" $ Flows.map (unaryFunction Core.name) $
     Flows.bind (ref ExtractCore.wrapDef @@ Core.nameLift _Name @@ var "term") $
     ref ExtractCore.stringDef
+
+pairTypeDef :: TBinding (Term -> Flow Graph PairType)
+pairTypeDef = define "pairType" $
+  doc "Decode a pair type from a term" $
+  ref Lexical.matchRecordDef @@ (lambda "m" $ binds [
+   "first">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _PairType_first @@ ref typeDef,
+   "second">: ref Lexical.getFieldDef @@ var "m" @@ Core.nameLift _PairType_second @@ ref typeDef] $
+   produce $ Core.pairType (var "first") (var "second"))
 
 rowTypeDef :: TBinding (Term -> Flow Graph RowType)
 rowTypeDef = define "rowType" $
@@ -214,52 +223,55 @@ typeDef = define "type" $
   lambda "dat" $
   cases _Term (var "dat")
     (Just $ trace ("dbg 4") $ ref Lexical.matchUnionDef @@ Core.nameLift _Type @@ list [
-      tuple2
+      pair
         (Core.nameLift _Type_application)
         (lambda "at" $ Flows.map (unaryFunction Core.typeApplication) $ ref applicationTypeDef @@ var "at"),
-      tuple2
+      pair
         (Core.nameLift _Type_either)
         (lambda "et" $ Flows.map (unaryFunction Core.typeEither) $ ref eitherTypeDef @@ var "et"),
-      tuple2
+      pair
         (Core.nameLift _Type_forall)
         (lambda "ft" $ Flows.map (unaryFunction Core.typeForall) $ ref forallTypeDef @@ var "ft"),
-      tuple2
+      pair
         (Core.nameLift _Type_function)
         (lambda "ft" $ Flows.map (unaryFunction Core.typeFunction) $ ref functionTypeDef @@ var "ft"),
-      tuple2
+      pair
         (Core.nameLift _Type_list)
         (lambda "et" $ Flows.map (unaryFunction Core.typeList) $ ref typeDef @@ var "et"),
-      tuple2
+      pair
         (Core.nameLift _Type_literal)
         (lambda "lt" $ Flows.map (unaryFunction Core.typeLiteral) $ ref literalTypeDef @@ var "lt"),
-      tuple2
+      pair
         (Core.nameLift _Type_map)
         (lambda "mt" $ Flows.map (unaryFunction Core.typeMap) $ ref mapTypeDef @@ var "mt"),
-      tuple2
+      pair
         (Core.nameLift _Type_maybe)
         (lambda "et" $ Flows.map (unaryFunction Core.typeMaybe) $ ref typeDef @@ var "et"),
-      tuple2
+      pair
+        (Core.nameLift _Type_pair)
+        (lambda "pt" $ Flows.map (unaryFunction Core.typePair) $ ref pairTypeDef @@ var "pt"),
+      pair
         (Core.nameLift _Type_product)
         (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      tuple2
+      pair
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref rowTypeDef @@ var "rt"),
-      tuple2
+      pair
         (Core.nameLift _Type_set)
         (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref typeDef @@ var "et"),
-      tuple2
+      pair
         (Core.nameLift _Type_sum)
         (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      tuple2
+      pair
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
-      tuple2
+      pair
         (Core.nameLift _Type_unit)
         (constant $ Flows.pure Core.typeUnit),
-      tuple2
+      pair
         (Core.nameLift _Type_variable)
         (lambda "n" $ Flows.map (unaryFunction Core.typeVariable) $ ref nameDef @@ var "n"),
-      tuple2
+      pair
         (Core.nameLift _Type_wrap)
         (lambda "wt" $ Flows.map (unaryFunction Core.typeWrap) $ ref wrappedTypeDef @@ var "wt")] @@ var "dat") [
     _Term_annotated>>: lambda "annotatedTerm" $

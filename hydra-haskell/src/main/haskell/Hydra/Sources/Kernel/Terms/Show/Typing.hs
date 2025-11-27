@@ -89,9 +89,9 @@ typeSubstDef = define "typeSubst" $
   lambda "ts" $ lets [
     "subst">: Typing.unTypeSubst $ var "ts",
     "pairs">: Maps.toList $ var "subst",
-    "showPair">: lambda "tuple2" $ lets [
-      "name">: unwrap _Name @@ (first $ var "tuple2"),
-      "typ">: second $ var "tuple2"] $
+    "showPair">: lambda "pair" $ lets [
+      "name">: unwrap _Name @@ (Pairs.first $ var "pair"),
+      "typ">: Pairs.second $ var "pair"] $
       Strings.cat $ list [
         var "name",
         string "↦",

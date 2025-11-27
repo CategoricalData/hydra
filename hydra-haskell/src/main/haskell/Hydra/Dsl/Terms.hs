@@ -239,11 +239,6 @@ optional = TermMaybe
 pair :: Term -> Term -> Term
 pair a b = TermPair (a, b)
 
--- | Create a 2-tuple
--- Example: tuple2 (string "name") (int32 42)
-tuple2 :: Term -> Term -> Term
-tuple2 a b = TermProduct [a, b]
-
 -- | Create a primitive function
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> Term

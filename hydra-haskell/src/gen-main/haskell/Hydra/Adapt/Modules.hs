@@ -18,6 +18,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -47,10 +48,10 @@ adaptedModuleDefinitions lang mod =
   in  
     let adaptersFor = (\types -> Flows.bind (Flows.mapList (languageAdapter lang) types) (\adapters -> Flows.pure (Maps.fromList (Lists.zip types adapters))))
     in  
-      let classify = (\adapters -> \tuple2 ->  
-              let el = (fst tuple2)
+      let classify = (\adapters -> \pair ->  
+              let el = (Pairs.first pair)
               in  
-                let tt = (snd tuple2)
+                let tt = (Pairs.second pair)
                 in  
                   let term = (Core.typeApplicationTermBody tt)
                   in  
@@ -79,9 +80,9 @@ languageAdapter lang typ =
             Coders.adapterContextLanguage = lang,
             Coders.adapterContextAdapters = Maps.empty}
     in (Flows.bind (Monads.withState cx0 (getPair typ)) (\result ->  
-      let adapter = (fst result)
+      let adapter = (Pairs.first result)
       in  
-        let cx = (snd result)
+        let cx = (Pairs.second result)
         in  
           let encode = (\term -> Monads.withState cx (Compute.coderEncode (Compute.adapterCoder adapter) term))
           in  

@@ -322,16 +322,14 @@ testGroupForLet = Testing.TestGroup {
                 Core.letBindings = [
                   Core.Binding {
                     Core.bindingName = (Core.Name "bar"),
-                    Core.bindingTerm = (Core.TermProduct [
-                      Core.TermVariable (Core.Name "foo"),
-                      (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))]),
+                    Core.bindingTerm = (Core.TermPair (Core.TermVariable (Core.Name "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))))),
                     Core.bindingType = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "bar"))}))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -370,21 +368,17 @@ testGroupForLet = Testing.TestGroup {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "sng")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
                     Core.bindingType = Nothing}],
-                Core.letBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "foo"),
-                  (Core.TermProduct [
-                    Core.TermVariable (Core.Name "bar"),
-                    (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "quux")),
-                      Core.applicationArgument = (Core.TermList [])}))])])}))})),
+                Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "foo"), (Core.TermPair (Core.TermVariable (Core.Name "bar"), (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "quux")),
+                  Core.applicationArgument = (Core.TermList [])}))))))}))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                (Core.TypeProduct [
-                  Core.TypeList (Core.TypeLiteral Core.LiteralTypeString),
-                  (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))])])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
+                  Core.pairTypeSecond = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -432,14 +426,12 @@ testGroupForLet = Testing.TestGroup {
                     Core.bindingName = (Core.Name "foo"),
                     Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137))),
                     Core.bindingType = Nothing}],
-                Core.letBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "bar"),
-                  (Core.TermVariable (Core.Name "foo"))])}))})),
+                Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "bar"), (Core.TermVariable (Core.Name "foo"))))}))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeString,
-                (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -631,18 +623,16 @@ testGroupForLet = Testing.TestGroup {
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-                (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])})),
+              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -658,18 +648,16 @@ testGroupForLet = Testing.TestGroup {
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "x")])}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-                (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))])})),
+              Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -696,13 +684,11 @@ testGroupForLet = Testing.TestGroup {
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
-                          Core.applicationArgument = (Core.TermProduct [
-                            Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}),
-                            (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))])})),
+                          Core.applicationArgument = (Core.TermPair (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}), (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))})),
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -727,9 +713,9 @@ testGroupForLet = Testing.TestGroup {
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeList (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeVariable (Core.Name "t0"))]))}})),
+              Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))})))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabled"]},
@@ -757,14 +743,12 @@ testGroupForLet = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "fortytwo"),
-                (Core.TermVariable (Core.Name "foo"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "fortytwo"), (Core.TermVariable (Core.Name "foo"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -792,14 +776,12 @@ testGroupForLet = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "fortytwo"),
-                (Core.TermVariable (Core.Name "foo"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "fortytwo"), (Core.TermVariable (Core.Name "foo"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -851,16 +833,14 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingName = (Core.Name "y"),
                   Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "y"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeVariable (Core.Name "t0"),
-                (Core.TypeVariable (Core.Name "t1"))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -896,24 +876,22 @@ testGroupForLet = Testing.TestGroup {
                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "f"),
-                (Core.TermVariable (Core.Name "g"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}),
-                (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))})),
+                Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v0")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))])}})),
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabled"]},
@@ -973,13 +951,11 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "p0"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermProduct [
-                      Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}),
-                      (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}))])}))),
+                    Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}), (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "p0"))}))))}))),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
@@ -1003,20 +979,18 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingName = (Core.Name "z"),
                   Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "z"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "z"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}),
-                (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))])}})),
+                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -1039,27 +1013,23 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingName = (Core.Name "w"),
                   Core.bindingTerm = (Core.TermVariable (Core.Name "z")),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermProduct [
-                  Core.TermVariable (Core.Name "w"),
-                  (Core.TermVariable (Core.Name "z"))])])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermPair (Core.TermVariable (Core.Name "w"), (Core.TermVariable (Core.Name "z"))))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 Core.Name "t1",
                 (Core.Name "t2")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}),
-                (Core.TypeProduct [
-                  Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}),
-                  (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))})),
+                  Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t2"))}))])])}})),
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t2"))}))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -1092,14 +1062,12 @@ testGroupForLet = Testing.TestGroup {
                     Core.applicationArgument = (Core.TermList [
                       Core.TermVariable (Core.Name "f")])})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "f"),
-                (Core.TermVariable (Core.Name "g"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -1131,14 +1099,12 @@ testGroupForLet = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermList [
                         Core.TermVariable (Core.Name "f")])}))})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "f"),
-                (Core.TermVariable (Core.Name "g"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -1171,14 +1137,12 @@ testGroupForLet = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermList [
                         Core.TermVariable (Core.Name "f")])}))})),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "f"),
-                (Core.TermVariable (Core.Name "g"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -1279,22 +1243,20 @@ testGroupForLet = Testing.TestGroup {
                             Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "b0"))}))}))})))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "inst"),
-                (Core.TermVariable (Core.Name "rec"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "inst"), (Core.TermVariable (Core.Name "rec"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeBoolean,
-                (Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))])}})),
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -1323,19 +1285,17 @@ testGroupForLet = Testing.TestGroup {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "inst"),
-                (Core.TermVariable (Core.Name "rec"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "inst"), (Core.TermVariable (Core.Name "rec"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeBoolean,
-                (Core.TypeFunction (Core.FunctionType {
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))])}})),
+                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -1404,16 +1364,14 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingName = (Core.Name "bar"),
                   Core.bindingTerm = (Core.TermVariable (Core.Name "foo")),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "foo"),
-                (Core.TermVariable (Core.Name "bar"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "foo"), (Core.TermVariable (Core.Name "bar"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeVariable (Core.Name "t0"),
-                (Core.TypeVariable (Core.Name "t1"))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -1812,17 +1770,15 @@ testGroupForPolymorphism = Testing.TestGroup {
             Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "x"))])}))),
+              Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x"))))}))),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t0"))])}))}})),
+                Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -1871,9 +1827,7 @@ testGroupForPolymorphism = Testing.TestGroup {
                 Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermProduct [
-                    Core.TermVariable (Core.Name "y"),
-                    (Core.TermVariable (Core.Name "x"))])})))}))]),
+                  Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "y"), (Core.TermVariable (Core.Name "x"))))})))}))]),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
@@ -1882,9 +1836,9 @@ testGroupForPolymorphism = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                  Core.functionTypeCodomain = (Core.TypeProduct [
-                    Core.TypeVariable (Core.Name "t1"),
-                    (Core.TypeVariable (Core.Name "t0"))])}))})))}})),
+                  Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t1")),
+                    Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))})))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

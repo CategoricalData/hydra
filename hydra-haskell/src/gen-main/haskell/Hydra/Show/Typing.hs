@@ -7,6 +7,7 @@ module Hydra.Show.Typing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Typing as Typing
@@ -31,9 +32,9 @@ typeSubst :: (Typing.TypeSubst -> String)
 typeSubst ts =  
   let subst = (Typing.unTypeSubst ts) 
       pairs = (Maps.toList subst)
-      showPair = (\tuple2 ->  
-              let name = (Core.unName (fst tuple2)) 
-                  typ = (snd tuple2)
+      showPair = (\pair ->  
+              let name = (Core.unName (Pairs.first pair)) 
+                  typ = (Pairs.second pair)
               in (Strings.cat [
                 name,
                 "\8614",

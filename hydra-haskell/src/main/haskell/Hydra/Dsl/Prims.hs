@@ -187,20 +187,11 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode dec
 pair :: TermCoder x -> TermCoder y -> TermCoder (x, y)
 pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
   where
-    encode = ExtractCore.tuple2 (coderEncode $ termCoderCoder xCoder) (coderEncode $ termCoderCoder yCoder)
+    encode = ExtractCore.pair (coderEncode $ termCoderCoder xCoder) (coderEncode $ termCoderCoder yCoder)
     decode (x, y) = do
       xTerm <- coderDecode (termCoderCoder xCoder) x
       yTerm <- coderDecode (termCoderCoder yCoder) y
       return $ Terms.pair xTerm yTerm
-
-tuple2 :: TermCoder k -> TermCoder v -> TermCoder (k, v)
-tuple2 kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
-  where
-    encode = ExtractCore.tuple2 (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
-    decode (k, v) = do
-      kTerm <- coderDecode (termCoderCoder kCoder) k
-      vTerm <- coderDecode (termCoderCoder vCoder) v
-      return $ Terms.tuple [kTerm, vTerm]
 
 prim0 :: Name -> x -> [String]  -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl

@@ -29,7 +29,6 @@ module_ = Module (Namespace "hydra.test.inference.algebraicTypes") elements
       el testGroupForMapsDef,
       el testGroupForOptionalsDef,
       el testGroupForPairsDef,
-      el testGroupForProductsDef,
       el testGroupForSetsDef,
       el testGroupForSumsDef]
 
@@ -46,7 +45,6 @@ allTestsDef = define "allTests" $
     ref testGroupForMapsDef,
     ref testGroupForOptionalsDef,
     ref testGroupForPairsDef,
-    ref testGroupForProductsDef,
     ref testGroupForSetsDef,
     ref testGroupForSumsDef]
 
@@ -98,8 +96,8 @@ testGroupForEithersDef = define "testGroupForEithers" $
         (list [left $ string "error", right $ int32 42])
         (T.list $ T.either_ T.string T.int32),
       expectPoly 2 []
-        (tuple2 (list [left $ string "error", right $ int32 42]) (list []))
-        ["t0"] (T.tuple2 (T.list $ T.either_ T.string T.int32) (T.list $ T.var "t0"))]]
+        (pair (list [left $ string "error", right $ int32 42]) (list []))
+        ["t0"] (T.pair (T.list $ T.either_ T.string T.int32) (T.list $ T.var "t0"))]]
 
 testGroupForFoldsDef :: TBinding TestGroup
 testGroupForFoldsDef = define "testGroupForFolds" $
@@ -233,45 +231,18 @@ testGroupForPairsDef = define "testGroupForPairs" $
         (T.list $ T.pair T.string T.int32),
       expectPoly 2 [tag_disabledForMinimalInference]
         (list [pair (list []) (string "foo")])
-        ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)]]
+        ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)],
 
-testGroupForProductsDef :: TBinding TestGroup
-testGroupForProductsDef = define "testGroupForProducts" $
-  supergroup "Product terms" [
-    subgroup "Empty products" [
-      expectMono 1 []
-        (tuple [])
-        (T.product [])],
-
-    subgroup "Non-empty, monotyped products" [
-      expectMono 1 []
-        (tuple [string "foo", int32 42])
-        (T.product [T.string, T.int32]),
-      expectMono 2 []
-        (tuple [string "foo", list [float32 42.0, float32 137.0]])
-        (T.product [T.string, T.list T.float32]),
-      expectMono 3 [tag_disabledForMinimalInference]
-        (tuple [string "foo", int32 42, list [float32 42.0, float32 137.0]])
-        (T.product [T.string, T.int32, T.list T.float32])],
-
-    subgroup "Polytyped products" [
-      expectPoly 1 []
-        (tuple [list [], string "foo"])
-        ["t0"] (T.product [T.list $ T.var "t0", T.string]),
-      expectPoly 2 [tag_disabledForMinimalInference]
-        (tuple [int32 42, string "foo", list []])
-        ["t0"] (T.product [T.int32, T.string, T.list $ T.var "t0"])],
-
-    subgroup "Pairs" [
+    subgroup "Additional cases" [
       expectMono 1 [tag_disabledForMinimalInference]
-        (tuple2 (int32 42) (string "foo"))
-        (T.tuple2 T.int32 T.string),
+        (pair (int32 42) (string "foo"))
+        (T.pair T.int32 T.string),
       expectPoly 2 [tag_disabledForMinimalInference]
-        (tuple2 (list []) (string "foo"))
-        ["t0"] (T.tuple2 (T.list $ T.var "t0") T.string),
+        (pair (list []) (string "foo"))
+        ["t0"] (T.pair (T.list $ T.var "t0") T.string),
       expectPoly 3 [tag_disabledForMinimalInference]
-        (tuple2 (list []) (list []))
-        ["t0", "t1"] (T.tuple2 (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
+        (pair (list []) (list []))
+        ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 
 testGroupForSetsDef :: TBinding TestGroup
 testGroupForSetsDef = define "testGroupForSets" $
