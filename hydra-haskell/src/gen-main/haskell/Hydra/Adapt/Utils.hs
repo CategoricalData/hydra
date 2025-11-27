@@ -132,6 +132,7 @@ typeIsSupported constraints t =
                 Core.TypeLiteral v1 -> (literalTypeIsSupported constraints v1)
                 Core.TypeMap v1 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v1)) (typeIsSupported constraints (Core.mapTypeValues v1)))
                 Core.TypeMaybe v1 -> (typeIsSupported constraints v1)
+                Core.TypePair v1 -> (Logic.and (typeIsSupported constraints (Core.pairTypeFirst v1)) (typeIsSupported constraints (Core.pairTypeSecond v1)))
                 Core.TypeProduct v1 -> (Lists.foldl Logic.and True (Lists.map (typeIsSupported constraints) v1))
                 Core.TypeRecord v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
                 Core.TypeSet v1 -> (typeIsSupported constraints v1)

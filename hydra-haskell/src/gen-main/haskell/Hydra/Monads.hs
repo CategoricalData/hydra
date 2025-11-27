@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -149,13 +150,13 @@ traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
   let messageLines = (Lists.nub (Compute.traceMessages t))
   in  
-    let toLine = (\tuple2 -> Strings.cat [
+    let toLine = (\pair -> Strings.cat [
             Strings.cat [
               Strings.cat [
                 "\t",
-                (Core.unName (fst tuple2))],
+                (Core.unName (Pairs.first pair))],
               ": "],
-            (Core_.term (snd tuple2))])
+            (Core_.term (Pairs.second pair))])
     in  
       let keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
       in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))

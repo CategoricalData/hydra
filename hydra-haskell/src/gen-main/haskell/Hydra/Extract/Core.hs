@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -264,14 +265,14 @@ literal term0 =
 
 map :: (Ord t0) => ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 t1))
 map fk fv term0 =  
-  let tuple2 = (\kvPair ->  
-          let kterm = (fst kvPair)
+  let pair = (\kvPair ->  
+          let kterm = (Pairs.first kvPair)
           in  
-            let vterm = (snd kvPair)
+            let vterm = (Pairs.second kvPair)
             in (Flows.bind (fk kterm) (\kval -> Flows.bind (fv vterm) (\vval -> Flows.pure (kval, vval)))))
   in  
     let extract = (\term -> (\x -> case x of
-            Core.TermMap v1 -> (Flows.map Maps.fromList (Flows.mapList tuple2 (Maps.toList v1)))
+            Core.TermMap v1 -> (Flows.map Maps.fromList (Flows.mapList pair (Maps.toList v1)))
             _ -> (Monads.unexpected "map" (Core_.term term))) term)
     in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
@@ -305,8 +306,8 @@ maybeType typ =
 pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
 pair kf vf term0 =  
   let extract = (\term -> (\x -> case x of
-          Core.TermPair v1 -> (Flows.bind (kf (fst v1)) (\kVal -> Flows.bind (vf (snd v1)) (\vVal -> Flows.pure (kVal, vVal))))
-          Core.TermProduct v1 -> (Logic.ifElse (Equality.equal (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "tuple2" (Core_.term term)))
+          Core.TermPair v1 -> (Flows.bind (kf (Pairs.first v1)) (\kVal -> Flows.bind (vf (Pairs.second v1)) (\vVal -> Flows.pure (kVal, vVal))))
+          Core.TermProduct v1 -> (Logic.ifElse (Equality.equal (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "pair" (Core_.term term)))
           _ -> (Monads.unexpected "product" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
@@ -374,14 +375,6 @@ termRecord term0 =
   let extract = (\term -> (\x -> case x of
           Core.TermRecord v1 -> (Flows.pure v1)
           _ -> (Monads.unexpected "record" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
-
-tuple2 :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
-tuple2 kf vf term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermPair v1 -> (Flows.bind (kf (fst v1)) (\kVal -> Flows.bind (vf (snd v1)) (\vVal -> Flows.pure (kVal, vVal))))
-          Core.TermProduct v1 -> (Logic.ifElse (Equality.equal (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "tuple2" (Core_.term term)))
-          _ -> (Monads.unexpected "product" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
 -- | Extract a 16-bit unsigned integer value from a term

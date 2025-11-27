@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
@@ -36,35 +37,35 @@ childName lname n = (Strings.cat [
 findNames :: ([Grammar.Pattern] -> [String])
 findNames pats =  
   let nextName = (\acc -> \pat ->  
-          let names = (fst acc)
+          let names = (Pairs.first acc)
           in  
-            let nameMap = (snd acc)
+            let nameMap = (Pairs.second acc)
             in  
               let rn = (rawName pat)
               in  
                 let nameAndIndex = (Maybes.maybe (rn, 1) (\i -> (Strings.cat2 rn (Literals.showInt32 (Math.add i 1)), (Math.add i 1))) (Maps.lookup rn nameMap))
                 in  
-                  let nn = (fst nameAndIndex)
+                  let nn = (Pairs.first nameAndIndex)
                   in  
-                    let ni = (snd nameAndIndex)
+                    let ni = (Pairs.second nameAndIndex)
                     in (Lists.cons nn names, (Maps.insert rn ni nameMap)))
-  in (Lists.reverse (fst (Lists.foldl nextName ([], Maps.empty) pats)))
+  in (Lists.reverse (Pairs.first (Lists.foldl nextName ([], Maps.empty) pats)))
 
 -- | Convert a BNF grammar to a Hydra module
 grammarToModule :: (Module.Namespace -> Grammar.Grammar -> Maybe String -> Module.Module)
 grammarToModule ns grammar desc =  
   let prodPairs = (Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar))
   in  
-    let capitalizedNames = (Lists.map (\tuple2 -> Formatting.capitalize (fst tuple2)) prodPairs)
+    let capitalizedNames = (Lists.map (\pair -> Formatting.capitalize (Pairs.first pair)) prodPairs)
     in  
-      let patterns = (Lists.map (\tuple2 -> snd tuple2) prodPairs)
+      let patterns = (Lists.map (\pair -> Pairs.second pair) prodPairs)
       in  
         let elementPairs = (Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns))
         in  
-          let elements = (Lists.map (\tuple2 ->  
-                  let lname = (fst tuple2)
+          let elements = (Lists.map (\pair ->  
+                  let lname = (Pairs.first pair)
                   in  
-                    let typ = (wrapType (snd tuple2))
+                    let typ = (wrapType (Pairs.second pair))
                     in (Annotations.typeElement (toName ns lname) typ)) elementPairs)
           in Module.Module {
             Module.moduleNamespace = ns,
@@ -91,7 +92,6 @@ isNontrivial isRecord pats =
             _ -> False) p)
     in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) (isLabeled (Lists.head minPats)) True)
 
--- | Create elements from pattern
 makeElements :: (Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)])
 makeElements omitTrivial ns lname pat =  
   let trivial = (Logic.ifElse omitTrivial [] [
@@ -99,10 +99,10 @@ makeElements omitTrivial ns lname pat =
   in  
     let descend = (\n -> \f -> \p ->  
             let cpairs = (makeElements False ns (childName lname n) p)
-            in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (fst (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
-              (lname, Core.TypeUnit)] (Lists.cons (lname, (snd (Lists.head cpairs))) (Lists.tail cpairs))))))
+            in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (Pairs.first (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
+              (lname, Core.TypeUnit)] (Lists.cons (lname, (Pairs.second (Lists.head cpairs))) (Lists.tail cpairs))))))
     in  
-      let mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (snd (Lists.head pairs)))) (Lists.tail pairs)) p)
+      let mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (Pairs.second (Lists.head pairs)))) (Lists.tail pairs)) p)
       in  
         let forPat = (\pat -> (\x -> case x of
                 Grammar.PatternAlternatives v1 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
@@ -129,13 +129,13 @@ makeElements omitTrivial ns lname pat =
                       in  
                         let toField = (\n -> \p -> descend n (\pairs -> (Core.FieldType {
                                 Core.fieldTypeName = (Core.Name n),
-                                Core.fieldTypeType = (snd (Lists.head pairs))}, (Lists.tail pairs))) p)
+                                Core.fieldTypeType = (Pairs.second (Lists.head pairs))}, (Lists.tail pairs))) p)
                         in  
                           let fieldPairs = (Lists.zipWith toField fieldNames minPats)
                           in  
-                            let fields = (Lists.map fst fieldPairs)
+                            let fields = (Lists.map Pairs.first fieldPairs)
                             in  
-                              let els = (Lists.concat (Lists.map snd fieldPairs))
+                              let els = (Lists.concat (Lists.map Pairs.second fieldPairs))
                               in (Logic.ifElse (isNontrivial isRecord pats) (Lists.cons (lname, (construct fields)) els) (forPat (Lists.head minPats))))
         in (forPat pat)
 

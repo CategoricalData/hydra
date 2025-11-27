@@ -111,9 +111,10 @@ emptyListsTestsDef = define "emptyListsTests" $
     (tylam "t0" $ tyapp (list []) (T.var "t0"))
     (T.forAll "t0" $ T.list $ T.var "t0"),
   checkTest "pair of empty lists" []
-    (tuple2 (list []) (list []))
-    (tylams ["t0", "t1"] $ tuple2 (tyapp (list []) (T.var "t0")) (tyapp (list []) (T.var "t1")))
-    (T.forAlls ["t0", "t1"] $ T.tuple2 (T.list $ T.var "t0") (T.list $ T.var "t1")),
+    (pair (list []) (list []))
+    (tylams ["t0", "t1"] $
+      tyapps (pair (tyapp (list []) (T.var "t0")) (tyapp (list []) (T.var "t1"))) [T.list $ T.var "t0", T.list $ T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.pair (T.list $ T.var "t0") (T.list $ T.var "t1")),
   checkTest "empty list in tuple" []
     (tuple [list [], string "context"])
     (tylam "t0" $ tuple [tyapp (list []) (T.var "t0"), string "context"])

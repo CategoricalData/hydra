@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -113,7 +114,7 @@ lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
 lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
 
 matchEnum :: (Core.Name -> [(Core.Name, t0)] -> Core.Term -> Compute.Flow Graph.Graph t0)
-matchEnum tname pairs = (matchUnion tname (Lists.map (\tuple2 -> matchUnitField (fst tuple2) (snd tuple2)) pairs))
+matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (Pairs.first pair) (Pairs.second pair)) pairs))
 
 matchRecord :: ((M.Map Core.Name Core.Term -> Compute.Flow t0 t1) -> Core.Term -> Compute.Flow t0 t1)
 matchRecord decode term =  
@@ -148,7 +149,7 @@ matchUnion tname pairs term =
         "inject(",
         Core.unName tname,
         ") with one of {",
-        Strings.intercalate ", " (Lists.map (\tuple2 -> Core.unName (fst tuple2)) pairs),
+        Strings.intercalate ", " (Lists.map (\pair -> Core.unName (Pairs.first pair)) pairs),
         "}"]) (Core_.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))

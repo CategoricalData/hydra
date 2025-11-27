@@ -229,12 +229,12 @@ functionToUnionDef = define "functionToUnion" $
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
     Maybes.fromMaybe (var "notFound" @@ var "fname") (Maps.lookup (var "fname") (Maps.fromList (list [
-      tuple2 (Core.nameLift _Elimination_wrap) (var "forWrapped" @@ var "fterm"),
-      tuple2 (Core.nameLift _Elimination_record) (var "forProjection" @@ var "fterm"),
-      tuple2 (Core.nameLift _Elimination_union) (var "forCases" @@ var "fterm"),
-      tuple2 (Core.nameLift _Function_lambda) (var "forLambda" @@ var "fterm"),
-      tuple2 (Core.nameLift _Function_primitive) (var "forPrimitive" @@ var "fterm"),
-      tuple2 (Core.nameLift _Term_variable) (var "forVariable" @@ var "fterm")])))) $
+      pair (Core.nameLift _Elimination_wrap) (var "forWrapped" @@ var "fterm"),
+      pair (Core.nameLift _Elimination_record) (var "forProjection" @@ var "fterm"),
+      pair (Core.nameLift _Elimination_union) (var "forCases" @@ var "fterm"),
+      pair (Core.nameLift _Function_lambda) (var "forLambda" @@ var "fterm"),
+      pair (Core.nameLift _Function_primitive) (var "forPrimitive" @@ var "fterm"),
+      pair (Core.nameLift _Term_variable) (var "forVariable" @@ var "fterm")])))) $
   cases _Type (var "t")
     Nothing [
     _Type_function>>: "ft" ~>
@@ -369,7 +369,7 @@ passFunctionDef = define "passFunction" $
             (Core.typeFunction (Core.functionType
               (Core.fieldTypeType (var "f"))
               (var "cod"))) $
-          produce (tuple2 (Core.fieldTypeName (var "f")) (var "ad")))
+          produce (pair (Core.fieldTypeName (var "f")) (var "ad")))
         (Core.rowTypeFields (var "rt")) $
       produce (Maps.fromList (var "pairs"))]) $
   "toOptionAd" <~ ("dom" ~> "cod" ~> cases _Type (ref Rewriting.deannotateTypeDef @@ var "dom")
@@ -419,7 +419,7 @@ passFunctionDef = define "passFunction" $
     "optionAd" <<~ var "toOptionAd" @@ var "dom" @@ var "cod" $
     "lossy" <~ Logic.or
       (Compute.adapterIsLossy (var "codAd"))
-      (Logic.ors (Lists.map ("tuple2" ~> Compute.adapterIsLossy (second (var "tuple2"))) (Maps.toList (var "caseAds")))) $
+      (Logic.ors (Lists.map ("pair" ~> Compute.adapterIsLossy (Pairs.second (var "pair"))) (Maps.toList (var "caseAds")))) $
     "target" <~ MetaTypes.function (Compute.adapterTarget (var "domAd")) (Compute.adapterTarget (var "codAd")) $
     produce $ Compute.adapter (var "lossy") (var "t") (var "target")
       (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "codAd" @@ var "caseAds"))) $
@@ -475,12 +475,12 @@ passMapDef = define "passMap" $
     Nothing [
     _Term_map>>: "m" ~>
       "newPairs" <<~ Flows.mapList
-        ("tuple2" ~>
-          "k" <~ first (var "tuple2") $
-          "v" <~ second (var "tuple2") $
+        ("pair" ~>
+          "k" <~ Pairs.first (var "pair") $
+          "v" <~ Pairs.second (var "pair") $
           "newK" <<~ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "kad")) @@ var "k" $
           "newV" <<~ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "vad")) @@ var "v" $
-          produce (tuple2 (var "newK") (var "newV")))
+          produce (pair (var "newK") (var "newV")))
         (Maps.toList (var "m")) $
       produce (Core.termMap (Maps.fromList (var "newPairs")))]) $
   "forMapType" <~ ("mt" ~>
@@ -622,11 +622,11 @@ passUnionDef = define "passUnion" $
       "adapters" <<~ Flows.mapList
         ("f" ~>
           "ad" <<~ ref fieldAdapterDef @@ var "f" $
-          produce (tuple2 (Core.fieldTypeName (var "f")) (var "ad")))
+          produce (pair (Core.fieldTypeName (var "f")) (var "ad")))
         (var "sfields") $
       "adaptersMap" <~ Maps.fromList (var "adapters") $
-      "lossy" <~ Logic.ors (Lists.map ("tuple2" ~> Compute.adapterIsLossy (second (var "tuple2"))) (var "adapters")) $
-      "sfields'" <~ Lists.map ("tuple2" ~> Compute.adapterTarget (second (var "tuple2"))) (var "adapters") $
+      "lossy" <~ Logic.ors (Lists.map ("pair" ~> Compute.adapterIsLossy (Pairs.second (var "pair"))) (var "adapters")) $
+      "sfields'" <~ Lists.map ("pair" ~> Compute.adapterTarget (Pairs.second (var "pair"))) (var "adapters") $
       produce (Compute.adapter
         (var "lossy")
         (var "t")

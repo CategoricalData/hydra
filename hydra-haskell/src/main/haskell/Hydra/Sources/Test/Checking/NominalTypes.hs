@@ -79,13 +79,7 @@ module_ = Module (Namespace "hydra.test.checking.nominalTypes") elements
       el chainedUnwrappingTestsDef,
       el multipleUnwrapOperationsTestsDef,
       el eliminationsTestsDef,
-      el productEliminationsTestsDef,
-      el simpleTupleProjectionsTestsDef,
-      el polymorphicTupleProjectionsTestsDef,
-      el projectionsWithVariablesTestsDef,
-      el projectionsInComplexContextsTestsDef,
-      el projectionsWithMixedTypesTestsDef,
-      el projectionsWithPrimitiveFunctionsTestsDef]
+      el projectionsWithVariablesTestsDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -309,7 +303,8 @@ recordEliminationsTestsDef = define "recordEliminationsTests" $
   ref multiParameterPolymorphicProjectionsTestsDef,
   ref higherOrderRecordProjectionsTestsDef,
   ref recursiveRecordProjectionsTestsDef,
-  ref recordProjectionsWithMutualRecursionTestsDef]
+  ref recordProjectionsWithMutualRecursionTestsDef,
+  ref projectionsWithVariablesTestsDef]
 
 simpleRecordProjectionsTestsDef :: TBinding TestGroup
 simpleRecordProjectionsTestsDef = define "simpleRecordProjectionsTests" $
@@ -1599,68 +1594,9 @@ multipleUnwrapOperationsTestsDef = define "multipleUnwrapOperationsTests" $
 eliminationsTestsDef :: TBinding TestGroup
 eliminationsTestsDef = define "eliminationsTests" $
   supergroup "Eliminations" [
-  ref productEliminationsTestsDef,
   ref recordEliminationsTestsDef,
   ref unionEliminationsTestsDef,
   ref wrapEliminationsTestsDef]
-
--- Note: productEliminationsTests is defined in the original Checking.hs file and needs to be imported or duplicated
-productEliminationsTestsDef :: TBinding TestGroup
-productEliminationsTestsDef = define "productEliminationsTests" $
-  supergroup "Product eliminations" [
-  ref simpleTupleProjectionsTestsDef,
-  ref polymorphicTupleProjectionsTestsDef,
-  ref projectionsWithVariablesTestsDef,
-  ref projectionsInComplexContextsTestsDef,
-  ref projectionsWithMixedTypesTestsDef,
-  ref projectionsWithPrimitiveFunctionsTestsDef]
-
-simpleTupleProjectionsTestsDef :: TBinding TestGroup
-simpleTupleProjectionsTestsDef = define "simpleTupleProjectionsTests" $
-  subgroup "Simple tuple projections" [
-  noChange "projection from pair"
-    (untuple 2 0 @@ tuple2 (int32 42) (string "hello"))
-    T.int32,
-  noChange "second projection from pair"
-    (untuple 2 1 @@ tuple2 (int32 42) (string "hello"))
-    T.string,
-  noChange "projection from triple"
-    (untuple 3 1 @@ triple (int32 1) (string "middle") (boolean True))
-    T.string,
-  noChange "first element of triple"
-    (untuple 3 0 @@ triple (boolean False) (int32 100) (string "last"))
-    T.boolean,
-  noChange "last element of triple"
-    (untuple 3 2 @@ triple (boolean False) (int32 100) (string "last"))
-    T.string]
-
-polymorphicTupleProjectionsTestsDef :: TBinding TestGroup
-polymorphicTupleProjectionsTestsDef = define "polymorphicTupleProjectionsTests" $
-  subgroup "Polymorphic tuple projections" [
-  checkTest "projection function" []
-    (untuple 2 0)
-    (tylams ["t0", "t1"] $ untuple 2 0)
-    (T.forAlls ["t0", "t1"] $ T.function
-      (T.product [T.var "t0", T.var "t1"])
-      (T.var "t0")),
-  checkTest "second projection function" []
-    (untuple 2 1)
-    (tylams ["t0", "t1"] $ untuple 2 1)
-    (T.forAlls ["t0", "t1"] $ T.function
-      (T.product [T.var "t0", T.var "t1"])
-      (T.var "t1")),
-  checkTest "triple projection function" []
-    (untuple 3 1)
-    (tylams ["t0", "t1", "t2"] $ untuple 3 1)
-    (T.forAlls ["t0", "t1", "t2"] $ T.function
-      (T.product [T.var "t0", T.var "t1", T.var "t2"])
-      (T.var "t1")),
-  checkTest "projection from lambda" []
-    (lambda "pair" $ untuple 2 0 @@ var "pair")
-    (tylams ["t0", "t1"] $ lambdaTyped "pair" (T.product [T.var "t0", T.var "t1"]) $ untuple 2 0 @@ var "pair")
-    (T.forAlls ["t0", "t1"] $ T.function
-      (T.product [T.var "t0", T.var "t1"])
-      (T.var "t0"))]
 
 projectionsWithVariablesTestsDef :: TBinding TestGroup
 projectionsWithVariablesTestsDef = define "projectionsWithVariablesTests" $
@@ -1682,53 +1618,3 @@ projectionsWithVariablesTestsDef = define "projectionsWithVariablesTests" $
             project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person"])
     (T.function (T.var "Person") (T.product [T.string, T.string]))]
 
-projectionsInComplexContextsTestsDef :: TBinding TestGroup
-projectionsInComplexContextsTestsDef = define "projectionsInComplexContextsTests" $
-  subgroup "Projections in complex contexts" [
-  checkTest "projection in let binding" []
-    (lets ["pair">: tuple2 (int32 10) (string "test")] $
-      untuple 2 0 @@ var "pair")
-    (letsTyped [("pair", tuple2 (int32 10) (string "test"), T.mono $ T.product [T.int32, T.string])] $
-      untuple 2 0 @@ var "pair")
-    T.int32,
-  noChange "projection in tuple"
-    (tuple2 (untuple 2 0 @@ tuple2 (int32 1) (string "a"))
-      (untuple 2 1 @@ tuple2 (int32 2) (string "b")))
-    (T.product [T.int32, T.string]),
-  noChange "projection in list"
-    (list [untuple 2 0 @@ tuple2 (int32 1) (string "a"),
-           untuple 2 0 @@ tuple2 (int32 2) (string "b")])
-    (T.list T.int32)]
-
-projectionsWithMixedTypesTestsDef :: TBinding TestGroup
-projectionsWithMixedTypesTestsDef = define "projectionsWithMixedTypesTests" $
-  subgroup "Projections with mixed types" [
-  noChange "projection from mixed tuple"
-    (untuple 4 2 @@ tuple4 (int32 1) (string "test") (boolean True) (float32 3.14))
-    T.boolean,
-  checkTest "projection chain" []
-    (lets ["quadruple">: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)] $
-      tuple4 (untuple 4 0 @@ var "quadruple")
-             (untuple 4 1 @@ var "quadruple")
-             (untuple 4 2 @@ var "quadruple")
-             (untuple 4 3 @@ var "quadruple"))
-    (letsTyped [("quadruple", tuple4 (int32 1) (string "test") (boolean True) (float32 3.14),
-                 T.mono $ T.product [T.int32, T.string, T.boolean, T.float32])] $
-      tuple4 (untuple 4 0 @@ var "quadruple")
-             (untuple 4 1 @@ var "quadruple")
-             (untuple 4 2 @@ var "quadruple")
-             (untuple 4 3 @@ var "quadruple"))
-    (T.product [T.int32, T.string, T.boolean, T.float32]),
-  checkTest "projection with function result" []
-    (untuple 2 1 @@ tuple2 (int32 42) (lambda "x" $ var "x"))
-    (tylam "t0" $ untuple 2 1 @@ tuple2 (int32 42) (lambdaTyped "x" (T.var "t0") $ var "x"))
-    (T.forAll "t0" $ T.function (T.var "t0") (T.var "t0"))]
-
-projectionsWithPrimitiveFunctionsTestsDef :: TBinding TestGroup
-projectionsWithPrimitiveFunctionsTestsDef = define "projectionsWithPrimitiveFunctionsTests" $
-  subgroup "Projections with primitive functions" [
-  checkTest "lists.map with untuple" []
-    (primitive _lists_map @@ (untuple 2 0))
-    (tylams ["t0", "t1"] $ tyapps (primitive _lists_map) [T.product [T.var "t0", T.var "t1"], T.var "t0"] @@ (untuple 2 0))
-    (T.forAlls ["t0", "t1"] $
-      T.function (T.list (T.product [T.var "t0", T.var "t1"])) (T.list (T.var "t0")))]

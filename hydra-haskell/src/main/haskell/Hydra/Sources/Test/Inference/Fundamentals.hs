@@ -114,9 +114,9 @@ testGroupForLetDef = define "testGroupForLet" $
         (lets [
           "foo">: int32 42]
           $ lets [
-            "bar">: tuple2 (var "foo") (int32 137)]
+            "bar">: pair (var "foo") (int32 137)]
             $ var "bar")
-        (T.tuple2 T.int32 T.int32),
+        (T.pair T.int32 T.int32),
       expectPoly 3 []
         (lets [
           "sng">: lambda "x" $ list [var "x"]]
@@ -124,8 +124,8 @@ testGroupForLetDef = define "testGroupForLet" $
             "foo">: var "sng" @@ int32 42,
             "bar">: var "sng" @@ string "bar",
             "quux">: lambda "x" $ var "sng" @@ var "x"]
-            $ tuple2 (var "foo") (tuple2 (var "bar") (var "quux" @@ list [])))
-        ["t0"] (T.tuple2 (T.list T.int32) (T.tuple2 (T.list T.string) (T.list $ T.list $ T.var "t0")))],
+            $ pair (var "foo") (pair (var "bar") (var "quux" @@ list [])))
+        ["t0"] (T.pair (T.list T.int32) (T.pair (T.list T.string) (T.list $ T.list $ T.var "t0")))],
 
     subgroup "Nested let with shadowing" [
       expectMono 1 []
@@ -141,8 +141,8 @@ testGroupForLetDef = define "testGroupForLet" $
           "bar">: var "foo"]
           $ lets [
             "foo">: int32 137]
-            $ tuple2 (var "bar") (var "foo"))
-        (T.tuple2 T.string T.int32)],
+            $ pair (var "bar") (var "foo"))
+        (T.pair T.string T.int32)],
 
     subgroup "Let-polymorphism" [
       expectPoly 1 []
@@ -176,36 +176,36 @@ testGroupForLetDef = define "testGroupForLet" $
       expectMono 6 []
         (lets [
           "id">: lambda "x" $ var "x"]
-          $ tuple2 (var "id" @@ int32 42) (var "id" @@ string "foo"))
-        (T.tuple2 T.int32 T.string),
+          $ pair (var "id" @@ int32 42) (var "id" @@ string "foo"))
+        (T.pair T.int32 T.string),
       expectMono 7 []
         (lets [
           "list">: lambda "x" $ list [var "x"]]
-          $ tuple2 (var "list" @@ int32 42) (var "list" @@ string "foo"))
-        (T.tuple2 (T.list T.int32) (T.list T.string)),
+          $ pair (var "list" @@ int32 42) (var "list" @@ string "foo"))
+        (T.pair (T.list T.int32) (T.list T.string)),
       expectPoly 8 [tag_disabled]
         (lets [
           "singleton">: lambda "x" $ list [var "x"],
           "f">: lambda "x" $ lambda "y" $ primitive _lists_cons
-            @@ (tuple2 (var "singleton" @@ var "x") (var "singleton" @@ var "y"))
+            @@ (pair (var "singleton" @@ var "x") (var "singleton" @@ var "y"))
             @@ (var "g" @@ var "x" @@ var "y"),
           "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
           $ var "f")
-        ["t0"] (T.list $ T.tuple2 T.int32 (T.var "t0")),
+        ["t0"] (T.list $ T.pair T.int32 (T.var "t0")),
       expectMono 9 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "fortytwo">: var "id" @@ int32 42,
           "foo">: var "id" @@ string "foo"]
-          $ tuple2 (var "fortytwo") (var "foo"))
-        (T.tuple2 T.int32 T.string),
+          $ pair (var "fortytwo") (var "foo"))
+        (T.pair T.int32 T.string),
       expectMono 10 [tag_disabledForMinimalInference]
         (lets [
           "fortytwo">: var "id" @@ int32 42,
           "id">: lambda "x" $ var "x",
           "foo">: var "id" @@ string "foo"]
-          $ tuple2 (var "fortytwo") (var "foo"))
-        (T.tuple2 T.int32 T.string)],
+          $ pair (var "fortytwo") (var "foo"))
+        (T.pair T.int32 T.string)],
 
     subgroup "Recursive and mutually recursive let (@wisnesky's test cases)" [
       expectPoly 1 []
@@ -218,14 +218,14 @@ testGroupForLetDef = define "testGroupForLet" $
         (lets [
           "x">: var "y",
           "y">: var "x"] $
-          tuple2 (var "x") (var "y"))
-        ["t0", "t1"] (T.tuple2 (T.var "t0") (T.var "t1")),
+          pair (var "x") (var "y"))
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
       expectPoly 3 [tag_disabled]
         (lets [
           "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
           "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-          $ tuple2 (var "f") (var "g"))
-        ["t0", "t1"] (T.tuple2
+          $ pair (var "f") (var "g"))
+        ["t0", "t1"] (T.pair
           (T.functionMany [T.var "t0", T.int32, T.var "t1"])
           (T.functionMany [T.int32, T.var "v0", T.var "t1"])),
       expectMono 4 []
@@ -236,30 +236,30 @@ testGroupForLetDef = define "testGroupForLet" $
         T.int32,
       expectMono 5 []
         -- letrecs id = (\z. z)
-        --     f = (\p0. (tuple2 (id p0) (id p0)))
+        --     f = (\p0. (pair (id p0) (id p0)))
         --     in 0
         (lets [
           "id">: lambda "z" $ var "z",
-          "f">: lambda "p0" $ tuple2 (var "id" @@ var "p0") (var "id" @@ var "p0")]
+          "f">: lambda "p0" $ pair (var "id" @@ var "p0") (var "id" @@ var "p0")]
           $ int32 0)
         T.int32,
       expectPoly 6 []
         (lets [
            "x">: lambda "y" $ var "y",
            "z">: var "x"] $
-           tuple2 (var "x") (var "z"))
-        ["t0", "t1"] (T.tuple2 (T.function (T.var "t0") (T.var "t0")) (T.function (T.var "t1") (T.var "t1"))),
+           pair (var "x") (var "z"))
+        ["t0", "t1"] (T.pair (T.function (T.var "t0") (T.var "t0")) (T.function (T.var "t1") (T.var "t1"))),
       expectPoly 7 []
         (lets [
            "x">: lambda "y" $ var "y",
            "z">: var "x",
            "w">: var "z"] $
-           tuple2 (var "x") (tuple2 (var "w") (var "z")))
-        ["t0", "t1", "t2"] (T.product [
-          T.function (T.var "t0") (T.var "t0"),
-          T.product [
-          T.function (T.var "t1") (T.var "t1"),
-          T.function (T.var "t2") (T.var "t2")]])],
+           pair (var "x") (pair (var "w") (var "z")))
+        ["t0", "t1", "t2"] (T.pair
+          (T.function (T.var "t0") (T.var "t0"))
+          (T.pair
+            (T.function (T.var "t1") (T.var "t1"))
+            (T.function (T.var "t2") (T.var "t2"))))],
 
     subgroup "Recursive and mutually recursive let with polymorphism" [
       expectMono 1 []
@@ -267,22 +267,22 @@ testGroupForLetDef = define "testGroupForLet" $
           "id">: lambda "x" $ var "x",
           "f">: primitive _strings_length @@ var "g",
           "g">: primitive _strings_fromList @@ list [var "f"]]
-          $ tuple2 (var "f") (var "g"))
-        (T.tuple2 T.int32 T.string),
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string),
       expectMono 2 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
-          $ tuple2 (var "f") (var "g"))
-        (T.tuple2 T.int32 T.string),
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string),
       expectMono 3 [tag_disabledForMinimalInference]
         (lets [
           "f">: var "id" @@ (primitive _strings_length @@ var "g"),
           "id">: lambda "x" $ var "x",
           "g">: var "id" @@ (primitive _strings_fromList @@ list [var "f"])]
-          $ tuple2 (var "f") (var "g"))
-        (T.tuple2 T.int32 T.string)],
+          $ pair (var "f") (var "g"))
+        (T.pair T.int32 T.string)],
 
     subgroup "Recursion involving polymorphic functions" [ -- Note: not 'polymorphic recursion' per se
       expectPoly 1 []
@@ -297,14 +297,14 @@ testGroupForLetDef = define "testGroupForLet" $
         (lets [
           "inst">: var "rec" @@ (lambda "x" false) @@ false,
           "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
-          tuple2 (var "inst") (var "rec"))
-        ["t0", "t1"] (T.tuple2 T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t1", T.var "t0"])),
+          pair (var "inst") (var "rec"))
+        ["t0", "t1"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t1", T.var "t0"])),
       expectPoly 3 [tag_disabledForMinimalInference] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
         (lets [
           "inst">: var "rec" @@ (lambda "x" false),
           "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
-          tuple2 (var "inst") (var "rec"))
-        ["t0"] (T.tuple2 T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
+          pair (var "inst") (var "rec"))
+        ["t0"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
       expectPoly 4 [tag_disabledForMinimalInference]
         (lets [
           "inst1">: var "rec" @@ (lambda "x" false),
@@ -318,8 +318,8 @@ testGroupForLetDef = define "testGroupForLet" $
         (lets [
           "foo">: var "bar",
           "bar">: var "foo"] $
-          tuple2 (var "foo") (var "bar"))
-        ["t0", "t1"] (T.tuple2 (T.var "t0") (T.var "t1"))]]
+          pair (var "foo") (var "bar"))
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1"))]]
   where
     s = primitive _math_negate
     p = primitive _math_negate
@@ -418,8 +418,8 @@ testGroupForPolymorphismDef = define "testGroupForPolymorphism" $
         (lambda "x" $ var "x")
         ["t0"] (T.function (T.var "t0") (T.var "t0")),
       expectPoly 2 []
-        (lambda "x" $ tuple2 (var "x") (var "x"))
-        ["t0"] (T.function (T.var "t0") (T.tuple2 (T.var "t0") (T.var "t0"))),
+        (lambda "x" $ pair (var "x") (var "x"))
+        ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0"))),
       expectPoly 3 []
         (lambda "x" $ list [var "x"])
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
@@ -427,8 +427,8 @@ testGroupForPolymorphismDef = define "testGroupForPolymorphism" $
         (list [lambda "x" $ var "x", lambda "y" $ var "y"])
         ["t0"] (T.list (T.function (T.var "t0") (T.var "t0"))),
       expectPoly 5 []
-        (list [lambda "x" $ lambda "y" $ tuple2 (var "y") (var "x")])
-        ["t0", "t1"] (T.list (T.function (T.var "t0") (T.function (T.var "t1") (T.tuple2 (T.var "t1") (T.var "t0")))))],
+        (list [lambda "x" $ lambda "y" $ pair (var "y") (var "x")])
+        ["t0", "t1"] (T.list (T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t1") (T.var "t0")))))],
 
     subgroup "Lambdas and application" [
       expectMono 1 []

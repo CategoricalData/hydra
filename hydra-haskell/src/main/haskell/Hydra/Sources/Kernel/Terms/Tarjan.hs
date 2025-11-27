@@ -85,31 +85,31 @@ adjacencyListsToGraphDef = define "adjacencyListsToGraph" $
     <> " back to its original key.") $
   withOrd "t0" $
   "edges0" ~>
-  "sortedEdges" <~ Lists.sortOn (unaryFunction first) (var "edges0") $
+  "sortedEdges" <~ Lists.sortOn (unaryFunction Pairs.first) (var "edges0") $
   "indexedEdges" <~ Lists.zip (Math.range (int32 0) (Lists.length (var "sortedEdges"))) (var "sortedEdges") $
   "keyToVertex" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
-      "v" <~ first (var "vkNeighbors") $
-      "kNeighbors" <~ second (var "vkNeighbors") $
-      "k" <~ first (var "kNeighbors") $
-      tuple2 (var "k") (var "v"))
+      "v" <~ Pairs.first (var "vkNeighbors") $
+      "kNeighbors" <~ Pairs.second (var "vkNeighbors") $
+      "k" <~ Pairs.first (var "kNeighbors") $
+      pair (var "k") (var "v"))
     (var "indexedEdges")) $
   "vertexMap" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
-      "v" <~ first (var "vkNeighbors") $
-      "kNeighbors" <~ second (var "vkNeighbors") $
-      "k" <~ first (var "kNeighbors") $
-      tuple2 (var "v") (var "k"))
+      "v" <~ Pairs.first (var "vkNeighbors") $
+      "kNeighbors" <~ Pairs.second (var "vkNeighbors") $
+      "k" <~ Pairs.first (var "kNeighbors") $
+      pair (var "v") (var "k"))
     (var "indexedEdges")) $
   "graph" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
-      "v" <~ first (var "vkNeighbors") $
-      "kNeighbors" <~ second (var "vkNeighbors") $
-      "neighbors" <~ second (var "kNeighbors") $
-      tuple2 (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
+      "v" <~ Pairs.first (var "vkNeighbors") $
+      "kNeighbors" <~ Pairs.second (var "vkNeighbors") $
+      "neighbors" <~ Pairs.second (var "kNeighbors") $
+      pair (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
     (var "indexedEdges")) $
   "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
-  tuple2 (var "graph") (var "vertexToKey")
+  pair (var "graph") (var "vertexToKey")
 
 initialStateDef :: TBinding Topo.TarjanState
 initialStateDef = define "initialState" $

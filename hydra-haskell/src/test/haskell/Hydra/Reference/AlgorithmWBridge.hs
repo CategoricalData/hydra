@@ -51,15 +51,14 @@ hydraTermToStlc context term = case term of
       return $ foldr (\el acc -> App (App (Const Cons) el) acc) (Const Nil) sels
     Core.TermLiteral lit -> pure $ Const $ PrimLiteral lit
     Core.TermPair (t1, t2) -> pair <$> toStlc t1 <*> toStlc t2
-    Core.TermProduct els -> toPairs <$> CM.mapM toStlc els
-      where
-        toPairs sels = case sels of
-          [] -> Const TT
-          [h] -> h
-          (h:r) -> pair h (toPairs r)
+    Core.TermProduct els -> case els of
+      [] -> pure $ Const TT
+      [t1, t2] -> pair <$> toStlc t1 <*> toStlc t2
+      _ -> Left $ "products with arity other than 0 or 2 are not supported"
     Core.TermEither et -> case et of
       Left l -> App (Const Inl) <$> toStlc l
       Right r -> App (Const Inr) <$> toStlc r
+    Core.TermUnit -> pure $ Const TT
     Core.TermVariable (Core.Name v) -> pure $ Var v
     _ -> Left $ "Unsupported term: " ++ show term
   where
@@ -79,11 +78,6 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
 --      TypeMap MapType |
 --      TypeMaybe Type |
       Core.TypePair (Core.PairType first second) -> TyProd <$> toStlc first <*> toStlc second
-      Core.TypeProduct types -> toProd <$> (CM.mapM toStlc types)
-        where
-          toProd ts = case ts of
-            [h] -> h
-            (h:r) -> TyProd h (toProd r)
 --      TypeRecord RowType |
 --      TypeSet Type |
       Core.TypeSum types -> if L.length types == 0
@@ -129,7 +123,7 @@ toTerm expr = case expr of
     PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
     Nil -> Core.TermList []
     Pair -> Terms.lambdas ["a", "b"] $ Terms.pair (Terms.var "a") (Terms.var "b")
-    TT -> Terms.tuple []
+    TT -> Core.TermProduct []
     _ -> Terms.string $ "unexpected primitive: " ++ show prim
     -- Note: other prims are unsupported; they can be added here as needed
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
@@ -147,11 +141,7 @@ toType ty = case ty of
   FTyLit lt -> Core.TypeLiteral lt
   FTyList lt -> Core.TypeList $ toType lt
   FTyFn dom cod -> Core.TypeFunction $ Core.FunctionType (toType dom) (toType cod)
-  FTyProd t1 t2 -> Core.TypeProduct (toType <$> (t1:(componentsTypesOf t2)))
-    where
-      componentsTypesOf t = case t of
-        FTyProd t1 t2 -> t1:(componentsTypesOf t2)
-        _ -> [t]
+  FTyProd t1 t2 -> Core.TypePair $ Core.PairType (toType t1) (toType t2)
   FTySum t1 t2 -> Core.TypeSum (toType <$> (t1:(componentsTypesOf t2)))
     where
       componentsTypesOf t = case t of

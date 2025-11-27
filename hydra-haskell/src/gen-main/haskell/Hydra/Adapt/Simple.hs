@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals_
@@ -82,10 +83,10 @@ adaptDataGraph constraints doExpand graph0 =
 
 adaptGraphSchema :: (Ord t0) => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
-  let mapPair = (\tuple2 ->  
-          let name = (fst tuple2)
+  let mapPair = (\pair ->  
+          let name = (Pairs.first pair)
           in  
-            let typ = (snd tuple2)
+            let typ = (Pairs.second pair)
             in (Flows.bind (adaptType constraints litmap typ) (\typ1 -> Flows.pure (name, typ1))))
   in (Flows.bind (Flows.mapList mapPair (Maps.toList types0)) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
@@ -222,9 +223,9 @@ schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core
 schemaGraphToDefinitions constraints graph nameLists =  
   let litmap = (adaptLiteralTypesMap constraints)
   in (Flows.bind (Schemas.graphAsTypes graph) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
-    let toDef = (\tuple2 -> Module.TypeDefinition {
-            Module.typeDefinitionName = (fst tuple2),
-            Module.typeDefinitionType = (snd tuple2)})
+    let toDef = (\pair -> Module.TypeDefinition {
+            Module.typeDefinitionName = (Pairs.first pair),
+            Module.typeDefinitionType = (Pairs.second pair)})
     in (Flows.pure (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Find a list of alternatives for a given term, if any

@@ -170,11 +170,6 @@ optional = TypeMaybe
 pair :: Type -> Type -> Type
 pair first second = TypePair $ PairType first second
 
--- | Create a 2-tuple type
--- Example: tuple2 string int32
-tuple2 :: Type -> Type -> Type
-tuple2 a b = TypeProduct [a, b]
-
 -- | Create a polymorphic type scheme with explicit type variables
 -- Example: poly ["a", "b"] (var "a" --> var "b")
 -- This represents a type forall a b. a -> b that can be instantiated with different types

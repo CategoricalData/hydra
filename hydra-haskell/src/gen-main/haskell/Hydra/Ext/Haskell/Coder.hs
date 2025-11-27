@@ -28,6 +28,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -69,19 +70,19 @@ constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod coders pairs =  
   let h = (\namespace -> Module.unNamespace namespace) 
-      createDeclarations = (\g -> \tuple2 ->  
-              let el = (fst tuple2) 
-                  tt = (snd tuple2)
+      createDeclarations = (\g -> \pair ->  
+              let el = (Pairs.first pair) 
+                  tt = (Pairs.second pair)
                   term = (Core.typeApplicationTermBody tt)
                   typ = (Core.typeApplicationTermType tt)
-              in (Logic.ifElse (Annotations.isNativeType el) (toTypeDeclarations namespaces el term) (Flows.bind (toDataDeclaration coders namespaces tuple2) (\d -> Flows.pure [
+              in (Logic.ifElse (Annotations.isNativeType el) (toTypeDeclarations namespaces el term) (Flows.bind (toDataDeclaration coders namespaces pair) (\d -> Flows.pure [
                 d]))))
       importName = (\name -> Ast.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name))))
       imports = (Lists.concat2 domainImports standardImports)
       domainImports =  
-              let toImport = (\tuple2 ->  
-                      let namespace = (fst tuple2) 
-                          alias = (snd tuple2)
+              let toImport = (\pair ->  
+                      let namespace = (Pairs.first pair) 
+                          alias = (Pairs.second pair)
                           name = (h namespace)
                       in Ast.Import {
                         Ast.importQualified = True,
@@ -91,9 +92,9 @@ constructModule namespaces mod coders pairs =
               in (Lists.map toImport (Maps.toList (Module.namespacesMapping namespaces)))
       standardImports =  
               let toImport = (\triple ->  
-                      let name = (fst (fst triple)) 
-                          malias = (snd (fst triple))
-                          hidden = (snd triple)
+                      let name = (Pairs.first (Pairs.first triple)) 
+                          malias = (Pairs.second (Pairs.first triple))
+                          hidden = (Pairs.second triple)
                           spec = (Logic.ifElse (Lists.null hidden) Nothing (Just (Ast.SpecImportHiding (Lists.map (\n -> Ast.ImportExportSpec {
                                   Ast.importExportSpecModifier = Nothing,
                                   Ast.importExportSpecName = (Utils.simpleName n),
@@ -213,83 +214,87 @@ encodeLiteral l = ((\x -> case x of
 encodeTerm :: (Module.Namespaces Ast.ModuleName -> Core.Term -> Compute.Flow Graph.Graph Ast.Expression)
 encodeTerm namespaces term =  
   let encode = (encodeTerm namespaces)
-  in ((\x -> case x of
-    Core.TermApplication v1 ->  
-      let fun = (Core.applicationFunction v1) 
-          arg = (Core.applicationArgument v1)
-      in (Flows.bind (encode fun) (\hfun -> Flows.bind (encode arg) (\harg -> Flows.pure (Utils.hsapp hfun harg))))
-    Core.TermEither v1 -> (Eithers.either (\l -> Flows.bind (encode l) (\hl -> Flows.pure (Utils.hsapp (Utils.hsvar "Left") hl))) (\r -> Flows.bind (encode r) (\hr -> Flows.pure (Utils.hsapp (Utils.hsvar "Right") hr))) v1)
-    Core.TermFunction v1 -> (encodeFunction namespaces v1)
-    Core.TermLet v1 ->  
-      let bindings = (Core.letBindings v1) 
-          env = (Core.letBody v1)
-          encodeBinding = (\binding ->  
-                  let name = (Core.bindingName binding) 
-                      term_ = (Core.bindingTerm binding)
-                      hname = (Utils.simpleName (Core.unName name))
-                  in (Flows.bind (encode term_) (\hexpr -> Flows.pure (Ast.LocalBindingValue (Utils.simpleValueBinding hname hexpr Nothing)))))
-      in (Flows.bind (Flows.mapList encodeBinding bindings) (\hbindings -> Flows.bind (encode env) (\hinner -> Flows.pure (Ast.ExpressionLet (Ast.LetExpression {
-        Ast.letExpressionBindings = hbindings,
-        Ast.letExpressionInner = hinner})))))
-    Core.TermList v1 -> (Flows.bind (Flows.mapList encode v1) (\helems -> Flows.pure (Ast.ExpressionList helems)))
-    Core.TermLiteral v1 -> (encodeLiteral v1)
-    Core.TermMap v1 ->  
-      let lhs = (Utils.hsvar "M.fromList") 
-          encodePair = (\tuple2 ->  
-                  let k = (fst tuple2) 
-                      v = (snd tuple2)
-                      hk = (encode k)
-                      hv = (encode v)
-                  in (Flows.map (\x -> Ast.ExpressionTuple x) (Flows.sequence [
-                    hk,
-                    hv])))
-      in (Flows.bind (Flows.map (\x -> Ast.ExpressionList x) (Flows.mapList encodePair (Maps.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    Core.TermMaybe v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
-    Core.TermPair v1 -> (Flows.bind (encode (fst v1)) (\f -> Flows.bind (encode (snd v1)) (\s -> Flows.pure (Ast.ExpressionTuple [
-      f,
-      s]))))
-    Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
-    Core.TermRecord v1 ->  
-      let sname = (Core.recordTypeName v1) 
-          fields = (Core.recordFields v1)
-          toFieldUpdate = (\field ->  
-                  let fn = (Core.fieldName field) 
-                      ft = (Core.fieldTerm field)
-                      fieldRef = (Utils.recordFieldReference namespaces sname fn)
-                  in (Flows.bind (encode ft) (\hft -> Flows.pure (Ast.FieldUpdate {
-                    Ast.fieldUpdateName = fieldRef,
-                    Ast.fieldUpdateValue = hft}))))
-          typeName = (Utils.elementReference namespaces sname)
-      in (Flows.bind (Flows.mapList toFieldUpdate fields) (\updates -> Flows.pure (Ast.ExpressionConstructRecord (Ast.ConstructRecordExpression {
-        Ast.constructRecordExpressionName = typeName,
-        Ast.constructRecordExpressionFields = updates}))))
-    Core.TermSet v1 ->  
-      let lhs = (Utils.hsvar "S.fromList")
-      in (Flows.bind (encodeTerm namespaces (Core.TermList (Sets.toList v1))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    Core.TermTypeLambda v1 ->  
-      let term1 = (Core.typeLambdaBody v1)
-      in (encode term1)
-    Core.TermTypeApplication v1 ->  
-      let term1 = (Core.typeApplicationTermBody v1)
-      in (encode term1)
-    Core.TermUnion v1 ->  
-      let sname = (Core.injectionTypeName v1) 
-          field = (Core.injectionField v1)
-          fn = (Core.fieldName field)
-          ft = (Core.fieldTerm field)
-          lhs = (Ast.ExpressionVariable (Utils.unionFieldReference namespaces sname fn))
-          dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
+  in  
+    let nonemptyMap = (\m ->  
+            let lhs = (Utils.hsvar "M.fromList") 
+                encodePair = (\pair ->  
+                        let k = (Pairs.first pair) 
+                            v = (Pairs.second pair)
+                            hk = (encode k)
+                            hv = (encode v)
+                        in (Flows.map (\x -> Ast.ExpressionTuple x) (Flows.sequence [
+                          hk,
+                          hv])))
+            in (Flows.bind (Flows.map (\x -> Ast.ExpressionList x) (Flows.mapList encodePair (Maps.toList m))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs))))
+    in  
+      let nonemptySet = (\s ->  
+              let lhs = (Utils.hsvar "S.fromList")
+              in (Flows.bind (encodeTerm namespaces (Core.TermList (Sets.toList s))) (\rhs -> Flows.pure (Utils.hsapp lhs rhs))))
       in ((\x -> case x of
-        Core.TermUnit -> (Flows.pure lhs)
-        _ -> dflt) (Rewriting.deannotateTerm ft))
-    Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
-    Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
-    Core.TermWrap v1 ->  
-      let tname = (Core.wrappedTermTypeName v1) 
-          term_ = (Core.wrappedTermBody v1)
-          lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
-      in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-    _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Rewriting.deannotateTerm term))
+        Core.TermApplication v1 ->  
+          let fun = (Core.applicationFunction v1) 
+              arg = (Core.applicationArgument v1)
+          in (Flows.bind (encode fun) (\hfun -> Flows.bind (encode arg) (\harg -> Flows.pure (Utils.hsapp hfun harg))))
+        Core.TermEither v1 -> (Eithers.either (\l -> Flows.bind (encode l) (\hl -> Flows.pure (Utils.hsapp (Utils.hsvar "Left") hl))) (\r -> Flows.bind (encode r) (\hr -> Flows.pure (Utils.hsapp (Utils.hsvar "Right") hr))) v1)
+        Core.TermFunction v1 -> (encodeFunction namespaces v1)
+        Core.TermLet v1 ->  
+          let bindings = (Core.letBindings v1) 
+              env = (Core.letBody v1)
+              encodeBinding = (\binding ->  
+                      let name = (Core.bindingName binding) 
+                          term_ = (Core.bindingTerm binding)
+                          hname = (Utils.simpleName (Core.unName name))
+                      in (Flows.bind (encode term_) (\hexpr -> Flows.pure (Ast.LocalBindingValue (Utils.simpleValueBinding hname hexpr Nothing)))))
+          in (Flows.bind (Flows.mapList encodeBinding bindings) (\hbindings -> Flows.bind (encode env) (\hinner -> Flows.pure (Ast.ExpressionLet (Ast.LetExpression {
+            Ast.letExpressionBindings = hbindings,
+            Ast.letExpressionInner = hinner})))))
+        Core.TermList v1 -> (Flows.bind (Flows.mapList encode v1) (\helems -> Flows.pure (Ast.ExpressionList helems)))
+        Core.TermLiteral v1 -> (encodeLiteral v1)
+        Core.TermMap v1 -> (Logic.ifElse (Maps.null v1) (Flows.pure (Utils.hsvar "M.empty")) (nonemptyMap v1))
+        Core.TermMaybe v1 -> (Maybes.cases v1 (Flows.pure (Utils.hsvar "Nothing")) (\t -> Flows.bind (encode t) (\ht -> Flows.pure (Utils.hsapp (Utils.hsvar "Just") ht))))
+        Core.TermPair v1 -> (Flows.bind (encode (Pairs.first v1)) (\f -> Flows.bind (encode (Pairs.second v1)) (\s -> Flows.pure (Ast.ExpressionTuple [
+          f,
+          s]))))
+        Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
+        Core.TermRecord v1 ->  
+          let sname = (Core.recordTypeName v1) 
+              fields = (Core.recordFields v1)
+              toFieldUpdate = (\field ->  
+                      let fn = (Core.fieldName field) 
+                          ft = (Core.fieldTerm field)
+                          fieldRef = (Utils.recordFieldReference namespaces sname fn)
+                      in (Flows.bind (encode ft) (\hft -> Flows.pure (Ast.FieldUpdate {
+                        Ast.fieldUpdateName = fieldRef,
+                        Ast.fieldUpdateValue = hft}))))
+              typeName = (Utils.elementReference namespaces sname)
+          in (Flows.bind (Flows.mapList toFieldUpdate fields) (\updates -> Flows.pure (Ast.ExpressionConstructRecord (Ast.ConstructRecordExpression {
+            Ast.constructRecordExpressionName = typeName,
+            Ast.constructRecordExpressionFields = updates}))))
+        Core.TermSet v1 -> (Logic.ifElse (Sets.null v1) (Flows.pure (Utils.hsvar "S.empty")) (nonemptySet v1))
+        Core.TermTypeLambda v1 ->  
+          let term1 = (Core.typeLambdaBody v1)
+          in (encode term1)
+        Core.TermTypeApplication v1 ->  
+          let term1 = (Core.typeApplicationTermBody v1)
+          in (encode term1)
+        Core.TermUnion v1 ->  
+          let sname = (Core.injectionTypeName v1) 
+              field = (Core.injectionField v1)
+              fn = (Core.fieldName field)
+              ft = (Core.fieldTerm field)
+              lhs = (Ast.ExpressionVariable (Utils.unionFieldReference namespaces sname fn))
+              dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
+          in ((\x -> case x of
+            Core.TermUnit -> (Flows.pure lhs)
+            _ -> dflt) (Rewriting.deannotateTerm ft))
+        Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
+        Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
+        Core.TermWrap v1 ->  
+          let tname = (Core.wrappedTermTypeName v1) 
+              term_ = (Core.wrappedTermBody v1)
+              lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
+          in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
+        _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Rewriting.deannotateTerm term))
 
 encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow t0 Ast.Type)
 encodeType namespaces typ =  
@@ -368,9 +373,9 @@ encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
-      encodeAssertion = (\tuple2 ->  
-              let name = (fst tuple2) 
-                  cls = (snd tuple2)
+      encodeAssertion = (\pair ->  
+              let name = (Pairs.first pair) 
+                  cls = (Pairs.second pair)
                   hname = (Utils.rawName ((\x -> case x of
                           Classes.TypeClassEquality -> "Eq"
                           Classes.TypeClassOrdering -> "Ord") cls))
@@ -381,8 +386,8 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
                   htype]})))
       assertPairs = (Lists.concat (Lists.map toPairs (Maps.toList classes)))
       toPairs = (\mapEntry ->  
-              let name = (fst mapEntry) 
-                  clsSet = (snd mapEntry)
+              let name = (Pairs.first mapEntry) 
+                  clsSet = (Pairs.second mapEntry)
                   toPair = (\c -> (name, c))
               in (Lists.map toPair (Sets.toList clsSet)))
   in (Monads.withTrace "encode with assertions" (Flows.bind (adaptTypeToHaskellAndEncode namespaces typ) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Flows.pure htyp) ( 
@@ -428,9 +433,9 @@ moduleToHaskell mod = (Flows.bind (moduleToHaskellModule mod) (\hsmod ->
 nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
 nameDecls g namespaces name typ =  
   let nm = (Core.unName name) 
-      toDecl = (\n -> \tuple2 ->  
-              let k = (fst tuple2) 
-                  v = (snd tuple2)
+      toDecl = (\n -> \pair ->  
+              let k = (Pairs.first pair) 
+                  v = (Pairs.second pair)
                   decl = (Ast.DeclarationValueBinding (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
                           Ast.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
                           Ast.simpleValueBindingRhs = (Ast.RightHandSide (Ast.ExpressionApplication (Ast.ApplicationExpression {
@@ -448,9 +453,9 @@ nameDecls g namespaces name typ =
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
 toDataDeclaration :: (M.Map Core.Type (Compute.Coder Graph.Graph t0 Core.Term Ast.Expression) -> Module.Namespaces Ast.ModuleName -> (Core.Binding, Core.TypeApplicationTerm) -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
-toDataDeclaration coders namespaces tuple2 =  
-  let el = (fst tuple2) 
-      tt = (snd tuple2)
+toDataDeclaration coders namespaces pair =  
+  let el = (Pairs.first pair) 
+      tt = (Pairs.second pair)
       term = (Core.typeApplicationTermBody tt)
       typ = (Core.typeApplicationTermType tt)
       coder = (Maybes.fromJust (Maps.lookup typ coders))
@@ -549,7 +554,7 @@ toTypeDeclarations namespaces el term =
                   ftype = (Core.fieldTypeType fieldType)
                   deconflict = (\name ->  
                           let tname = (Names.unqualifyName (Module.QualifiedName {
-                                  Module.qualifiedNameNamespace = (Just (fst (Module.namespacesFocus namespaces))),
+                                  Module.qualifiedNameNamespace = (Just (Pairs.first (Module.namespacesFocus namespaces))),
                                   Module.qualifiedNameLocal = name}))
                           in (Logic.ifElse (Maybes.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
@@ -567,8 +572,8 @@ toTypeDeclarations namespaces el term =
             "Read",
             "Show"]) [])) 
         unpackResult = (Utils.unpackForallType g t)
-        vars = (fst unpackResult)
-        t_ = (snd unpackResult)
+        vars = (Pairs.first unpackResult)
+        t_ = (Pairs.second unpackResult)
         hd = (declHead hname (Lists.reverse vars))
     in (Flows.bind ((\x -> case x of
       Core.TypeRecord v1 -> (Flows.bind (recordCons lname (Core.rowTypeFields v1)) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {

@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Topology as Topology
@@ -24,32 +25,32 @@ import qualified Data.Set as S
 
 adjacencyListsToGraph :: (Ord t0) => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
 adjacencyListsToGraph edges0 =  
-  let sortedEdges = (Lists.sortOn fst edges0)
+  let sortedEdges = (Lists.sortOn Pairs.first edges0)
   in  
     let indexedEdges = (Lists.zip (Math.range 0 (Lists.length sortedEdges)) sortedEdges)
     in  
       let keyToVertex = (Maps.fromList (Lists.map (\vkNeighbors ->  
-              let v = (fst vkNeighbors)
+              let v = (Pairs.first vkNeighbors)
               in  
-                let kNeighbors = (snd vkNeighbors)
+                let kNeighbors = (Pairs.second vkNeighbors)
                 in  
-                  let k = (fst kNeighbors)
+                  let k = (Pairs.first kNeighbors)
                   in (k, v)) indexedEdges))
       in  
         let vertexMap = (Maps.fromList (Lists.map (\vkNeighbors ->  
-                let v = (fst vkNeighbors)
+                let v = (Pairs.first vkNeighbors)
                 in  
-                  let kNeighbors = (snd vkNeighbors)
+                  let kNeighbors = (Pairs.second vkNeighbors)
                   in  
-                    let k = (fst kNeighbors)
+                    let k = (Pairs.first kNeighbors)
                     in (v, k)) indexedEdges))
         in  
           let graph = (Maps.fromList (Lists.map (\vkNeighbors ->  
-                  let v = (fst vkNeighbors)
+                  let v = (Pairs.first vkNeighbors)
                   in  
-                    let kNeighbors = (snd vkNeighbors)
+                    let kNeighbors = (Pairs.second vkNeighbors)
                     in  
-                      let neighbors = (snd kNeighbors)
+                      let neighbors = (Pairs.second kNeighbors)
                       in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges))
           in  
             let vertexToKey = (\v -> Maybes.fromJust (Maps.lookup v vertexMap))

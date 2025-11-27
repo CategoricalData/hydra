@@ -96,6 +96,12 @@ mapType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name 
 name :: (Core.Term -> Compute.Flow Graph.Graph Core.Name)
 name term = (Flows.map (\x -> Core.Name x) (Flows.bind (Core_.wrap (Core.Name "hydra.core.Name") term) Core_.string))
 
+-- | Decode a pair type from a term
+pairType :: (Core.Term -> Compute.Flow Graph.Graph Core.PairType)
+pairType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "first") type_) (\first -> Flows.bind (Lexical.getField m (Core.Name "second") type_) (\second -> Flows.pure (Core.PairType {
+  Core.pairTypeFirst = first,
+  Core.pairTypeSecond = second})))))
+
 -- | Decode a row type from a term
 rowType :: (Core.Term -> Compute.Flow Graph.Graph Core.RowType)
 rowType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "typeName") name) (\typeName -> Flows.bind (Lexical.getField m (Core.Name "fields") fieldTypes) (\fields -> Flows.pure (Core.RowType {
@@ -121,6 +127,7 @@ type_ dat = ((\x -> case x of
     (Core.Name "literal", (\lt -> Flows.map (\x -> Core.TypeLiteral x) (literalType lt))),
     (Core.Name "map", (\mt -> Flows.map (\x -> Core.TypeMap x) (mapType mt))),
     (Core.Name "maybe", (\et -> Flows.map (\x -> Core.TypeMaybe x) (type_ et))),
+    (Core.Name "pair", (\pt -> Flows.map (\x -> Core.TypePair x) (pairType pt))),
     (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.listOf type_ types))),
     (Core.Name "record", (\rt -> Flows.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),

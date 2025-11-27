@@ -18,6 +18,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -169,13 +170,13 @@ checkTypeSubst cx subst =
         in  
           let badVars = (Sets.fromList (Lists.filter (\v -> Maybes.maybe False isNominal (Lexical.dereferenceSchemaType v (Typing.inferenceContextSchemaTypes cx))) (Sets.toList suspectVars)))
           in  
-            let badPairs = (Lists.filter (\p -> Sets.member (fst p) badVars) (Maps.toList s))
+            let badPairs = (Lists.filter (\p -> Sets.member (Pairs.first p) badVars) (Maps.toList s))
             in  
               let printPair = (\p -> Strings.cat [
                       Strings.cat [
-                        Core.unName (fst p),
+                        Core.unName (Pairs.first p),
                         " --> "],
-                      (Core__.type_ (snd p))])
+                      (Core__.type_ (Pairs.second p))])
               in (Logic.ifElse (Sets.null badVars) (Flows.pure subst) (Flows.fail (Strings.cat [
                 Strings.cat [
                   "Schema type(s) incorrectly unified: {",
@@ -287,9 +288,9 @@ typeOfApplication tx typeArgs app =
                 ")",
                 ". types: ",
                 (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
-                  Core.unName (fst p),
+                  Core.unName (Pairs.first p),
                   ": ",
-                  (Core__.type_ (snd p))]) (Maps.toList (Typing.typeContextTypes tx))))]))) tfun)
+                  (Core__.type_ (Pairs.second p))]) (Maps.toList (Typing.typeContextTypes tx))))]))) tfun)
       in (Flows.bind (typeOf tx [] fun) (\tfun -> Flows.bind (checkTypeVariables tx tfun) (\_ -> Flows.bind (typeOf tx [] arg) (\targ -> Flows.bind (checkTypeVariables tx targ) (\_ -> Flows.bind (tryType tfun targ) (\t -> applyTypeArgumentsToType tx typeArgs t))))))
 
 typeOfCaseStatement :: (Typing.TypeContext -> [Core.Type] -> Core.CaseStatement -> Compute.Flow t0 Core.Type)
@@ -389,7 +390,7 @@ typeOfMap :: (Typing.TypeContext -> [Core.Type] -> M.Map Core.Term Core.Term -> 
 typeOfMap tx typeArgs m =  
   let nonnull =  
           let pairs = (Maps.toList m)
-          in (Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map fst pairs)) (checkSameType tx "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map snd pairs)) (checkSameType tx "map values")) (\vt -> Flows.bind (checkTypeVariables tx kt) (\_ -> Flows.bind (checkTypeVariables tx vt) (\_ -> applyTypeArgumentsToType tx typeArgs (Core.TypeMap (Core.MapType {
+          in (Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map Pairs.first pairs)) (checkSameType tx "map keys")) (\kt -> Flows.bind (Flows.bind (Flows.mapList (typeOf tx []) (Lists.map Pairs.second pairs)) (checkSameType tx "map values")) (\vt -> Flows.bind (checkTypeVariables tx kt) (\_ -> Flows.bind (checkTypeVariables tx vt) (\_ -> applyTypeArgumentsToType tx typeArgs (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = kt,
             Core.mapTypeValues = vt})))))))
   in (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Flows.pure (Core.TypeMap (Core.MapType {
@@ -414,12 +415,12 @@ typeOfPair tx typeArgs p =
   let checkLength =  
           let n = (Lists.length typeArgs)
           in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat [
-            "tuple2 type requires 2 type arguments, got ",
+            "pair type requires 2 type arguments, got ",
             (Literals.showInt32 n)])))
   in (Flows.bind checkLength (\_ ->  
-    let pairFst = (fst p)
+    let pairFst = (Pairs.first p)
     in  
-      let pairSnd = (snd p)
+      let pairSnd = (Pairs.second p)
       in (Flows.bind (typeOf tx [] pairFst) (\firstType -> Flows.bind (checkTypeVariables tx firstType) (\_ -> Flows.bind (typeOf tx [] pairSnd) (\secondType -> Flows.bind (checkTypeVariables tx secondType) (\_ -> Flows.pure (Core.TypePair (Core.PairType {
         Core.pairTypeFirst = firstType,
         Core.pairTypeSecond = secondType})))))))))

@@ -11,6 +11,9 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+tryMe :: Core.Term
+tryMe = (Core.TermPair (Core.TermUnit, Core.TermUnit))
+
 -- | Disable type checking by default, for better performance
 debugInference :: Bool
 debugInference = True
