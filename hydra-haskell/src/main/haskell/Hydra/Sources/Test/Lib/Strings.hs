@@ -6,7 +6,7 @@ import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -19,10 +19,10 @@ module_ = Module (Namespace "hydra.test.lib.strings") elements
     (Just "Test cases for hydra.lib.strings primitives")
   where
     elements = [
-        MetaTerms.el allTestsDef]
+        el allTestsDef]
 
 define :: String -> TTerm a -> TBinding a
-define = MetaTerms.definitionInModule module_
+define = definitionInModule module_
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = define "allTests" $
@@ -60,7 +60,7 @@ allTestsDef = define "allTests" $
         test "control characters" ["\n", "\t", "\r"] "\n\t\r",
         test "null character" ["hello", "\0", "world"] "hello\0world"]
         where
-          test name ls result = primCase name _strings_cat [MetaTerms.list (MetaTerms.string <$> ls)] (MetaTerms.string result)
+          test name ls result = primCase name _strings_cat [list (string <$> ls)] (string result)
   
       stringsCat2 = subgroup "cat2" [
         test "basic concatenation" "hello" "world" "helloworld",
@@ -71,7 +71,7 @@ allTestsDef = define "allTests" $
         test "special characters" "\n" "\t" "\n\t",
         test "null characters" "hello\0" "world" "hello\0world"]
         where
-          test name s1 s2 result = primCase name _strings_cat2 [MetaTerms.string s1, MetaTerms.string s2] (MetaTerms.string result)
+          test name s1 s2 result = primCase name _strings_cat2 [string s1, string s2] (string result)
   
       stringsCharAt = subgroup "charAt" [
         test "first character" 0 "hello" 104,  -- 'h'
@@ -80,13 +80,13 @@ allTestsDef = define "allTests" $
         test "single character string" 0 "a" 97,      -- 'a'
         test "unicode character" 0 "\241" 241,    -- ñ
         test "multi-byte unicode" 0 "\19990" 19990,  -- 世
-        test "second of combining tuple2" 1 "e\769" 769]  -- combining acute accent
+        test "second of combining pair" 1 "e\769" 769]  -- combining acute accent
         -- TODO: failure cases (need syntax support)
         -- test "negative index" (-1) "hello" <error>
         -- test "index out of bounds" 10 "hello" <error>
         -- test "index on empty string" 0 "" <error>
         where
-          test name idx s result = primCase name _strings_charAt [MetaTerms.int32 idx, MetaTerms.string s] (MetaTerms.int32 result)
+          test name idx s result = primCase name _strings_charAt [int32 idx, string s] (int32 result)
   
       stringsFromList = subgroup "fromList" [
         test "basic ascii string" [104, 101, 108, 108, 111] "hello",
@@ -100,7 +100,7 @@ allTestsDef = define "allTests" $
         -- test "negative code point" [-1] <error>
         -- test "invalid code point" [1114112] <error>  -- beyond valid Unicode range
         where
-          test name codePoints result = primCase name _strings_fromList [MetaTerms.list (MetaTerms.int32 <$> codePoints)] (MetaTerms.string result)
+          test name codePoints result = primCase name _strings_fromList [list (int32 <$> codePoints)] (string result)
   
       stringsIntercalate = subgroup "intercalate" [
         -- Basic functionality
@@ -117,7 +117,7 @@ allTestsDef = define "allTests" $
         test "unicode separator" "\127757" ["link1", "link2"] "link1\127757link2",  -- 🌍
         test "newline separator" "\n" ["line1", "line2"] "line1\nline2"]
         where
-          test name sep strs result = primCase name _strings_intercalate [MetaTerms.string sep, MetaTerms.list (MetaTerms.string <$> strs)] (MetaTerms.string result)
+          test name sep strs result = primCase name _strings_intercalate [string sep, list (string <$> strs)] (string result)
   
       stringsLength = subgroup "length" [
         test "empty string" "" 0,
@@ -127,7 +127,7 @@ allTestsDef = define "allTests" $
         test "combining character sequence" "e\769" 2,  -- e + combining acute (separate code points)
         test "special characters" "\n\t\r" 3]
         where
-          test name s result = primCase name _strings_length [MetaTerms.string s] (MetaTerms.int32 result)
+          test name s result = primCase name _strings_length [string s] (int32 result)
   
       stringsLines = subgroup "lines" [
         -- Basic functionality
@@ -148,7 +148,7 @@ allTestsDef = define "allTests" $
         test "unicode content" "\241\n\19990" ["\241", "\19990"],  -- ñ, 世
         test "tabs not split" "a\tb\nc" ["a\tb", "c"]]  -- only \n splits, not \t
         where
-          test name s result = primCase name _strings_lines [MetaTerms.string s] (MetaTerms.list (MetaTerms.string <$> result))
+          test name s result = primCase name _strings_lines [string s] (list (string <$> result))
   
       stringsNull = subgroup "null" [
         test "empty string" "" True,
@@ -159,7 +159,7 @@ allTestsDef = define "allTests" $
         test "null character" "\0" False,
         test "multi-character" "hello" False]
         where
-          test name s result = primCase name _strings_null [MetaTerms.string s] (MetaTerms.boolean result)
+          test name s result = primCase name _strings_null [string s] (boolean result)
   
       stringsSplitOn = subgroup "splitOn" [
         -- Basic functionality
@@ -194,7 +194,7 @@ allTestsDef = define "allTests" $
         -- Special characters
         test "newline separator" "\n" "line1\nline2\nline3" ["line1", "line2", "line3"]]
         where
-          test name s0 s1 result = primCase name _strings_splitOn [MetaTerms.string s0, MetaTerms.string s1] (MetaTerms.list (MetaTerms.string <$> result))
+          test name s0 s1 result = primCase name _strings_splitOn [string s0, string s1] (list (string <$> result))
   
       stringsToList = subgroup "toList" [
         -- Basic functionality
@@ -210,7 +210,7 @@ allTestsDef = define "allTests" $
         test "control characters" "\n\t\r" [10, 9, 13],
         test "null character" "h\0i" [104, 0, 105]]
         where
-          test name s result = primCase name _strings_toList [MetaTerms.string s] (MetaTerms.list (MetaTerms.int32 <$> result))
+          test name s result = primCase name _strings_toList [string s] (list (int32 <$> result))
   
       stringsToLower = subgroup "toLower" [
         -- Basic functionality
@@ -226,7 +226,7 @@ allTestsDef = define "allTests" $
         -- Unicode
         test "unicode accented chars" "\209\193\201\205\211\218" "\241\225\233\237\243\250"]  -- ÑÁÉÍÓÚ -> ñáéíóú
         where
-          test name s result = primCase name _strings_toLower [MetaTerms.string s] (MetaTerms.string result)
+          test name s result = primCase name _strings_toLower [string s] (string result)
   
       stringsToUpper = subgroup "toUpper" [
         -- Basic functionality
@@ -242,7 +242,7 @@ allTestsDef = define "allTests" $
         -- Unicode
         test "unicode accented chars" "\241\225\233\237\243\250" "\209\193\201\205\211\218"]  -- ñáéíóú -> ÑÁÉÍÓÚ
         where
-          test name s result = primCase name _strings_toUpper [MetaTerms.string s] (MetaTerms.string result)
+          test name s result = primCase name _strings_toUpper [string s] (string result)
   
       stringsUnlines = subgroup "unlines" [
         -- Basic functionality
@@ -257,4 +257,4 @@ allTestsDef = define "allTests" $
         -- Unicode
         test "unicode content" ["\241o\241o", "\19990\30028"] "\241o\241o\n\19990\30028\n"]  -- ñoño, 世界
         where
-          test name strs result = primCase name _strings_unlines [MetaTerms.list (MetaTerms.string <$> strs)] (MetaTerms.string result)
+          test name strs result = primCase name _strings_unlines [list (string <$> strs)] (string result)

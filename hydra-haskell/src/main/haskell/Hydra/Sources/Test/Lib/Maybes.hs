@@ -63,7 +63,7 @@ maybesMaybe = subgroup "maybe" [
 maybesPure :: TTerm TestGroup
 maybesPure = subgroup "pure" [
   test "wraps integer" (int32 42) (justInt32 42),
-  test "wraps string" (MetaTerms.string "hello") (Core.termMaybe $ just (MetaTerms.string "hello"))]
+  test "wraps string" (string "hello") (Core.termMaybe $ just (string "hello"))]
   where
     test name x expected = primCase name _maybes_pure [x] expected
 
@@ -76,7 +76,7 @@ maybesCat = subgroup "cat" [
   where
     test name input expected = primCase name _maybes_cat [
       list input
-      ] (list $ Prelude.map int32 expected)
+      ] (list $ fmap int32 expected)
 
 maybesMap :: TTerm TestGroup
 maybesMap = subgroup "map" [

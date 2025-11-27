@@ -28,7 +28,7 @@ literalsBigintToInt32 = subgroup "bigintToInt32" [
   test "negative" (-42) (-42),
   test "zero" 0 0]
   where
-    test name x result = primCase name _literals_bigintToInt32 [MetaTerms.bigint x] (int32 result)
+    test name x result = primCase name _literals_bigintToInt32 [bigint x] (int32 result)
 
 literalsInt32ToBigint :: TTerm TestGroup
 literalsInt32ToBigint = subgroup "int32ToBigint" [
@@ -36,21 +36,21 @@ literalsInt32ToBigint = subgroup "int32ToBigint" [
   test "negative" (-42) (-42),
   test "zero" 0 0]
   where
-    test name x result = primCase name _literals_int32ToBigint [int32 x] (MetaTerms.bigint result)
+    test name x result = primCase name _literals_int32ToBigint [int32 x] (bigint result)
 
 --literalsStringToBinary :: TTerm TestGroup
 --literalsStringToBinary = subgroup "stringToBinary" [
 --  test "simple string" "hello" "hello",
 --  test "empty string" "" ""]
 --  where
---    test name x result = primCase name _literals_stringToBinary [MetaTerms.string x] (MetaTerms.string result)
+--    test name x result = primCase name _literals_stringToBinary [string x] (string result)
 --
 --literalsBinaryToString :: TTerm TestGroup
 --literalsBinaryToString = subgroup "binaryToString" [
 --  test "simple string" "hello" "hello",
 --  test "empty string" "" ""]
 --  where
---    test name x result = primCase name _literals_binaryToString [MetaTerms.string x] (MetaTerms.string result)
+--    test name x result = primCase name _literals_binaryToString [string x] (string result)
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $

@@ -20,17 +20,17 @@ module_ = Module (Namespace "hydra.test.lib.lists") elements
     (Just "Test cases for hydra.lib.lists primitives")
   where
     elements = [
-      MetaTerms.el allTestsDef]
+      el allTestsDef]
 
 define :: String -> TTerm a -> TBinding a
-define = MetaTerms.definitionInModule module_
+define = definitionInModule module_
 
 -- Helper functions for building test terms
 intList :: [Int] -> TTerm Term
-intList els = MetaTerms.list (MetaTerms.int32 <$> els)
+intList els = list (int32 <$> els)
 
 intListList :: [[Int]] -> TTerm Term
-intListList lists = MetaTerms.list (intList <$> lists)
+intListList lists = list (intList <$> lists)
 
 optionalInt32 :: Maybe Int -> TTerm Term
 optionalInt32 Nothing = Core.termMaybe nothing
@@ -41,7 +41,7 @@ optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
 
 stringList :: [String] -> TTerm Term
-stringList els = MetaTerms.list (MetaTerms.string <$> els)
+stringList els = list (string <$> els)
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = define "allTests" $
@@ -91,7 +91,7 @@ allTestsDef = define "allTests" $
           testStr "single function" [primitive _strings_toUpper] ["hello"] ["HELLO"],
           testStr "single input" [primitive _strings_toUpper, primitive _strings_toLower] ["Test"] ["TEST", "test"]]]
         where
-          testStr name funs lst result = primCase name _lists_apply [MetaTerms.list funs, stringList lst] (stringList result)
+          testStr name funs lst result = primCase name _lists_apply [list funs, stringList lst] (stringList result)
   
       listsAt = subgroup "at" [
         testInt "first element" 0 [1, 2, 3] 1,
@@ -100,8 +100,8 @@ allTestsDef = define "allTests" $
         testInt "single element list" 0 [42] 42,
         testStr "string list access" 1 ["hello", "world"] "world"]
         where
-          testInt name idx lst result = primCase name _lists_at [MetaTerms.int32 idx, intList lst] (MetaTerms.int32 result)
-          testStr name idx lst result = primCase name _lists_at [MetaTerms.int32 idx, stringList lst] (MetaTerms.string result)
+          testInt name idx lst result = primCase name _lists_at [int32 idx, intList lst] (int32 result)
+          testStr name idx lst result = primCase name _lists_at [int32 idx, stringList lst] (string result)
   
       listsBind = subgroup "bind" [
         test "negation function" [1, 2, 3, 4] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
@@ -137,8 +137,8 @@ allTestsDef = define "allTests" $
         testInt "cons negative number" (-1) [2, 3] [-1, 2, 3],
         testStr "cons string" "hello" ["world"] ["hello", "world"]]
         where
-          testInt name x lst result = primCase name _lists_cons [MetaTerms.int32 x, intList lst] (intList result)
-          testStr name x lst result = primCase name _lists_cons [MetaTerms.string x, stringList lst] (stringList result)
+          testInt name x lst result = primCase name _lists_cons [int32 x, intList lst] (intList result)
+          testStr name x lst result = primCase name _lists_cons [string x, stringList lst] (stringList result)
   
       listsDrop = subgroup "drop" [
         test "drop from beginning" 2 [1, 2, 3, 4, 5] [3, 4, 5],
@@ -148,7 +148,7 @@ allTestsDef = define "allTests" $
         test "drop from empty list" 3 [] [],
         test "drop negative amount" (-1) [1, 2, 3] [1, 2, 3]]
         where
-          test name n lst result = primCase name _lists_drop [MetaTerms.int32 n, intList lst] (intList result)
+          test name n lst result = primCase name _lists_drop [int32 n, intList lst] (intList result)
   
       listsDropWhile = subgroup "dropWhile" [
         test "drop while less than 3" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 3)) [1, 2, 3, 2, 1] [3, 2, 1],
@@ -168,8 +168,8 @@ allTestsDef = define "allTests" $
         testStr "string element present" "hello" ["world", "hello", "test"] True,
         testStr "string element not present" "missing" ["world", "hello"] False]
         where
-          testInt name x lst result = primCase name _lists_elem [MetaTerms.int32 x, intList lst] (MetaTerms.boolean result)
-          testStr name x lst result = primCase name _lists_elem [MetaTerms.string x, stringList lst] (MetaTerms.boolean result)
+          testInt name x lst result = primCase name _lists_elem [int32 x, intList lst] (boolean result)
+          testStr name x lst result = primCase name _lists_elem [string x, stringList lst] (boolean result)
   
       listsFilter = subgroup "filter" [
         test "filter positive numbers" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [-1, 2, -3, 4, 5] [2, 4, 5],
@@ -186,7 +186,7 @@ allTestsDef = define "allTests" $
         test "single element" (primitive _math_add) 10 [5] 15,
         test "subtraction fold" (primitive _math_sub) 10 [1, 2, 3] 4]
         where
-          test name op acc lst result = primCaseWithTags name [tag_requiresInterp] _lists_foldl [op, MetaTerms.int32 acc, intList lst] (MetaTerms.int32 result)
+          test name op acc lst result = primCaseWithTags name [tag_requiresInterp] _lists_foldl [op, int32 acc, intList lst] (int32 result)
   
       listsGroup = subgroup "group" [
         test "consecutive duplicates" [1, 1, 2, 2, 2, 3, 1] [[1, 1], [2, 2, 2], [3], [1]],
@@ -203,8 +203,8 @@ allTestsDef = define "allTests" $
         testInt "negative numbers" [-1, -2, -3] (-1),
         testStr "string list" ["hello", "world"] "hello"]
         where
-          testInt name lst result = primCase name _lists_head [intList lst] (MetaTerms.int32 result)
-          testStr name lst result = primCase name _lists_head [stringList lst] (MetaTerms.string result)
+          testInt name lst result = primCase name _lists_head [intList lst] (int32 result)
+          testStr name lst result = primCase name _lists_head [stringList lst] (string result)
   
       listsInit = subgroup "init" [
         testInt "multiple elements" [1, 2, 3, 4] [1, 2, 3],
@@ -232,8 +232,8 @@ allTestsDef = define "allTests" $
         testStr "two elements" "+" ["a", "b"] ["a", "+", "b"],
         testInt "number interspersion" 0 [1, 2, 3] [1, 0, 2, 0, 3]]
         where
-          testStr name ifx lst result = primCase name _lists_intersperse [MetaTerms.string ifx, stringList lst] (stringList result)
-          testInt name ifx lst result = primCase name _lists_intersperse [MetaTerms.int32 ifx, intList lst] (intList result)
+          testStr name ifx lst result = primCase name _lists_intersperse [string ifx, stringList lst] (stringList result)
+          testInt name ifx lst result = primCase name _lists_intersperse [int32 ifx, intList lst] (intList result)
   
       listsLast = subgroup "last" [
         testInt "three element list" [1, 2, 3] 3,
@@ -241,8 +241,8 @@ allTestsDef = define "allTests" $
         testInt "negative numbers" [-1, -2, -3] (-3),
         testStr "string list" ["hello", "world"] "world"]
         where
-          testInt name lst result = primCase name _lists_last [intList lst] (MetaTerms.int32 result)
-          testStr name lst result = primCase name _lists_last [stringList lst] (MetaTerms.string result)
+          testInt name lst result = primCase name _lists_last [intList lst] (int32 result)
+          testStr name lst result = primCase name _lists_last [stringList lst] (string result)
   
       listsLength = subgroup "length" [
         testInt "three elements" [1, 2, 3] 3,
@@ -251,8 +251,8 @@ allTestsDef = define "allTests" $
         testInt "many elements" [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] 10,
         testStr "string list" ["a", "b", "c"] 3]
         where
-          testInt name lst result = primCase name _lists_length [intList lst] (MetaTerms.int32 result)
-          testStr name lst result = primCase name _lists_length [stringList lst] (MetaTerms.int32 result)
+          testInt name lst result = primCase name _lists_length [intList lst] (int32 result)
+          testStr name lst result = primCase name _lists_length [stringList lst] (int32 result)
   
       listsMap = subgroup "map" [
         testStr "string to uppercase" (primitive _strings_toUpper) ["one", "two"] ["ONE", "TWO"],
@@ -282,8 +282,8 @@ allTestsDef = define "allTests" $
         testStr "empty string list" [] True,
         testStr "non-empty string list" ["a"] False]
         where
-          testInt name lst result = primCase name _lists_null [intList lst] (MetaTerms.boolean result)
-          testStr name lst result = primCase name _lists_null [stringList lst] (MetaTerms.boolean result)
+          testInt name lst result = primCase name _lists_null [intList lst] (boolean result)
+          testStr name lst result = primCase name _lists_null [stringList lst] (boolean result)
   
       listsPure = subgroup "pure" [
         testStr "string element" "one" ["one"],
@@ -291,8 +291,8 @@ allTestsDef = define "allTests" $
         testInt "number element" 42 [42],
         testInt "negative number" (-5) [-5]]
         where
-          testStr name arg result = primCase name _lists_pure [MetaTerms.string arg] (stringList result)
-          testInt name arg result = primCase name _lists_pure [MetaTerms.int32 arg] (intList result)
+          testStr name arg result = primCase name _lists_pure [string arg] (stringList result)
+          testInt name arg result = primCase name _lists_pure [int32 arg] (intList result)
   
       listsReplicate = subgroup "replicate" [
         testInt "replicate three times" 3 42 [42, 42, 42],
@@ -300,8 +300,8 @@ allTestsDef = define "allTests" $
         testInt "replicate once" 1 99 [99],
         testStr "replicate string" 2 "hello" ["hello", "hello"]]
         where
-          testInt name n x result = primCase name _lists_replicate [MetaTerms.int32 n, MetaTerms.int32 x] (intList result)
-          testStr name n x result = primCase name _lists_replicate [MetaTerms.int32 n, MetaTerms.string x] (stringList result)
+          testInt name n x result = primCase name _lists_replicate [int32 n, int32 x] (intList result)
+          testStr name n x result = primCase name _lists_replicate [int32 n, string x] (stringList result)
   
       listsReverse = subgroup "reverse" [
         testInt "multiple elements" [1, 2, 3, 4] [4, 3, 2, 1],
@@ -329,8 +329,8 @@ allTestsDef = define "allTests" $
         testInt "zero" 0 [0],
         testStr "string element" "hello" ["hello"]]
         where
-          testInt name x result = primCase name _lists_singleton [MetaTerms.int32 x] (intList result)
-          testStr name x result = primCase name _lists_singleton [MetaTerms.string x] (stringList result)
+          testInt name x result = primCase name _lists_singleton [int32 x] (intList result)
+          testStr name x result = primCase name _lists_singleton [string x] (stringList result)
   
       listsSort = subgroup "sort" [
         testInt "unsorted numbers" [3, 1, 4, 1, 5] [1, 1, 3, 4, 5],
@@ -360,7 +360,7 @@ allTestsDef = define "allTests" $
         test "span no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
         test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] ([], [])]
         where
-          test name pred lst (prefix, suffix) = primCaseWithTags name [tag_requiresInterp] _lists_span [pred, intList lst] (tuple2 (intList prefix) (intList suffix))
+          test name pred lst (prefix, suffix) = primCaseWithTags name [tag_requiresInterp] _lists_span [pred, intList lst] (pair (intList prefix) (intList suffix))
   
       listsTail = subgroup "tail" [
         testInt "multiple elements" [1, 2, 3, 4] [2, 3, 4],
@@ -379,7 +379,7 @@ allTestsDef = define "allTests" $
         test "take from empty list" 3 [] [],
         test "take negative amount" (-1) [1, 2, 3] []]
         where
-          test name n lst result = primCase name _lists_take [MetaTerms.int32 n, intList lst] (intList result)
+          test name n lst result = primCase name _lists_take [int32 n, intList lst] (intList result)
   
       listsTranspose = subgroup "transpose" [
         test "square matrix" [[1, 2, 3], [4, 5, 6]] [[1, 4], [2, 5], [3, 6]],
@@ -398,7 +398,7 @@ allTestsDef = define "allTests" $
         test "empty second list" [1, 2] [] [],
         test "both empty lists" [] [] []]
         where
-          test name lst1 lst2 result = primCase name _lists_zip [intList lst1, stringList lst2] (MetaTerms.list ((\(x, y) -> tuple2 (MetaTerms.int32 x) (MetaTerms.string y)) <$> result))
+          test name lst1 lst2 result = primCase name _lists_zip [intList lst1, stringList lst2] (list ((\(x, y) -> pair (int32 x) (string y)) <$> result))
   
       listsZipWith = subgroup "zipWith" [
         testInt "addition" (primitive _math_add) [1, 2, 3] [4, 5, 6] [5, 7, 9],
