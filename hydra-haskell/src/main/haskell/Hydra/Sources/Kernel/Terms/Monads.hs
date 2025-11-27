@@ -245,8 +245,8 @@ traceSummaryDef = define "traceSummary" $
   doc "Summarize a trace as a string" $
   "t" ~>
   "messageLines" <~ (Lists.nub (Compute.traceMessages $ var "t")) $
-  "toLine" <~ ("tuple2" ~>
-    "\t" ++ (Core.unName $ (first $ var "tuple2")) ++ ": " ++ (ref ShowCore.termDef @@ (second $ var "tuple2"))) $
+  "toLine" <~ ("pair" ~>
+    "\t" ++ (Core.unName $ (Pairs.first $ var "pair")) ++ ": " ++ (ref ShowCore.termDef @@ (Pairs.second $ var "pair"))) $
   "keyvalLines" <~ Logic.ifElse (Maps.null (Compute.traceOther $ var "t"))
     (list [])
     (Lists.cons ("key/value pairs: ")

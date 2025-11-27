@@ -560,8 +560,8 @@ termIsValueDef = define "termIsValue" $
     _Term_map>>: "m" ~>
       Lists.foldl ("b" ~> "kv" ~>
         Logic.and (var "b") $ Logic.and
-          (ref termIsValueDef @@ var "g" @@ first (var "kv"))
-          (ref termIsValueDef @@ var "g" @@ second (var "kv")))
+          (ref termIsValueDef @@ var "g" @@ Pairs.first (var "kv"))
+          (ref termIsValueDef @@ var "g" @@ Pairs.second (var "kv")))
         true $ Maps.toList (var "m"),
     _Term_maybe>>: "m" ~>
       Maybes.maybe true (ref termIsValueDef @@ var "g") (var "m"),

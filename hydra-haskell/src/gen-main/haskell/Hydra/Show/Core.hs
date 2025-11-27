@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -288,9 +289,9 @@ term t =
     Core.TermLiteral v1 -> (literal v1)
     Core.TermMap v1 ->  
       let entry = (\p -> Strings.cat [
-              term (fst p),
+              term (Pairs.first p),
               "=",
-              (term (snd p))])
+              (term (Pairs.second p))])
       in (Strings.cat [
         "{",
         Strings.intercalate ", " (Lists.map entry (Maps.toList v1)),
@@ -301,9 +302,9 @@ term t =
       ")"]) v1)
     Core.TermPair v1 -> (Strings.cat [
       "(",
-      term (fst v1),
+      term (Pairs.first v1),
       ", ",
-      term (snd v1),
+      term (Pairs.second v1),
       ")"])
     Core.TermProduct v1 ->  
       let termStrs = (Lists.map term v1)

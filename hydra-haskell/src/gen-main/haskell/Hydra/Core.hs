@@ -160,7 +160,7 @@ _Elimination_union = (Name "union")
 
 _Elimination_wrap = (Name "wrap")
 
--- | A name/term tuple2
+-- | A name/term pair
 data Field = 
   Field {
     -- | The name of the field
@@ -175,7 +175,7 @@ _Field_name = (Name "name")
 
 _Field_term = (Name "term")
 
--- | A name/type tuple2
+-- | A name/type pair
 data FieldType = 
   FieldType {
     -- | The name of the field

@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals_
@@ -74,10 +75,10 @@ encodeRecord coders term =
   in (Flows.bind (Core__.termRecord stripped) (\record ->  
     let fields = (Core.recordFields record) 
         encodeField = (\coderAndField ->  
-                let coder = (fst coderAndField) 
-                    field = (snd coderAndField)
-                    ft = (fst coder)
-                    coder_ = (snd coder)
+                let coder = (Pairs.first coderAndField) 
+                    field = (Pairs.second coderAndField)
+                    ft = (Pairs.first coder)
+                    coder_ = (Pairs.second coder)
                     fname = (Core.fieldName field)
                     fvalue = (Core.fieldTerm field)
                 in ((\x -> case x of
@@ -91,8 +92,8 @@ decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder t0 t1 Core.Ter
 decodeRecord rt coders n = ((\x -> case x of
   Json.ValueObject v1 ->  
     let decodeField = (\coder ->  
-            let ft = (fst coder) 
-                coder_ = (snd coder)
+            let ft = (Pairs.first coder) 
+                coder_ = (Pairs.second coder)
                 fname = (Core.fieldTypeName ft)
                 defaultValue = Json.ValueNull
                 jsonValue = (Maybes.fromMaybe defaultValue (Maps.lookup (Core.unName fname) v1))
@@ -132,12 +133,12 @@ termCoder typ =
                     _ -> (Core___.term v)) (Rewriting.deannotateTerm v)) (Core___.term v))
             fromString = (\s -> Logic.ifElse isStringKey (Core.TermLiteral (Core.LiteralString s)) (readStringStub s))
             encodeEntry = (\kv ->  
-                    let k = (fst kv) 
-                        v = (snd kv)
+                    let k = (Pairs.first kv) 
+                        v = (Pairs.second kv)
                     in (Flows.bind (Compute.coderEncode vc v) (\encodedV -> Flows.pure (toString k, encodedV))))
             decodeEntry = (\kv ->  
-                    let k = (fst kv) 
-                        v = (snd kv)
+                    let k = (Pairs.first kv) 
+                        v = (Pairs.second kv)
                     in (Flows.bind (Compute.coderDecode vc v) (\decodedV -> Flows.pure (fromString k, decodedV))))
         in (Flows.pure (Compute.Coder {
           Compute.coderEncode = (\term -> (\x -> case x of
@@ -201,8 +202,8 @@ untypedTermToJson term =
       let term1 = (Core.annotatedTermBody v1) 
           ann = (Core.annotatedTermAnnotation v1)
           encodePair = (\kv ->  
-                  let k = (Core.unName (fst kv)) 
-                      v = (snd kv)
+                  let k = (Core.unName (Pairs.first kv)) 
+                      v = (Pairs.second kv)
                   in (Flows.bind (untypedTermToJson v) (\json -> Flows.pure (k, json))))
       in (Flows.bind (untypedTermToJson term1) (\json -> Flows.bind (Flows.mapList encodePair (Maps.toList ann)) (\pairs -> Flows.pure (Json.ValueObject (Maps.fromList [
         ("term", json),

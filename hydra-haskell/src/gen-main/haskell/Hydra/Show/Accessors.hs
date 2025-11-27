@@ -9,6 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -53,12 +54,12 @@ termToAccessorGraph :: (M.Map Module.Namespace String -> Core.Term -> Accessors.
 termToAccessorGraph namespaces term =  
   let dontCareAccessor = Accessors.TermAccessorAnnotatedBody 
       helper = (\ids -> \mroot -> \path -> \state -> \accessorTerm ->  
-              let accessor = (fst accessorTerm) 
-                  currentTerm = (snd accessorTerm)
-                  nodesEdges = (fst state)
-                  visited = (snd state)
-                  nodes = (fst nodesEdges)
-                  edges = (snd nodesEdges)
+              let accessor = (Pairs.first accessorTerm) 
+                  currentTerm = (Pairs.second accessorTerm)
+                  nodesEdges = (Pairs.first state)
+                  visited = (Pairs.second state)
+                  nodes = (Pairs.first nodesEdges)
+                  edges = (Pairs.second nodesEdges)
                   nextPath = (Lists.cons accessor path)
               in ((\x -> case x of
                 Core.TermLet v1 ->  
@@ -66,10 +67,10 @@ termToAccessorGraph namespaces term =
                       env = (Core.letBody v1)
                       bindingNames = (Lists.map Core.bindingName bindings)
                       addBindingName = (\nodesVisitedIds -> \name ->  
-                              let currentNodesVisited = (fst nodesVisitedIds) 
-                                  currentIds = (snd nodesVisitedIds)
-                                  currentNodes = (fst currentNodesVisited)
-                                  currentVisited = (snd currentNodesVisited)
+                              let currentNodesVisited = (Pairs.first nodesVisitedIds) 
+                                  currentIds = (Pairs.second nodesVisitedIds)
+                                  currentNodes = (Pairs.first currentNodesVisited)
+                                  currentVisited = (Pairs.second currentNodesVisited)
                                   rawLabel = (Names.compactName namespaces name)
                                   uniqueLabel = (Names.uniqueLabel currentVisited rawLabel)
                                   node = Accessors.AccessorNode {
@@ -81,12 +82,12 @@ termToAccessorGraph namespaces term =
                                   newIds = (Maps.insert name node currentIds)
                               in ((newNodes, newVisited), newIds))
                       nodesVisitedIds1 = (Lists.foldl addBindingName (([], visited), ids) bindingNames)
-                      nodes1 = (fst (fst nodesVisitedIds1))
-                      visited1 = (snd (fst nodesVisitedIds1))
-                      ids1 = (snd nodesVisitedIds1)
+                      nodes1 = (Pairs.first (Pairs.first nodesVisitedIds1))
+                      visited1 = (Pairs.second (Pairs.first nodesVisitedIds1))
+                      ids1 = (Pairs.second nodesVisitedIds1)
                       addBindingTerm = (\currentState -> \nodeBinding ->  
-                              let root = (fst nodeBinding) 
-                                  binding = (snd nodeBinding)
+                              let root = (Pairs.first nodeBinding) 
+                                  binding = (Pairs.second nodeBinding)
                                   term1 = (Core.bindingTerm binding)
                               in (helper ids1 (Just root) [] currentState (dontCareAccessor, term1)))
                       nodeBindingPairs = (Lists.zip nodes1 bindings)
@@ -102,9 +103,9 @@ termToAccessorGraph namespaces term =
                 _ -> (Lists.foldl (helper ids mroot nextPath) state (Rewriting.subtermsWithAccessors currentTerm))) currentTerm))
       initialState = (([], []), Sets.empty)
       result = (helper Maps.empty Nothing [] initialState (dontCareAccessor, term))
-      finalNodesEdges = (fst result)
-      finalNodes = (fst finalNodesEdges)
-      finalEdges = (snd finalNodesEdges)
+      finalNodesEdges = (Pairs.first result)
+      finalNodes = (Pairs.first finalNodesEdges)
+      finalEdges = (Pairs.second finalNodesEdges)
   in Accessors.AccessorGraph {
     Accessors.accessorGraphNodes = finalNodes,
     Accessors.accessorGraphEdges = finalEdges}

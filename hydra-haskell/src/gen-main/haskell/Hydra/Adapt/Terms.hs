@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -337,7 +338,7 @@ passFunction t =
                       in  
                         let cod = (Core.functionTypeCodomain ft)
                         in (Flows.bind (termAdapter dom) (\domAd -> Flows.bind (termAdapter cod) (\codAd -> Flows.bind (toCaseAds dom cod) (\caseAds -> Flows.bind (toOptionAd dom cod) (\optionAd ->  
-                          let lossy = (Logic.or (Compute.adapterIsLossy codAd) (Lists.foldl Logic.or False (Lists.map (\tuple2 -> Compute.adapterIsLossy (snd tuple2)) (Maps.toList caseAds))))
+                          let lossy = (Logic.or (Compute.adapterIsLossy codAd) (Lists.foldl Logic.or False (Lists.map (\pair -> Compute.adapterIsLossy (Pairs.second pair)) (Maps.toList caseAds))))
                           in  
                             let target = (Core.TypeFunction (Core.FunctionType {
                                     Core.functionTypeDomain = (Compute.adapterTarget domAd),
@@ -400,10 +401,10 @@ passList t =
 passMap :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passMap t =  
   let encdec = (\kad -> \vad -> \dir -> \term -> (\x -> case x of
-          Core.TermMap v1 -> (Flows.bind (Flows.mapList (\tuple2 ->  
-            let k = (fst tuple2)
+          Core.TermMap v1 -> (Flows.bind (Flows.mapList (\pair ->  
+            let k = (Pairs.first pair)
             in  
-              let v = (snd tuple2)
+              let v = (Pairs.second pair)
               in (Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder kad) k) (\newK -> Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder vad) v) (\newV -> Flows.pure (newK, newV))))) (Maps.toList v1)) (\newPairs -> Flows.pure (Core.TermMap (Maps.fromList newPairs))))) term)
   in  
     let forMapType = (\mt ->  
@@ -516,9 +517,9 @@ passUnion t = ((\x -> case x of
         in (Flows.bind (Flows.mapList (\f -> Flows.bind (fieldAdapter f) (\ad -> Flows.pure (Core.fieldTypeName f, ad))) sfields) (\adapters ->  
           let adaptersMap = (Maps.fromList adapters)
           in  
-            let lossy = (Lists.foldl Logic.or False (Lists.map (\tuple2 -> Compute.adapterIsLossy (snd tuple2)) adapters))
+            let lossy = (Lists.foldl Logic.or False (Lists.map (\pair -> Compute.adapterIsLossy (Pairs.second pair)) adapters))
             in  
-              let sfields_ = (Lists.map (\tuple2 -> Compute.adapterTarget (snd tuple2)) adapters)
+              let sfields_ = (Lists.map (\pair -> Compute.adapterTarget (Pairs.second pair)) adapters)
               in (Flows.pure (Compute.Adapter {
                 Compute.adapterIsLossy = lossy,
                 Compute.adapterSource = t,

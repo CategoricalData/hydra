@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -503,7 +504,6 @@ sum s = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "term"),
       Core.fieldTerm = (term (Core.sumTerm s))}]}))
 
--- | Encode a term as a term (identity encoding)
 term :: (Core.Term -> Core.Term)
 term x = case x of
   Core.TermAnnotated v1 -> (Core.TermUnion (Core.Injection {
@@ -555,7 +555,7 @@ term x = case x of
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "pair"),
-      Core.fieldTerm = (Core.TermPair (term (fst v1), (term (snd v1))))}}))
+      Core.fieldTerm = (Core.TermPair (term (Pairs.first v1), (term (Pairs.second v1))))}}))
   Core.TermProduct v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {

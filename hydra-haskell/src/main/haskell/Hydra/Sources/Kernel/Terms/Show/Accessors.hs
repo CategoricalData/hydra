@@ -108,12 +108,12 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
   lambda "namespaces" $ lambda "term" $ lets [
     "dontCareAccessor">: Accessors.termAccessorAnnotatedBody,
     "helper">: lambdas ["ids", "mroot", "path", "state", "accessorTerm"] $ lets [
-      "accessor">: first $ var "accessorTerm",
-      "currentTerm">: second $ var "accessorTerm",
-      "nodesEdges">: first $ var "state",
-      "visited">: second $ var "state",
-      "nodes">: first $ var "nodesEdges",
-      "edges">: second $ var "nodesEdges",
+      "accessor">: Pairs.first $ var "accessorTerm",
+      "currentTerm">: Pairs.second $ var "accessorTerm",
+      "nodesEdges">: Pairs.first $ var "state",
+      "visited">: Pairs.second $ var "state",
+      "nodes">: Pairs.first $ var "nodesEdges",
+      "edges">: Pairs.second $ var "nodesEdges",
       "nextPath">: Lists.cons (var "accessor") (var "path")]
       $ match _Term (Just $
           Lists.foldl
@@ -126,38 +126,38 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
           "bindingNames">: Lists.map (unaryFunction Core.bindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [
-            "currentNodesVisited">: first $ var "nodesVisitedIds",
-            "currentIds">: second $ var "nodesVisitedIds",
-            "currentNodes">: first $ var "currentNodesVisited",
-            "currentVisited">: second $ var "currentNodesVisited",
+            "currentNodesVisited">: Pairs.first $ var "nodesVisitedIds",
+            "currentIds">: Pairs.second $ var "nodesVisitedIds",
+            "currentNodes">: Pairs.first $ var "currentNodesVisited",
+            "currentVisited">: Pairs.second $ var "currentNodesVisited",
             "rawLabel">: ref Names.compactNameDef @@ var "namespaces" @@ var "name",
             "uniqueLabel">: ref Names.uniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
             "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
             "newIds">: Maps.insert (var "name") (var "node") (var "currentIds")]
-            $ tuple2 (tuple2 (var "newNodes") (var "newVisited")) (var "newIds"),
+            $ pair (pair (var "newNodes") (var "newVisited")) (var "newIds"),
           "nodesVisitedIds1">: Lists.foldl
             (var "addBindingName")
-            (tuple2 (tuple2 (list []) (var "visited")) (var "ids"))
+            (pair (pair (list []) (var "visited")) (var "ids"))
             (var "bindingNames"),
-          "nodes1">: first $ first $ var "nodesVisitedIds1",
-          "visited1">: second $ first $ var "nodesVisitedIds1",
-          "ids1">: second $ var "nodesVisitedIds1",
+          "nodes1">: Pairs.first $ Pairs.first $ var "nodesVisitedIds1",
+          "visited1">: Pairs.second $ Pairs.first $ var "nodesVisitedIds1",
+          "ids1">: Pairs.second $ var "nodesVisitedIds1",
           -- Second fold: process each binding term
           "addBindingTerm">: lambdas ["currentState", "nodeBinding"] $ lets [
-            "root">: first $ var "nodeBinding",
-            "binding">: second $ var "nodeBinding",
+            "root">: Pairs.first $ var "nodeBinding",
+            "binding">: Pairs.second $ var "nodeBinding",
             "term1">: Core.bindingTerm $ var "binding"]
             $ var "helper" @@ var "ids1" @@ just (var "root") @@ list [] @@ var "currentState" @@
-              tuple2 (var "dontCareAccessor") (var "term1"),
+              pair (var "dontCareAccessor") (var "term1"),
           "nodeBindingPairs">: Lists.zip (var "nodes1") (var "bindings"),
           "stateAfterBindings">: Lists.foldl
             (var "addBindingTerm")
-            (tuple2 (tuple2 (Lists.concat2 (var "nodes1") (var "nodes")) (var "edges")) (var "visited1"))
+            (pair (pair (Lists.concat2 (var "nodes1") (var "nodes")) (var "edges")) (var "visited1"))
             (var "nodeBindingPairs")]
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
-            tuple2 Accessors.termAccessorLetEnvironment (var "env"),
+            pair Accessors.termAccessorLetEnvironment (var "env"),
         _Term_variable>>: lambda "name" $
           Maybes.maybe (var "state")
             (lambda "root" $
@@ -166,14 +166,14 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
                   "edge">: Accessors.accessorEdge (var "root")
                     (Accessors.accessorPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
-                  $ tuple2 (tuple2 (var "nodes") (var "newEdges")) (var "visited"))
+                  $ pair (pair (var "nodes") (var "newEdges")) (var "visited"))
                 (Maps.lookup (var "name") (var "ids")))
             (var "mroot")]
       @@ var "currentTerm",
-    "initialState">: tuple2 (tuple2 (list []) (list [])) Sets.empty,
+    "initialState">: pair (pair (list []) (list [])) Sets.empty,
     "result">: var "helper" @@ Maps.empty @@ nothing @@ list [] @@ var "initialState" @@
-      tuple2 (var "dontCareAccessor") (var "term"),
-    "finalNodesEdges">: first $ var "result",
-    "finalNodes">: first $ var "finalNodesEdges",
-    "finalEdges">: second $ var "finalNodesEdges"] $
+      pair (var "dontCareAccessor") (var "term"),
+    "finalNodesEdges">: Pairs.first $ var "result",
+    "finalNodes">: Pairs.first $ var "finalNodesEdges",
+    "finalEdges">: Pairs.second $ var "finalNodesEdges"] $
     Accessors.accessorGraph (var "finalNodes") (var "finalEdges")

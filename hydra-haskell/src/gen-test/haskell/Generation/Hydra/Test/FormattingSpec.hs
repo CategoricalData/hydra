@@ -8,6 +8,10 @@ module Generation.Hydra.Test.FormattingSpec where
 
 import Hydra.Kernel
 import qualified Test.Hspec as H
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
+import qualified Data.Maybe as Y
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Util as Util
 

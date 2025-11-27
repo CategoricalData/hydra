@@ -124,7 +124,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             core "Name"],
 
       def "Field" $
-        doc "A name/term tuple2" $
+        doc "A name/term pair" $
         record [
           "name">:
             doc "The name of the field" $
@@ -134,7 +134,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             core "Term"],
 
       def "FieldType" $
-        doc "A name/type tuple2" $
+        doc "A name/type pair" $
         record [
           "name">:
             doc "The name of the field" $
@@ -405,7 +405,7 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             optional $ core "Term",
           "pair">:
             doc "A pair (2-tuple)" $
-            Types.tuple2 (core "Term") (core "Term"),
+            pair (core "Term") (core "Term"),
           "product">:
             doc "A tuple" $
             list (core "Term"),

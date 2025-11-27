@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
@@ -98,13 +99,13 @@ nonAlnumToUnderscores input =
   let isAlnum = (\c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57))))
   in  
     let replace = (\p -> \c ->  
-            let s = (fst p)
+            let s = (Pairs.first p)
             in  
-              let b = (snd p)
+              let b = (Pairs.second p)
               in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True))))
     in  
       let result = (Lists.foldl replace ([], False) (Strings.toList input))
-      in (Strings.fromList (Lists.reverse (fst result)))
+      in (Strings.fromList (Lists.reverse (Pairs.first result)))
 
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: (S.Set String -> String -> String)
@@ -166,8 +167,8 @@ wrapLine maxlen input =
   let helper = (\prev -> \rem ->  
           let trunc = (Lists.take maxlen rem) 
               spanResult = (Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc))
-              prefix = (Lists.reverse (snd spanResult))
-              suffix = (Lists.reverse (fst spanResult))
+              prefix = (Lists.reverse (Pairs.second spanResult))
+              suffix = (Lists.reverse (Pairs.first spanResult))
           in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem))))))
   in (Strings.fromList (Lists.intercalate [
     10] (helper [] (Strings.toList input))))

@@ -113,27 +113,27 @@ emptyListsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "pair of empty lists",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermList [],
-          (Core.TermList [])]),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermList [], (Core.TermList []))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
             Core.typeLambdaParameter = (Core.Name "t1"),
-            Core.typeLambdaBody = (Core.TermProduct [
-              Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermList []),
-                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}),
-              (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermList []),
-                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))}))])}))})),
+            Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermList []),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermList []),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))})))),
+                Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
             Core.forallTypeParameter = (Core.Name "t1"),
-            Core.forallTypeBody = (Core.TypeProduct [
-              Core.TypeList (Core.TypeVariable (Core.Name "t0")),
-              (Core.TypeList (Core.TypeVariable (Core.Name "t1")))])}))}))})),
+            Core.forallTypeBody = (Core.TypePair (Core.PairType {
+              Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+              Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -360,14 +360,14 @@ monomorphicMapsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "empty map",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermMap (M.fromList [])),
+        Testing.typeCheckingTestCaseInput = (Core.TermMap M.empty),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
             Core.typeLambdaParameter = (Core.Name "t1"),
             Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
               Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermMap (M.fromList [])),
+                Core.typeApplicationTermBody = (Core.TermMap M.empty),
                 Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
               Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))}))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
@@ -708,11 +708,11 @@ monomorphicSetsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "empty set",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermSet (S.fromList [])),
+        Testing.typeCheckingTestCaseInput = (Core.TermSet S.empty),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-            Core.typeApplicationTermBody = (Core.TermSet (S.fromList [])),
+            Core.typeApplicationTermBody = (Core.TermSet S.empty),
             Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),

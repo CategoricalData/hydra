@@ -335,9 +335,9 @@ termDef = define "term" $
     _Term_literal>>: "lit" ~> ref literalDef @@ var "lit",
     _Term_map>>: "m" ~>
       "entry" <~ ("p" ~> Strings.cat $ list [
-        ref termDef @@ (first $ var "p"),
+        ref termDef @@ (Pairs.first $ var "p"),
         string "=",
-        ref termDef @@ (second $ var "p")]) $
+        ref termDef @@ (Pairs.second $ var "p")]) $
       Strings.cat $ list [
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
@@ -351,9 +351,9 @@ termDef = define "term" $
       (var "mt"),
     _Term_pair>>: "p" ~> Strings.cat $ list [
       string "(",
-      ref termDef @@ (first $ var "p"),
+      ref termDef @@ (Pairs.first $ var "p"),
       string ", ",
-      ref termDef @@ (second $ var "p"),
+      ref termDef @@ (Pairs.second $ var "p"),
       string ")"],
     _Term_product>>: "els" ~>
       "termStrs" <~ Lists.map (ref termDef) (var "els") $

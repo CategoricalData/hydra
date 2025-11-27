@@ -11,6 +11,7 @@ import Hydra.Staging.Testing.Generation.HaskellCodec (haskellTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 
+
 main :: IO ()
 main = do
   putStrLn "=== Generate Hydra generation tests ==="

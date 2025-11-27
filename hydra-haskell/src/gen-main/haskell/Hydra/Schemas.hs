@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
@@ -374,7 +375,7 @@ typeDependencies withSchema transform name =
       let deps = (\seeds -> \names -> Logic.ifElse (Sets.null seeds) (Flows.pure names) (Flows.bind (Flows.mapList toPair (Sets.toList seeds)) (\pairs ->  
               let newNames = (Maps.union names (Maps.fromList pairs))
               in  
-                let refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\tuple2 -> Rewriting.typeDependencyNames withSchema (snd tuple2)) pairs))
+                let refs = (Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (Pairs.second pair)) pairs))
                 in  
                   let visited = (Sets.fromList (Maps.keys names))
                   in  
@@ -405,10 +406,10 @@ typeToTypeScheme t0 =
 -- | Encode a map of named types to a map of elements
 typesToElements :: (M.Map Core.Name Core.Type -> M.Map Core.Name Core.Binding)
 typesToElements typeMap =  
-  let toElement = (\tuple2 ->  
-          let name = (fst tuple2)
+  let toElement = (\pair ->  
+          let name = (Pairs.first pair)
           in (name, Core.Binding {
             Core.bindingName = name,
-            Core.bindingTerm = (Core__.type_ (snd tuple2)),
+            Core.bindingTerm = (Core__.type_ (Pairs.second pair)),
             Core.bindingType = Nothing}))
   in (Maps.fromList (Lists.map toElement (Maps.toList typeMap)))

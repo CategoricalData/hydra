@@ -95,39 +95,39 @@ findNamesDef = define "findNames" $
   doc "Find unique names for patterns" $
   "pats" ~>
   "nextName" <~ ("acc" ~> "pat" ~>
-    "names" <~ first (var "acc") $
-    "nameMap" <~ second (var "acc") $
+    "names" <~ Pairs.first (var "acc") $
+    "nameMap" <~ Pairs.second (var "acc") $
     "rn" <~ ref rawNameDef @@ var "pat" $
     "nameAndIndex" <~ Maybes.maybe
-      (tuple2 (var "rn") (int32 1))
-      ("i" ~> tuple2 (Strings.cat2 (var "rn") (Literals.showInt32 (Math.add (var "i") (int32 1)))) (Math.add (var "i") (int32 1)))
+      (pair (var "rn") (int32 1))
+      ("i" ~> pair (Strings.cat2 (var "rn") (Literals.showInt32 (Math.add (var "i") (int32 1)))) (Math.add (var "i") (int32 1)))
       (Maps.lookup (var "rn") (var "nameMap")) $
-    "nn" <~ first (var "nameAndIndex") $
-    "ni" <~ second (var "nameAndIndex") $
-    tuple2
+    "nn" <~ Pairs.first (var "nameAndIndex") $
+    "ni" <~ Pairs.second (var "nameAndIndex") $
+    pair
       (Lists.cons (var "nn") (var "names"))
       (Maps.insert (var "rn") (var "ni") (var "nameMap"))) $
-  Lists.reverse (first (Lists.foldl (var "nextName") (tuple2 (list []) Maps.empty) (var "pats")))
+  Lists.reverse (Pairs.first (Lists.foldl (var "nextName") (pair (list []) Maps.empty) (var "pats")))
 
 grammarToModuleDef :: TBinding (Namespace -> G.Grammar -> Maybe String -> Module)
 grammarToModuleDef = define "grammarToModule" $
   doc "Convert a BNF grammar to a Hydra module" $
   "ns" ~> "grammar" ~> "desc" ~>
   "prodPairs" <~ Lists.map
-    ("prod" ~> tuple2
+    ("prod" ~> pair
       (Grammar.unSymbol (Grammar.productionSymbol (var "prod")))
       (Grammar.productionPattern (var "prod")))
     (Grammar.unGrammar (var "grammar")) $
-  "capitalizedNames" <~ Lists.map ("tuple2" ~> ref Formatting.capitalizeDef @@ (first (var "tuple2"))) (var "prodPairs") $
-  "patterns" <~ Lists.map ("tuple2" ~> second (var "tuple2")) (var "prodPairs") $
+  "capitalizedNames" <~ Lists.map ("pair" ~> ref Formatting.capitalizeDef @@ (Pairs.first (var "pair"))) (var "prodPairs") $
+  "patterns" <~ Lists.map ("pair" ~> Pairs.second (var "pair")) (var "prodPairs") $
   "elementPairs" <~ Lists.concat (Lists.zipWith
     (ref makeElementsDef @@ false @@ var "ns")
     (var "capitalizedNames")
     (var "patterns")) $
   "elements" <~ Lists.map
-    ("tuple2" ~>
-      "lname" <~ first (var "tuple2") $
-      "typ" <~ ref wrapTypeDef @@ (second (var "tuple2")) $
+    ("pair" ~>
+      "lname" <~ Pairs.first (var "pair") $
+      "typ" <~ ref wrapTypeDef @@ (Pairs.second (var "pair")) $
       ref Annotations.typeElementDef @@ (ref toNameDef @@ var "ns" @@ var "lname") @@ var "typ")
     (var "elementPairs") $
   Module.module_ (var "ns") (var "elements") (list []) (list []) (var "desc")
@@ -157,18 +157,18 @@ makeElementsDef :: TBinding (Bool -> Namespace -> String -> G.Pattern -> [(Strin
 makeElementsDef = define "makeElements" $
   doc "Create elements from pattern" $
   "omitTrivial" ~> "ns" ~> "lname" ~> "pat" ~>
-  "trivial" <~ Logic.ifElse (var "omitTrivial") (list []) (list [tuple2 (var "lname") MetaTypes.unit]) $
+  "trivial" <~ Logic.ifElse (var "omitTrivial") (list []) (list [pair (var "lname") MetaTypes.unit]) $
 
   "descend" <~ ("n" ~> "f" ~> "p" ~>
     "cpairs" <~ ref makeElementsDef @@ false @@ var "ns" @@ (ref childNameDef @@ var "lname" @@ var "n") @@ var "p" $
     var "f" @@ Logic.ifElse (ref isComplexDef @@ var "p")
-      (Lists.cons (tuple2 (var "lname") (Core.typeVariable (ref toNameDef @@ var "ns" @@ (first (Lists.head (var "cpairs")))))) (var "cpairs"))
+      (Lists.cons (pair (var "lname") (Core.typeVariable (ref toNameDef @@ var "ns" @@ (Pairs.first (Lists.head (var "cpairs")))))) (var "cpairs"))
       (Logic.ifElse (Lists.null (var "cpairs"))
-        (list [tuple2 (var "lname") MetaTypes.unit])
-        (Lists.cons (tuple2 (var "lname") (second (Lists.head (var "cpairs")))) (Lists.tail (var "cpairs"))))) $
+        (list [pair (var "lname") MetaTypes.unit])
+        (Lists.cons (pair (var "lname") (Pairs.second (Lists.head (var "cpairs")))) (Lists.tail (var "cpairs"))))) $
 
   "mod" <~ ("n" ~> "f" ~> "p" ~> var "descend" @@ var "n" @@
-    ("pairs" ~> Lists.cons (tuple2 (var "lname") (var "f" @@ (second (Lists.head (var "pairs"))))) (Lists.tail (var "pairs"))) @@
+    ("pairs" ~> Lists.cons (pair (var "lname") (var "f" @@ (Pairs.second (Lists.head (var "pairs"))))) (Lists.tail (var "pairs"))) @@
     var "p") $
 
   lets [
@@ -179,11 +179,11 @@ makeElementsDef = define "makeElements" $
       _Pattern_ignored>>: constant (list []),
       _Pattern_labeled>>: "lp" ~> var "forPat" @@ Grammar.labeledPatternPattern (var "lp"),
       _Pattern_nil>>: constant (var "trivial"),
-      _Pattern_nonterminal>>: "s" ~> list [tuple2 (var "lname") (Core.typeVariable (
+      _Pattern_nonterminal>>: "s" ~> list [pair (var "lname") (Core.typeVariable (
         ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")))],
       _Pattern_option>>: "p" ~> var "mod" @@ "Option" @@ (unaryFunction MetaTypes.optional) @@ var "p",
       _Pattern_plus>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p",
-      _Pattern_regex>>: constant (list [tuple2 (var "lname") MetaTypes.string]),
+      _Pattern_regex>>: constant (list [pair (var "lname") MetaTypes.string]),
       _Pattern_sequence>>: "pats" ~> var "forRecordOrUnion" @@ true @@
         ("fields" ~> Core.typeRecord (Core.rowType (ref Constants.placeholderNameDef) (var "fields"))) @@ var "pats",
       _Pattern_star>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p"]
@@ -193,13 +193,13 @@ makeElementsDef = define "makeElements" $
       "minPats" <~ ref simplifyDef @@ var "isRecord" @@ var "pats" $
       "fieldNames" <~ ref findNamesDef @@ var "minPats" $
       "toField" <~ ("n" ~> "p" ~> var "descend" @@ var "n" @@
-        ("pairs" ~> tuple2 (Core.fieldType (Core.name (var "n")) (second (Lists.head (var "pairs")))) (Lists.tail (var "pairs"))) @@
+        ("pairs" ~> pair (Core.fieldType (Core.name (var "n")) (Pairs.second (Lists.head (var "pairs")))) (Lists.tail (var "pairs"))) @@
         var "p") $
       "fieldPairs" <~ Lists.zipWith (var "toField") (var "fieldNames") (var "minPats") $
-      "fields" <~ Lists.map (unaryFunction first) (var "fieldPairs") $
-      "els" <~ Lists.concat (Lists.map (unaryFunction second) (var "fieldPairs")) $
+      "fields" <~ Lists.map (unaryFunction Pairs.first) (var "fieldPairs") $
+      "els" <~ Lists.concat (Lists.map (unaryFunction Pairs.second) (var "fieldPairs")) $
       Logic.ifElse (ref isNontrivialDef @@ var "isRecord" @@ var "pats")
-        (Lists.cons (tuple2 (var "lname") (var "construct" @@ var "fields")) (var "els"))
+        (Lists.cons (pair (var "lname") (var "construct" @@ var "fields")) (var "els"))
         (var "forPat" @@ (Lists.head (var "minPats"))))] $
 
   var "forPat" @@ var "pat"

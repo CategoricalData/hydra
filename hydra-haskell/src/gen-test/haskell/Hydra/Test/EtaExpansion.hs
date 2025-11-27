@@ -219,21 +219,17 @@ allTests = Testing.TestGroup {
                 Testing.TestCaseWithMetadata {
                   Testing.testCaseWithMetadataName = "projection in a tuple",
                   Testing.testCaseWithMetadataCase = (Testing.TestCaseEtaExpansion (Testing.EtaExpansionTestCase {
-                    Testing.etaExpansionTestCaseInput = (Core.TermProduct [
-                      Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                        Core.projectionTypeName = TestTypes.testTypePersonName,
-                        Core.projectionField = (Core.Name "firstName")}))),
-                      (Core.TermLiteral (Core.LiteralString "default"))]),
-                    Testing.etaExpansionTestCaseOutput = (Core.TermProduct [
-                      Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "v1"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                            Core.projectionTypeName = TestTypes.testTypePersonName,
-                            Core.projectionField = (Core.Name "firstName")})))),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})),
-                      (Core.TermLiteral (Core.LiteralString "default"))])})),
+                    Testing.etaExpansionTestCaseInput = (Core.TermPair (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                      Core.projectionTypeName = TestTypes.testTypePersonName,
+                      Core.projectionField = (Core.Name "firstName")}))), (Core.TermLiteral (Core.LiteralString "default")))),
+                    Testing.etaExpansionTestCaseOutput = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "v1"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                          Core.projectionTypeName = TestTypes.testTypePersonName,
+                          Core.projectionField = (Core.Name "firstName")})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})), (Core.TermLiteral (Core.LiteralString "default"))))})),
                   Testing.testCaseWithMetadataDescription = Nothing,
                   Testing.testCaseWithMetadataTags = []},
                 Testing.TestCaseWithMetadata {

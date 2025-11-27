@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
@@ -393,7 +394,7 @@ termIsValue g term =
           Core.TermLiteral _ -> True
           Core.TermFunction v1 -> (functionIsValue v1)
           Core.TermList v1 -> (forList v1)
-          Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue g (fst kv)) (termIsValue g (snd kv)))) True (Maps.toList v1))
+          Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue g (Pairs.first kv)) (termIsValue g (Pairs.second kv)))) True (Maps.toList v1))
           Core.TermMaybe v1 -> (Maybes.maybe True (termIsValue g) v1)
           Core.TermRecord v1 -> (checkFields (Core.recordFields v1))
           Core.TermSet v1 -> (forList (Sets.toList v1))

@@ -77,10 +77,10 @@ graphToSchemaDef = define "graphToSchema" $
   doc "Create a graph schema from a graph which contains nothing but encoded type definitions" $
   "g" ~>
   "toPair" <~ ("nameAndEl" ~>
-    "name" <~ first (var "nameAndEl") $
-    "el" <~ second (var "nameAndEl") $
+    "name" <~ Pairs.first (var "nameAndEl") $
+    "el" <~ Pairs.second (var "nameAndEl") $
     Flows.bind (trace "graph to schema" $ ref DecodeCore.typeDef @@ (Core.bindingTerm (var "el"))) (
-      "t" ~> Flows.pure (tuple2 (var "name") (var "t")))) $
+      "t" ~> Flows.pure (pair (var "name") (var "t")))) $
   Flows.bind (Flows.mapList (var "toPair") (Maps.toList (Graph.graphElements (var "g")))) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))
 

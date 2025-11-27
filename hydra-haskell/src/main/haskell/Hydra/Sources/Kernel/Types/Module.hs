@@ -84,7 +84,7 @@ module_ = Module ns elements [Graph.module_] [Core.module_] $
         forAll "n" $ record [
           "focus">:
             doc "The namespace in focus, together with its associated value" $
-            tuple2 (mod "Namespace") (var "n"),
+            pair (mod "Namespace") (var "n"),
           "mapping">:
             doc "A mapping of namespaces to values" $
             Types.map (mod "Namespace") (var "n")],
