@@ -2393,14 +2393,12 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermProduct [
-              Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
-              (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]},
@@ -2423,12 +2421,10 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermProduct [
-              Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))],
-              (Core.TermList [])])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))], (Core.TermList [])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]},
@@ -2451,12 +2447,10 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
-            Testing.evaluationTestCaseOutput = (Core.TermProduct [
-              Core.TermList [],
-              (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]},
@@ -2476,9 +2470,7 @@ allTests = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})))})),
               Core.applicationArgument = (Core.TermList [])})),
-            Testing.evaluationTestCaseOutput = (Core.TermProduct [
-              Core.TermList [],
-              (Core.TermList [])])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]}]},
@@ -2774,15 +2766,9 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralString "b"),
                 (Core.TermLiteral (Core.LiteralString "c"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
-              Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                (Core.TermLiteral (Core.LiteralString "a"))],
-              Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralString "b"))],
-              (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                (Core.TermLiteral (Core.LiteralString "c"))])])})),
+              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "a"))),
+              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "b"))),
+              (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c"))))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -2800,12 +2786,8 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralString "b"),
                 (Core.TermLiteral (Core.LiteralString "c"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
-              Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                (Core.TermLiteral (Core.LiteralString "a"))],
-              (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralString "b"))])])})),
+              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "a"))),
+              (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "b"))))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -2823,12 +2805,8 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralString "a"),
                 (Core.TermLiteral (Core.LiteralString "b"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
-              Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                (Core.TermLiteral (Core.LiteralString "a"))],
-              (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralString "b"))])])})),
+              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "a"))),
+              (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "b"))))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
