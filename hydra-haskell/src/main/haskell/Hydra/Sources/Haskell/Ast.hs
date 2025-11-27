@@ -28,8 +28,8 @@ import qualified Hydra.Sources.Kernel.Types.Util        as Util
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
 
-haskellAstModule :: Module
-haskellAstModule = Module ns elements [Core.module_] [Core.module_] $
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     ns = Namespace "hydra.ext.haskell.ast"
@@ -237,7 +237,7 @@ haskellAstModule = Module ns elements [Core.module_] [Core.module_] $
           "fields">: list $ ast "FieldUpdate"],
 
       def "Field" $ -- UFieldDecl
-        doc "A field (name/type tuple2)" $
+        doc "A field (name/type pair)" $
         record [
           "name">: ast "Name",
           "type">: ast "Type"],

@@ -100,12 +100,12 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 type HaskellNamespaces = Namespaces H.ModuleName
 
 haskellUtilsDefinition :: String -> TTerm a -> TBinding a
-haskellUtilsDefinition = definitionInModule haskellUtilsModule
+haskellUtilsDefinition = definitionInModule module_
 
-haskellUtilsModule :: Module
-haskellUtilsModule = Module ns elements
-    [Formatting.module_, HaskellLanguage.haskellLanguageModule, Schemas.module_, Names.module_]
-    (HaskellAst.haskellAstModule:KernelTypes.kernelTypesModules) $
+module_ :: Module
+module_ = Module ns elements
+    [Formatting.module_, HaskellLanguage.module_, Schemas.module_, Names.module_]
+    (HaskellAst.module_:KernelTypes.kernelTypesModules) $
     Just "Utilities for working with Haskell syntax trees"
   where
     ns = Namespace "hydra.ext.haskell.utils"
@@ -140,8 +140,8 @@ elementReferenceDef :: TBinding (HaskellNamespaces -> Name -> H.Name)
 elementReferenceDef = haskellUtilsDefinition "elementReference" $
   lambda "namespaces" $ lambda "name" $ lets [
     "namespacePair">: Module.namespacesFocus $ var "namespaces",
-    "gname">: first $ var "namespacePair",
-    "gmod">: unwrap H._ModuleName @@ (second $ var "namespacePair"),
+    "gname">: Pairs.first $ var "namespacePair",
+    "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
     "namespacesMap">: Module.namespacesMapping $ var "namespaces",
     "qname">: ref Names.qualifyNameDef @@ var "name",
     "local">: Module.qualifiedNameLocal $ var "qname",
@@ -196,9 +196,9 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
     "focusPair">: var "toPair" @@ var "ns",
     "nssAsList">: Sets.toList $ var "nss",
     "nssPairs">: Lists.map (var "toPair") (var "nssAsList"),
-    "emptyState">: tuple2 Maps.empty Sets.empty,
+    "emptyState">: pair Maps.empty Sets.empty,
     "finalState">: Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs"),
-    "resultMap">: first $ var "finalState",
+    "resultMap">: Pairs.first $ var "finalState",
     "toModuleName">: lambda "namespace" $ lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
       "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
@@ -206,16 +206,16 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
       "capitalized">: ref Formatting.capitalizeDef @@ var "lastPart"] $
       wrap H._ModuleName $ var "capitalized",
     "toPair">: lambda "name" $
-      tuple2 (var "name") (var "toModuleName" @@ var "name"),
+      pair (var "name") (var "toModuleName" @@ var "name"),
     "addPair">: lambda "state" $ lambda "namePair" $ lets [
-      "currentMap">: first $ var "state",
-      "currentSet">: second $ var "state",
-      "name">: first $ var "namePair",
-      "alias">: second $ var "namePair",
+      "currentMap">: Pairs.first $ var "state",
+      "currentSet">: Pairs.second $ var "state",
+      "name">: Pairs.first $ var "namePair",
+      "alias">: Pairs.second $ var "namePair",
       "aliasStr">: unwrap H._ModuleName @@ var "alias"] $
       Logic.ifElse (Sets.member (var "alias") (var "currentSet"))
-        (var "addPair" @@ var "state" @@ tuple2 (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
-        (tuple2 (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
+        (var "addPair" @@ var "state" @@ pair (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
+        (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
     Flows.pure $ Module.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorNameDef :: TBinding (Name -> String)
@@ -306,11 +306,11 @@ unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
 unpackForallTypeDef :: TBinding (Graph -> Type -> ([Name], Type))
 unpackForallTypeDef = haskellUtilsDefinition "unpackForallType" $
   lambdas ["cx", "t"] $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "t")
-    (Just $ tuple2 (list []) (var "t")) [
+    (Just $ pair (list []) (var "t")) [
     _Type_forall>>: lambda "fat" $ lets [
       "v">: Core.forallTypeParameter $ var "fat",
       "tbody">: Core.forallTypeBody $ var "fat",
       "recursiveResult">: ref unpackForallTypeDef @@ var "cx" @@ var "tbody",
-      "vars">: first $ var "recursiveResult",
-      "finalType">: second $ var "recursiveResult"] $
-      tuple2 (Lists.cons (var "v") (var "vars")) (var "finalType")]
+      "vars">: Pairs.first $ var "recursiveResult",
+      "finalType">: Pairs.second $ var "recursiveResult"] $
+      pair (Lists.cons (var "v") (var "vars")) (var "finalType")]

@@ -95,10 +95,10 @@ import Hydra.Ast
 
 
 haskellOperatorsDefinition :: String -> TTerm a -> TBinding a
-haskellOperatorsDefinition = definitionInModule haskellOperatorsModule
+haskellOperatorsDefinition = definitionInModule module_
 
-haskellOperatorsModule :: Module
-haskellOperatorsModule = Module ns elements
+module_ :: Module
+module_ = Module ns elements
     [Serialization.module_]
     KernelTypes.kernelTypesModules $
     Just "AST operators for Haskell"

@@ -103,13 +103,13 @@ import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 type HaskellNamespaces = Namespaces H.ModuleName
 
 haskellCoderDefinition :: String -> TTerm a -> TBinding a
-haskellCoderDefinition = definitionInModule haskellCoderModule
+haskellCoderDefinition = definitionInModule module_
 
-haskellCoderModule :: Module
-haskellCoderModule = Module ns elements
-    [HaskellSerde.haskellSerdeModule, HaskellUtils.haskellUtilsModule,
+module_ :: Module
+module_ = Module ns elements
+    [HaskellSerde.module_, HaskellUtils.module_,
       AdaptModules.module_, Rewriting.module_, Serialization.module_]
-    (HaskellAst.haskellAstModule:KernelTypes.kernelTypesModules) $
+    (HaskellAst.module_:KernelTypes.kernelTypesModules) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"
@@ -170,22 +170,22 @@ constructModuleDef :: TBinding (HaskellNamespaces -> Module -> M.Map Type (Coder
 constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namespaces", "mod", "coders", "pairs"] $ lets [
   "h">: lambda "namespace" $
     unwrap _Namespace @@ var "namespace",
-  "createDeclarations">: lambda "g" $ lambda "tuple2" $ lets [
-    "el">: first $ var "tuple2",
-    "tt">: second $ var "tuple2",
+  "createDeclarations">: lambda "g" $ lambda "pair" $ lets [
+    "el">: Pairs.first $ var "pair",
+    "tt">: Pairs.second $ var "pair",
     "term">: Core.typeApplicationTermBody $ var "tt",
     "typ">: Core.typeApplicationTermType $ var "tt"] $
     Logic.ifElse (ref Annotations.isNativeTypeDef @@ var "el")
       (ref toTypeDeclarationsDef @@ var "namespaces" @@ var "el" @@ var "term")
-      (bind "d" (ref toDataDeclarationDef @@ var "coders" @@ var "namespaces" @@ var "tuple2") $
+      (bind "d" (ref toDataDeclarationDef @@ var "coders" @@ var "namespaces" @@ var "pair") $
         Flows.pure $ list [var "d"]),
     "importName">: lambda "name" $
       wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (ref Formatting.capitalizeDef) (Strings.splitOn (string ".") (var "name"))),
     "imports">: Lists.concat2 (var "domainImports") (var "standardImports"),
     "domainImports">: lets [
-      "toImport">: lambda "tuple2" $ lets [
-        "namespace">: first $ var "tuple2",
-        "alias">: second $ var "tuple2",
+      "toImport">: lambda "pair" $ lets [
+        "namespace">: Pairs.first $ var "pair",
+        "alias">: Pairs.second $ var "pair",
         "name">: var "h" @@ var "namespace"] $
         record H._Import [
           H._Import_qualified>>: true,
@@ -195,9 +195,9 @@ constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namesp
       Lists.map (var "toImport") (Maps.toList $ Module.namespacesMapping $ var "namespaces"),
     "standardImports">: lets [
       "toImport">: lambda "triple" $ lets [
-        "name">: first $ first $ var "triple",
-        "malias">: second $ first $ var "triple",
-        "hidden">: second $ var "triple",
+        "name">: Pairs.first $ Pairs.first $ var "triple",
+        "malias">: Pairs.second $ Pairs.first $ var "triple",
+        "hidden">: Pairs.second $ var "triple",
         "spec">: Logic.ifElse (Lists.null $ var "hidden")
           nothing
           (just $ inject H._SpecImport H._SpecImport_hiding $ Lists.map (lambda "n" $ record H._ImportExportSpec [
@@ -210,12 +210,12 @@ constructModuleDef = haskellCoderDefinition "constructModule" $ lambdas ["namesp
           H._Import_as>>: Maybes.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
       Lists.map (var "toImport") $ list [
-        tuple2 (tuple2 (string "Prelude") nothing) (list $ string <$> [
+        pair (pair (string "Prelude") nothing) (list $ string <$> [
           "Enum", "Ordering", "fail", "map", "pure", "sum"]),
-        tuple2 (tuple2 (string "Data.Int") (just $ string "I")) (list []),
-        tuple2 (tuple2 (string "Data.List") (just $ string "L")) (list []),
-        tuple2 (tuple2 (string "Data.Map") (just $ string "M")) (list []),
-        tuple2 (tuple2 (string "Data.Set") (just $ string "S")) (list [])]] $
+        pair (pair (string "Data.Int") (just $ string "I")) (list []),
+        pair (pair (string "Data.List") (just $ string "L")) (list []),
+        pair (pair (string "Data.Map") (just $ string "M")) (list []),
+        pair (pair (string "Data.Set") (just $ string "S")) (list [])]] $
     bind "g" (ref Monads.getStateDef) $
     bind "declLists" (Flows.mapList (var "createDeclarations" @@ var "g") (var "pairs")) $ lets [
     "decls">: Lists.concat $ var "declLists",
@@ -255,7 +255,7 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
               bind "rt" (ref Lexical.withSchemaContextDef @@ (ref Schemas.requireUnionTypeDef @@ var "dn")) $ lets [
               "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt"),
               "toFieldMapEntry">: lambda "f" $
-                tuple2 (Core.fieldTypeName $ var "f") (var "f")] $
+                pair (Core.fieldTypeName $ var "f") (var "f")] $
               bind "ecases" (Flows.mapList (var "toAlt" @@ var "fieldMap") (var "fields")) $
               bind "dcases" (Maybes.cases (var "def")
                 (Flows.pure $ list []) $
@@ -350,6 +350,24 @@ encodeTermDef :: TBinding (HaskellNamespaces -> Term -> Flow Graph H.Expression)
 encodeTermDef = haskellCoderDefinition "encodeTerm" $
   lambda "namespaces" $ lambda "term" $ lets [
     "encode">: ref encodeTermDef @@ var "namespaces"] $
+    "nonemptyMap" <~ ("m" ~> lets [
+      "lhs">: ref HaskellUtils.hsvarDef @@ string "M.fromList",
+      "encodePair">: lambda "pair" $ lets [
+        "k">: Pairs.first $ var "pair",
+        "v">: Pairs.second $ var "pair",
+        "hk">: var "encode" @@ var "k",
+        "hv">: var "encode" @@ var "v"] $
+        Flows.map
+          (unaryFunction $ inject H._Expression H._Expression_tuple)
+          (Flows.sequence $ list [var "hk", var "hv"])] $
+      bind "rhs" (Flows.map
+        (unaryFunction $ inject H._Expression H._Expression_list)
+        (Flows.mapList (var "encodePair") $ Maps.toList (var "m"))) $
+      Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs") $
+    "nonemptySet" <~ ("s" ~> lets [
+      "lhs">: ref HaskellUtils.hsvarDef @@ string "S.fromList" ] $
+      bind "rhs" (ref encodeTermDef @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s")) $
+      Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs") $
     cases _Term (ref Rewriting.deannotateTermDef @@ var "term")
       (Just $ Flows.fail $ Strings.cat2 (string "unexpected term: ") (ref ShowCore.termDef @@ var "term")) [
       _Term_application>>: lambda "app" $ lets [
@@ -388,20 +406,9 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
           Flows.pure $ inject H._Expression H._Expression_list $ var "helems",
       _Term_literal>>: lambda "v" $
         ref encodeLiteralDef @@ var "v",
-      _Term_map>>: lambda "m" $ lets [
-        "lhs">: ref HaskellUtils.hsvarDef @@ string "M.fromList",
-        "encodePair">: lambda "tuple2" $ lets [
-          "k">: first $ var "tuple2",
-          "v">: second $ var "tuple2",
-          "hk">: var "encode" @@ var "k",
-          "hv">: var "encode" @@ var "v"] $
-          Flows.map
-            (unaryFunction $ inject H._Expression H._Expression_tuple)
-            (Flows.sequence $ list [var "hk", var "hv"])] $
-        bind "rhs" (Flows.map
-          (unaryFunction $ inject H._Expression H._Expression_list)
-          (Flows.mapList (var "encodePair") $ Maps.toList (var "m"))) $
-        Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs",
+      _Term_map>>: "m" ~> Logic.ifElse (Maps.null $ var "m")
+        (produce $ ref HaskellUtils.hsvarDef @@ string "M.empty")
+        (var "nonemptyMap" @@ var "m"),
       _Term_maybe>>: lambda "m" $
         Maybes.cases (var "m")
           (Flows.pure $ ref HaskellUtils.hsvarDef @@ string "Nothing") $
@@ -409,10 +416,8 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
             Flows.bind (var "encode" @@ var "t") $ lambda "ht" $
               Flows.pure $ ref HaskellUtils.hsappDef @@ (ref HaskellUtils.hsvarDef @@ string "Just") @@ var "ht",
       _Term_pair>>: "p" ~>
---        "f" <<~ var "encode" @@ Pairs.first (var "p") $
---        "s" <<~ var "encode" @@ Pairs.second (var "p") $
-        "f" <<~ var "encode" @@ first (var "p") $
-        "s" <<~ var "encode" @@ second (var "p") $
+        "f" <<~ var "encode" @@ Pairs.first (var "p") $
+        "s" <<~ var "encode" @@ Pairs.second (var "p") $
         Flows.pure $ inject H._Expression H._Expression_tuple $ list [var "f", var "s"],
       _Term_product>>: lambda "terms" $
         Flows.bind (Flows.mapList (var "encode") (var "terms")) $ lambda "hterms" $
@@ -433,10 +438,9 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
           Flows.pure $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
             H._ConstructRecordExpression_name>>: var "typeName",
             H._ConstructRecordExpression_fields>>: var "updates"],
-      _Term_set>>: lambda "s" $ lets [
-        "lhs">: ref HaskellUtils.hsvarDef @@ string "S.fromList" ] $
-        bind "rhs" (ref encodeTermDef @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s")) $
-        Flows.pure $ ref HaskellUtils.hsappDef @@ var "lhs" @@ var "rhs",
+      _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ var "s")
+        (produce $ ref HaskellUtils.hsvarDef @@ string "S.empty")
+        (var "nonemptySet" @@ var "s"),
       _Term_typeLambda>>: lambda "abs" $ lets [
         "term1">: Core.typeLambdaBody $ var "abs"] $
         var "encode" @@ var "term1",
@@ -575,9 +579,9 @@ encodeTypeWithClassAssertionsDef = haskellCoderDefinition "encodeTypeWithClassAs
   lambda "namespaces" $ lambda "explicitClasses" $ lambda "typ" $ lets [
     "classes">: Maps.union (var "explicitClasses") (ref getImplicitTypeClassesDef @@ var "typ"),
     "implicitClasses">: ref getImplicitTypeClassesDef @@ var "typ",
-    "encodeAssertion">: lambda "tuple2" $ lets [
-      "name">: first $ var "tuple2",
-      "cls">: second $ var "tuple2",
+    "encodeAssertion">: lambda "pair" $ lets [
+      "name">: Pairs.first $ var "pair",
+      "cls">: Pairs.second $ var "pair",
       "hname">: ref HaskellUtils.rawNameDef @@ cases _TypeClass (var "cls") Nothing [
         _TypeClass_equality>>: constant $ string "Eq",
         _TypeClass_ordering>>: constant $ string "Ord"],
@@ -587,10 +591,10 @@ encodeTypeWithClassAssertionsDef = haskellCoderDefinition "encodeTypeWithClassAs
         H._ClassAssertion_types>>: list [var "htype"]],
     "assertPairs">: Lists.concat $ Lists.map (var "toPairs") (Maps.toList $ var "classes"),
     "toPairs">: lambda "mapEntry" $ lets [
-      "name">: first $ var "mapEntry",
-      "clsSet">: second $ var "mapEntry",
+      "name">: Pairs.first $ var "mapEntry",
+      "clsSet">: Pairs.second $ var "mapEntry",
       "toPair">: lambda "c" $
-        tuple2 (var "name") (var "c")] $
+        pair (var "name") (var "c")] $
       Lists.map (var "toPair") (Sets.toList $ var "clsSet")] $
     ref Monads.withTraceDef @@ (string "encode with assertions") @@
       (bind "htyp" (ref adaptTypeToHaskellAndEncodeDef @@ var "namespaces" @@ var "typ") $
@@ -633,7 +637,7 @@ getImplicitTypeClassesDef :: TBinding (Type -> M.Map Name (S.Set TypeClass))
 getImplicitTypeClassesDef = haskellCoderDefinition "getImplicitTypeClasses" $
   lambda "typ" $ lets [
     "toPair">: lambda "name" $
-      tuple2 (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
+      pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ ref findOrdVariablesDef @@ var "typ")
 
 moduleToHaskellModuleDef :: TBinding (Module -> Flow Graph H.Module)
@@ -653,9 +657,9 @@ nameDeclsDef :: TBinding (Graph -> HaskellNamespaces -> Name -> Type -> [H.Decla
 nameDeclsDef = haskellCoderDefinition "nameDecls" $
   lambda "g" $ lambda "namespaces" $ lambda "name" $ lambda "typ" $ lets [
     "nm">: Core.unName $ var "name",
-    "toDecl">: lambda "n" $ lambda "tuple2" $ lets [
-      "k">: first $ var "tuple2",
-      "v">: second $ var "tuple2",
+    "toDecl">: lambda "n" $ lambda "pair" $ lets [
+      "k">: Pairs.first $ var "pair",
+      "v">: Pairs.second $ var "pair",
       "decl">: inject H._Declaration H._Declaration_valueBinding $ inject H._ValueBinding H._ValueBinding_simple $ record H._SimpleValueBinding [
         H._SimpleValueBinding_pattern>>: ref HaskellUtils.applicationPatternDef @@ (ref HaskellUtils.simpleNameDef @@ var "k") @@ list [],
         H._SimpleValueBinding_rhs>>: wrap H._RightHandSide $ inject H._Expression H._Expression_application $ record H._ApplicationExpression [
@@ -665,20 +669,20 @@ nameDeclsDef = haskellCoderDefinition "nameDecls" $
       record H._DeclarationWithComments [
         H._DeclarationWithComments_body>>: var "decl",
         H._DeclarationWithComments_comments>>: nothing],
-    "nameDecl">: tuple2 (ref constantForTypeNameDef @@ var "name") (var "nm"),
+    "nameDecl">: pair (ref constantForTypeNameDef @@ var "name") (var "nm"),
     "fieldDecls">: Lists.map (var "toConstant") (ref Lexical.fieldsOfDef @@ var "typ"),
     "toConstant">: lambda "fieldType" $ lets [
       "fname">: Core.fieldTypeName $ var "fieldType"] $
-      tuple2 (ref constantForFieldNameDef @@ var "name" @@ var "fname") (Core.unName $ var "fname")] $
+      pair (ref constantForFieldNameDef @@ var "name" @@ var "fname") (Core.unName $ var "fname")] $
     Logic.ifElse (ref useCoreImportDef)
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list [])
 
 toDataDeclarationDef :: TBinding (M.Map Type (Coder Graph Graph Term H.Expression) -> HaskellNamespaces -> (Binding, TypeApplicationTerm) -> Flow Graph H.DeclarationWithComments)
 toDataDeclarationDef = haskellCoderDefinition "toDataDeclaration" $
-  lambdas ["coders", "namespaces", "tuple2"] $ lets [
-    "el">: first $ var "tuple2",
-    "tt">: second $ var "tuple2",
+  lambdas ["coders", "namespaces", "pair"] $ lets [
+    "el">: Pairs.first $ var "pair",
+    "tt">: Pairs.second $ var "pair",
     "term">: Core.typeApplicationTermBody $ var "tt",
     "typ">: Core.typeApplicationTermType $ var "tt",
     "coder">: Maybes.fromJust $ Maps.lookup (var "typ") (var "coders"),
@@ -792,7 +796,7 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: lambda "name" $ lets [
         "tname">: ref Names.unqualifyNameDef @@ record _QualifiedName [
-          _QualifiedName_namespace>>: just $ first $ Module.namespacesFocus $ var "namespaces",
+          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
@@ -816,8 +820,8 @@ toTypeDeclarationsDef = haskellCoderDefinition "toTypeDeclarations" $
         (Lists.map (ref HaskellUtils.rawNameDef) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list []),
       "unpackResult">: ref HaskellUtils.unpackForallTypeDef @@ var "g" @@ var "t",
-      "vars">: first $ var "unpackResult",
-      "t'">: second $ var "unpackResult",
+      "vars">: Pairs.first $ var "unpackResult",
+      "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
       bind "decl" (cases _Type (ref Rewriting.deannotateTypeDef @@ var "t'")
         (Just $ bind "htype" (ref adaptTypeToHaskellAndEncodeDef @@ var "namespaces" @@ var "t") $
