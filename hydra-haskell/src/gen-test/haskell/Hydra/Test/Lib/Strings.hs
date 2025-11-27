@@ -303,7 +303,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "second of combining tuple2",
+          Testing.testCaseWithMetadataName = "second of combining pair",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
             Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
             Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
