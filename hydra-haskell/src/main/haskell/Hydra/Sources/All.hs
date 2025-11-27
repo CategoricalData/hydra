@@ -10,17 +10,17 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Test.All
 
-import Hydra.Sources.Haskell.Ast
-import Hydra.Sources.Haskell.Coder
-import Hydra.Sources.Haskell.Language
-import Hydra.Sources.Haskell.Operators
-import Hydra.Sources.Haskell.Serde
-import Hydra.Sources.Haskell.Utils
+import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
+import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
+import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
+import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
+import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 import qualified Hydra.Sources.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Json.Decoding as JsonDecoding
 import qualified Hydra.Sources.Json.Extract as JsonExtract
 import qualified Hydra.Sources.Json.Language as JsonLanguage
-import Hydra.Sources.Yaml.Model
+import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 
 mainModules :: [Module]
@@ -35,13 +35,13 @@ jsonModules = [
 
 otherModules :: [Module]
 otherModules = [
-  haskellAstModule,
-  haskellCoderModule,
-  haskellLanguageModule,
-  haskellOperatorsModule,
-  haskellSerdeModule,
-  haskellUtilsModule,
-  yamlModelModule]
+  HaskellAst.module_,
+  HaskellCoder.module_,
+  HaskellLanguage.module_,
+  HaskellOperators.module_,
+  HaskellSerde.module_,
+  HaskellUtils.module_,
+  YamlModel.module_]
 
 kernelModules :: [Module]
 kernelModules = kernelTypesModules ++ kernelTermsModules
