@@ -96,16 +96,16 @@ import qualified Data.Maybe                                 as Y
 import Hydra.Ast
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Sources.Haskell.Ast as HaskellAst
-import qualified Hydra.Sources.Haskell.Operators as Operators
+import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 
 
 haskellSerdeDefinition :: String -> TTerm a -> TBinding a
-haskellSerdeDefinition = definitionInModule haskellSerdeModule
+haskellSerdeDefinition = definitionInModule module_
 
-haskellSerdeModule :: Module
-haskellSerdeModule = Module ns elements
-    [Constants.module_, Serialization.module_, Operators.haskellOperatorsModule]
-    (HaskellAst.haskellAstModule:KernelTypes.kernelTypesModules) $
+module_ :: Module
+module_ = Module ns elements
+    [Constants.module_, Serialization.module_, HaskellOperators.module_]
+    (HaskellAst.module_:KernelTypes.kernelTypesModules) $
     Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
@@ -154,14 +154,14 @@ haskellSerdeModule = Module ns elements
 alternativeToExprDef :: TBinding (H.Alternative -> Expr)
 alternativeToExprDef = haskellSerdeDefinition "alternativeToExpr" $
   lambda "alt" $ 
-    ref Serialization.ifxDef @@ ref Operators.caseOpDef @@
+    ref Serialization.ifxDef @@ ref HaskellOperators.caseOpDef @@
       (ref patternToExprDef @@ (project H._Alternative H._Alternative_pattern @@ var "alt")) @@
       (ref caseRhsToExprDef @@ (project H._Alternative H._Alternative_rhs @@ var "alt"))
 
 applicationExpressionToExprDef :: TBinding (H.ApplicationExpression -> Expr)
 applicationExpressionToExprDef = haskellSerdeDefinition "applicationExpressionToExpr" $
   lambda "app" $
-    ref Serialization.ifxDef @@ ref Operators.appOpDef @@
+    ref Serialization.ifxDef @@ ref HaskellOperators.appOpDef @@
       (ref expressionToExprDef @@ (project H._ApplicationExpression H._ApplicationExpression_function @@ var "app")) @@
       (ref expressionToExprDef @@ (project H._ApplicationExpression H._ApplicationExpression_argument @@ var "app"))
 
@@ -286,7 +286,7 @@ declarationToExprDef = haskellSerdeDefinition "declarationToExpr" $
         "name">: project H._TypeSignature H._TypeSignature_name @@ var "typeSig",
         "htype">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig"] $
         ref Serialization.newlineSepDef @@ list [
-          ref Serialization.ifxDef @@ ref Operators.typeOpDef @@ (ref nameToExprDef @@ var "name") @@ (ref typeToExprDef @@ var "htype"),
+          ref Serialization.ifxDef @@ ref HaskellOperators.typeOpDef @@ (ref nameToExprDef @@ var "name") @@ (ref typeToExprDef @@ var "htype"),
           ref valueBindingToExprDef @@ var "vb"]]
 
 declarationWithCommentsToExprDef :: TBinding (H.DeclarationWithComments -> Expr)
@@ -337,7 +337,7 @@ constructRecordExpressionToExprDef = haskellSerdeDefinition "constructRecordExpr
     "fromUpdate">: lambda "update" $ lets [
       "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
       "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
-      ref Serialization.ifxDef @@ ref Operators.defineOpDef @@ (ref nameToExprDef @@ var "fn") @@ (ref expressionToExprDef @@ var "val"),
+      ref Serialization.ifxDef @@ ref HaskellOperators.defineOpDef @@ (ref nameToExprDef @@ var "fn") @@ (ref expressionToExprDef @@ var "val"),
     "body">: ref Serialization.commaSepDef @@ ref Serialization.halfBlockStyleDef @@ (Lists.map (var "fromUpdate") (var "updates"))] $
     ref Serialization.spaceSepDef @@ list [
       ref nameToExprDef @@ var "name",
@@ -414,7 +414,7 @@ lambdaExpressionToExprDef = haskellSerdeDefinition "lambdaExpressionToExpr" $
             "inner">: project H._LambdaExpression H._LambdaExpression_inner @@ var "lambdaExpr",
     "head">: ref Serialization.spaceSepDef @@ (Lists.map (ref patternToExprDef) (var "bindings")),
     "body">: ref expressionToExprDef @@ var "inner"] $
-    ref Serialization.ifxDef @@ ref Operators.lambdaOpDef @@
+    ref Serialization.ifxDef @@ ref HaskellOperators.lambdaOpDef @@
       (ref Serialization.prefixDef @@ string "\\" @@ var "head") @@
       var "body"
 
@@ -548,15 +548,15 @@ typeToExprDef = haskellSerdeDefinition "typeToExpr" $
       H._Type_application>>: lambda "appType" $ lets [
         "lhs">: project H._ApplicationType H._ApplicationType_context @@ var "appType",
         "rhs">: project H._ApplicationType H._ApplicationType_argument @@ var "appType"] $
-        ref Serialization.ifxDef @@ ref Operators.appOpDef @@ (ref typeToExprDef @@ var "lhs") @@ (ref typeToExprDef @@ var "rhs"),
+        ref Serialization.ifxDef @@ ref HaskellOperators.appOpDef @@ (ref typeToExprDef @@ var "lhs") @@ (ref typeToExprDef @@ var "rhs"),
       H._Type_ctx>>: lambda "ctxType" $ lets [
         "ctx">: project H._ContextType H._ContextType_ctx @@ var "ctxType",
         "typ">: project H._ContextType H._ContextType_type @@ var "ctxType"] $
-        ref Serialization.ifxDef @@ ref Operators.assertOpDef @@ (ref assertionToExprDef @@ var "ctx") @@ (ref typeToExprDef @@ var "typ"),
+        ref Serialization.ifxDef @@ ref HaskellOperators.assertOpDef @@ (ref assertionToExprDef @@ var "ctx") @@ (ref typeToExprDef @@ var "typ"),
       H._Type_function>>: lambda "funType" $ lets [
         "dom">: project H._FunctionType H._FunctionType_domain @@ var "funType",
         "cod">: project H._FunctionType H._FunctionType_codomain @@ var "funType"] $
-        ref Serialization.ifxDef @@ ref Operators.arrowOpDef @@ (ref typeToExprDef @@ var "dom") @@ (ref typeToExprDef @@ var "cod"),
+        ref Serialization.ifxDef @@ ref HaskellOperators.arrowOpDef @@ (ref typeToExprDef @@ var "dom") @@ (ref typeToExprDef @@ var "cod"),
       H._Type_list>>: lambda "htype'" $
         ref Serialization.bracketListDef @@ ref Serialization.inlineStyleDef @@ list [ref typeToExprDef @@ var "htype'"],
       H._Type_tuple>>: lambda "types" $
@@ -571,7 +571,7 @@ valueBindingToExprDef = haskellSerdeDefinition "valueBindingToExpr" $
         "pat">: project H._SimpleValueBinding H._SimpleValueBinding_pattern @@ var "simpleVB",
         "rhs">: project H._SimpleValueBinding H._SimpleValueBinding_rhs @@ var "simpleVB",
         "local">: project H._SimpleValueBinding H._SimpleValueBinding_localBindings @@ var "simpleVB",
-        "body">: ref Serialization.ifxDef @@ ref Operators.defineOpDef @@ (ref patternToExprDef @@ var "pat") @@ (ref rightHandSideToExprDef @@ var "rhs")] $
+        "body">: ref Serialization.ifxDef @@ ref HaskellOperators.defineOpDef @@ (ref patternToExprDef @@ var "pat") @@ (ref rightHandSideToExprDef @@ var "rhs")] $
         Maybes.maybe
           (var "body")
           (lambda "localBindings" $ lets [

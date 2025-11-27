@@ -92,10 +92,10 @@ import qualified Data.Maybe                                 as Y
 
 
 haskellLanguageDefinition :: String -> TTerm a -> TBinding a
-haskellLanguageDefinition = definitionInModule haskellLanguageModule
+haskellLanguageDefinition = definitionInModule module_
 
-haskellLanguageModule :: Module
-haskellLanguageModule = Module (Namespace "hydra.ext.haskell.language")
+module_ :: Module
+module_ = Module (Namespace "hydra.ext.haskell.language")
   [el haskellLanguageDef, el reservedWordsDef]
   []
   KernelTypes.kernelTypesModules $
