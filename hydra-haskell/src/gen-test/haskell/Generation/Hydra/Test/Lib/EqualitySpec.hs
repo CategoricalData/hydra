@@ -8,6 +8,10 @@ module Generation.Hydra.Test.Lib.EqualitySpec where
 
 import Hydra.Kernel
 import qualified Test.Hspec as H
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
+import qualified Data.Maybe as Y
 import qualified Hydra.Lib.Equality as Equality
 
 spec :: H.Spec
