@@ -15,6 +15,7 @@ import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Kernel.Types.Json        as Json
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Module      as Module
+import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
 import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
 import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
@@ -39,6 +40,7 @@ kernelTypesModules = [
   Graph.module_,
   Json.module_,
   Module.module_,
+  Parsing.module_,
   Phantoms.module_,
   Query.module_,
   Relational.module_,

@@ -7,6 +7,9 @@ Note: the following modules are part of the kernel, but they are not default imp
 - Hydra.Extract.Core
 - Hydra.Grammar
 - Hydra.Grammars
+- Hydra.Json.Parser
+- Hydra.Json.Writer
+- Hydra.Parsers
 - Hydra.Show.Core
 - Hydra.Topology
 -}
@@ -35,6 +38,7 @@ module Hydra.Kernel (
   module Hydra.Lexical,
   module Hydra.Literals,
   module Hydra.Module,
+  module Hydra.Parsing,
   module Hydra.Phantoms,
   module Hydra.Names,
   module Hydra.Query,
@@ -80,6 +84,7 @@ import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
 import Hydra.Module
+import Hydra.Parsing
 import Hydra.Phantoms
 import Hydra.Names
 import Hydra.Query

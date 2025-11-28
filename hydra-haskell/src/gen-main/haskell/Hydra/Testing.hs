@@ -8,7 +8,9 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Json as Json
 import qualified Hydra.Module as Module
+import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -126,6 +128,31 @@ _InferenceTestCase_input = (Core.Name "input")
 
 _InferenceTestCase_output = (Core.Name "output")
 
+-- | A test case which parses a JSON string and compares the result with an expected JSON value
+type JsonParserTestCase = (ParserTestCase Json.Value)
+
+_JsonParserTestCase = (Core.Name "hydra.testing.JsonParserTestCase")
+
+-- | A test case which serializes a JSON value to a string and compares it to the expected string
+type JsonWriterTestCase = (WriterTestCase Json.Value)
+
+_JsonWriterTestCase = (Core.Name "hydra.testing.JsonWriterTestCase")
+
+-- | A test case which parses an input string and compares the result with an expected value
+data ParserTestCase a = 
+  ParserTestCase {
+    -- | The input string to parse
+    parserTestCaseInput :: String,
+    -- | The expected parse result
+    parserTestCaseOutput :: (Parsing.ParseResult a)}
+  deriving (Eq, Ord, Read, Show)
+
+_ParserTestCase = (Core.Name "hydra.testing.ParserTestCase")
+
+_ParserTestCase_input = (Core.Name "input")
+
+_ParserTestCase_output = (Core.Name "output")
+
 -- | A tag for categorizing test cases
 newtype Tag = 
   Tag {
@@ -198,6 +225,10 @@ data TestCase =
   TestCaseInference InferenceTestCase |
   -- | A type inference failure test
   TestCaseInferenceFailure InferenceFailureTestCase |
+  -- | A JSON parser test
+  TestCaseJsonParser JsonParserTestCase |
+  -- | A JSON writer test
+  TestCaseJsonWriter JsonWriterTestCase |
   -- | A type checking test
   TestCaseTypeChecking TypeCheckingTestCase |
   -- | A type checking failure test (currently unused)
@@ -217,6 +248,10 @@ _TestCase_evaluation = (Core.Name "evaluation")
 _TestCase_inference = (Core.Name "inference")
 
 _TestCase_inferenceFailure = (Core.Name "inferenceFailure")
+
+_TestCase_jsonParser = (Core.Name "jsonParser")
+
+_TestCase_jsonWriter = (Core.Name "jsonWriter")
 
 _TestCase_typeChecking = (Core.Name "typeChecking")
 
@@ -297,3 +332,18 @@ data TypeCheckingFailureTestCase =
 _TypeCheckingFailureTestCase = (Core.Name "hydra.testing.TypeCheckingFailureTestCase")
 
 _TypeCheckingFailureTestCase_input = (Core.Name "input")
+
+-- | A test case which writes a value to a string and compares it to the expected string
+data WriterTestCase a = 
+  WriterTestCase {
+    -- | The input value to write
+    writerTestCaseInput :: a,
+    -- | The expected string
+    writerTestCaseOutput :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_WriterTestCase = (Core.Name "hydra.testing.WriterTestCase")
+
+_WriterTestCase_input = (Core.Name "input")
+
+_WriterTestCase_output = (Core.Name "output")
