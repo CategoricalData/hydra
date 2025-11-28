@@ -4,10 +4,10 @@ module Generation.Spec (spec) where
 
 import qualified Test.Hspec as H
 import qualified Generation.Hydra.Test.FormattingSpec as Generation_Hydra_Test_FormattingSpec
+import qualified Generation.Hydra.Test.ReductionSpec as Generation_Hydra_Test_ReductionSpec
 import qualified Generation.Hydra.Test.Lib.CharsSpec as Generation_Hydra_Test_Lib_CharsSpec
 import qualified Generation.Hydra.Test.Lib.EithersSpec as Generation_Hydra_Test_Lib_EithersSpec
 import qualified Generation.Hydra.Test.Lib.EqualitySpec as Generation_Hydra_Test_Lib_EqualitySpec
-import qualified Generation.Hydra.Test.Lib.FlowsSpec as Generation_Hydra_Test_Lib_FlowsSpec
 import qualified Generation.Hydra.Test.Lib.ListsSpec as Generation_Hydra_Test_Lib_ListsSpec
 import qualified Generation.Hydra.Test.Lib.LiteralsSpec as Generation_Hydra_Test_Lib_LiteralsSpec
 import qualified Generation.Hydra.Test.Lib.LogicSpec as Generation_Hydra_Test_Lib_LogicSpec
@@ -21,10 +21,10 @@ import qualified Generation.Hydra.Test.Lib.StringsSpec as Generation_Hydra_Test_
 spec :: H.Spec
 spec = do
     Generation_Hydra_Test_FormattingSpec.spec
+    Generation_Hydra_Test_ReductionSpec.spec
     Generation_Hydra_Test_Lib_CharsSpec.spec
     Generation_Hydra_Test_Lib_EithersSpec.spec
     Generation_Hydra_Test_Lib_EqualitySpec.spec
-    Generation_Hydra_Test_Lib_FlowsSpec.spec
     Generation_Hydra_Test_Lib_ListsSpec.spec
     Generation_Hydra_Test_Lib_LiteralsSpec.spec
     Generation_Hydra_Test_Lib_LogicSpec.spec
