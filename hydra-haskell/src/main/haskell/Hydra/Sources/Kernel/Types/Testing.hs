@@ -17,12 +17,14 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Json as Json
 import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 module_ :: Module
-module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Module.module_, Util.module_] [Core.module_] $
+module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Json.module_, Module.module_, Parsing.module_, Util.module_] [Core.module_] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra.testing"
@@ -30,8 +32,10 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Mo
     coders = typeref $ moduleNamespace Coders.module_
     compute = typeref $ moduleNamespace Compute.module_
     graph = typeref $ moduleNamespace Graph.module_
+    json = typeref $ moduleNamespace Json.module_
     core = typeref $ moduleNamespace Core.module_
     modulemod = typeref $ moduleNamespace Module.module_
+    parsing = typeref $ moduleNamespace Parsing.module_
     util = typeref $ moduleNamespace Util.module_
     testing = typeref ns
 
@@ -110,6 +114,24 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Mo
             doc "The expected type scheme" $
             core "TypeScheme"],
 
+      def "JsonParserTestCase" $
+        doc "A test case which parses a JSON string and compares the result with an expected JSON value" $
+        testing "ParserTestCase" @@ json "Value",
+
+      def "JsonWriterTestCase" $
+        doc "A test case which serializes a JSON value to a string and compares it to the expected string" $
+        testing "WriterTestCase" @@ json "Value",
+
+      def "ParserTestCase" $
+        doc "A test case which parses an input string and compares the result with an expected value" $
+        forAll "a" $ record [
+          "input">:
+            doc "The input string to parse" $
+            string,
+          "output">:
+            doc "The expected parse result" $
+            parsing "ParseResult" @@ "a"],
+
       def "Tag" $
         doc "A tag for categorizing test cases" $
         wrap string,
@@ -172,6 +194,12 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Mo
           "inferenceFailure">:
             doc "A type inference failure test" $
             testing "InferenceFailureTestCase",
+          "jsonParser">:
+            doc "A JSON parser test" $
+            testing "JsonParserTestCase",
+          "jsonWriter">:
+            doc "A JSON writer test" $
+            testing "JsonWriterTestCase",
           "typeChecking">:
             doc "A type checking test" $
             testing "TypeCheckingTestCase",
@@ -229,4 +257,14 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Mo
         record [
           "input">:
             doc "The term for which type checking should fail" $
-            core "Term"]]
+            core "Term"],
+            
+      def "WriterTestCase" $
+        doc "A test case which writes a value to a string and compares it to the expected string" $
+        forAll "a" $ record [
+          "input">:
+            doc "The input value to write" $
+            "a",
+          "output">:
+            doc "The expected string" $
+            string]]
