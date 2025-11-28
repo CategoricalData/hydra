@@ -33,6 +33,10 @@ defaultTestRunner :: TestRunner
 defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequiresInterp tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
+    TestCaseAlphaConversion (AlphaConversionTestCase term oldVar newVar result) ->
+      H.it "alpha conversion" $ H.shouldBe
+        (alphaConvert oldVar newVar term)
+        result
     TestCaseCaseConversion (CaseConversionTestCase fromConvention toConvention fromString toString) ->
       H.it "case conversion" $ H.shouldBe
         (convertCase fromConvention toConvention fromString)
@@ -59,6 +63,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       expectTypeCheckingResult desc input outputTerm outputType
     TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) ->
       H.it "type checking failure" $ H.shouldBe True False  -- TODO: implement
+    TestCaseTypeReduction (TypeReductionTestCase input output) ->
+      H.it "type reduction" $ H.shouldBe
+        (fromFlow input (schemaContext testGraph) (betaReduceType input))
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
