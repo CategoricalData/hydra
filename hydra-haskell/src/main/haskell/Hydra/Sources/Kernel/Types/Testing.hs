@@ -41,6 +41,22 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
 
     elements = [
 
+      def "AlphaConversionTestCase" $
+        doc "A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term" $
+        record [
+          "term">:
+            doc "The term on which to perform alpha conversion" $
+            core "Term",
+          "oldVariable">:
+            doc "The variable name to replace" $
+            core "Name",
+          "newVariable">:
+            doc "The new variable name" $
+            core "Name",
+          "result">:
+            doc "The expected result term after alpha conversion" $
+            core "Term"],
+
       def "EvaluationStyle" $
         doc "One of two evaluation styles: eager or lazy" $
         enum ["eager", "lazy"],
@@ -176,6 +192,9 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
         union [
+          "alphaConversion">:
+            doc "An alpha conversion test" $
+            testing "AlphaConversionTestCase",
           "caseConversion">:
             doc "A case conversion test" $
             testing "CaseConversionTestCase",
@@ -205,7 +224,10 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
             testing "TypeCheckingTestCase",
           "typeCheckingFailure">:
             doc "A type checking failure test (currently unused)" $
-            testing "TypeCheckingFailureTestCase"],
+            testing "TypeCheckingFailureTestCase",
+          "typeReduction">:
+            doc "A type reduction test" $
+            testing "TypeReductionTestCase"],
 
       def "TestCaseWithMetadata" $
         doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
@@ -258,7 +280,17 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "input">:
             doc "The term for which type checking should fail" $
             core "Term"],
-            
+
+      def "TypeReductionTestCase" $
+        doc "A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type" $
+        record [
+          "input">:
+            doc "The type to reduce" $
+            core "Type",
+          "output">:
+            doc "The expected reduced type" $
+            core "Type"],
+
       def "WriterTestCase" $
         doc "A test case which writes a value to a string and compares it to the expected string" $
         forAll "a" $ record [

@@ -44,11 +44,15 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
       Just tcase
 
     -- Other test types: exclude (not applicable for compiled tests)
+    TestCaseAlphaConversion _ -> Nothing
     TestCaseInference _ -> Nothing
     TestCaseInferenceFailure _ -> Nothing
     TestCaseTypeChecking _ -> Nothing
     TestCaseTypeCheckingFailure _ -> Nothing
+    TestCaseTypeReduction _ -> Nothing
     TestCaseEtaExpansion _ -> Nothing
+    TestCaseJsonWriter _ -> Nothing
+    TestCaseJsonParser _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term

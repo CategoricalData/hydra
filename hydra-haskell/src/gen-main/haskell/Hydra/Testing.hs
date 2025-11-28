@@ -18,6 +18,29 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term
+data AlphaConversionTestCase = 
+  AlphaConversionTestCase {
+    -- | The term on which to perform alpha conversion
+    alphaConversionTestCaseTerm :: Core.Term,
+    -- | The variable name to replace
+    alphaConversionTestCaseOldVariable :: Core.Name,
+    -- | The new variable name
+    alphaConversionTestCaseNewVariable :: Core.Name,
+    -- | The expected result term after alpha conversion
+    alphaConversionTestCaseResult :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_AlphaConversionTestCase = (Core.Name "hydra.testing.AlphaConversionTestCase")
+
+_AlphaConversionTestCase_term = (Core.Name "term")
+
+_AlphaConversionTestCase_oldVariable = (Core.Name "oldVariable")
+
+_AlphaConversionTestCase_newVariable = (Core.Name "newVariable")
+
+_AlphaConversionTestCase_result = (Core.Name "result")
+
 -- | One of two evaluation styles: eager or lazy
 data EvaluationStyle = 
   EvaluationStyleEager  |
@@ -213,6 +236,8 @@ _TestCodec_findImports = (Core.Name "findImports")
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
+  -- | An alpha conversion test
+  TestCaseAlphaConversion AlphaConversionTestCase |
   -- | A case conversion test
   TestCaseCaseConversion CaseConversionTestCase |
   -- | A delegated evaluation test
@@ -232,10 +257,14 @@ data TestCase =
   -- | A type checking test
   TestCaseTypeChecking TypeCheckingTestCase |
   -- | A type checking failure test (currently unused)
-  TestCaseTypeCheckingFailure TypeCheckingFailureTestCase
+  TestCaseTypeCheckingFailure TypeCheckingFailureTestCase |
+  -- | A type reduction test
+  TestCaseTypeReduction TypeReductionTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
+
+_TestCase_alphaConversion = (Core.Name "alphaConversion")
 
 _TestCase_caseConversion = (Core.Name "caseConversion")
 
@@ -256,6 +285,8 @@ _TestCase_jsonWriter = (Core.Name "jsonWriter")
 _TestCase_typeChecking = (Core.Name "typeChecking")
 
 _TestCase_typeCheckingFailure = (Core.Name "typeCheckingFailure")
+
+_TestCase_typeReduction = (Core.Name "typeReduction")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -332,6 +363,21 @@ data TypeCheckingFailureTestCase =
 _TypeCheckingFailureTestCase = (Core.Name "hydra.testing.TypeCheckingFailureTestCase")
 
 _TypeCheckingFailureTestCase_input = (Core.Name "input")
+
+-- | A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type
+data TypeReductionTestCase = 
+  TypeReductionTestCase {
+    -- | The type to reduce
+    typeReductionTestCaseInput :: Core.Type,
+    -- | The expected reduced type
+    typeReductionTestCaseOutput :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeReductionTestCase = (Core.Name "hydra.testing.TypeReductionTestCase")
+
+_TypeReductionTestCase_input = (Core.Name "input")
+
+_TypeReductionTestCase_output = (Core.Name "output")
 
 -- | A test case which writes a value to a string and compares it to the expected string
 data WriterTestCase a = 

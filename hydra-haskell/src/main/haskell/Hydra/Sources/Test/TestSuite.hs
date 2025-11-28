@@ -34,6 +34,7 @@ import qualified Hydra.Sources.Test.Formatting as Formatting
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Test.Reduction as Reduction
 
 
 module_ :: Module
@@ -49,6 +50,7 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       InferenceAll.module_,
       JsonParser.module_,
       JsonWriter.module_,
+      Reduction.module_,
       Chars.module_,
       Eithers.module_,
       Equality.module_,
@@ -75,6 +77,7 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref InferenceAll.allTestsDef,
       ref JsonParser.allTestsDef,
       ref JsonWriter.allTestsDef,
+      ref Reduction.allTestsDef,
       ref Chars.allTestsDef,
       ref Eithers.allTestsDef,
       ref Equality.allTestsDef,

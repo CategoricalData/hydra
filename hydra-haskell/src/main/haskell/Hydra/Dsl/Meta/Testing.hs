@@ -180,6 +180,36 @@ testCaseJsonParser = inject _TestCase _TestCase_jsonParser
 testCaseJsonWriter :: TTerm JsonWriterTestCase -> TTerm TestCase
 testCaseJsonWriter = inject _TestCase _TestCase_jsonWriter
 
+testCaseAlphaConversion :: TTerm AlphaConversionTestCase -> TTerm TestCase
+testCaseAlphaConversion = inject _TestCase _TestCase_alphaConversion
+
+testCaseTypeReduction :: TTerm TypeReductionTestCase -> TTerm TestCase
+testCaseTypeReduction = inject _TestCase _TestCase_typeReduction
+
+alphaConversionTestCase :: TTerm Term -> TTerm Name -> TTerm Name -> TTerm Term -> TTerm AlphaConversionTestCase
+alphaConversionTestCase term oldVar newVar result = Phantoms.record _AlphaConversionTestCase [
+  _AlphaConversionTestCase_term>>: term,
+  _AlphaConversionTestCase_oldVariable>>: oldVar,
+  _AlphaConversionTestCase_newVariable>>: newVar,
+  _AlphaConversionTestCase_result>>: result]
+
+typeReductionTestCase :: TTerm Type -> TTerm Type -> TTerm TypeReductionTestCase
+typeReductionTestCase input output = Phantoms.record _TypeReductionTestCase [
+  _TypeReductionTestCase_input>>: input,
+  _TypeReductionTestCase_output>>: output]
+
+-- | Convenience function for creating alpha conversion test cases
+alphaCase :: String -> TTerm Term -> TTerm Name -> TTerm Name -> TTerm Term -> TTerm TestCaseWithMetadata
+alphaCase cname term oldVar newVar result = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseAlphaConversion $ alphaConversionTestCase term oldVar newVar result)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating type reduction test cases
+typeRedCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+typeRedCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseTypeReduction $ typeReductionTestCase input output)
+  nothing (Phantoms.list [])
+
 writerTestCase :: TTerm a -> TTerm String -> TTerm (WriterTestCase a)
 writerTestCase input output = Phantoms.record _WriterTestCase [
   _WriterTestCase_input>>: input,
