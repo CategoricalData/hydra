@@ -8,6 +8,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
@@ -50,13 +51,13 @@ topologicalSortComponents :: (Ord t0) => ([(t0, [t0])] -> [[t0]])
 topologicalSortComponents pairs =  
   let graphResult = (Tarjan.adjacencyListsToGraph pairs)
   in  
-    let g = (fst graphResult)
+    let g = (Pairs.first graphResult)
     in  
-      let getKey = (snd graphResult)
+      let getKey = (Pairs.second graphResult)
       in (Lists.map (\comp -> Lists.map getKey comp) (Tarjan.stronglyConnectedComponents g))
 
 topologicalSortNodes :: (Ord t1) => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])
-topologicalSortNodes getKey getAdj nodes =  
+topologicalSortNodes getKey getAdj nodes =
   let nodesByKey = (Maps.fromList (Lists.map (\n -> (getKey n, n)) nodes))
   in  
     let pairs = (Lists.map (\n -> (getKey n, (getAdj n))) nodes)

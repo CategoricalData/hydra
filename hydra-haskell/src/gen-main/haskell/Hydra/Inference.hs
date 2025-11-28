@@ -91,9 +91,9 @@ buildTypeApplicationTerm tvars body = (Lists.foldl (\t -> \v -> Core.TermTypeApp
 -- | An empty inference context
 emptyInferenceContext :: Typing_.InferenceContext
 emptyInferenceContext = Typing_.InferenceContext {
-  Typing_.inferenceContextSchemaTypes = (M.fromList []),
-  Typing_.inferenceContextPrimitiveTypes = (M.fromList []),
-  Typing_.inferenceContextDataTypes = (M.fromList []),
+  Typing_.inferenceContextSchemaTypes = M.empty,
+  Typing_.inferenceContextPrimitiveTypes = M.empty,
+  Typing_.inferenceContextDataTypes = M.empty,
   Typing_.inferenceContextDebug = False}
 
 -- | Add (term variable, type scheme) pairs to the typing environment

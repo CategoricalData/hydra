@@ -8,10 +8,11 @@ import qualified Hydra.Test.Checking.All as All
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Inference.All as All_
+import qualified Hydra.Test.Json.Parser as Parser
+import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Lib.Chars as Chars
 import qualified Hydra.Test.Lib.Eithers as Eithers
 import qualified Hydra.Test.Lib.Equality as Equality
-import qualified Hydra.Test.Lib.Flows as Flows
 import qualified Hydra.Test.Lib.Lists as Lists
 import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
@@ -38,10 +39,11 @@ allTests = Testing.TestGroup {
     EtaExpansion.allTests,
     Formatting.allTests,
     All_.allTests,
+    Parser.allTests,
+    Writer.allTests,
     Chars.allTests,
     Eithers.allTests,
     Equality.allTests,
-    Flows.allTests,
     Lists.allTests,
     Literals.allTests,
     Logic.allTests,

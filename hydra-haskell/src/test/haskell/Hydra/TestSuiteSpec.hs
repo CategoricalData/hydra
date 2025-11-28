@@ -10,9 +10,12 @@ import Hydra.Kernel
 import Hydra.TestUtils
 import Hydra.Testing
 import Hydra.Inference
+import Hydra.Parsing (ParseResult(..))
 import Hydra.Test.TestSuite
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Json.Parser as JsonParser
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -34,6 +37,8 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "case conversion" $ H.shouldBe
         (convertCase fromConvention toConvention fromString)
         toString
+    TestCaseDelegatedEvaluation _ ->
+      H.it "delegated evaluation (skipped - runs in target language)" $ H.shouldBe True True
     TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansionResult desc input output
     TestCaseEvaluation (EvaluationTestCase _ input output) ->
       H.it "evaluation" $ shouldSucceedWith
@@ -42,6 +47,14 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) ->
       H.it "inference failure" $ expectInferenceFailure desc input
+    TestCaseJsonParser (ParserTestCase input expectedResult) ->
+      H.it "JSON parser" $ H.shouldBe
+        (JsonParser.parseJson input)
+        expectedResult
+    TestCaseJsonWriter (WriterTestCase input expectedOutput) ->
+      H.it "JSON writer" $ H.shouldBe
+        (JsonWriter.printJson input)
+        expectedOutput
     TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) ->
       expectTypeCheckingResult desc input outputTerm outputType
     TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) ->
