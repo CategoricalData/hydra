@@ -21,8 +21,6 @@ extra-source-files:
 
 dependencies:
   - HsYAML                        >= 0.2.1 && < 0.3
-  - aeson                         >= 2.2.0 && < 2.3
-  - aeson-pretty                  >= 0.8.9 && < 0.9
   - base                          >= 4.20.0 && < 4.21
   - bytestring                    >= 0.12.0 && < 0.13
   - containers                    >= 0.7 && < 0.8
@@ -65,6 +63,7 @@ tests:
       - src/gen-test/haskell
     dependencies:
       - hydra
+      - aeson                         >= 2.2.0 && < 2.3
       - hspec
       - hspec-discover
       - HUnit

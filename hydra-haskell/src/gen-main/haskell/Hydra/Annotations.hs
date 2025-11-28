@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
@@ -183,9 +184,8 @@ setTypeAnnotation key val typ =
       Core.annotatedTypeBody = typ_,
       Core.annotatedTypeAnnotation = anns})))
 
--- | Set type classes on term
 setTypeClasses :: (M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Term -> Core.Term)
-setTypeClasses m term =  
+setTypeClasses m term =
   let encodeClass = (\tc -> (\x -> case x of
           Classes.TypeClassEquality -> (Core.TermUnion (Core.Injection {
             Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
@@ -199,9 +199,9 @@ setTypeClasses m term =
               Core.fieldTerm = Core.TermUnit}}))) tc)
   in  
     let encodePair = (\nameClasses ->  
-            let name = (fst nameClasses)
+            let name = (Pairs.first nameClasses)
             in  
-              let classes = (snd nameClasses)
+              let classes = (Pairs.second nameClasses)
               in (Core__.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes))))))
     in  
       let encoded = (Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m))))))
