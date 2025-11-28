@@ -2,6 +2,8 @@
 module Hydra.Dsl.Meta.Testing where
 
 import Hydra.Kernel
+import Hydra.Json (Value)
+import Hydra.Parsing (ParseResult)
 import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Encode.Core as EncodeCore
@@ -171,6 +173,28 @@ testCaseInference = inject _TestCase _TestCase_inference
 
 testCaseInferenceFailure :: TTerm InferenceFailureTestCase -> TTerm TestCase
 testCaseInferenceFailure = inject _TestCase _TestCase_inferenceFailure
+
+testCaseJsonParser :: TTerm JsonParserTestCase -> TTerm TestCase
+testCaseJsonParser = inject _TestCase _TestCase_jsonParser
+
+testCaseJsonWriter :: TTerm JsonWriterTestCase -> TTerm TestCase
+testCaseJsonWriter = inject _TestCase _TestCase_jsonWriter
+
+writerTestCase :: TTerm a -> TTerm String -> TTerm (WriterTestCase a)
+writerTestCase input output = Phantoms.record _WriterTestCase [
+  _WriterTestCase_input>>: input,
+  _WriterTestCase_output>>: output]
+
+jsonWriterTestCase :: TTerm Value -> TTerm String -> TTerm JsonWriterTestCase
+jsonWriterTestCase = writerTestCase
+
+parserTestCase :: TTerm String -> TTerm (ParseResult a) -> TTerm (ParserTestCase a)
+parserTestCase input output = Phantoms.record _ParserTestCase [
+  _ParserTestCase_input>>: input,
+  _ParserTestCase_output>>: output]
+
+jsonParserTestCase :: TTerm String -> TTerm (ParseResult Value) -> TTerm JsonParserTestCase
+jsonParserTestCase = parserTestCase
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
