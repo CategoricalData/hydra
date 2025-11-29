@@ -4,6 +4,7 @@
 
 module Hydra.Testing where
 
+import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
@@ -275,6 +276,8 @@ data TestCase =
   TestCaseJsonParser JsonParserTestCase |
   -- | A JSON writer test
   TestCaseJsonWriter JsonWriterTestCase |
+  -- | An AST serialization test
+  TestCaseSerialization SerializationTestCase |
   -- | A topological sort test
   TestCaseTopologicalSort TopologicalSortTestCase |
   -- | A topological sort with SCC detection test
@@ -308,6 +311,8 @@ _TestCase_jsonCoder = (Core.Name "jsonCoder")
 _TestCase_jsonParser = (Core.Name "jsonParser")
 
 _TestCase_jsonWriter = (Core.Name "jsonWriter")
+
+_TestCase_serialization = (Core.Name "serialization")
 
 _TestCase_topologicalSort = (Core.Name "topologicalSort")
 
@@ -364,6 +369,21 @@ _TestGroup_description = (Core.Name "description")
 _TestGroup_subgroups = (Core.Name "subgroups")
 
 _TestGroup_cases = (Core.Name "cases")
+
+-- | A test case which serializes an AST expression to a string and compares it with the expected output
+data SerializationTestCase =
+  SerializationTestCase {
+    -- | The AST expression to serialize
+    serializationTestCaseInput :: Ast.Expr,
+    -- | The expected serialized string
+    serializationTestCaseOutput :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_SerializationTestCase = (Core.Name "hydra.testing.SerializationTestCase")
+
+_SerializationTestCase_input = (Core.Name "input")
+
+_SerializationTestCase_output = (Core.Name "output")
 
 -- | A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
 data TopologicalSortTestCase =

@@ -71,6 +71,7 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
     TestCaseJsonCoder _ -> Nothing
     TestCaseJsonWriter _ -> Nothing
     TestCaseJsonParser _ -> Nothing
+    TestCaseSerialization _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term

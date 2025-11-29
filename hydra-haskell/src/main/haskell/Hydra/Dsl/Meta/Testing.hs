@@ -2,6 +2,7 @@
 module Hydra.Dsl.Meta.Testing where
 
 import Hydra.Kernel
+import Hydra.Ast (Expr)
 import Hydra.Json (Value)
 import Hydra.Parsing (ParseResult)
 import Hydra.Testing as Testing
@@ -300,3 +301,17 @@ testGroup name description subgroups cases = Phantoms.record _TestGroup [
 
 testGroupToBinding :: Namespace -> String -> TestGroup -> Binding
 testGroupToBinding ns lname group = encodedTestGroupToBinding ns lname (TTerm $ encodeGroup group)
+
+testCaseSerialization :: TTerm SerializationTestCase -> TTerm TestCase
+testCaseSerialization = inject _TestCase _TestCase_serialization
+
+serializationTestCase :: TTerm Expr -> TTerm String -> TTerm SerializationTestCase
+serializationTestCase input output = Phantoms.record _SerializationTestCase [
+  _SerializationTestCase_input>>: input,
+  _SerializationTestCase_output>>: output]
+
+-- | Convenience function for creating serialization test cases
+serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
+serCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseSerialization $ serializationTestCase input output)
+  nothing (Phantoms.list [])
