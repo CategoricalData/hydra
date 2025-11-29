@@ -32,6 +32,7 @@ import qualified Hydra.Sources.Test.Checking.All as CheckingAll
 import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Sources.Test.Formatting as Formatting
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
+import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Test.Reduction as Reduction
@@ -48,6 +49,7 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       EtaExpansion.module_,
       Formatting.module_,
       InferenceAll.module_,
+      JsonCoder.module_,
       JsonParser.module_,
       JsonWriter.module_,
       Reduction.module_,
@@ -75,6 +77,7 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref EtaExpansion.allTestsDef,
       ref Formatting.allTestsDef,
       ref InferenceAll.allTestsDef,
+      ref JsonCoder.allTestsDef,
       ref JsonParser.allTestsDef,
       ref JsonWriter.allTestsDef,
       ref Reduction.allTestsDef,

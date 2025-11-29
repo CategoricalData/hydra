@@ -130,6 +130,20 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
             doc "The expected type scheme" $
             core "TypeScheme"],
 
+      def "JsonCoderTestCase" $
+        doc ("A test case which encodes a Hydra term to JSON using a type-directed coder,"
+          <> " and verifies that decoding produces the original term (round-trip)") $
+        record [
+          "type">:
+            doc "The Hydra type that determines how the term is encoded/decoded" $
+            core "Type",
+          "term">:
+            doc "The Hydra term to encode" $
+            core "Term",
+          "json">:
+            doc "The expected JSON value" $
+            json "Value"],
+
       def "JsonParserTestCase" $
         doc "A test case which parses a JSON string and compares the result with an expected JSON value" $
         testing "ParserTestCase" @@ json "Value",
@@ -213,6 +227,9 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "inferenceFailure">:
             doc "A type inference failure test" $
             testing "InferenceFailureTestCase",
+          "jsonCoder">:
+            doc "A JSON coder (round-trip) test" $
+            testing "JsonCoderTestCase",
           "jsonParser">:
             doc "A JSON parser test" $
             testing "JsonParserTestCase",
