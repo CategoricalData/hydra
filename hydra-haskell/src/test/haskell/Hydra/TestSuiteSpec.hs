@@ -16,6 +16,8 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Meta.Testing as Testing
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
+import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
+import qualified Hydra.Json as Json
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -51,6 +53,8 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) ->
       H.it "inference failure" $ expectInferenceFailure desc input
+    TestCaseJsonCoder (JsonCoderTestCase typ term expectedJson) ->
+      H.it "JSON coder" $ checkJsonCoder typ term expectedJson
     TestCaseJsonParser (ParserTestCase input expectedResult) ->
       H.it "JSON parser" $ H.shouldBe
         (JsonParser.parseJson input)
@@ -94,3 +98,14 @@ runTestGroup pdesc runner tg = do
 
 spec :: H.Spec
 spec = runTestGroup "" defaultTestRunner allTests
+
+-- | Check that the JSON coder correctly encodes a term to the expected JSON value
+-- and that decoding and re-encoding produces the same term (round-trip)
+checkJsonCoder :: Type -> Term -> Json.Value -> H.Expectation
+checkJsonCoder typ term expectedJson = case mstep of
+    Nothing -> HL.assertFailure (traceSummary trace)
+    Just step -> do
+      shouldSucceedWith (coderEncode step term) expectedJson
+      shouldSucceedWith (coderEncode step term >>= coderDecode step) term
+  where
+    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace

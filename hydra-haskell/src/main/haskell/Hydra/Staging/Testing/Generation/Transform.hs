@@ -51,6 +51,7 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
     TestCaseTypeCheckingFailure _ -> Nothing
     TestCaseTypeReduction _ -> Nothing
     TestCaseEtaExpansion _ -> Nothing
+    TestCaseJsonCoder _ -> Nothing
     TestCaseJsonWriter _ -> Nothing
     TestCaseJsonParser _ -> Nothing
 
