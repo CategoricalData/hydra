@@ -14,6 +14,7 @@ import qualified Data.Map                        as M
 import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
+import qualified Hydra.Sources.Kernel.Types.Ast as Ast
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
@@ -24,11 +25,12 @@ import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 module_ :: Module
-module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Json.module_, Module.module_, Parsing.module_, Util.module_] [Core.module_] $
+module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Graph.module_, Json.module_, Module.module_, Parsing.module_, Util.module_] [Core.module_] $
     Just "A model for unit testing"
   where
     ns = Namespace "hydra.testing"
     def = datatype ns
+    ast = typeref $ moduleNamespace Ast.module_
     coders = typeref $ moduleNamespace Coders.module_
     compute = typeref $ moduleNamespace Compute.module_
     graph = typeref $ moduleNamespace Graph.module_
@@ -236,6 +238,9 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "jsonWriter">:
             doc "A JSON writer test" $
             testing "JsonWriterTestCase",
+          "serialization">:
+            doc "An AST serialization test" $
+            testing "SerializationTestCase",
           "topologicalSort">:
             doc "A topological sort test" $
             testing "TopologicalSortTestCase",
@@ -325,6 +330,16 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "expected">:
             doc "The expected strongly connected components in topological order" $
             list (list int32)],
+
+      def "SerializationTestCase" $
+        doc "A test case which serializes an AST expression to a string and compares it with the expected output" $
+        record [
+          "input">:
+            doc "The AST expression to serialize" $
+            ast "Expr",
+          "output">:
+            doc "The expected serialized string" $
+            string],
 
       def "TypeReductionTestCase" $
         doc "A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type" $
