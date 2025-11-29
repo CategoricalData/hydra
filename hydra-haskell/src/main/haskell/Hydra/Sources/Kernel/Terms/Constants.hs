@@ -61,8 +61,7 @@ module_ = Module (Namespace "hydra.constants") elements
     Just ("A module for tier-0 constants.")
   where
    elements = [
-     el tryMeDef,
-
+--     el tryMeDef,
      el debugInferenceDef,
      el ignoredVariableDef,
      el key_classesDef,
@@ -93,17 +92,13 @@ defineAnnotationKey name mdesc = define ("key_" <> name) $ case mdesc of
 
 -- 
 
---tryMeDef :: TBinding (Int, String)
+-- An extra definition, normally commented out, for debugging
 tryMeDef = define "tryMe" $
-  Core.termPair $ pair Core.termUnit Core.termUnit
+  left $ string "foo"
+--  Core.termPair $ pair Core.termUnit Core.termUnit
 --  Core.termPair $ pair Core.termUnit Core.termUnit
 --  pair Core.termUnit Core.termUnit
 --  Core.termProduct $ list [Core.termUnit, Core.termUnit]
-
-
---  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
-
---
 
 debugInferenceDef :: TBinding Bool
 debugInferenceDef = define "debugInference" $

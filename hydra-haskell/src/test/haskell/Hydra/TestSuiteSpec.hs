@@ -18,6 +18,7 @@ import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
 import qualified Hydra.Json as Json
+import qualified Hydra.Sorting as Sorting
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -71,6 +72,14 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "type reduction" $ H.shouldBe
         (fromFlow input (schemaContext testGraph) (betaReduceType input))
         output
+    TestCaseTopologicalSort (TopologicalSortTestCase adjList expected) ->
+      H.it "topological sort" $ H.shouldBe
+        (Sorting.topologicalSort adjList)
+        expected
+    TestCaseTopologicalSortSCC (TopologicalSortSCCTestCase adjList expected) ->
+      H.it "topological sort SCC" $ H.shouldBe
+        (Sorting.topologicalSortComponents adjList)
+        expected
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
