@@ -40,8 +40,8 @@ checkLiterals = H.describe "Test literal values" $ do
       (TypeApplicationTerm (bigint i) $ Types.bigint)
       (show i)
 
-checkOptionals :: H.SpecWith ()
-checkOptionals = H.describe "Test and document serialization of optionals" $ do
+checkMaybes :: H.SpecWith ()
+checkMaybes = H.describe "Test and document serialization of maybe terms" $ do
 
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
     QC.property $ \mi -> checkSerialization jsonStringCoder
@@ -50,14 +50,14 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
         (Types.optional Types.int32))
       (Y.maybe "null" show mi)
 
-  H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
+  H.it "Nested maybe terms case #1: just x? :: maybe<maybe<int32>>" $
     QC.property $ \mi -> checkSerialization jsonStringCoder
       (TypeApplicationTerm
         (optional $ Just $ optional $ (Just . int32) =<< mi)
         (Types.optional $ Types.optional Types.int32))
       ("[" ++ Y.maybe "null" show mi ++ "]")
 
-  H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
+  H.it "Nested maybe terms case #2: nothing :: maybe<maybe<int32>>" $
     QC.property $ \() -> checkSerialization jsonStringCoder
       (TypeApplicationTerm
         (optional Nothing)
@@ -65,7 +65,7 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
       "[]"
 
 checkRecordsAndUnions :: H.SpecWith ()
-checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
+checkRecordsAndUnions = H.describe "Test and document handling of maybe terms vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
     QC.property $ \() -> checkSerialization jsonStringCoder
@@ -102,6 +102,6 @@ jsonByteStringCoderIsInformationPreserving = H.describe "Verify that a round tri
 spec :: H.Spec
 spec = do
   checkLiterals
-  checkOptionals
+  checkMaybes
   checkRecordsAndUnions
 --  jsonByteStringCoderIsInformationPreserving -- TODO: restore me

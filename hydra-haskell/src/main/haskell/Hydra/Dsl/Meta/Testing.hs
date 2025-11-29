@@ -174,6 +174,9 @@ testCaseInference = inject _TestCase _TestCase_inference
 testCaseInferenceFailure :: TTerm InferenceFailureTestCase -> TTerm TestCase
 testCaseInferenceFailure = inject _TestCase _TestCase_inferenceFailure
 
+testCaseJsonCoder :: TTerm JsonCoderTestCase -> TTerm TestCase
+testCaseJsonCoder = inject _TestCase _TestCase_jsonCoder
+
 testCaseJsonParser :: TTerm JsonParserTestCase -> TTerm TestCase
 testCaseJsonParser = inject _TestCase _TestCase_jsonParser
 
@@ -225,6 +228,18 @@ parserTestCase input output = Phantoms.record _ParserTestCase [
 
 jsonParserTestCase :: TTerm String -> TTerm (ParseResult Value) -> TTerm JsonParserTestCase
 jsonParserTestCase = parserTestCase
+
+jsonCoderTestCase :: TTerm Type -> TTerm Term -> TTerm Value -> TTerm JsonCoderTestCase
+jsonCoderTestCase typ term json = Phantoms.record _JsonCoderTestCase [
+  _JsonCoderTestCase_type>>: typ,
+  _JsonCoderTestCase_term>>: term,
+  _JsonCoderTestCase_json>>: json]
+
+-- | Convenience function for creating JSON coder test cases
+coderCase :: String -> TTerm Type -> TTerm Term -> TTerm Value -> TTerm TestCaseWithMetadata
+coderCase cname typ term json = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJsonCoder $ jsonCoderTestCase typ term json)
+  nothing (Phantoms.list [])
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
