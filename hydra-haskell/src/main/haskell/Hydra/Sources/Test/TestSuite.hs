@@ -36,6 +36,7 @@ import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Test.Reduction as Reduction
+import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
 
 
@@ -54,6 +55,7 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       JsonParser.module_,
       JsonWriter.module_,
       Reduction.module_,
+      Serialization.module_,
       Sorting.module_,
       Chars.module_,
       Eithers.module_,
@@ -83,6 +85,7 @@ allTestsDef = definitionInModule module_ "allTests" $
       ref JsonParser.allTestsDef,
       ref JsonWriter.allTestsDef,
       ref Reduction.allTestsDef,
+      ref Serialization.allTestsDef,
       ref Sorting.allTestsDef,
       ref Chars.allTestsDef,
       ref Eithers.allTestsDef,

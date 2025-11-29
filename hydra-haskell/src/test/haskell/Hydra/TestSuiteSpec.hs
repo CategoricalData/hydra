@@ -19,6 +19,7 @@ import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
 import qualified Hydra.Json as Json
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Serialization as Serialization
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -80,6 +81,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "topological sort SCC" $ H.shouldBe
         (Sorting.topologicalSortComponents adjList)
         expected
+    TestCaseSerialization (SerializationTestCase input output) ->
+      H.it "serialization" $ H.shouldBe
+        (Serialization.printExpr (Serialization.parenthesize input))
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
