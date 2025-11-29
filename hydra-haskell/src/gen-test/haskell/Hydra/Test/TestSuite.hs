@@ -24,6 +24,7 @@ import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Test.Reduction as Reduction
+import qualified Hydra.Test.Sorting as Sorting
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -45,6 +46,7 @@ allTests = Testing.TestGroup {
     Parser.allTests,
     Writer.allTests,
     Reduction.allTests,
+    Sorting.allTests,
     Chars.allTests,
     Eithers.allTests,
     Equality.allTests,

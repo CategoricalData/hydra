@@ -12,8 +12,11 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Dsl.Meta.Types as T
 
+import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
+
+type Int32 = I.Int32
 
 
 tag_disabled = Tag "disabled"
@@ -239,6 +242,34 @@ jsonCoderTestCase typ term json = Phantoms.record _JsonCoderTestCase [
 coderCase :: String -> TTerm Type -> TTerm Term -> TTerm Value -> TTerm TestCaseWithMetadata
 coderCase cname typ term json = testCaseWithMetadata (Phantoms.string cname)
   (testCaseJsonCoder $ jsonCoderTestCase typ term json)
+  nothing (Phantoms.list [])
+
+testCaseTopologicalSort :: TTerm TopologicalSortTestCase -> TTerm TestCase
+testCaseTopologicalSort = inject _TestCase _TestCase_topologicalSort
+
+testCaseTopologicalSortSCC :: TTerm TopologicalSortSCCTestCase -> TTerm TestCase
+testCaseTopologicalSortSCC = inject _TestCase _TestCase_topologicalSortSCC
+
+topologicalSortTestCase :: TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TopologicalSortTestCase
+topologicalSortTestCase adj expected = Phantoms.record _TopologicalSortTestCase [
+  _TopologicalSortTestCase_adjacencyList>>: adj,
+  _TopologicalSortTestCase_expected>>: expected]
+
+topologicalSortSCCTestCase :: TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TopologicalSortSCCTestCase
+topologicalSortSCCTestCase adj expected = Phantoms.record _TopologicalSortSCCTestCase [
+  _TopologicalSortSCCTestCase_adjacencyList>>: adj,
+  _TopologicalSortSCCTestCase_expected>>: expected]
+
+-- | Convenience function for creating topological sort test cases
+sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
+sortCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseTopologicalSort $ topologicalSortTestCase adj expected)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating topological sort SCC test cases
+sortSCCCase :: String -> TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TestCaseWithMetadata
+sortSCCCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseTopologicalSortSCC $ topologicalSortSCCTestCase adj expected)
   nothing (Phantoms.list [])
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata

@@ -376,8 +376,7 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         Flows.bind (var "encode" @@ var "fun") $ lambda "hfun" $
           Flows.bind (var "encode" @@ var "arg") $ lambda "harg" $
             Flows.pure $ ref HaskellUtils.hsappDef @@ var "hfun" @@ var "harg",
-      _Term_either>>: lambda "e" $
-        Eithers.either_
+      _Term_either>>: "e" ~> Eithers.either_
           (lambda "l" $
             Flows.bind (var "encode" @@ var "l") $ lambda "hl" $
               Flows.pure $ ref HaskellUtils.hsappDef @@ (ref HaskellUtils.hsvarDef @@ string "Left") @@ var "hl")
