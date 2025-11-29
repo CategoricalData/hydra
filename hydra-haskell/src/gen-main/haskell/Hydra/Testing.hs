@@ -275,6 +275,10 @@ data TestCase =
   TestCaseJsonParser JsonParserTestCase |
   -- | A JSON writer test
   TestCaseJsonWriter JsonWriterTestCase |
+  -- | A topological sort test
+  TestCaseTopologicalSort TopologicalSortTestCase |
+  -- | A topological sort with SCC detection test
+  TestCaseTopologicalSortSCC TopologicalSortSCCTestCase |
   -- | A type checking test
   TestCaseTypeChecking TypeCheckingTestCase |
   -- | A type checking failure test (currently unused)
@@ -304,6 +308,10 @@ _TestCase_jsonCoder = (Core.Name "jsonCoder")
 _TestCase_jsonParser = (Core.Name "jsonParser")
 
 _TestCase_jsonWriter = (Core.Name "jsonWriter")
+
+_TestCase_topologicalSort = (Core.Name "topologicalSort")
+
+_TestCase_topologicalSortSCC = (Core.Name "topologicalSortSCC")
 
 _TestCase_typeChecking = (Core.Name "typeChecking")
 
@@ -356,6 +364,36 @@ _TestGroup_description = (Core.Name "description")
 _TestGroup_subgroups = (Core.Name "subgroups")
 
 _TestGroup_cases = (Core.Name "cases")
+
+-- | A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
+data TopologicalSortTestCase =
+  TopologicalSortTestCase {
+    -- | The directed graph as an adjacency list (node to list of dependencies)
+    topologicalSortTestCaseAdjacencyList :: [(I.Int32, [I.Int32])],
+    -- | The expected result: Left for cycles, Right for sorted nodes
+    topologicalSortTestCaseExpected :: (Either [[I.Int32]] [I.Int32])}
+  deriving (Eq, Ord, Read, Show)
+
+_TopologicalSortTestCase = (Core.Name "hydra.testing.TopologicalSortTestCase")
+
+_TopologicalSortTestCase_adjacencyList = (Core.Name "adjacencyList")
+
+_TopologicalSortTestCase_expected = (Core.Name "expected")
+
+-- | A test case which performs topological sort with strongly connected component detection and compares the result with expected components
+data TopologicalSortSCCTestCase =
+  TopologicalSortSCCTestCase {
+    -- | The directed graph as an adjacency list
+    topologicalSortSCCTestCaseAdjacencyList :: [(I.Int32, [I.Int32])],
+    -- | The expected strongly connected components in topological order
+    topologicalSortSCCTestCaseExpected :: [[I.Int32]]}
+  deriving (Eq, Ord, Read, Show)
+
+_TopologicalSortSCCTestCase = (Core.Name "hydra.testing.TopologicalSortSCCTestCase")
+
+_TopologicalSortSCCTestCase_adjacencyList = (Core.Name "adjacencyList")
+
+_TopologicalSortSCCTestCase_expected = (Core.Name "expected")
 
 -- | A test case which performs type checking on a given term and compares the result with an expected annotated term and type
 data TypeCheckingTestCase = 

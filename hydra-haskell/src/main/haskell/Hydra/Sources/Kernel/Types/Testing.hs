@@ -236,6 +236,12 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "jsonWriter">:
             doc "A JSON writer test" $
             testing "JsonWriterTestCase",
+          "topologicalSort">:
+            doc "A topological sort test" $
+            testing "TopologicalSortTestCase",
+          "topologicalSortSCC">:
+            doc "A topological sort with SCC detection test" $
+            testing "TopologicalSortSCCTestCase",
           "typeChecking">:
             doc "A type checking test" $
             testing "TypeCheckingTestCase",
@@ -297,6 +303,28 @@ module_ = Module ns elements [Coders.module_, Compute.module_, Graph.module_, Js
           "input">:
             doc "The term for which type checking should fail" $
             core "Term"],
+
+      def "TopologicalSortTestCase" $
+        doc ("A test case which performs topological sort on a directed graph and compares the result"
+          <> " with either an expected sorted list or expected cycles") $
+        record [
+          "adjacencyList">:
+            doc "The directed graph as an adjacency list (node to list of dependencies)" $
+            list (pair int32 (list int32)),
+          "expected">:
+            doc "The expected result: Left for cycles, Right for sorted nodes" $
+            Types.either_ (list (list int32)) (list int32)],
+
+      def "TopologicalSortSCCTestCase" $
+        doc ("A test case which performs topological sort with strongly connected component detection"
+          <> " and compares the result with expected components") $
+        record [
+          "adjacencyList">:
+            doc "The directed graph as an adjacency list" $
+            list (pair int32 (list int32)),
+          "expected">:
+            doc "The expected strongly connected components in topological order" $
+            list (list int32)],
 
       def "TypeReductionTestCase" $
         doc "A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type" $

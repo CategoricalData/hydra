@@ -3,6 +3,7 @@ module Hydra.Staging.Testing.Generation.Transform where
 import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Data.Int as I
 import qualified Data.Maybe as Y
 import qualified Data.Map as M
 
@@ -42,6 +43,22 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
     -- Already delegated evaluation: keep as-is
     TestCaseDelegatedEvaluation _ ->
       Just tcase
+
+    TestCaseTopologicalSort (TopologicalSortTestCase adjList expected) ->
+      Just $ TestCaseWithMetadata name delegated desc tags
+      where
+        delegated = TestCaseDelegatedEvaluation $ DelegatedEvaluationTestCase {
+          delegatedEvaluationTestCaseInput = buildTopologicalSortCall adjList,
+          delegatedEvaluationTestCaseOutput = encodeEitherListList expected
+        }
+
+    TestCaseTopologicalSortSCC (TopologicalSortSCCTestCase adjList expected) ->
+      Just $ TestCaseWithMetadata name delegated desc tags
+      where
+        delegated = TestCaseDelegatedEvaluation $ DelegatedEvaluationTestCase {
+          delegatedEvaluationTestCaseInput = buildTopologicalSortSCCCall adjList,
+          delegatedEvaluationTestCaseOutput = encodeListList expected
+        }
 
     -- Other test types: exclude (not applicable for compiled tests)
     TestCaseAlphaConversion _ -> Nothing
@@ -95,3 +112,46 @@ transformModule (Module ns elements deps schemaDeps desc) =
 collectTestCases :: TestGroup -> [TestCaseWithMetadata]
 collectTestCases (TestGroup _ _ subgroups cases) =
   cases ++ concatMap collectTestCases subgroups
+
+-- | Build a Term representing a topologicalSort function call
+buildTopologicalSortCall :: [(I.Int32, [I.Int32])] -> Term
+buildTopologicalSortCall adjList =
+  TermApplication $ Application {
+    applicationFunction = TermVariable topologicalSortName,
+    applicationArgument = encodeAdjacencyList adjList
+  }
+  where
+    topologicalSortName = Name "hydra.sorting.topologicalSort"
+
+-- | Build a Term representing a topologicalSortComponents function call
+buildTopologicalSortSCCCall :: [(I.Int32, [I.Int32])] -> Term
+buildTopologicalSortSCCCall adjList =
+  TermApplication $ Application {
+    applicationFunction = TermVariable topologicalSortSCCName,
+    applicationArgument = encodeAdjacencyList adjList
+  }
+  where
+    topologicalSortSCCName = Name "hydra.sorting.topologicalSortComponents"
+
+-- | Encode an adjacency list as a Term
+encodeAdjacencyList :: [(I.Int32, [I.Int32])] -> Term
+encodeAdjacencyList pairs = Terms.list (encodePair <$> pairs)
+  where
+    encodePair (node, deps) = Terms.pair (encodeInt32 node) (Terms.list (encodeInt32 <$> deps))
+
+-- | Encode an Int32 as a Term
+encodeInt32 :: I.Int32 -> Term
+encodeInt32 = Terms.int32 . fromIntegral
+
+-- | Encode Either [[Int32]] [Int32] as a Term
+encodeEitherListList :: Either [[I.Int32]] [I.Int32] -> Term
+encodeEitherListList (Left cycles) = Terms.left (encodeListList cycles)
+encodeEitherListList (Right sorted) = Terms.right (encodeIntList sorted)
+
+-- | Encode [[Int32]] as a Term
+encodeListList :: [[I.Int32]] -> Term
+encodeListList = Terms.list . fmap encodeIntList
+
+-- | Encode [Int32] as a Term
+encodeIntList :: [I.Int32] -> Term
+encodeIntList = Terms.list . fmap encodeInt32

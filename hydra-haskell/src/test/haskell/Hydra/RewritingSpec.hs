@@ -8,7 +8,7 @@ Test.Hspec.hspec Hydra.RewritingSpec.spec
 module Hydra.RewritingSpec where
 
 import Hydra.Kernel
-import Hydra.Monads
+--import Hydra.Monads
 import Hydra.Tools.Monads
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
