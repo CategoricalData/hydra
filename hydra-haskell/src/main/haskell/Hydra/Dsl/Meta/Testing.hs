@@ -16,6 +16,7 @@ import qualified Hydra.Dsl.Meta.Types as T
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 type Int32 = I.Int32
 
@@ -314,4 +315,210 @@ serializationTestCase input output = Phantoms.record _SerializationTestCase [
 serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
 serCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseSerialization $ serializationTestCase input output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Rewriting test case helpers
+
+testCaseFlattenLetTerms :: TTerm FlattenLetTermsTestCase -> TTerm TestCase
+testCaseFlattenLetTerms = inject _TestCase _TestCase_flattenLetTerms
+
+testCaseFreeVariables :: TTerm FreeVariablesTestCase -> TTerm TestCase
+testCaseFreeVariables = inject _TestCase _TestCase_freeVariables
+
+testCaseLiftLambdaAboveLet :: TTerm LiftLambdaAboveLetTestCase -> TTerm TestCase
+testCaseLiftLambdaAboveLet = inject _TestCase _TestCase_liftLambdaAboveLet
+
+testCaseSimplifyTerm :: TTerm SimplifyTermTestCase -> TTerm TestCase
+testCaseSimplifyTerm = inject _TestCase _TestCase_simplifyTerm
+
+flattenLetTermsTestCase :: TTerm Term -> TTerm Term -> TTerm FlattenLetTermsTestCase
+flattenLetTermsTestCase input output = Phantoms.record _FlattenLetTermsTestCase [
+  _FlattenLetTermsTestCase_input>>: input,
+  _FlattenLetTermsTestCase_output>>: output]
+
+freeVariablesTestCase :: TTerm Term -> TTerm (S.Set Name) -> TTerm FreeVariablesTestCase
+freeVariablesTestCase input output = Phantoms.record _FreeVariablesTestCase [
+  _FreeVariablesTestCase_input>>: input,
+  _FreeVariablesTestCase_output>>: output]
+
+liftLambdaAboveLetTestCase :: TTerm Term -> TTerm Term -> TTerm LiftLambdaAboveLetTestCase
+liftLambdaAboveLetTestCase input output = Phantoms.record _LiftLambdaAboveLetTestCase [
+  _LiftLambdaAboveLetTestCase_input>>: input,
+  _LiftLambdaAboveLetTestCase_output>>: output]
+
+simplifyTermTestCase :: TTerm Term -> TTerm Term -> TTerm SimplifyTermTestCase
+simplifyTermTestCase input output = Phantoms.record _SimplifyTermTestCase [
+  _SimplifyTermTestCase_input>>: input,
+  _SimplifyTermTestCase_output>>: output]
+
+-- | Convenience function for creating flatten let terms test cases
+flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+flattenCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseFlattenLetTerms $ flattenLetTermsTestCase input output)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating free variables test cases
+freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
+freeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseFreeVariables $ freeVariablesTestCase input output)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating lift lambda above let test cases
+liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+liftLambdaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseLiftLambdaAboveLet $ liftLambdaAboveLetTestCase input output)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating simplify term test cases
+simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+simplifyCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseSimplifyTerm $ simplifyTermTestCase input output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Deannotate test case helpers
+
+testCaseDeannotateTerm :: TTerm DeannotateTermTestCase -> TTerm TestCase
+testCaseDeannotateTerm = inject _TestCase _TestCase_deannotateTerm
+
+testCaseDeannotateType :: TTerm DeannotateTypeTestCase -> TTerm TestCase
+testCaseDeannotateType = inject _TestCase _TestCase_deannotateType
+
+deannotateTermTestCase :: TTerm Term -> TTerm Term -> TTerm DeannotateTermTestCase
+deannotateTermTestCase input output = Phantoms.record _DeannotateTermTestCase [
+  _DeannotateTermTestCase_input>>: input,
+  _DeannotateTermTestCase_output>>: output]
+
+deannotateTypeTestCase :: TTerm Type -> TTerm Type -> TTerm DeannotateTypeTestCase
+deannotateTypeTestCase input output = Phantoms.record _DeannotateTypeTestCase [
+  _DeannotateTypeTestCase_input>>: input,
+  _DeannotateTypeTestCase_output>>: output]
+
+-- | Convenience function for creating deannotate term test cases
+deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+deannotateTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseDeannotateTerm $ deannotateTermTestCase input output)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating deannotate type test cases
+deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+deannotateTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseDeannotateType $ deannotateTypeTestCase input output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Topological sort bindings test case helpers
+
+testCaseTopologicalSortBindings :: TTerm TopologicalSortBindingsTestCase -> TTerm TestCase
+testCaseTopologicalSortBindings = inject _TestCase _TestCase_topologicalSortBindings
+
+topologicalSortBindingsTestCase :: TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TopologicalSortBindingsTestCase
+topologicalSortBindingsTestCase bindings expected = Phantoms.record _TopologicalSortBindingsTestCase [
+  _TopologicalSortBindingsTestCase_bindings>>: bindings,
+  _TopologicalSortBindingsTestCase_expected>>: expected]
+
+-- | Convenience function for creating topological sort bindings test cases
+sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
+sortBindingsCase cname bindings expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseTopologicalSortBindings $ topologicalSortBindingsTestCase bindings expected)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Normalize type variables test case helpers
+
+testCaseNormalizeTypeVariables :: TTerm NormalizeTypeVariablesTestCase -> TTerm TestCase
+testCaseNormalizeTypeVariables = inject _TestCase _TestCase_normalizeTypeVariables
+
+normalizeTypeVariablesTestCase :: TTerm Term -> TTerm Term -> TTerm NormalizeTypeVariablesTestCase
+normalizeTypeVariablesTestCase input output = Phantoms.record _NormalizeTypeVariablesTestCase [
+  _NormalizeTypeVariablesTestCase_input>>: input,
+  _NormalizeTypeVariablesTestCase_output>>: output]
+
+-- | Convenience function for creating normalize type variables test cases
+normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+normalizeTypeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseNormalizeTypeVariables $ normalizeTypeVariablesTestCase input output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Fold over term test case helpers
+
+testCaseFoldOverTerm :: TTerm FoldOverTermTestCase -> TTerm TestCase
+testCaseFoldOverTerm = inject _TestCase _TestCase_foldOverTerm
+
+foldOverTermTestCase :: TTerm Term -> TTerm TraversalOrder -> TTerm FoldOperation -> TTerm Term -> TTerm FoldOverTermTestCase
+foldOverTermTestCase input order op output = Phantoms.record _FoldOverTermTestCase [
+  _FoldOverTermTestCase_input>>: input,
+  _FoldOverTermTestCase_traversalOrder>>: order,
+  _FoldOverTermTestCase_operation>>: op,
+  _FoldOverTermTestCase_output>>: output]
+
+-- Fold operation constructors
+foldOpSumInt32Literals :: TTerm FoldOperation
+foldOpSumInt32Literals = inject _FoldOperation _FoldOperation_sumInt32Literals $ Phantoms.unit
+
+foldOpCollectListLengths :: TTerm FoldOperation
+foldOpCollectListLengths = inject _FoldOperation _FoldOperation_collectListLengths $ Phantoms.unit
+
+foldOpCollectLabels :: TTerm FoldOperation
+foldOpCollectLabels = inject _FoldOperation _FoldOperation_collectLabels $ Phantoms.unit
+
+-- | Convenience function for creating fold over term test cases
+foldOverTermCase :: String -> TTerm Term -> TTerm TraversalOrder -> TTerm FoldOperation -> TTerm Term -> TTerm TestCaseWithMetadata
+foldOverTermCase cname input order op output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseFoldOverTerm $ foldOverTermTestCase input order op output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Rewrite term test case helpers
+
+testCaseRewriteTerm :: TTerm RewriteTermTestCase -> TTerm TestCase
+testCaseRewriteTerm = inject _TestCase _TestCase_rewriteTerm
+
+rewriteTermTestCase :: TTerm Term -> TTerm TermRewriter -> TTerm Term -> TTerm RewriteTermTestCase
+rewriteTermTestCase input rewriter output = Phantoms.record _RewriteTermTestCase [
+  _RewriteTermTestCase_input>>: input,
+  _RewriteTermTestCase_rewriter>>: rewriter,
+  _RewriteTermTestCase_output>>: output]
+
+-- Term rewriter constructors
+termRewriterReplaceFooWithBar :: TTerm TermRewriter
+termRewriterReplaceFooWithBar = inject _TermRewriter _TermRewriter_replaceFooWithBar $ Phantoms.unit
+
+termRewriterReplaceInt32WithInt64 :: TTerm TermRewriter
+termRewriterReplaceInt32WithInt64 = inject _TermRewriter _TermRewriter_replaceInt32WithInt64 $ Phantoms.unit
+
+-- | Convenience function for creating rewrite term test cases (replaceFooWithBar)
+rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+rewriteTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseRewriteTerm $ rewriteTermTestCase input termRewriterReplaceFooWithBar output)
+  nothing (Phantoms.list [])
+
+----------------------------------------
+-- Rewrite type test case helpers
+
+testCaseRewriteType :: TTerm RewriteTypeTestCase -> TTerm TestCase
+testCaseRewriteType = inject _TestCase _TestCase_rewriteType
+
+rewriteTypeTestCase :: TTerm Type -> TTerm TypeRewriter -> TTerm Type -> TTerm RewriteTypeTestCase
+rewriteTypeTestCase input rewriter output = Phantoms.record _RewriteTypeTestCase [
+  _RewriteTypeTestCase_input>>: input,
+  _RewriteTypeTestCase_rewriter>>: rewriter,
+  _RewriteTypeTestCase_output>>: output]
+
+-- Type rewriter constructors
+typeRewriterReplaceStringWithInt32 :: TTerm TypeRewriter
+typeRewriterReplaceStringWithInt32 = inject _TypeRewriter _TypeRewriter_replaceStringWithInt32 $ Phantoms.unit
+
+-- | Convenience function for creating rewrite type test cases (replaceStringWithInt32)
+rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+rewriteTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseRewriteType $ rewriteTypeTestCase input typeRewriterReplaceStringWithInt32 output)
+  nothing (Phantoms.list [])
+
+-- | Convenience function for creating eta expansion test cases
+etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+etaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseEtaExpansion $ etaExpansionTestCase input output)
   nothing (Phantoms.list [])
