@@ -3,7 +3,6 @@ module Hydra.Staging.Testing.Generation.Transform where
 import Hydra.Kernel
 import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
-import qualified Data.Int as I
 import qualified Data.Maybe as Y
 import qualified Data.Map as M
 
@@ -72,6 +71,17 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
     TestCaseJsonWriter _ -> Nothing
     TestCaseJsonParser _ -> Nothing
     TestCaseSerialization _ -> Nothing
+    TestCaseFlattenLetTerms _ -> Nothing
+    TestCaseFreeVariables _ -> Nothing
+    TestCaseLiftLambdaAboveLet _ -> Nothing
+    TestCaseSimplifyTerm _ -> Nothing
+    TestCaseDeannotateTerm _ -> Nothing
+    TestCaseDeannotateType _ -> Nothing
+    TestCaseTopologicalSortBindings _ -> Nothing
+    TestCaseNormalizeTypeVariables _ -> Nothing
+    TestCaseFoldOverTerm _ -> Nothing
+    TestCaseRewriteTerm _ -> Nothing
+    TestCaseRewriteType _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term
@@ -115,7 +125,7 @@ collectTestCases (TestGroup _ _ subgroups cases) =
   cases ++ concatMap collectTestCases subgroups
 
 -- | Build a Term representing a topologicalSort function call
-buildTopologicalSortCall :: [(I.Int32, [I.Int32])] -> Term
+buildTopologicalSortCall :: [(Int, [Int])] -> Term
 buildTopologicalSortCall adjList =
   TermApplication $ Application {
     applicationFunction = TermVariable topologicalSortName,
@@ -125,7 +135,7 @@ buildTopologicalSortCall adjList =
     topologicalSortName = Name "hydra.sorting.topologicalSort"
 
 -- | Build a Term representing a topologicalSortComponents function call
-buildTopologicalSortSCCCall :: [(I.Int32, [I.Int32])] -> Term
+buildTopologicalSortSCCCall :: [(Int, [Int])] -> Term
 buildTopologicalSortSCCCall adjList =
   TermApplication $ Application {
     applicationFunction = TermVariable topologicalSortSCCName,
@@ -135,24 +145,24 @@ buildTopologicalSortSCCCall adjList =
     topologicalSortSCCName = Name "hydra.sorting.topologicalSortComponents"
 
 -- | Encode an adjacency list as a Term
-encodeAdjacencyList :: [(I.Int32, [I.Int32])] -> Term
+encodeAdjacencyList :: [(Int, [Int])] -> Term
 encodeAdjacencyList pairs = Terms.list (encodePair <$> pairs)
   where
-    encodePair (node, deps) = Terms.pair (encodeInt32 node) (Terms.list (encodeInt32 <$> deps))
+    encodePair (node, deps) = Terms.pair (encodeInt node) (Terms.list (encodeInt <$> deps))
 
--- | Encode an Int32 as a Term
-encodeInt32 :: I.Int32 -> Term
-encodeInt32 = Terms.int32 . fromIntegral
+-- | Encode an Int as a Term
+encodeInt :: Int -> Term
+encodeInt = Terms.int32 . fromIntegral
 
--- | Encode Either [[Int32]] [Int32] as a Term
-encodeEitherListList :: Either [[I.Int32]] [I.Int32] -> Term
+-- | Encode Either [[Int]] [Int] as a Term
+encodeEitherListList :: Either [[Int]] [Int] -> Term
 encodeEitherListList (Left cycles) = Terms.left (encodeListList cycles)
 encodeEitherListList (Right sorted) = Terms.right (encodeIntList sorted)
 
--- | Encode [[Int32]] as a Term
-encodeListList :: [[I.Int32]] -> Term
+-- | Encode [[Int]] as a Term
+encodeListList :: [[Int]] -> Term
 encodeListList = Terms.list . fmap encodeIntList
 
--- | Encode [Int32] as a Term
-encodeIntList :: [I.Int32] -> Term
-encodeIntList = Terms.list . fmap encodeInt32
+-- | Encode [Int] as a Term
+encodeIntList :: [Int] -> Term
+encodeIntList = Terms.list . fmap encodeInt

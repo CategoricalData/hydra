@@ -102,6 +102,119 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
             doc "The expected result" $
             core "Term"],
 
+      def "DeannotateTermTestCase" $
+        doc "A test case which strips all annotations from a term and compares the result with the expected term" $
+        record [
+          "input">:
+            doc "The term to deannotate" $
+            core "Term",
+          "output">:
+            doc "The expected deannotated term" $
+            core "Term"],
+
+      def "DeannotateTypeTestCase" $
+        doc "A test case which strips all annotations from a type and compares the result with the expected type" $
+        record [
+          "input">:
+            doc "The type to deannotate" $
+            core "Type",
+          "output">:
+            doc "The expected deannotated type" $
+            core "Type"],
+
+      def "FlattenLetTermsTestCase" $
+        doc ("A test case which flattens nested let terms,"
+          <> " lifting inner bindings to the outer let, and compares the result with the expected term") $
+        record [
+          "input">:
+            doc "The term to flatten" $
+            core "Term",
+          "output">:
+            doc "The expected flattened term" $
+            core "Term"],
+
+      def "FoldOperation" $
+        doc "A predefined fold operation for testing foldOverTerm" $
+        union [
+          "sumInt32Literals">:
+            doc "Sum all Int32 literals in a term" $
+            unit,
+          "collectListLengths">:
+            doc "Collect the lengths of all list terms (returns list of integers in traversal order)" $
+            unit,
+          "collectLabels">:
+            doc "Collect labels (first element of pairs where first is a string literal)" $
+            unit],
+
+      def "FoldOverTermTestCase" $
+        doc "A test case which applies a fold operation over a term and compares the result" $
+        record [
+          "input">:
+            doc "The term to fold over" $
+            core "Term",
+          "traversalOrder">:
+            doc "The traversal order (pre or post)" $
+            core "TraversalOrder",
+          "operation">:
+            doc "The fold operation to apply" $
+            testing "FoldOperation",
+          "output">:
+            doc "The expected result of the fold" $
+            core "Term"],
+
+      def "FreeVariablesTestCase" $
+        doc "A test case which computes the free variables of a term and compares the result with an expected set of names" $
+        record [
+          "input">:
+            doc "The term to analyze" $
+            core "Term",
+          "output">:
+            doc "The expected set of free variable names" $
+            set $ core "Name"],
+
+      def "TermRewriter" $
+        doc "A predefined term rewriter for testing rewriteTerm" $
+        union [
+          "replaceFooWithBar">:
+            doc "Replace all string literal 'foo' with 'bar'" $
+            unit,
+          "replaceInt32WithInt64">:
+            doc "Replace all Int32 literals with Int64 literals of the same value" $
+            unit],
+
+      def "RewriteTermTestCase" $
+        doc "A test case which applies a term rewriter and compares the result" $
+        record [
+          "input">:
+            doc "The term to rewrite" $
+            core "Term",
+          "rewriter">:
+            doc "The rewriter to apply" $
+            testing "TermRewriter",
+          "output">:
+            doc "The expected rewritten term" $
+            core "Term"],
+
+      def "TypeRewriter" $
+        doc "A predefined type rewriter for testing rewriteType" $
+        union [
+          "replaceStringWithInt32">:
+            doc "Replace all String types with Int32 types" $
+            unit],
+
+      def "RewriteTypeTestCase" $
+        doc "A test case which applies a type rewriter and compares the result" $
+        record [
+          "input">:
+            doc "The type to rewrite" $
+            core "Type",
+          "rewriter">:
+            doc "The rewriter to apply" $
+            testing "TypeRewriter",
+          "output">:
+            doc "The expected rewritten type" $
+            core "Type"],
+
       def "EvaluationTestCase" $
         doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
         record [
@@ -149,6 +262,17 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
       def "JsonParserTestCase" $
         doc "A test case which parses a JSON string and compares the result with an expected JSON value" $
         testing "ParserTestCase" @@ json "Value",
+
+      def "LiftLambdaAboveLetTestCase" $
+        doc ("A test case which lifts lambda abstractions above let expressions"
+          <> " and compares the result with the expected term") $
+        record [
+          "input">:
+            doc "The term to transform" $
+            core "Term",
+          "output">:
+            doc "The expected transformed term" $
+            core "Term"],
 
       def "JsonWriterTestCase" $
         doc "A test case which serializes a JSON value to a string and compares it to the expected string" $
@@ -214,12 +338,24 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
           "caseConversion">:
             doc "A case conversion test" $
             testing "CaseConversionTestCase",
+          "deannotateTerm">:
+            doc "A deannotate term test" $
+            testing "DeannotateTermTestCase",
+          "deannotateType">:
+            doc "A deannotate type test" $
+            testing "DeannotateTypeTestCase",
           "delegatedEvaluation">:
             doc "A delegated evaluation test" $
             testing "DelegatedEvaluationTestCase",
           "etaExpansion">:
             doc "An eta expansion test" $
             testing "EtaExpansionTestCase",
+          "flattenLetTerms">:
+            doc "A flatten let terms test" $
+            testing "FlattenLetTermsTestCase",
+          "freeVariables">:
+            doc "A free variables test" $
+            testing "FreeVariablesTestCase",
           "evaluation">:
             doc "A term evaluation test" $
             testing "EvaluationTestCase",
@@ -238,12 +374,21 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
           "jsonWriter">:
             doc "A JSON writer test" $
             testing "JsonWriterTestCase",
+          "liftLambdaAboveLet">:
+            doc "A lift lambda above let test" $
+            testing "LiftLambdaAboveLetTestCase",
           "serialization">:
             doc "An AST serialization test" $
             testing "SerializationTestCase",
+          "simplifyTerm">:
+            doc "A simplify term test" $
+            testing "SimplifyTermTestCase",
           "topologicalSort">:
             doc "A topological sort test" $
             testing "TopologicalSortTestCase",
+          "topologicalSortBindings">:
+            doc "A topological sort bindings test" $
+            testing "TopologicalSortBindingsTestCase",
           "topologicalSortSCC">:
             doc "A topological sort with SCC detection test" $
             testing "TopologicalSortSCCTestCase",
@@ -255,7 +400,19 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
             testing "TypeCheckingFailureTestCase",
           "typeReduction">:
             doc "A type reduction test" $
-            testing "TypeReductionTestCase"],
+            testing "TypeReductionTestCase",
+          "normalizeTypeVariables">:
+            doc "A normalize type variables test" $
+            testing "NormalizeTypeVariablesTestCase",
+          "foldOverTerm">:
+            doc "A fold over term test" $
+            testing "FoldOverTermTestCase",
+          "rewriteTerm">:
+            doc "A rewrite term test" $
+            testing "RewriteTermTestCase",
+          "rewriteType">:
+            doc "A rewrite type test" $
+            testing "RewriteTypeTestCase"],
 
       def "TestCaseWithMetadata" $
         doc "One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags" $
@@ -309,6 +466,17 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
             doc "The term for which type checking should fail" $
             core "Term"],
 
+      def "TopologicalSortBindingsTestCase" $
+        doc ("A test case which performs topological sort on a map of bindings (name -> term)"
+          <> " and compares the result with expected groups of bindings in topological order") $
+        record [
+          "bindings">:
+            doc "The bindings as a list of (name, term) pairs" $
+            list (pair (core "Name") (core "Term")),
+          "expected">:
+            doc "The expected groups of bindings in topological order" $
+            list (list (pair (core "Name") (core "Term")))],
+
       def "TopologicalSortTestCase" $
         doc ("A test case which performs topological sort on a directed graph and compares the result"
           <> " with either an expected sorted list or expected cycles") $
@@ -340,6 +508,28 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
           "output">:
             doc "The expected serialized string" $
             string],
+
+      def "SimplifyTermTestCase" $
+        doc ("A test case which performs term simplification (beta reduction and optimization)"
+          <> " and compares the result with the expected term") $
+        record [
+          "input">:
+            doc "The term to simplify" $
+            core "Term",
+          "output">:
+            doc "The expected simplified term" $
+            core "Term"],
+
+      def "NormalizeTypeVariablesTestCase" $
+        doc ("A test case which normalizes type variables in a term"
+          <> " (renaming them to t0, t1, t2, etc.) and compares the result with the expected term") $
+        record [
+          "input">:
+            doc "The term with type annotations to normalize" $
+            core "Term",
+          "output">:
+            doc "The expected term with normalized type variable names" $
+            core "Term"],
 
       def "TypeReductionTestCase" $
         doc "A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type" $

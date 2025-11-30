@@ -107,6 +107,169 @@ _EtaExpansionTestCase_input = (Core.Name "input")
 
 _EtaExpansionTestCase_output = (Core.Name "output")
 
+-- | A test case which strips all annotations from a term and compares the result with the expected term
+data DeannotateTermTestCase = 
+  DeannotateTermTestCase {
+    -- | The term to deannotate
+    deannotateTermTestCaseInput :: Core.Term,
+    -- | The expected deannotated term
+    deannotateTermTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_DeannotateTermTestCase = (Core.Name "hydra.testing.DeannotateTermTestCase")
+
+_DeannotateTermTestCase_input = (Core.Name "input")
+
+_DeannotateTermTestCase_output = (Core.Name "output")
+
+-- | A test case which strips all annotations from a type and compares the result with the expected type
+data DeannotateTypeTestCase = 
+  DeannotateTypeTestCase {
+    -- | The type to deannotate
+    deannotateTypeTestCaseInput :: Core.Type,
+    -- | The expected deannotated type
+    deannotateTypeTestCaseOutput :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_DeannotateTypeTestCase = (Core.Name "hydra.testing.DeannotateTypeTestCase")
+
+_DeannotateTypeTestCase_input = (Core.Name "input")
+
+_DeannotateTypeTestCase_output = (Core.Name "output")
+
+-- | A test case which flattens nested let terms, lifting inner bindings to the outer let, and compares the result with the expected term
+data FlattenLetTermsTestCase = 
+  FlattenLetTermsTestCase {
+    -- | The term to flatten
+    flattenLetTermsTestCaseInput :: Core.Term,
+    -- | The expected flattened term
+    flattenLetTermsTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_FlattenLetTermsTestCase = (Core.Name "hydra.testing.FlattenLetTermsTestCase")
+
+_FlattenLetTermsTestCase_input = (Core.Name "input")
+
+_FlattenLetTermsTestCase_output = (Core.Name "output")
+
+-- | A test case which computes the free variables of a term and compares the result with an expected set of names
+data FreeVariablesTestCase = 
+  FreeVariablesTestCase {
+    -- | The term to analyze
+    freeVariablesTestCaseInput :: Core.Term,
+    -- | The expected set of free variable names
+    freeVariablesTestCaseOutput :: (S.Set Core.Name)}
+  deriving (Eq, Ord, Read, Show)
+
+_FreeVariablesTestCase = (Core.Name "hydra.testing.FreeVariablesTestCase")
+
+_FreeVariablesTestCase_input = (Core.Name "input")
+
+_FreeVariablesTestCase_output = (Core.Name "output")
+
+-- | A predefined fold operation for testing foldOverTerm
+data FoldOperation =
+  -- | Sum all Int32 literals in a term
+  FoldOperationSumInt32Literals  |
+  -- | Collect the lengths of all list terms (returns list of integers in traversal order)
+  FoldOperationCollectListLengths  |
+  -- | Collect labels (first element of pairs where first is a string literal)
+  FoldOperationCollectLabels
+  deriving (Eq, Ord, Read, Show)
+
+_FoldOperation = (Core.Name "hydra.testing.FoldOperation")
+
+_FoldOperation_sumInt32Literals = (Core.Name "sumInt32Literals")
+
+_FoldOperation_collectListLengths = (Core.Name "collectListLengths")
+
+_FoldOperation_collectLabels = (Core.Name "collectLabels")
+
+-- | A test case which applies a fold operation over a term and compares the result
+data FoldOverTermTestCase =
+  FoldOverTermTestCase {
+    -- | The term to fold over
+    foldOverTermTestCaseInput :: Core.Term,
+    -- | The traversal order (pre or post)
+    foldOverTermTestCaseTraversalOrder :: Coders.TraversalOrder,
+    -- | The fold operation to apply
+    foldOverTermTestCaseOperation :: FoldOperation,
+    -- | The expected result of the fold
+    foldOverTermTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_FoldOverTermTestCase = (Core.Name "hydra.testing.FoldOverTermTestCase")
+
+_FoldOverTermTestCase_input = (Core.Name "input")
+
+_FoldOverTermTestCase_traversalOrder = (Core.Name "traversalOrder")
+
+_FoldOverTermTestCase_operation = (Core.Name "operation")
+
+_FoldOverTermTestCase_output = (Core.Name "output")
+
+-- | A predefined term rewriter for testing rewriteTerm
+data TermRewriter =
+  -- | Replace all string literal 'foo' with 'bar'
+  TermRewriterReplaceFooWithBar  |
+  -- | Replace all Int32 literals with Int64 literals of the same value
+  TermRewriterReplaceInt32WithInt64
+  deriving (Eq, Ord, Read, Show)
+
+_TermRewriter = (Core.Name "hydra.testing.TermRewriter")
+
+_TermRewriter_replaceFooWithBar = (Core.Name "replaceFooWithBar")
+
+_TermRewriter_replaceInt32WithInt64 = (Core.Name "replaceInt32WithInt64")
+
+-- | A test case which applies a term rewriter and compares the result
+data RewriteTermTestCase =
+  RewriteTermTestCase {
+    -- | The term to rewrite
+    rewriteTermTestCaseInput :: Core.Term,
+    -- | The rewriter to apply
+    rewriteTermTestCaseRewriter :: TermRewriter,
+    -- | The expected rewritten term
+    rewriteTermTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_RewriteTermTestCase = (Core.Name "hydra.testing.RewriteTermTestCase")
+
+_RewriteTermTestCase_input = (Core.Name "input")
+
+_RewriteTermTestCase_rewriter = (Core.Name "rewriter")
+
+_RewriteTermTestCase_output = (Core.Name "output")
+
+-- | A predefined type rewriter for testing rewriteType
+data TypeRewriter =
+  -- | Replace all String types with Int32 types
+  TypeRewriterReplaceStringWithInt32
+  deriving (Eq, Ord, Read, Show)
+
+_TypeRewriter = (Core.Name "hydra.testing.TypeRewriter")
+
+_TypeRewriter_replaceStringWithInt32 = (Core.Name "replaceStringWithInt32")
+
+-- | A test case which applies a type rewriter and compares the result
+data RewriteTypeTestCase =
+  RewriteTypeTestCase {
+    -- | The type to rewrite
+    rewriteTypeTestCaseInput :: Core.Type,
+    -- | The rewriter to apply
+    rewriteTypeTestCaseRewriter :: TypeRewriter,
+    -- | The expected rewritten type
+    rewriteTypeTestCaseOutput :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_RewriteTypeTestCase = (Core.Name "hydra.testing.RewriteTypeTestCase")
+
+_RewriteTypeTestCase_input = (Core.Name "input")
+
+_RewriteTypeTestCase_rewriter = (Core.Name "rewriter")
+
+_RewriteTypeTestCase_output = (Core.Name "output")
+
 -- | A test case which evaluates (reduces) a given term and compares it with the expected result
 data EvaluationTestCase = 
   EvaluationTestCase {
@@ -153,7 +316,7 @@ _InferenceTestCase_input = (Core.Name "input")
 _InferenceTestCase_output = (Core.Name "output")
 
 -- | A test case which encodes a Hydra term to JSON using a type-directed coder, and verifies that decoding produces the original term (round-trip)
-data JsonCoderTestCase =
+data JsonCoderTestCase = 
   JsonCoderTestCase {
     -- | The Hydra type that determines how the term is encoded/decoded
     jsonCoderTestCaseType :: Core.Type,
@@ -175,6 +338,21 @@ _JsonCoderTestCase_json = (Core.Name "json")
 type JsonParserTestCase = (ParserTestCase Json.Value)
 
 _JsonParserTestCase = (Core.Name "hydra.testing.JsonParserTestCase")
+
+-- | A test case which lifts lambda abstractions above let expressions and compares the result with the expected term
+data LiftLambdaAboveLetTestCase = 
+  LiftLambdaAboveLetTestCase {
+    -- | The term to transform
+    liftLambdaAboveLetTestCaseInput :: Core.Term,
+    -- | The expected transformed term
+    liftLambdaAboveLetTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_LiftLambdaAboveLetTestCase = (Core.Name "hydra.testing.LiftLambdaAboveLetTestCase")
+
+_LiftLambdaAboveLetTestCase_input = (Core.Name "input")
+
+_LiftLambdaAboveLetTestCase_output = (Core.Name "output")
 
 -- | A test case which serializes a JSON value to a string and compares it to the expected string
 type JsonWriterTestCase = (WriterTestCase Json.Value)
@@ -260,10 +438,18 @@ data TestCase =
   TestCaseAlphaConversion AlphaConversionTestCase |
   -- | A case conversion test
   TestCaseCaseConversion CaseConversionTestCase |
+  -- | A deannotate term test
+  TestCaseDeannotateTerm DeannotateTermTestCase |
+  -- | A deannotate type test
+  TestCaseDeannotateType DeannotateTypeTestCase |
   -- | A delegated evaluation test
   TestCaseDelegatedEvaluation DelegatedEvaluationTestCase |
   -- | An eta expansion test
   TestCaseEtaExpansion EtaExpansionTestCase |
+  -- | A flatten let terms test
+  TestCaseFlattenLetTerms FlattenLetTermsTestCase |
+  -- | A free variables test
+  TestCaseFreeVariables FreeVariablesTestCase |
   -- | A term evaluation test
   TestCaseEvaluation EvaluationTestCase |
   -- | A type inference test
@@ -276,10 +462,16 @@ data TestCase =
   TestCaseJsonParser JsonParserTestCase |
   -- | A JSON writer test
   TestCaseJsonWriter JsonWriterTestCase |
+  -- | A lift lambda above let test
+  TestCaseLiftLambdaAboveLet LiftLambdaAboveLetTestCase |
   -- | An AST serialization test
   TestCaseSerialization SerializationTestCase |
+  -- | A simplify term test
+  TestCaseSimplifyTerm SimplifyTermTestCase |
   -- | A topological sort test
   TestCaseTopologicalSort TopologicalSortTestCase |
+  -- | A topological sort bindings test
+  TestCaseTopologicalSortBindings TopologicalSortBindingsTestCase |
   -- | A topological sort with SCC detection test
   TestCaseTopologicalSortSCC TopologicalSortSCCTestCase |
   -- | A type checking test
@@ -287,7 +479,15 @@ data TestCase =
   -- | A type checking failure test (currently unused)
   TestCaseTypeCheckingFailure TypeCheckingFailureTestCase |
   -- | A type reduction test
-  TestCaseTypeReduction TypeReductionTestCase
+  TestCaseTypeReduction TypeReductionTestCase |
+  -- | A normalize type variables test
+  TestCaseNormalizeTypeVariables NormalizeTypeVariablesTestCase |
+  -- | A fold over term test
+  TestCaseFoldOverTerm FoldOverTermTestCase |
+  -- | A rewrite term test
+  TestCaseRewriteTerm RewriteTermTestCase |
+  -- | A rewrite type test
+  TestCaseRewriteType RewriteTypeTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -296,9 +496,17 @@ _TestCase_alphaConversion = (Core.Name "alphaConversion")
 
 _TestCase_caseConversion = (Core.Name "caseConversion")
 
+_TestCase_deannotateTerm = (Core.Name "deannotateTerm")
+
+_TestCase_deannotateType = (Core.Name "deannotateType")
+
 _TestCase_delegatedEvaluation = (Core.Name "delegatedEvaluation")
 
 _TestCase_etaExpansion = (Core.Name "etaExpansion")
+
+_TestCase_flattenLetTerms = (Core.Name "flattenLetTerms")
+
+_TestCase_freeVariables = (Core.Name "freeVariables")
 
 _TestCase_evaluation = (Core.Name "evaluation")
 
@@ -312,9 +520,15 @@ _TestCase_jsonParser = (Core.Name "jsonParser")
 
 _TestCase_jsonWriter = (Core.Name "jsonWriter")
 
+_TestCase_liftLambdaAboveLet = (Core.Name "liftLambdaAboveLet")
+
 _TestCase_serialization = (Core.Name "serialization")
 
+_TestCase_simplifyTerm = (Core.Name "simplifyTerm")
+
 _TestCase_topologicalSort = (Core.Name "topologicalSort")
+
+_TestCase_topologicalSortBindings = (Core.Name "topologicalSortBindings")
 
 _TestCase_topologicalSortSCC = (Core.Name "topologicalSortSCC")
 
@@ -323,6 +537,14 @@ _TestCase_typeChecking = (Core.Name "typeChecking")
 _TestCase_typeCheckingFailure = (Core.Name "typeCheckingFailure")
 
 _TestCase_typeReduction = (Core.Name "typeReduction")
+
+_TestCase_normalizeTypeVariables = (Core.Name "normalizeTypeVariables")
+
+_TestCase_foldOverTerm = (Core.Name "foldOverTerm")
+
+_TestCase_rewriteTerm = (Core.Name "rewriteTerm")
+
+_TestCase_rewriteType = (Core.Name "rewriteType")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -370,51 +592,6 @@ _TestGroup_subgroups = (Core.Name "subgroups")
 
 _TestGroup_cases = (Core.Name "cases")
 
--- | A test case which serializes an AST expression to a string and compares it with the expected output
-data SerializationTestCase =
-  SerializationTestCase {
-    -- | The AST expression to serialize
-    serializationTestCaseInput :: Ast.Expr,
-    -- | The expected serialized string
-    serializationTestCaseOutput :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_SerializationTestCase = (Core.Name "hydra.testing.SerializationTestCase")
-
-_SerializationTestCase_input = (Core.Name "input")
-
-_SerializationTestCase_output = (Core.Name "output")
-
--- | A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
-data TopologicalSortTestCase =
-  TopologicalSortTestCase {
-    -- | The directed graph as an adjacency list (node to list of dependencies)
-    topologicalSortTestCaseAdjacencyList :: [(I.Int32, [I.Int32])],
-    -- | The expected result: Left for cycles, Right for sorted nodes
-    topologicalSortTestCaseExpected :: (Either [[I.Int32]] [I.Int32])}
-  deriving (Eq, Ord, Read, Show)
-
-_TopologicalSortTestCase = (Core.Name "hydra.testing.TopologicalSortTestCase")
-
-_TopologicalSortTestCase_adjacencyList = (Core.Name "adjacencyList")
-
-_TopologicalSortTestCase_expected = (Core.Name "expected")
-
--- | A test case which performs topological sort with strongly connected component detection and compares the result with expected components
-data TopologicalSortSCCTestCase =
-  TopologicalSortSCCTestCase {
-    -- | The directed graph as an adjacency list
-    topologicalSortSCCTestCaseAdjacencyList :: [(I.Int32, [I.Int32])],
-    -- | The expected strongly connected components in topological order
-    topologicalSortSCCTestCaseExpected :: [[I.Int32]]}
-  deriving (Eq, Ord, Read, Show)
-
-_TopologicalSortSCCTestCase = (Core.Name "hydra.testing.TopologicalSortSCCTestCase")
-
-_TopologicalSortSCCTestCase_adjacencyList = (Core.Name "adjacencyList")
-
-_TopologicalSortSCCTestCase_expected = (Core.Name "expected")
-
 -- | A test case which performs type checking on a given term and compares the result with an expected annotated term and type
 data TypeCheckingTestCase = 
   TypeCheckingTestCase {
@@ -444,6 +621,96 @@ data TypeCheckingFailureTestCase =
 _TypeCheckingFailureTestCase = (Core.Name "hydra.testing.TypeCheckingFailureTestCase")
 
 _TypeCheckingFailureTestCase_input = (Core.Name "input")
+
+-- | A test case which performs topological sort on a map of bindings (name -> term) and compares the result with expected groups of bindings in topological order
+data TopologicalSortBindingsTestCase = 
+  TopologicalSortBindingsTestCase {
+    -- | The bindings as a list of (name, term) pairs
+    topologicalSortBindingsTestCaseBindings :: [(Core.Name, Core.Term)],
+    -- | The expected groups of bindings in topological order
+    topologicalSortBindingsTestCaseExpected :: [[(Core.Name, Core.Term)]]}
+  deriving (Eq, Ord, Read, Show)
+
+_TopologicalSortBindingsTestCase = (Core.Name "hydra.testing.TopologicalSortBindingsTestCase")
+
+_TopologicalSortBindingsTestCase_bindings = (Core.Name "bindings")
+
+_TopologicalSortBindingsTestCase_expected = (Core.Name "expected")
+
+-- | A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
+data TopologicalSortTestCase = 
+  TopologicalSortTestCase {
+    -- | The directed graph as an adjacency list (node to list of dependencies)
+    topologicalSortTestCaseAdjacencyList :: [(Int, [Int])],
+    -- | The expected result: Left for cycles, Right for sorted nodes
+    topologicalSortTestCaseExpected :: (Either [[Int]] [Int])}
+  deriving (Eq, Ord, Read, Show)
+
+_TopologicalSortTestCase = (Core.Name "hydra.testing.TopologicalSortTestCase")
+
+_TopologicalSortTestCase_adjacencyList = (Core.Name "adjacencyList")
+
+_TopologicalSortTestCase_expected = (Core.Name "expected")
+
+-- | A test case which performs topological sort with strongly connected component detection and compares the result with expected components
+data TopologicalSortSCCTestCase = 
+  TopologicalSortSCCTestCase {
+    -- | The directed graph as an adjacency list
+    topologicalSortSCCTestCaseAdjacencyList :: [(Int, [Int])],
+    -- | The expected strongly connected components in topological order
+    topologicalSortSCCTestCaseExpected :: [[Int]]}
+  deriving (Eq, Ord, Read, Show)
+
+_TopologicalSortSCCTestCase = (Core.Name "hydra.testing.TopologicalSortSCCTestCase")
+
+_TopologicalSortSCCTestCase_adjacencyList = (Core.Name "adjacencyList")
+
+_TopologicalSortSCCTestCase_expected = (Core.Name "expected")
+
+-- | A test case which serializes an AST expression to a string and compares it with the expected output
+data SerializationTestCase = 
+  SerializationTestCase {
+    -- | The AST expression to serialize
+    serializationTestCaseInput :: Ast.Expr,
+    -- | The expected serialized string
+    serializationTestCaseOutput :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_SerializationTestCase = (Core.Name "hydra.testing.SerializationTestCase")
+
+_SerializationTestCase_input = (Core.Name "input")
+
+_SerializationTestCase_output = (Core.Name "output")
+
+-- | A test case which performs term simplification (beta reduction and optimization) and compares the result with the expected term
+data SimplifyTermTestCase = 
+  SimplifyTermTestCase {
+    -- | The term to simplify
+    simplifyTermTestCaseInput :: Core.Term,
+    -- | The expected simplified term
+    simplifyTermTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_SimplifyTermTestCase = (Core.Name "hydra.testing.SimplifyTermTestCase")
+
+_SimplifyTermTestCase_input = (Core.Name "input")
+
+_SimplifyTermTestCase_output = (Core.Name "output")
+
+-- | A test case which normalizes type variables in a term (renaming them to t0, t1, t2, etc.) and compares the result with the expected term
+data NormalizeTypeVariablesTestCase = 
+  NormalizeTypeVariablesTestCase {
+    -- | The term with type annotations to normalize
+    normalizeTypeVariablesTestCaseInput :: Core.Term,
+    -- | The expected term with normalized type variable names
+    normalizeTypeVariablesTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_NormalizeTypeVariablesTestCase = (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase")
+
+_NormalizeTypeVariablesTestCase_input = (Core.Name "input")
+
+_NormalizeTypeVariablesTestCase_output = (Core.Name "output")
 
 -- | A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type
 data TypeReductionTestCase = 
