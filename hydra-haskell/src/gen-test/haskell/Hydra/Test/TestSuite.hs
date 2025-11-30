@@ -24,6 +24,7 @@ import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Test.Reduction as Reduction
+import qualified Hydra.Test.Rewriting as Rewriting
 import qualified Hydra.Test.Serialization as Serialization
 import qualified Hydra.Test.Sorting as Sorting
 import qualified Hydra.Testing as Testing
@@ -47,6 +48,7 @@ allTests = Testing.TestGroup {
     Parser.allTests,
     Writer.allTests,
     Reduction.allTests,
+    Rewriting.allTests,
     Serialization.allTests,
     Sorting.allTests,
     Chars.allTests,
