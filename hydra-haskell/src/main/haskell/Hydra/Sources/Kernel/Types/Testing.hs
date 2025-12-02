@@ -154,7 +154,7 @@ module_ = Module ns elements [Ast.module_, Coders.module_, Compute.module_, Grap
             core "Term",
           "traversalOrder">:
             doc "The traversal order (pre or post)" $
-            core "TraversalOrder",
+            coders "TraversalOrder",
           "operation">:
             doc "The fold operation to apply" $
             testing "FoldOperation",
