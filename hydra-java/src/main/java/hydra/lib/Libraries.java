@@ -47,6 +47,7 @@ public class Libraries {
         prims.addAll(mapsPrimitives());
         prims.addAll(mathPrimitives());
         prims.addAll(maybesPrimitives());
+        prims.addAll(pairsPrimitives());
         prims.addAll(setsPrimitives());
         prims.addAll(stringsPrimitives());
 
@@ -273,6 +274,12 @@ public class Libraries {
                 new hydra.lib.maybes.MapMaybe(),
                 new hydra.lib.maybes.Maybe(),
                 new hydra.lib.maybes.Pure());
+    }
+
+    private static List<PrimitiveFunction> pairsPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.pairs.First(),
+                new hydra.lib.pairs.Second());
     }
 
     private static List<PrimitiveFunction> setsPrimitives() {
