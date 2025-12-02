@@ -83,6 +83,7 @@ module_ = Module (Namespace "hydra.reduction") elements
      el etaExpansionArityDef,
      el etaExpandTypedTermDef,
      el reduceTermDef,
+     el rewriteTermWithTypeContextDef,
      el termIsClosedDef,
      el termIsValueDef]
 
@@ -523,6 +524,21 @@ reduceTermDef = define "reduceTerm" $
       (Flows.pure $ var "mid") $
     var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])) $
   ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
+
+rewriteTermWithTypeContextDef :: TBinding (((TypeContext -> Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
+rewriteTermWithTypeContextDef = define "rewriteTermWithTypeContext" $
+  doc "Rewrite a term with the help of a type context which is updated as we descend into subterms" $
+  "f" ~> "cx0" ~> "term0" ~>
+  "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
+    "recurse1" <~ ("cx" ~> "term" ~>
+      "fallback" <~ var "recurse" @@ var "cx" @@ var "term" $
+      cases _Term (var "term") (Just $ var "fallback") [
+        _Term_function>>: "fun" ~> cases _Function (var "fun") (Just $ var "fallback") [
+          _Function_lambda>>: "l" ~> var "recurse" @@ (ref Schemas.extendTypeContextForLambdaDef @@ var "cx" @@ var "l") @@ var "term"],
+        _Term_let>>: "l" ~> var "recurse" @@ (ref Schemas.extendTypeContextForLetDef @@ var "cx" @@ var "l") @@ var "term",
+        _Term_typeLambda>>: "tl" ~> var "recurse" @@ (ref Schemas.extendTypeContextForTypeLambdaDef @@ var "cx" @@ var "tl") @@ var "term"]) $
+    var "f" @@ var "recurse1" @@ var "term") $
+  ref Rewriting.rewriteTermWithContextDef @@ var "f2" @@ var "cx0" @@ var "term0"
 
 termIsClosedDef :: TBinding (Term -> Bool)
 termIsClosedDef = define "termIsClosed" $

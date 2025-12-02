@@ -369,6 +369,22 @@ reduceTerm eager term =
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
               in (Rewriting.rewriteTermM mapping term)
 
+-- | Rewrite a term with the help of a type context which is updated as we descend into subterms
+rewriteTermWithTypeContext :: (((Typing.TypeContext -> Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Typing.TypeContext -> Core.Term -> Core.Term)
+rewriteTermWithTypeContext f cx0 term0 =  
+  let f2 = (\recurse -> \cx -> \term ->  
+          let recurse1 = (\cx -> \term ->  
+                  let fallback = (recurse cx term)
+                  in ((\x -> case x of
+                    Core.TermFunction v1 -> ((\x -> case x of
+                      Core.FunctionLambda v2 -> (recurse (Schemas.extendTypeContextForLambda cx v2) term)
+                      _ -> fallback) v1)
+                    Core.TermLet v1 -> (recurse (Schemas.extendTypeContextForLet cx v1) term)
+                    Core.TermTypeLambda v1 -> (recurse (Schemas.extendTypeContextForTypeLambda cx v1) term)
+                    _ -> fallback) term))
+          in (f recurse1 term))
+  in (Rewriting.rewriteTermWithContext f2 cx0 term0)
+
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: (Core.Term -> Bool)
 termIsClosed term = (Sets.null (Rewriting.freeVariablesInTerm term))
