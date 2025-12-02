@@ -82,8 +82,23 @@ public class TestSuiteRunner extends HydraTestBase {
     private static void addTestCase(TestCaseWithMetadata testCase, int idx, String prefix, List<Arguments> args) {
         testCase.case_.accept(new TestCase.Visitor() {
             @Override
+            public Object visit(TestCase.AlphaConversion instance) {
+                return null;
+            }
+
+            @Override
             public Object visit(TestCase.CaseConversion instance) {
                 // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.DeannotateTerm instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.DeannotateType instance) {
                 return null;
             }
 
@@ -96,6 +111,16 @@ public class TestSuiteRunner extends HydraTestBase {
             @Override
             public Object visit(TestCase.EtaExpansion instance) {
                 // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.FlattenLetTerms instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.FreeVariables instance) {
                 return null;
             }
 
@@ -119,6 +144,51 @@ public class TestSuiteRunner extends HydraTestBase {
             }
 
             @Override
+            public Object visit(TestCase.JsonCoder instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.JsonParser instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.JsonWriter instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.LiftLambdaAboveLet instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.Serialization instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.SimplifyTerm instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TopologicalSort instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TopologicalSortBindings instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TopologicalSortSCC instance) {
+                return null;
+            }
+
+            @Override
             public Object visit(TestCase.TypeChecking instance) {
                 // TODO
                 return null;
@@ -127,6 +197,31 @@ public class TestSuiteRunner extends HydraTestBase {
             @Override
             public Object visit(TestCase.TypeCheckingFailure instance) {
                 // TODO
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.TypeReduction instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.NormalizeTypeVariables instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.FoldOverTerm instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.RewriteTerm instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.RewriteType instance) {
                 return null;
             }
         });
