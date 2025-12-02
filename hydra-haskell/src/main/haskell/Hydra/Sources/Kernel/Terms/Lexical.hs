@@ -67,6 +67,7 @@ module_ = Module (Namespace "hydra.lexical") elements
     Just ("A module for lexical operations over graphs.")
   where
     elements = [
+      el chooseUniqueNameDef,
       el dereferenceElementDef,
       el dereferenceSchemaTypeDef,
       el elementsToGraphDef,
@@ -92,6 +93,18 @@ module_ = Module (Namespace "hydra.lexical") elements
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
+
+chooseUniqueNameDef :: TBinding (S.Set Name -> Name -> Name)
+chooseUniqueNameDef = define "chooseUniqueName" $
+  "reserved" ~> "name" ~>
+  "tryName" <~ ("index" ~>
+    "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 0))
+      (var "name")
+      (Core.name $ (Core.unName (var "name") ++ Literals.showInt32 (var "index"))) $
+    Logic.ifElse (Sets.member (var "candidate") (var "reserved"))
+      (var "tryName" @@ (Math.add (var "index") (int32 1)))
+      (var "candidate")) $
+  var "tryName" @@ (int32 0)
 
 dereferenceElementDef :: TBinding (Name -> Flow Graph (Maybe Binding))
 dereferenceElementDef = define "dereferenceElement" $
