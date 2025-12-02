@@ -11,15 +11,15 @@ public interface Core {
   }
   
   static String binding(hydra.core.Binding el) {
-    String name = (((hydra.core.Binding) ((el))).name).value;
-    hydra.core.Term t = ((hydra.core.Binding) ((el))).term;
+    String name = (((el)).name).value;
+    hydra.core.Term t = ((el)).term;
     String typeStr = hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.core.TypeScheme, String>) (ts -> hydra.lib.strings.Cat.apply(java.util.List.of(
         ":(",
         hydra.show.core.Core.typeScheme((ts)),
         ")"))),
-      ((hydra.core.Binding) ((el))).type);
+      ((el)).type);
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       (name),
       (typeStr),
@@ -33,16 +33,16 @@ public interface Core {
       public String visit(hydra.core.Elimination.Product tp) {
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "[",
-          hydra.lib.literals.ShowInt32.apply(((hydra.core.TupleProjection) (((tp)).value)).index),
+          hydra.lib.literals.ShowInt32.apply((((tp)).value).index),
           "/",
-          hydra.lib.literals.ShowInt32.apply(((hydra.core.TupleProjection) (((tp)).value)).arity),
+          hydra.lib.literals.ShowInt32.apply((((tp)).value).arity),
           "]"));
       }
       
       @Override
       public String visit(hydra.core.Elimination.Record proj) {
-        String fname = (((hydra.core.Projection) (((proj)).value)).field).value;
-        String tname = (((hydra.core.Projection) (((proj)).value)).typeName).value;
+        String fname = ((((proj)).value).field).value;
+        String tname = ((((proj)).value).typeName).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "project(",
           (tname),
@@ -53,16 +53,16 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Elimination.Union cs) {
-        java.util.List<hydra.core.Field> cases = ((hydra.core.CaseStatement) (((cs)).value)).cases;
-        hydra.util.Maybe<hydra.core.Term> mdef = ((hydra.core.CaseStatement) (((cs)).value)).default_;
+        java.util.List<hydra.core.Field> cases = (((cs)).value).cases;
+        hydra.util.Maybe<hydra.core.Term> mdef = (((cs)).value).default_;
         java.util.List<hydra.core.Field> defaultField = hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.core.Field>) ((java.util.List) (java.util.List.<hydra.core.Field>of())),
+          (java.util.List<hydra.core.Field>) (java.util.List.<hydra.core.Field>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.List.of(new hydra.core.Field(new hydra.core.Name("[default]"), (d)))),
           (mdef));
         java.util.List<hydra.core.Field> allFields = hydra.lib.lists.Concat.apply(java.util.List.of(
           (cases),
           (defaultField)));
-        String tname = (((hydra.core.CaseStatement) (((cs)).value)).typeName).value;
+        String tname = ((((cs)).value).typeName).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "case(",
           (tname),
@@ -81,8 +81,8 @@ public interface Core {
   }
   
   static String field(hydra.core.Field field) {
-    String fname = (((hydra.core.Field) ((field))).name).value;
-    hydra.core.Term fterm = ((hydra.core.Field) ((field))).term;
+    String fname = (((field)).name).value;
+    hydra.core.Term fterm = ((field)).term;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       (fname),
       "=",
@@ -90,8 +90,8 @@ public interface Core {
   }
   
   static String fieldType(hydra.core.FieldType ft) {
-    String fname = (((hydra.core.FieldType) ((ft))).name).value;
-    hydra.core.Type ftyp = ((hydra.core.FieldType) ((ft))).type;
+    String fname = (((ft)).name).value;
+    hydra.core.Type ftyp = ((ft)).type;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       (fname),
       ":",
@@ -176,8 +176,8 @@ public interface Core {
   }
   
   static String injection(hydra.core.Injection inj) {
-    hydra.core.Field f = ((hydra.core.Injection) ((inj))).field;
-    hydra.core.Name tname = ((hydra.core.Injection) ((inj))).typeName;
+    hydra.core.Field f = ((inj)).field;
+    hydra.core.Name tname = ((inj)).typeName;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "inject(",
       ((tname)).value,
@@ -302,15 +302,15 @@ public interface Core {
   }
   
   static String lambda(hydra.core.Lambda l) {
-    hydra.core.Term body = ((hydra.core.Lambda) ((l))).body;
-    hydra.util.Maybe<hydra.core.Type> mt = ((hydra.core.Lambda) ((l))).domain;
+    hydra.core.Term body = ((l)).body;
+    hydra.util.Maybe<hydra.core.Type> mt = ((l)).domain;
     String typeStr = hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.core.Type, String>) (t -> hydra.lib.strings.Cat2.apply(
         ":",
         hydra.show.core.Core.type((t)))),
       (mt));
-    String v = (((hydra.core.Lambda) ((l))).parameter).value;
+    String v = (((l)).parameter).value;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "\u03BB",
       (v),
@@ -395,8 +395,8 @@ public interface Core {
   static String term(hydra.core.Term t) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Application, java.util.List<hydra.core.Term>>>> gatherTerms = new java.util.concurrent.atomic.AtomicReference<>();
     gatherTerms.set((java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Application, java.util.List<hydra.core.Term>>>) (prev -> (java.util.function.Function<hydra.core.Application, java.util.List<hydra.core.Term>>) (app -> {
-      hydra.core.Term lhs = ((hydra.core.Application) ((app))).function;
-      hydra.core.Term rhs = ((hydra.core.Application) ((app))).argument;
+      hydra.core.Term lhs = ((app)).function;
+      hydra.core.Term rhs = ((app)).argument;
       return ((lhs)).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public java.util.List<hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -409,21 +409,21 @@ public interface Core {
         
         @Override
         public java.util.List<hydra.core.Term> visit(hydra.core.Term.Application app2) {
-          return (java.util.List<hydra.core.Term>) ((java.util.List) (((java.util.function.Function<hydra.core.Application, java.util.List<hydra.core.Term>>) ((java.util.function.Function) ((gatherTerms.get()).apply(hydra.lib.lists.Cons.apply(
+          return ((gatherTerms.get()).apply(hydra.lib.lists.Cons.apply(
             (rhs),
-            (prev)))))).apply(((app2)).value)));
+            (prev)))).apply(((app2)).value);
         }
       });
     })));
     return ((t)).accept(new hydra.core.Term.Visitor<>() {
       @Override
       public String visit(hydra.core.Term.Annotated at) {
-        return hydra.show.core.Core.term(((hydra.core.AnnotatedTerm) (((at)).value)).body);
+        return hydra.show.core.Core.term((((at)).value).body);
       }
       
       @Override
       public String visit(hydra.core.Term.Application app) {
-        java.util.List<hydra.core.Term> terms = (java.util.List<hydra.core.Term>) ((java.util.List) (((java.util.function.Function<hydra.core.Application, java.util.List<hydra.core.Term>>) ((java.util.function.Function) ((gatherTerms.get()).apply((java.util.List<hydra.core.Term>) ((java.util.List) (java.util.List.<hydra.core.Term>of())))))).apply(((app)).value)));
+        java.util.List<hydra.core.Term> terms = ((gatherTerms.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(((app)).value);
         java.util.List<String> termStrs = hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::term),
           (terms));
@@ -456,11 +456,11 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Let l) {
-        java.util.List<hydra.core.Binding> bindings = ((hydra.core.Let) (((l)).value)).bindings;
+        java.util.List<hydra.core.Binding> bindings = (((l)).value).bindings;
         java.util.List<String> bindingStrs = hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::binding),
           (bindings));
-        hydra.core.Term env = ((hydra.core.Let) (((l)).value)).body;
+        hydra.core.Term env = (((l)).value).body;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "let ",
           hydra.lib.strings.Intercalate.apply(
@@ -491,9 +491,9 @@ public interface Core {
       @Override
       public String visit(hydra.core.Term.Map m) {
         java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, String> entry = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
-          hydra.show.core.Core.term(((p)).object1),
+          hydra.show.core.Core.term(hydra.lib.pairs.First.apply((p))),
           "=",
-          hydra.show.core.Core.term(((p)).object2))));
+          hydra.show.core.Core.term(hydra.lib.pairs.Second.apply((p))))));
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "{",
           hydra.lib.strings.Intercalate.apply(
@@ -519,9 +519,9 @@ public interface Core {
       public String visit(hydra.core.Term.Pair p) {
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
-          hydra.show.core.Core.term((((p)).value).object1),
+          hydra.show.core.Core.term(hydra.lib.pairs.First.apply(((p)).value)),
           ", ",
-          hydra.show.core.Core.term((((p)).value).object2),
+          hydra.show.core.Core.term(hydra.lib.pairs.Second.apply(((p)).value)),
           ")"));
       }
       
@@ -540,8 +540,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Record rec) {
-        java.util.List<hydra.core.Field> flds = ((hydra.core.Record) (((rec)).value)).fields;
-        String tname = (((hydra.core.Record) (((rec)).value)).typeName).value;
+        java.util.List<hydra.core.Field> flds = (((rec)).value).fields;
+        String tname = ((((rec)).value).typeName).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "record(",
           (tname),
@@ -563,9 +563,9 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Sum s) {
-        Integer index = ((hydra.core.Sum) (((s)).value)).index;
-        Integer size = ((hydra.core.Sum) (((s)).value)).size;
-        hydra.core.Term t2 = ((hydra.core.Sum) (((s)).value)).term;
+        Integer index = (((s)).value).index;
+        Integer size = (((s)).value).size;
+        hydra.core.Term t2 = (((s)).value).term;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
           hydra.lib.literals.ShowInt32.apply((index)),
@@ -578,8 +578,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.TypeLambda ta) {
-        hydra.core.Term body = ((hydra.core.TypeLambda) (((ta)).value)).body;
-        String param = (((hydra.core.TypeLambda) (((ta)).value)).parameter).value;
+        hydra.core.Term body = (((ta)).value).body;
+        String param = ((((ta)).value).parameter).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "\u039B",
           (param),
@@ -589,8 +589,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.TypeApplication tt) {
-        hydra.core.Term t2 = ((hydra.core.TypeApplicationTerm) (((tt)).value)).body;
-        hydra.core.Type typ = ((hydra.core.TypeApplicationTerm) (((tt)).value)).type;
+        hydra.core.Term t2 = (((tt)).value).body;
+        hydra.core.Type typ = (((tt)).value).type;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           hydra.show.core.Core.term((t2)),
           "\u27E8",
@@ -615,8 +615,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Wrap wt) {
-        hydra.core.Term term1 = ((hydra.core.WrappedTerm) (((wt)).value)).body;
-        String tname = (((hydra.core.WrappedTerm) (((wt)).value)).typeName).value;
+        hydra.core.Term term1 = (((wt)).value).body;
+        String tname = ((((wt)).value).typeName).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "wrap(",
           (tname),
@@ -639,17 +639,17 @@ public interface Core {
       
       @Override
       public java.util.List<hydra.core.Type> visit(hydra.core.Type.Function ft) {
-        hydra.core.Type cod = ((hydra.core.FunctionType) (((ft)).value)).codomain;
-        hydra.core.Type dom = ((hydra.core.FunctionType) (((ft)).value)).domain;
-        return (java.util.List<hydra.core.Type>) ((java.util.List) (((java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>) ((java.util.function.Function) ((gatherFunctionTypes.get()).apply(hydra.lib.lists.Cons.apply(
+        hydra.core.Type cod = (((ft)).value).codomain;
+        hydra.core.Type dom = (((ft)).value).domain;
+        return ((gatherFunctionTypes.get()).apply(hydra.lib.lists.Cons.apply(
           (dom),
-          (prev)))))).apply((cod))));
+          (prev)))).apply((cod));
       }
     }))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.ApplicationType, java.util.List<hydra.core.Type>>>> gatherTypes = new java.util.concurrent.atomic.AtomicReference<>();
     gatherTypes.set((java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.ApplicationType, java.util.List<hydra.core.Type>>>) (prev -> (java.util.function.Function<hydra.core.ApplicationType, java.util.List<hydra.core.Type>>) (app -> {
-      hydra.core.Type lhs = ((hydra.core.ApplicationType) ((app))).function;
-      hydra.core.Type rhs = ((hydra.core.ApplicationType) ((app))).argument;
+      hydra.core.Type lhs = ((app)).function;
+      hydra.core.Type rhs = ((app)).argument;
       return ((lhs)).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
         public java.util.List<hydra.core.Type> otherwise(hydra.core.Type instance) {
@@ -662,14 +662,14 @@ public interface Core {
         
         @Override
         public java.util.List<hydra.core.Type> visit(hydra.core.Type.Application app2) {
-          return (java.util.List<hydra.core.Type>) ((java.util.List) (((java.util.function.Function<hydra.core.ApplicationType, java.util.List<hydra.core.Type>>) ((java.util.function.Function) ((gatherTypes.get()).apply(hydra.lib.lists.Cons.apply(
+          return ((gatherTypes.get()).apply(hydra.lib.lists.Cons.apply(
             (rhs),
-            (prev)))))).apply(((app2)).value)));
+            (prev)))).apply(((app2)).value);
         }
       });
     })));
     java.util.function.Function<hydra.core.RowType, String> showRowType = (java.util.function.Function<hydra.core.RowType, String>) (rt -> {
-      java.util.List<hydra.core.FieldType> flds = ((hydra.core.RowType) ((rt))).fields;
+      java.util.List<hydra.core.FieldType> flds = ((rt)).fields;
       java.util.List<String> fieldStrs = hydra.lib.lists.Map.apply(
         (hydra.show.core.Core::fieldType),
         (flds));
@@ -683,12 +683,12 @@ public interface Core {
     return ((typ)).accept(new hydra.core.Type.Visitor<>() {
       @Override
       public String visit(hydra.core.Type.Annotated at) {
-        return hydra.show.core.Core.type(((hydra.core.AnnotatedType) (((at)).value)).body);
+        return hydra.show.core.Core.type((((at)).value).body);
       }
       
       @Override
       public String visit(hydra.core.Type.Application app) {
-        java.util.List<hydra.core.Type> types = (java.util.List<hydra.core.Type>) ((java.util.List) (((java.util.function.Function<hydra.core.ApplicationType, java.util.List<hydra.core.Type>>) ((java.util.function.Function) ((gatherTypes.get()).apply((java.util.List<hydra.core.Type>) ((java.util.List) (java.util.List.<hydra.core.Type>of())))))).apply(((app)).value)));
+        java.util.List<hydra.core.Type> types = ((gatherTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply(((app)).value);
         java.util.List<String> typeStrs = hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::type),
           (types));
@@ -702,8 +702,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Either et) {
-        hydra.core.Type leftTyp = ((hydra.core.EitherType) (((et)).value)).left;
-        hydra.core.Type rightTyp = ((hydra.core.EitherType) (((et)).value)).right;
+        hydra.core.Type leftTyp = (((et)).value).left;
+        hydra.core.Type rightTyp = (((et)).value).right;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "either<",
           hydra.show.core.Core.type((leftTyp)),
@@ -714,8 +714,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Forall ft) {
-        hydra.core.Type body = ((hydra.core.ForallType) (((ft)).value)).body;
-        String var = (((hydra.core.ForallType) (((ft)).value)).parameter).value;
+        hydra.core.Type body = (((ft)).value).body;
+        String var = ((((ft)).value).parameter).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(\u2200",
           (var),
@@ -726,7 +726,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Function ft) {
-        java.util.List<hydra.core.Type> types = (java.util.List<hydra.core.Type>) ((java.util.List) (((java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>) ((java.util.function.Function) ((gatherFunctionTypes.get()).apply((java.util.List<hydra.core.Type>) ((java.util.List) (java.util.List.<hydra.core.Type>of())))))).apply((typ))));
+        java.util.List<hydra.core.Type> types = ((gatherFunctionTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply((typ));
         java.util.List<String> typeStrs = hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::type),
           (types));
@@ -753,8 +753,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Map mt) {
-        hydra.core.Type keyTyp = ((hydra.core.MapType) (((mt)).value)).keys;
-        hydra.core.Type valTyp = ((hydra.core.MapType) (((mt)).value)).values;
+        hydra.core.Type keyTyp = (((mt)).value).keys;
+        hydra.core.Type valTyp = (((mt)).value).values;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "map<",
           hydra.show.core.Core.type((keyTyp)),
@@ -773,8 +773,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Pair pt) {
-        hydra.core.Type firstTyp = ((hydra.core.PairType) (((pt)).value)).first;
-        hydra.core.Type secondTyp = ((hydra.core.PairType) (((pt)).value)).second;
+        hydra.core.Type firstTyp = (((pt)).value).first;
+        hydra.core.Type secondTyp = (((pt)).value).second;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
           hydra.show.core.Core.type((firstTyp)),
@@ -797,7 +797,7 @@ public interface Core {
       public String visit(hydra.core.Type.Record rt) {
         return hydra.lib.strings.Cat2.apply(
           "record",
-          (String) ((String) (((showRowType)).apply(((rt)).value))));
+          ((showRowType)).apply(((rt)).value));
       }
       
       @Override
@@ -822,7 +822,7 @@ public interface Core {
       public String visit(hydra.core.Type.Union rt) {
         return hydra.lib.strings.Cat2.apply(
           "union",
-          (String) ((String) (((showRowType)).apply(((rt)).value))));
+          ((showRowType)).apply(((rt)).value));
       }
       
       @Override
@@ -837,8 +837,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Wrap wt) {
-        String tname = (((hydra.core.WrappedType) (((wt)).value)).typeName).value;
-        hydra.core.Type typ1 = ((hydra.core.WrappedType) (((wt)).value)).body;
+        String tname = ((((wt)).value).typeName).value;
+        hydra.core.Type typ1 = (((wt)).value).body;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "wrap[",
           (tname),
@@ -850,8 +850,8 @@ public interface Core {
   }
   
   static String typeScheme(hydra.core.TypeScheme ts) {
-    hydra.core.Type body = ((hydra.core.TypeScheme) ((ts))).type;
-    java.util.List<hydra.core.Name> vars = ((hydra.core.TypeScheme) ((ts))).variables;
+    hydra.core.Type body = ((ts)).type;
+    java.util.List<hydra.core.Name> vars = ((ts)).variables;
     java.util.List<String> varNames = hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Name, String>) (v1 -> ((v1)).value),
       (vars));
