@@ -262,13 +262,13 @@ validatePropertiesDef = validationDefinition "validateProperties" $
         nothing,
     "checkValues">: lets [
       "m">: Maps.fromList (Lists.map
-          (lambda "p" $ tuple2
+          (lambda "p" $ pair
             (project _PropertyType _PropertyType_key @@ var "p")
             (project _PropertyType _PropertyType_value @@ var "p"))
           (var "types")),
       "checkPair">: lambda "pair" $ lets [
-        "key">: first $ var "pair",
-        "val">: second $ var "pair"]
+        "key">: Pairs.first $ var "pair",
+        "val">: Pairs.second $ var "pair"]
         $ Maybes.maybe
           (just (ref prependDef @@ "Unexpected key" @@ (unwrap _PropertyKey @@ var "key")))
           (lambda "typ" $ Maybes.map

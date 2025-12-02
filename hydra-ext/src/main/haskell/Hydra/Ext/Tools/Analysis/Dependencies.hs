@@ -8,12 +8,14 @@ import Hydra.Kernel
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Kernel.Terms.All
-import Hydra.Staging.Json.Serde
+import qualified Hydra.Json.Writer as JsonWriter
+import qualified Data.List as L
 import Hydra.Tools.Monads
 import Hydra.Ext.Tools.Analysis.Dependencies
 import Hydra.Generation (modulesToGraph)
 import System.IO
 
+let jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
 termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims False (modulesToGraph modules)) >>= writeFile outFile
 typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
 combinedModulesToGraphson dataModules schemaModules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
@@ -50,6 +52,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Meta as ShowMeta
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json as Json
+import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Ext.Staging.Pg.Utils
 import Hydra.Ext.Staging.Pg.Graphson.Utils
 

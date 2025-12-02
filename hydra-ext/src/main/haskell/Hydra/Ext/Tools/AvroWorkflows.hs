@@ -24,7 +24,8 @@ import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Extract.Json
-import Hydra.Staging.Json.Serde
+import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
+import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Ext.Staging.Avro.Coder
 import Hydra.Ext.Staging.Avro.SchemaJson
 import Hydra.Ext.Staging.Pg.Graphson.Utils
@@ -51,6 +52,12 @@ import System.FilePath
 import System.FilePath.Posix
 import System.Directory
 
+
+-- | Parse a JSON string, returning Either for compatibility
+parseJsonEither :: String -> Either String Json.Value
+parseJsonEither s = case JsonParser.parseJson s of
+  ParseResultSuccess success -> Right (parseSuccessValue success)
+  ParseResultFailure err -> Left (parseErrorMessage err)
 
 data JsonPayloadFormat = Json | Jsonl
 
@@ -115,7 +122,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
 
-    jsonToTarget inFile adapter lmEncoder index payload = case stringToJsonValue payload of
+    jsonToTarget inFile adapter lmEncoder index payload = case parseJsonEither payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
         Right json -> withState emptyAvroEnvironment $ do
           -- TODO; the core graph is neither the data nor the schema graph

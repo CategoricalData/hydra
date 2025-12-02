@@ -5,7 +5,7 @@ module Hydra.Ext.Staging.Json.Schema.Serde(
 
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
-import qualified Hydra.Staging.Json.Serde as JsonSerde
+import qualified Hydra.Json.Writer as JsonWriter
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -161,7 +161,7 @@ jsonSchemaDocumentToJsonValue (JS.Document mid mdefs root) = J.ValueObject $ M.u
     encodeDefs mp = J.ValueObject $ M.fromList $ L.map encodeDef $ M.toList mp
 
 jsonSchemaDocumentToString :: JS.Document -> String
-jsonSchemaDocumentToString = JsonSerde.jsonValueToString . jsonSchemaDocumentToJsonValue
+jsonSchemaDocumentToString = JsonWriter.printJson . jsonSchemaDocumentToJsonValue
 
 fromObject :: J.Value -> M.Map String J.Value
 fromObject (J.ValueObject mp) = mp

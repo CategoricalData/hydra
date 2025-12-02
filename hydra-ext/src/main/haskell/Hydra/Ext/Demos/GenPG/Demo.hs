@@ -10,7 +10,7 @@ import Hydra.Ext.Demos.GenPG.Generated.Mapping
 import Hydra.Ext.Demos.GenPG.Transform
 import Hydra.Dsl.Tabular
 import Hydra.Ext.Dsl.Pg.Mappings
-import Hydra.Staging.Json.Serde
+import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Ext.Staging.Pg.Graphson.Utils
 import Hydra.Ext.Staging.Pg.Printing
 import Hydra.Sources.Kernel.Types.Core
@@ -38,3 +38,5 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   let els = lazyGraphToElements g
   jsonResult <- flowToIo hydraCoreGraph (pgElementsToGraphson termGraphsonContext els)
   writeFile outputPath (jsonValuesToString jsonResult)
+  where
+    jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
