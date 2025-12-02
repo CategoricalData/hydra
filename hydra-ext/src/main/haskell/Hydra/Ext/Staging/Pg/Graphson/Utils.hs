@@ -10,7 +10,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Show.Core as ShowCore
 import Hydra.Ext.Staging.Pg.Utils
-import Hydra.Staging.Json.Serde
+import qualified Hydra.Json.Writer as JsonWriter
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E
@@ -101,10 +101,12 @@ pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schem
 propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphGraphsonLastMile ctx schema vidType eidType =
   LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
+  where
+    jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
 
 propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
 propertyGraphJsonLastMile schema vidType eidType =
-  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
+  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> JsonWriter.printJson <$> pgElementsToJson schema els) "json"
 
 stringGraphsonContext :: GraphsonContext s String
 stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString

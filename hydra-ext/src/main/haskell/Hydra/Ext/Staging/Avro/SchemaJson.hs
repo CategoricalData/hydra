@@ -1,7 +1,9 @@
 module Hydra.Ext.Staging.Avro.SchemaJson where
 
 import Hydra.Kernel
-import Hydra.Staging.Json.Serde
+import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
+import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Extract.Json
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json as Json
@@ -10,6 +12,13 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
+
+
+-- | Parse a JSON string, returning Either for compatibility
+stringToJsonValue :: String -> Either String Json.Value
+stringToJsonValue s = case JsonParser.parseJson s of
+  ParseResultSuccess success -> Right (parseSuccessValue success)
+  ParseResultFailure err -> Left (parseErrorMessage err)
 
 
 avro_aliases = "aliases"
@@ -48,7 +57,7 @@ avroSchemaJsonCoder = Coder {
 
 avroSchemaStringCoder :: Coder s s Avro.Schema String
 avroSchemaStringCoder = Coder {
-  coderEncode = \schema -> jsonValueToString <$> coderEncode avroSchemaJsonCoder schema,
+  coderEncode = \schema -> JsonWriter.printJson <$> coderEncode avroSchemaJsonCoder schema,
   coderDecode = \s -> do
     json <- case stringToJsonValue s of
       Left msg -> fail $ "failed to parse JSON: " ++ msg
