@@ -12,14 +12,14 @@ public class OrderingIsomorphism<A> {
   /**
    * Mapping from source ordering to target ordering
    */
-  public final java.util.function.Function<java.util.List<Object>, java.util.List<Object>> encode;
+  public final java.util.function.Function<java.util.List<A>, java.util.List<A>> encode;
   
   /**
    * Mapping from target ordering to source ordering
    */
-  public final java.util.function.Function<java.util.List<Object>, java.util.List<Object>> decode;
+  public final java.util.function.Function<java.util.List<A>, java.util.List<A>> decode;
   
-  public OrderingIsomorphism (java.util.function.Function<java.util.List<Object>, java.util.List<Object>> encode, java.util.function.Function<java.util.List<Object>, java.util.List<Object>> decode) {
+  public OrderingIsomorphism (java.util.function.Function<java.util.List<A>, java.util.List<A>> encode, java.util.function.Function<java.util.List<A>, java.util.List<A>> decode) {
     java.util.Objects.requireNonNull((encode));
     java.util.Objects.requireNonNull((decode));
     this.encode = encode;
@@ -40,12 +40,12 @@ public class OrderingIsomorphism<A> {
     return 2 * encode.hashCode() + 3 * decode.hashCode();
   }
   
-  public OrderingIsomorphism withEncode(java.util.function.Function<java.util.List<Object>, java.util.List<Object>> encode) {
+  public OrderingIsomorphism withEncode(java.util.function.Function<java.util.List<A>, java.util.List<A>> encode) {
     java.util.Objects.requireNonNull((encode));
     return new OrderingIsomorphism(encode, decode);
   }
   
-  public OrderingIsomorphism withDecode(java.util.function.Function<java.util.List<Object>, java.util.List<Object>> decode) {
+  public OrderingIsomorphism withDecode(java.util.function.Function<java.util.List<A>, java.util.List<A>> decode) {
     java.util.Objects.requireNonNull((decode));
     return new OrderingIsomorphism(encode, decode);
   }

@@ -20,9 +20,9 @@ public class TermCoder<A> {
   /**
    * A coder between Hydra terms and instances of the given type
    */
-  public final hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, Object> coder;
+  public final hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder;
   
-  public TermCoder (hydra.core.Type type, hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, Object> coder) {
+  public TermCoder (hydra.core.Type type, hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((coder));
     this.type = type;
@@ -48,7 +48,7 @@ public class TermCoder<A> {
     return new TermCoder(type, coder);
   }
   
-  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, Object> coder) {
+  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder) {
     java.util.Objects.requireNonNull((coder));
     return new TermCoder(type, coder);
   }

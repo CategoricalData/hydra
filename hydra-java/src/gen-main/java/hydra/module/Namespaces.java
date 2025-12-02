@@ -15,14 +15,14 @@ public class Namespaces<N> {
   /**
    * The namespace in focus, together with its associated value
    */
-  public final hydra.util.Tuple.Tuple2<hydra.module.Namespace, Object> focus;
+  public final hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus;
   
   /**
    * A mapping of namespaces to values
    */
-  public final java.util.Map<hydra.module.Namespace, Object> mapping;
+  public final java.util.Map<hydra.module.Namespace, N> mapping;
   
-  public Namespaces (hydra.util.Tuple.Tuple2<hydra.module.Namespace, Object> focus, java.util.Map<hydra.module.Namespace, Object> mapping) {
+  public Namespaces (hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus, java.util.Map<hydra.module.Namespace, N> mapping) {
     java.util.Objects.requireNonNull((focus));
     java.util.Objects.requireNonNull((mapping));
     this.focus = focus;
@@ -43,12 +43,12 @@ public class Namespaces<N> {
     return 2 * focus.hashCode() + 3 * mapping.hashCode();
   }
   
-  public Namespaces withFocus(hydra.util.Tuple.Tuple2<hydra.module.Namespace, Object> focus) {
+  public Namespaces withFocus(hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus) {
     java.util.Objects.requireNonNull((focus));
     return new Namespaces(focus, mapping);
   }
   
-  public Namespaces withMapping(java.util.Map<hydra.module.Namespace, Object> mapping) {
+  public Namespaces withMapping(java.util.Map<hydra.module.Namespace, N> mapping) {
     java.util.Objects.requireNonNull((mapping));
     return new Namespaces(focus, mapping);
   }
