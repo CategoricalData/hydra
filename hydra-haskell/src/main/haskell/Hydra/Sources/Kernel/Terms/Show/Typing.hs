@@ -56,12 +56,11 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
 module_ :: Module
 module_ = Module (Namespace "hydra.show.typing") elements
-    [Annotations.module_, ShowCore.module_]
+    [ShowCore.module_]
     kernelTypesModules $
     Just "String representations of hydra.typing types"
   where
