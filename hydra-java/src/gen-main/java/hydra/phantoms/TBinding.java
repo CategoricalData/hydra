@@ -20,9 +20,9 @@ public class TBinding<A> {
   /**
    * The term with its phantom type
    */
-  public final hydra.phantoms.TTerm<Object> term;
+  public final hydra.phantoms.TTerm<A> term;
   
-  public TBinding (hydra.core.Name name, hydra.phantoms.TTerm<Object> term) {
+  public TBinding (hydra.core.Name name, hydra.phantoms.TTerm<A> term) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((term));
     this.name = name;
@@ -48,7 +48,7 @@ public class TBinding<A> {
     return new TBinding(name, term);
   }
   
-  public TBinding withTerm(hydra.phantoms.TTerm<Object> term) {
+  public TBinding withTerm(hydra.phantoms.TTerm<A> term) {
     java.util.Objects.requireNonNull((term));
     return new TBinding(name, term);
   }

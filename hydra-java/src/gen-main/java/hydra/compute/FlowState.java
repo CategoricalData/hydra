@@ -17,19 +17,19 @@ public class FlowState<S, V> {
   /**
    * The resulting value, or nothing in the case of failure
    */
-  public final hydra.util.Maybe<Object> value;
+  public final hydra.util.Maybe<V> value;
   
   /**
    * The final state
    */
-  public final Object state;
+  public final S state;
   
   /**
    * The trace (log) produced during evaluation
    */
   public final hydra.compute.Trace trace;
   
-  public FlowState (hydra.util.Maybe<Object> value, Object state, hydra.compute.Trace trace) {
+  public FlowState (hydra.util.Maybe<V> value, S state, hydra.compute.Trace trace) {
     java.util.Objects.requireNonNull((value));
     java.util.Objects.requireNonNull((state));
     java.util.Objects.requireNonNull((trace));
@@ -52,12 +52,12 @@ public class FlowState<S, V> {
     return 2 * value.hashCode() + 3 * state.hashCode() + 5 * trace.hashCode();
   }
   
-  public FlowState withValue(hydra.util.Maybe<Object> value) {
+  public FlowState withValue(hydra.util.Maybe<V> value) {
     java.util.Objects.requireNonNull((value));
     return new FlowState(value, state, trace);
   }
   
-  public FlowState withState(Object state) {
+  public FlowState withState(S state) {
     java.util.Objects.requireNonNull((state));
     return new FlowState(value, state, trace);
   }

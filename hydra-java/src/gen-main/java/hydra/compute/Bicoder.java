@@ -15,14 +15,14 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> {
   /**
    * A function from source types to adapters
    */
-  public final java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> encode;
+  public final java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode;
   
   /**
    * A function from target types to adapters
    */
-  public final java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> decode;
+  public final java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode;
   
-  public Bicoder (java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> encode, java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> decode) {
+  public Bicoder (java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
     java.util.Objects.requireNonNull((encode));
     java.util.Objects.requireNonNull((decode));
     this.encode = encode;
@@ -43,12 +43,12 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> {
     return 2 * encode.hashCode() + 3 * decode.hashCode();
   }
   
-  public Bicoder withEncode(java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> encode) {
+  public Bicoder withEncode(java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode) {
     java.util.Objects.requireNonNull((encode));
     return new Bicoder(encode, decode);
   }
   
-  public Bicoder withDecode(java.util.function.Function<Object, hydra.compute.Adapter<Object, Object, Object, Object, Object, Object>> decode) {
+  public Bicoder withDecode(java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
     java.util.Objects.requireNonNull((decode));
     return new Bicoder(encode, decode);
   }

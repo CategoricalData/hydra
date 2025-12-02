@@ -5,7 +5,7 @@ package hydra.core;
 import java.io.Serializable;
 
 /**
- * A name/type tuple2
+ * A name/type pair
  */
 public class FieldType implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.FieldType");

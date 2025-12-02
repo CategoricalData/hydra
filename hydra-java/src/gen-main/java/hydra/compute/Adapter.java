@@ -24,19 +24,19 @@ public class Adapter<S1, S2, T1, T2, V1, V2> {
   /**
    * The source type
    */
-  public final Object source;
+  public final T1 source;
   
   /**
    * The target type
    */
-  public final Object target;
+  public final T2 target;
   
   /**
    * The coder for transforming instances of the source type to instances of the target type
    */
-  public final hydra.compute.Coder<Object, Object, Object, Object> coder;
+  public final hydra.compute.Coder<S1, S2, V1, V2> coder;
   
-  public Adapter (Boolean isLossy, Object source, Object target, hydra.compute.Coder<Object, Object, Object, Object> coder) {
+  public Adapter (Boolean isLossy, T1 source, T2 target, hydra.compute.Coder<S1, S2, V1, V2> coder) {
     java.util.Objects.requireNonNull((isLossy));
     java.util.Objects.requireNonNull((source));
     java.util.Objects.requireNonNull((target));
@@ -66,17 +66,17 @@ public class Adapter<S1, S2, T1, T2, V1, V2> {
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withSource(Object source) {
+  public Adapter withSource(T1 source) {
     java.util.Objects.requireNonNull((source));
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withTarget(Object target) {
+  public Adapter withTarget(T2 target) {
     java.util.Objects.requireNonNull((target));
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withCoder(hydra.compute.Coder<Object, Object, Object, Object> coder) {
+  public Adapter withCoder(hydra.compute.Coder<S1, S2, V1, V2> coder) {
     java.util.Objects.requireNonNull((coder));
     return new Adapter(isLossy, source, target, coder);
   }

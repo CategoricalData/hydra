@@ -10,9 +10,9 @@ public class DataRow<V> {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.util.Maybe<Object>> value;
+  public final java.util.List<hydra.util.Maybe<V>> value;
   
-  public DataRow (java.util.List<hydra.util.Maybe<Object>> value) {
+  public DataRow (java.util.List<hydra.util.Maybe<V>> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

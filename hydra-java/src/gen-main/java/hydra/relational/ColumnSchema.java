@@ -20,9 +20,9 @@ public class ColumnSchema<T> {
   /**
    * The domain (type) of the column
    */
-  public final Object domain;
+  public final T domain;
   
-  public ColumnSchema (hydra.relational.ColumnName name, Object domain) {
+  public ColumnSchema (hydra.relational.ColumnName name, T domain) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((domain));
     this.name = name;
@@ -48,7 +48,7 @@ public class ColumnSchema<T> {
     return new ColumnSchema(name, domain);
   }
   
-  public ColumnSchema withDomain(Object domain) {
+  public ColumnSchema withDomain(T domain) {
     java.util.Objects.requireNonNull((domain));
     return new ColumnSchema(name, domain);
   }
