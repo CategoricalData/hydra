@@ -16,8 +16,8 @@ public interface Formatting {
     java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>> splitOnUppercase = (java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>>) (acc -> (java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.apply(
         hydra.lib.chars.IsUpper.apply((c)),
-        java.util.List.of((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of()))),
-        (java.util.List<java.util.List<Integer>>) ((java.util.List) (java.util.List.<java.util.List<Integer>>of()))),
+        java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
+        (java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of())),
       hydra.lib.lists.Cons.apply(
         hydra.lib.lists.Cons.apply(
           (c),
@@ -27,7 +27,7 @@ public interface Formatting {
       (hydra.lib.strings.FromList::apply),
       hydra.lib.lists.Foldl.apply(
         (splitOnUppercase),
-        java.util.List.of((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of()))),
+        java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(hydra.formatting.Formatting.decapitalize((original))))));
     java.util.List<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
       "_",
@@ -147,7 +147,7 @@ public interface Formatting {
   
   static String mapFirstLetter(java.util.function.Function<String, String> mapping, String s) {
     java.util.List<Integer> list = hydra.lib.strings.ToList.apply((s));
-    String firstLetter = (String) ((String) (((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))))));
+    String firstLetter = ((mapping)).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply((list)))));
     return hydra.lib.logic.IfElse.apply(
       hydra.lib.strings.Null.apply((s)),
       (s),
@@ -181,25 +181,25 @@ public interface Formatting {
             (c),
             57)))));
     java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>>> replace = (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>>>) (p -> (java.util.function.Function<Integer, hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>>) (c -> {
-      Boolean b = ((p)).object2;
-      java.util.List<Integer> s = ((p)).object1;
+      Boolean b = hydra.lib.pairs.Second.apply((p));
+      java.util.List<Integer> s = hydra.lib.pairs.First.apply((p));
       return hydra.lib.logic.IfElse.apply(
-        (Boolean) ((Boolean) (((isAlnum)).apply((c)))),
-        new hydra.util.Tuple.Tuple2(hydra.lib.lists.Cons.apply(
+        ((isAlnum)).apply((c)),
+        (hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) (new hydra.util.Tuple.Tuple2(hydra.lib.lists.Cons.apply(
           (c),
-          (s)), false),
+          (s)), false))),
         hydra.lib.logic.IfElse.apply(
           (b),
-          new hydra.util.Tuple.Tuple2((s), true),
-          new hydra.util.Tuple.Tuple2(hydra.lib.lists.Cons.apply(
+          (hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) (new hydra.util.Tuple.Tuple2((s), true))),
+          (hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) (new hydra.util.Tuple.Tuple2(hydra.lib.lists.Cons.apply(
             95,
-            (s)), true)));
+            (s)), true)))));
     }));
     hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean> result = hydra.lib.lists.Foldl.apply(
       (replace),
-      new hydra.util.Tuple.Tuple2((java.util.List<Integer>) ((java.util.List) (java.util.List.<Integer>of())), false),
+      (hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, Boolean>) (new hydra.util.Tuple.Tuple2((java.util.List<Integer>) (java.util.List.<Integer>of()), false))),
       hydra.lib.strings.ToList.apply((input)));
-    return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(((result)).object1));
+    return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply((result))));
   }
   
   static String sanitizeWithUnderscores(java.util.Set<String> reserved, String s) {
@@ -229,39 +229,39 @@ public interface Formatting {
   
   static String withCharacterAliases(String original) {
     java.util.Map<Integer, String> aliases = hydra.lib.maps.FromList.apply(java.util.List.of(
-      new hydra.util.Tuple.Tuple2(32, "sp"),
-      new hydra.util.Tuple.Tuple2(33, "excl"),
-      new hydra.util.Tuple.Tuple2(34, "quot"),
-      new hydra.util.Tuple.Tuple2(35, "num"),
-      new hydra.util.Tuple.Tuple2(36, "dollar"),
-      new hydra.util.Tuple.Tuple2(37, "percnt"),
-      new hydra.util.Tuple.Tuple2(38, "amp"),
-      new hydra.util.Tuple.Tuple2(39, "apos"),
-      new hydra.util.Tuple.Tuple2(40, "lpar"),
-      new hydra.util.Tuple.Tuple2(41, "rpar"),
-      new hydra.util.Tuple.Tuple2(42, "ast"),
-      new hydra.util.Tuple.Tuple2(43, "plus"),
-      new hydra.util.Tuple.Tuple2(44, "comma"),
-      new hydra.util.Tuple.Tuple2(45, "minus"),
-      new hydra.util.Tuple.Tuple2(46, "period"),
-      new hydra.util.Tuple.Tuple2(47, "sol"),
-      new hydra.util.Tuple.Tuple2(58, "colon"),
-      new hydra.util.Tuple.Tuple2(59, "semi"),
-      new hydra.util.Tuple.Tuple2(60, "lt"),
-      new hydra.util.Tuple.Tuple2(61, "equals"),
-      new hydra.util.Tuple.Tuple2(62, "gt"),
-      new hydra.util.Tuple.Tuple2(63, "quest"),
-      new hydra.util.Tuple.Tuple2(64, "commat"),
-      new hydra.util.Tuple.Tuple2(91, "lsqb"),
-      new hydra.util.Tuple.Tuple2(92, "bsol"),
-      new hydra.util.Tuple.Tuple2(93, "rsqb"),
-      new hydra.util.Tuple.Tuple2(94, "circ"),
-      new hydra.util.Tuple.Tuple2(95, "lowbar"),
-      new hydra.util.Tuple.Tuple2(96, "grave"),
-      new hydra.util.Tuple.Tuple2(123, "lcub"),
-      new hydra.util.Tuple.Tuple2(124, "verbar"),
-      new hydra.util.Tuple.Tuple2(125, "rcub"),
-      new hydra.util.Tuple.Tuple2(126, "tilde")));
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(32, "sp"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(33, "excl"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(34, "quot"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(35, "num"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(36, "dollar"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(37, "percnt"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(38, "amp"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(39, "apos"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(40, "lpar"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(41, "rpar"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(42, "ast"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(43, "plus"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(44, "comma"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(45, "minus"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(46, "period"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(47, "sol"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(58, "colon"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(59, "semi"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(60, "lt"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(61, "equals"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(62, "gt"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(63, "quest"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(64, "commat"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(91, "lsqb"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(92, "bsol"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(93, "rsqb"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(94, "circ"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(95, "lowbar"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(96, "grave"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(123, "lcub"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(124, "verbar"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(125, "rcub"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2(126, "tilde")))));
     java.util.function.Function<Integer, java.util.List<Integer>> alias = (java.util.function.Function<Integer, java.util.List<Integer>>) (c -> hydra.lib.maybes.FromMaybe.apply(
       hydra.lib.lists.Pure.apply((c)),
       hydra.lib.maybes.Map.apply(
@@ -291,8 +291,8 @@ public interface Formatting {
             (c),
             9)))),
         hydra.lib.lists.Reverse.apply((trunc)));
-      java.util.List<Integer> prefix = hydra.lib.lists.Reverse.apply(((spanResult)).object2);
-      java.util.List<Integer> suffix = hydra.lib.lists.Reverse.apply(((spanResult)).object1);
+      java.util.List<Integer> prefix = hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply((spanResult)));
+      java.util.List<Integer> suffix = hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply((spanResult)));
       return hydra.lib.logic.IfElse.apply(
         hydra.lib.equality.Lte.apply(
           hydra.lib.lists.Length.apply((rem)),
@@ -302,21 +302,21 @@ public interface Formatting {
           (prev))),
         hydra.lib.logic.IfElse.apply(
           hydra.lib.lists.Null.apply((prefix)),
-          (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+          ((helper.get()).apply(hydra.lib.lists.Cons.apply(
             (trunc),
-            (prev)))))).apply(hydra.lib.lists.Drop.apply(
+            (prev)))).apply(hydra.lib.lists.Drop.apply(
             (maxlen),
-            (rem))))),
-          (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+            (rem))),
+          ((helper.get()).apply(hydra.lib.lists.Cons.apply(
             hydra.lib.lists.Init.apply((prefix)),
-            (prev)))))).apply(hydra.lib.lists.Concat2.apply(
+            (prev)))).apply(hydra.lib.lists.Concat2.apply(
             (suffix),
             hydra.lib.lists.Drop.apply(
               (maxlen),
-              (rem))))))));
+              (rem))))));
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
       java.util.List.of(10),
-      (java.util.List<java.util.List<Integer>>) ((java.util.List) (((java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) ((java.util.function.Function) ((helper.get()).apply((java.util.List<java.util.List<Integer>>) ((java.util.List) (java.util.List.<java.util.List<Integer>>of())))))).apply(hydra.lib.strings.ToList.apply((input)))))));
+      ((helper.get()).apply((java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of()))).apply(hydra.lib.strings.ToList.apply((input)))));
   }
 }
