@@ -24,7 +24,7 @@ public class RelationSchema<T> {
   /**
    * A list of column specifications
    */
-  public final java.util.List<hydra.relational.ColumnSchema<Object>> columns;
+  public final java.util.List<hydra.relational.ColumnSchema<T>> columns;
   
   /**
    * Any number of primary keys for the relation, each of which must be valid for this relation
@@ -36,7 +36,7 @@ public class RelationSchema<T> {
    */
   public final java.util.List<hydra.relational.ForeignKey> foreignKeys;
   
-  public RelationSchema (hydra.relational.RelationName name, java.util.List<hydra.relational.ColumnSchema<Object>> columns, java.util.List<hydra.relational.PrimaryKey> primaryKeys, java.util.List<hydra.relational.ForeignKey> foreignKeys) {
+  public RelationSchema (hydra.relational.RelationName name, java.util.List<hydra.relational.ColumnSchema<T>> columns, java.util.List<hydra.relational.PrimaryKey> primaryKeys, java.util.List<hydra.relational.ForeignKey> foreignKeys) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((columns));
     java.util.Objects.requireNonNull((primaryKeys));
@@ -66,7 +66,7 @@ public class RelationSchema<T> {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
-  public RelationSchema withColumns(java.util.List<hydra.relational.ColumnSchema<Object>> columns) {
+  public RelationSchema withColumns(java.util.List<hydra.relational.ColumnSchema<T>> columns) {
     java.util.Objects.requireNonNull((columns));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
