@@ -13,7 +13,7 @@ import qualified System.Directory as SD
 import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.Map as M
-import Data.Char (isAlphaNum, toLower, toUpper)
+import Data.Char (isAlphaNum, isUpper, toLower, toUpper)
 
 
 -- | Language-agnostic test generator abstraction
@@ -50,15 +50,54 @@ buildNamespacesForTestGroup testGen testModule testGroup = do
       TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
       _ -> []
 
--- | Build a mapping from module namespaces to test groups by directly mapping submodules to subgroups
--- Pairs up modules with test groups up to the shorter of the two lists
+-- | Build a mapping from module namespaces to test groups by matching on derived keys.
+-- This handles the case where submodules and subgroups may be in different orders
+-- (e.g., due to code generation reordering).
 buildTestGroupMap :: Module -> TestGroup -> M.Map Namespace TestGroup
 buildTestGroupMap rootModule rootTestGroup =
   let subModules = moduleTermDependencies rootModule
       subGroups = testGroupSubgroups rootTestGroup
-      -- Zip up to the minimum length (handles cases where some modules don't have test groups yet)
-      pairs = zip (fmap moduleNamespace subModules) subGroups
+      -- Build a map from test group name to test group for lookup
+      groupByName = M.fromList [(testGroupName g, g) | g <- subGroups]
+      -- Match each module to its test group by deriving the expected test group name
+      pairs = [(moduleNamespace mod, group) |
+               mod <- subModules,
+               let expectedName = deriveTestGroupName (moduleNamespace mod),
+               Just group <- [M.lookup expectedName groupByName]]
   in M.fromList pairs
+  where
+    -- Derive the test group name from a module namespace
+    -- Handles various patterns:
+    -- e.g., "hydra.test.lib.chars" -> "hydra.lib.chars primitives"
+    -- e.g., "hydra.test.formatting" -> "formatting"
+    -- e.g., "hydra.test.checking.all" -> "checking"
+    -- e.g., "hydra.test.monads" -> "hydra.monads"
+    -- e.g., "hydra.test.etaExpansion" -> "eta expansion"
+    -- e.g., "hydra.test.json.coder" -> "JSON coder"
+    deriveTestGroupName (Namespace ns) =
+      let parts = Strings.splitOn "." ns
+          -- Remove "hydra.test." prefix and handle different patterns
+          withoutPrefix = drop 2 parts  -- drop "hydra" and "test"
+      in case withoutPrefix of
+        ("lib":rest) -> "hydra.lib." ++ L.intercalate "." rest ++ " primitives"
+        -- JSON special cases
+        ["json", "coder"] -> "JSON coder"
+        ["json", "parser"] -> "JSON parsing"
+        ["json", "writer"] -> "JSON serialization"
+        -- Handle camelCase conversion (e.g., etaExpansion -> eta expansion)
+        [name] -> decamelize name
+        -- Handle .all suffix (e.g., checking.all -> checking, inference.all -> inference)
+        parts' | not (null parts') && last parts' == "all" -> L.intercalate "." (init parts')
+        _ -> L.intercalate "." withoutPrefix
+
+    -- Convert camelCase to space-separated lowercase
+    decamelize s = map toLower $ L.intercalate " " $ splitCamelCase s
+
+    -- Split a camelCase string into words
+    splitCamelCase [] = []
+    splitCamelCase (c:cs) =
+      let (word, rest) = span (not . isUpper) cs
+      in (c:word) : splitCamelCase rest
 
 -- | Create a lookup function from a test group hierarchy
 -- This walks the test group and module hierarchies to build the mapping
@@ -175,4 +214,3 @@ generateAggregatorSpec baseDir modules =
       L.intercalate "." $ L.map capitalize (L.filter (not . null) $ Strings.splitOn "." ns)
     capitalize [] = []
     capitalize (x:xs) = toUpper x : xs
-

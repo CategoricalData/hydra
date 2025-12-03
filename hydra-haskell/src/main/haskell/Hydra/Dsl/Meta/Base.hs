@@ -20,5 +20,9 @@ infixr 0 >:
 (>:) :: String -> a -> (TTerm Name, a)
 n >: d = (name n, d)
 
+infixr 0 >>:
+(>>:) :: Name -> a -> (TTerm Name, a)
+n >>: d = (Core.nameLift n, d)
+
 name :: String -> TTerm Name
 name s = Core.nameLift $ Name s

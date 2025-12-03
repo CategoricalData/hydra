@@ -22,6 +22,7 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.rewriting
@@ -450,7 +451,7 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
             return for_list(els)
         
         case hydra.core.TermMap(value=m):
-            return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(g, kv[0]), term_is_value(g, kv[1])))), True, hydra.lib.maps.to_list(m))
+            return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(g, hydra.lib.pairs.first(kv)), term_is_value(g, hydra.lib.pairs.second(kv))))), True, hydra.lib.maps.to_list(m))
         
         case hydra.core.TermMaybe(value=m2):
             return hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), m2)

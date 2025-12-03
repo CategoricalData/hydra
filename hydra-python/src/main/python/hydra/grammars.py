@@ -5,7 +5,7 @@ r"""A utility for converting a BNF grammar to a Hydra module."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.annotations
 import hydra.constants
 import hydra.core
@@ -18,6 +18,7 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.module
 import hydra.names
@@ -70,15 +71,15 @@ def raw_name(pat: hydra.grammar.Pattern) -> str:
 def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
     r"""Find unique names for patterns."""
     
-    def next_name(acc: Tuple[frozenlist[str], FrozenDict[str, int]], pat: hydra.grammar.Pattern) -> Tuple[frozenlist[str], FrozenDict[str, int]]:
-        names = acc[0]
-        name_map = acc[1]
+    def next_name[T0](acc: Tuple[T0, FrozenDict[str, int]], pat: hydra.grammar.Pattern) -> Tuple[frozenlist[str], FrozenDict[str, int]]:
+        names = hydra.lib.pairs.first(acc)
+        name_map = hydra.lib.pairs.second(acc)
         rn = raw_name(pat)
-        name_and_index = hydra.lib.maybes.maybe((rn, 1), (lambda i: (hydra.lib.strings.cat2(rn, hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1))), hydra.lib.maps.lookup(rn, name_map))
-        nn = name_and_index[0]
-        ni = name_and_index[1]
-        return (hydra.lib.lists.cons(nn, names), hydra.lib.maps.insert(rn, ni, name_map))
-    return hydra.lib.lists.reverse(hydra.lib.lists.foldl(next_name, (cast(frozenlist[str], ()), cast(FrozenDict[str, int], hydra.lib.maps.empty())), pats)[0])
+        name_and_index = hydra.lib.maybes.maybe(cast(Tuple[str, int], (rn, 1)), (lambda i: cast(Tuple[str, int], (hydra.lib.strings.cat2(rn, hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1)))), hydra.lib.maps.lookup(rn, name_map))
+        nn = hydra.lib.pairs.first(name_and_index)
+        ni = hydra.lib.pairs.second(name_and_index)
+        return cast(Tuple[frozenlist[str], FrozenDict[str, int]], (hydra.lib.lists.cons(nn, names), hydra.lib.maps.insert(rn, ni, name_map)))
+    return hydra.lib.lists.reverse(hydra.lib.pairs.first(hydra.lib.lists.foldl(cast(Callable[[Tuple[frozenlist[str], FrozenDict[str, int]], hydra.grammar.Pattern], Tuple[frozenlist[str], FrozenDict[str, int]]], next_name), cast(Tuple[frozenlist[str], FrozenDict[str, int]], (cast(frozenlist[str], ()), cast(FrozenDict[str, int], hydra.lib.maps.empty()))), pats)))
 
 def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[hydra.grammar.Pattern]:
     r"""Remove trivial patterns from records."""
@@ -126,15 +127,13 @@ def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
     
     return hydra.names.unqualify_name(hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(ns)), local))
 
-def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
-    r"""Create elements from pattern."""
-    
-    trivial = hydra.lib.logic.if_else(omit_trivial, (lambda : cast(frozenlist[Tuple[str, hydra.core.Type]], ())), (lambda : ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),)))
-    def descend[T0](n: str, f: Callable[[frozenlist[Tuple[str, hydra.core.Type]]], T0], p: hydra.grammar.Pattern) -> T0:
+def make_elements[T0](omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
+    trivial = hydra.lib.logic.if_else(omit_trivial, (lambda : cast(frozenlist[Tuple[str, hydra.core.Type]], ())), (lambda : (cast(Tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeUnit()))),)))
+    def descend[T1](n: str, f: Callable[[frozenlist[Tuple[str, hydra.core.Type]]], T1], p: hydra.grammar.Pattern) -> T1:
         cpairs = make_elements(False, ns, child_name(lname, n), p)
-        return f(hydra.lib.logic.if_else(is_complex(p), (lambda : hydra.lib.lists.cons((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, hydra.lib.lists.head(cpairs)[0])))), cpairs)), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(cpairs), (lambda : ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),)), (lambda : hydra.lib.lists.cons((lname, hydra.lib.lists.head(cpairs)[1]), hydra.lib.lists.tail(cpairs)))))))
+        return f(hydra.lib.logic.if_else(is_complex(p), (lambda : hydra.lib.lists.cons(cast(Tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, hydra.lib.pairs.first(hydra.lib.lists.head(cpairs))))))), cpairs)), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(cpairs), (lambda : (cast(Tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeUnit()))),)), (lambda : hydra.lib.lists.cons(cast(Tuple[str, hydra.core.Type], (lname, hydra.lib.pairs.second(hydra.lib.lists.head(cpairs)))), hydra.lib.lists.tail(cpairs)))))))
     def mod(n: str, f: Callable[[hydra.core.Type], hydra.core.Type], p: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
-        return descend(n, (lambda pairs: hydra.lib.lists.cons((lname, f(hydra.lib.lists.head(pairs)[1])), hydra.lib.lists.tail(pairs))), p)
+        return descend(n, (lambda pairs: hydra.lib.lists.cons(cast(Tuple[str, hydra.core.Type], (lname, f(hydra.lib.pairs.second(hydra.lib.lists.head(pairs))))), hydra.lib.lists.tail(pairs))), p)
     def for_pat(pat2: hydra.grammar.Pattern) -> frozenlist[Tuple[str, hydra.core.Type]]:
         match pat2:
             case hydra.grammar.PatternAlternatives(value=pats):
@@ -153,7 +152,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
                 return trivial
             
             case hydra.grammar.PatternNonterminal(value=s):
-                return ((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, s.value)))),)
+                return (cast(Tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, s.value))))),)
             
             case hydra.grammar.PatternOption(value=p):
                 return mod("Option", (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), p)
@@ -162,7 +161,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
                 return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p2)
             
             case hydra.grammar.PatternRegex():
-                return ((lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))),)
+                return (cast(Tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))),)
             
             case hydra.grammar.PatternSequence(value=pats2):
                 return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name(), fields)))), pats2)
@@ -176,11 +175,11 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
         min_pats = simplify(is_record, pats)
         field_names = find_names(min_pats)
         def to_field(n: str, p: hydra.grammar.Pattern) -> Tuple[hydra.core.FieldType, frozenlist[Tuple[str, hydra.core.Type]]]:
-            return descend(n, (lambda pairs: (hydra.core.FieldType(hydra.core.Name(n), hydra.lib.lists.head(pairs)[1]), hydra.lib.lists.tail(pairs))), p)
+            return descend(n, (lambda pairs: cast(Tuple[hydra.core.FieldType, frozenlist[Tuple[str, hydra.core.Type]]], (hydra.core.FieldType(hydra.core.Name(n), hydra.lib.pairs.second(hydra.lib.lists.head(pairs))), hydra.lib.lists.tail(pairs)))), p)
         field_pairs = hydra.lib.lists.zip_with(to_field, field_names, min_pats)
-        fields = hydra.lib.lists.map((lambda v1: v1[0]), field_pairs)
-        els = hydra.lib.lists.concat(hydra.lib.lists.map((lambda v1: v1[1]), field_pairs))
-        return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), (lambda : hydra.lib.lists.cons((lname, construct(fields)), els)), (lambda : for_pat(hydra.lib.lists.head(min_pats))))
+        fields = hydra.lib.lists.map(cast(Callable[[Tuple[hydra.core.FieldType, frozenlist[Tuple[str, hydra.core.Type]]]], hydra.core.FieldType], hydra.lib.pairs.first), field_pairs)
+        els = hydra.lib.lists.concat(hydra.lib.lists.map(cast(Callable[[Tuple[hydra.core.FieldType, frozenlist[Tuple[str, hydra.core.Type]]]], frozenlist[Tuple[str, hydra.core.Type]]], hydra.lib.pairs.second), field_pairs))
+        return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), (lambda : hydra.lib.lists.cons(cast(Tuple[str, hydra.core.Type], (lname, construct(fields))), els)), (lambda : for_pat(hydra.lib.lists.head(min_pats))))
     return for_pat(pat)
 
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
@@ -202,9 +201,9 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
 def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
     r"""Convert a BNF grammar to a Hydra module."""
     
-    prod_pairs = hydra.lib.lists.map((lambda prod: (prod.symbol.value, prod.pattern)), grammar.value)
-    capitalized_names = hydra.lib.lists.map((lambda tuple2: hydra.formatting.capitalize(tuple2[0])), prod_pairs)
-    patterns = hydra.lib.lists.map((lambda tuple2: tuple2[1]), prod_pairs)
+    prod_pairs = hydra.lib.lists.map((lambda prod: cast(Tuple[str, hydra.grammar.Pattern], (prod.symbol.value, prod.pattern))), grammar.value)
+    capitalized_names = hydra.lib.lists.map((lambda pair: hydra.formatting.capitalize(hydra.lib.pairs.first(pair))), prod_pairs)
+    patterns = hydra.lib.lists.map((lambda pair: hydra.lib.pairs.second(pair)), prod_pairs)
     element_pairs = hydra.lib.lists.concat(hydra.lib.lists.zip_with((lambda v1, v2: make_elements(False, ns, v1, v2)), capitalized_names, patterns))
-    elements = hydra.lib.lists.map((lambda tuple2: (lname := tuple2[0], typ := wrap_type(tuple2[1]), hydra.annotations.type_element(to_name(ns, lname), typ))[2]), element_pairs)
+    elements = hydra.lib.lists.map((lambda pair: (lname := hydra.lib.pairs.first(pair), typ := wrap_type(hydra.lib.pairs.second(pair)), hydra.annotations.type_element(to_name(ns, lname), typ))[2]), element_pairs)
     return hydra.module.Module(ns, elements, cast(frozenlist[hydra.module.Module], ()), cast(frozenlist[hydra.module.Module], ()), desc)

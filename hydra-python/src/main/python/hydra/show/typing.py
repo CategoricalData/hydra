@@ -3,10 +3,10 @@
 r"""String representations of hydra.typing types."""
 
 from __future__ import annotations
-from typing import Tuple
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.show.core
 import hydra.typing
@@ -23,9 +23,9 @@ def type_subst(ts: hydra.typing.TypeSubst) -> str:
     
     subst = ts.value
     pairs = hydra.lib.maps.to_list(subst)
-    def show_pair(tuple2: Tuple[hydra.core.Name, hydra.core.Type]) -> str:
-        name = tuple2[0].value
-        typ = tuple2[1]
+    def show_pair(pair: Tuple[hydra.core.Name, hydra.core.Type]) -> str:
+        name = hydra.lib.pairs.first(pair).value
+        typ = hydra.lib.pairs.second(pair)
         return hydra.lib.strings.cat((name, "↦", hydra.show.core.type(typ)))
     pair_strs = hydra.lib.lists.map(show_pair, pairs)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(",", pair_strs), "}"))

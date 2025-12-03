@@ -5,7 +5,7 @@ r"""Utilities for reading and writing type and term annotations."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.classes
 import hydra.compute
 import hydra.constants
@@ -22,6 +22,7 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.monads
 import hydra.rewriting
@@ -108,7 +109,7 @@ def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Gr
     r"""Get type classes from term."""
     
     def decode_class(term2: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.classes.TypeClass]:
-        by_name = cast(FrozenDict[hydra.core.Name, hydra.classes.TypeClass], hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING))))
+        by_name = cast(FrozenDict[hydra.core.Name, hydra.classes.TypeClass], hydra.lib.maps.from_list((cast(Tuple[hydra.core.Name, hydra.classes.TypeClass], (hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY)), cast(Tuple[hydra.core.Name, hydra.classes.TypeClass], (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING)))))
         return hydra.lib.flows.bind(hydra.extract.core.unit_variant(hydra.core.Name("hydra.classes.TypeClass"), term2), (lambda fn: hydra.lib.maybes.maybe(hydra.monads.unexpected("type class", hydra.show.core.term(term2)), cast(Callable[[hydra.classes.TypeClass], hydra.compute.Flow[hydra.graph.Graph, hydra.classes.TypeClass]], hydra.lib.flows.pure), hydra.lib.maps.lookup(fn, by_name))))
     return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], hydra.lib.maps.empty())), (lambda term2: hydra.extract.core.map(hydra.decode.core.name, (lambda v1: hydra.extract.core.set_of(decode_class, v1)), term2)), get_term_annotation(hydra.constants.key_classes(), term))
 
@@ -189,9 +190,7 @@ def set_type_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], typ: 
     anns = set_annotation(key, val, type_annotation_internal(typ))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), (lambda : typ_), (lambda : cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(typ_, anns)))))
 
-def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
-    r"""Set type classes on term."""
-    
+def set_type_classes[T0](m: FrozenDict[T0, frozenset[hydra.classes.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
     def encode_class(tc: hydra.classes.TypeClass) -> hydra.core.Term:
         match tc:
             case hydra.classes.TypeClass.EQUALITY:
@@ -202,11 +201,11 @@ def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.classes.Type
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.classes.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
-        name = name_classes[0]
-        classes = name_classes[1]
-        return (hydra.encode.core.name(name), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.map(encode_class, hydra.lib.sets.to_list(classes))))))
-    encoded = hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : cast(Maybe[hydra.core.Term], Nothing())), (lambda : cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map(encode_pair, hydra.lib.maps.to_list(m))))))))))
+    def encode_pair[T1](name_classes: Tuple[T1, frozenset[hydra.classes.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
+        name = hydra.lib.pairs.first(name_classes)
+        classes = hydra.lib.pairs.second(name_classes)
+        return cast(Tuple[hydra.core.Term, hydra.core.Term], (hydra.encode.core.name(name), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.map(encode_class, hydra.lib.sets.to_list(classes)))))))
+    encoded = hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : cast(Maybe[hydra.core.Term], Nothing())), (lambda : cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map(cast(Callable[[Tuple[T0, frozenset[hydra.classes.TypeClass]]], Tuple[hydra.core.Term, hydra.core.Term]], encode_pair), hydra.lib.maps.to_list(m))))))))))
     return set_term_annotation(hydra.constants.key_classes(), encoded, term)
 
 def set_type_description(d: Maybe[str], v1: hydra.core.Type) -> hydra.core.Type:
@@ -218,7 +217,7 @@ def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Bind
     r"""Create a type element with proper annotations."""
     
     schema_term = cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.core.Type")))
-    data_term = normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list(((hydra.constants.key_type(), schema_term),)))))))
+    data_term = normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list((cast(Tuple[hydra.core.Name, hydra.core.Term], (hydra.constants.key_type(), schema_term)),)))))))
     return hydra.core.Binding(name, data_term, cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")))))))
 
 def when_flag[T0, T1](flag: hydra.core.Name, fthen: hydra.compute.Flow[T0, T1], felse: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:

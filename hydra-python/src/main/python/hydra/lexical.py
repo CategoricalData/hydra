@@ -5,7 +5,7 @@ r"""A module for lexical operations over graphs."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -15,6 +15,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
@@ -50,9 +51,9 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
 def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
     r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
     
-    def to_pair(el: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
-        return (el.name, el)
-    return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
+    def to_pair[T0](el: T0) -> Tuple[hydra.core.Name, T0]:
+        return cast(Tuple[hydra.core.Name, T0], (el.name, el))
+    return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(cast(Callable[[hydra.core.Binding], Tuple[hydra.core.Name, hydra.core.Binding]], to_pair), elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
 
 # An empty graph; no elements, no primitives, no schema, and an arbitrary body.
 empty_graph = hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), cast(FrozenDict[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty()), cast(Maybe[hydra.graph.Graph], Nothing()))
@@ -64,7 +65,7 @@ def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydr
         name = binding.name
         term = binding.term
         mts = binding.type
-        return (name, hydra.core.Binding(name, term, mts))
+        return cast(Tuple[hydra.core.Name, hydra.core.Binding], (name, hydra.core.Binding(name, term, mts)))
     new_els = cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_el, bindings)))
     return hydra.graph.Graph(hydra.lib.maps.union(new_els, g.elements), g.environment, g.types, g.body, g.primitives, g.schema)
 
@@ -114,19 +115,19 @@ def match_union[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.N
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), (lambda : exp), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("injection for type ", tname.value)), hydra.show.core.term(term))))
         
         case _:
-            return hydra.monads.unexpected(hydra.lib.strings.cat(("inject(", tname.value, ") with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda tuple2: tuple2[0].value), pairs)), "}")), hydra.show.core.term(stripped))
+            return hydra.monads.unexpected(hydra.lib.strings.cat(("inject(", tname.value, ") with one of {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda pair: hydra.lib.pairs.first(pair).value), pairs)), "}")), hydra.show.core.term(stripped))
 
 def match_unit_field[T0, T1, T2, T3](fname: T0, x: T1) -> Tuple[T0, Callable[[T2], hydra.compute.Flow[T3, T1]]]:
-    return (fname, (lambda ignored: hydra.lib.flows.pure(x)))
+    return cast(Tuple[T0, Callable[[T2], hydra.compute.Flow[T3, T1]]], (fname, (lambda ignored: hydra.lib.flows.pure(x))))
 
 def match_enum[T0](tname: hydra.core.Name, pairs: frozenlist[Tuple[hydra.core.Name, T0]], v1: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-    return match_union(tname, hydra.lib.lists.map((lambda tuple2: match_unit_field(tuple2[0], tuple2[1])), pairs), v1)
+    return match_union(tname, hydra.lib.lists.map((lambda pair: match_unit_field(hydra.lib.pairs.first(pair), hydra.lib.pairs.second(pair))), pairs), v1)
 
 def match_record[T0, T1](decode: Callable[[FrozenDict[hydra.core.Name, hydra.core.Term]], hydra.compute.Flow[T0, T1]], term: hydra.core.Term) -> hydra.compute.Flow[T0, T1]:
     stripped = hydra.rewriting.deannotate_and_detype_term(term)
     match stripped:
         case hydra.core.TermRecord(value=record):
-            return decode(cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda field: (field.name, field.term)), record.fields))))
+            return decode(cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda field: cast(Tuple[hydra.core.Name, hydra.core.Term], (field.name, field.term))), record.fields))))
         
         case _:
             return hydra.monads.unexpected("record", hydra.show.core.term(term))

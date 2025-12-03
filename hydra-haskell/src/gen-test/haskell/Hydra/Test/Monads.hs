@@ -1,0 +1,236 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Test cases for hydra.monads functions
+
+module Hydra.Test.Monads where
+
+import qualified Hydra.Core as Core
+import qualified Hydra.Testing as Testing
+import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Set as S
+
+-- | Test cases for hydra.monads functions
+allTests :: Testing.TestGroup
+allTests = Testing.TestGroup {
+  Testing.testGroupName = "monads",
+  Testing.testGroupDescription = Nothing,
+  Testing.testGroupSubgroups = [
+    Testing.TestGroup {
+      Testing.testGroupName = "pure",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "integer",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "string",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello"))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "map",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "map negate",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.map")),
+                      Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.negate")))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-5))))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "requiresInterp"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "map absolute",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.map")),
+                      Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.abs")))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3))))}))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "requiresInterp"]}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "bind",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bind add",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.bind")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})),
+                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "n"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15)))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "requiresInterp"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bind multiply",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.compute.Flow")))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.bind")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})),
+                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "n"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))}))}))})))}))})),
+                Core.applicationArgument = Core.TermUnit})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "value"),
+                  Core.fieldTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12)))))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "state"),
+                  Core.fieldTerm = Core.TermUnit},
+                Core.Field {
+                  Core.fieldName = (Core.Name "trace"),
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "requiresInterp"]}]}],
+  Testing.testGroupCases = []}

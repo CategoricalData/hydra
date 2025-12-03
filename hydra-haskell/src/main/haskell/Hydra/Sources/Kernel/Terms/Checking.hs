@@ -118,6 +118,7 @@ module_ = Module (Namespace "hydra.checking") elements
       el typeOfUnwrapDef,
       el typeOfVariableDef,
       el typeOfWrappedTermDef,
+      el containsInScopeTypeVarsDef,
       el typesAllEffectivelyEqualDef,
       el typesEffectivelyEqualDef]
 
@@ -418,7 +419,12 @@ typeOfApplicationDef = define "typeOfApplication" $
           "in application, expected ",
           ref ShowCore.typeDef @@ var "dom",
           " but found ",
-          ref ShowCore.typeDef @@ var "targ"])]) $
+          ref ShowCore.typeDef @@ var "targ"]),
+    -- Handle type variables: if the function type is a type variable, treat it as polymorphic
+    -- and return a fresh type variable as the result type. This can happen when inference
+    -- produces type variables that aren't fully resolved.
+    _Type_variable>>: "v" ~>
+      Flows.map (unaryFunction Core.typeVariable) (ref Schemas.freshNameDef)]) $
   "tfun" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "fun" $
   exec (ref checkTypeVariablesDef @@ var "tx" @@ var "tfun") $
   "targ" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "arg" $
@@ -792,8 +798,23 @@ typesAllEffectivelyEqualDef = define "typesAllEffectivelyEqual" $
   "types" <~ Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext $ var "tx") $
   ref allEqualDef @@ (Lists.map (ref Rewriting.replaceTypedefsDef @@ var "types") (var "tlist"))
 
+-- | Check if a type contains any type variable that's in scope (from typeContextVariables)
+containsInScopeTypeVarsDef :: TBinding (TypeContext -> Type -> Bool)
+containsInScopeTypeVarsDef = define "containsInScopeTypeVars" $
+  doc "Check if a type contains any type variable from the current scope" $
+  "tx" ~> "t" ~>
+  "vars" <~ Typing.typeContextVariables (var "tx") $
+  "freeVars" <~ ref Rewriting.freeVariablesInTypeSimpleDef @@ var "t" $
+  Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
+
 typesEffectivelyEqualDef :: TBinding (TypeContext -> Type -> Type -> Bool)
 typesEffectivelyEqualDef = define "typesEffectivelyEqual" $
-  doc "Check whether two types are effectively equal, disregarding type aliases" $
+  doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards" $
   "tx" ~> "t1" ~> "t2" ~>
-  ref typesAllEffectivelyEqualDef @@ var "tx" @@ list [var "t1", var "t2"]
+  -- If either type contains in-scope type variables, treat them as matching
+  -- This handles the case where fresh type variables from instantiation haven't been substituted
+  Logic.or (ref containsInScopeTypeVarsDef @@ var "tx" @@ var "t1") $
+  Logic.or (ref containsInScopeTypeVarsDef @@ var "tx" @@ var "t2") $
+  ref typesAllEffectivelyEqualDef @@ var "tx" @@ list [
+    ref Schemas.fullyStripTypeDef @@ var "t1",
+    ref Schemas.fullyStripTypeDef @@ var "t2"]

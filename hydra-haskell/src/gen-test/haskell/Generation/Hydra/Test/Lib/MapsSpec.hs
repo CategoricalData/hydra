@@ -20,7 +20,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
   H.describe "empty" $ do
     H.it "empty map" $ H.shouldBe
       (Maps.empty)
-      (M.empty :: M.Map String String)
+      (M.empty :: M.Map Int Int)
   H.describe "singleton" $ do
     H.it "single entry" $ H.shouldBe
       (Maps.singleton 42 "hello")
@@ -42,7 +42,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (1, "b")])
     H.it "empty list" $ H.shouldBe
       (Maps.fromList [])
-      (M.empty :: M.Map String String)
+      (M.empty :: M.Map Int Int)
   H.describe "toList" $ do
     H.it "convert to pairs" $ H.shouldBe
       (Maps.toList (M.fromList [
@@ -53,7 +53,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (2, "b")])
     H.it "empty map" $ H.shouldBe
       (Maps.toList M.empty)
-      ([] :: [(String, String)])
+      ([] :: [(Int, Int)])
   H.describe "insert" $ do
     H.it "insert new key" $ H.shouldBe
       (Maps.insert 3 "c" (M.fromList [
@@ -92,7 +92,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (2, "b")])
     H.it "remove from empty" $ H.shouldBe
       (Maps.remove 1 M.empty)
-      (M.empty :: M.Map Int String)
+      (M.empty :: M.Map Int Int)
   H.describe "lookup" $ do
     H.it "find existing key" $ H.shouldBe
       (Maps.lookup 2 (M.fromList [
@@ -106,7 +106,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
       (Nothing)
     H.it "lookup in empty" $ H.shouldBe
       (Maps.lookup 1 M.empty)
-      (Nothing :: Maybe String)
+      (Nothing :: Maybe Int)
   H.describe "member" $ do
     H.it "key exists" $ H.shouldBe
       (Maps.member 2 (M.fromList [
@@ -155,7 +155,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           3])
     H.it "empty map" $ H.shouldBe
       (Maps.keys M.empty)
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "elems" $ do
     H.it "get all elements" $ H.shouldBe
       (Maps.elems (M.fromList [
@@ -166,7 +166,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           "b"])
     H.it "empty map" $ H.shouldBe
       (Maps.elems M.empty)
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "map" $ do
     H.it "map over values" $ H.shouldBe
       (Maps.map (\s -> Strings.toUpper s) (M.fromList [
@@ -177,7 +177,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (2, "B")])
     H.it "map empty" $ H.shouldBe
       (Maps.map (\s -> Strings.toUpper s) M.empty)
-      (M.empty :: M.Map String String)
+      (M.empty :: M.Map Int String)
   H.describe "findWithDefault" $ do
     H.it "find existing" $ H.shouldBe
       (Maps.findWithDefault "default" 2 (M.fromList [

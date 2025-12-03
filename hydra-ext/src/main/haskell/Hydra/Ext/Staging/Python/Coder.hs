@@ -23,6 +23,7 @@ import qualified Data.Map   as M
 import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 import qualified Text.Read  as TR
+import Debug.Trace
 
 
 -- | Temporary metadata which is used to create the header section of a Python file
@@ -818,21 +819,28 @@ encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph P
 encodeVariable env name args = do
   PyGraph g _ <- getState
 
-  return $ if L.null args
+  let nameStr = case name of Name n -> n
+      debugMsg = if "subst" `L.isInfixOf` nameStr || "Subst" `L.isInfixOf` nameStr
+        then trace ("DEBUG encodeTerm TermVariable: name=" ++ show name ++
+                    ", args=" ++ show (L.length args) ++
+                    ", lookupElement=" ++ show (Y.isJust $ lookupElement g name) ++
+                    ", lookupPrimitive=" ++ show (Y.isJust $ lookupPrimitive g name)) ()
+        else ()
+  return $ debugMsg `seq` (if L.null args
     then case lookupElement g name of
       -- Lambda-bound variables, as well as primitive functions
       Nothing -> case (lookupPrimitive g name) of
-        Nothing -> asVariable
+        Nothing -> trace ("  -> asVariable (not found)") asVariable
         Just prim -> if primitiveArity prim == 0
-          then asFunctionCall
-          else asVariable
+          then trace ("  -> asFunctionCall (primitive arity 0)") asFunctionCall
+          else trace ("  -> asVariable (primitive arity > 0)") asVariable
       -- Let-bound variables (elements)
       -- Call if it's a wrapped term (monadic thunk)
       Just el@(Binding _ _term (Just _ts)) -> if isFunctionCall el
-        then asFunctionCall
-        else asVariable
-      Just _ -> asVariable
-     else asFunctionCall
+        then trace ("  -> asFunctionCall (isFunctionCall True)") asFunctionCall
+        else trace ("  -> asVariable (isFunctionCall False)") asVariable
+      Just _ -> trace ("  -> asVariable (element no type scheme)") asVariable
+     else asFunctionCall)
   where
     asVariable = termVariableReference env name
     asFunctionCall = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) args

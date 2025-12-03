@@ -691,6 +691,18 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermApplication app -> withTrace "encode application" $ encodeApplication env app
 
+        TermEither et -> do
+          targs <- takeTypeArgs "either" 2
+          case et of
+            Left term1 -> do
+              expr <- encode term1
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "left") targs [expr]
+            Right term1 -> do
+              expr <- encode term1
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "right") targs [expr]
+
         TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
           t <- withTrace "debug d" $ typeOf tc [] term0
           case deannotateType t of
@@ -709,18 +721,6 @@ encodeTerm env term0 = encodeInternal [] [] term0
             methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.List") (Java.Identifier "of") targs jels
 
         TermLiteral l -> pure $ encodeLiteral l
-
-        TermEither et -> do
-          targs <- takeTypeArgs "either" 2
-          case et of
-            Left term1 -> do
-              expr <- encode term1
-              return $ javaMethodInvocationToJavaExpression $
-                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "left") targs [expr]
-            Right term1 -> do
-              expr <- encode term1
-              return $ javaMethodInvocationToJavaExpression $
-                methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "right") targs [expr]
 
         TermMap m -> do
           jkeys <- CM.mapM encode $ M.keys m
@@ -776,6 +776,8 @@ encodeTerm env term0 = encodeInternal [] [] term0
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
+
+        TermTypeLambda tl@(TypeLambda _ body) -> withTypeLambda env tl $ \env2 -> encodeTerm env2 body
 
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
@@ -1036,7 +1038,6 @@ encodeVariable env name =
         JavaSymbolClassConstant -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
         JavaSymbolClassNullaryFunction -> javaMethodInvocationToJavaExpression $
           methodInvocation Nothing (elementJavaIdentifier False False aliases name) []
---          javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name -- TODO
         JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
   where
     aliases = javaEnvironmentAliases env

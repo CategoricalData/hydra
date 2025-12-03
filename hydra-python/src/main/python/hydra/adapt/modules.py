@@ -5,7 +5,7 @@ r"""Entry point for Hydra's adapter (type/term rewriting) framework."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.adapt.terms
 import hydra.adapt.utils
 import hydra.annotations
@@ -20,6 +20,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
@@ -30,8 +31,8 @@ import hydra.show.core
 
 def language_adapter[T0, T1](lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     def get_pair(typ2: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, Tuple[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.coders.AdapterContext]]:
-        return hydra.lib.flows.bind(hydra.adapt.terms.term_adapter(typ2), (lambda ad: hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: hydra.lib.flows.pure((ad, cx))))))
-    return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state()), (lambda g: (cx0 := hydra.coders.AdapterContext(g, lang, cast(FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], hydra.lib.maps.empty())), hydra.lib.flows.bind(hydra.monads.with_state(cx0, get_pair(typ)), (lambda result: (adapter := result[0], cx := result[1], encode := (lambda term: hydra.monads.with_state(cx, adapter.coder.encode(term))), decode := (lambda term: hydra.monads.with_state(cx, adapter.coder.decode(term))), hydra.lib.flows.pure(cast(hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(adapter.is_lossy, adapter.source, adapter.target, cast(hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.core.Term], hydra.compute.Coder(cast(Callable[[hydra.core.Term], hydra.compute.Flow[T0, hydra.core.Term]], encode), cast(Callable[[hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], decode)))))))[4])))[1]))
+        return hydra.lib.flows.bind(hydra.adapt.terms.term_adapter(typ2), (lambda ad: hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: hydra.lib.flows.pure(cast(Tuple[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.coders.AdapterContext], (ad, cx)))))))
+    return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state()), (lambda g: (cx0 := hydra.coders.AdapterContext(g, lang, cast(FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], hydra.lib.maps.empty())), hydra.lib.flows.bind(hydra.monads.with_state(cx0, get_pair(typ)), (lambda result: (adapter := hydra.lib.pairs.first(result), cx := hydra.lib.pairs.second(result), encode := (lambda term: hydra.monads.with_state(cx, adapter.coder.encode(term))), decode := (lambda term: hydra.monads.with_state(cx, adapter.coder.decode(term))), hydra.lib.flows.pure(cast(hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(adapter.is_lossy, adapter.source, adapter.target, cast(hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.core.Term], hydra.compute.Coder(cast(Callable[[hydra.core.Term], hydra.compute.Flow[T0, hydra.core.Term]], encode), cast(Callable[[hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], decode)))))))[4])))[1]))
 
 def adapt_type_to_language[T1, T0](lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
     return hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(adapter.target)))
@@ -49,9 +50,9 @@ def adapted_module_definitions[T0](lang: hydra.coders.Language, mod: hydra.modul
     els = mod.elements
     def adapters_for[T1, T2](types: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Type, hydra.compute.Adapter[T1, T2, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]:
         return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: language_adapter(lang, v1)), types), (lambda adapters: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Type, hydra.compute.Adapter[T1, T2, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], hydra.lib.maps.from_list(hydra.lib.lists.zip(types, adapters))))))
-    def classify[T1, T2](adapters: FrozenDict[hydra.core.Type, hydra.compute.Adapter[hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term]], tuple2: Tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.module.Definition]:
-        el = tuple2[0]
-        tt = tuple2[1]
+    def classify[T1, T2](adapters: FrozenDict[hydra.core.Type, hydra.compute.Adapter[hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term]], pair: Tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.module.Definition]:
+        el = hydra.lib.pairs.first(pair)
+        tt = hydra.lib.pairs.second(pair)
         term = tt.body
         typ = tt.type
         name = el.name

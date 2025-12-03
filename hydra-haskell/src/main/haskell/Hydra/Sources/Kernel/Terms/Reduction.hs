@@ -525,6 +525,45 @@ reduceTermDef = define "reduceTerm" $
     var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list [])) $
   ref Rewriting.rewriteTermMDef @@ var "mapping" @@ var "term"
 
+
+
+
+
+
+
+
+
+
+
+
+
+--
+--liftPolymorphicLetBindingsDef :: TBinding (TypeContext -> Let -> Let)
+--liftPolymorphicLetBindingsDef = define "liftPolymorphicLetBindings" $
+--  doc ("Transform a let-term by pulling all polymorphic let bindings to the top level."
+--    <> " This is useful to ensure that polymorphic bindings are not nested within other terms,"
+--    <> " which is unsupported by certain targets such as Java."
+--    <> " Note: not tolerant of variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+--  "cx0" ~> "let0" ~>
+--  "cx1" <~ ref Schemas.extendTypeContextForLetDef @@ var "cx0" @@ var "let0" $
+--  "originalNames" <~ Sets.fromList (Lists.map (unaryFunction Core.bindingName) $ Core.letBindings $ var "let0") $
+--  "processBinding" <~ ("p" ~> "b" ~>
+--    "bindings" <~ Pairs.first (var "p") $
+--    "reserved" <~ Pairs.second (var "p") $
+--    ...replace binding b with a list of bindings, using Lexical.chooseUniqueNameDef to avoid name collisions...
+--    ) $
+--  Lists.concat $ L.reverse $ Lists.foldl
+--    (var "processBinding")
+--    (pair (list []) (var "originalNames"))
+--    (Core.letBindings $ var "let0")
+--
+
+
+
+
+
+
+
 rewriteTermWithTypeContextDef :: TBinding (((TypeContext -> Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
 rewriteTermWithTypeContextDef = define "rewriteTermWithTypeContext" $
   doc "Rewrite a term with the help of a type context which is updated as we descend into subterms" $

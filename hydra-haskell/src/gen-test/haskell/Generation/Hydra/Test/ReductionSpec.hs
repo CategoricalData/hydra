@@ -146,7 +146,7 @@ spec = H.describe "reduction" $ do
           1])
     H.it "reverse empty list" $ H.shouldBe
       (Lists.reverse [])
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "nullary primitives" $ do
     H.it "empty set has size zero" $ H.shouldBe
       (Sets.size Sets.empty)
@@ -188,7 +188,7 @@ spec = H.describe "reduction" $ do
   H.describe "list reduction" $ do
     H.it "empty list is a value" $ H.shouldBe
       ([])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "list of literals is a value" $ H.shouldBe
       ([
           1,
@@ -206,7 +206,7 @@ spec = H.describe "reduction" $ do
   H.describe "optional reduction" $ do
     H.it "nothing is a value" $ H.shouldBe
       (Nothing)
-      (Nothing :: Maybe String)
+      (Nothing :: Maybe Int)
     H.it "just literal is a value" $ H.shouldBe
       (Just 42)
       (Just 42)

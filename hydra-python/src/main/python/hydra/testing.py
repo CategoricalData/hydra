@@ -6,14 +6,34 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from hydra.dsl.python import Maybe, Node, frozenlist
-from typing import Annotated
+from hydra.dsl.python import Either, Maybe, Node, frozenlist
+from typing import Annotated, Generic, TypeVar
+import hydra.ast
 import hydra.coders
 import hydra.compute
 import hydra.core
 import hydra.graph
+import hydra.json
 import hydra.module
+import hydra.parsing
 import hydra.util
+
+A = TypeVar("A")
+
+@dataclass(frozen=True)
+class AlphaConversionTestCase:
+    r"""A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term."""
+    
+    term: Annotated[hydra.core.Term, "The term on which to perform alpha conversion"]
+    old_variable: Annotated[hydra.core.Name, "The variable name to replace"]
+    new_variable: Annotated[hydra.core.Name, "The new variable name"]
+    result: Annotated[hydra.core.Term, "The expected result term after alpha conversion"]
+
+ALPHA_CONVERSION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.AlphaConversionTestCase")
+ALPHA_CONVERSION_TEST_CASE__TERM__NAME = hydra.core.Name("term")
+ALPHA_CONVERSION_TEST_CASE__OLD_VARIABLE__NAME = hydra.core.Name("oldVariable")
+ALPHA_CONVERSION_TEST_CASE__NEW_VARIABLE__NAME = hydra.core.Name("newVariable")
+ALPHA_CONVERSION_TEST_CASE__RESULT__NAME = hydra.core.Name("result")
 
 class EvaluationStyle(Enum):
     r"""One of two evaluation styles: eager or lazy."""
@@ -64,6 +84,130 @@ ETA_EXPANSION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 ETA_EXPANSION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 @dataclass(frozen=True)
+class DeannotateTermTestCase:
+    r"""A test case which strips all annotations from a term and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term to deannotate"]
+    output: Annotated[hydra.core.Term, "The expected deannotated term"]
+
+DEANNOTATE_TERM_TEST_CASE__NAME = hydra.core.Name("hydra.testing.DeannotateTermTestCase")
+DEANNOTATE_TERM_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+DEANNOTATE_TERM_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class DeannotateTypeTestCase:
+    r"""A test case which strips all annotations from a type and compares the result with the expected type."""
+    
+    input: Annotated[hydra.core.Type, "The type to deannotate"]
+    output: Annotated[hydra.core.Type, "The expected deannotated type"]
+
+DEANNOTATE_TYPE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.DeannotateTypeTestCase")
+DEANNOTATE_TYPE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+DEANNOTATE_TYPE_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class FlattenLetTermsTestCase:
+    r"""A test case which flattens nested let terms, lifting inner bindings to the outer let, and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term to flatten"]
+    output: Annotated[hydra.core.Term, "The expected flattened term"]
+
+FLATTEN_LET_TERMS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.FlattenLetTermsTestCase")
+FLATTEN_LET_TERMS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+FLATTEN_LET_TERMS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+class FoldOperation(Enum):
+    r"""A predefined fold operation for testing foldOverTerm."""
+    
+    SUM_INT32_LITERALS = "sumInt32Literals"
+    r"""Sum all Int32 literals in a term."""
+    
+    COLLECT_LIST_LENGTHS = "collectListLengths"
+    r"""Collect the lengths of all list terms (returns list of integers in traversal order)."""
+    
+    COLLECT_LABELS = "collectLabels"
+    r"""Collect labels (first element of pairs where first is a string literal)."""
+
+FOLD_OPERATION__NAME = hydra.core.Name("hydra.testing.FoldOperation")
+FOLD_OPERATION__SUM_INT32_LITERALS__NAME = hydra.core.Name("sumInt32Literals")
+FOLD_OPERATION__COLLECT_LIST_LENGTHS__NAME = hydra.core.Name("collectListLengths")
+FOLD_OPERATION__COLLECT_LABELS__NAME = hydra.core.Name("collectLabels")
+
+@dataclass(frozen=True)
+class FoldOverTermTestCase:
+    r"""A test case which applies a fold operation over a term and compares the result."""
+    
+    input: Annotated[hydra.core.Term, "The term to fold over"]
+    traversal_order: Annotated[hydra.coders.TraversalOrder, "The traversal order (pre or post)"]
+    operation: Annotated[FoldOperation, "The fold operation to apply"]
+    output: Annotated[hydra.core.Term, "The expected result of the fold"]
+
+FOLD_OVER_TERM_TEST_CASE__NAME = hydra.core.Name("hydra.testing.FoldOverTermTestCase")
+FOLD_OVER_TERM_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+FOLD_OVER_TERM_TEST_CASE__TRAVERSAL_ORDER__NAME = hydra.core.Name("traversalOrder")
+FOLD_OVER_TERM_TEST_CASE__OPERATION__NAME = hydra.core.Name("operation")
+FOLD_OVER_TERM_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class FreeVariablesTestCase:
+    r"""A test case which computes the free variables of a term and compares the result with an expected set of names."""
+    
+    input: Annotated[hydra.core.Term, "The term to analyze"]
+    output: Annotated[frozenset[hydra.core.Name], "The expected set of free variable names"]
+
+FREE_VARIABLES_TEST_CASE__NAME = hydra.core.Name("hydra.testing.FreeVariablesTestCase")
+FREE_VARIABLES_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+FREE_VARIABLES_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+class TermRewriter(Enum):
+    r"""A predefined term rewriter for testing rewriteTerm."""
+    
+    REPLACE_FOO_WITH_BAR = "replaceFooWithBar"
+    r"""Replace all string literal 'foo' with 'bar'."""
+    
+    REPLACE_INT32_WITH_INT64 = "replaceInt32WithInt64"
+    r"""Replace all Int32 literals with Int64 literals of the same value."""
+
+TERM_REWRITER__NAME = hydra.core.Name("hydra.testing.TermRewriter")
+TERM_REWRITER__REPLACE_FOO_WITH_BAR__NAME = hydra.core.Name("replaceFooWithBar")
+TERM_REWRITER__REPLACE_INT32_WITH_INT64__NAME = hydra.core.Name("replaceInt32WithInt64")
+
+@dataclass(frozen=True)
+class RewriteTermTestCase:
+    r"""A test case which applies a term rewriter and compares the result."""
+    
+    input: Annotated[hydra.core.Term, "The term to rewrite"]
+    rewriter: Annotated[TermRewriter, "The rewriter to apply"]
+    output: Annotated[hydra.core.Term, "The expected rewritten term"]
+
+REWRITE_TERM_TEST_CASE__NAME = hydra.core.Name("hydra.testing.RewriteTermTestCase")
+REWRITE_TERM_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+REWRITE_TERM_TEST_CASE__REWRITER__NAME = hydra.core.Name("rewriter")
+REWRITE_TERM_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+class TypeRewriter(Enum):
+    r"""A predefined type rewriter for testing rewriteType."""
+    
+    REPLACE_STRING_WITH_INT32 = "replaceStringWithInt32"
+    r"""Replace all String types with Int32 types."""
+
+TYPE_REWRITER__NAME = hydra.core.Name("hydra.testing.TypeRewriter")
+TYPE_REWRITER__REPLACE_STRING_WITH_INT32__NAME = hydra.core.Name("replaceStringWithInt32")
+
+@dataclass(frozen=True)
+class RewriteTypeTestCase:
+    r"""A test case which applies a type rewriter and compares the result."""
+    
+    input: Annotated[hydra.core.Type, "The type to rewrite"]
+    rewriter: Annotated[TypeRewriter, "The rewriter to apply"]
+    output: Annotated[hydra.core.Type, "The expected rewritten type"]
+
+REWRITE_TYPE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.RewriteTypeTestCase")
+REWRITE_TYPE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+REWRITE_TYPE_TEST_CASE__REWRITER__NAME = hydra.core.Name("rewriter")
+REWRITE_TYPE_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
 class EvaluationTestCase:
     r"""A test case which evaluates (reduces) a given term and compares it with the expected result."""
     
@@ -95,6 +239,51 @@ class InferenceTestCase:
 INFERENCE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.InferenceTestCase")
 INFERENCE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 INFERENCE_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class JsonCoderTestCase:
+    r"""A test case which encodes a Hydra term to JSON using a type-directed coder, and verifies that decoding produces the original term (round-trip)."""
+    
+    type: Annotated[hydra.core.Type, "The Hydra type that determines how the term is encoded/decoded"]
+    term: Annotated[hydra.core.Term, "The Hydra term to encode"]
+    json: Annotated[hydra.json.Value, "The expected JSON value"]
+
+JSON_CODER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonCoderTestCase")
+JSON_CODER_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
+JSON_CODER_TEST_CASE__TERM__NAME = hydra.core.Name("term")
+JSON_CODER_TEST_CASE__JSON__NAME = hydra.core.Name("json")
+
+# A test case which parses a JSON string and compares the result with an expected JSON value.
+type JsonParserTestCase = ParserTestCase[hydra.json.Value]
+
+JSON_PARSER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonParserTestCase")
+
+@dataclass(frozen=True)
+class LiftLambdaAboveLetTestCase:
+    r"""A test case which lifts lambda abstractions above let expressions and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term to transform"]
+    output: Annotated[hydra.core.Term, "The expected transformed term"]
+
+LIFT_LAMBDA_ABOVE_LET_TEST_CASE__NAME = hydra.core.Name("hydra.testing.LiftLambdaAboveLetTestCase")
+LIFT_LAMBDA_ABOVE_LET_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+LIFT_LAMBDA_ABOVE_LET_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+# A test case which serializes a JSON value to a string and compares it to the expected string.
+type JsonWriterTestCase = WriterTestCase[hydra.json.Value]
+
+JSON_WRITER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonWriterTestCase")
+
+@dataclass(frozen=True)
+class ParserTestCase(Generic[A]):
+    r"""A test case which parses an input string and compares the result with an expected value."""
+    
+    input: Annotated[str, "The input string to parse"]
+    output: Annotated[hydra.parsing.ParseResult[A], "The expected parse result"]
+
+PARSER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.ParserTestCase")
+PARSER_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+PARSER_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 class Tag(Node[str]):
     r"""A tag for categorizing test cases."""
@@ -130,14 +319,29 @@ TEST_CODEC__MODULE_TEMPLATE__NAME = hydra.core.Name("moduleTemplate")
 TEST_CODEC__IMPORT_TEMPLATE__NAME = hydra.core.Name("importTemplate")
 TEST_CODEC__FIND_IMPORTS__NAME = hydra.core.Name("findImports")
 
+class TestCaseAlphaConversion(Node["AlphaConversionTestCase"]):
+    r"""An alpha conversion test."""
+
 class TestCaseCaseConversion(Node["CaseConversionTestCase"]):
     r"""A case conversion test."""
+
+class TestCaseDeannotateTerm(Node["DeannotateTermTestCase"]):
+    r"""A deannotate term test."""
+
+class TestCaseDeannotateType(Node["DeannotateTypeTestCase"]):
+    r"""A deannotate type test."""
 
 class TestCaseDelegatedEvaluation(Node["DelegatedEvaluationTestCase"]):
     r"""A delegated evaluation test."""
 
 class TestCaseEtaExpansion(Node["EtaExpansionTestCase"]):
     r"""An eta expansion test."""
+
+class TestCaseFlattenLetTerms(Node["FlattenLetTermsTestCase"]):
+    r"""A flatten let terms test."""
+
+class TestCaseFreeVariables(Node["FreeVariablesTestCase"]):
+    r"""A free variables test."""
 
 class TestCaseEvaluation(Node["EvaluationTestCase"]):
     r"""A term evaluation test."""
@@ -148,24 +352,85 @@ class TestCaseInference(Node["InferenceTestCase"]):
 class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
     r"""A type inference failure test."""
 
+class TestCaseJsonCoder(Node["JsonCoderTestCase"]):
+    r"""A JSON coder (round-trip) test."""
+
+class TestCaseJsonParser(Node["JsonParserTestCase"]):
+    r"""A JSON parser test."""
+
+class TestCaseJsonWriter(Node["JsonWriterTestCase"]):
+    r"""A JSON writer test."""
+
+class TestCaseLiftLambdaAboveLet(Node["LiftLambdaAboveLetTestCase"]):
+    r"""A lift lambda above let test."""
+
+class TestCaseSerialization(Node["SerializationTestCase"]):
+    r"""An AST serialization test."""
+
+class TestCaseSimplifyTerm(Node["SimplifyTermTestCase"]):
+    r"""A simplify term test."""
+
+class TestCaseTopologicalSort(Node["TopologicalSortTestCase"]):
+    r"""A topological sort test."""
+
+class TestCaseTopologicalSortBindings(Node["TopologicalSortBindingsTestCase"]):
+    r"""A topological sort bindings test."""
+
+class TestCaseTopologicalSortSCC(Node["TopologicalSortSCCTestCase"]):
+    r"""A topological sort with SCC detection test."""
+
 class TestCaseTypeChecking(Node["TypeCheckingTestCase"]):
     r"""A type checking test."""
 
 class TestCaseTypeCheckingFailure(Node["TypeCheckingFailureTestCase"]):
     r"""A type checking failure test (currently unused)."""
 
+class TestCaseTypeReduction(Node["TypeReductionTestCase"]):
+    r"""A type reduction test."""
+
+class TestCaseNormalizeTypeVariables(Node["NormalizeTypeVariablesTestCase"]):
+    r"""A normalize type variables test."""
+
+class TestCaseFoldOverTerm(Node["FoldOverTermTestCase"]):
+    r"""A fold over term test."""
+
+class TestCaseRewriteTerm(Node["RewriteTermTestCase"]):
+    r"""A rewrite term test."""
+
+class TestCaseRewriteType(Node["RewriteTypeTestCase"]):
+    r"""A rewrite type test."""
+
 # A simple test case with an input and an expected output.
-type TestCase = TestCaseCaseConversion | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseTypeChecking | TestCaseTypeCheckingFailure
+type TestCase = TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType
 
 TEST_CASE__NAME = hydra.core.Name("hydra.testing.TestCase")
+TEST_CASE__ALPHA_CONVERSION__NAME = hydra.core.Name("alphaConversion")
 TEST_CASE__CASE_CONVERSION__NAME = hydra.core.Name("caseConversion")
+TEST_CASE__DEANNOTATE_TERM__NAME = hydra.core.Name("deannotateTerm")
+TEST_CASE__DEANNOTATE_TYPE__NAME = hydra.core.Name("deannotateType")
 TEST_CASE__DELEGATED_EVALUATION__NAME = hydra.core.Name("delegatedEvaluation")
 TEST_CASE__ETA_EXPANSION__NAME = hydra.core.Name("etaExpansion")
+TEST_CASE__FLATTEN_LET_TERMS__NAME = hydra.core.Name("flattenLetTerms")
+TEST_CASE__FREE_VARIABLES__NAME = hydra.core.Name("freeVariables")
 TEST_CASE__EVALUATION__NAME = hydra.core.Name("evaluation")
 TEST_CASE__INFERENCE__NAME = hydra.core.Name("inference")
 TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
+TEST_CASE__JSON_CODER__NAME = hydra.core.Name("jsonCoder")
+TEST_CASE__JSON_PARSER__NAME = hydra.core.Name("jsonParser")
+TEST_CASE__JSON_WRITER__NAME = hydra.core.Name("jsonWriter")
+TEST_CASE__LIFT_LAMBDA_ABOVE_LET__NAME = hydra.core.Name("liftLambdaAboveLet")
+TEST_CASE__SERIALIZATION__NAME = hydra.core.Name("serialization")
+TEST_CASE__SIMPLIFY_TERM__NAME = hydra.core.Name("simplifyTerm")
+TEST_CASE__TOPOLOGICAL_SORT__NAME = hydra.core.Name("topologicalSort")
+TEST_CASE__TOPOLOGICAL_SORT_BINDINGS__NAME = hydra.core.Name("topologicalSortBindings")
+TEST_CASE__TOPOLOGICAL_SORT_S_C_C__NAME = hydra.core.Name("topologicalSortSCC")
 TEST_CASE__TYPE_CHECKING__NAME = hydra.core.Name("typeChecking")
 TEST_CASE__TYPE_CHECKING_FAILURE__NAME = hydra.core.Name("typeCheckingFailure")
+TEST_CASE__TYPE_REDUCTION__NAME = hydra.core.Name("typeReduction")
+TEST_CASE__NORMALIZE_TYPE_VARIABLES__NAME = hydra.core.Name("normalizeTypeVariables")
+TEST_CASE__FOLD_OVER_TERM__NAME = hydra.core.Name("foldOverTerm")
+TEST_CASE__REWRITE_TERM__NAME = hydra.core.Name("rewriteTerm")
+TEST_CASE__REWRITE_TYPE__NAME = hydra.core.Name("rewriteType")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
@@ -218,3 +483,91 @@ class TypeCheckingFailureTestCase:
 
 TYPE_CHECKING_FAILURE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase")
 TYPE_CHECKING_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+
+@dataclass(frozen=True)
+class TopologicalSortBindingsTestCase:
+    r"""A test case which performs topological sort on a map of bindings (name -> term) and compares the result with expected groups of bindings in topological order."""
+    
+    bindings: Annotated[frozenlist[Tuple[hydra.core.Name, hydra.core.Term]], "The bindings as a list of (name, term) pairs"]
+    expected: Annotated[frozenlist[frozenlist[Tuple[hydra.core.Name, hydra.core.Term]]], "The expected groups of bindings in topological order"]
+
+TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase")
+TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__BINDINGS__NAME = hydra.core.Name("bindings")
+TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class TopologicalSortTestCase:
+    r"""A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles."""
+    
+    adjacency_list: Annotated[frozenlist[Tuple[int, frozenlist[int]]], "The directed graph as an adjacency list (node to list of dependencies)"]
+    expected: Annotated[Either[frozenlist[frozenlist[int]], frozenlist[int]], "The expected result: Left for cycles, Right for sorted nodes"]
+
+TOPOLOGICAL_SORT_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortTestCase")
+TOPOLOGICAL_SORT_TEST_CASE__ADJACENCY_LIST__NAME = hydra.core.Name("adjacencyList")
+TOPOLOGICAL_SORT_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class TopologicalSortSCCTestCase:
+    r"""A test case which performs topological sort with strongly connected component detection and compares the result with expected components."""
+    
+    adjacency_list: Annotated[frozenlist[Tuple[int, frozenlist[int]]], "The directed graph as an adjacency list"]
+    expected: Annotated[frozenlist[frozenlist[int]], "The expected strongly connected components in topological order"]
+
+TOPOLOGICAL_SORT_S_C_C_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase")
+TOPOLOGICAL_SORT_S_C_C_TEST_CASE__ADJACENCY_LIST__NAME = hydra.core.Name("adjacencyList")
+TOPOLOGICAL_SORT_S_C_C_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class SerializationTestCase:
+    r"""A test case which serializes an AST expression to a string and compares it with the expected output."""
+    
+    input: Annotated[hydra.ast.Expr, "The AST expression to serialize"]
+    output: Annotated[str, "The expected serialized string"]
+
+SERIALIZATION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.SerializationTestCase")
+SERIALIZATION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+SERIALIZATION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class SimplifyTermTestCase:
+    r"""A test case which performs term simplification (beta reduction and optimization) and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term to simplify"]
+    output: Annotated[hydra.core.Term, "The expected simplified term"]
+
+SIMPLIFY_TERM_TEST_CASE__NAME = hydra.core.Name("hydra.testing.SimplifyTermTestCase")
+SIMPLIFY_TERM_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+SIMPLIFY_TERM_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class NormalizeTypeVariablesTestCase:
+    r"""A test case which normalizes type variables in a term (renaming them to t0, t1, t2, etc.) and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term with type annotations to normalize"]
+    output: Annotated[hydra.core.Term, "The expected term with normalized type variable names"]
+
+NORMALIZE_TYPE_VARIABLES_TEST_CASE__NAME = hydra.core.Name("hydra.testing.NormalizeTypeVariablesTestCase")
+NORMALIZE_TYPE_VARIABLES_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+NORMALIZE_TYPE_VARIABLES_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class TypeReductionTestCase:
+    r"""A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type."""
+    
+    input: Annotated[hydra.core.Type, "The type to reduce"]
+    output: Annotated[hydra.core.Type, "The expected reduced type"]
+
+TYPE_REDUCTION_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TypeReductionTestCase")
+TYPE_REDUCTION_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+TYPE_REDUCTION_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class WriterTestCase(Generic[A]):
+    r"""A test case which writes a value to a string and compares it to the expected string."""
+    
+    input: Annotated[A, "The input value to write"]
+    output: Annotated[str, "The expected string"]
+
+WRITER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.WriterTestCase")
+WRITER_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+WRITER_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")

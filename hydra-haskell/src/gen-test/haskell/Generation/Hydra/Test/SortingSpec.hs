@@ -19,7 +19,7 @@ spec = H.describe "sorting" $ do
   H.describe "topological sort" $ do
     H.it "empty set" $ H.shouldBe
       (Sorting.topologicalSort [])
-      (Right [] :: Either [[String]] [String])
+      (Right [] :: Either [[Int]] [Int])
     H.it "singleton set" $ H.shouldBe
       (Sorting.topologicalSort [
           (1, [])])
@@ -134,7 +134,7 @@ spec = H.describe "sorting" $ do
   H.describe "topological sort SCC" $ do
     H.it "empty set" $ H.shouldBe
       (Sorting.topologicalSortComponents [])
-      ([] :: [[String]])
+      ([] :: [[Int]])
     H.it "singleton set" $ H.shouldBe
       (Sorting.topologicalSortComponents [
           (1, [])])

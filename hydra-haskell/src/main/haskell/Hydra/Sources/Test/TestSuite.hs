@@ -25,6 +25,7 @@ import qualified Hydra.Sources.Test.Lib.Logic as Logic
 import qualified Hydra.Sources.Test.Lib.Maps as Maps
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
+import qualified Hydra.Sources.Test.Monads as Monads
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
@@ -47,59 +48,45 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
     elements = [el allTestsDef]
-    modules = [
-      CheckingAll.module_,
-      EtaExpansion.module_,
-      Formatting.module_,
-      InferenceAll.module_,
-      JsonCoder.module_,
-      JsonParser.module_,
-      JsonWriter.module_,
-      Reduction.module_,
-      Rewriting.module_,
-      Serialization.module_,
-      Sorting.module_,
-      Chars.module_,
-      Eithers.module_,
-      Equality.module_,
-      -- Flows.module_, -- Temporarily disabled: Flow tests cause type unification errors in generation
-      Lists.module_,
-      Literals.module_,
-      Logic.module_,
-      Maps.module_,
-      Math.module_,
-      Maybes.module_,
-      Pairs.module_,
-      Sets.module_,
-      Strings.module_]
+    modules = fst <$> testPairs
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
     Testing.testGroup "common" nothing (list subgroups) (list [])
   where
-    subgroups = [
-      ref CheckingAll.allTestsDef,
-      ref EtaExpansion.allTestsDef,
-      ref Formatting.allTestsDef,
-      ref InferenceAll.allTestsDef,
-      ref JsonCoder.allTestsDef,
-      ref JsonParser.allTestsDef,
-      ref JsonWriter.allTestsDef,
-      ref Reduction.allTestsDef,
-      ref Rewriting.allTestsDef,
-      ref Serialization.allTestsDef,
-      ref Sorting.allTestsDef,
-      ref Chars.allTestsDef,
-      ref Eithers.allTestsDef,
-      ref Equality.allTestsDef,
-      -- ref Flows.allTestsDef, -- Temporarily disabled: Flow tests cause type unification errors in generation
-      ref Lists.allTestsDef,
-      ref Literals.allTestsDef,
-      ref Logic.allTestsDef,
-      ref Maps.allTestsDef,
-      ref Math.allTestsDef,
-      ref Maybes.allTestsDef,
-      ref Pairs.allTestsDef,
-      ref Sets.allTestsDef,
-      ref Strings.allTestsDef]
+    subgroups = snd <$> testPairs
+
+libPairs :: [(Module, TTerm TestGroup)]
+libPairs = [
+  (Chars.module_, ref Chars.allTestsDef),
+  (Eithers.module_, ref Eithers.allTestsDef),
+  (Equality.module_, ref Equality.allTestsDef),
+  -- (Flows.module_, ref Flows.allTestsDef), -- Temporarily disabled: Flow tests cause type unification errors in generation
+  (Lists.module_, ref Lists.allTestsDef),
+  (Literals.module_, ref Literals.allTestsDef),
+  (Logic.module_, ref Logic.allTestsDef),
+  (Maps.module_, ref Maps.allTestsDef),
+  (Math.module_, ref Math.allTestsDef),
+  (Maybes.module_, ref Maybes.allTestsDef),
+  (Pairs.module_, ref Pairs.allTestsDef),
+  (Sets.module_, ref Sets.allTestsDef),
+  (Strings.module_, ref Strings.allTestsDef)]
+
+otherPairs :: [(Module, TTerm TestGroup)]
+otherPairs = [
+  (CheckingAll.module_, ref CheckingAll.allTestsDef),
+  (EtaExpansion.module_, ref EtaExpansion.allTestsDef),
+  (Formatting.module_, ref Formatting.allTestsDef),
+  (InferenceAll.module_, ref InferenceAll.allTestsDef),
+  (JsonCoder.module_, ref JsonCoder.allTestsDef),
+  (JsonParser.module_, ref JsonParser.allTestsDef),
+  (JsonWriter.module_, ref JsonWriter.allTestsDef),
+  (Monads.module_, ref Monads.allTestsDef),
+  (Reduction.module_, ref Reduction.allTestsDef),
+  (Rewriting.module_, ref Rewriting.allTestsDef),
+  (Serialization.module_, ref Serialization.allTestsDef),
+  (Sorting.module_, ref Sorting.allTestsDef)]
+
+testPairs :: [(Module, TTerm TestGroup)]
+testPairs = libPairs ++ otherPairs
