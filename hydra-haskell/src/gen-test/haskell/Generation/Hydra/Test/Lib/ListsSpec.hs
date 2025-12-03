@@ -40,7 +40,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
         (Lists.apply [] [
             "a",
             "b"])
-        ([] :: [String])
+        ([] :: [Int])
       H.it "empty input list" $ H.shouldBe
         (Lists.apply [
             Strings.toUpper] [])
@@ -167,10 +167,10 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           [],
           [],
           []])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "empty list of lists" $ H.shouldBe
       (Lists.concat [])
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "concat2" $ do
     H.it "two non-empty lists" $ H.shouldBe
       (Lists.concat2 [
@@ -199,7 +199,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           2])
     H.it "both lists empty" $ H.shouldBe
       (Lists.concat2 [] [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "single elements" $ H.shouldBe
       (Lists.concat2 [
           1] [
@@ -279,7 +279,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
       ([])
     H.it "drop from empty list" $ H.shouldBe
       (Lists.drop 3 [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "drop negative amount" $ H.shouldBe
       (Lists.drop (-1) [
           1,
@@ -464,7 +464,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
             1]])
     H.it "empty list" $ H.shouldBe
       (Lists.group [])
-      ([] :: [[String]])
+      ([] :: [[Int]])
     H.it "single element" $ H.shouldBe
       (Lists.group [
           1])
@@ -765,7 +765,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           1])
     H.it "empty list" $ H.shouldBe
       (Lists.nub [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "single element" $ H.shouldBe
       (Lists.nub [
           1])
@@ -857,7 +857,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           1])
     H.it "empty list" $ H.shouldBe
       (Lists.reverse [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "two elements" $ H.shouldBe
       (Lists.reverse [
           1,
@@ -883,7 +883,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
       (Just 1)
     H.it "empty int list" $ H.shouldBe
       (Lists.safeHead [])
-      (Nothing :: Maybe String)
+      (Nothing :: Maybe Int)
     H.it "single element" $ H.shouldBe
       (Lists.safeHead [
           42])
@@ -895,7 +895,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
       (Just "hello")
     H.it "empty string list" $ H.shouldBe
       (Lists.safeHead [])
-      (Nothing :: Maybe String)
+      (Nothing :: Maybe Int)
   H.describe "singleton" $ do
     H.it "number element" $ H.shouldBe
       (Lists.singleton 42)
@@ -952,7 +952,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           1])
     H.it "empty list" $ H.shouldBe
       (Lists.sort [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "duplicates" $ H.shouldBe
       (Lists.sort [
           2,
@@ -1110,7 +1110,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           2])
     H.it "take from empty list" $ H.shouldBe
       (Lists.take 3 [])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "take negative amount" $ H.shouldBe
       (Lists.take (-1) [
           1,
@@ -1140,7 +1140,7 @@ spec = H.describe "hydra.lib.lists primitives" $ do
             6]])
     H.it "empty lists" $ H.shouldBe
       (Lists.transpose [])
-      ([] :: [[String]])
+      ([] :: [[Int]])
     H.it "single row" $ H.shouldBe
       (Lists.transpose [
           [
@@ -1225,15 +1225,15 @@ spec = H.describe "hydra.lib.lists primitives" $ do
       (Lists.zip [] [
           "a",
           "b"])
-      ([] :: [(String, String)])
+      ([] :: [(Int, String)])
     H.it "empty second list" $ H.shouldBe
       (Lists.zip [
           1,
           2] [])
-      ([] :: [(Int, String)])
+      ([] :: [(Int, Int)])
     H.it "both empty lists" $ H.shouldBe
       (Lists.zip [] [])
-      ([] :: [(String, String)])
+      ([] :: [(Int, Int)])
   H.describe "zipWith" $ do
     H.it "addition" $ H.shouldBe
       (Lists.zipWith Math.add [

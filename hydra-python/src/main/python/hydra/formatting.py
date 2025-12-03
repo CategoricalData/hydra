@@ -5,7 +5,7 @@ r"""String formatting types and functions."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -13,6 +13,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.util
@@ -112,11 +113,11 @@ def non_alnum_to_underscores(input: str) -> str:
     def is_alnum(c: int) -> bool:
         return hydra.lib.logic.or_(hydra.lib.logic.and_(hydra.lib.equality.gte(c, 65), hydra.lib.equality.lte(c, 90)), hydra.lib.logic.or_(hydra.lib.logic.and_(hydra.lib.equality.gte(c, 97), hydra.lib.equality.lte(c, 122)), hydra.lib.logic.and_(hydra.lib.equality.gte(c, 48), hydra.lib.equality.lte(c, 57))))
     def replace(p: Tuple[frozenlist[int], bool], c: int) -> Tuple[frozenlist[int], bool]:
-        s = p[0]
-        b = p[1]
-        return hydra.lib.logic.if_else(is_alnum(c), (lambda : (hydra.lib.lists.cons(c, s), False)), (lambda : hydra.lib.logic.if_else(b, (lambda : (s, True)), (lambda : (hydra.lib.lists.cons(95, s), True)))))
-    result = hydra.lib.lists.foldl(replace, (cast(frozenlist[int], ()), False), hydra.lib.strings.to_list(input))
-    return hydra.lib.strings.from_list(hydra.lib.lists.reverse(result[0]))
+        s = hydra.lib.pairs.first(p)
+        b = hydra.lib.pairs.second(p)
+        return hydra.lib.logic.if_else(is_alnum(c), (lambda : cast(Tuple[frozenlist[int], bool], (hydra.lib.lists.cons(c, s), False))), (lambda : hydra.lib.logic.if_else(b, (lambda : cast(Tuple[frozenlist[int], bool], (s, True))), (lambda : cast(Tuple[frozenlist[int], bool], (hydra.lib.lists.cons(95, s), True))))))
+    result = hydra.lib.lists.foldl(replace, cast(Tuple[frozenlist[int], bool], (cast(frozenlist[int], ()), False)), hydra.lib.strings.to_list(input))
+    return hydra.lib.strings.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.first(result)))
 
 def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
     r"""Sanitize a string by replacing non-alphanumeric characters and escaping reserved words."""
@@ -134,7 +135,7 @@ def strip_leading_and_trailing_whitespace(s: str) -> str:
 def with_character_aliases(original: str) -> str:
     r"""Replace special characters with their alphanumeric aliases."""
     
-    aliases = cast(FrozenDict[int, str], hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde"))))
+    aliases = cast(FrozenDict[int, str], hydra.lib.maps.from_list((cast(Tuple[int, str], (32, "sp")), cast(Tuple[int, str], (33, "excl")), cast(Tuple[int, str], (34, "quot")), cast(Tuple[int, str], (35, "num")), cast(Tuple[int, str], (36, "dollar")), cast(Tuple[int, str], (37, "percnt")), cast(Tuple[int, str], (38, "amp")), cast(Tuple[int, str], (39, "apos")), cast(Tuple[int, str], (40, "lpar")), cast(Tuple[int, str], (41, "rpar")), cast(Tuple[int, str], (42, "ast")), cast(Tuple[int, str], (43, "plus")), cast(Tuple[int, str], (44, "comma")), cast(Tuple[int, str], (45, "minus")), cast(Tuple[int, str], (46, "period")), cast(Tuple[int, str], (47, "sol")), cast(Tuple[int, str], (58, "colon")), cast(Tuple[int, str], (59, "semi")), cast(Tuple[int, str], (60, "lt")), cast(Tuple[int, str], (61, "equals")), cast(Tuple[int, str], (62, "gt")), cast(Tuple[int, str], (63, "quest")), cast(Tuple[int, str], (64, "commat")), cast(Tuple[int, str], (91, "lsqb")), cast(Tuple[int, str], (92, "bsol")), cast(Tuple[int, str], (93, "rsqb")), cast(Tuple[int, str], (94, "circ")), cast(Tuple[int, str], (95, "lowbar")), cast(Tuple[int, str], (96, "grave")), cast(Tuple[int, str], (123, "lcub")), cast(Tuple[int, str], (124, "verbar")), cast(Tuple[int, str], (125, "rcub")), cast(Tuple[int, str], (126, "tilde")))))
     def alias(c: int) -> frozenlist[int]:
         return hydra.lib.maybes.from_maybe(hydra.lib.lists.pure(c), hydra.lib.maybes.map(hydra.lib.strings.to_list, hydra.lib.maps.lookup(c, aliases)))
     return hydra.lib.strings.from_list(hydra.lib.lists.filter(hydra.lib.chars.is_alpha_num, hydra.lib.lists.concat(hydra.lib.lists.map(alias, hydra.lib.strings.to_list(original)))))
@@ -145,7 +146,7 @@ def wrap_line(maxlen: int, input: str) -> str:
     def helper(prev: frozenlist[frozenlist[int]], rem: frozenlist[int]) -> frozenlist[frozenlist[int]]:
         trunc = hydra.lib.lists.take(maxlen, rem)
         span_result = hydra.lib.lists.span((lambda c: hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.equality.equal(c, 32)), hydra.lib.logic.not_(hydra.lib.equality.equal(c, 9)))), hydra.lib.lists.reverse(trunc))
-        prefix = hydra.lib.lists.reverse(span_result[1])
-        suffix = hydra.lib.lists.reverse(span_result[0])
+        prefix = hydra.lib.lists.reverse(hydra.lib.pairs.second(span_result))
+        suffix = hydra.lib.lists.reverse(hydra.lib.pairs.first(span_result))
         return hydra.lib.logic.if_else(hydra.lib.equality.lte(hydra.lib.lists.length(rem), maxlen), (lambda : hydra.lib.lists.reverse(hydra.lib.lists.cons(rem, prev))), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(prefix), (lambda : helper(hydra.lib.lists.cons(trunc, prev), hydra.lib.lists.drop(maxlen, rem))), (lambda : helper(hydra.lib.lists.cons(hydra.lib.lists.init(prefix), prev), hydra.lib.lists.concat2(suffix, hydra.lib.lists.drop(maxlen, rem)))))))
     return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper(cast(frozenlist[frozenlist[int]], ()), hydra.lib.strings.to_list(input))))

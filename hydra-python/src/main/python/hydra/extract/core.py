@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -19,6 +19,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
@@ -334,14 +335,14 @@ def list_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Typ
             return hydra.monads.unexpected("list type", hydra.show.core.type(typ))
 
 def map[T0, T1](fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fv: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
-    def tuple2(kv_pair: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
-        kterm = kv_pair[0]
-        vterm = kv_pair[1]
-        return hydra.lib.flows.bind(fk(kterm), (lambda kval: hydra.lib.flows.bind(fv(vterm), (lambda vval: hydra.lib.flows.pure((kval, vval))))))
+    def pair(kv_pair: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
+        kterm = hydra.lib.pairs.first(kv_pair)
+        vterm = hydra.lib.pairs.second(kv_pair)
+        return hydra.lib.flows.bind(fk(kterm), (lambda kval: hydra.lib.flows.bind(fv(vterm), (lambda vval: hydra.lib.flows.pure(cast(Tuple[T0, T1], (kval, vval)))))))
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
         match term:
             case hydra.core.TermMap(value=m):
-                return hydra.lib.flows.map(cast(Callable[[frozenlist[Tuple[T0, T1]]], FrozenDict[T0, T1]], hydra.lib.maps.from_list), hydra.lib.flows.map_list(tuple2, hydra.lib.maps.to_list(m)))
+                return hydra.lib.flows.map(cast(Callable[[frozenlist[Tuple[T0, T1]]], FrozenDict[T0, T1]], hydra.lib.maps.from_list), hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
             
             case _:
                 return hydra.monads.unexpected("map", hydra.show.core.term(term))
@@ -382,10 +383,10 @@ def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
         match term:
             case hydra.core.TermPair(value=p):
-                return hydra.lib.flows.bind(kf(p[0]), (lambda k_val: hydra.lib.flows.bind(vf(p[1]), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
+                return hydra.lib.flows.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: hydra.lib.flows.pure(cast(Tuple[T0, T1], (k_val, v_val)))))))
             
             case hydra.core.TermProduct(value=terms):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))), (lambda : hydra.monads.unexpected("tuple2", hydra.show.core.term(term))))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure(cast(Tuple[T0, T1], (k_val, v_val)))))))), (lambda : hydra.monads.unexpected("pair", hydra.show.core.term(term))))
             
             case _:
                 return hydra.monads.unexpected("product", hydra.show.core.term(term))
@@ -471,19 +472,6 @@ def sum_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydr
         
         case _:
             return hydra.monads.unexpected("sum type", hydra.show.core.type(typ))
-
-def tuple2[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], vf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, T1]]:
-        match term:
-            case hydra.core.TermPair(value=p):
-                return hydra.lib.flows.bind(kf(p[0]), (lambda k_val: hydra.lib.flows.bind(vf(p[1]), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
-            
-            case hydra.core.TermProduct(value=terms):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))), (lambda : hydra.monads.unexpected("tuple2", hydra.show.core.term(term))))
-            
-            case _:
-                return hydra.monads.unexpected("product", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def uint16_value[T0](v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
     match v:

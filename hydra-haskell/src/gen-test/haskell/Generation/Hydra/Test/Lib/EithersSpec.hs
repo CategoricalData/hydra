@@ -74,10 +74,10 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
       (Eithers.lefts [
           Right "a",
           (Right "b")])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "empty list" $ H.shouldBe
       (Eithers.lefts [])
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "rights" $ do
     H.it "filter right values" $ H.shouldBe
       (Eithers.rights [
@@ -99,10 +99,10 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
       (Eithers.rights [
           Left 1,
           (Left 2)])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "empty list" $ H.shouldBe
       (Eithers.rights [])
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "partitionEithers" $ do
     H.it "partition mixed" $ H.shouldBe
       (Eithers.partitionEithers [
@@ -121,14 +121,14 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
           (Left 2)])
       (([
           1,
-          2], []) :: ([Int], [String]))
+          2], []) :: ([Int], [Int]))
     H.it "all rights" $ H.shouldBe
       (Eithers.partitionEithers [
           Right "a",
           (Right "b")])
       (([], [
           "a",
-          "b"]) :: ([String], [String]))
+          "b"]) :: ([Int], [String]))
     H.it "empty list" $ H.shouldBe
       (Eithers.partitionEithers [])
-      (([], []) :: ([String], [String]))
+      (([], []) :: ([Int], [Int]))

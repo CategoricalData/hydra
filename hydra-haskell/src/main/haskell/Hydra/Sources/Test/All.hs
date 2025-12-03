@@ -16,7 +16,8 @@ testModules :: [Module]
 testModules = [
   TestGraph.module_,
   TestTerms.module_,
-  TestTypes.module_]
+  TestTypes.module_,
+  TestSuite.module_]  -- Include TestSuite itself, not just its dependencies
   ++ testModuleAndDependencies TestSuite.module_
 
 moduleAndDependencies :: Module -> [Module]

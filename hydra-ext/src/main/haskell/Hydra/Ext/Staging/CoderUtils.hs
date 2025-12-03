@@ -188,8 +188,9 @@ isFunctionCall (Binding name term (Just ts)) =
         TermVariable _ -> "TermVariable"
         TermWrap _ -> "TermWrap"
         TermEither _ -> "TermEither"
-      -- Debug output for specific problematic bindings
-      _ = if name `elem` [Name "idTypeSubst", Name "emptyTrace", Name "initialState"] && isArityZero
+      -- Debug output for arity-0 bindings with "subst" in the name
+      nameStr = case name of Name n -> n
+      _ = if isArityZero && ("subst" `L.isInfixOf` nameStr || "Subst" `L.isInfixOf` nameStr)
           then trace ("DEBUG isFunctionCall: name=" ++ show name ++
                       ", arity=" ++ show (typeSchemeArity ts) ++
                       ", isWrapped=" ++ show isWrapped ++
