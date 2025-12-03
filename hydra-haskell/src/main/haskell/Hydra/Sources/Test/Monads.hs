@@ -9,6 +9,9 @@ import qualified Hydra.Dsl.Meta.Compute as Compute
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
+
+import qualified Data.Map as M
 
 
 module_ :: Module
@@ -50,10 +53,40 @@ bindTests = subgroup "bind" [
       (unFlowTerm @@ (metaref Monads.bindDef @@ (metaref Monads.pureDef @@ x) @@ (lambda "n" (metaref Monads.pureDef @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just result) unit testTrace)
 
+-- | Build a trace term at the meta level with custom stack, messages, and other
+traceTerm :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+traceTerm stack messages other = recordLift _Trace [
+  _Trace_stack >>: stack,
+  _Trace_messages >>: messages,
+  _Trace_other >>: other]
+
+-- | Build an empty trace with custom messages
+traceWithMessages :: [String] -> TTerm Term
+traceWithMessages msgs = traceTerm
+  (list [])
+  (list $ fmap string msgs)
+  (MetaTerms.map (Phantoms.map M.empty))
+
+-- | Test cases for error trace ordering
+-- Tests that withTrace annotations are properly recorded and errors include the trace context
+errorTraceTests :: TTerm TestGroup
+errorTraceTests = subgroup "error traces" [
+  evalCaseWithTags "Error traces are in the right order" [tag_requiresInterp]
+    -- Input: withTrace "one" $ withTrace "two" $ fail "oops"
+    (unFlowTerm
+      @@ (metaref Monads.withTraceDef @@ string "one"
+          @@ (metaref Monads.withTraceDef @@ string "two"
+              @@ (metaref Monads.failDef @@ string "oops")))
+      @@ unit
+      @@ testTrace)
+    -- Output: FlowState Nothing () (Trace [] ["Error: oops (one > two)"] {})
+    (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: oops (one > two)"]))]
+
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.monads functions" $
     supergroup "monads" [
       pureTests,
       mapTests,
-      bindTests]
+      bindTests,
+      errorTraceTests]

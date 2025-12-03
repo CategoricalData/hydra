@@ -17,15 +17,9 @@ import qualified Data.Map as M
 import qualified Test.Hspec as H
 
 
-checkErrorTrace :: H.SpecWith ()
-checkErrorTrace = do
-  H.describe "Check error traces resulting from an explicit failure" $ do
-
-    H.it "Error traces are in the right order" $
-      H.shouldBe
-        (unFlow (withTrace "one" $ withTrace "two" $ if False then pure 42 else fail "oops") () emptyTrace)
-        (FlowState Nothing () emptyTrace {traceMessages = ["Error: oops (one > two)"]})
-
+-- This test cannot be included in the kernel because it requires
+-- building terms with 4000+ nested withTrace calls, which exceeds the trace depth limit
+-- during kernel generation. These tests remain as hand-written HSpec tests only.
 checkMaxTraceDepth :: H.SpecWith ()
 checkMaxTraceDepth = do
   H.describe "Check breaking out of flows with an infinite loop" $ do
@@ -55,5 +49,4 @@ testFlow seed depth = helper depth
 
 spec :: H.Spec
 spec = do
-  checkErrorTrace
   checkMaxTraceDepth
