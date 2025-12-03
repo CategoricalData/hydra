@@ -57,3 +57,14 @@ spec = H.describe "monads" $ do
           Compute.flowStateValue = (Just 12),
           Compute.flowStateState = (),
           Compute.flowStateTrace = Monads.emptyTrace})
+  H.describe "error traces" $ do
+    H.it "Error traces are in the right order" $ H.shouldBe
+      (Compute.unFlow (Monads.withTrace "one" (Monads.withTrace "two" (Monads.fail "oops"))) () Monads.emptyTrace)
+      (Compute.FlowState {
+          Compute.flowStateValue = Nothing,
+          Compute.flowStateState = (),
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [
+              "Error: oops (one > two)"],
+            Compute.traceOther = M.empty}} :: FlowState () String)
