@@ -192,7 +192,9 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
       let (_, typeScheme) = result
           typ = typeSchemeType typeScheme
           -- Check if there are any free type variables that need grounding
-          freeVars = S.toList $ Rewriting.freeVariablesInType typ
+          freeVars = S.toList $ S.difference
+            (Rewriting.freeVariablesInType typ)
+            schemaVars
       if null freeVars
         then return Nothing  -- No free variables, no annotation needed
         else do
@@ -203,6 +205,8 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
           -- Encode the type as Haskell
           typeStr <- typeToHaskell namespaces groundedType
           return $ Just (" :: " ++ typeStr)
+  where
+    schemaVars = S.fromList $ M.keys $ inferenceContextSchemaTypes infContext
 
 -- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
 -- This recursively searches through the term structure to find any parts that would

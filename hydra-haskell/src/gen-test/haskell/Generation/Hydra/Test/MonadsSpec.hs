@@ -67,4 +67,4 @@ spec = H.describe "monads" $ do
             Compute.traceStack = [],
             Compute.traceMessages = [
               "Error: oops (one > two)"],
-            Compute.traceOther = M.empty}} :: FlowState () String)
+            Compute.traceOther = M.empty}} :: Compute.FlowState () Int)
