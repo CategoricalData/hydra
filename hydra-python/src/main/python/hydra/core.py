@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
 from hydra.dsl.python import Either, FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated, Tuple
+from typing import Annotated
 
 class Name(Node[str]):
     r"""A unique identifier in some context; a string-valued key."""
@@ -129,7 +129,7 @@ ELIMINATION__WRAP__NAME = Name("wrap")
 
 @dataclass(frozen=True)
 class Field:
-    r"""A name/term tuple2."""
+    r"""A name/term pair."""
     
     name: Annotated[Name, "The name of the field"]
     term: Annotated[Term, "The term value of the field"]
@@ -140,7 +140,7 @@ FIELD__TERM__NAME = Name("term")
 
 @dataclass(frozen=True)
 class FieldType:
-    r"""A name/type tuple2."""
+    r"""A name/type pair."""
     
     name: Annotated[Name, "The name of the field"]
     type: Annotated[Type, "The type of the field"]

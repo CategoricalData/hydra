@@ -32,7 +32,6 @@ f <.> g = compose f g
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
-
 -- | Apply a term-encoded function to a term-encoded argument
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm Term -> TTerm Term -> TTerm Term
@@ -215,6 +214,12 @@ match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.elim
   where
     toField = fmap (\(n, t) -> Core.field n t)
 
+--meta :: TTerm a -> TTerm Term
+--meta (TTerm term) = TTerm $ EncodeCore.term term
+
+metaref :: TBinding a -> TTerm Term
+metaref (TBinding name _) = Core.termVariable $ Core.nameLift name
+
 -- | Create a term-encoded 'Nothing' optional value
 nothing :: TTerm (Maybe Term)
 nothing = Phantoms.nothing
@@ -249,6 +254,9 @@ record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
 record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
   where
     toField (n, t) = Core.field n t
+
+recordLift :: Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
+recordLift name pairs = record (TTerm $ EncodeCore.name name) pairs
 
 -- | Create a term-encoded right either value
 -- Example: right (int32 42)
@@ -469,3 +477,14 @@ comparison t = case t of
   ComparisonEqualTo -> Phantoms.injectUnit _Comparison _Comparison_equalTo
   ComparisonLessThan -> Phantoms.injectUnit _Comparison _Comparison_lessThan
   ComparisonGreaterThan -> Phantoms.injectUnit _Comparison _Comparison_greaterThan
+
+-- hydra.compute at the `TTerm Term` level
+
+flowStateTerm :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
+flowStateTerm value state trace = recordLift _FlowState [
+  _FlowState_value >>: value,
+  _FlowState_state >>: state,
+  _FlowState_trace >>: trace]
+
+unFlowTerm :: TTerm Term
+unFlowTerm = unwrap $ Core.nameLift _Flow

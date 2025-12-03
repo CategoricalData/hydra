@@ -98,13 +98,13 @@ chooseUniqueNameDef :: TBinding (S.Set Name -> Name -> Name)
 chooseUniqueNameDef = define "chooseUniqueName" $
   "reserved" ~> "name" ~>
   "tryName" <~ ("index" ~>
-    "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 0))
+    "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
       (var "name")
       (Core.name $ (Core.unName (var "name") ++ Literals.showInt32 (var "index"))) $
     Logic.ifElse (Sets.member (var "candidate") (var "reserved"))
       (var "tryName" @@ (Math.add (var "index") (int32 1)))
       (var "candidate")) $
-  var "tryName" @@ (int32 0)
+  var "tryName" @@ (int32 1)
 
 dereferenceElementDef :: TBinding (Name -> Flow Graph (Maybe Binding))
 dereferenceElementDef = define "dereferenceElement" $

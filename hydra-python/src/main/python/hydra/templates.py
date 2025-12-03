@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.compute
 import hydra.core
 import hydra.decode.core
@@ -15,6 +15,7 @@ import hydra.lib.flows
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.monads
@@ -24,9 +25,9 @@ def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Grap
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
     
     def to_pair[T0](name_and_el: Tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, hydra.core.Type]]:
-        name = name_and_el[0]
-        el = name_and_el[1]
-        return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el.term)), (lambda t: hydra.lib.flows.pure((name, t))))
+        name = hydra.lib.pairs.first(name_and_el)
+        el = hydra.lib.pairs.second(name_and_el)
+        return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el.term)), (lambda t: hydra.lib.flows.pure(cast(Tuple[T0, hydra.core.Type], (name, t)))))
     return hydra.lib.flows.bind(hydra.lib.flows.map_list(cast(Callable[[Tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[hydra.graph.Graph, Tuple[hydra.core.Name, hydra.core.Type]]], to_pair), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
 
 def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:

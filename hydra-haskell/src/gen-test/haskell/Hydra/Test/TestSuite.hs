@@ -23,6 +23,7 @@ import qualified Hydra.Test.Lib.Maybes as Maybes
 import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
+import qualified Hydra.Test.Monads as Monads
 import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
 import qualified Hydra.Test.Serialization as Serialization
@@ -40,17 +41,6 @@ allTests = Testing.TestGroup {
   Testing.testGroupName = "common",
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [
-    All.allTests,
-    EtaExpansion.allTests,
-    Formatting.allTests,
-    All_.allTests,
-    Coder.allTests,
-    Parser.allTests,
-    Writer.allTests,
-    Reduction.allTests,
-    Rewriting.allTests,
-    Serialization.allTests,
-    Sorting.allTests,
     Chars.allTests,
     Eithers.allTests,
     Equality.allTests,
@@ -62,5 +52,17 @@ allTests = Testing.TestGroup {
     Maybes.allTests,
     Pairs.allTests,
     Sets.allTests,
-    Strings.allTests],
+    Strings.allTests,
+    All.allTests,
+    EtaExpansion.allTests,
+    Formatting.allTests,
+    All_.allTests,
+    Coder.allTests,
+    Parser.allTests,
+    Writer.allTests,
+    Monads.allTests,
+    Reduction.allTests,
+    Rewriting.allTests,
+    Serialization.allTests,
+    Sorting.allTests],
   Testing.testGroupCases = []}

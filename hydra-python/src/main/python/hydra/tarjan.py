@@ -5,7 +5,7 @@ r"""This implementation of Tarjan's algorithm was originally based on GraphSCC b
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.compute
 import hydra.constants
 import hydra.core
@@ -16,19 +16,20 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.monads
 import hydra.topology
 
 def adjacency_lists_to_graph[T0](edges0: frozenlist[Tuple[T0, frozenlist[T0]]]) -> Tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
-    sorted_edges = hydra.lib.lists.sort_on((lambda v1: v1[0]), edges0)
+    sorted_edges = hydra.lib.lists.sort_on(cast(Callable[[Tuple[T0, frozenlist[T0]]], T0], hydra.lib.pairs.first), edges0)
     indexed_edges = hydra.lib.lists.zip(hydra.lib.math.range_(0, hydra.lib.lists.length(sorted_edges)), sorted_edges)
-    key_to_vertex = cast(FrozenDict[T0, int], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], k := k_neighbors[0], (k, v))[3]), indexed_edges)))
-    vertex_map = cast(FrozenDict[int, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], k := k_neighbors[0], (v, k))[3]), indexed_edges)))
-    graph = cast(FrozenDict[int, frozenlist[int]], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := vk_neighbors[0], k_neighbors := vk_neighbors[1], neighbors := k_neighbors[1], (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex)), neighbors)))[3]), indexed_edges)))
+    key_to_vertex = cast(FrozenDict[T0, int], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), k := hydra.lib.pairs.first(k_neighbors), cast(Tuple[T0, int], (k, v)))[3]), indexed_edges)))
+    vertex_map = cast(FrozenDict[int, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), k := hydra.lib.pairs.first(k_neighbors), cast(Tuple[int, T0], (v, k)))[3]), indexed_edges)))
+    graph = cast(FrozenDict[int, frozenlist[int]], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), neighbors := hydra.lib.pairs.second(k_neighbors), cast(Tuple[int, frozenlist[int]], (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex)), neighbors))))[3]), indexed_edges)))
     def vertex_to_key(v: int) -> T0:
         return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map))
-    return (graph, vertex_to_key)
+    return cast(Tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]], (graph, vertex_to_key))
 
 # Initial state for Tarjan's algorithm.
 initial_state = hydra.topology.TarjanState(0, cast(FrozenDict[int, int], hydra.lib.maps.empty()), cast(FrozenDict[int, int], hydra.lib.maps.empty()), cast(frozenlist[int], ()), cast(frozenset[int], hydra.lib.sets.empty()), cast(frozenlist[frozenlist[int]], ()))

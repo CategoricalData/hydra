@@ -5,7 +5,7 @@ r"""String representations of hydra.core types."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Just, Maybe, frozenlist
-from typing import Tuple, cast
+from typing import cast
 import hydra.core
 import hydra.lib.eithers
 import hydra.lib.lists
@@ -13,6 +13,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 
@@ -392,14 +393,14 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermMap(value=m):
             def entry(p: Tuple[hydra.core.Term, hydra.core.Term]) -> str:
-                return hydra.lib.strings.cat((term(p[0]), "=", term(p[1])))
+                return hydra.lib.strings.cat((term(hydra.lib.pairs.first(p)), "=", term(hydra.lib.pairs.second(p))))
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(entry, hydra.lib.maps.to_list(m))), "}"))
         
         case hydra.core.TermMaybe(value=mt):
             return hydra.lib.maybes.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
         
         case hydra.core.TermPair(value=p):
-            return hydra.lib.strings.cat(("(", term(p[0]), ", ", term(p[1]), ")"))
+            return hydra.lib.strings.cat(("(", term(hydra.lib.pairs.first(p)), ", ", term(hydra.lib.pairs.second(p)), ")"))
         
         case hydra.core.TermProduct(value=els2):
             term_strs = hydra.lib.lists.map(term, els2)

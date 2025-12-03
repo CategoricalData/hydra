@@ -23,6 +23,9 @@ import qualified Data.Map as M
 import qualified Data.List as L
 import qualified Data.Set as S
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Inference as Inference
+import qualified Hydra.Substitution as Substitution
+import qualified Hydra.Typing as Typing
 import Debug.Trace
 
 
@@ -171,32 +174,55 @@ generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadat
   _ -> return []  -- Skip non-delegated tests (shouldn't happen after transform)
 
 -- | Generate a type annotation for polymorphic output values
--- Only adds annotations when output is trivially polymorphic (empty list, Nothing)
--- where GHC has no concrete values to guide type inference.
+-- Adds annotations when BOTH:
+-- 1. The inferred type has free type variables that GHC cannot resolve
+-- 2. The output has no concrete values to guide type inference (empty list, etc.)
+--
+-- The annotation is derived from the INPUT term's inferred type, since the input
+-- is the expression being evaluated and its result type should match the output type.
+-- Free type variables are replaced with Int32.
 generateTypeAnnotationFor :: InferenceContext -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
 generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
-    (_, ts) <- inferTypeOf infContext inputTerm
-    let vars = S.toList $ freeVariablesInType $ typeSchemeType ts
-    let subst = TypeSubst $ M.fromList $ fmap (\v -> (v, TypeLiteral LiteralTypeString)) vars
---    let vars = typeSchemeVariables ts
-    if L.null vars
-      then return Nothing
-      else do
-        sig <- typeToHaskell $ substInType subst $ typeSchemeType ts
-        return $ Just $ " :: " ++ sig
-  where
-    typeToHaskell typ = do
-       htype <- HaskellCoder.encodeType namespaces typ
-       return $ printExpr $ HaskellSerde.typeToExpr htype
+  -- Only consider annotation if output has no concrete values to guide inference
+  if not (containsTriviallyPolymorphic outputTerm)
+    then return Nothing
+    else do
+      -- Infer the type of the input expression (which gives us the result/output type)
+      result <- Inference.inferTypeOf infContext inputTerm
+      let (_, typeScheme) = result
+          typ = typeSchemeType typeScheme
+          -- Check if there are any free type variables that need grounding
+          freeVars = S.toList $ Rewriting.freeVariablesInType typ
+      if null freeVars
+        then return Nothing  -- No free variables, no annotation needed
+        else do
+          -- Replace free type variables with Int32
+          let int32Type = TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
+              subst = Typing.TypeSubst $ M.fromList [(v, int32Type) | v <- freeVars]
+              groundedType = Substitution.substInType subst typ
+          -- Encode the type as Haskell
+          typeStr <- typeToHaskell namespaces groundedType
+          return $ Just (" :: " ++ typeStr)
 
--- | Check if a term is trivially polymorphic (no concrete values to guide type inference)
-isTriviallyPolymorphic :: Term -> Bool
-isTriviallyPolymorphic term = case term of
+-- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
+-- This recursively searches through the term structure to find any parts that would
+-- cause GHC to need type annotations.
+containsTriviallyPolymorphic :: Term -> Bool
+containsTriviallyPolymorphic term = case term of
   TermList [] -> True  -- Empty list
+  TermList xs -> any containsTriviallyPolymorphic xs  -- Check list elements
+  TermSet s -> S.null s || any containsTriviallyPolymorphic (S.toList s)  -- Empty set or elements
+  TermMap m -> M.null m || any containsTriviallyPolymorphic (M.keys m) || any containsTriviallyPolymorphic (M.elems m)
   TermMaybe Nothing -> True  -- Nothing value
-  TermApplication app ->  -- Check if all parts are polymorphic
-    isTriviallyPolymorphic (applicationFunction app) &&
-    isTriviallyPolymorphic (applicationArgument app)
+  TermMaybe (Just x) -> containsTriviallyPolymorphic x  -- Check content
+  TermEither (Left l) -> containsTriviallyPolymorphic l
+  TermEither (Right r) -> containsTriviallyPolymorphic r
+  TermSum s -> containsTriviallyPolymorphic (sumTerm s)
+  TermUnion inj -> containsTriviallyPolymorphic (fieldTerm $ injectionField inj)
+  TermPair (a, b) -> containsTriviallyPolymorphic a || containsTriviallyPolymorphic b
+  TermRecord fields -> any (containsTriviallyPolymorphic . fieldTerm) (recordFields fields)
+  TermApplication app -> containsTriviallyPolymorphic (applicationFunction app) ||
+                         containsTriviallyPolymorphic (applicationArgument app)
   _ -> False
 
 -- | Build the complete test module using a TestCodec

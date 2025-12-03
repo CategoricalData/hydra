@@ -11,6 +11,7 @@ import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.rewriting
 
@@ -371,9 +372,7 @@ def sum(s: hydra.core.Sum) -> hydra.core.Term:
     
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Sum"), (hydra.core.Field(hydra.core.Name("index"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(s.index))))))), hydra.core.Field(hydra.core.Name("size"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(s.size))))))), hydra.core.Field(hydra.core.Name("term"), term(s.term))))))
 
-def term(v1: hydra.core.Term) -> hydra.core.Term:
-    r"""Encode a term as a term (identity encoding)."""
-    
+def term[T0](v1: hydra.core.Term) -> hydra.core.Term:
     match v1:
         case hydra.core.TermAnnotated(value=v):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("annotated"), annotated_term(v)))))
@@ -403,7 +402,7 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(term, v9)))))))
         
         case hydra.core.TermPair(value=v10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair((term(v10[0]), term(v10[1]))))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair(cast(Tuple[hydra.core.Term, hydra.core.Term], (term(hydra.lib.pairs.first(v10)), term(hydra.lib.pairs.second(v10))))))))))
         
         case hydra.core.TermProduct(value=v11):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("product"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term, v11)))))))

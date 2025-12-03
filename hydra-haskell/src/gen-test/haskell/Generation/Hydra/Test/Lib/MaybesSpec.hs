@@ -72,10 +72,10 @@ spec = H.describe "hydra.lib.maybes primitives" $ do
       (Maybes.cat [
           Nothing,
           Nothing])
-      ([] :: [String])
+      ([] :: [Int])
     H.it "empty list" $ H.shouldBe
       (Maybes.cat [])
-      ([] :: [String])
+      ([] :: [Int])
   H.describe "map" $ do
     H.it "maps just value" $ H.shouldBe
       (Maybes.map (\x -> Math.mul x 2) (Just 5))
