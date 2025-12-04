@@ -32,6 +32,21 @@ f <.> g = compose f g
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
+-- | Attach an annotation to a term-encoded term
+-- Example: annot (Phantoms.map M.empty) (int32 42)
+annot :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
+annot annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
+
+-- | Create a term-encoded annotated term (term with type annotations)
+-- Example: annotated (int32 42) (Phantoms.map M.empty)
+annotated :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm Term
+annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term annMap
+
+annotatedTerm :: TTerm Term -> TTerm Term -> TTerm Term
+annotatedTerm body ann = inject (Core.nameLift _Term) "annotated" $ record (Core.nameLift _AnnotatedTerm) [
+  _AnnotatedTerm_body>>: body,
+  _AnnotatedTerm_annotation>>: ann]
+
 -- | Apply a term-encoded function to a term-encoded argument
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm Term -> TTerm Term -> TTerm Term
@@ -206,6 +221,9 @@ list = Core.termList . Phantoms.list
 map :: TTerm (M.Map Term Term) -> TTerm Term
 map = Core.termMap
 
+mapTerm1 :: TTerm (M.Map Term Term) -> TTerm Term
+mapTerm1 m = inject (Core.nameLift _Term) "map" $ Core.termMap m
+
 -- | Create a term-encoded pattern match on a union
 -- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
 match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
@@ -277,6 +295,40 @@ string = stringLift . TTerm . Terms.string
 -- Example: stringLift $ Phantoms.string "hello world"
 stringLift :: TTerm String -> TTerm Term
 stringLift = Core.termLiteral . Core.literalString
+
+stringTerm :: String -> TTerm Term
+stringTerm s = inject (Core.nameLift _Term) "literal" $ inject (Core.nameLift _Literal) "string" $ string s
+
+-- | Create a meta-level term encoding a 16-bit signed integer literal
+-- Example: int16Term 100 creates a term that *represents* the int16 literal 100
+int16Term :: Int16 -> TTerm Term
+int16Term n = inject (Core.nameLift _Term) "literal" $
+  inject (Core.nameLift _Literal) "integer" $
+  inject (Core.nameLift _IntegerValue) "int16" $ int16 n
+
+-- | Create a meta-level term encoding a 32-bit signed integer literal
+-- Example: int32Term 42 creates a term that *represents* the int32 literal 42
+int32Term :: Int -> TTerm Term
+int32Term n = inject (Core.nameLift _Term) "literal" $
+  inject (Core.nameLift _Literal) "integer" $
+  inject (Core.nameLift _IntegerValue) "int32" $ int32 n
+
+-- | Create a meta-level term encoding a 64-bit signed integer literal
+-- Example: int64Term 137 creates a term that *represents* the int64 literal 137
+int64Term :: Int64 -> TTerm Term
+int64Term n = inject (Core.nameLift _Term) "literal" $
+  inject (Core.nameLift _Literal) "integer" $
+  inject (Core.nameLift _IntegerValue) "int64" $ int64 n
+
+-- | Create a meta-level term encoding a boolean literal
+-- Example: booleanTerm True creates a term that *represents* the boolean True
+booleanTerm :: Bool -> TTerm Term
+booleanTerm b = inject (Core.nameLift _Term) "literal" $ inject (Core.nameLift _Literal) "boolean" $ boolean b
+
+-- | Create a meta-level term encoding a Name
+-- Example: nameTerm "foo" creates a term that *represents* the name "foo"
+nameTerm :: String -> TTerm Term
+nameTerm s = wrap (Core.nameLift _Name) $ string s
 
 -- | Create a term-encoded sum type instance
 -- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
@@ -380,16 +432,6 @@ injectPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift 
 -- Example: wrap (name "Email") (string "user@example.com")
 wrap :: TTerm Name -> TTerm Term -> TTerm Term
 wrap name = Core.termWrap . Core.wrappedTerm name
-
--- | Attach an annotation to a term-encoded term
--- Example: annot (Phantoms.map M.empty) (int32 42)
-annot :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
-annot annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
-
--- | Create a term-encoded annotated term (term with type annotations)
--- Example: annotated (int32 42) (Phantoms.map M.empty)
-annotated :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm Term
-annotated term annMap = Core.termAnnotated $ Core.annotatedTerm term annMap
 
 -- | Create a term-encoded lambda with a type annotation
 -- Example: lambdaTyped "x" T.int32 (var "x")

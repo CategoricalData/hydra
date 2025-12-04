@@ -1,3 +1,5 @@
+-- Legacy JSON serializer/deserializer in Haskell which is used as a sanity check for Hydra's native JSON support
+
 module Hydra.Staging.Json.Serde where
 
 import Hydra.Tools.Monads
