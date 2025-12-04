@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.maps"},ModuleName {unModuleName = "Maps"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.maps"},ModuleName {unModuleName = "Maps"})]
+-- [(Namespace {unNamespace = "hydra.lib.maps"},ModuleName {unModuleName = "Maps"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
 
 module Generation.Hydra.Test.Lib.MapsSpec where
 
@@ -13,6 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Strings as Strings
 
 spec :: H.Spec
 spec = H.describe "hydra.lib.maps primitives" $ do
@@ -166,6 +167,17 @@ spec = H.describe "hydra.lib.maps primitives" $ do
     H.it "empty map" $ H.shouldBe
       (Maps.elems M.empty)
       ([] :: [Int])
+  H.describe "map" $ do
+    H.it "map over values" $ H.shouldBe
+      (Maps.map (\s -> Strings.toUpper s) (M.fromList [
+          (1, "a"),
+          (2, "b")]))
+      (M.fromList [
+          (1, "A"),
+          (2, "B")])
+    H.it "map empty" $ H.shouldBe
+      (Maps.map (\s -> Strings.toUpper s) M.empty)
+      (M.empty :: M.Map Int String)
   H.describe "findWithDefault" $ do
     H.it "find existing" $ H.shouldBe
       (Maps.findWithDefault "default" 2 (M.fromList [

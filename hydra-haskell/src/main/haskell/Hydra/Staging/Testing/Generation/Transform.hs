@@ -26,12 +26,11 @@ transformToCompiledTests (TestGroup name desc subgroups cases) =
      else Just $ TestGroup name desc transformedSubgroups transformedCases
 
 -- | Transform a test case to DelegatedEvaluationTestCase if applicable
--- Returns Nothing if the test case type cannot be translated or if it requires interpretation
+-- Returns Nothing if the test case type cannot be translated or uses kernel references
 transformTestCase :: TestCaseWithMetadata -> Maybe TestCaseWithMetadata
 transformTestCase tcase@(TestCaseWithMetadata name tc desc tags)
-  -- Filter out tests that require the interpreter (e.g., Flow Graph operations)
-  | tag_requiresInterp `L.elem` tags = Nothing
-  -- Filter out tests that use references to kernel definitions
+  -- Filter out tests that use references to kernel definitions (these can't be compiled)
+  -- Note: tag_requiresInterp tests ARE included here; they can be compiled but not interpreted
   | tag_usesKernelRefs `L.elem` tags = Nothing
   | otherwise = case tc of
     -- Case conversion: create delegated evaluation with convertCase call

@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.sets"},ModuleName {unModuleName = "Sets"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.sets"},ModuleName {unModuleName = "Sets"})]
+-- [(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.sets"},ModuleName {unModuleName = "Sets"})]
 
 module Generation.Hydra.Test.Lib.SetsSpec where
 
@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Sets as Sets
 
 spec :: H.Spec
@@ -221,3 +222,16 @@ spec = H.describe "hydra.lib.sets primitives" $ do
       (S.fromList [
           1,
           2])
+  H.describe "map" $ do
+    H.it "map function" $ H.shouldBe
+      (Sets.map (\x -> Math.mul x 2) (S.fromList [
+          1,
+          2,
+          3]))
+      (S.fromList [
+          2,
+          4,
+          6])
+    H.it "map on empty" $ H.shouldBe
+      (Sets.map (\x -> Math.mul x 2) S.empty)
+      (S.empty)
