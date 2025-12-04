@@ -25,6 +25,7 @@ import qualified Hydra.Sources.Test.Lib.Logic as Logic
 import qualified Hydra.Sources.Test.Lib.Maps as Maps
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
+import qualified Hydra.Sources.Test.Annotations as Annotations
 import qualified Hydra.Sources.Test.Monads as Monads
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
@@ -75,6 +76,7 @@ libPairs = [
 
 otherPairs :: [(Module, TTerm TestGroup)]
 otherPairs = [
+  (Annotations.module_, ref Annotations.allTestsDef),
   (CheckingAll.module_, ref CheckingAll.allTestsDef),
   (EtaExpansion.module_, ref EtaExpansion.allTestsDef),
   (Formatting.module_, ref Formatting.allTestsDef),

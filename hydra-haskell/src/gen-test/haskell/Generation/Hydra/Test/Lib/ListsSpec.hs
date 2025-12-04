@@ -289,36 +289,6 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           1,
           2,
           3])
-  H.describe "dropWhile" $ do
-    H.it "drop while less than 3" $ H.shouldBe
-      (Lists.dropWhile (\x -> Equality.lt x 3) [
-          1,
-          2,
-          3,
-          2,
-          1])
-      ([
-          3,
-          2,
-          1])
-    H.it "drop all elements" $ H.shouldBe
-      (Lists.dropWhile (\x -> Equality.lt x 10) [
-          1,
-          2,
-          3])
-      ([])
-    H.it "drop no elements" $ H.shouldBe
-      (Lists.dropWhile (\x -> Equality.lt x 0) [
-          1,
-          2,
-          3])
-      ([
-          1,
-          2,
-          3])
-    H.it "empty list" $ H.shouldBe
-      (Lists.dropWhile (\x -> Equality.lt x 5) [])
-      ([])
   H.describe "elem" $ do
     H.it "element present" $ H.shouldBe
       (Lists.elem 2 [
@@ -361,63 +331,6 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           "world",
           "hello"])
       (False)
-  H.describe "filter" $ do
-    H.it "filter positive numbers" $ H.shouldBe
-      (Lists.filter (\x -> Equality.gt x 0) [
-          (-1),
-          2,
-          (-3),
-          4,
-          5])
-      ([
-          2,
-          4,
-          5])
-    H.it "filter all elements" $ H.shouldBe
-      (Lists.filter (\x -> Equality.lt x 10) [
-          1,
-          2,
-          3])
-      ([
-          1,
-          2,
-          3])
-    H.it "filter no elements" $ H.shouldBe
-      (Lists.filter (\x -> Equality.gt x 10) [
-          1,
-          2,
-          3])
-      ([])
-    H.it "empty list" $ H.shouldBe
-      (Lists.filter (\x -> Equality.gt x 0) [])
-      ([])
-  H.describe "foldl" $ do
-    H.it "sum with addition" $ H.shouldBe
-      (Lists.foldl Math.add 0 [
-          1,
-          2,
-          3,
-          4])
-      (10)
-    H.it "product with multiplication" $ H.shouldBe
-      (Lists.foldl Math.mul 1 [
-          2,
-          3,
-          4])
-      (24)
-    H.it "empty list" $ H.shouldBe
-      (Lists.foldl Math.add 5 [])
-      (5)
-    H.it "single element" $ H.shouldBe
-      (Lists.foldl Math.add 10 [
-          5])
-      (15)
-    H.it "subtraction fold" $ H.shouldBe
-      (Lists.foldl Math.sub 10 [
-          1,
-          2,
-          3])
-      (4)
   H.describe "group" $ do
     H.it "consecutive duplicates" $ H.shouldBe
       (Lists.group [
@@ -975,77 +888,6 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           "apple",
           "banana",
           "zebra"])
-  H.describe "sortOn" $ do
-    H.it "sort by string length" $ H.shouldBe
-      (Lists.sortOn Strings.length [
-          "hello",
-          "hi",
-          "world"])
-      ([
-          "hi",
-          "hello",
-          "world"])
-    H.it "empty string list" $ H.shouldBe
-      (Lists.sortOn Strings.length [])
-      ([])
-    H.it "single string element" $ H.shouldBe
-      (Lists.sortOn Strings.length [
-          "test"])
-      ([
-          "test"])
-    H.it "sort by negation" $ H.shouldBe
-      (Lists.sortOn Math.negate [
-          1,
-          3,
-          2])
-      ([
-          3,
-          2,
-          1])
-    H.it "sort by absolute value" $ H.shouldBe
-      (Lists.sortOn Math.abs [
-          (-1),
-          (-3),
-          2])
-      ([
-          (-1),
-          2,
-          (-3)])
-  H.describe "span" $ do
-    H.it "span less than 3" $ H.shouldBe
-      (Lists.span (\x -> Equality.lt x 3) [
-          1,
-          2,
-          3,
-          1,
-          2])
-      (([
-          1,
-          2], [
-          3,
-          1,
-          2]))
-    H.it "span all elements" $ H.shouldBe
-      (Lists.span (\x -> Equality.lt x 10) [
-          1,
-          2,
-          3])
-      (([
-          1,
-          2,
-          3], []))
-    H.it "span no elements" $ H.shouldBe
-      (Lists.span (\x -> Equality.gt x 10) [
-          1,
-          2,
-          3])
-      (([], [
-          1,
-          2,
-          3]))
-    H.it "empty list" $ H.shouldBe
-      (Lists.span (\x -> Equality.lt x 5) [])
-      (([], []))
   H.describe "tail" $ do
     H.it "multiple elements" $ H.shouldBe
       (Lists.tail [
@@ -1234,57 +1076,3 @@ spec = H.describe "hydra.lib.lists primitives" $ do
     H.it "both empty lists" $ H.shouldBe
       (Lists.zip [] [])
       ([] :: [(Int, Int)])
-  H.describe "zipWith" $ do
-    H.it "addition" $ H.shouldBe
-      (Lists.zipWith Math.add [
-          1,
-          2,
-          3] [
-          4,
-          5,
-          6])
-      ([
-          5,
-          7,
-          9])
-    H.it "first list shorter" $ H.shouldBe
-      (Lists.zipWith Math.add [
-          1,
-          2] [
-          4,
-          5,
-          6])
-      ([
-          5,
-          7])
-    H.it "second list shorter" $ H.shouldBe
-      (Lists.zipWith Math.add [
-          1,
-          2,
-          3] [
-          4,
-          5])
-      ([
-          5,
-          7])
-    H.it "empty first list" $ H.shouldBe
-      (Lists.zipWith Math.add [] [
-          1,
-          2,
-          3])
-      ([])
-    H.it "empty second list" $ H.shouldBe
-      (Lists.zipWith Math.add [
-          1,
-          2,
-          3] [])
-      ([])
-    H.it "string concatenation" $ H.shouldBe
-      (Lists.zipWith Strings.cat2 [
-          "a",
-          "b"] [
-          "1",
-          "2"])
-      ([
-          "a1",
-          "b2"])

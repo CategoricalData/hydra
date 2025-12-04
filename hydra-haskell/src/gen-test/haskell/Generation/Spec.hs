@@ -15,6 +15,7 @@ import qualified Generation.Hydra.Test.Lib.MaybesSpec as Generation_Hydra_Test_L
 import qualified Generation.Hydra.Test.Lib.PairsSpec as Generation_Hydra_Test_Lib_PairsSpec
 import qualified Generation.Hydra.Test.Lib.SetsSpec as Generation_Hydra_Test_Lib_SetsSpec
 import qualified Generation.Hydra.Test.Lib.StringsSpec as Generation_Hydra_Test_Lib_StringsSpec
+import qualified Generation.Hydra.Test.AnnotationsSpec as Generation_Hydra_Test_AnnotationsSpec
 import qualified Generation.Hydra.Test.FormattingSpec as Generation_Hydra_Test_FormattingSpec
 import qualified Generation.Hydra.Test.MonadsSpec as Generation_Hydra_Test_MonadsSpec
 import qualified Generation.Hydra.Test.ReductionSpec as Generation_Hydra_Test_ReductionSpec
@@ -34,6 +35,7 @@ spec = do
     Generation_Hydra_Test_Lib_PairsSpec.spec
     Generation_Hydra_Test_Lib_SetsSpec.spec
     Generation_Hydra_Test_Lib_StringsSpec.spec
+    Generation_Hydra_Test_AnnotationsSpec.spec
     Generation_Hydra_Test_FormattingSpec.spec
     Generation_Hydra_Test_MonadsSpec.spec
     Generation_Hydra_Test_ReductionSpec.spec
