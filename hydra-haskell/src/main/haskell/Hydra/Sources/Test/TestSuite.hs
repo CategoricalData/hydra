@@ -63,7 +63,7 @@ libPairs = [
   (Chars.module_, ref Chars.allTestsDef),
   (Eithers.module_, ref Eithers.allTestsDef),
   (Equality.module_, ref Equality.allTestsDef),
-  -- (Flows.module_, ref Flows.allTestsDef), -- Temporarily disabled: Flow tests cause type unification errors in generation
+  (Flows.module_, ref Flows.allTestsDef),
   (Lists.module_, ref Lists.allTestsDef),
   (Literals.module_, ref Literals.allTestsDef),
   (Logic.module_, ref Logic.allTestsDef),
