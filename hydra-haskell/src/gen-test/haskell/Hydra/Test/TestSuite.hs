@@ -15,6 +15,7 @@ import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Lib.Chars as Chars
 import qualified Hydra.Test.Lib.Eithers as Eithers
 import qualified Hydra.Test.Lib.Equality as Equality
+import qualified Hydra.Test.Lib.Flows as Flows
 import qualified Hydra.Test.Lib.Lists as Lists
 import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
@@ -45,6 +46,7 @@ allTests = Testing.TestGroup {
     Chars.allTests,
     Eithers.allTests,
     Equality.allTests,
+    Flows.allTests,
     Lists.allTests,
     Literals.allTests,
     Logic.allTests,

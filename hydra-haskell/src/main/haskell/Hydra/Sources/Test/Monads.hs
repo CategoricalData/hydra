@@ -53,13 +53,6 @@ bindTests = subgroup "bind" [
       (unFlowTerm @@ (metaref Monads.bindDef @@ (metaref Monads.pureDef @@ x) @@ (lambda "n" (metaref Monads.pureDef @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just result) unit testTrace)
 
--- | Build a trace term at the meta level with custom stack, messages, and other
-traceTerm :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-traceTerm stack messages other = recordLift _Trace [
-  _Trace_stack >>: stack,
-  _Trace_messages >>: messages,
-  _Trace_other >>: other]
-
 -- | Build an empty trace with custom messages
 traceWithMessages :: [String] -> TTerm Term
 traceWithMessages msgs = traceTerm

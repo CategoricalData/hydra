@@ -1,161 +1,84 @@
+-- | Test cases for hydra.lib.flows primitives
 module Hydra.Sources.Test.Lib.Flows where
 
 import Hydra.Kernel
 import Hydra.Testing
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Meta.Compute as Compute
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
-import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Data.Map as M
 
 
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.flows") elements [] [] $
+module_ = Module (Namespace "hydra.test.lib.flows") elements [Monads.module_] [] $
     Just "Test cases for hydra.lib.flows primitives"
   where
     elements = [el allTestsDef]
 
+testTrace :: TTerm Term
+testTrace = metaref Monads.emptyTraceDef
+
 -- Test groups for hydra.lib.flows primitives
 
-flowsApply :: TTerm TestGroup
-flowsApply = subgroup "apply" [
-  test "apply negation function" 5 (-5),
-  test "apply absolute value" (-3) 3]
-  where
-    test name x result = primCaseWithTags name [tag_requiresInterp] _flows_apply [
-        primitive _flows_pure @@ primitive _math_negate,
-        primitive _flows_pure @@ int32 x]
-      (primitive _flows_pure @@ int32 result)
-
+-- | Test cases for flows.bind: chains flow computations together
 flowsBind :: TTerm TestGroup
 flowsBind = subgroup "bind" [
-  test "bind single computation" 5 10,
-  test "bind chained computations" 3 12]
+  test "bind add" (primitive _math_add) (int32 5) (int32 5) (int32 10),
+  test "bind multiply" (primitive _math_mul) (int32 3) (int32 4) (int32 12)]
   where
-    test name x result = primCaseWithTags name [tag_requiresInterp] _flows_bind [
-        primitive _flows_pure @@ int32 x,
-        lambda "n" (primitive _flows_pure @@ (primitive _math_add @@ var "n" @@ int32 x))]
-      (primitive _flows_pure @@ int32 result)
+    test testName op x y result = evalCaseWithTags testName [tag_requiresInterp]
+      (unFlowTerm @@ (metaref Monads.bindDef
+        @@ (metaref Monads.pureDef @@ x)
+        @@ (lambda "n" (metaref Monads.pureDef @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
+      (flowStateTerm (optional $ just result) unit testTrace)
 
+-- | Test cases for flows.fail: creates a failing flow
 flowsFail :: TTerm TestGroup
 flowsFail = subgroup "fail" [
   test "fail with message"]
   where
-    test name = primCase name _flows_fail [
-        MetaTerms.string "test error message"]
-      (primitive _flows_fail @@ MetaTerms.string "test error message")
+    test testName = evalCaseWithTags testName []
+      (unFlowTerm @@ (metaref Monads.failDef @@ MetaTerms.string "test error message") @@ unit @@ testTrace)
+      (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: test error message ()"]))
 
-flowsFoldl :: TTerm TestGroup
-flowsFoldl = subgroup "foldl" [
-  test "fold sum" [1, 2, 3] 0 6,
-  test "fold product" [2, 3, 4] 1 24,
-  test "fold empty list" [] 10 10]
-  where
-    test name xs init result = primCaseWithTags name [tag_requiresInterp] _flows_foldl [
-        lambda "acc" (lambda "x" (primitive _flows_pure @@ (primitive _math_add @@ var "acc" @@ var "x"))),
-        int32 init,
-        list (Prelude.map int32 xs)]
-      (primitive _flows_pure @@ int32 result)
+-- | Build an empty trace with custom messages
+traceWithMessages :: [String] -> TTerm Term
+traceWithMessages msgs = traceTerm
+  (list [])
+  (list $ fmap string msgs)
+  (MetaTerms.map (Phantoms.map M.empty))
 
+-- | Test cases for flows.map: transforms the value inside a flow
 flowsMap :: TTerm TestGroup
 flowsMap = subgroup "map" [
-  test "map negate" 5 (-5),
-  test "map absolute" (-3) 3]
+  test "map negate" (primitive _math_negate) (int32 5) (int32 (-5)),
+  test "map abs" (primitive _math_abs) (int32 (-3)) (int32 3)]
   where
-    test name x result = primCaseWithTags name [tag_requiresInterp] _flows_map [
-        primitive _math_negate,
-        primitive _flows_pure @@ int32 x]
-      (primitive _flows_pure @@ int32 result)
+    test testName fn inVal outVal = evalCaseWithTags testName [tag_requiresInterp]
+      (unFlowTerm @@ (metaref Monads.mapDef @@ fn @@ (metaref Monads.pureDef @@ inVal)) @@ unit @@ testTrace)
+      (flowStateTerm (optional $ just outVal) unit testTrace)
 
-flowsMapElems :: TTerm TestGroup
-flowsMapElems = subgroup "mapElems" [
-  test "map double values" [(1, 2), (3, 4)] [(1, 4), (3, 8)],
-  test "map empty map" [] []]
-  where
-    test name input expected = primCaseWithTags name [tag_requiresInterp] _flows_mapElems [
-        lambda "x" (primitive _flows_pure @@ (primitive _math_mul @@ var "x" @@ int32 2)),
-        Core.termMap (Phantoms.map $ M.fromList $ Prelude.map (\(k, v) -> (int32 k, int32 v)) input)]
-      (primitive _flows_pure @@ (Core.termMap $ Phantoms.map $ M.fromList $ Prelude.map (\(k, v) -> (int32 k, int32 v)) expected))
-
-flowsMapKeys :: TTerm TestGroup
-flowsMapKeys = subgroup "mapKeys" [
-  test "map double keys" [(1, 2), (3, 4)] [(2, 2), (6, 4)],
-  test "map empty map" [] []]
-  where
-    test name input expected = primCaseWithTags name [tag_requiresInterp] _flows_mapKeys [
-        lambda "x" (primitive _flows_pure @@ (primitive _math_mul @@ var "x" @@ int32 2)),
-        Core.termMap (Phantoms.map $ M.fromList $ Prelude.map (\(k, v) -> (int32 k, int32 v)) input)]
-      (primitive _flows_pure @@ (Core.termMap $ Phantoms.map $ M.fromList $ Prelude.map (\(k, v) -> (int32 k, int32 v)) expected))
-
-flowsMapList :: TTerm TestGroup
-flowsMapList = subgroup "mapList" [
-  test "map double list" [1, 2, 3] [2, 4, 6],
-  test "map empty list" [] []]
-  where
-    test name input expected = primCaseWithTags name [tag_requiresInterp] _flows_mapList [
-        lambda "x" (primitive _flows_pure @@ (primitive _math_mul @@ var "x" @@ int32 2)),
-        list (Prelude.map int32 input)]
-      (primitive _flows_pure @@ (list $ Prelude.map int32 expected))
-
-flowsMapMaybe :: TTerm TestGroup
-flowsMapMaybe = subgroup "mapMaybe" [
-  test "map over just" 5 (Just 10),
-  test "map over nothing" 5 Nothing]
-  where
-    test name x result = primCaseWithTags name [tag_requiresInterp] _flows_mapMaybe [
-        lambda "n" (primitive _flows_pure @@ (primitive _math_add @@ var "n" @@ int32 x)),
-        case result of
-          Nothing -> Core.termMaybe nothing
-          Just r -> Core.termMaybe (just (int32 x))]
-      (primitive _flows_pure @@ case result of
-        Nothing -> Core.termMaybe nothing
-        Just r -> Core.termMaybe (just (int32 r)))
-
-flowsMapSet :: TTerm TestGroup
-flowsMapSet = subgroup "mapSet" [
-  test "map double set" [1, 2, 3] [2, 4, 6],
-  test "map empty set" [] []]
-  where
-    test name input expected = primCaseWithTags name [tag_requiresInterp] _flows_mapSet [
-        lambda "x" (primitive _flows_pure @@ (primitive _math_mul @@ var "x" @@ int32 2)),
-        Core.termSet (Phantoms.set $ Prelude.map int32 input)]
-      (primitive _flows_pure @@ (Core.termSet $ Phantoms.set $ Prelude.map int32 expected))
-
+-- | Test cases for flows.pure: lifts a value into a successful flow
 flowsPure :: TTerm TestGroup
 flowsPure = subgroup "pure" [
-  test "pure integer" 42,
-  test "pure zero" 0,
-  test "pure negative" (-5)]
+  test "pure integer" (int32 42),
+  test "pure zero" (int32 0),
+  test "pure negative" (int32 (-5)),
+  test "pure string" (string "hello")]
   where
-    test name x = primCase name _flows_pure [int32 x]
-      (primitive _flows_pure @@ int32 x)
-
-flowsSequence :: TTerm TestGroup
-flowsSequence = subgroup "sequence" [
-  test "sequence list of flows" [1, 2, 3],
-  test "sequence empty list" []]
-  where
-    test name xs = primCase name _flows_sequence [
-        list (Prelude.map (\x -> primitive _flows_pure @@ int32 x) xs)]
-      (primitive _flows_pure @@ (list $ Prelude.map int32 xs))
+    test testName val = evalCaseWithTags testName []
+      (unFlowTerm @@ (metaref Monads.pureDef @@ val) @@ unit @@ testTrace)
+      (flowStateTerm (optional $ just val) unit testTrace)
 
 allTestsDef :: TBinding TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.flows primitives" $
     supergroup "hydra.lib.flows primitives" [
-      -- flowsApply,
-      -- flowsBind,
+      flowsBind,
       flowsFail,
-      -- flowsFoldl,
-      -- flowsMap,
-      -- flowsMapElems,
-      -- flowsMapKeys,
-      -- flowsMapList,
-      -- flowsMapMaybe,
-      -- flowsMapSet,
-      flowsPure,
-      flowsSequence]
+      flowsMap,
+      flowsPure]
