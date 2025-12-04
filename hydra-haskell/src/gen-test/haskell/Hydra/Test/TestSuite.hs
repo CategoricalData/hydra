@@ -4,6 +4,7 @@
 
 module Hydra.Test.TestSuite where
 
+import qualified Hydra.Test.Annotations as Annotations
 import qualified Hydra.Test.Checking.All as All
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
@@ -53,6 +54,7 @@ allTests = Testing.TestGroup {
     Pairs.allTests,
     Sets.allTests,
     Strings.allTests,
+    Annotations.allTests,
     All.allTests,
     EtaExpansion.allTests,
     Formatting.allTests,

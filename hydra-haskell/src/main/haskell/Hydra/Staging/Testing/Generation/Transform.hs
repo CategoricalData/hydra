@@ -5,6 +5,15 @@ import Hydra.Testing
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Data.Maybe as Y
 import qualified Data.Map as M
+import qualified Data.List as L
+
+-- | Tag for tests that require the interpreter and cannot be compiled
+tag_requiresInterp :: Tag
+tag_requiresInterp = Tag "requiresInterp"
+
+-- | Tag for tests that use references to kernel definitions
+tag_usesKernelRefs :: Tag
+tag_usesKernelRefs = Tag "usesKernelRefs"
 
 -- | Transform test group hierarchy to only include delegated evaluation tests
 -- Returns Nothing if the group becomes empty after filtering
@@ -17,10 +26,14 @@ transformToCompiledTests (TestGroup name desc subgroups cases) =
      else Just $ TestGroup name desc transformedSubgroups transformedCases
 
 -- | Transform a test case to DelegatedEvaluationTestCase if applicable
--- Returns Nothing if the test case type cannot be translated
+-- Returns Nothing if the test case type cannot be translated or if it requires interpretation
 transformTestCase :: TestCaseWithMetadata -> Maybe TestCaseWithMetadata
-transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) =
-  case tc of
+transformTestCase tcase@(TestCaseWithMetadata name tc desc tags)
+  -- Filter out tests that require the interpreter (e.g., Flow Graph operations)
+  | tag_requiresInterp `L.elem` tags = Nothing
+  -- Filter out tests that use references to kernel definitions
+  | tag_usesKernelRefs `L.elem` tags = Nothing
+  | otherwise = case tc of
     -- Case conversion: create delegated evaluation with convertCase call
     TestCaseCaseConversion (CaseConversionTestCase fromConv toConv fromStr toStr) ->
       Just $ TestCaseWithMetadata name delegated desc tags
