@@ -53,7 +53,9 @@ haskellLanguage = Coders.Language {
       Core.IntegerTypeInt32,
       Core.IntegerTypeInt64])
     termVariants = (Sets.fromList [
+      Variants.TermVariantAnnotated,
       Variants.TermVariantApplication,
+      Variants.TermVariantEither,
       Variants.TermVariantFunction,
       Variants.TermVariantLet,
       Variants.TermVariantList,
