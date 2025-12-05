@@ -32,25 +32,25 @@ import qualified System.FilePath as FP
 
 
 writeCpp :: FP.FilePath -> [Module] -> IO ()
-writeCpp = generateSourcesSimple moduleToCpp cppLanguage False
+writeCpp = generateSources moduleToCpp cppLanguage False
 
 writeGraphql :: FP.FilePath -> [Module] -> IO ()
-writeGraphql = generateSourcesSimple moduleToGraphql graphqlLanguage False
+writeGraphql = generateSources moduleToGraphql graphqlLanguage False
 
 writeJava :: FP.FilePath -> [Module] -> IO ()
-writeJava = generateSourcesSimple moduleToJava javaLanguage True
+writeJava = generateSources moduleToJava javaLanguage True
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
-writeJsonSchema = generateSourcesSimple (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False
+writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False
 
 writePdl :: FP.FilePath -> [Module] -> IO ()
-writePdl = generateSourcesSimple moduleToPdl pdlLanguage False
+writePdl = generateSources moduleToPdl pdlLanguage False
 
 writeProtobuf :: FP.FilePath -> [Module] -> IO ()
-writeProtobuf = generateSourcesSimple moduleToProtobuf protobufLanguage False
+writeProtobuf = generateSources moduleToProtobuf protobufLanguage False
 
 writePython :: FP.FilePath -> [Module] -> IO ()
-writePython = generateSourcesSimple moduleToPython pythonLanguage True
+writePython = generateSources moduleToPython pythonLanguage True
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
-writeScala = generateSourcesSimple moduleToScala scalaLanguage True
+writeScala = generateSources moduleToScala scalaLanguage True
