@@ -661,37 +661,33 @@ inferTypeOfOptional cx m =
   in (inferTypeOfCollection cx (\x -> Core.TypeMaybe x) trmCons "optional element" (Maybes.maybe [] Lists.singleton m))
 
 inferTypeOfPair :: (Typing_.InferenceContext -> (Core.Term, Core.Term) -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfPair cx p =  
-  let pairFst = (Pairs.first p)
+inferTypeOfPair cx p = (Flows.map (\results ->  
+  let iterms = (Pairs.first results)
   in  
-    let pairSnd = (Pairs.second p)
-    in (Flows.bind (inferTypeOfTerm cx pairFst "pair first element") (\r1 ->  
-      let ifst = (Typing_.inferenceResultTerm r1)
+    let itypes = (Pairs.first (Pairs.second results))
+    in  
+      let isubst = (Pairs.second (Pairs.second results))
       in  
-        let firstType = (Typing_.inferenceResultType r1)
+        let ifst = (Lists.head iterms)
         in  
-          let subst1 = (Typing_.inferenceResultSubst r1)
-          in (Flows.bind (inferTypeOfTerm cx pairSnd "pair second element") (\r2 ->  
-            let isnd = (Typing_.inferenceResultTerm r2)
+          let isnd = (Lists.head (Lists.tail iterms))
+          in  
+            let tyFst = (Lists.head itypes)
             in  
-              let secondType = (Typing_.inferenceResultType r2)
+              let tySnd = (Lists.head (Lists.tail itypes))
               in  
-                let subst2 = (Typing_.inferenceResultSubst r2)
+                let pairTerm = (Core.TermPair (ifst, isnd))
                 in  
-                  let pairTerm = (Core.TermPair (ifst, isnd))
-                  in  
-                    let termWithFirstType = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  let termWithTypes = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                             Core.typeApplicationTermBody = pairTerm,
-                            Core.typeApplicationTermType = firstType}))
-                    in  
-                      let termWithBothTypes = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                              Core.typeApplicationTermBody = termWithFirstType,
-                              Core.typeApplicationTermType = secondType}))
-                      in  
-                        let pairType = (Core.TypePair (Core.PairType {
-                                Core.pairTypeFirst = firstType,
-                                Core.pairTypeSecond = secondType}))
-                        in (yieldChecked termWithBothTypes pairType subst2)))))
+                            Core.typeApplicationTermType = tyFst})),
+                          Core.typeApplicationTermType = tySnd}))
+                  in (yield termWithTypes (Core.TypePair (Core.PairType {
+                    Core.pairTypeFirst = tyFst,
+                    Core.pairTypeSecond = tySnd})) isubst)) (inferMany cx [
+  (Pairs.first p, "pair first element"),
+  (Pairs.second p, "pair second element")]))
 
 inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfPrimitive cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))

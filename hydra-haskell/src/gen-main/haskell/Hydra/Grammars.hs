@@ -92,6 +92,7 @@ isNontrivial isRecord pats =
             _ -> False) p)
     in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) (isLabeled (Lists.head minPats)) True)
 
+-- | Create elements from pattern
 makeElements :: (Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)])
 makeElements omitTrivial ns lname pat =  
   let trivial = (Logic.ifElse omitTrivial [] [
