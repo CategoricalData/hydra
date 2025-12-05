@@ -528,7 +528,6 @@ encodeUntypedAssignment (Py.UntypedAssignment targets rhs _) = spaceSep $ lefts 
 encodeValuePattern :: Py.ValuePattern -> A.Expr
 encodeValuePattern (Py.ValuePattern attr) = encodeAttribute attr
 
--- TODO: this is a partially ChatGPT-generated function which has not been thoroughly tested.
 escapePythonString :: Bool -> String -> String
 escapePythonString doubleQuoted str = encChar : L.concatMap escapeChar str ++ [encChar]
   where

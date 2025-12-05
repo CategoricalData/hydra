@@ -26,7 +26,7 @@ module Hydra.Ext.Staging.CoderUtils (
   withTypeLambdaContext,
 
   -- * Definitions
-  partititonDefinitions,
+  partitionDefinitions,
 ) where
 
 import Hydra.Kernel
@@ -34,7 +34,6 @@ import Hydra.Typing
 import qualified Hydra.Show.Core as ShowCore
 
 import qualified Data.List as L
-import Debug.Trace
 
 
 -- | A structured representation of a function term's components, replacing ad-hoc tuples.
@@ -167,36 +166,6 @@ isFunctionCall (Binding name term (Just ts)) =
         TermWrap _ -> True
         _ -> False
       result = isArityZero && isWrapped
-      termConstructor = case term1 of
-        TermAnnotated _ -> "TermAnnotated"
-        TermApplication _ -> "TermApplication"
-        TermFunction _ -> "TermFunction"
-        TermLet _ -> "TermLet"
-        TermList _ -> "TermList"
-        TermLiteral _ -> "TermLiteral"
-        TermMap _ -> "TermMap"
-        TermMaybe _ -> "TermMaybe"
-        TermPair _ -> "TermPair"
-        TermProduct _ -> "TermProduct"
-        TermRecord _ -> "TermRecord"
-        TermSet _ -> "TermSet"
-        TermSum _ -> "TermSum"
-        TermTypeApplication _ -> "TermTypeApplication"
-        TermTypeLambda _ -> "TermTypeLambda"
-        TermUnion _ -> "TermUnion"
-        TermUnit -> "TermUnit"
-        TermVariable _ -> "TermVariable"
-        TermWrap _ -> "TermWrap"
-        TermEither _ -> "TermEither"
-      -- Debug output for arity-0 bindings with "subst" in the name
-      nameStr = case name of Name n -> n
-      _ = if isArityZero && ("subst" `L.isInfixOf` nameStr || "Subst" `L.isInfixOf` nameStr)
-          then trace ("DEBUG isFunctionCall: name=" ++ show name ++
-                      ", arity=" ++ show (typeSchemeArity ts) ++
-                      ", isWrapped=" ++ show isWrapped ++
-                      ", termConstructor=" ++ termConstructor ++
-                      ", result=" ++ show result) ()
-          else ()
   in result
 isFunctionCall _ = False
 
@@ -223,8 +192,8 @@ isSimpleAssignment term = case term of
     TermFunction (FunctionElimination (EliminationUnion _)) -> False
     _ -> True
 
-partititonDefinitions :: [Definition] -> ([TypeDefinition], [TermDefinition])
-partititonDefinitions defs = (L.reverse typeDefsRev, L.reverse termDefsRev)
+partitionDefinitions :: [Definition] -> ([TypeDefinition], [TermDefinition])
+partitionDefinitions defs = (L.reverse typeDefsRev, L.reverse termDefsRev)
   where
     (typeDefsRev, termDefsRev) = L.foldl part ([], []) defs
     part (types, terms) def = case def of
