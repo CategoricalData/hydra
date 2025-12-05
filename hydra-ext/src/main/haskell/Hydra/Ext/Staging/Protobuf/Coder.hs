@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Ext.Staging.Protobuf.Serde
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import qualified Hydra.Extract.Core as ExtractCore
@@ -114,7 +114,7 @@ collectStructuralTypes types = L.foldl S.union S.empty (collectFromType <$> type
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
 moduleToProtobuf :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToProtobuf mod defs = withTrace ("encode module to Protobuf: " ++ unNamespace ns) $ do
-    let (typeDefs, _termDefs) = partititonDefinitions defs
+    let (typeDefs, _termDefs) = partitionDefinitions defs
     pfile <- constructModule mod typeDefs
     let content = printExpr $ parenthesize $ writeProtoFile pfile
     return $ M.fromList [(path, content)]

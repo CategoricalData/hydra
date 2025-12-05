@@ -10,7 +10,7 @@ a few artifacts in Java and Python.
 JavaDocs for Hydra-Ext can be found [here](https://categoricaldata.github.io/hydra/hydra-ext/javadoc),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext).
 
-## Code Organization
+## Code organization
 
 Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
@@ -31,26 +31,52 @@ Note: Only generated Haskell is checked into version control for space reasons. 
 
 ## Coders
 
-Hydra-Ext contains the following two-level coders (schema + data):
-* Avro
-* Java
-* Property graphs ("PG")
-* Python
-* Scala (has known bugs)
+Hydra-Ext provides coders for generating code in various target languages and formats. These coders vary in their capabilities and maturity levels.
 
-The following are schema-only coders:
-* C++
-* C-sharp
-* GraphQL
-* JSON Schema
-* Pegasus (PDL) - does not support polymorphic models
-* Protobuf - does not support polymorphic models
-* SHACL
+### Coder maturity tiers
 
-And the following are data-only coders:
-* GraphSON
-* GraphViz
-* RDF
+#### Full implementation (types + terms)
+
+These coders generate complete, runnable code including type definitions and term-level implementations (functions, values, pattern matching):
+
+| Coder | Status | Notes |
+|-------|--------|-------|
+| **Python** | Production-ready | Most complete implementation; generates full Python modules |
+| **Java** | Production-ready | Types complete; term generation functional but Serde incomplete |
+
+#### Type generation only
+
+These coders generate type/schema definitions but not term-level code. They are suitable for defining data structures that will be populated by other means:
+
+| Coder | Status | Notes |
+|-------|--------|-------|
+| **C++** | Stable | Generates header files with classes and enums |
+| **GraphQL** | Stable | Generates GraphQL schema definitions |
+| **JSON Schema** | Stable | Generates JSON Schema (2020-12 spec) |
+| **Protobuf** | Stable | Proto3 format; no polymorphism support |
+| **PDL (Pegasus)** | Stable | No polymorphism or cyclic types |
+| **Scala** | Beta | Has known bugs; generates type aliases |
+
+#### Specialized/data-oriented
+
+These coders serve specific purposes beyond general-purpose code generation:
+
+| Coder | Purpose | Notes |
+|-------|---------|-------|
+| **Avro** | Schema + data adapter | Bidirectional Avro ↔ Hydra conversion |
+| **Property Graph** | Graph data mapping | Maps Hydra terms to PG vertices/edges |
+| **SHACL** | RDF shape generation | Generates SHACL constraints from types |
+| **GraphSON** | Graph serialization | TinkerPop graph format |
+| **Graphviz** | Visualization | DOT format for graph visualization |
+| **RDF** | Linked data | RDF triple serialization |
+
+### Choosing a coder
+
+- **For complete code generation**: Use Python or Java coders
+- **For API definitions/schemas**: Use GraphQL, Protobuf, or JSON Schema
+- **For data interchange**: Use Avro or JSON (via hydra-haskell)
+- **For graph databases**: Use Property Graph or GraphSON
+- **For semantic web**: Use RDF or SHACL
 
 Code generation is similar to Haskell generation (see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)).
 
@@ -280,17 +306,43 @@ Note: The Scala coder currently generates type aliases rather than full case cla
 
 ## Models
 
-The following models are included:
-* [Apache Atlas](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/Atlas.hs)
-* [Azure DTLD](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/AzureDtld.hs)
-* [Coq](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/Coq.hs)
-* [Datalog](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/Datalog.hs)
-* [GeoJSON](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/GeoJson.hs)
-* [IANA Relations](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/IanaRelations.hs)
-* [OSV](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/Osv.hs)
-* [STAC Items](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Models/StacItems.hs)
+### Language syntax models
 
-These extensions are listed [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
+Hydra-Ext includes syntax models for various programming languages and data formats. These can be used to generate or parse code in the target language:
+
+* [Avro Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Avro/Schema.hs)
+* [C++](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cpp/Syntax.hs)
+* [C#](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Csharp/Syntax.hs)
+* [Cypher (OpenCypher)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cypher/OpenCypher.hs)
+* [GraphQL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Graphql/Syntax.hs)
+* [Java](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Syntax.hs)
+* [JSON Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Json/Schema.hs)
+* [OWL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Owl/Syntax.hs)
+* [Parquet](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Parquet/Format.hs)
+* [Pegasus (PDL)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pegasus/Pdl.hs)
+* [Protobuf (Proto3)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Protobuf/Proto3.hs)
+* [Python](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Syntax.hs)
+* [RDF](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Rdf/Syntax.hs)
+* [Scala](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Scala/Meta.hs)
+* [SHACL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Shacl/Model.hs)
+* [SQL (ANSI)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Sql/Ansi.hs)
+* [TypeScript](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/TypeScript/Model.hs)
+* [XML Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Xml/Schema.hs)
+
+### Domain models
+
+The following domain-specific models are also included:
+
+* [Apache Atlas](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Atlas.hs)
+* [Azure DTLD](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/AzureDtld.hs)
+* [Coq](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Coq.hs)
+* [Datalog](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Datalog.hs)
+* [GeoJSON](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/GeoJson.hs)
+* [IANA Relations](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/IanaRelations.hs)
+* [OSV](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Osv.hs)
+* [STAC Items](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/StacItems.hs)
+
+All extensions are listed [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
 and the generated Haskell APIs for all of these models can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/gen-main/haskell).
 For the sake of space, only generated Haskell is checked in to the repository, but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 

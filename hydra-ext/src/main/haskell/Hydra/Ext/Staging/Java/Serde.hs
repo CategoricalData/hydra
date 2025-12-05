@@ -108,7 +108,9 @@ writeBlockStatement s = case s of
   Java.BlockStatementStatement s -> writeStatement s
 
 writeBreakStatement :: Java.BreakStatement -> Ast.Expr
-writeBreakStatement _ = cst "TODO:BreakStatement"
+writeBreakStatement (Java.BreakStatement mlabel) = suffixSemi $ spaceSep $ Y.catMaybes [
+  Just $ cst "break",
+  writeIdentifier <$> mlabel]
 
 writeCastExpression :: Java.CastExpression -> Ast.Expr
 writeCastExpression e = case e of
@@ -292,7 +294,9 @@ writeConstructorModifier m = case m of
   Java.ConstructorModifierPrivate -> cst "private"
 
 writeContinueStatement :: Java.ContinueStatement -> Ast.Expr
-writeContinueStatement _ = cst "TODO:ContinueStatement"
+writeContinueStatement (Java.ContinueStatement mlabel) = suffixSemi $ spaceSep $ Y.catMaybes [
+  Just $ cst "continue",
+  writeIdentifier <$> mlabel]
 
 writeDims :: Java.Dims -> Ast.Expr
 writeDims (Java.Dims anns) = noSep (write <$> anns)
@@ -369,7 +373,9 @@ writeFloatingPointLiteral :: Java.FloatingPointLiteral -> Ast.Expr
 writeFloatingPointLiteral (Java.FloatingPointLiteral d) = cst $ show d
 
 writeFloatingPointType :: Java.FloatingPointType -> Ast.Expr
-writeFloatingPointType _ = cst "TODO:FloatingPointType"
+writeFloatingPointType ft = cst $ case ft of
+  Java.FloatingPointTypeFloat -> "float"
+  Java.FloatingPointTypeDouble -> "double"
 
 writeForStatement :: Java.ForStatement -> Ast.Expr
 writeForStatement _ = cst "TODO:ForStatement"
@@ -717,20 +723,24 @@ writeRelationalExpression e = case e of
   Java.RelationalExpressionInstanceof i -> writeRelationalExpression_InstanceOf i
 
 writeRelationalExpression_GreaterThan :: Java.RelationalExpression_GreaterThan -> Ast.Expr
-writeRelationalExpression_GreaterThan _ = cst "TODO:RelationalExpression_GreaterThan"
+writeRelationalExpression_GreaterThan (Java.RelationalExpression_GreaterThan lhs rhs) =
+  infixWs ">" (writeRelationalExpression lhs) (writeShiftExpression rhs)
 
 writeRelationalExpression_GreaterThanEqual :: Java.RelationalExpression_GreaterThanEqual -> Ast.Expr
-writeRelationalExpression_GreaterThanEqual _ = cst "TODO:RelationalExpression_GreaterThanEqual"
+writeRelationalExpression_GreaterThanEqual (Java.RelationalExpression_GreaterThanEqual lhs rhs) =
+  infixWs ">=" (writeRelationalExpression lhs) (writeShiftExpression rhs)
 
 writeRelationalExpression_InstanceOf :: Java.RelationalExpression_InstanceOf -> Ast.Expr
 writeRelationalExpression_InstanceOf (Java.RelationalExpression_InstanceOf lhs rhs) =
   infixWs "instanceof" (writeRelationalExpression lhs) (writeReferenceType rhs)
 
 writeRelationalExpression_LessThan :: Java.RelationalExpression_LessThan -> Ast.Expr
-writeRelationalExpression_LessThan _ = cst "TODO:RelationalExpression_LessThan"
+writeRelationalExpression_LessThan (Java.RelationalExpression_LessThan lhs rhs) =
+  infixWs "<" (writeRelationalExpression lhs) (writeShiftExpression rhs)
 
 writeRelationalExpression_LessThanEqual :: Java.RelationalExpression_LessThanEqual -> Ast.Expr
-writeRelationalExpression_LessThanEqual _ = cst "TODO:RelationalExpression_LessThanEqual"
+writeRelationalExpression_LessThanEqual (Java.RelationalExpression_LessThanEqual lhs rhs) =
+  infixWs "<=" (writeRelationalExpression lhs) (writeShiftExpression rhs)
 
 writeResult :: Java.Result -> Ast.Expr
 writeResult r = case r of

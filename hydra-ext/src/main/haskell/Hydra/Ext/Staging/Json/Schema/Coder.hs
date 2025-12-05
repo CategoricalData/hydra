@@ -20,7 +20,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Reflect as Reflect
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -35,7 +35,7 @@ data JsonSchemaOptions = JsonSchemaOptions {
 
 moduleToJsonSchema :: JsonSchemaOptions -> Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map FilePath String)
 moduleToJsonSchema opts mod defs = do
-  let (typeDefs, _termDefs) = partititonDefinitions defs
+  let (typeDefs, _termDefs) = partitionDefinitions defs
   docs <- constructModule opts mod typeDefs
   return $ fmap JsonSchemaSerde.jsonSchemaDocumentToString docs
 
