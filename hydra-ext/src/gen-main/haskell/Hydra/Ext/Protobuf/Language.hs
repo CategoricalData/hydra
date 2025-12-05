@@ -47,23 +47,31 @@ protobufLanguage = Coders.Language {
       Core.IntegerTypeUint32,
       Core.IntegerTypeUint64])
     termVariants = (Sets.fromList [
+      Variants.TermVariantEither,
       Variants.TermVariantList,
       Variants.TermVariantLiteral,
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
+      Variants.TermVariantPair,
       Variants.TermVariantRecord,
+      Variants.TermVariantSet,
       Variants.TermVariantUnion,
-      Variants.TermVariantUnit])
+      Variants.TermVariantUnit,
+      Variants.TermVariantWrap])
     typeVariants = (Sets.fromList [
       Variants.TypeVariantAnnotated,
+      Variants.TypeVariantEither,
       Variants.TypeVariantList,
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
+      Variants.TypeVariantPair,
       Variants.TypeVariantRecord,
+      Variants.TypeVariantSet,
       Variants.TypeVariantUnion,
       Variants.TypeVariantUnit,
-      Variants.TypeVariantVariable])
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantWrap])
     typePredicate = (\typ -> (\x -> case x of
       Core.TypeMap v1 ->  
         let valuesType = (Core.mapTypeValues v1) 

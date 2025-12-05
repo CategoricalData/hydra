@@ -123,23 +123,31 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
     Core.integerTypeUint32,
     Core.integerTypeUint64],
   "termVariants">: Sets.fromList $ list [
+    Variants.termVariantEither,
     Variants.termVariantList,
     Variants.termVariantLiteral,
     Variants.termVariantMap,
     Variants.termVariantMaybe,
+    Variants.termVariantPair,
     Variants.termVariantRecord,
+    Variants.termVariantSet,
     Variants.termVariantUnion,
-    Variants.termVariantUnit],
+    Variants.termVariantUnit,
+    Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
+    Variants.typeVariantEither,
     Variants.typeVariantList,
     Variants.typeVariantLiteral,
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
+    Variants.typeVariantPair,
     Variants.typeVariantRecord,
+    Variants.typeVariantSet,
     Variants.typeVariantUnion,
     Variants.typeVariantUnit,
-    Variants.typeVariantVariable],
+    Variants.typeVariantVariable,
+    Variants.typeVariantWrap],
   "typePredicate">: lambda "typ" $ cases _Type (var "typ")
     (Just true) [
     _Type_map>>: lambda "mt" $ lets [
