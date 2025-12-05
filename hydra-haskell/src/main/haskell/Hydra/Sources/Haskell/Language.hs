@@ -115,7 +115,6 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     Variants.literalVariantInteger,
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [
-    -- Bigfloat is excluded for now
     Core.floatTypeFloat32, -- Float
     Core.floatTypeFloat64], -- Double
   "functionVariants">: Sets.fromList $ list [
@@ -129,7 +128,9 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     Core.integerTypeInt32, -- Int
     Core.integerTypeInt64], -- Int64
   "termVariants">: Sets.fromList $ list [
+    Variants.termVariantAnnotated,
     Variants.termVariantApplication,
+    Variants.termVariantEither,
     Variants.termVariantFunction,
     Variants.termVariantLet,
     Variants.termVariantList,
