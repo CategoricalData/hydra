@@ -1,7 +1,6 @@
 module Hydra.Ext.Staging.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import Hydra.Ext.Staging.Pegasus.Language
 import Hydra.Ext.Staging.Pegasus.Serde
 import qualified Hydra.Ext.Pegasus.Pdl as PDL

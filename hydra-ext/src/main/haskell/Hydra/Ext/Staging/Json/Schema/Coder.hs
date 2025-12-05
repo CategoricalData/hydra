@@ -3,6 +3,7 @@ module Hydra.Ext.Staging.Json.Schema.Coder (
   moduleToJsonSchema,
 ) where
 
+import Hydra.Kernel
 import qualified Hydra.Adapt.Terms as AdaptTerms
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Compute as Compute
@@ -20,7 +21,6 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Reflect as Reflect
-import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
