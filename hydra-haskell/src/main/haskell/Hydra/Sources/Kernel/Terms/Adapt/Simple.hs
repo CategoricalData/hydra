@@ -102,7 +102,8 @@ adaptFloatTypeDef = define "adaptFloatType" $
   "alt" <~ (ref adaptFloatTypeDef @@ var "constraints") $
   "forUnsupported" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
-    _FloatType_bigfloat>>: constant nothing,
+--    _FloatType_bigfloat>>: constant nothing,
+    _FloatType_bigfloat>>: constant $ var "alt" @@ Core.floatTypeFloat64, -- TODO: temporary; the only non-lossy alternative for bigfloat is string, but some migration is needed
     _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
     _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeBigfloat]) $
   Logic.ifElse (var "supported")
