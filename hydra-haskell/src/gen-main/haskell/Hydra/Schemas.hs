@@ -131,11 +131,6 @@ fieldTypeMap fields =
   let toPair = (\f -> (Core.fieldTypeName f, (Core.fieldTypeType f)))
   in (Maps.fromList (Lists.map toPair fields))
 
-findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
-findFieldType fname fields =  
-  let matchingFields = (Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields)
-  in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 "No such field: " (Core.unName fname))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.pure (Core.fieldTypeType (Lists.head matchingFields))) (Flows.fail (Strings.cat2 "Multiple fields named " (Core.unName fname)))))
-
 -- | Get field types from a record or union type
 fieldTypes :: (Core.Type -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 fieldTypes t =  
@@ -147,6 +142,17 @@ fieldTypes t =
     Core.TypeVariable v1 -> (Monads.withTrace (Strings.cat2 "field types of " (Core.unName v1)) (Flows.bind (Lexical.requireElement v1) (\el -> Flows.bind (Monads.withTrace "field types" (Core_.type_ (Core.bindingTerm el))) fieldTypes)))
     _ -> (Monads.unexpected "record or union type" (Core___.type_ t))) (Rewriting.deannotateType t))
 
+findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
+findFieldType fname fields =  
+  let matchingFields = (Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields)
+  in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 "No such field: " (Core.unName fname))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.pure (Core.fieldTypeType (Lists.head matchingFields))) (Flows.fail (Strings.cat2 "Multiple fields named " (Core.unName fname)))))
+
+freshName :: (Compute.Flow t0 Core.Name)
+freshName = (Flows.map normalTypeVariable (Annotations.nextCount Constants.key_freshTypeVariableCount))
+
+freshNames :: (Int -> Compute.Flow t0 [Core.Name])
+freshNames n = (Flows.sequence (Lists.replicate n freshName))
+
 -- | Convert a forall type to a type scheme
 fTypeToTypeScheme :: (Core.Type -> Core.TypeScheme)
 fTypeToTypeScheme typ =  
@@ -156,12 +162,6 @@ fTypeToTypeScheme typ =
             Core.typeSchemeVariables = (Lists.reverse vars),
             Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
   in (gatherForall [] typ)
-
-freshName :: (Compute.Flow t0 Core.Name)
-freshName = (Flows.map normalTypeVariable (Annotations.nextCount Constants.key_freshTypeVariableCount))
-
-freshNames :: (Int -> Compute.Flow t0 [Core.Name])
-freshNames n = (Flows.sequence (Lists.replicate n freshName))
 
 -- | Fully strip a type of forall quantifiers
 fullyStripType :: (Core.Type -> Core.Type)
@@ -245,6 +245,20 @@ isSerializable el =
     let allVariants = (Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps))))
     in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity (Core.bindingName el)))
 
+-- | Check if a type is serializable (no function types in the type itself)
+isSerializableType :: (Core.Type -> Bool)
+isSerializableType typ =  
+  let allVariants = (Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)))
+  in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
+
+-- | Check if a type (by name) is serializable, resolving all type dependencies
+isSerializableByName :: (Core.Name -> Compute.Flow Graph.Graph Bool)
+isSerializableByName name =  
+  let variants = (\typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
+  in (Flows.map (\deps ->  
+    let allVariants = (Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps))))
+    in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity name))
+
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
 moduleDependencyNamespaces binds withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces binds withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))
@@ -267,6 +281,18 @@ nominalApplication tname args = (Lists.foldl (\t -> \a -> Core.TypeApplication (
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: (Int -> Core.Name)
 normalTypeVariable i = (Core.Name (Strings.cat2 "t" (Literals.showInt32 i)))
+
+-- | Partition a list of definitions into type definitions and term definitions
+partitionDefinitions :: ([Module.Definition] -> ([Module.TypeDefinition], [Module.TermDefinition]))
+partitionDefinitions defs =  
+  let getType = (\def -> (\x -> case x of
+          Module.DefinitionType v1 -> (Just v1)
+          Module.DefinitionTerm _ -> Nothing) def)
+  in  
+    let getTerm = (\def -> (\x -> case x of
+            Module.DefinitionType _ -> Nothing
+            Module.DefinitionTerm v1 -> (Just v1)) def)
+    in (Maybes.cat (Lists.map getType defs), (Maybes.cat (Lists.map getTerm defs)))
 
 -- | Require a name to resolve to a record type
 requireRecordType :: (Core.Name -> Compute.Flow Graph.Graph Core.RowType)
@@ -413,3 +439,18 @@ typesToElements typeMap =
             Core.bindingTerm = (Core__.type_ (Pairs.second pair)),
             Core.bindingType = Nothing}))
   in (Maps.fromList (Lists.map toElement (Maps.toList typeMap)))
+
+withLambdaContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.Lambda -> (t1 -> t2) -> t2)
+withLambdaContext getContext setContext env lam body =  
+  let newContext = (extendTypeContextForLambda (getContext env) lam)
+  in (body (setContext newContext env))
+
+withLetContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.Let -> (t1 -> t2) -> t2)
+withLetContext getContext setContext env letrec body =  
+  let newContext = (extendTypeContextForLet (getContext env) letrec)
+  in (body (setContext newContext env))
+
+withTypeLambdaContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.TypeLambda -> (t1 -> t2) -> t2)
+withTypeLambdaContext getContext setContext env tlam body =  
+  let newContext = (extendTypeContextForTypeLambda (getContext env) tlam)
+  in (body (setContext newContext env))
