@@ -48,7 +48,18 @@ allTests = Testing.TestGroup {
                             Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -60,7 +71,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]},
@@ -89,7 +111,18 @@ allTests = Testing.TestGroup {
                             Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))}))}))})))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -101,7 +134,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]}]},
@@ -122,7 +166,18 @@ allTests = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.fail")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test error message"))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -170,7 +225,18 @@ allTests = Testing.TestGroup {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -182,7 +248,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]},
@@ -202,7 +279,18 @@ allTests = Testing.TestGroup {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3))))}))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -214,7 +302,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "requiresInterp"]}]},
@@ -235,7 +334,18 @@ allTests = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -247,7 +357,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -262,7 +383,18 @@ allTests = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -274,7 +406,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -289,7 +432,18 @@ allTests = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-5))))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -301,7 +455,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -316,7 +481,18 @@ allTests = Testing.TestGroup {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))})),
                 Core.applicationArgument = Core.TermUnit})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
+              Core.applicationArgument = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "stack"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "messages"),
+                    Core.fieldTerm = (Core.TermList [])},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "other"),
+                    Core.fieldTerm = (Core.TermMap M.empty)}]}))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
               Core.recordFields = [
@@ -328,7 +504,18 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = Core.TermUnit},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
-                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.compute.Trace"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "stack"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "messages"),
+                        Core.fieldTerm = (Core.TermList [])},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "other"),
+                        Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

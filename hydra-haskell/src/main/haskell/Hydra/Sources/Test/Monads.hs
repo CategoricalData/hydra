@@ -21,7 +21,7 @@ module_ = Module (Namespace "hydra.test.monads") elements [Monads.module_] [] $
     elements = [el allTestsDef]
 
 testTrace :: TTerm Term
-testTrace = metaref Monads.emptyTraceDef
+testTrace = traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
 
 -- | Test cases for pure: lifts a value into a successful flow
 pureTests :: TTerm TestGroup
