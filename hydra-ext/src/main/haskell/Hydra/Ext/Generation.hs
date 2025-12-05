@@ -13,9 +13,11 @@ import Hydra.Sources.All
 
 import Hydra.Ext.Cpp.Language (cppLanguage)
 import Hydra.Ext.Java.Language
+import Hydra.Ext.Org.Json.Schema.Language (jsonSchemaLanguage)
 import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Ext.Python.Language
 import Hydra.Ext.Staging.Pegasus.Language (pdlLanguage)
+import Hydra.Ext.Staging.Scala.Language (scalaLanguage)
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
@@ -39,7 +41,7 @@ writeJava :: FP.FilePath -> [Module] -> IO ()
 writeJava = generateSourcesSimple moduleToJava javaLanguage True
 
 writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
-writeJsonSchema = generateSources (moduleToJsonSchemaFiles (JsonSchemaOptions True))
+writeJsonSchema = generateSourcesSimple (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False
 
 writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSourcesSimple moduleToPdl pdlLanguage False
@@ -51,4 +53,4 @@ writePython :: FP.FilePath -> [Module] -> IO ()
 writePython = generateSourcesSimple moduleToPython pythonLanguage True
 
 writeScala :: FP.FilePath -> [Module] -> IO ()
-writeScala = generateSources moduleToScala
+writeScala = generateSourcesSimple moduleToScala scalaLanguage True

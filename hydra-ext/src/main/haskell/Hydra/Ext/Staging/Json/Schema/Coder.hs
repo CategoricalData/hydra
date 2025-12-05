@@ -1,33 +1,26 @@
 module Hydra.Ext.Staging.Json.Schema.Coder (
   JsonSchemaOptions(..),
-  moduleToJsonSchemaFiles,
+  moduleToJsonSchema,
 ) where
 
-import qualified Hydra.Adapt.Modules as AdaptModules
 import qualified Hydra.Adapt.Terms as AdaptTerms
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Dsl.Annotations as DslAnnotations
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Util as Util
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Ext.Org.Json.Schema.Language as JsonSchemaLanguage
 import qualified Hydra.Ext.Staging.Json.Schema.Serde as JsonSchemaSerde
-import qualified Hydra.Variants as Variants
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
-import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Reflect as Reflect
+import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -40,29 +33,46 @@ data JsonSchemaOptions = JsonSchemaOptions {
   jsonSchemaOptionsShortNames :: Bool
 }
 
+moduleToJsonSchema :: JsonSchemaOptions -> Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map FilePath String)
+moduleToJsonSchema opts mod defs = do
+  let (typeDefs, _termDefs) = partititonDefinitions defs
+  docs <- constructModule opts mod typeDefs
+  return $ fmap JsonSchemaSerde.jsonSchemaDocumentToString docs
+
 constructModule
   :: JsonSchemaOptions
   -> Module.Module
-  -> M.Map Core.Type (Compute.Coder Graph.Graph Graph.Graph Core.Term ())
-  -> [(Core.Binding, Core.TypeApplicationTerm)]
+  -> [Module.TypeDefinition]
   -> Compute.Flow Graph.Graph (M.Map FilePath JS.Document)
-constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
+constructModule opts mod typeDefs = M.fromList <$> CM.mapM toDocument typeDefs
   where
-    toDocument (el, tt@(Core.TypeApplicationTerm term typ)) = if Annotations.isNativeType el
-      then typeTermToDocument (Core.bindingName el)
-      else Monads.fail $ "mapping of non-type elements to JSON Schema is not yet supported: " ++ Core.unName (Core.bindingName el)
+    -- Build a map from name to adapted type for lookups
+    typeMap = M.fromList [(Module.typeDefinitionName td, Module.typeDefinitionType td) | td <- typeDefs]
 
-    typeTermToDocument rootName = do
-      nt <- Schemas.typeDependencies False excludeAnnotatedFields rootName
-      let names = M.keys nt
-      let nameSubst = Rewriting.toShortNames names
-      let types = Rewriting.substituteTypeVariables nameSubst <$> M.elems nt
-      schemas <- M.fromList <$> (CM.zipWithM typeToKeywordDocumentPair (substName nameSubst <$> names) types)
+    toDocument typeDef = typeDefToDocument (Module.typeDefinitionName typeDef) (Module.typeDefinitionType typeDef)
+
+    typeDefToDocument rootName rootType = do
+      -- Collect all type dependencies
+      let depNames = S.toList $ Rewriting.typeDependencyNames True rootType
+      let allNames = rootName : L.filter (/= rootName) depNames
+      let allTypes = [Y.fromMaybe (Core.TypeVariable n) (M.lookup n typeMap) | n <- allNames]
+
+      -- Apply short name substitution if needed
+      let nameSubst = Rewriting.toShortNames allNames
+      let types = Rewriting.substituteTypeVariables nameSubst <$> allTypes
+      let names = substName nameSubst <$> allNames
+
+      -- Encode all types
+      schemas <- M.fromList <$> CM.zipWithM typeToKeywordDocumentPair names types
 
       return (nameToPath rootName, JS.Document Nothing (Just schemas) $
         JS.Schema [referenceRestriction $ substName nameSubst rootName])
 
     substName subst name = Y.fromMaybe name (M.lookup name subst)
+
+    typeToKeywordDocumentPair name typ = do
+      schema <- JS.Schema <$> encodeNamedType name (excludeAnnotatedFields typ)
+      return (JS.Keyword $ encodeName $ Core.Name $ Names.localNameOf name, schema)
 
     excludeAnnotatedFields = Rewriting.rewriteType $ \recurse typ -> case recurse typ of
         Core.TypeRecord (Core.RowType n fields) -> Core.TypeRecord $ Core.RowType n $ L.filter (not . isExcluded . Core.fieldTypeType) fields
@@ -70,12 +80,6 @@ constructModule opts mod coders pairs = M.fromList <$> CM.mapM toDocument pairs
         t -> t
       where
         isExcluded typ = Y.isJust $ Annotations.getTypeAnnotation Constants.key_exclude typ
-
-    typeToKeywordDocumentPair name typ = do
-      g <- Monads.getState
-      atyp <- Compute.adapterTarget <$> (Monads.withState (Coders.AdapterContext g JsonSchemaLanguage.jsonSchemaLanguage M.empty) $ AdaptTerms.termAdapter typ)
-      schema <- JS.Schema <$> encodeNamedType name atyp
-      return (JS.Keyword $ encodeName $ Core.Name $ Names.localNameOf name, schema)
 
     nameToPath name = Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "json") (Module.Namespace $ nsPart ++ local)
       where
@@ -107,6 +111,33 @@ encodeType optional typ = case typ of
       mdesc <- Annotations.getTypeDescription typ
       let desc = Y.maybe [] (\d -> [JS.RestrictionDescription d]) mdesc
       return $ desc ++ res
+    Core.TypeEither (Core.EitherType lt rt) -> do
+      leftRes <- encodeType False lt
+      rightRes <- encodeType False rt
+      let leftField = (JS.Keyword "left", JS.Schema leftRes)
+      let rightField = (JS.Keyword "right", JS.Schema rightRes)
+      let leftSchema = JS.Schema [
+            JS.RestrictionType $ JS.TypeSingle JS.TypeNameObject,
+            JS.RestrictionObject $ JS.ObjectRestrictionProperties $ M.fromList [leftField],
+            JS.RestrictionObject $ JS.ObjectRestrictionRequired [JS.Keyword "left"],
+            JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
+      let rightSchema = JS.Schema [
+            JS.RestrictionType $ JS.TypeSingle JS.TypeNameObject,
+            JS.RestrictionObject $ JS.ObjectRestrictionProperties $ M.fromList [rightField],
+            JS.RestrictionObject $ JS.ObjectRestrictionRequired [JS.Keyword "right"],
+            JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
+      return [JS.RestrictionMultiple $ JS.MultipleRestrictionOneOf [leftSchema, rightSchema]]
+    Core.TypePair (Core.PairType ft st) -> do
+      firstRes <- encodeType False ft
+      secondRes <- encodeType False st
+      let firstField = (JS.Keyword "first", JS.Schema firstRes)
+      let secondField = (JS.Keyword "second", JS.Schema secondRes)
+      let props = M.fromList [firstField, secondField]
+      let reqs = [JS.Keyword "first", JS.Keyword "second"]
+      return $ jsType JS.TypeNameObject ++
+        [JS.RestrictionObject $ JS.ObjectRestrictionProperties props,
+         JS.RestrictionObject $ JS.ObjectRestrictionRequired reqs,
+         JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
     Core.TypeList lt -> do
       elSchema <- JS.Schema <$> encodeType False lt
       let arrayRes = [JS.RestrictionArray $ JS.ArrayRestrictionItems $ JS.ItemsSameItems elSchema]
@@ -136,7 +167,12 @@ encodeType optional typ = case typ of
         asRecord rt = encodeRecordOrUnion True $ AdaptTerms.unionTypeToRecordType rt
         (simpleFields, nonsimpleFields) = L.partition isSimple $ Core.rowTypeFields rt
         isSimple (Core.FieldType _ ft) = EncodeCore.isUnitType $ Rewriting.deannotateType ft
+    Core.TypeSet st -> do
+      elSchema <- JS.Schema <$> encodeType False st
+      let arrayRes = [JS.RestrictionArray $ JS.ArrayRestrictionItems $ JS.ItemsSameItems elSchema]
+      Monads.pure $ jsType JS.TypeNameArray ++ arrayRes
     Core.TypeVariable name -> Monads.pure [referenceRestriction name]
+    Core.TypeWrap (Core.WrappedType _ inner) -> encodeType optional inner
     _ -> Monads.fail $ "unsupported type variant: " ++ show (Reflect.typeVariant typ)
   where
     encodeRecordOrUnion union (Core.RowType _ fields) = do
@@ -162,14 +198,6 @@ isRequiredField :: Core.FieldType -> Bool
 isRequiredField (Core.FieldType _ typ) = case Rewriting.deannotateType typ of
   Core.TypeMaybe _ -> False
   _ -> True
-
-moduleToJsonSchemaDocuments :: JsonSchemaOptions -> Module.Module -> Compute.Flow Graph.Graph (M.Map FilePath JS.Document)
-moduleToJsonSchemaDocuments opts mod = AdaptModules.transformModule JsonSchemaLanguage.jsonSchemaLanguage encodeTerm (constructModule opts) mod
-
-moduleToJsonSchemaFiles :: JsonSchemaOptions -> Module.Module -> Compute.Flow Graph.Graph (M.Map FilePath String)
-moduleToJsonSchemaFiles opts mod = do
-  files <- moduleToJsonSchemaDocuments opts mod
-  return $ fmap JsonSchemaSerde.jsonSchemaDocumentToString files
 
 referenceRestriction :: Core.Name -> JS.Restriction
 referenceRestriction name = JS.RestrictionReference $ JS.SchemaReference $ "#/$defs/" ++ encodeName name

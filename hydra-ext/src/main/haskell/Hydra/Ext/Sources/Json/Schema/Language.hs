@@ -118,13 +118,17 @@ jsonSchemaLanguageDef = define "jsonSchemaLanguage" $
   "termVariants">: Sets.fromList $ ref Reflect.termVariantsDef,
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
+    Variants.typeVariantEither,
     Variants.typeVariantList,
     Variants.typeVariantLiteral,
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
+    Variants.typeVariantPair,
     Variants.typeVariantRecord,
+    Variants.typeVariantSet,
     Variants.typeVariantUnion,
-    Variants.typeVariantVariable],
+    Variants.typeVariantVariable,
+    Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
     (Coders.languageName $ string "hydra.ext.org.json.schema")
