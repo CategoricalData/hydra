@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
+import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
@@ -92,13 +93,17 @@ generateSourcesSimple printDefinitions lang doExpand basePath mods = do
         else withTrace "generate data files" $ do
           (g1, defLists) <- dataGraphToDefinitions constraints doExpand g0 nameLists
           withState g1 $ do
-            maps <- CM.zipWithM forEachModule dataModules defLists
+            -- Refresh modules with elements from the inferred graph (which have type annotations)
+            let refreshedMods = refreshModule (graphElements g1) <$> dataModules
+            maps <- CM.zipWithM forEachModule refreshedMods defLists
             return $ L.concat (M.toList <$> maps)
       where
         g0 = modulesToGraph dataModules
         nameLists = fmap (fmap bindingName . moduleElements) dataModules
         forEachModule mod defs = withTrace ("data module " ++ unNamespace (moduleNamespace mod)) $
           printDefinitions mod (fmap DefinitionTerm defs)
+        refreshModule els mod = mod {
+          moduleElements = Y.catMaybes ((\e -> M.lookup (bindingName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
         let fullPath = FP.combine basePath path
@@ -132,7 +137,7 @@ runFlow s f = do
     FlowState v _ t = unFlow f s emptyTrace
 
 writeHaskell :: FilePath -> [Module] -> IO ()
-writeHaskell = generateSources moduleToHaskell
+writeHaskell = generateSourcesSimple moduleToHaskell haskellLanguage False
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
