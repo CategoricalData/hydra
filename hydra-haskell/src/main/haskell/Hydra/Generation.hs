@@ -8,6 +8,7 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Staging.Yaml.Modules
+import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Inference as Inference
@@ -136,8 +137,36 @@ writeHaskell = generateSources moduleToHaskell
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
 
+-- | YAML generation - only processes data modules (term definitions), skips schema modules
 writeYaml :: FP.FilePath -> [Module] -> IO ()
-writeYaml = generateSources moduleToYaml
+writeYaml basePath mods = do
+    mfiles <- runFlow bootstrapGraph generateFiles
+    case mfiles of
+      Nothing -> fail "Failed to generate YAML files"
+      Just files -> mapM_ writePair files
+  where
+    constraints = languageConstraints yamlLanguage
+    -- Only process data modules (modules without native types)
+    dataModules = L.filter (not . hasNativeTypes) mods
+    hasNativeTypes mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
+
+    generateFiles = if L.null dataModules
+        then pure []
+        else withTrace "generate YAML files" $ do
+          (g1, defLists) <- dataGraphToDefinitions constraints True g0 nameLists
+          withState g1 $ do
+            maps <- CM.zipWithM forEachModule dataModules defLists
+            return $ L.concat (M.toList <$> maps)
+      where
+        g0 = modulesToGraph dataModules
+        nameLists = fmap (fmap bindingName . moduleElements) dataModules
+        forEachModule mod defs = withTrace ("data module " ++ unNamespace (moduleNamespace mod)) $
+          moduleToYaml mod (fmap DefinitionTerm defs)
+
+    writePair (path, contents) = do
+      let fullPath = basePath FP.</> path
+      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+      writeFile fullPath contents
 
 -- | Generate the lexicon content from a graph
 generateLexicon :: Graph -> Flow Graph String
