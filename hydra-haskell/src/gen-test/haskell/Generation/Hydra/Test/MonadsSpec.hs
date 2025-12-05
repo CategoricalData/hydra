@@ -20,46 +20,85 @@ spec :: H.Spec
 spec = H.describe "monads" $ do
   H.describe "pure" $ do
     H.it "integer" $ H.shouldBe
-      (Compute.unFlow (Monads.pure 42) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.pure 42) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just 42),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
     H.it "string" $ H.shouldBe
-      (Compute.unFlow (Monads.pure "hello") () Monads.emptyTrace)
+      (Compute.unFlow (Monads.pure "hello") () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just "hello"),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
   H.describe "map" $ do
     H.it "map negate" $ H.shouldBe
-      (Compute.unFlow (Monads.map Math.negate (Monads.pure 5)) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.map Math.negate (Monads.pure 5)) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just (-5)),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
     H.it "map absolute" $ H.shouldBe
-      (Compute.unFlow (Monads.map Math.abs (Monads.pure (-3))) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.map Math.abs (Monads.pure (-3))) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just 3),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
   H.describe "bind" $ do
     H.it "bind add" $ H.shouldBe
-      (Compute.unFlow (Monads.bind (Monads.pure 10) (\n -> Monads.pure (Math.add n 5))) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.bind (Monads.pure 10) (\n -> Monads.pure (Math.add n 5))) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just 15),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
     H.it "bind multiply" $ H.shouldBe
-      (Compute.unFlow (Monads.bind (Monads.pure 3) (\n -> Monads.pure (Math.mul n 4))) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.bind (Monads.pure 3) (\n -> Monads.pure (Math.mul n 4))) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = (Just 12),
           Compute.flowStateState = (),
-          Compute.flowStateTrace = Monads.emptyTrace})
+          Compute.flowStateTrace = Compute.Trace {
+            Compute.traceStack = [],
+            Compute.traceMessages = [],
+            Compute.traceOther = M.empty}})
   H.describe "error traces" $ do
     H.it "Error traces are in the right order" $ H.shouldBe
-      (Compute.unFlow (Monads.withTrace "one" (Monads.withTrace "two" (Monads.fail "oops"))) () Monads.emptyTrace)
+      (Compute.unFlow (Monads.withTrace "one" (Monads.withTrace "two" (Monads.fail "oops"))) () (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty}))
       (Compute.FlowState {
           Compute.flowStateValue = Nothing,
           Compute.flowStateState = (),

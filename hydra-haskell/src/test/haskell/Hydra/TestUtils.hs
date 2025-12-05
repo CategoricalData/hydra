@@ -14,6 +14,7 @@ import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
 import Hydra.Sources.Kernel.Types.All
+import Hydra.Sources.Kernel.Terms.All (kernelTermsModules)
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Libraries
 import Hydra.Test.TestGraph
@@ -34,8 +35,10 @@ import qualified Data.ByteString.Lazy as BS
 
 
 testGraph :: Graph
-testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) dataBindings
+testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
+    -- Include kernel term definitions (like hydra.monads.pure) for interpreter tests
+    kernelTermBindings = L.concat $ fmap moduleElements kernelTermsModules
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 
 testSchemaGraph :: Graph
