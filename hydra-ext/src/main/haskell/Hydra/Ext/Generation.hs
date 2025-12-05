@@ -16,6 +16,7 @@ import Hydra.Ext.Python.Language
 
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
+import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
 import Hydra.Ext.Staging.Java.Coder
 import Hydra.Ext.Staging.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
@@ -30,7 +31,7 @@ writeCpp :: FP.FilePath -> [Module] -> IO ()
 writeCpp = generateSources moduleToCpp
 
 writeGraphql :: FP.FilePath -> [Module] -> IO ()
-writeGraphql = generateSources moduleToGraphql
+writeGraphql = generateSourcesSimple moduleToGraphql graphqlLanguage False
 
 writeJava :: FP.FilePath -> [Module] -> IO ()
 writeJava = generateSourcesSimple moduleToJava javaLanguage True

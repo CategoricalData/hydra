@@ -23,7 +23,11 @@ import qualified Data.Maybe as Y
 
 
 -- TODO: deprecated
-generateSources :: (Module -> Flow Graph (M.Map FilePath String)) -> FilePath -> [Module] -> IO ()
+generateSources
+  :: (Module -> Flow Graph (M.Map FilePath String))
+  -> FilePath
+  -> [Module]
+  -> IO ()
 generateSources printModule basePath mods = do
     mfiles <- runFlow bootstrapGraph generateFiles
     case mfiles of
@@ -82,11 +86,13 @@ generateSourcesSimple printDefinitions lang doExpand basePath mods = do
         forEachModule mod defs = withTrace ("schema module " ++ unNamespace (moduleNamespace mod)) $
           printDefinitions mod (fmap DefinitionType defs)
 
-    generateDataFiles = withTrace "generate data files" $ do
-        (g1, defLists) <- dataGraphToDefinitions constraints doExpand g0 nameLists
-        withState g1 $ do
-          maps <- CM.zipWithM forEachModule dataModules defLists
-          return $ L.concat (M.toList <$> maps)
+    generateDataFiles = if L.null dataModules
+        then pure []  -- No data modules to process
+        else withTrace "generate data files" $ do
+          (g1, defLists) <- dataGraphToDefinitions constraints doExpand g0 nameLists
+          withState g1 $ do
+            maps <- CM.zipWithM forEachModule dataModules defLists
+            return $ L.concat (M.toList <$> maps)
       where
         g0 = modulesToGraph dataModules
         nameLists = fmap (fmap bindingName . moduleElements) dataModules
@@ -173,8 +179,7 @@ formatTermBinding binding =
 formatPrimitive :: Primitive -> String
 formatPrimitive prim =
   let name = unName $ primitiveName prim
-      scheme = primitiveType prim
-      typeStr = ShowCore.typeScheme scheme
+      typeStr = ShowCore.typeScheme (primitiveType prim)
   in "  " ++ name ++ " : " ++ typeStr
 
 -- | Generate and write the lexicon file

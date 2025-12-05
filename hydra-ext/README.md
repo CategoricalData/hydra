@@ -31,25 +31,80 @@ Note: Only generated Haskell is checked into version control for space reasons. 
 
 ## Coders
 
-Hydra-Ext contains the following two-level coders:
+Hydra-Ext contains the following two-level coders (schema + data):
 * Avro
 * Java
 * Property graphs ("PG")
 * Python
-* Scala
+* Scala (has known bugs)
 
 The following are schema-only coders:
 * C++
 * C-sharp
-* Graphql
-* Pegagus (PDL)
-* Protobuf
+* GraphQL
+* Pegasus (PDL) - does not support polymorphic models
+* Protobuf - does not support polymorphic models
 * SHACL
 
 And the following are data-only coders:
 * GraphSON
 * GraphViz
 * RDF
+
+Code generation is similar to Haskell generation (see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)).
+
+### Java
+
+```haskell
+writeJava "../hydra-java/src/gen-main/java" kernelModules
+```
+
+For Java tests, use:
+
+```haskell
+writeJava "../hydra-java/src/gen-test/java" testModules
+```
+
+### Python
+
+```haskell
+writePython "../hydra-python/src/main/python" kernelModules
+```
+
+For Python tests, use:
+
+```haskell
+writePython "../hydra-python/src/gen-test/python" testModules
+```
+
+Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)). Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+
+### GraphQL
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+
+writeGraphql "/tmp/graphql" [Core.module_]
+```
+
+Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together and map them to a single `.graphql` file.
+
+**Type Mappings:**
+
+| Hydra Type | GraphQL Representation |
+|------------|------------------------|
+| Record | Object type with fields |
+| Union (unit variants only) | Enum type |
+| List | List type `[T!]!` |
+| Maybe | Nullable type (no `!`) |
+| Wrap | Object type with `value` field |
+| Literal (String, Int, Float, Boolean) | Scalar types |
+| Map | List of values (keys discarded) |
+| Set | List type |
+| Either | Object with optional `left`/`right` fields |
+| Pair | Object with `first`/`second` fields |
+
+Note: GraphQL doesn't natively support maps, sets, or sum types with values. These are approximated using the mappings above.
 
 ## Models
 
@@ -76,25 +131,6 @@ The generated Haskell can be updated using:
 ```haskell
 writeHaskell "src/gen-main/haskell" hydraExtModules
 ```
-
-Currently, hydra-ext is also used to transform Hydra's kernel code into Hydra-Java and Hydra-Python:
-
-```haskell
-writeJava "../hydra-java/src/gen-main/java" kernelModules
-
-writePython "../hydra-python/src/main/python" kernelModules
-```
-
-...and to transform the test suite:
-
-```haskell
-writeJava "../hydra-java/src/gen-test/java" testModules
-
-writePython "../hydra-python/src/gen-test/python" testModules"
-```
-
-Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)). Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
-
 
 ## Tools
 
@@ -204,47 +240,3 @@ transformAvroJsonToPg graphsonLastMile aviationSchema aviationDataDir outDir
 transformAvroJsonToPg jsonLastMile movieSchema movieDataDir outDir
 transformAvroJsonToPg graphsonLastMile movieSchema movieDataDir outDir
 ```
-
-## Code generation
-
-Java generation is similar to Haskell generation (see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)), e.g.
-
-```haskell
-writeJava "../hydra-java/src/gen-main/java" mainModules
-```
-
-For Java tests, use:
-
-```haskell
-writeJava "../hydra-java/src/gen-test/java" testModules
-```
-
-Scala generation has known bugs, but you can try it out with:
-
-```haskell
-writeScala "../hydra-scala/src/gen-main/scala" kernelModules
-```
-
-There is schema-only support for GraphQL:
-
-```haskell
-import Hydra.Sources.Langs.Graphql.Syntax
-import Hydra.Sources.Langs.Json.Model
-writeGraphql "/tmp/graphql" [graphqlSyntaxModule, jsonModelModule]
-```
-
-Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
-and map them to a single `.graphql` file.
-Hydra has a similar level of schema-only support for [Protobuf](https://protobuf.dev/):
-
-```haskell
-writeProtobuf "/tmp/proto" [jsonModelModule]
-```
-
-...and similarly for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
-
-```haskell
-writePdl "/tmp/pdl" [jsonModelModule]
-```
-
-Note that neither the Protobuf nor PDL coder currently supports polymorphic models.
