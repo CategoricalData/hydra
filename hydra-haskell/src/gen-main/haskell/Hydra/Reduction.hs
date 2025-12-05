@@ -289,10 +289,28 @@ etaExpandTypedTerm tx0 term0 =
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
+-- | Expand all let-expressions by substituting bindings into bodies
+expandLets :: Core.Term -> Core.Term
+expandLets term = Rewriting.rewriteTerm rewrite term
+  where
+    rewrite recurse t = case t of
+      Core.TermLet lt ->
+        let bindings = Core.letBindings lt
+            body = Core.letBody lt
+            -- Substitute all bindings into the body
+            subst [] b = b
+            subst (binding:rest) b =
+              let name = Core.bindingName binding
+                  term = Core.bindingTerm binding
+              in subst rest (Rewriting.replaceFreeTermVariable name (recurse term) b)
+        in recurse (subst bindings body)
+      _ -> recurse t
+
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-reduceTerm eager term =  
-  let reduce = (\eager -> reduceTerm eager)
+reduceTerm eager term =
+  let expandedTerm = expandLets term
+      reduce = (\eager -> reduceTerm eager)
   in  
     let doRecurse = (\eager -> \term ->  
             let isNonLambda = (\f -> (\x -> case x of
@@ -363,11 +381,16 @@ reduceTerm eager term =
                               Core.FunctionPrimitive v2 -> (Flows.bind (Lexical.requirePrimitive v2) (\prim ->  
                                 let arity = (Arity.primitiveArity prim)
                                 in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) (forPrimitive prim arity args))))) v1)
-                            Core.TermVariable _ -> (Flows.pure (applyToArguments original args))
+                            Core.TermVariable v1 -> (Flows.bind (Lexical.dereferenceElement v1) (\mBinding ->
+                              Maybes.maybe
+                                (Flows.pure (applyToArguments original args))
+                                (\binding -> applyIfNullary eager (Core.bindingTerm binding) args)
+                                mBinding))
+                            -- Note: TermLet is handled by expandLets before reduction
                             _ -> (Flows.pure (applyToArguments original args))) stripped))
-            in  
+            in
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
-              in (Rewriting.rewriteTermM mapping term)
+              in (Rewriting.rewriteTermM mapping expandedTerm)
 
 -- | Rewrite a term with the help of a type context which is updated as we descend into subterms
 rewriteTermWithTypeContext :: (((Typing.TypeContext -> Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Typing.TypeContext -> Core.Term -> Core.Term)

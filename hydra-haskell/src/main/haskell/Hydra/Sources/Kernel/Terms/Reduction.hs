@@ -517,7 +517,15 @@ reduceTermDef = define "reduceTerm" $
             Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
               (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
               (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
-      _Term_variable>>: "v" ~> Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args"]) $
+      _Term_variable>>: "v" ~>
+        -- Look up the variable in the graph; if found, reduce its definition
+        "mBinding" <<~ ref Lexical.dereferenceElementDef @@ var "v" $
+        Maybes.maybe
+          -- Not found: lambda-bound variable, return with args applied
+          (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
+          -- Found: reduce the element's term with the accumulated args
+          ("binding" ~> var "applyIfNullary" @@ var "eager" @@ (Core.bindingTerm $ var "binding") @@ var "args")
+          (var "mBinding")]) $
   "mapping" <~ ("recurse" ~> "mid" ~>
     "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
       (var "recurse" @@ var "mid")

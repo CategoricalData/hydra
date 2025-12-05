@@ -20,7 +20,7 @@ module_ = Module (Namespace "hydra.test.lib.flows") elements [Monads.module_] []
     elements = [el allTestsDef]
 
 testTrace :: TTerm Term
-testTrace = metaref Monads.emptyTraceDef
+testTrace = MetaTerms.traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
 
 -- Test groups for hydra.lib.flows primitives
 
