@@ -1,3 +1,10 @@
+-- | Serialization of Java syntax to source code.
+--
+-- Note: Some syntax node types are stubbed (returning "STUB:...") because they are not
+-- currently needed for Hydra's Java code generation. The Java coder generates classes,
+-- interfaces, methods, fields, and common expressions, but does not generate constructs
+-- like loops, try-catch, switch statements, or arrays. These stubs can be implemented
+-- if the coder is extended to generate such constructs.
 module Hydra.Ext.Staging.Java.Serde where
 
 import Hydra.Kernel
@@ -33,7 +40,7 @@ withComments mc expr = case mc of
         toLine l = " * " ++ l
 
 writeAdditionalBound :: Java.AdditionalBound -> Ast.Expr
-writeAdditionalBound _ = cst "TODO:AdditionalBound"
+writeAdditionalBound _ = cst "STUB:AdditionalBound"
 
 writeAdditiveExpression :: Java.AdditiveExpression -> Ast.Expr
 writeAdditiveExpression e = case e of
@@ -59,22 +66,22 @@ writeAnnotation ann = case ann of
   Java.AnnotationSingleElement s -> writeSingleElementAnnotation s
 
 writeAnnotationTypeDeclaration :: Java.AnnotationTypeDeclaration -> Ast.Expr
-writeAnnotationTypeDeclaration _ = cst "TODO:AnnotationTypeDeclaration"
+writeAnnotationTypeDeclaration _ = cst "STUB:AnnotationTypeDeclaration"
 
 writeArrayAccess :: Java.ArrayAccess -> Ast.Expr
-writeArrayAccess _ = cst "TODO:ArrayAccess"
+writeArrayAccess _ = cst "STUB:ArrayAccess"
 
 writeArrayCreationExpression :: Java.ArrayCreationExpression -> Ast.Expr
-writeArrayCreationExpression _ = cst "TODO:ArrayCreationExpression"
+writeArrayCreationExpression _ = cst "STUB:ArrayCreationExpression"
 
 writeArrayInitializer :: Java.ArrayInitializer -> Ast.Expr
-writeArrayInitializer _ = cst "TODO:ArrayInitializer"
+writeArrayInitializer _ = cst "STUB:ArrayInitializer"
 
 writeArrayType :: Java.ArrayType -> Ast.Expr
-writeArrayType _ = cst "TODO:ArrayType"
+writeArrayType _ = cst "STUB:ArrayType"
 
 writeAssertStatement :: Java.AssertStatement -> Ast.Expr
-writeAssertStatement _ = cst "TODO:AssertStatement"
+writeAssertStatement _ = cst "STUB:AssertStatement"
 
 writeAssignment :: Java.Assignment -> Ast.Expr
 writeAssignment (Java.Assignment lhs op rhs) = infixWs ctop (writeLeftHandSide lhs) (writeExpression rhs)
@@ -119,7 +126,7 @@ writeCastExpression e = case e of
   Java.CastExpressionLambda l -> writeCastExpression_Lambda l
 
 writeCastExpression_Lambda :: Java.CastExpression_Lambda -> Ast.Expr
-writeCastExpression_Lambda _ = cst "TODO:CastExpression_Lambda"
+writeCastExpression_Lambda _ = cst "STUB:CastExpression_Lambda"
 
 writeCastExpression_NotPlusMinus :: Java.CastExpression_NotPlusMinus -> Ast.Expr
 writeCastExpression_NotPlusMinus (Java.CastExpression_NotPlusMinus rb ex) = spaceSep [
@@ -132,7 +139,7 @@ writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = pa
   if L.null adds then Nothing else Just $ spaceSep (writeAdditionalBound <$> adds)]]
 
 writeCastExpression_Primitive :: Java.CastExpression_Primitive -> Ast.Expr
-writeCastExpression_Primitive _ = cst "TODO:CastExpression_Primitive"
+writeCastExpression_Primitive _ = cst "STUB:CastExpression_Primitive"
 
 writeCharacterLiteral :: Int -> Ast.Expr
 writeCharacterLiteral c = cst $ "'" ++ escapeChar (Chr.chr c) ++ "'"
@@ -180,7 +187,7 @@ writeClassInstanceCreationExpression_Qualifier q = case q of
   Java.ClassInstanceCreationExpression_QualifierPrimary p -> writePrimary p
 
 writeClassLiteral :: Java.ClassLiteral -> Ast.Expr
-writeClassLiteral _ = cst "TODO:ClassLiteral"
+writeClassLiteral _ = cst "STUB:ClassLiteral"
 
 writeClassMemberDeclaration :: Java.ClassMemberDeclaration -> Ast.Expr
 writeClassMemberDeclaration d = case d of
@@ -249,10 +256,10 @@ writeConditionalExpression c = case c of
   Java.ConditionalExpressionTernaryLambda tl -> writeConditionalExpression_TernaryLambda tl
 
 writeConditionalExpression_TernaryCond :: Java.ConditionalExpression_TernaryCond -> Ast.Expr
-writeConditionalExpression_TernaryCond _ = cst "TODO:ConditionalExpression_TernaryCond"
+writeConditionalExpression_TernaryCond _ = cst "STUB:ConditionalExpression_TernaryCond"
 
 writeConditionalExpression_TernaryLambda :: Java.ConditionalExpression_TernaryLambda -> Ast.Expr
-writeConditionalExpression_TernaryLambda _ = cst "TODO:ConditionalExpression_TernaryLambda"
+writeConditionalExpression_TernaryLambda _ = cst "STUB:ConditionalExpression_TernaryLambda"
 
 writeConditionalOrExpression :: Java.ConditionalOrExpression -> Ast.Expr
 writeConditionalOrExpression (Java.ConditionalOrExpression ands)
@@ -265,7 +272,7 @@ writeConstantDeclaration (Java.ConstantDeclaration mods typ vars) = suffixSemi $
   Just $ commaSep inlineStyle (writeVariableDeclarator <$> vars)]
 
 writeConstantModifier :: Java.ConstantModifier -> Ast.Expr
-writeConstantModifier _ = cst "TODO:ConstantModifier"
+writeConstantModifier _ = cst "STUB:ConstantModifier"
 
 writeConstructorBody :: Java.ConstructorBody -> Ast.Expr
 writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [
@@ -304,7 +311,7 @@ writeDims (Java.Dims anns) = noSep (write <$> anns)
     write _ = cst "[]" -- Note: ignoring annotations on dimensions for now
 
 writeDoStatement :: Java.DoStatement -> Ast.Expr
-writeDoStatement _ = cst "TODO:DoStatement"
+writeDoStatement _ = cst "STUB:DoStatement"
 
 writeElementValue :: Java.ElementValue -> Ast.Expr
 writeElementValue ev = case ev of
@@ -317,7 +324,7 @@ writeElementValuePair :: Java.ElementValuePair -> Ast.Expr
 writeElementValuePair (Java.ElementValuePair k v) = infixWs "=" (writeIdentifier k) (writeElementValue v)
 
 writeEnumDeclaration :: Java.EnumDeclaration -> Ast.Expr
-writeEnumDeclaration _ = cst "TODO:EnumDeclaration"
+writeEnumDeclaration _ = cst "STUB:EnumDeclaration"
 
 writeEqualityExpression :: Java.EqualityExpression -> Ast.Expr
 writeEqualityExpression e = case e of
@@ -331,7 +338,7 @@ writeExclusiveOrExpression :: Java.ExclusiveOrExpression -> Ast.Expr
 writeExclusiveOrExpression (Java.ExclusiveOrExpression ands) = infixWsList "^" (writeAndExpression <$> ands)
 
 writeExplicitConstructorInvocation :: Java.ExplicitConstructorInvocation -> Ast.Expr
-writeExplicitConstructorInvocation _ = cst "TODO:ExplicitConstructorInvocation"
+writeExplicitConstructorInvocation _ = cst "STUB:ExplicitConstructorInvocation"
 
 writeExpression :: Java.Expression -> Ast.Expr
 writeExpression e = case e of
@@ -378,7 +385,7 @@ writeFloatingPointType ft = cst $ case ft of
   Java.FloatingPointTypeDouble -> "double"
 
 writeForStatement :: Java.ForStatement -> Ast.Expr
-writeForStatement _ = cst "TODO:ForStatement"
+writeForStatement _ = cst "STUB:ForStatement"
 
 writeFormalParameter :: Java.FormalParameter -> Ast.Expr
 writeFormalParameter p = case p of
@@ -401,22 +408,22 @@ writeIfThenStatement (Java.IfThenStatement cond thn) = spaceSep [
   writeBlock (Java.Block [Java.BlockStatementStatement thn])]
 
 writeIfThenElseStatement :: Java.IfThenElseStatement -> Ast.Expr
-writeIfThenElseStatement _ = cst "TODO:IfThenElseStatement"
+writeIfThenElseStatement _ = cst "STUB:IfThenElseStatement"
 
 writeImportDeclaration :: Java.ImportDeclaration -> Ast.Expr
 writeImportDeclaration imp = case imp of
   Java.ImportDeclarationSingleType (Java.SingleTypeImportDeclaration tn) -> suffixSemi $
     spaceSep [cst "import", writeTypeName tn]
-  Java.ImportDeclarationTypeImportOnDemand d -> cst "TODO:ImportDeclarationTypeImportOnDemand"
-  Java.ImportDeclarationSingleStaticImport d -> cst "TODO:ImportDeclarationSingleStaticImport"
-  Java.ImportDeclarationStaticImportOnDemand d -> cst "TODO:ImportDeclarationStaticImportOnDemand"
+  Java.ImportDeclarationTypeImportOnDemand d -> cst "STUB:ImportDeclarationTypeImportOnDemand"
+  Java.ImportDeclarationSingleStaticImport d -> cst "STUB:ImportDeclarationSingleStaticImport"
+  Java.ImportDeclarationStaticImportOnDemand d -> cst "STUB:ImportDeclarationStaticImportOnDemand"
 
 writeInclusiveOrExpression :: Java.InclusiveOrExpression -> Ast.Expr
 writeInclusiveOrExpression (Java.InclusiveOrExpression ors)
   = infixWsList "|" (writeExclusiveOrExpression <$> ors)
 
 writeInstanceInitializer :: Java.InstanceInitializer -> Ast.Expr
-writeInstanceInitializer _ = cst "TODO:InstanceInitializer"
+writeInstanceInitializer _ = cst "STUB:InstanceInitializer"
 
 writeIntegerLiteral :: Java.IntegerLiteral -> Ast.Expr
 writeIntegerLiteral (Java.IntegerLiteral i) = cst $ show i
@@ -475,7 +482,7 @@ writeInterfaceType :: Java.InterfaceType -> Ast.Expr
 writeInterfaceType (Java.InterfaceType ct) = writeClassType ct
 
 writeLabeledStatement :: Java.LabeledStatement -> Ast.Expr
-writeLabeledStatement _ = cst "TODO:LabeledStatement"
+writeLabeledStatement _ = cst "STUB:LabeledStatement"
 
 writeLambdaBody :: Java.LambdaBody -> Ast.Expr
 writeLambdaBody b = case b of
@@ -585,7 +592,7 @@ writeMethodName :: Java.MethodName -> Ast.Expr
 writeMethodName (Java.MethodName id) = writeIdentifier id
 
 writeMethodReference :: Java.MethodReference -> Ast.Expr
-writeMethodReference _ = cst "TODO:MethodReference"
+writeMethodReference _ = cst "STUB:MethodReference"
 
 writeMultiplicativeExpression :: Java.MultiplicativeExpression -> Ast.Expr
 writeMultiplicativeExpression e = case e of
@@ -658,10 +665,10 @@ writePackageModifier :: Java.PackageModifier -> Ast.Expr
 writePackageModifier (Java.PackageModifier ann) = writeAnnotation ann
 
 writePostDecrementExpression :: Java.PostDecrementExpression -> Ast.Expr
-writePostDecrementExpression _ = cst "TODO:PostDecrementExpression"
+writePostDecrementExpression _ = cst "STUB:PostDecrementExpression"
 
 writePostIncrementExpression :: Java.PostIncrementExpression -> Ast.Expr
-writePostIncrementExpression _ = cst "TODO:PostIncrementExpression"
+writePostIncrementExpression _ = cst "STUB:PostIncrementExpression"
 
 writePostfixExpression :: Java.PostfixExpression -> Ast.Expr
 writePostfixExpression e = case e of
@@ -671,10 +678,10 @@ writePostfixExpression e = case e of
   Java.PostfixExpressionPostDecrement pd -> writePostDecrementExpression pd
 
 writePreDecrementExpression:: Java.PreDecrementExpression -> Ast.Expr
-writePreDecrementExpression _ = cst "TODO:PreDecrementExpression"
+writePreDecrementExpression _ = cst "STUB:PreDecrementExpression"
 
 writePreIncrementExpression :: Java.PreIncrementExpression -> Ast.Expr
-writePreIncrementExpression _ = cst "TODO:PreIncrementExpression"
+writePreIncrementExpression _ = cst "STUB:PreIncrementExpression"
 
 writePrimary :: Java.Primary -> Ast.Expr
 writePrimary p = case p of
@@ -705,7 +712,7 @@ writePrimitiveTypeWithAnnotations (Java.PrimitiveTypeWithAnnotations pt anns) = 
   Just $ writePrimitiveType pt]
 
 writeReceiverParameter :: Java.ReceiverParameter -> Ast.Expr
-writeReceiverParameter _ = cst "TODO:ReceiverParameter"
+writeReceiverParameter _ = cst "STUB:ReceiverParameter"
 
 writeReferenceType :: Java.ReferenceType -> Ast.Expr
 writeReferenceType rt = case rt of
@@ -805,7 +812,7 @@ writeStatementWithoutTrailingSubstatement s = case s of
   Java.StatementWithoutTrailingSubstatementTry t -> writeTryStatement t
 
 writeStaticInitializer :: Java.StaticInitializer -> Ast.Expr
-writeStaticInitializer _ = cst "TODO:StaticInitializer"
+writeStaticInitializer _ = cst "STUB:StaticInitializer"
 
 writeStringLiteral :: Java.StringLiteral -> Ast.Expr
 writeStringLiteral (Java.StringLiteral s) = cst $ "\"" ++ escapeJavaString s ++ "\""
@@ -825,19 +832,19 @@ writeStringLiteral (Java.StringLiteral s) = cst $ "\"" ++ escapeJavaString s ++ 
       where hex = fmap toUpper $ showHex n ""
 
 writeSwitchStatement :: Java.SwitchStatement -> Ast.Expr
-writeSwitchStatement _ = cst "TODO:SwitchStatement"
+writeSwitchStatement _ = cst "STUB:SwitchStatement"
 
 writeSynchronizedStatement :: Java.SynchronizedStatement -> Ast.Expr
-writeSynchronizedStatement _ = cst "TODO:SynchronizedStatement"
+writeSynchronizedStatement _ = cst "STUB:SynchronizedStatement"
 
 writeThrowStatement :: Java.ThrowStatement -> Ast.Expr
 writeThrowStatement (Java.ThrowStatement ex) = suffixSemi $ spaceSep [cst "throw", writeExpression ex]
 
 writeThrows :: Java.Throws -> Ast.Expr
-writeThrows _ = cst "TODO:Throws"
+writeThrows _ = cst "STUB:Throws"
 
 writeTryStatement :: Java.TryStatement -> Ast.Expr
-writeTryStatement _ = cst "TODO:TryStatement"
+writeTryStatement _ = cst "STUB:TryStatement"
 
 writeType :: Java.Type -> Ast.Expr
 writeType t = case t of
@@ -855,7 +862,7 @@ writeTypeArgumentsOrDiamond targs = case targs of
   Java.TypeArgumentsOrDiamondDiamond -> cst "<>"
 
 writeTypeBound :: Java.TypeBound -> Ast.Expr
-writeTypeBound _ = cst "TODO:TypeBound"
+writeTypeBound _ = cst "STUB:TypeBound"
 
 writeTypeDeclaration :: Java.TypeDeclaration -> Ast.Expr
 writeTypeDeclaration d = case d of
@@ -915,7 +922,7 @@ writeUnqualifiedClassInstanceCreationExpression (Java.UnqualifiedClassInstanceCr
     writeClassBody <$> mbody]
 
 writeVariableArityParameter :: Java.VariableArityParameter -> Ast.Expr
-writeVariableArityParameter _ = cst "TODO:VariableArityParameter"
+writeVariableArityParameter _ = cst "STUB:VariableArityParameter"
 
 writeVariableDeclarator :: Java.VariableDeclarator -> Ast.Expr
 writeVariableDeclarator (Java.VariableDeclarator id minit) =
@@ -939,7 +946,7 @@ writeVariableModifier m = case m of
   Java.VariableModifierFinal -> cst "final"
 
 writeWhileStatement :: Java.WhileStatement -> Ast.Expr
-writeWhileStatement _ = cst "TODO:WhileStatement"
+writeWhileStatement _ = cst "STUB:WhileStatement"
 
 writeWildcard :: Java.Wildcard -> Ast.Expr
 writeWildcard (Java.Wildcard anns mbounds) = spaceSep $ Y.catMaybes [
