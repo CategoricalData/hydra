@@ -16,11 +16,10 @@ import qualified Data.Maybe                      as Y
 
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [] [Core.module_] $
     Just ("General-purpose utility types used across Hydra.")
   where
     ns = Namespace "hydra.util"
-    core = typeref $ moduleNamespace Core.module_
     util = typeref ns
     def = datatype ns
 

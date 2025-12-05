@@ -1,11 +1,9 @@
 module Hydra.Ext.Staging.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
-import Hydra.Adapt.Terms
-import Hydra.Adapt.Modules
+import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
 import Hydra.Ext.Staging.Pegasus.Language
 import Hydra.Ext.Staging.Pegasus.Serde
-import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Dsl.Types as Types
 
@@ -16,9 +14,9 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-moduleToPdl :: Module -> Flow Graph (M.Map FilePath String)
-moduleToPdl mod = do
-    files <- moduleToPegasusSchemas mod
+moduleToPdl :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
+moduleToPdl mod defs = do
+    files <- moduleToPegasusSchemas mod defs
     return $ M.fromList (mapPair <$> M.toList files)
   where
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprSchemaFile sf)
@@ -26,14 +24,15 @@ moduleToPdl mod = do
 constructModule ::
   M.Map Namespace String
   -> Module
-  -> M.Map Type (Coder Graph Graph Term ())
-  -> [(Binding, TypeApplicationTerm)]
+  -> [TypeDefinition]
   -> Flow Graph (M.Map FilePath PDL.SchemaFile)
-constructModule aliases mod coders pairs = do
-    sortedPairs <- case (topologicalSortBindings $ fst <$> pairs) of
-      Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
-      Right sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
-    schemas <- CM.mapM toSchema sortedPairs
+constructModule aliases mod typeDefs = do
+    -- Flatten the sorted groups; if any group has more than one element, it's a cycle
+    let groups = topologicalSortTypeDefinitions typeDefs
+    sortedDefs <- case L.find (\g -> L.length g > 1) groups of
+      Just cycle -> fail $ "types form a cycle (unsupported in PDL): " ++ show (typeDefinitionName <$> cycle)
+      Nothing -> pure $ L.concat groups
+    schemas <- CM.mapM toSchema sortedDefs
     return $ M.fromList (toPair <$> schemas)
   where
     ns = pdlNameForModule mod
@@ -43,50 +42,38 @@ constructModule aliases mod coders pairs = do
         path = namespaceToFilePath CaseConventionCamel (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
 
-    pairByName = L.foldl (\m p -> M.insert (bindingName $ fst p) p m) M.empty pairs
-    toSchema (el, tt@(TypeApplicationTerm term typ)) = do
-      if isNativeType el
-        then DecodeCore.type_ term >>= typeToSchema el
-        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (bindingName el)
-    typeToSchema el typ = do
-        res <- encodeAdaptedType aliases typ
+    toSchema typeDef = typeToSchema typeDef (typeDefinitionType typeDef)
+    typeToSchema typeDef typ = do
+        res <- encodeType aliases typ
         let ptype = case res of
               Left schema -> PDL.NamedSchemaTypeTyperef schema
               Right t -> t
-        r <- getTermDescription $ bindingTerm el
-        let anns = doc r
+        descr <- getTypeDescription typ
+        let anns = doc descr
         return (PDL.NamedSchema qname ptype anns, imports)
       where
-        qname = pdlNameForElement aliases False $ bindingName el
+        qname = pdlNameForElement aliases False $ typeDefinitionName typeDef
         imports = []
---        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
---          where
---            deps = S.toList $ termDependencyNames False False False $ bindingTerm el
---            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
-moduleToPegasusSchemas :: Module -> Flow Graph (M.Map FilePath PDL.SchemaFile)
-moduleToPegasusSchemas mod = do
+moduleToPegasusSchemas :: Module -> [Definition] -> Flow Graph (M.Map FilePath PDL.SchemaFile)
+moduleToPegasusSchemas mod defs = do
+  let (typeDefs, _termDefs) = partititonDefinitions defs
   aliases <- importAliasesForModule mod
-  transformModule pdlLanguage (encodeTerm aliases) (constructModule aliases) mod
+  constructModule aliases mod typeDefs
 
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
-encodeAdaptedType ::
-  M.Map Namespace String -> Type
-  -> Flow Graph (Either PDL.Schema PDL.NamedSchemaType)
-encodeAdaptedType aliases typ = do
-  g <- getState
-  let cx = AdapterContext g pdlLanguage M.empty
-  ad <- withState cx $ termAdapter typ
-  encodeType aliases $ adapterTarget ad
-
-encodeTerm :: M.Map Namespace String -> Term -> Flow Graph ()
-encodeTerm aliases term = fail "not yet implemented"
-
 encodeType :: M.Map Namespace String -> Type -> Flow Graph (Either PDL.Schema PDL.NamedSchemaType)
 encodeType aliases typ = case typ of
     TypeAnnotated (AnnotatedType typ' _) -> encodeType aliases typ'
+    TypeEither (EitherType lt rt) -> do
+      -- Encode Either as a union with "left" and "right" variants
+      leftSchema <- encode lt
+      rightSchema <- encode rt
+      let leftMember = PDL.UnionMember (Just $ PDL.FieldName "left") leftSchema noAnnotations
+      let rightMember = PDL.UnionMember (Just $ PDL.FieldName "right") rightSchema noAnnotations
+      return $ Left $ PDL.SchemaUnion $ PDL.UnionSchema [leftMember, rightMember]
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -101,7 +88,16 @@ encodeType aliases typ = case typ of
         _ -> unexpected "int32 or int64" $ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
+    TypePair (PairType ft st) -> do
+      -- Encode Pair as a record with "first" and "second" fields
+      firstSchema <- encode ft
+      secondSchema <- encode st
+      let firstField = PDL.RecordField (PDL.FieldName "first") firstSchema False Nothing noAnnotations
+      let secondField = PDL.RecordField (PDL.FieldName "second") secondSchema False Nothing noAnnotations
+      return $ Right $ PDL.NamedSchemaTypeRecord $ PDL.RecordSchema [firstField, secondField] []
+    TypeSet st -> Left . PDL.SchemaArray <$> encode st  -- Encode Set as array (PDL has no native set type)
     TypeVariable name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
+    TypeWrap (WrappedType _ inner) -> encodeType aliases inner  -- Unwrap to inner type
     TypeMaybe ot -> fail $ "optionals unexpected at top level"
     TypeRecord rt -> do
       let includes = []

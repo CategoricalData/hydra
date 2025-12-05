@@ -13,11 +13,10 @@ import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Adapt.Modules
+import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
 import Hydra.Formatting
 
 import qualified Control.Monad as CM
-import qualified Data.Either as E
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -32,34 +31,31 @@ data CppModuleMetadata = CppModuleMetadata {
   cppModuleMetadataTypeVariables :: S.Set Name,
   cppModuleMetadataUsesMap :: Bool,
   cppModuleMetadataUsesOptional :: Bool,
+  cppModuleMetadataUsesPair :: Bool,
   cppModuleMetadataUsesSet :: Bool,
   cppModuleMetadataUsesString :: Bool,
   cppModuleMetadataUsesTuple :: Bool,
   cppModuleMetadataUsesTypeinfo :: Bool,
+  cppModuleMetadataUsesVariant :: Bool,
   cppModuleMetadataUsesVector :: Bool}
 
 --------------------------------------------------------------------------------
 -- Entry point
 
 -- | Convert a module to C++ code files
-moduleToCpp :: Module -> Flow Graph (M.Map FilePath String)
-moduleToCpp mod = do
-    defs <- adaptedModuleDefinitions cppLanguage mod
-    let namespaces = namespacesForDefinitions encodeNamespace (moduleNamespace mod) defs
+moduleToCpp :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
+moduleToCpp mod defs = do
+    let (typeDefs, _termDefs) = partititonDefinitions defs
+    let namespaces = namespacesForDefinitions encodeNamespace ns (DefinitionType <$> typeDefs)
     let env = CppEnvironment {
       cppEnvironmentNamespaces = namespaces,
       cppEnvironmentBoundTypeVariables = ([], M.empty)}
-
-    let (typeDefs, termDefs) = E.partitionEithers $ fmap toEither defs
 
     typeFiles <- generateTypeFiles env ns typeDefs
 
     return $ M.fromList typeFiles -- TODO: also generate a term-level *.cpp file if nonempty
   where
     ns = moduleNamespace mod
-    toEither d = case d of
-      DefinitionType t -> Left t
-      DefinitionTerm t -> Right t
 
 generateTypeFile :: CppEnvironment -> TypeDefinition -> Flow Graph (FilePath, String)
 generateTypeFile env def@(TypeDefinition name typ) = withTrace ("type definition " ++ show (unName name)) $ do
@@ -257,12 +253,14 @@ encodeRecordType env name (RowType _ tfields) _comment = do
 encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
 encodeType env typ = case deannotateType typ of
     TypeApplication at -> encodeApplicationType env at
+    TypeEither (EitherType lt rt) -> toConstType <$> (createTemplateType "std::variant" <$> sequence [encode lt, encode rt])
     TypeFunction ft -> encodeFunctionType env ft
     TypeForall lt -> encodeForallType env lt
     TypeList et -> toConstType <$> (createTemplateType "std::vector" <$> ((:[]) <$> encode et))
     TypeMap (MapType kt vt) -> toConstType <$> (createTemplateType "std::map" <$> sequence [encode kt, encode vt])
     TypeLiteral lt -> encodeLiteralType lt
     TypeMaybe et -> toConstType <$> (createTemplateType "std::optional" <$> ((:[]) <$> encode et))
+    TypePair (PairType ft st) -> toConstType <$> (createTemplateType "std::pair" <$> sequence [encode ft, encode st])
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
@@ -553,6 +551,8 @@ findIncludes withFwd ns defs = systemIncludes ++ domainIncludes
       if cppModuleMetadataUsesString meta then Just (Cpp.IncludeDirective "string" True) else Nothing,
       if cppModuleMetadataUsesTuple meta then Just (Cpp.IncludeDirective "tuple" True) else Nothing,
       if cppModuleMetadataUsesTypeinfo meta then Just (Cpp.IncludeDirective "typeinfo" True) else Nothing,
+      if cppModuleMetadataUsesPair meta then Just (Cpp.IncludeDirective "utility" True) else Nothing,  -- for std::pair
+      if cppModuleMetadataUsesVariant meta then Just (Cpp.IncludeDirective "variant" True) else Nothing,
       if cppModuleMetadataUsesVector meta then Just (Cpp.IncludeDirective "vector" True) else Nothing,
       -- TODO: consider making these conditional as well
       Just (Cpp.IncludeDirective "memory" True),
@@ -576,10 +576,12 @@ gatherMetadata defs = L.foldl addDef start defs
       cppModuleMetadataTypeVariables = S.empty,
       cppModuleMetadataUsesMap = False,
       cppModuleMetadataUsesOptional = False,
+      cppModuleMetadataUsesPair = False,
       cppModuleMetadataUsesSet = False,
       cppModuleMetadataUsesString = False,
       cppModuleMetadataUsesTuple = False,
       cppModuleMetadataUsesTypeinfo = False,
+      cppModuleMetadataUsesVariant = False,
       cppModuleMetadataUsesVector = False}
 
     addDef meta def = case def of
@@ -602,6 +604,7 @@ gatherMetadata defs = L.foldl addDef start defs
       _ -> meta
 
     extendMetaForType meta typ = case deannotateType typ of
+      TypeEither _ -> meta {cppModuleMetadataUsesVariant = True}
       TypeForall (ForallType _ body) ->
         meta {cppModuleMetadataTypeVariables = S.union (cppModuleMetadataTypeVariables meta) (freeVariablesInType body)}
       TypeList _ -> meta {cppModuleMetadataUsesVector = True}
@@ -610,7 +613,8 @@ gatherMetadata defs = L.foldl addDef start defs
         LiteralTypeString -> meta {cppModuleMetadataUsesString = True}
         _ -> meta
       TypeMaybe _ -> meta {cppModuleMetadataUsesOptional = True}
-      TypeRecord rt -> meta
+      TypePair _ -> meta {cppModuleMetadataUsesPair = True}
+      TypeRecord _ -> meta
       TypeSet _ -> meta {cppModuleMetadataUsesSet = True}
       TypeUnion _ -> meta {cppModuleMetadataUsesTypeinfo = True}
       TypeUnit -> meta {cppModuleMetadataUsesTuple = True}
