@@ -24,45 +24,14 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
--- TODO: deprecated
 generateSources
-  :: (Module -> Flow Graph (M.Map FilePath String))
-  -> FilePath
-  -> [Module]
-  -> IO ()
-generateSources printModule basePath mods = do
-    mfiles <- runFlow bootstrapGraph generateFiles
-    case mfiles of
-      Nothing -> fail "Transformation failed"
-      Just files -> mapM_ writePair files
-  where
-    generateFiles = withTrace "generate files" $ withState (modulesToGraph mods) $ do
-      g <- getState
-      g1 <- inferGraphTypes g
-      withState g1 $ do
-          maps <- CM.mapM forModule $ refreshModule (graphElements g1) <$> mods
-          return $ L.concat (M.toList <$> maps)
-        where
-          refreshModule els mod = mod {
-            moduleElements = Y.catMaybes ((\e -> M.lookup (bindingName e) els) <$> moduleElements mod)}
-
-    writePair (path, s) = do
-        let fullPath = FP.combine basePath path
-        SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-        writeFile fullPath withNewline
-      where
-        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
-
-    forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
-
-generateSourcesSimple
   :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
   -> Language
   -> Bool
   -> FilePath
   -> [Module]
   -> IO ()
-generateSourcesSimple printDefinitions lang doExpand basePath mods = do
+generateSources printDefinitions lang doExpand basePath mods = do
     mschemaFiles <- runFlow bootstrapGraph generateSchemaFiles
     case mschemaFiles of
       Nothing -> fail "Failed to generate schema files"
@@ -137,7 +106,7 @@ runFlow s f = do
     FlowState v _ t = unFlow f s emptyTrace
 
 writeHaskell :: FilePath -> [Module] -> IO ()
-writeHaskell = generateSourcesSimple moduleToHaskell haskellLanguage False
+writeHaskell = generateSources moduleToHaskell haskellLanguage False
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
