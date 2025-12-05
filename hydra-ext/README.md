@@ -79,6 +79,35 @@ writePython "../hydra-python/src/gen-test/python" testModules
 
 Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)). Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
 
+### Protobuf
+
+Protobuf (Proto3) does not support polymorphic models, so type parameters are replaced with `string`. The generated `.proto` files follow the [Protobuf Style Guide](https://protobuf.dev/programming-guides/style).
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+
+writeProtobuf "/tmp/protobuf" [Core.module_]
+```
+
+**Type Mappings:**
+
+| Hydra Type | Protobuf Representation |
+|------------|-------------------------|
+| Record | Message with fields |
+| Union (unit variants only) | Enum type |
+| Union (with values) | Message with `oneof value` |
+| List | `repeated` field |
+| Maybe (scalar) | Wrapper type (e.g., `google.protobuf.StringValue`) |
+| Wrap | Unwrapped to inner type |
+| Literal (String, Int32, Int64, etc.) | Scalar types |
+| Map | `map<K, V>` field |
+| Set | `repeated` field (same as List) |
+| Either | Helper message with `left`/`right` fields |
+| Pair | Helper message with `first`/`second` fields |
+| Unit | `google.protobuf.Empty` |
+
+Note: Structural types like `Either<A, B>` and `Pair<A, B>` generate helper message types (e.g., `Either_Term_Term`, `Pair_Term_Term`) since Protobuf doesn't support nested `oneof` blocks.
+
 ### GraphQL
 
 ```haskell

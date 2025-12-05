@@ -14,6 +14,7 @@ import Hydra.Sources.All
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Python.Language
 
+import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
@@ -43,7 +44,7 @@ writePdl :: FP.FilePath -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl
 
 writeProtobuf :: FP.FilePath -> [Module] -> IO ()
-writeProtobuf = generateSources moduleToProtobuf
+writeProtobuf = generateSourcesSimple moduleToProtobuf protobufLanguage False
 
 writePython :: FP.FilePath -> [Module] -> IO ()
 writePython = generateSourcesSimple moduleToPython pythonLanguage True
