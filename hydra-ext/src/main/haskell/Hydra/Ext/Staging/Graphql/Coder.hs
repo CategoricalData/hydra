@@ -3,7 +3,7 @@ module Hydra.Ext.Staging.Graphql.Coder (moduleToGraphql) where
 import Hydra.Kernel
 import Hydra.Ext.Staging.Graphql.Language
 import Hydra.Ext.Staging.Graphql.Serde
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import qualified Hydra.Ext.Org.Graphql.Syntax as G
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Formatting
@@ -21,7 +21,7 @@ type Prefixes = M.Map Namespace String
 -- | New simple adapter version that works with definitions directly
 moduleToGraphql :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToGraphql mod defs = withTrace ("encode module to GraphQL: " ++ unNamespace (moduleNamespace mod)) $ do
-    let (typeDefs, _termDefs) = partititonDefinitions defs
+    let (typeDefs, _termDefs) = partitionDefinitions defs
     -- Build prefixes for namespace qualification
     let prefixes = findPrefixes typeDefs
     -- Convert type definitions to GraphQL type definitions

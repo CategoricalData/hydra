@@ -13,7 +13,7 @@ import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import Hydra.Formatting
 
 import qualified Control.Monad as CM
@@ -45,7 +45,7 @@ data CppModuleMetadata = CppModuleMetadata {
 -- | Convert a module to C++ code files
 moduleToCpp :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToCpp mod defs = do
-    let (typeDefs, _termDefs) = partititonDefinitions defs
+    let (typeDefs, _termDefs) = partitionDefinitions defs
     let namespaces = namespacesForDefinitions encodeNamespace ns (DefinitionType <$> typeDefs)
     let env = CppEnvironment {
       cppEnvironmentNamespaces = namespaces,

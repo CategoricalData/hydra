@@ -1,7 +1,7 @@
 module Hydra.Ext.Staging.Pegasus.Coder (moduleToPdl) where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import Hydra.Ext.Staging.Pegasus.Language
 import Hydra.Ext.Staging.Pegasus.Serde
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
@@ -57,7 +57,7 @@ constructModule aliases mod typeDefs = do
 
 moduleToPegasusSchemas :: Module -> [Definition] -> Flow Graph (M.Map FilePath PDL.SchemaFile)
 moduleToPegasusSchemas mod defs = do
-  let (typeDefs, _termDefs) = partititonDefinitions defs
+  let (typeDefs, _termDefs) = partitionDefinitions defs
   aliases <- importAliasesForModule mod
   constructModule aliases mod typeDefs
 

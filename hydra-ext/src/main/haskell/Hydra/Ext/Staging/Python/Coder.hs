@@ -400,25 +400,16 @@ encodeModule mod defs0 = do
       _ -> False) defs0
     reorderDefs defs = sortedTypeDefs ++ sortedTermDefs
       where
-        p1 = L.partition isTypeDef defs
+        (typeDefsRaw, termDefsRaw) = partitionDefinitions defs
+        -- Sort type definitions: put _Name first, then the rest
+        sortedTypeDefs = (DefinitionType <$> nameFirst) ++ (DefinitionType <$> nameRest)
           where
-            isTypeDef d = case d of
-              DefinitionType _ -> True
-              _ -> False
-        sortedTypeDefs = fst p2 ++ snd p2
+            (nameFirst, nameRest) = L.partition (\(TypeDefinition name _) -> name == _Name) typeDefsRaw
+        -- Topologically sort term definitions
+        sortedTermDefs = L.concat $ Sorting.topologicalSortNodes getKey getAdj $ (DefinitionTerm <$> termDefsRaw)
           where
-            p2 = L.partition isNameDef (fst p1)
-            isNameDef d = case d of
-              DefinitionType (TypeDefinition name _) -> name == _Name
-              _ -> False
-        sortedTermDefs = L.concat $ Sorting.topologicalSortNodes getKey getAdj $ snd p1
-          where
-            getKey def = case def of
-              DefinitionTerm (TermDefinition name _ _) -> name
---              DefinitionType (TypeDefinition name _) -> name
-            getAdj def = case def of
-              DefinitionTerm (TermDefinition _ term _) -> S.toList $ Rewriting.freeVariablesInTerm term
---              DefinitionType (TypeDefinition _ typ) -> S.toList $ Rewriting.freeVariablesInType typ
+            getKey (DefinitionTerm (TermDefinition name _ _)) = name
+            getAdj (DefinitionTerm (TermDefinition _ term _)) = S.toList $ Rewriting.freeVariablesInTerm term
 
     tvarStmt name = assignmentStatement name $ functionCall (pyNameToPyPrimary $ Py.Name "TypeVar")
       [doubleQuotedString $ Py.unName name]

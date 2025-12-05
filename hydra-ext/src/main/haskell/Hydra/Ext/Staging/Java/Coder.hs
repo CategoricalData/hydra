@@ -456,7 +456,7 @@ encodeDefinitions mod defs = do
     let units = typeUnits ++ termUnits
     return $ M.fromList units
   where
-    (typeDefs, termDefs) = partititonDefinitions defs
+    (typeDefs, termDefs) = partitionDefinitions defs
     aliases = importAliasesForModule mod
 
 encodeElimination :: JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Flow Graph Java.Expression
@@ -1172,13 +1172,8 @@ typeArgsOrDiamond args = if supportsDiamondOperator javaFeatures
   then Java.TypeArgumentsOrDiamondDiamond
   else Java.TypeArgumentsOrDiamondArguments args
 
--- TODO: use these
-
 withLambda :: JavaEnvironment -> Lambda -> (JavaEnvironment -> Flow s a) -> Flow s a
 withLambda = withLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
-
-withLet :: JavaEnvironment -> Let -> (JavaEnvironment -> Flow s a) -> Flow s a
-withLet = withLetContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
 
 withTypeLambda :: JavaEnvironment -> TypeLambda -> (JavaEnvironment -> Flow s a) -> Flow s a
 withTypeLambda = withTypeLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })

@@ -1,3 +1,5 @@
+-- | A minimal mapping of property graph data to RDF data. Provides a rough equivalence which can be used for visualization, basic SPARQL queries, etc.
+
 module Hydra.Ext.Tools.PropertyGraphToRdf where
 
 import Hydra.Kernel

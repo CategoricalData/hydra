@@ -5,7 +5,7 @@ import Hydra.Dsl.Terms
 import Hydra.Ext.Staging.Scala.Language
 import Hydra.Ext.Staging.Scala.Utils
 import Hydra.Ext.Staging.Scala.Serde
-import Hydra.Ext.Staging.CoderUtils (partititonDefinitions)
+import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
@@ -26,7 +26,7 @@ moduleToScala mod defs = do
 
 constructModule :: Module -> [Definition] -> Flow Graph Scala.Pkg
 constructModule mod defs = do
-    let (typeDefs, termDefs) = partititonDefinitions defs
+    let (typeDefs, termDefs) = partitionDefinitions defs
     typeDeclStats <- CM.mapM encodeTypeDefinition typeDefs
     termDeclStats <- CM.mapM encodeTermDefinition termDefs
     let pname = toScalaName $ h $ moduleNamespace mod
