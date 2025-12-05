@@ -1517,7 +1517,7 @@ typeNamesInType typ0 =
 
 -- | Unshadow lambda-bound variables in a term
 unshadowVariables :: (Core.Term -> Core.Term)
-unshadowVariables term =  
+unshadowVariables term0 =  
   let rewrite = (\recurse -> \m -> \term ->  
           let dflt = (recurse m term)
           in ((\x -> case x of
@@ -1544,4 +1544,4 @@ unshadowVariables term =
               _ -> dflt) v1)
             Core.TermVariable v1 -> (m, (Core.TermVariable (Maybes.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
             _ -> dflt) term))
-  in (Pairs.second (rewriteAndFoldTerm rewrite Maps.empty term))
+  in (Pairs.second (rewriteAndFoldTerm rewrite Maps.empty term0))
