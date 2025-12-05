@@ -1,6 +1,12 @@
 -- Note: these tests are dependent on HsYaml, both because the Serde depends on HsYaml
 --       and because of the particular serialization style.
 
+{-
+stack ghci hydra:lib hydra:hydra-test
+
+Test.Hspec.hspec Hydra.Staging.Yaml.SerdeSpec.spec
+-}
+
 module Hydra.Staging.Yaml.SerdeSpec where
 
 import Hydra.Kernel
