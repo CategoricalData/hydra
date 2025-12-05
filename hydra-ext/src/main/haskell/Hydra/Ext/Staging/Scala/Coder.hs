@@ -5,7 +5,6 @@ import Hydra.Dsl.Terms
 import Hydra.Ext.Staging.Scala.Language
 import Hydra.Ext.Staging.Scala.Utils
 import Hydra.Ext.Staging.Scala.Serde
-import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings

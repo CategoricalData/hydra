@@ -13,7 +13,6 @@ import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Ext.Staging.CoderUtils (partitionDefinitions)
 import Hydra.Formatting
 
 import qualified Control.Monad as CM

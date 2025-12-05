@@ -88,11 +88,11 @@ module_ = Module (Namespace "hydra.schemas") elements
       el extendTypeContextForTypeLambdaDef,
       el fieldMapDef,
       el fieldTypeMapDef,
-      el findFieldTypeDef,
       el fieldTypesDef,
-      el fTypeToTypeSchemeDef,
+      el findFieldTypeDef,
       el freshNameDef,
       el freshNamesDef,
+      el fTypeToTypeSchemeDef,
       el fullyStripTypeDef,
       el graphAsTermDef,
       el graphAsTypesDef,
@@ -103,10 +103,13 @@ module_ = Module (Namespace "hydra.schemas") elements
       el isEnumRowTypeDef,
       el isEnumTypeDef,
       el isSerializableDef,
+      el isSerializableTypeDef,
+      el isSerializableByNameDef,
       el moduleDependencyNamespacesDef,
       el namespacesForDefinitionsDef,
       el nominalApplicationDef,
       el normalTypeVariableDef,
+      el partitionDefinitionsDef,
       el requireRecordTypeDef,
       el requireRowTypeDef,
       el requireSchemaTypeDef,
@@ -119,7 +122,10 @@ module_ = Module (Namespace "hydra.schemas") elements
       el typeDependenciesDef,
       el typeSchemeToFTypeDef,
       el typeToTypeSchemeDef,
-      el typesToElementsDef]
+      el typesToElementsDef,
+      el withLambdaContextDef,
+      el withLetContextDef,
+      el withTypeLambdaContextDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -394,6 +400,28 @@ isSerializableDef = define "isSerializable" $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (ref typeDependenciesDef @@ false @@ (unaryFunction Equality.identity) @@ Core.bindingName (var "el"))
 
+isSerializableTypeDef :: TBinding (Type -> Bool)
+isSerializableTypeDef = define "isSerializableType" $
+  doc "Check if a type is serializable (no function types in the type itself)" $
+  "typ" ~>
+  "allVariants" <~ Sets.fromList (Lists.map (ref Reflect.typeVariantDef)
+    (ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@
+      ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list [] @@ var "typ")) $
+  Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
+
+isSerializableByNameDef :: TBinding (Name -> Flow Graph Bool)
+isSerializableByNameDef = define "isSerializableByName" $
+  doc "Check if a type (by name) is serializable, resolving all type dependencies" $
+  "name" ~>
+  "variants" <~ ("typ" ~>
+    Lists.map (ref Reflect.typeVariantDef) (ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@
+      ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list [] @@ var "typ")) $
+  Flows.map
+    ("deps" ~>
+      "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
+      Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
+    (ref typeDependenciesDef @@ false @@ (unaryFunction Equality.identity) @@ var "name")
+
 moduleDependencyNamespacesDef :: TBinding (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
 moduleDependencyNamespacesDef = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace" $
@@ -423,6 +451,20 @@ normalTypeVariableDef :: TBinding (Int -> Name)
 normalTypeVariableDef = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
   "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))
+
+partitionDefinitionsDef :: TBinding ([Definition] -> ([TypeDefinition], [TermDefinition]))
+partitionDefinitionsDef = define "partitionDefinitions" $
+  doc "Partition a list of definitions into type definitions and term definitions" $
+  "defs" ~>
+  "getType" <~ ("def" ~> cases _Definition (var "def") Nothing [
+    _Definition_type>>: "td" ~> just (var "td"),
+    _Definition_term>>: "_" ~> nothing]) $
+  "getTerm" <~ ("def" ~> cases _Definition (var "def") Nothing [
+    _Definition_type>>: "_" ~> nothing,
+    _Definition_term>>: "td" ~> just (var "td")]) $
+  pair
+    (Maybes.cat $ Lists.map (var "getType") (var "defs"))
+    (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
 
 requireRecordTypeDef :: TBinding (Name -> Flow Graph RowType)
 requireRecordTypeDef = define "requireRecordType" $
@@ -628,3 +670,24 @@ typesToElementsDef = define "typesToElements" $
         (ref EncodeCore.typeDef @@ (Pairs.second $ var "pair"))
         nothing)) $
   Maps.fromList $ Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
+
+withLambdaContextDef :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> Lambda -> (e -> Flow s a) -> Flow s a)
+withLambdaContextDef = define "withLambdaContext" $
+  doc "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter" $
+  "getContext" ~> "setContext" ~> "env" ~> "lam" ~> "body" ~>
+  "newContext" <~ ref extendTypeContextForLambdaDef @@ (var "getContext" @@ var "env") @@ var "lam" $
+  var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
+
+withLetContextDef :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> Let -> (e -> Flow s a) -> Flow s a)
+withLetContextDef = define "withLetContext" $
+  doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
+  "getContext" ~> "setContext" ~> "env" ~> "letrec" ~> "body" ~>
+  "newContext" <~ ref extendTypeContextForLetDef @@ (var "getContext" @@ var "env") @@ var "letrec" $
+  var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
+
+withTypeLambdaContextDef :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> TypeLambda -> (e -> Flow s a) -> Flow s a)
+withTypeLambdaContextDef = define "withTypeLambdaContext" $
+  doc "Execute a computation in the context of a type lambda body, extending the type context with the type parameter" $
+  "getContext" ~> "setContext" ~> "env" ~> "tlam" ~> "body" ~>
+  "newContext" <~ ref extendTypeContextForTypeLambdaDef @@ (var "getContext" @@ var "env") @@ var "tlam" $
+  var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
