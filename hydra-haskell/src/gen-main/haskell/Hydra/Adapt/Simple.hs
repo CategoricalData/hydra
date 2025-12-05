@@ -40,7 +40,7 @@ adaptFloatType constraints ft =
     let alt = (adaptFloatType constraints)
     in  
       let forUnsupported = (\ft -> (\x -> case x of
-              Core.FloatTypeBigfloat -> Nothing
+              Core.FloatTypeBigfloat -> (alt Core.FloatTypeFloat64)
               Core.FloatTypeFloat32 -> (alt Core.FloatTypeFloat64)
               Core.FloatTypeFloat64 -> (alt Core.FloatTypeBigfloat)) ft)
       in (Logic.ifElse supported (Just ft) (forUnsupported ft))
