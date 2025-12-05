@@ -271,20 +271,16 @@ typeOfApplication tx typeArgs app =
     in  
       let tryType = (\tfun -> \targ -> (\x -> case x of
               Core.TypeForall v1 -> (tryType (Core.forallTypeBody v1) targ)
-              Core.TypeFunction v1 ->
+              Core.TypeFunction v1 ->  
                 let dom = (Core.functionTypeDomain v1)
-                in
+                in  
                   let cod = (Core.functionTypeCodomain v1)
                   in (Logic.ifElse (typesEffectivelyEqual tx dom targ) (Flows.pure cod) (Flows.fail (Strings.cat [
                     "in application, expected ",
                     Core__.type_ dom,
                     " but found ",
                     (Core__.type_ targ)])))
-              -- Handle type variables: if the function type is a type variable, treat it as polymorphic
-              -- and return a fresh type variable as the result type. This can happen when inference
-              -- produces type variables that aren't fully resolved.
-              -- We wrap the fresh variable in a forall so it passes checkTypeVariables.
-              Core.TypeVariable v1 -> (Flows.map (\n -> Core.TypeForall (Core.ForallType n (Core.TypeVariable n))) Schemas.freshName)
+              Core.TypeVariable _ -> (Flows.map (\x -> Core.TypeVariable x) Schemas.freshName)
               _ -> (Flows.fail (Strings.cat [
                 "left hand side of application (",
                 Core__.term fun,
@@ -532,30 +528,22 @@ typeOfWrappedTerm tx typeArgs wt =
     let body = (Core.wrappedTermBody wt)
     in (Flows.bind (typeOf tx [] body) (\btype -> Flows.bind (checkTypeVariables tx btype) (\_ -> Flows.pure (Schemas.nominalApplication tname typeArgs))))
 
--- | Check whether a list of types are effectively equal, disregarding type aliases
--- Types containing in-scope type variables are treated as wildcards that match anything
-typesAllEffectivelyEqual :: (Typing.TypeContext -> [Core.Type] -> Bool)
-typesAllEffectivelyEqual tx tlist =
-  let types = (Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext tx))
-  in
-    -- Filter out types that contain in-scope type variables (wildcards)
-    let concreteTypes = (Lists.filter (\t -> Logic.not (containsInScopeTypeVars tx t)) tlist)
-    in -- If all types were wildcards, or only one concrete type remains, they're equal
-       Logic.or (Equality.lte (Lists.length concreteTypes) 1)
-         (allEqual (Lists.map (Rewriting.replaceTypedefs types) concreteTypes))
-
 -- | Check if a type contains any type variable from the current scope
 containsInScopeTypeVars :: (Typing.TypeContext -> Core.Type -> Bool)
-containsInScopeTypeVars tx t =
+containsInScopeTypeVars tx t =  
   let vars = (Typing.typeContextVariables tx)
-  in let freeVars = (Rewriting.freeVariablesInTypeSimple t)
-  in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
+  in  
+    let freeVars = (Rewriting.freeVariablesInTypeSimple t)
+    in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
+
+-- | Check whether a list of types are effectively equal, disregarding type aliases
+typesAllEffectivelyEqual :: (Typing.TypeContext -> [Core.Type] -> Bool)
+typesAllEffectivelyEqual tx tlist =  
+  let types = (Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext tx))
+  in (allEqual (Lists.map (Rewriting.replaceTypedefs types) tlist))
 
 -- | Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards
 typesEffectivelyEqual :: (Typing.TypeContext -> Core.Type -> Core.Type -> Bool)
-typesEffectivelyEqual tx t1 t2 =
-  -- If either type contains in-scope type variables, treat them as matching
-  -- This handles the case where fresh type variables from instantiation haven't been substituted
-  Logic.or (containsInScopeTypeVars tx t1)
-    (Logic.or (containsInScopeTypeVars tx t2)
-      (typesAllEffectivelyEqual tx [Schemas.fullyStripType t1, Schemas.fullyStripType t2]))
+typesEffectivelyEqual tx t1 t2 = (Logic.or (containsInScopeTypeVars tx t1) (Logic.or (containsInScopeTypeVars tx t2) (typesAllEffectivelyEqual tx [
+  Schemas.fullyStripType t1,
+  (Schemas.fullyStripType t2)])))

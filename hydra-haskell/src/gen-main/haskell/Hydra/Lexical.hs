@@ -31,11 +31,11 @@ import qualified Data.Set as S
 chooseUniqueName :: (S.Set Core.Name -> Core.Name -> Core.Name)
 chooseUniqueName reserved name =  
   let tryName = (\index ->  
-          let candidate = (Logic.ifElse (Equality.equal index 0) name (Core.Name (Strings.cat [
+          let candidate = (Logic.ifElse (Equality.equal index 1) name (Core.Name (Strings.cat [
                   Core.unName name,
                   (Literals.showInt32 index)])))
           in (Logic.ifElse (Sets.member candidate reserved) (tryName (Math.add index 1)) candidate))
-  in (tryName 0)
+  in (tryName 1)
 
 -- | Look up an element in the current graph context
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Binding))

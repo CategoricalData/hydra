@@ -152,29 +152,14 @@ _FlattenLetTermsTestCase_input = (Core.Name "input")
 
 _FlattenLetTermsTestCase_output = (Core.Name "output")
 
--- | A test case which computes the free variables of a term and compares the result with an expected set of names
-data FreeVariablesTestCase = 
-  FreeVariablesTestCase {
-    -- | The term to analyze
-    freeVariablesTestCaseInput :: Core.Term,
-    -- | The expected set of free variable names
-    freeVariablesTestCaseOutput :: (S.Set Core.Name)}
-  deriving (Eq, Ord, Read, Show)
-
-_FreeVariablesTestCase = (Core.Name "hydra.testing.FreeVariablesTestCase")
-
-_FreeVariablesTestCase_input = (Core.Name "input")
-
-_FreeVariablesTestCase_output = (Core.Name "output")
-
 -- | A predefined fold operation for testing foldOverTerm
-data FoldOperation =
+data FoldOperation = 
   -- | Sum all Int32 literals in a term
   FoldOperationSumInt32Literals  |
   -- | Collect the lengths of all list terms (returns list of integers in traversal order)
   FoldOperationCollectListLengths  |
   -- | Collect labels (first element of pairs where first is a string literal)
-  FoldOperationCollectLabels
+  FoldOperationCollectLabels 
   deriving (Eq, Ord, Read, Show)
 
 _FoldOperation = (Core.Name "hydra.testing.FoldOperation")
@@ -186,7 +171,7 @@ _FoldOperation_collectListLengths = (Core.Name "collectListLengths")
 _FoldOperation_collectLabels = (Core.Name "collectLabels")
 
 -- | A test case which applies a fold operation over a term and compares the result
-data FoldOverTermTestCase =
+data FoldOverTermTestCase = 
   FoldOverTermTestCase {
     -- | The term to fold over
     foldOverTermTestCaseInput :: Core.Term,
@@ -208,12 +193,27 @@ _FoldOverTermTestCase_operation = (Core.Name "operation")
 
 _FoldOverTermTestCase_output = (Core.Name "output")
 
+-- | A test case which computes the free variables of a term and compares the result with an expected set of names
+data FreeVariablesTestCase = 
+  FreeVariablesTestCase {
+    -- | The term to analyze
+    freeVariablesTestCaseInput :: Core.Term,
+    -- | The expected set of free variable names
+    freeVariablesTestCaseOutput :: (S.Set Core.Name)}
+  deriving (Eq, Ord, Read, Show)
+
+_FreeVariablesTestCase = (Core.Name "hydra.testing.FreeVariablesTestCase")
+
+_FreeVariablesTestCase_input = (Core.Name "input")
+
+_FreeVariablesTestCase_output = (Core.Name "output")
+
 -- | A predefined term rewriter for testing rewriteTerm
-data TermRewriter =
+data TermRewriter = 
   -- | Replace all string literal 'foo' with 'bar'
   TermRewriterReplaceFooWithBar  |
   -- | Replace all Int32 literals with Int64 literals of the same value
-  TermRewriterReplaceInt32WithInt64
+  TermRewriterReplaceInt32WithInt64 
   deriving (Eq, Ord, Read, Show)
 
 _TermRewriter = (Core.Name "hydra.testing.TermRewriter")
@@ -223,7 +223,7 @@ _TermRewriter_replaceFooWithBar = (Core.Name "replaceFooWithBar")
 _TermRewriter_replaceInt32WithInt64 = (Core.Name "replaceInt32WithInt64")
 
 -- | A test case which applies a term rewriter and compares the result
-data RewriteTermTestCase =
+data RewriteTermTestCase = 
   RewriteTermTestCase {
     -- | The term to rewrite
     rewriteTermTestCaseInput :: Core.Term,
@@ -242,9 +242,9 @@ _RewriteTermTestCase_rewriter = (Core.Name "rewriter")
 _RewriteTermTestCase_output = (Core.Name "output")
 
 -- | A predefined type rewriter for testing rewriteType
-data TypeRewriter =
+data TypeRewriter = 
   -- | Replace all String types with Int32 types
-  TypeRewriterReplaceStringWithInt32
+  TypeRewriterReplaceStringWithInt32 
   deriving (Eq, Ord, Read, Show)
 
 _TypeRewriter = (Core.Name "hydra.testing.TypeRewriter")
@@ -252,7 +252,7 @@ _TypeRewriter = (Core.Name "hydra.testing.TypeRewriter")
 _TypeRewriter_replaceStringWithInt32 = (Core.Name "replaceStringWithInt32")
 
 -- | A test case which applies a type rewriter and compares the result
-data RewriteTypeTestCase =
+data RewriteTypeTestCase = 
   RewriteTypeTestCase {
     -- | The type to rewrite
     rewriteTypeTestCaseInput :: Core.Type,
