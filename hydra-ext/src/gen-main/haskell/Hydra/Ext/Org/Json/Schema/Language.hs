@@ -43,11 +43,15 @@ jsonSchemaLanguage = Coders.Language {
     termVariants = (Sets.fromList Reflect.termVariants)
     typeVariants = (Sets.fromList [
       Variants.TypeVariantAnnotated,
+      Variants.TypeVariantEither,
       Variants.TypeVariantList,
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
+      Variants.TypeVariantPair,
       Variants.TypeVariantRecord,
+      Variants.TypeVariantSet,
       Variants.TypeVariantUnion,
-      Variants.TypeVariantVariable])
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantWrap])
     typePredicate = (\_ -> True)

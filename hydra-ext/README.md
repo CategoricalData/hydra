@@ -42,6 +42,7 @@ The following are schema-only coders:
 * C++
 * C-sharp
 * GraphQL
+* JSON Schema
 * Pegasus (PDL) - does not support polymorphic models
 * Protobuf - does not support polymorphic models
 * SHACL
@@ -150,6 +151,38 @@ writeProtobuf "/tmp/protobuf" [Core.module_]
 
 Note: Structural types like `Either<A, B>` and `Pair<A, B>` generate helper message types (e.g., `Either_Term_Term`, `Pair_Term_Term`) since Protobuf doesn't support nested `oneof` blocks.
 
+### JSON Schema
+
+The JSON Schema coder generates [JSON Schema](https://json-schema.org/) files (`.json`) following the 2020-12 specification.
+This coder operates at the type level only, and can be used in connection with Hydra's built-in JSON coder at the term level.
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+
+writeJsonSchema "/tmp/jsonschema" [Core.module_]
+```
+
+**Type mappings:**
+
+| Hydra type | JSON Schema representation |
+|------------|---------------------------|
+| Record | Object with properties and required fields |
+| Union (unit variants only) | String enum |
+| Union (with values) | Object with oneOf for variants |
+| List | Array with items schema |
+| Set | Array with items schema |
+| Map | Object with additionalProperties schema |
+| Maybe | Nullable type (adds `null` to type array) |
+| Wrap | Unwrapped to inner type |
+| Either | oneOf with `left`/`right` object variants |
+| Pair | Object with `first`/`second` required fields |
+| Literal (String) | `"type": "string"` |
+| Literal (Boolean) | `"type": "boolean"` |
+| Literal (Integer) | `"type": "integer"` |
+| Literal (Float) | `"type": "number"` |
+
+Note: Type references use JSON Schema `$ref` to `#/$defs/TypeName`.
+
 ### GraphQL
 
 ```haskell
@@ -211,6 +244,39 @@ writePdl "/tmp/pdl" [Accessors.module_]
 | Literal (Float64) | `double` primitive |
 | Literal (Boolean) | `boolean` primitive |
 | Literal (Binary) | `bytes` primitive |
+
+### Scala
+
+The Scala coder generates Scala source files (`.scala`). Note that this coder has known bugs and may not work correctly for all types.
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
+
+writeScala "/tmp/scala" [Accessors.module_]
+```
+
+**Type mappings:**
+
+| Hydra type | Scala representation |
+|------------|---------------------|
+| Record | Type alias (case classes not yet supported) |
+| Union | Type alias (sealed traits not yet supported) |
+| List | `Seq[T]` |
+| Set | `Set[T]` |
+| Map | `Map[K, V]` |
+| Maybe | `Option[T]` |
+| Either | `Either[L, R]` |
+| Pair | `Tuple2[A, B]` |
+| Wrap | Type alias |
+| Function | `A => B` |
+| Literal (String) | `String` |
+| Literal (Boolean) | `Boolean` |
+| Literal (Int32) | `Int` |
+| Literal (Int64) | `Long` |
+| Literal (Float32) | `Float` |
+| Literal (Float64) | `Double` |
+
+Note: The Scala coder currently generates type aliases rather than full case class/sealed trait hierarchies. Term definitions are encoded as `val` or `def` declarations.
 
 ## Models
 
