@@ -134,26 +134,30 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Core.integerTypeBigint],    -- custom big integer implementation
   "termVariants">: Sets.fromList $ list [
     Variants.termVariantApplication,
+    Variants.termVariantEither,      -- std::variant<Left, Right> with left/right semantics
     Variants.termVariantFunction,
     Variants.termVariantLet,
-    Variants.termVariantList,       -- std::vector
+    Variants.termVariantList,        -- std::vector
     Variants.termVariantLiteral,
-    Variants.termVariantMap,        -- std::map
-    Variants.termVariantMaybe,   -- std::optional
-    Variants.termVariantProduct,    -- struct with unnamed fields
-    Variants.termVariantRecord,     -- struct with named fields
-    Variants.termVariantSet,        -- std::set
-    Variants.termVariantUnion,      -- std::inject or enum
+    Variants.termVariantMap,         -- std::map
+    Variants.termVariantMaybe,       -- std::optional
+    Variants.termVariantPair,        -- std::pair
+    Variants.termVariantProduct,     -- struct with unnamed fields
+    Variants.termVariantRecord,      -- struct with named fields
+    Variants.termVariantSet,         -- std::set
+    Variants.termVariantUnion,       -- std::inject or enum
     Variants.termVariantVariable,
-    Variants.termVariantWrap],      -- wrapper class
+    Variants.termVariantWrap],       -- wrapper class
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantApplication, -- template instantiation
+    Variants.typeVariantEither,      -- std::variant<Left, Right>
     Variants.typeVariantFunction,    -- function types
     Variants.typeVariantForall,      -- templates
     Variants.typeVariantList,        -- std::vector
     Variants.typeVariantLiteral,     -- primitive types
     Variants.typeVariantMap,         -- std::map
-    Variants.typeVariantMaybe,    -- std::optional
+    Variants.typeVariantMaybe,       -- std::optional
+    Variants.typeVariantPair,        -- std::pair
     Variants.typeVariantProduct,     -- anonymous structs
     Variants.typeVariantRecord,      -- structs
     Variants.typeVariantSet,         -- std::set

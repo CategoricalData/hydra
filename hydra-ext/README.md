@@ -55,6 +55,9 @@ Code generation is similar to Haskell generation (see the [Hydra-Haskell README]
 
 ### Java
 
+[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java) is a complete Hydra implementation.
+You can update the Java image of the Hydra kernel with:
+
 ```haskell
 writeJava "../hydra-java/src/gen-main/java" kernelModules
 ```
@@ -67,6 +70,9 @@ writeJava "../hydra-java/src/gen-test/java" testModules
 
 ### Python
 
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python), like Hydra-Java and Hydra-Haskell, is a complete Hydra implementation.
+You can update the Python image of the Hydra kernel with:
+
 ```haskell
 writePython "../hydra-python/src/main/python" kernelModules
 ```
@@ -77,7 +83,43 @@ For Python tests, use:
 writePython "../hydra-python/src/gen-test/python" testModules
 ```
 
-Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)). Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)).
+Instead of `stack ghci`, you can enter the REPL with `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+
+### C++
+
+The C++ coder operates on schemas only, generating header files (`.h`) with class and enum definitions.
+The coder does not support polymorphic models at this time; type parameters are replaced with their bounds or `std::string`.
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+
+writeCpp "/tmp/cpp" [Core.module_]
+```
+
+**Type mappings:**
+
+| Hydra type | C++ representation |
+|------------|-------------------|
+| Record | Class with public fields and constructor |
+| Union (unit variants only) | Enum class |
+| Union (with values) | Base class with variant subclasses and visitor pattern |
+| Either | `std::variant<L, R>` |
+| Pair | `std::pair<A, B>` |
+| List | `std::vector<T>` |
+| Map | `std::map<K, V>` |
+| Set | `std::set<T>` |
+| Maybe | `std::optional<T>` |
+| Literal (String) | `std::string` |
+| Literal (Int32) | `int` |
+| Literal (Int64) | `int64_t` |
+| Literal (Float32) | `float` |
+| Literal (Float64) | `double` |
+| Literal (Boolean) | `bool` |
+| Unit | `std::tuple<>` |
+| Wrap | Class with `value` field |
+
+Note: Union types with values use the visitor pattern for type-safe case analysis. Each variant becomes a subclass of the union's base class.
 
 ### Protobuf
 
@@ -89,9 +131,9 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 writeProtobuf "/tmp/protobuf" [Core.module_]
 ```
 
-**Type Mappings:**
+**Type mappings:**
 
-| Hydra Type | Protobuf Representation |
+| Hydra type | Protobuf representation |
 |------------|-------------------------|
 | Record | Message with fields |
 | Union (unit variants only) | Enum type |
@@ -118,9 +160,9 @@ writeGraphql "/tmp/graphql" [Core.module_]
 
 Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together and map them to a single `.graphql` file.
 
-**Type Mappings:**
+**Type mappings:**
 
-| Hydra Type | GraphQL Representation |
+| Hydra type | GraphQL representation |
 |------------|------------------------|
 | Record | Object type with fields |
 | Union (unit variants only) | Enum type |
@@ -134,6 +176,41 @@ Because GraphQL does not support imports, the GraphQL coder will gather all of t
 | Pair | Object with `first`/`second` fields |
 
 Note: GraphQL doesn't natively support maps, sets, or sum types with values. These are approximated using the mappings above.
+
+### PDL (Pegasus)
+
+LinkedIn's PDL ([Pegasus Data Language](https://linkedin.github.io/rest.li/pdl_schema)) is supported in hydra-ext for historical reasons.
+It is a fairly limited data language, supporting neither polymorphism nor cyclic type dependencies.
+For example, modules like `hydra.core` cannot be expressed in PDL, because the `Term` and `Type` types reference each other.
+The PDL coder generates PDL schema files (`.pdl`). 
+
+```haskell
+import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
+
+writePdl "/tmp/pdl" [Accessors.module_]
+```
+
+**Type mappings:**
+
+| Hydra type | PDL representation |
+|------------|-------------------|
+| Record | Record schema |
+| Union (unit variants only) | Enum schema |
+| Union (with values) | Union schema with aliased members |
+| Either | Union with `left`/`right` aliased members |
+| Pair | Record with `first`/`second` fields |
+| List | Array schema |
+| Set | Array schema |
+| Map | Map schema (string keys assumed) |
+| Maybe | Optional field |
+| Wrap | Typeref to inner type |
+| Literal (String) | `string` primitive |
+| Literal (Int32) | `int` primitive |
+| Literal (Int64) | `long` primitive |
+| Literal (Float32) | `float` primitive |
+| Literal (Float64) | `double` primitive |
+| Literal (Boolean) | `boolean` primitive |
+| Literal (Binary) | `bytes` primitive |
 
 ## Models
 

@@ -55,12 +55,14 @@ cppLanguage = Coders.Language {
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList [
       Variants.TermVariantApplication,
+      Variants.TermVariantEither,
       Variants.TermVariantFunction,
       Variants.TermVariantLet,
       Variants.TermVariantList,
       Variants.TermVariantLiteral,
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
+      Variants.TermVariantPair,
       Variants.TermVariantProduct,
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
@@ -69,12 +71,14 @@ cppLanguage = Coders.Language {
       Variants.TermVariantWrap])
     typeVariants = (Sets.fromList [
       Variants.TypeVariantApplication,
+      Variants.TypeVariantEither,
       Variants.TypeVariantFunction,
       Variants.TypeVariantForall,
       Variants.TypeVariantList,
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
+      Variants.TypeVariantPair,
       Variants.TypeVariantProduct,
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,
