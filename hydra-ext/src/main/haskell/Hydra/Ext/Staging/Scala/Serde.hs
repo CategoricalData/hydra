@@ -32,10 +32,39 @@ writeDefn def = case def of
         if L.null tparams then Nothing else Just $ bracketList inlineStyle (writeType_Param <$> tparams),
         Just $ parenList False (writeData_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
+  Scala.DefnType (Scala.Defn_Type _ name tparams body) -> spaceSep $
+      [cst "type", writeType_Name name] ++
+      (if L.null tparams then [] else [bracketList inlineStyle (writeType_Param <$> tparams)]) ++
+      [cst "=", writeType body]
   Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name (Scala.PredefString name)))] typ term) -> spaceSep [
       cst "val", nameAndType, cst "=", writeTerm term]
     where
       nameAndType = Y.maybe (cst name) (\t -> spaceSep [cst $ name ++ ":", writeType t]) typ
+  Scala.DefnClass (Scala.Defn_Class mods name tparams (Scala.Ctor_Primary _ _ paramss) _) -> spaceSep $
+      (writeMod <$> mods) ++ [cst "class", nameAndParams]
+    where
+      nameAndParams = noSep $ Y.catMaybes [
+        Just $ writeType_Name name,
+        if L.null tparams then Nothing else Just $ bracketList inlineStyle (writeType_Param <$> tparams),
+        if L.null paramss then Nothing else Just $ parenList False (writeData_Param <$> L.concat paramss)]
+  Scala.DefnEnum (Scala.Defn_Enum _ name tparams _ (Scala.Template _ _ _ stats)) ->
+      newlineSep (enumHeader:enumCases)
+    where
+      enumHeader = spaceSep [cst "enum", noSep $ Y.catMaybes [
+        Just $ writeType_Name name,
+        if L.null tparams then Nothing else Just $ bracketList inlineStyle (writeType_Param <$> tparams)],
+        cst ":"]
+      enumCases = (spaceSep . (cst "  " :) . (: [])) <$> (writeStat <$> stats)
+  Scala.DefnEnumCase (Scala.Defn_EnumCase _ name _ (Scala.Ctor_Primary _ _ paramss) inits) ->
+      spaceSep [cst "case", noSep [writeData_Name name, params], extendsClause]
+    where
+      params = if L.null (L.concat paramss)
+        then cst ""
+        else parenList False (writeData_Param <$> L.concat paramss)
+      extendsClause = if L.null inits
+        then cst ""
+        else spaceSep [cst "extends", commaSep inlineStyle (writeInit <$> inits)]
+  _ -> cst $ "/* TODO: unsupported definition: " ++ show def ++ " */"
 
 writeImportExportStat :: Scala.ImportExportStat -> Expr
 writeImportExportStat ie = case ie of
@@ -138,3 +167,19 @@ writeType_Name (Scala.Type_Name name) = cst name
 
 writeType_Param :: Scala.Type_Param -> Expr
 writeType_Param (Scala.Type_Param [] n [] [] [] []) = writeName n
+
+writeInit :: Scala.Init -> Expr
+writeInit (Scala.Init tpe _ _) = writeType tpe
+
+writeMod :: Scala.Mod -> Expr
+writeMod m = case m of
+  Scala.ModCase -> cst "case"
+  Scala.ModSealed -> cst "sealed"
+  Scala.ModAbstract -> cst "abstract"
+  Scala.ModFinal -> cst "final"
+  Scala.ModOverride -> cst "override"
+  Scala.ModImplicit -> cst "implicit"
+  Scala.ModLazy -> cst "lazy"
+  Scala.ModPrivate _ -> cst "private"
+  Scala.ModProtected _ -> cst "protected"
+  _ -> cst ""
