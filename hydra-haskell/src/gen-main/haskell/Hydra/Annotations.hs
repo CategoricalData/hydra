@@ -184,8 +184,9 @@ setTypeAnnotation key val typ =
       Core.annotatedTypeBody = typ_,
       Core.annotatedTypeAnnotation = anns})))
 
+-- | Set type classes on term
 setTypeClasses :: (M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Term -> Core.Term)
-setTypeClasses m term =
+setTypeClasses m term =  
   let encodeClass = (\tc -> (\x -> case x of
           Classes.TypeClassEquality -> (Core.TermUnion (Core.Injection {
             Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),

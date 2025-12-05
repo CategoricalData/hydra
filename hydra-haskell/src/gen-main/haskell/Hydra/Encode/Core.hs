@@ -504,6 +504,7 @@ sum s = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "term"),
       Core.fieldTerm = (term (Core.sumTerm s))}]}))
 
+-- | Encode a term as a term (identity encoding)
 term :: (Core.Term -> Core.Term)
 term x = case x of
   Core.TermAnnotated v1 -> (Core.TermUnion (Core.Injection {

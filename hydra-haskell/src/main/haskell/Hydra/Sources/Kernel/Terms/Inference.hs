@@ -807,21 +807,52 @@ inferTypeOfPairDef :: TBinding (InferenceContext -> (Term, Term) -> Flow s Infer
 inferTypeOfPairDef = define "inferTypeOfPair" $
   doc "Infer the type of a pair" $
   "cx" ~> "p" ~>
-  "pairFst" <~ Pairs.first (var "p") $
-  "pairSnd" <~ Pairs.second (var "p") $
-  "r1" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "pairFst" @@ string "pair first element") $
-  "ifst" <~ Typing.inferenceResultTerm (var "r1") $
-  "firstType" <~ Typing.inferenceResultType (var "r1") $
-  "subst1" <~ Typing.inferenceResultSubst (var "r1") $
-  "r2" <<~ (ref inferTypeOfTermDef @@ var "cx" @@ var "pairSnd" @@ string "pair second element") $
-  "isnd" <~ Typing.inferenceResultTerm (var "r2") $
-  "secondType" <~ Typing.inferenceResultType (var "r2") $
-  "subst2" <~ Typing.inferenceResultSubst (var "r2") $
-  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
-  "termWithFirstType" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "firstType")) $
-  "termWithBothTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm (var "termWithFirstType") (var "secondType")) $
-  "pairType" <~ (Core.typePair $ Core.pairType (var "firstType") (var "secondType")) $
-  ref yieldCheckedDef @@ var "termWithBothTypes" @@ var "pairType" @@ var "subst2"
+  Flows.map
+    ( "results" ~>
+      "iterms" <~ Pairs.first (var "results") $
+      "itypes" <~ Pairs.first (Pairs.second $ var "results") $
+      "isubst" <~ Pairs.second (Pairs.second $ var "results") $
+      "ifst" <~ Lists.head (var "iterms") $
+      "isnd" <~ Lists.head (Lists.tail $ var "iterms") $
+      "tyFst" <~ Lists.head (var "itypes") $
+      "tySnd" <~ Lists.head (Lists.tail $ var "itypes") $
+      "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
+      "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
+        (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
+        (var "tySnd")) $
+      ref yieldDef
+        @@ var "termWithTypes"
+        @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
+        @@ var "isubst")
+    (ref inferManyDef @@ var "cx" @@ list [
+      pair (Pairs.first $ var "p") (string "pair first element"),
+      pair (Pairs.second $ var "p") (string "pair second element")])
+
+
+
+
+
+
+--inferTypeOfProductDef :: TBinding (InferenceContext -> [Term] -> Flow s InferenceResult)
+--inferTypeOfProductDef = define "inferTypeOfProduct" $
+--  doc "Infer the type of a product (tuple)" $
+--  "cx" ~> "els" ~>
+--  Flows.map
+--    ( "results" ~>
+--      "iterms" <~ Pairs.first (var "results") $
+--      "itypes" <~ Pairs.first (Pairs.second $ var "results") $
+--      "isubst" <~ Pairs.second (Pairs.second $ var "results") $
+--      ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
+--    (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> pair (var "e") (string "tuple element")) $ var "els"))
+
+
+
+
+
+
+
+
+
 
 inferTypeOfPrimitiveDef :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
