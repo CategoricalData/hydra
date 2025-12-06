@@ -527,25 +527,6 @@ _RowType_typeName = (Name "typeName")
 
 _RowType_fields = (Name "fields")
 
--- | The unlabeled equivalent of an Injection term
-data Sum = 
-  Sum {
-    -- | The 0-indexed position of the variant
-    sumIndex :: Int,
-    -- | The total number of variants in the sum type
-    sumSize :: Int,
-    -- | The term value of the variant
-    sumTerm :: Term}
-  deriving (Eq, Ord, Read, Show)
-
-_Sum = (Name "hydra.core.Sum")
-
-_Sum_index = (Name "index")
-
-_Sum_size = (Name "size")
-
-_Sum_term = (Name "term")
-
 -- | A data term
 data Term = 
   -- | A term annotated with metadata
@@ -574,8 +555,6 @@ data Term =
   TermRecord Record |
   -- | A set of values
   TermSet (S.Set Term) |
-  -- | A variant tuple
-  TermSum Sum |
   -- | A System F type application term
   TermTypeApplication TypeApplicationTerm |
   -- | A System F type abstraction term
@@ -617,8 +596,6 @@ _Term_product = (Name "product")
 _Term_record = (Name "record")
 
 _Term_set = (Name "set")
-
-_Term_sum = (Name "sum")
 
 _Term_typeApplication = (Name "typeApplication")
 
@@ -679,8 +656,6 @@ data Type =
   TypeRecord RowType |
   -- | A set type
   TypeSet Type |
-  -- | A union type without field names
-  TypeSum [Type] |
   -- | A union type with field names
   TypeUnion RowType |
   -- | The unit type
@@ -718,8 +693,6 @@ _Type_product = (Name "product")
 _Type_record = (Name "record")
 
 _Type_set = (Name "set")
-
-_Type_sum = (Name "sum")
 
 _Type_union = (Name "union")
 

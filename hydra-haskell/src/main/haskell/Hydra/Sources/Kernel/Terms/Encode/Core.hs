@@ -98,7 +98,6 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el projectionDef,
       el recordDef,
       el rowTypeDef,
-      el sumDef,
       el termDef,
       el tupleProjectionDef,
       el typeDef,
@@ -442,14 +441,6 @@ rowTypeDef = define "RowType" $
     field _RowType_typeName (ref nameDef @@ (Core.rowTypeTypeName (var "rt"))),
     field _RowType_fields (encodedList (primitive _lists_map @@ ref fieldTypeDef @@ (Core.rowTypeFields (var "rt"))))]
 
-sumDef :: TBinding (Sum -> Term)
-sumDef = define "Sum" $
-  doc "Encode a sum as a term" $
-  lambda "s" $ encodedRecord _Sum [
-    field _Sum_index $ encodedInt32 $ Core.sumIndex $ var "s",
-    field _Sum_size $ encodedInt32 $ Core.sumSize $ var "s",
-    field _Sum_term $ ref termDef @@ (Core.sumTerm $ var "s")]
-
 termDef :: TBinding (Term -> Term)
 termDef = define "Term" $
   doc "Encode a term as a term (identity encoding)" $
@@ -471,7 +462,6 @@ termDef = define "Term" $
     ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref termDef @@ var "v"),
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
-    ecase _Term_sum (ref sumDef),
     ecase _Term_typeApplication $ ref typeApplicationTermDef,
     ecase _Term_typeLambda $ ref typeLambdaDef,
     ecase _Term_union (ref injectionDef),
@@ -511,7 +501,6 @@ typeDef = define "Type" $
     cs _Type_product $ encodedList $ primitive _lists_map @@ ref typeDef @@ var "v",
     csref _Type_record rowTypeDef,
     csref _Type_set typeDef,
-    cs _Type_sum $ encodedList $ primitive _lists_map @@ ref typeDef @@ var "v",
     csref _Type_union rowTypeDef,
     field _Type_unit $ constant $ encodedVariant _Type _Type_unit Core.termUnit,
     csref _Type_variable nameDef,

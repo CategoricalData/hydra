@@ -362,13 +362,6 @@ stringLiteral v = ((\x -> case x of
   Core.LiteralString v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "string" (Core_.literal v))) v)
 
-sumType :: (Core.Type -> Compute.Flow t0 [Core.Type])
-sumType typ =  
-  let stripped = (Rewriting.deannotateType typ)
-  in ((\x -> case x of
-    Core.TypeSum v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "sum type" (Core_.type_ typ))) stripped)
-
 -- | Extract a record from a term
 termRecord :: (Core.Term -> Compute.Flow Graph.Graph Core.Record)
 termRecord term0 =  

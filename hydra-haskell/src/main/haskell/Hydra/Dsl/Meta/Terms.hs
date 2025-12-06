@@ -330,11 +330,6 @@ booleanTerm b = inject (Core.nameLift _Term) "literal" $ inject (Core.nameLift _
 nameTerm :: String -> TTerm Term
 nameTerm s = wrap (Core.nameLift _Name) $ string s
 
--- | Create a term-encoded sum type instance
--- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
-sum :: Int -> Int -> TTerm Term -> TTerm Term
-sum i s = Core.termSum . Core.sum (Phantoms.int32 i) (Phantoms.int32 s)
-
 -- | Term-encoded boolean true literal
 true :: TTerm Term
 true = boolean True

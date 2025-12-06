@@ -752,28 +752,6 @@ inferTypeOfRecord cx record =
 inferTypeOfSet :: (Typing_.InferenceContext -> S.Set Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfSet cx s = (inferTypeOfCollection cx (\x -> Core.TypeSet x) (\terms -> Core.TermSet (Sets.fromList terms)) "set element" (Sets.toList s))
 
-inferTypeOfSum :: (Typing_.InferenceContext -> Core.Sum -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfSum cx sum =  
-  let i = (Core.sumIndex sum)
-  in  
-    let s = (Core.sumSize sum)
-    in  
-      let term = (Core.sumTerm sum)
-      in  
-        let toType = (\e -> Eithers.either (\t -> t) (\v -> Core.TypeVariable v) e)
-        in  
-          let varOrTerm = (\t -> \j -> Logic.ifElse (Equality.equal i j) (Flows.pure (Left t)) (Flows.map (\x -> Right x) Schemas.freshName))
-          in (Flows.bind (inferTypeOfTerm cx term "sum term") (\result ->  
-            let iterm = (Typing_.inferenceResultTerm result)
-            in  
-              let ityp = (Typing_.inferenceResultType result)
-              in  
-                let isubst = (Typing_.inferenceResultSubst result)
-                in (Flows.bind (Flows.mapList (varOrTerm ityp) (Math.range 0 (Math.sub s 1))) (\vars -> Flows.pure (yield (Core.TermSum (Core.Sum {
-                  Core.sumIndex = i,
-                  Core.sumSize = s,
-                  Core.sumTerm = iterm})) (Core.TypeSum (Lists.map toType vars)) isubst)))))
-
 inferTypeOfTerm :: (Typing_.InferenceContext -> Core.Term -> String -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTerm cx term desc =  
   let matchTerm = ((\x -> case x of
@@ -790,7 +768,6 @@ inferTypeOfTerm cx term desc =
           Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)
-          Core.TermSum v1 -> (inferTypeOfSum cx v1)
           Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
           Core.TermTypeLambda v1 -> (inferTypeOfTypeLambda cx v1)
           Core.TermUnion v1 -> (inferTypeOfInjection cx v1)

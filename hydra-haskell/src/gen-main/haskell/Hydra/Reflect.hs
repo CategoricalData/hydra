@@ -175,7 +175,6 @@ termVariant x = case x of
   Core.TermProduct _ -> Variants.TermVariantProduct
   Core.TermRecord _ -> Variants.TermVariantRecord
   Core.TermSet _ -> Variants.TermVariantSet
-  Core.TermSum _ -> Variants.TermVariantSum
   Core.TermTypeApplication _ -> Variants.TermVariantTypeApplication
   Core.TermTypeLambda _ -> Variants.TermVariantTypeLambda
   Core.TermUnion _ -> Variants.TermVariantUnion
@@ -198,7 +197,6 @@ termVariants = [
   Variants.TermVariantProduct,
   Variants.TermVariantRecord,
   Variants.TermVariantSet,
-  Variants.TermVariantSum,
   Variants.TermVariantTypeLambda,
   Variants.TermVariantTypeApplication,
   Variants.TermVariantUnion,
@@ -222,7 +220,6 @@ typeVariant x = case x of
   Core.TypeProduct _ -> Variants.TypeVariantProduct
   Core.TypeRecord _ -> Variants.TypeVariantRecord
   Core.TypeSet _ -> Variants.TypeVariantSet
-  Core.TypeSum _ -> Variants.TypeVariantSum
   Core.TypeUnion _ -> Variants.TypeVariantUnion
   Core.TypeUnit -> Variants.TypeVariantUnit
   Core.TypeVariable _ -> Variants.TypeVariantVariable
@@ -245,7 +242,6 @@ typeVariants = [
   Variants.TypeVariantProduct,
   Variants.TypeVariantRecord,
   Variants.TypeVariantSet,
-  Variants.TypeVariantSum,
   Variants.TypeVariantUnion,
   Variants.TypeVariantUnit,
   Variants.TypeVariantVariable]

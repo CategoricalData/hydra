@@ -221,7 +221,6 @@ containsTriviallyPolymorphic term = case term of
   TermMaybe (Just x) -> containsTriviallyPolymorphic x  -- Check content
   TermEither (Left l) -> containsTriviallyPolymorphic l
   TermEither (Right r) -> containsTriviallyPolymorphic r
-  TermSum s -> containsTriviallyPolymorphic (sumTerm s)
   TermUnion inj -> containsTriviallyPolymorphic (fieldTerm $ injectionField inj)
   TermPair (a, b) -> containsTriviallyPolymorphic a || containsTriviallyPolymorphic b
   TermRecord fields -> any (containsTriviallyPolymorphic . fieldTerm) (recordFields fields)

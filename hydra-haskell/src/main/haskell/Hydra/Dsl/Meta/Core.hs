@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, product)
 
 
 annotatedTerm :: TTerm Term -> TTerm (M.Map Name Term) -> TTerm AnnotatedTerm
@@ -379,21 +379,6 @@ rowTypeTypeName rt = Phantoms.project _RowType _RowType_typeName @@ rt
 rowTypeFields :: TTerm RowType -> TTerm [FieldType]
 rowTypeFields rt = Phantoms.project _RowType _RowType_fields @@ rt
 
-sum :: TTerm Int -> TTerm Int -> TTerm Term -> TTerm Sum
-sum index size term = Phantoms.record _Sum [
-  _Sum_index>>: index,
-  _Sum_size>>: size,
-  _Sum_term>>: term]
-
-sumIndex :: TTerm Sum -> TTerm Int
-sumIndex s = Phantoms.project _Sum _Sum_index @@ s
-
-sumSize :: TTerm Sum -> TTerm Int
-sumSize s = Phantoms.project _Sum _Sum_size @@ s
-
-sumTerm :: TTerm Sum -> TTerm Term
-sumTerm s = Phantoms.project _Sum _Sum_term @@ s
-
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
 termAnnotated = inject _Term _Term_annotated
 
@@ -432,9 +417,6 @@ termRecord = inject _Term _Term_record
 
 termSet :: TTerm (S.Set Term) -> TTerm Term
 termSet = inject _Term _Term_set
-
-termSum :: TTerm Sum -> TTerm Term
-termSum = inject _Term _Term_sum
 
 termTypeLambda :: TTerm TypeLambda -> TTerm Term
 termTypeLambda = inject _Term _Term_typeLambda
@@ -529,9 +511,6 @@ typeSchemeType ts = Phantoms.project _TypeScheme _TypeScheme_type @@ ts
 
 typeSet :: TTerm Type -> TTerm Type
 typeSet = inject _Type _Type_set
-
-typeSum :: TTerm [Type] -> TTerm Type
-typeSum = inject _Type _Type_sum
 
 typeUnion :: TTerm RowType -> TTerm Type
 typeUnion = inject _Type _Type_union

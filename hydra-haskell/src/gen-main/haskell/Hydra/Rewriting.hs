@@ -633,10 +633,6 @@ rewriteAndFoldTerm f term0 =
                               Core.recordTypeName = (Core.recordTypeName v1),
                               Core.recordFields = fields})) val0 (Core.recordFields v1))
                             Core.TermSet v1 -> (forMany recurse (\e -> Core.TermSet (Sets.fromList e)) val0 (Sets.toList v1))
-                            Core.TermSum v1 -> (forSingle recurse (\t -> Core.TermSum (Core.Sum {
-                              Core.sumIndex = (Core.sumIndex v1),
-                              Core.sumSize = (Core.sumSize v1),
-                              Core.sumTerm = t})) val0 (Core.sumTerm v1))
                             Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = t,
                               Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})) val0 (Core.typeApplicationTermBody v1))
@@ -717,10 +713,6 @@ rewriteAndFoldTermM f term0 =
                               Core.recordTypeName = (Core.recordTypeName v1),
                               Core.recordFields = fields})) val0 (Core.recordFields v1))
                             Core.TermSet v1 -> (forMany recurse (\e -> Core.TermSet (Sets.fromList e)) val0 (Sets.toList v1))
-                            Core.TermSum v1 -> (forSingle recurse (\t -> Core.TermSum (Core.Sum {
-                              Core.sumIndex = (Core.sumIndex v1),
-                              Core.sumSize = (Core.sumSize v1),
-                              Core.sumTerm = t})) val0 (Core.sumTerm v1))
                             Core.TermTypeApplication v1 -> (forSingle recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = t,
                               Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})) val0 (Core.typeApplicationTermBody v1))
@@ -796,10 +788,6 @@ rewriteTerm f term0 =
                       Core.recordTypeName = (Core.recordTypeName v1),
                       Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
                     Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map recurse (Sets.toList v1))))
-                    Core.TermSum v1 -> (Core.TermSum (Core.Sum {
-                      Core.sumIndex = (Core.sumIndex v1),
-                      Core.sumSize = (Core.sumSize v1),
-                      Core.sumTerm = (recurse (Core.sumTerm v1))}))
                     Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
                       Core.typeApplicationTermBody = (recurse (Core.typeApplicationTermBody v1)),
                       Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))
@@ -890,16 +878,6 @@ rewriteTermM f term0 =
                       Core.recordTypeName = n,
                       Core.recordFields = rfields})) (Flows.mapList forField fields))
                 Core.TermSet v1 -> (Flows.bind (Flows.mapList recurse (Sets.toList v1)) (\rlist -> Flows.pure (Core.TermSet (Sets.fromList rlist))))
-                Core.TermSum v1 ->  
-                  let i = (Core.sumIndex v1)
-                  in  
-                    let s = (Core.sumSize v1)
-                    in  
-                      let trm = (Core.sumTerm v1)
-                      in (Flows.bind (recurse trm) (\rtrm -> Flows.pure (Core.TermSum (Core.Sum {
-                        Core.sumIndex = i,
-                        Core.sumSize = s,
-                        Core.sumTerm = rtrm}))))
                 Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typeApplicationTermBody v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = t,
                   Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))))
@@ -988,10 +966,6 @@ rewriteTermWithContext f cx0 term0 =
                         Core.recordTypeName = (Core.recordTypeName v1),
                         Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
                       Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map recurse (Sets.toList v1))))
-                      Core.TermSum v1 -> (Core.TermSum (Core.Sum {
-                        Core.sumIndex = (Core.sumIndex v1),
-                        Core.sumSize = (Core.sumSize v1),
-                        Core.sumTerm = (recurse (Core.sumTerm v1))}))
                       Core.TermTypeApplication v1 -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
                         Core.typeApplicationTermBody = (recurse (Core.typeApplicationTermBody v1)),
                         Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))
@@ -1084,16 +1058,6 @@ rewriteTermWithContextM f cx0 term0 =
                             Core.recordTypeName = n,
                             Core.recordFields = rfields})) (Flows.mapList forField fields))
                       Core.TermSet v1 -> (Flows.bind (Flows.mapList recurse (Sets.toList v1)) (\rlist -> Flows.pure (Core.TermSet (Sets.fromList rlist))))
-                      Core.TermSum v1 ->  
-                        let i = (Core.sumIndex v1)
-                        in  
-                          let s = (Core.sumSize v1)
-                          in  
-                            let trm = (Core.sumTerm v1)
-                            in (Flows.bind (recurse trm) (\rtrm -> Flows.pure (Core.TermSum (Core.Sum {
-                              Core.sumIndex = i,
-                              Core.sumSize = s,
-                              Core.sumTerm = rtrm}))))
                       Core.TermTypeApplication v1 -> (Flows.bind (recurse (Core.typeApplicationTermBody v1)) (\t -> Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
                         Core.typeApplicationTermBody = t,
                         Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))))
@@ -1160,7 +1124,6 @@ rewriteType f typ0 =
               Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
               Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v1))}))
             Core.TypeSet v1 -> (Core.TypeSet (recurse v1))
-            Core.TypeSum v1 -> (Core.TypeSum (Lists.map recurse v1))
             Core.TypeUnion v1 -> (Core.TypeUnion (Core.RowType {
               Core.rowTypeTypeName = (Core.rowTypeTypeName v1),
               Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v1))}))
@@ -1213,7 +1176,6 @@ rewriteTypeM f typ0 =
                   Core.rowTypeTypeName = name,
                   Core.rowTypeFields = rfields}))))
           Core.TypeSet v1 -> (Flows.bind (recurse v1) (\rt -> Flows.pure (Core.TypeSet rt)))
-          Core.TypeSum v1 -> (Flows.bind (Flows.mapList recurse v1) (\rtypes -> Flows.pure (Core.TypeSum rtypes)))
           Core.TypeUnion v1 ->  
             let name = (Core.rowTypeTypeName v1)
             in  
@@ -1329,8 +1291,6 @@ subterms x = case x of
   Core.TermProduct v1 -> v1
   Core.TermRecord v1 -> (Lists.map Core.fieldTerm (Core.recordFields v1))
   Core.TermSet v1 -> (Sets.toList v1)
-  Core.TermSum v1 -> [
-    Core.sumTerm v1]
   Core.TermTypeApplication v1 -> [
     Core.typeApplicationTermBody v1]
   Core.TermTypeLambda v1 -> [
@@ -1371,8 +1331,6 @@ subtermsWithAccessors x = case x of
   Core.TermProduct v1 -> (Lists.map (\e -> (Accessors.TermAccessorProductTerm 0, e)) v1)
   Core.TermRecord v1 -> (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1))
   Core.TermSet v1 -> (Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) (Sets.toList v1))
-  Core.TermSum v1 -> [
-    (Accessors.TermAccessorSumTerm, (Core.sumTerm v1))]
   Core.TermTypeApplication v1 -> [
     (Accessors.TermAccessorTypeApplicationTerm, (Core.typeApplicationTermBody v1))]
   Core.TermTypeLambda v1 -> [
@@ -1415,7 +1373,6 @@ subtypes x = case x of
   Core.TypeRecord v1 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v1))
   Core.TypeSet v1 -> [
     v1]
-  Core.TypeSum v1 -> v1
   Core.TypeUnion v1 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v1))
   Core.TypeUnit -> []
   Core.TypeVariable _ -> []

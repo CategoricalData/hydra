@@ -201,11 +201,6 @@ set = typeSet
 string :: TTerm Type
 string = typeLiteral literalTypeString
 
--- | Create a term-encoded sum type (disjoint union) with multiple variants
--- Example: sum [string, int32, boolean]
-sum :: [TTerm Type] -> TTerm Type
-sum types = Core.typeSum $ TTerm $ TermList (unTTerm <$> types)
-
 -- | Create a term-encoded 8-bit unsigned integer type
 -- Example: uint8
 uint8 :: TTerm Type

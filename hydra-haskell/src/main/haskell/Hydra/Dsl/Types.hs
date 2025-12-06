@@ -201,11 +201,6 @@ set = TypeSet
 string :: Type
 string = literal LiteralTypeString
 
--- | Create a sum type (disjoint union) with multiple variants
--- Example: sum [string, int32, boolean]
-sum :: [Type] -> Type
-sum = TypeSum
-
 -- | 8-bit unsigned integer type
 uint8 :: Type
 uint8 = integer IntegerTypeUint8

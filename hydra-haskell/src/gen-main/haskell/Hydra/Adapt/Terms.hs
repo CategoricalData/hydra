@@ -482,29 +482,6 @@ passSet t =
       Compute.adapterTarget = (Core.TypeSet (Compute.adapterTarget ad)),
       Compute.adapterCoder = (Utils.bidirectional (encdec ad))})))) t)
 
--- | Pass through sum types
-passSum :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
-passSum t =  
-  let encdec = (\ads -> \dir -> \term -> (\x -> case x of
-          Core.TermSum v1 ->  
-            let i = (Core.sumIndex v1)
-            in  
-              let n = (Core.sumSize v1)
-              in  
-                let term = (Core.sumTerm v1)
-                in (Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder (Lists.at i ads)) term) (\newTerm -> Flows.pure (Core.TermSum (Core.Sum {
-                  Core.sumIndex = i,
-                  Core.sumSize = n,
-                  Core.sumTerm = newTerm}))))) term)
-  in ((\x -> case x of
-    Core.TypeSum v1 -> (Flows.bind (Flows.mapList termAdapter v1) (\ads ->  
-      let lossy = (Lists.foldl Logic.or False (Lists.map Compute.adapterIsLossy ads))
-      in (Flows.pure (Compute.Adapter {
-        Compute.adapterIsLossy = lossy,
-        Compute.adapterSource = t,
-        Compute.adapterTarget = (Core.TypeSum (Lists.map Compute.adapterTarget ads)),
-        Compute.adapterCoder = (Utils.bidirectional (encdec ads))}))))) t)
-
 -- | Pass through union types
 passUnion :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passUnion t = ((\x -> case x of
@@ -629,8 +606,6 @@ termAdapter typ =
                     passRecord]
                   Variants.TypeVariantSet -> [
                     passSet]
-                  Variants.TypeVariantSum -> [
-                    passSum]
                   Variants.TypeVariantUnion -> [
                     passUnion]
                   Variants.TypeVariantUnit -> [
@@ -658,7 +633,6 @@ termAdapter typ =
                     Variants.TypeVariantRecord -> []
                     Variants.TypeVariantSet -> [
                       setToList]
-                    Variants.TypeVariantSum -> []
                     Variants.TypeVariantUnion -> [
                       unionToRecord]
                     Variants.TypeVariantUnit -> [

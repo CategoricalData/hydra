@@ -260,9 +260,6 @@ typeDef = define "type" $
         (Core.nameLift _Type_set)
         (lambda "et" $ Flows.map (unaryFunction Core.typeSet) $ ref typeDef @@ var "et"),
       pair
-        (Core.nameLift _Type_sum)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeSum) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      pair
         (Core.nameLift _Type_union)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeUnion) $ ref rowTypeDef @@ var "rt"),
       pair
