@@ -106,9 +106,6 @@ PAIR_TYPE__NAME = Name("hydra.core.PairType")
 PAIR_TYPE__FIRST__NAME = Name("first")
 PAIR_TYPE__SECOND__NAME = Name("second")
 
-class EliminationProduct(Node["TupleProjection"]):
-    r"""Eliminates a tuple by projecting the component at a given 0-indexed offset."""
-
 class EliminationRecord(Node["Projection"]):
     r"""Eliminates a record by projecting a given field."""
 
@@ -119,10 +116,9 @@ class EliminationWrap(Node["Name"]):
     r"""Unwrap a wrapped term."""
 
 # A corresponding elimination for an introduction term.
-type Elimination = EliminationProduct | EliminationRecord | EliminationUnion | EliminationWrap
+type Elimination = EliminationRecord | EliminationUnion | EliminationWrap
 
 ELIMINATION__NAME = Name("hydra.core.Elimination")
-ELIMINATION__PRODUCT__NAME = Name("product")
 ELIMINATION__RECORD__NAME = Name("record")
 ELIMINATION__UNION__NAME = Name("union")
 ELIMINATION__WRAP__NAME = Name("wrap")
@@ -433,19 +429,6 @@ ROW_TYPE__NAME = Name("hydra.core.RowType")
 ROW_TYPE__TYPE_NAME__NAME = Name("typeName")
 ROW_TYPE__FIELDS__NAME = Name("fields")
 
-@dataclass(frozen=True)
-class Sum:
-    r"""The unlabeled equivalent of an Injection term."""
-    
-    index: Annotated[int, "The 0-indexed position of the variant"]
-    size: Annotated[int, "The total number of variants in the sum type"]
-    term: Annotated[Term, "The term value of the variant"]
-
-SUM__NAME = Name("hydra.core.Sum")
-SUM__INDEX__NAME = Name("index")
-SUM__SIZE__NAME = Name("size")
-SUM__TERM__NAME = Name("term")
-
 class TermAnnotated(Node["AnnotatedTerm"]):
     r"""A term annotated with metadata."""
 
@@ -476,17 +459,11 @@ class TermMaybe(Node["Maybe[Term]"]):
 class TermPair(Node["Tuple[Term, Term]"]):
     r"""A pair (2-tuple)."""
 
-class TermProduct(Node["frozenlist[Term]"]):
-    r"""A tuple."""
-
 class TermRecord(Node["Record"]):
     r"""A record term."""
 
 class TermSet(Node["frozenset[Term]"]):
     r"""A set of values."""
-
-class TermSum(Node["Sum"]):
-    r"""A variant tuple."""
 
 class TermTypeApplication(Node["TypeApplicationTerm"]):
     r"""A System F type application term."""
@@ -507,7 +484,7 @@ class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermProduct | TermRecord | TermSet | TermSum | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
+type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -520,29 +497,14 @@ TERM__LITERAL__NAME = Name("literal")
 TERM__MAP__NAME = Name("map")
 TERM__MAYBE__NAME = Name("maybe")
 TERM__PAIR__NAME = Name("pair")
-TERM__PRODUCT__NAME = Name("product")
 TERM__RECORD__NAME = Name("record")
 TERM__SET__NAME = Name("set")
-TERM__SUM__NAME = Name("sum")
 TERM__TYPE_APPLICATION__NAME = Name("typeApplication")
 TERM__TYPE_LAMBDA__NAME = Name("typeLambda")
 TERM__UNION__NAME = Name("union")
 TERM__UNIT__NAME = Name("unit")
 TERM__VARIABLE__NAME = Name("variable")
 TERM__WRAP__NAME = Name("wrap")
-
-@dataclass(frozen=True)
-class TupleProjection:
-    r"""A tuple elimination; a projection from an integer-indexed product."""
-    
-    arity: Annotated[int, "The arity of the tuple"]
-    index: Annotated[int, "The 0-indexed offset from the beginning of the tuple"]
-    domain: Annotated[Maybe[frozenlist[Type]], "An optional domain for the projection; this is a list of component types"]
-
-TUPLE_PROJECTION__NAME = Name("hydra.core.TupleProjection")
-TUPLE_PROJECTION__ARITY__NAME = Name("arity")
-TUPLE_PROJECTION__INDEX__NAME = Name("index")
-TUPLE_PROJECTION__DOMAIN__NAME = Name("domain")
 
 class TypeAnnotated(Node["AnnotatedType"]):
     r"""An annotated type."""
@@ -574,17 +536,11 @@ class TypeMaybe(Node["Type"]):
 class TypePair(Node["PairType"]):
     r"""A pair (2-tuple) type."""
 
-class TypeProduct(Node["frozenlist[Type]"]):
-    r"""A tuple type."""
-
 class TypeRecord(Node["RowType"]):
     r"""A record type."""
 
 class TypeSet(Node["Type"]):
     r"""A set type."""
-
-class TypeSum(Node["frozenlist[Type]"]):
-    r"""A union type without field names."""
 
 class TypeUnion(Node["RowType"]):
     r"""A union type with field names."""
@@ -599,7 +555,7 @@ class TypeWrap(Node["WrappedType"]):
     r"""A wrapped type (newtype)."""
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeProduct | TypeRecord | TypeSet | TypeSum | TypeUnion | TypeUnit | TypeVariable | TypeWrap
+type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
@@ -612,10 +568,8 @@ TYPE__LITERAL__NAME = Name("literal")
 TYPE__MAP__NAME = Name("map")
 TYPE__MAYBE__NAME = Name("maybe")
 TYPE__PAIR__NAME = Name("pair")
-TYPE__PRODUCT__NAME = Name("product")
 TYPE__RECORD__NAME = Name("record")
 TYPE__SET__NAME = Name("set")
-TYPE__SUM__NAME = Name("sum")
 TYPE__UNION__NAME = Name("union")
 TYPE__UNIT__NAME = Name("unit")
 TYPE__VARIABLE__NAME = Name("variable")

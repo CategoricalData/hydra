@@ -58,7 +58,10 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         case hydra.core.TypeUnion(value=rt):
             tname = rt.type_name
             fields = rt.fields
-            return (cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname, fields))),)
+            def to_opt_field(f: hydra.core.FieldType) -> hydra.core.FieldType:
+                return hydra.core.FieldType(f.name, cast(hydra.core.Type, hydra.core.TypeMaybe(f.type)))
+            opt_fields = hydra.lib.lists.map(to_opt_field, fields)
+            return (cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname, opt_fields))),)
         
         case hydra.core.TypeUnit():
             return (cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean()))),)
@@ -104,7 +107,7 @@ def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.co
     def for_unsupported(ft2: hydra.core.FloatType) -> Maybe[hydra.core.FloatType]:
         match ft2:
             case hydra.core.FloatType.BIGFLOAT:
-                return cast(Maybe[hydra.core.FloatType], Nothing())
+                return alt(hydra.core.FloatType.FLOAT64)
             
             case hydra.core.FloatType.FLOAT32:
                 return alt(hydra.core.FloatType.FLOAT64)

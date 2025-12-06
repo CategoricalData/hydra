@@ -354,7 +354,7 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
                 return hydra.extract.core.wrap(name, reduced_arg)
             
             case _:
-                raise TypeError("Unsupported Elimination")
+                raise AssertionError("Unreachable: all variants handled")
     def apply_if_nullary(eager2: bool, original: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
         stripped = hydra.rewriting.deannotate_term(original)
         def for_elimination(elm: hydra.core.Elimination, args2: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
@@ -389,14 +389,45 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
             
-            case hydra.core.TermVariable():
-                return hydra.lib.flows.pure(apply_to_arguments(original, args))
+            case hydra.core.TermVariable(value=v):
+                return hydra.lib.flows.bind(hydra.lexical.dereference_element(v), (lambda m_binding: hydra.lib.maybes.maybe(hydra.lib.flows.pure(apply_to_arguments(original, args)), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding)))
             
             case _:
                 return hydra.lib.flows.pure(apply_to_arguments(original, args))
     def mapping(recurse: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], mid: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
         return hydra.lib.flows.bind(hydra.lib.logic.if_else(do_recurse(eager, mid), (lambda : recurse(mid)), (lambda : hydra.lib.flows.pure(mid))), (lambda inner: apply_if_nullary(eager, inner, cast(frozenlist[hydra.core.Term], ()))))
     return hydra.rewriting.rewrite_term_m(mapping, term)
+
+def rewrite_term_with_type_context(f: Callable[[
+  Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term],
+  hydra.core.Term], hydra.core.Term], cx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Rewrite a term with the help of a type context which is updated as we descend into subterms."""
+    
+    def f2[T0](recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term], cx: T0, term: hydra.core.Term) -> hydra.core.Term:
+        def recurse1(cx2: hydra.typing.TypeContext, term2: hydra.core.Term) -> hydra.core.Term:
+            fallback = recurse(cx2, term2)
+            match term2:
+                case hydra.core.TermFunction(value=fun):
+                    match fun:
+                        case hydra.core.FunctionLambda(value=l):
+                            return recurse(hydra.schemas.extend_type_context_for_lambda(cx2, l), term2)
+                        
+                        case _:
+                            return fallback
+                
+                case hydra.core.TermLet(value=l):
+                    return recurse(hydra.schemas.extend_type_context_for_let(cx2, l), term2)
+                
+                case hydra.core.TermTypeLambda(value=tl):
+                    return recurse(hydra.schemas.extend_type_context_for_type_lambda(cx2, tl), term2)
+                
+                case _:
+                    return fallback
+        return f(recurse1, term)
+    return hydra.rewriting.rewrite_term_with_context(cast(Callable[[
+      Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term],
+      hydra.typing.TypeContext,
+      hydra.core.Term], hydra.core.Term], f2), cx0, term0)
 
 def term_is_closed(term: hydra.core.Term) -> bool:
     r"""Whether a term is closed, i.e. represents a complete program."""
@@ -424,7 +455,7 @@ def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
                         return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), cs.default))
                     
                     case _:
-                        raise TypeError("Unsupported Elimination")
+                        raise AssertionError("Unreachable: all variants handled")
             
             case hydra.core.FunctionLambda(value=l):
                 return term_is_value(g, l.body)

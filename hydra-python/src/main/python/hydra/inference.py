@@ -94,11 +94,6 @@ def infer_type_of_projection[T0](cx: hydra.typing.InferenceContext, proj: hydra.
     fname = proj.field
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.record_type(tname, stype), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname, sfields), (lambda ftyp: hydra.lib.flows.pure(yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(tname, fname)))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), ftyp))), hydra.substitution.id_type_subst())))))))[2]))
 
-def infer_type_of_tuple_projection[T0, T1](cx: T0, tp: hydra.core.TupleProjection) -> hydra.compute.Flow[T1, hydra.typing.InferenceResult]:
-    arity = tp.arity
-    idx = tp.index
-    return hydra.lib.flows.bind(hydra.schemas.fresh_names(arity), (lambda vars: (types := hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), vars), cod := hydra.lib.lists.at(idx, types), hydra.lib.logic.if_else(hydra.lib.equality.gte(idx, arity), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("tuple projection index ", hydra.lib.literals.show_int32(idx), " is out of bounds for arity ", hydra.lib.literals.show_int32(arity), ".")))), (lambda : hydra.lib.flows.pure(yield_(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(arity, idx, cast(Maybe[frozenlist[hydra.core.Type]], Just(types))))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(cast(hydra.core.Type, hydra.core.TypeProduct(types)), cod))), hydra.substitution.id_type_subst())))))[2]))
-
 def infer_type_of_unwrap[T0](cx: hydra.typing.InferenceContext, tname: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.wrapped_type(tname, stype), (lambda wtyp: hydra.lib.flows.pure(yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(tname))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), wtyp))), hydra.substitution.id_type_subst())))))[2]))
 
@@ -163,9 +158,6 @@ def infer_type_of_either[T0](cx: hydra.typing.InferenceContext, e: Either[hydra.
 
 def infer_type_of_elimination[T0](cx: hydra.typing.InferenceContext, elm: hydra.core.Elimination) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     match elm:
-        case hydra.core.EliminationProduct(value=tp):
-            return infer_type_of_tuple_projection(cx, tp)
-        
         case hydra.core.EliminationRecord(value=p):
             return infer_type_of_projection(cx, p)
         
@@ -268,12 +260,7 @@ def infer_type_of_optional[T0](cx: hydra.typing.InferenceContext, m: Maybe[hydra
     return infer_type_of_collection(cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), trm_cons, "optional element", hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Term], ()), cast(Callable[[hydra.core.Term], frozenlist[hydra.core.Term]], hydra.lib.lists.singleton), m))
 
 def infer_type_of_pair[T0](cx: hydra.typing.InferenceContext, p: Tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
-    pair_fst = hydra.lib.pairs.first(p)
-    pair_snd = hydra.lib.pairs.second(p)
-    return hydra.lib.flows.bind(infer_type_of_term(cx, pair_fst, "pair first element"), (lambda r1: (ifst := r1.term, first_type := r1.type, subst1 := r1.subst, hydra.lib.flows.bind(infer_type_of_term(cx, pair_snd, "pair second element"), (lambda r2: (isnd := r2.term, second_type := r2.type, subst2 := r2.subst, pair_term := cast(hydra.core.Term, hydra.core.TermPair(cast(Tuple[hydra.core.Term, hydra.core.Term], (ifst, isnd)))), term_with_first_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, first_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_first_type, second_type))), pair_type := cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(first_type, second_type))), yield_checked(term_with_both_types, pair_type, subst2))[7])))[3]))
-
-def infer_type_of_product[T0](cx: hydra.typing.InferenceContext, els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
-    return hydra.lib.flows.map((lambda results: (iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(results)), yield_(cast(hydra.core.Term, hydra.core.TermProduct(iterms)), cast(hydra.core.Type, hydra.core.TypeProduct(itypes)), isubst))[3]), infer_many(cx, hydra.lib.lists.map((lambda e: cast(Tuple[hydra.core.Term, str], (e, "tuple element"))), els)))
+    return hydra.lib.flows.map((lambda results: (iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(results)), ifst := hydra.lib.lists.head(iterms), isnd := hydra.lib.lists.head(hydra.lib.lists.tail(iterms)), ty_fst := hydra.lib.lists.head(itypes), ty_snd := hydra.lib.lists.head(hydra.lib.lists.tail(itypes)), pair_term := cast(hydra.core.Term, hydra.core.TermPair(cast(Tuple[hydra.core.Term, hydra.core.Term], (ifst, isnd)))), term_with_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, ty_fst))), ty_snd))), yield_(term_with_types, cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(ty_fst, ty_snd))), isubst))[9]), infer_many(cx, (cast(Tuple[hydra.core.Term, str], (hydra.lib.pairs.first(p), "pair first element")), cast(Tuple[hydra.core.Term, str], (hydra.lib.pairs.second(p), "pair second element")))))
 
 def infer_type_of_record[T0](cx: hydra.typing.InferenceContext, record: hydra.core.Record) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     tname = record.type_name
@@ -283,16 +270,6 @@ def infer_type_of_record[T0](cx: hydra.typing.InferenceContext, record: hydra.co
 
 def infer_type_of_set[T0](cx: hydra.typing.InferenceContext, s: frozenset[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return infer_type_of_collection(cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeSet(x))), (lambda terms: cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(terms)))), "set element", hydra.lib.sets.to_list(s))
-
-def infer_type_of_sum[T0](cx: hydra.typing.InferenceContext, sum: hydra.core.Sum) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
-    i = sum.index
-    s = sum.size
-    term = sum.term
-    def to_type(e: Either[hydra.core.Type, hydra.core.Name]) -> hydra.core.Type:
-        return hydra.lib.eithers.either((lambda t: t), (lambda v: cast(hydra.core.Type, hydra.core.TypeVariable(v))), e)
-    def var_or_term[T1, T2](t: T1, j: int) -> hydra.compute.Flow[T2, Either[T1, hydra.core.Name]]:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(i, j), (lambda : hydra.lib.flows.pure(cast(Either[T1, hydra.core.Name], Left(t)))), (lambda : hydra.lib.flows.map((lambda x: cast(Either[T1, hydra.core.Name], Right(x))), cast(hydra.compute.Flow[T2, hydra.core.Name], hydra.schemas.fresh_name))))
-    return hydra.lib.flows.bind(infer_type_of_term(cx, term, "sum term"), (lambda result: (iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: var_or_term(ityp, v1)), hydra.lib.math.range_(0, hydra.lib.math.sub(s, 1))), (lambda vars: hydra.lib.flows.pure(yield_(cast(hydra.core.Term, hydra.core.TermSum(hydra.core.Sum(i, s, iterm))), cast(hydra.core.Type, hydra.core.TypeSum(hydra.lib.lists.map(to_type, vars))), isubst)))))[3]))
 
 def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.Term, desc: str) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     def match_term() -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
@@ -327,17 +304,11 @@ def infer_type_of_term[T0](cx: hydra.typing.InferenceContext, term: hydra.core.T
             case hydra.core.TermPair(value=p):
                 return infer_type_of_pair(cx, p)
             
-            case hydra.core.TermProduct(value=els2):
-                return infer_type_of_product(cx, els2)
-            
             case hydra.core.TermRecord(value=r):
                 return infer_type_of_record(cx, r)
             
             case hydra.core.TermSet(value=s):
                 return infer_type_of_set(cx, s)
-            
-            case hydra.core.TermSum(value=s2):
-                return infer_type_of_sum(cx, s2)
             
             case hydra.core.TermTypeApplication(value=tt):
                 return infer_type_of_type_application(cx, tt)
@@ -388,9 +359,9 @@ def infer_graph_types[T0](g0: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra
     def from_let_term(l: hydra.core.Let) -> hydra.graph.Graph:
         bindings = l.bindings
         body = l.body
-        def from_binding[T1](b: T1) -> Tuple[hydra.core.Name, T1]:
-            return cast(Tuple[hydra.core.Name, T1], (b.name, b))
-        return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(cast(Callable[[hydra.core.Binding], Tuple[hydra.core.Name, hydra.core.Binding]], from_binding), bindings))), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), body, g0.primitives, g0.schema)
+        def from_binding(b: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
+            return cast(Tuple[hydra.core.Name, hydra.core.Binding], (b.name, b))
+        return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(from_binding, bindings))), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), body, g0.primitives, g0.schema)
     def to_let_term(g: hydra.graph.Graph) -> hydra.core.Term:
         def to_binding(el: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(el.name, el.term, cast(Maybe[hydra.core.TypeScheme], Nothing()))
