@@ -73,11 +73,6 @@ caseStatement cs = (Core.TermRecord (Core.Record {
 -- | Encode an elimination as a term
 elimination :: (Core.Elimination -> Core.Term)
 elimination x = case x of
-  Core.EliminationProduct v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "product"),
-      Core.fieldTerm = (tupleProjection v1)}}))
   Core.EliminationRecord v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
     Core.injectionField = Core.Field {
@@ -542,11 +537,6 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "pair"),
       Core.fieldTerm = (Core.TermPair (term (Pairs.first v1), (term (Pairs.second v1))))}}))
-  Core.TermProduct v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "product"),
-      Core.fieldTerm = (Core.TermList (Lists.map term v1))}}))
   Core.TermRecord v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -587,23 +577,6 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "wrap"),
       Core.fieldTerm = (wrappedTerm v1)}}))
-
--- | Encode a tuple projection as a term
-tupleProjection :: (Core.TupleProjection -> Core.Term)
-tupleProjection tp =  
-  let encodeTypes = (\types -> Core.TermList (Lists.map type_ types))
-  in (Core.TermRecord (Core.Record {
-    Core.recordTypeName = (Core.Name "hydra.core.TupleProjection"),
-    Core.recordFields = [
-      Core.Field {
-        Core.fieldName = (Core.Name "arity"),
-        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionArity tp))))},
-      Core.Field {
-        Core.fieldName = (Core.Name "index"),
-        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.tupleProjectionIndex tp))))},
-      Core.Field {
-        Core.fieldName = (Core.Name "domain"),
-        Core.fieldTerm = (Core.TermMaybe (Maybes.map encodeTypes (Core.tupleProjectionDomain tp)))}]}))
 
 -- | Encode a type as a term (epsilon encoding)
 type_ :: (Core.Type -> Core.Term)
@@ -656,11 +629,6 @@ type_ x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "pair"),
       Core.fieldTerm = (pairType v1)}}))
-  Core.TypeProduct v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Type"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "product"),
-      Core.fieldTerm = (Core.TermList (Lists.map type_ v1))}}))
   Core.TypeRecord v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {

@@ -30,7 +30,6 @@ csharpLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Variants.EliminationVariantProduct,
       Variants.EliminationVariantRecord,
       Variants.EliminationVariantUnion,
       Variants.EliminationVariantWrap])
@@ -64,7 +63,6 @@ csharpLanguage = Coders.Language {
       Variants.TermVariantLiteral,
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
-      Variants.TermVariantProduct,
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
       Variants.TermVariantUnion,
@@ -79,7 +77,6 @@ csharpLanguage = Coders.Language {
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
-      Variants.TypeVariantProduct,
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,
       Variants.TypeVariantUnion,

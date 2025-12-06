@@ -29,7 +29,6 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
         enum [
-          "product",
           "record",
           "union",
           "wrap"],
@@ -63,7 +62,6 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "map",
           "maybe",
           "pair",
-          "product",
           "record",
           "set",
           "typeApplication",
@@ -86,7 +84,6 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
           "map",
           "maybe",
           "pair",
-          "product",
           "record",
           "set",
           "union",

@@ -91,7 +91,6 @@ eliminationVariantDef :: TBinding (Elimination -> EliminationVariant)
 eliminationVariantDef = define "eliminationVariant" $
   doc "Find the elimination inject (constructor) for a given elimination term" $
   match _Elimination Nothing [
-    _Elimination_product>>: constant Variants.eliminationVariantProduct,
     _Elimination_record>>: constant Variants.eliminationVariantRecord,
     _Elimination_union>>: constant Variants.eliminationVariantUnion,
     _Elimination_wrap>>: constant Variants.eliminationVariantWrap]
@@ -100,7 +99,6 @@ eliminationVariantsDef :: TBinding [EliminationVariant]
 eliminationVariantsDef = define "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ injectUnit _EliminationVariant <$> [
-    _EliminationVariant_product,
     _EliminationVariant_record,
     _EliminationVariant_union,
     _EliminationVariant_wrap]
@@ -262,7 +260,6 @@ termVariantDef = define "termVariant" $
     _Term_map>>: constant Variants.termVariantMap,
     _Term_maybe>>: constant Variants.termVariantMaybe,
     _Term_pair>>: constant Variants.termVariantPair,
-    _Term_product>>: constant Variants.termVariantProduct,
     _Term_record>>: constant Variants.termVariantRecord,
     _Term_set>>: constant Variants.termVariantSet,
     _Term_typeApplication>>: constant Variants.termVariantTypeApplication,
@@ -285,7 +282,6 @@ termVariantsDef = define "termVariants" $
     _TermVariant_map,
     _TermVariant_maybe,
     _TermVariant_pair,
-    _TermVariant_product,
     _TermVariant_record,
     _TermVariant_set,
     _TermVariant_typeLambda,
@@ -309,7 +305,6 @@ typeVariantDef = define "typeVariant" $
     _Type_map>>: constant Variants.typeVariantMap,
     _Type_maybe>>: constant Variants.typeVariantMaybe,
     _Type_pair>>: constant Variants.typeVariantPair,
-    _Type_product>>: constant Variants.typeVariantProduct,
     _Type_record>>: constant Variants.typeVariantRecord,
     _Type_set>>: constant Variants.typeVariantSet,
     _Type_union>>: constant Variants.typeVariantUnion,
@@ -332,7 +327,6 @@ typeVariantsDef = define "typeVariants" $
     _TypeVariant_wrap,
     _TypeVariant_maybe,
     _TypeVariant_pair,
-    _TypeVariant_product,
     _TypeVariant_record,
     _TypeVariant_set,
     _TypeVariant_union,

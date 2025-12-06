@@ -109,7 +109,6 @@ cppLanguageDef :: TBinding Language
 cppLanguageDef = cppLanguageDefinition "cppLanguage" $
   doc "Language constraints for C++" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantProduct,
     Variants.eliminationVariantRecord,
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
@@ -142,7 +141,6 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Variants.termVariantMap,         -- std::map
     Variants.termVariantMaybe,       -- std::optional
     Variants.termVariantPair,        -- std::pair
-    Variants.termVariantProduct,     -- struct with unnamed fields
     Variants.termVariantRecord,      -- struct with named fields
     Variants.termVariantSet,         -- std::set
     Variants.termVariantUnion,       -- std::inject or enum
@@ -158,7 +156,6 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
     Variants.typeVariantMap,         -- std::map
     Variants.typeVariantMaybe,       -- std::optional
     Variants.typeVariantPair,        -- std::pair
-    Variants.typeVariantProduct,     -- anonymous structs
     Variants.typeVariantRecord,      -- structs
     Variants.typeVariantSet,         -- std::set
     Variants.typeVariantUnion,       -- std::variant, enum

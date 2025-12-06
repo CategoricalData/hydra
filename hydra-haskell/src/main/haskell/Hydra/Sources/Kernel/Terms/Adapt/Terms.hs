@@ -89,7 +89,6 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
       el passListDef,
       el passMapDef,
       el passOptionalDef,
-      el passProductDef,
       el passRecordDef,
       el passSetDef,
       el passUnionDef,
@@ -514,29 +513,6 @@ passOptionalDef = define "passOptional" $
         (Core.typeMaybe (Compute.adapterTarget (var "adapter")))
         (ref AdaptUtils.bidirectionalDef @@ (var "mapTerm" @@ (Compute.adapterCoder (var "adapter")))))]
 
-passProductDef :: TBinding TypeAdapter
-passProductDef = define "passProduct" $
-  doc "Pass through product types" $
-  "t" ~>
-  "encdec" <~ ("ads" ~> "dir" ~> "term" ~> cases _Term (var "term")
-    Nothing [
-    _Term_product>>: "tuple" ~>
-      "newTuple" <<~ Flows.sequence (Lists.zipWith
-        ("term" ~> "ad" ~> ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "term")
-        (var "tuple")
-        (var "ads")) $
-      produce (Core.termProduct (var "newTuple"))]) $
-  cases _Type (var "t")
-    Nothing [
-    _Type_product>>: "types" ~>
-      "ads" <<~ Flows.mapList (ref termAdapterDef) (var "types") $
-      "lossy" <~ Logic.ors (Lists.map (unaryFunction Compute.adapterIsLossy) (var "ads")) $
-      produce (Compute.adapter
-        (var "lossy")
-        (var "t")
-        (Core.typeProduct (Lists.map (unaryFunction Compute.adapterTarget) (var "ads")))
-        (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "ads")))]
-
 passRecordDef :: TBinding TypeAdapter
 passRecordDef = define "passRecord" $
   doc "Pass through record types" $
@@ -814,7 +790,6 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_map>>: constant (list [ref passMapDef]),
     _TypeVariant_maybe>>: constant (list [ref passOptionalDef, ref maybeToListDef]),
     _TypeVariant_pair>>: constant (list []),
-    _TypeVariant_product>>: constant (list [ref passProductDef]),
     _TypeVariant_record>>: constant (list [ref passRecordDef]),
     _TypeVariant_set>>: constant (list [ref passSetDef]),
     _TypeVariant_union>>: constant (list [ref passUnionDef]),
@@ -833,7 +808,6 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_map>>: constant (list []),
     _TypeVariant_maybe>>: constant (list [ref maybeToListDef]),
     _TypeVariant_pair>>: constant (list []),
-    _TypeVariant_product>>: constant (list []),
     _TypeVariant_record>>: constant (list []),
     _TypeVariant_set>>: constant (list [ref setToListDef]),
     _TypeVariant_union>>: constant (list [ref unionToRecordDef]),

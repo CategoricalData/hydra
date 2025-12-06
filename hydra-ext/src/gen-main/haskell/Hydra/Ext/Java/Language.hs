@@ -35,7 +35,6 @@ javaLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Variants.EliminationVariantProduct,
       Variants.EliminationVariantRecord,
       Variants.EliminationVariantUnion,
       Variants.EliminationVariantWrap])
@@ -69,7 +68,6 @@ javaLanguage = Coders.Language {
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
       Variants.TermVariantPair,
-      Variants.TermVariantProduct,
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
       Variants.TermVariantUnion,
@@ -86,15 +84,12 @@ javaLanguage = Coders.Language {
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
       Variants.TypeVariantPair,
-      Variants.TypeVariantProduct,
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,
       Variants.TypeVariantUnion,
       Variants.TypeVariantVariable,
       Variants.TypeVariantWrap])
-    typePredicate = (\typ -> (\x -> case x of
-      Core.TypeProduct v1 -> (Equality.lt (Lists.length v1) javaMaxTupleLength)
-      _ -> True) typ)
+    typePredicate = (\_ -> True)
 
 -- | A set of reserved words in Java
 reservedWords :: (S.Set String)

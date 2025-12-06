@@ -10,13 +10,9 @@ import qualified Data.Maybe as Y
 
 eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
 eliminationVariant v = injectUnit _EliminationVariant $ case v of
-  EliminationVariantProduct -> _EliminationVariant_product
   EliminationVariantRecord -> _EliminationVariant_record
   EliminationVariantUnion -> _EliminationVariant_union
   EliminationVariantWrap -> _EliminationVariant_wrap
-
-eliminationVariantProduct :: TTerm EliminationVariant
-eliminationVariantProduct = injectUnit _EliminationVariant _EliminationVariant_product
 
 eliminationVariantRecord :: TTerm EliminationVariant
 eliminationVariantRecord = injectUnit _EliminationVariant _EliminationVariant_record
@@ -77,7 +73,6 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantMap -> _TermVariant_map
   TermVariantMaybe -> _TermVariant_maybe
   TermVariantPair -> _TermVariant_pair
-  TermVariantProduct -> _TermVariant_product
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
   TermVariantTypeLambda -> _TermVariant_typeLambda
@@ -117,9 +112,6 @@ termVariantMaybe = injectUnit _TermVariant _TermVariant_maybe
 termVariantPair :: TTerm TermVariant
 termVariantPair = injectUnit _TermVariant _TermVariant_pair
 
-termVariantProduct :: TTerm TermVariant
-termVariantProduct = injectUnit _TermVariant _TermVariant_product
-
 termVariantRecord :: TTerm TermVariant
 termVariantRecord = injectUnit _TermVariant _TermVariant_record
 
@@ -156,7 +148,6 @@ typeVariant v = injectUnit _TypeVariant $ case v of
   TypeVariantMap -> _TypeVariant_map
   TypeVariantMaybe -> _TypeVariant_maybe
   TypeVariantPair -> _TypeVariant_pair
-  TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
   TypeVariantUnion -> _TypeVariant_union
@@ -193,9 +184,6 @@ typeVariantMaybe = injectUnit _TypeVariant _TypeVariant_maybe
 
 typeVariantPair :: TTerm TypeVariant
 typeVariantPair = injectUnit _TypeVariant _TypeVariant_pair
-
-typeVariantProduct :: TTerm TypeVariant
-typeVariantProduct = injectUnit _TypeVariant _TypeVariant_product
 
 typeVariantRecord :: TTerm TypeVariant
 typeVariantRecord = injectUnit _TypeVariant _TypeVariant_record

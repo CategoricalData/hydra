@@ -119,9 +119,6 @@ caseStatementDefault cs = Phantoms.project _CaseStatement _CaseStatement_default
 caseStatementCases :: TTerm CaseStatement -> TTerm [Field]
 caseStatementCases cs = Phantoms.project _CaseStatement _CaseStatement_cases @@ cs
 
-eliminationProduct :: TTerm TupleProjection -> TTerm Elimination
-eliminationProduct = inject _Elimination _Elimination_product
-
 eliminationRecord :: TTerm Projection -> TTerm Elimination
 eliminationRecord = inject _Elimination _Elimination_record
 
@@ -409,9 +406,6 @@ termMaybe = inject _Term _Term_maybe
 termPair :: TTerm (Term, Term) -> TTerm Term
 termPair = inject _Term _Term_pair
 
-termProduct :: TTerm [Term] -> TTerm Term
-termProduct = inject _Term _Term_product
-
 termRecord :: TTerm Record -> TTerm Term
 termRecord = inject _Term _Term_record
 
@@ -435,21 +429,6 @@ termVariable = inject _Term _Term_variable
 
 termWrap :: TTerm WrappedTerm -> TTerm Term
 termWrap = inject _Term _Term_wrap
-
-tupleProjection :: TTerm Int -> TTerm Int -> TTerm (Maybe [Type]) -> TTerm TupleProjection
-tupleProjection arity idx mdom = Phantoms.record _TupleProjection [
-  _TupleProjection_arity>>: arity,
-  _TupleProjection_index>>: idx,
-  _TupleProjection_domain>>: mdom]
-
-tupleProjectionArity :: TTerm TupleProjection -> TTerm Int
-tupleProjectionArity tp = Phantoms.project _TupleProjection _TupleProjection_arity @@ tp
-
-tupleProjectionIndex :: TTerm TupleProjection -> TTerm Int
-tupleProjectionIndex tp = Phantoms.project _TupleProjection _TupleProjection_index @@ tp
-
-tupleProjectionDomain :: TTerm TupleProjection -> TTerm (Maybe [Type])
-tupleProjectionDomain tp = Phantoms.project _TupleProjection _TupleProjection_domain @@ tp
 
 typeLambda :: TTerm Name -> TTerm Term -> TTerm TypeLambda
 typeLambda parameter body = Phantoms.record _TypeLambda [
@@ -491,9 +470,6 @@ typeMaybe = inject _Type _Type_maybe
 
 typePair :: TTerm PairType -> TTerm Type
 typePair = inject _Type _Type_pair
-
-typeProduct :: TTerm [Type] -> TTerm Type
-typeProduct = inject _Type _Type_product
 
 typeRecord :: TTerm RowType -> TTerm Type
 typeRecord = inject _Type _Type_record

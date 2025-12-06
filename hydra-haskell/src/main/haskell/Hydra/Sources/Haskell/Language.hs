@@ -105,7 +105,6 @@ haskellLanguageDef :: TBinding Language
 haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantProduct,
     Variants.eliminationVariantRecord,
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
@@ -138,7 +137,6 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     Variants.termVariantMap,
     Variants.termVariantMaybe,
     Variants.termVariantPair,
-    Variants.termVariantProduct,
     Variants.termVariantRecord,
     Variants.termVariantSet,
     Variants.termVariantUnion,
@@ -156,7 +154,6 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
     Variants.typeVariantPair,
-    Variants.typeVariantProduct,
     Variants.typeVariantRecord,
     Variants.typeVariantSet,
     Variants.typeVariantUnion,

@@ -44,12 +44,6 @@ binding el =
 -- | Show an elimination as a string
 elimination :: (Core.Elimination -> String)
 elimination elm = ((\x -> case x of
-  Core.EliminationProduct v1 -> (Strings.cat [
-    "[",
-    Literals.showInt32 (Core.tupleProjectionIndex v1),
-    "/",
-    Literals.showInt32 (Core.tupleProjectionArity v1),
-    "]"])
   Core.EliminationRecord v1 ->  
     let tname = (Core.unName (Core.projectionTypeName v1))
     in  
@@ -306,12 +300,6 @@ term t =
       ", ",
       term (Pairs.second v1),
       ")"])
-    Core.TermProduct v1 ->  
-      let termStrs = (Lists.map term v1)
-      in (Strings.cat [
-        "(",
-        Strings.intercalate ", " termStrs,
-        ")"])
     Core.TermRecord v1 ->  
       let tname = (Core.unName (Core.recordTypeName v1))
       in  
@@ -451,9 +439,6 @@ type_ typ =
               ", ",
               type_ secondTyp,
               ")"])
-        Core.TypeProduct v1 ->  
-          let typeStrs = (Lists.map type_ v1)
-          in (Strings.intercalate "\215" typeStrs)
         Core.TypeRecord v1 -> (Strings.cat2 "record" (showRowType v1))
         Core.TypeSet v1 -> (Strings.cat [
           "set<",

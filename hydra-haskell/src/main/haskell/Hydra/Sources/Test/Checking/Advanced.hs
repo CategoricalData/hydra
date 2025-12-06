@@ -100,10 +100,11 @@ nestedAnnotationsTestsDef = define "nestedAnnotationsTests" $
     noChange "annotation within annotation"
       (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
       T.int32,
-    noChange "annotated terms in tuple"
+    checkTest "annotated terms in tuple" []
       (tuple [annotated (int32 1) mapTermEmpty,
               annotated (string "hello") mapTermEmpty])
-      (T.product [T.int32, T.string]),
+      (tyapps (pair (annotated (int32 1) mapTermEmpty) (annotated (string "hello") mapTermEmpty)) [T.int32, T.string])
+      (T.pair T.int32 T.string),
     checkTest "annotated term in function application" []
       (annotated (lambda "x" $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
       (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
@@ -118,8 +119,8 @@ annotationsInComplexContextsTestsDef = define "annotationsInComplexContextsTests
         annotated (tuple [var "x", var "y"]) mapTermEmpty)
       (letsTyped [("x", annotated (int32 5) mapTermEmpty, T.mono T.int32),
                   ("y", annotated (string "world") mapTermEmpty, T.mono T.string)] $
-        annotated (tuple [var "x", var "y"]) mapTermEmpty)
-      (T.product [T.int32, T.string]),
+        annotated (tyapps (pair (var "x") (var "y")) [T.int32, T.string]) mapTermEmpty)
+      (T.pair T.int32 T.string),
     noChange "annotated record fields"
       (record (ref TestTypes.testTypePersonNameDef) [
         "firstName">: annotated (string "Alice") mapTermEmpty,

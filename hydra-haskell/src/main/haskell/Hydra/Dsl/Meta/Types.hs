@@ -179,10 +179,13 @@ poly params t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
   Phantoms.field _TypeScheme_type t]
 
--- | Create a term-encoded product type (tuple) with multiple components
+-- | Create a term-encoded product type (tuple) with multiple components using nested pairs
 -- Example: product [string, int32, boolean]
 product :: [TTerm Type] -> TTerm Type
-product types = Core.typeProduct $ TTerm $ TermList (unTTerm <$> types)
+product [] = unit
+product [a] = a
+product [a, b] = pair a b
+product (a:rest) = pair a (product rest)
 
 -- | Create a term-encoded record type with named fields
 -- Example: record (name "Person") ["name">: string, "age">: int32]

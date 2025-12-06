@@ -258,7 +258,6 @@ untypedTermToJson term =
         in (Json.ValueNumber f)
       Core.LiteralString v2 -> (Json.ValueString v2)) v1))
     Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
-    Core.TermProduct v1 -> (untypedTermToJson (Core.TermList v1))
     Core.TermRecord v1 ->  
       let fields = (Core.recordFields v1)
       in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat keyvals)))))

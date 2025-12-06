@@ -99,7 +99,6 @@ module_ = Module (Namespace "hydra.encode.core") elements
       el recordDef,
       el rowTypeDef,
       el termDef,
-      el tupleProjectionDef,
       el typeDef,
       el typeLambdaDef,
       el typeSchemeDef,
@@ -240,7 +239,6 @@ eliminationDef :: TBinding (Elimination -> Term)
 eliminationDef = define "Elimination" $
   doc "Encode an elimination as a term" $
     match _Elimination Nothing [
-      ecase _Elimination_product tupleProjectionDef,
       ecase _Elimination_record projectionDef,
       ecase _Elimination_union caseStatementDef,
       ecase _Elimination_wrap nameDef]
@@ -459,7 +457,6 @@ termDef = define "Term" $
     ecase2 _Term_map $ encodedMap (primitive _maps_bimap @@ ref termDef @@ ref termDef @@ var "v"),
     ecase2 _Term_maybe $ encodedOptional (primitive _maybes_map @@ ref termDef @@ var "v"),
     ecase2 _Term_pair $ encodedPair (pair (ref termDef @@ (Pairs.first $ var "v")) (ref termDef @@ (Pairs.second $ var "v"))),
-    ecase2 _Term_product $ encodedList (primitive _lists_map @@ ref termDef @@ var "v"),
     ecase _Term_record (ref recordDef),
     ecase2 _Term_set $ encodedSet $ primitive _sets_map @@ (ref termDef) @@ var "v",
     ecase _Term_typeApplication $ ref typeApplicationTermDef,
@@ -471,16 +468,6 @@ termDef = define "Term" $
   where
     ecase = encodedCase _Term
     ecase2 fname = field fname . lambda "v" . encodedVariant _Term fname
-
-tupleProjectionDef :: TBinding (TupleProjection -> Term)
-tupleProjectionDef = define "TupleProjection" $
-  doc "Encode a tuple projection as a term" $
-  "tp" ~>
-  "encodeTypes" <~ ("types" ~> encodedList (primitive _lists_map @@ ref typeDef @@ var "types")) $
-  encodedRecord _TupleProjection [
-    field _TupleProjection_arity (encodedInt32 (Core.tupleProjectionArity (var "tp"))),
-    field _TupleProjection_index (encodedInt32 (Core.tupleProjectionIndex (var "tp"))),
-    field _TupleProjection_domain (encodedOptional (primitive _maybes_map @@ var "encodeTypes" @@ (Core.tupleProjectionDomain (var "tp"))))]
 
 typeDef :: TBinding (Type -> Term)
 typeDef = define "Type" $
@@ -498,7 +485,6 @@ typeDef = define "Type" $
     csref _Type_map mapTypeDef,
     csref _Type_maybe typeDef,
     csref _Type_pair pairTypeDef,
-    cs _Type_product $ encodedList $ primitive _lists_map @@ ref typeDef @@ var "v",
     csref _Type_record rowTypeDef,
     csref _Type_set typeDef,
     csref _Type_union rowTypeDef,

@@ -140,8 +140,6 @@ _PairType_second = (Name "second")
 
 -- | A corresponding elimination for an introduction term
 data Elimination = 
-  -- | Eliminates a tuple by projecting the component at a given 0-indexed offset
-  EliminationProduct TupleProjection |
   -- | Eliminates a record by projecting a given field
   EliminationRecord Projection |
   -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
@@ -151,8 +149,6 @@ data Elimination =
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra.core.Elimination")
-
-_Elimination_product = (Name "product")
 
 _Elimination_record = (Name "record")
 
@@ -549,8 +545,6 @@ data Term =
   TermMaybe (Maybe Term) |
   -- | A pair (2-tuple)
   TermPair (Term, Term) |
-  -- | A tuple
-  TermProduct [Term] |
   -- | A record term
   TermRecord Record |
   -- | A set of values
@@ -591,8 +585,6 @@ _Term_maybe = (Name "maybe")
 
 _Term_pair = (Name "pair")
 
-_Term_product = (Name "product")
-
 _Term_record = (Name "record")
 
 _Term_set = (Name "set")
@@ -608,25 +600,6 @@ _Term_unit = (Name "unit")
 _Term_variable = (Name "variable")
 
 _Term_wrap = (Name "wrap")
-
--- | A tuple elimination; a projection from an integer-indexed product
-data TupleProjection = 
-  TupleProjection {
-    -- | The arity of the tuple
-    tupleProjectionArity :: Int,
-    -- | The 0-indexed offset from the beginning of the tuple
-    tupleProjectionIndex :: Int,
-    -- | An optional domain for the projection; this is a list of component types
-    tupleProjectionDomain :: (Maybe [Type])}
-  deriving (Eq, Ord, Read, Show)
-
-_TupleProjection = (Name "hydra.core.TupleProjection")
-
-_TupleProjection_arity = (Name "arity")
-
-_TupleProjection_index = (Name "index")
-
-_TupleProjection_domain = (Name "domain")
 
 -- | A data type
 data Type = 
@@ -650,8 +623,6 @@ data Type =
   TypeMaybe Type |
   -- | A pair (2-tuple) type
   TypePair PairType |
-  -- | A tuple type
-  TypeProduct [Type] |
   -- | A record type
   TypeRecord RowType |
   -- | A set type
@@ -687,8 +658,6 @@ _Type_map = (Name "map")
 _Type_maybe = (Name "maybe")
 
 _Type_pair = (Name "pair")
-
-_Type_product = (Name "product")
 
 _Type_record = (Name "record")
 

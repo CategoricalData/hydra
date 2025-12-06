@@ -139,9 +139,6 @@ instantiateTemplateDef = define "instantiateTemplate" $
       (Flows.pure (Core.termMaybe nothing))
       (Flows.bind (var "inst" @@ var "ot") (
         "e" ~> Flows.pure (Core.termMaybe (just (var "e"))))),
-    _Type_product>>: "types" ~>
-      Flows.bind (Flows.mapList (var "inst") (var "types")) (
-        "es" ~> Flows.pure (Core.termProduct (var "es"))),
     _Type_record>>: "rt" ~>
       "tname" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $

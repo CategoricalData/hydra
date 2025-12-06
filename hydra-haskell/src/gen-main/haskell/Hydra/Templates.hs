@@ -75,7 +75,6 @@ instantiateTemplate minimal schema t =
                 let vt = (Core.mapTypeValues v1)
                 in (Logic.ifElse minimal (Flows.pure (Core.TermMap Maps.empty)) (Flows.bind (inst kt) (\ke -> Flows.bind (inst vt) (\ve -> Flows.pure (Core.TermMap (Maps.singleton ke ve))))))
             Core.TypeMaybe v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermMaybe Nothing)) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermMaybe (Just e)))))
-            Core.TypeProduct v1 -> (Flows.bind (Flows.mapList inst v1) (\es -> Flows.pure (Core.TermProduct es)))
             Core.TypeRecord v1 ->  
               let tname = (Core.rowTypeTypeName v1)
               in  
