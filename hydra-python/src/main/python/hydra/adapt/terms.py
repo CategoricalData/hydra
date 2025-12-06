@@ -109,7 +109,7 @@ def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ada
                                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name(), hydra.core.Field(hydra.core.Name("union"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
                             
                             case _:
-                                raise TypeError("Unsupported Elimination")
+                                raise AssertionError("Unreachable: all variants handled")
                     
                     case hydra.core.FunctionLambda():
                         return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name(), hydra.core.Field(hydra.core.Name("lambda"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
@@ -349,23 +349,6 @@ def pass_optional(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
         case _:
             raise TypeError("Unsupported Type")
 
-def pass_product(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through product types."""
-    
-    def encdec[T0, T1, T2](ads: frozenlist[hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term]], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-        match term:
-            case hydra.core.TermProduct(value=tuple):
-                return hydra.lib.flows.bind(hydra.lib.flows.sequence(hydra.lib.lists.zip_with((lambda term2, ad: hydra.adapt.utils.encode_decode(dir, ad.coder, term2)), tuple, ads)), (lambda new_tuple: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermProduct(new_tuple)))))
-            
-            case _:
-                raise TypeError("Unsupported Term")
-    match t:
-        case hydra.core.TypeProduct(value=types):
-            return hydra.lib.flows.bind(hydra.lib.flows.map_list(term_adapter, types), (lambda ads: (lossy := hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda v1: v1.is_lossy), ads)), hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(lossy, t, cast(hydra.core.Type, hydra.core.TypeProduct(hydra.lib.lists.map((lambda v1: v1.target), ads))), hydra.adapt.utils.bidirectional((lambda v1, v2: encdec(ads, v1, v2)))))))[1]))
-        
-        case _:
-            raise TypeError("Unsupported Type")
-
 def pass_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Pass through record types."""
     
@@ -399,26 +382,6 @@ def pass_set(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterConte
     match t:
         case hydra.core.TypeSet(value=st):
             return hydra.lib.flows.bind(term_adapter(st), (lambda ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(ad.is_lossy, t, cast(hydra.core.Type, hydra.core.TypeSet(ad.target)), hydra.adapt.utils.bidirectional((lambda v1, v2: encdec(ad, v1, v2))))))))
-        
-        case _:
-            raise TypeError("Unsupported Type")
-
-def pass_sum(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through sum types."""
-    
-    def encdec[T0, T1, T2](ads: frozenlist[hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term]], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-        match term:
-            case hydra.core.TermSum(value=s):
-                i = s.index
-                n = s.size
-                term = s.term
-                return hydra.lib.flows.bind(hydra.adapt.utils.encode_decode(dir, hydra.lib.lists.at(i, ads).coder, term), (lambda new_term: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermSum(hydra.core.Sum(i, n, new_term))))))
-            
-            case _:
-                raise TypeError("Unsupported Term")
-    match t:
-        case hydra.core.TypeSum(value=types):
-            return hydra.lib.flows.bind(hydra.lib.flows.map_list(term_adapter, types), (lambda ads: (lossy := hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda v1: v1.is_lossy), ads)), hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(lossy, t, cast(hydra.core.Type, hydra.core.TypeSum(hydra.lib.lists.map((lambda v1: v1.target), ads))), hydra.adapt.utils.bidirectional((lambda v1, v2: encdec(ads, v1, v2)))))))[1]))
         
         case _:
             raise TypeError("Unsupported Type")
@@ -537,17 +500,11 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
             case hydra.variants.TypeVariant.PAIR:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.variants.TypeVariant.PRODUCT:
-                return (pass_product,)
-            
             case hydra.variants.TypeVariant.RECORD:
                 return (pass_record,)
             
             case hydra.variants.TypeVariant.SET:
                 return (pass_set,)
-            
-            case hydra.variants.TypeVariant.SUM:
-                return (pass_sum,)
             
             case hydra.variants.TypeVariant.UNION:
                 return (pass_union,)
@@ -595,17 +552,11 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
             case hydra.variants.TypeVariant.PAIR:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
-            case hydra.variants.TypeVariant.PRODUCT:
-                return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
-            
             case hydra.variants.TypeVariant.RECORD:
                 return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
             case hydra.variants.TypeVariant.SET:
                 return (set_to_list,)
-            
-            case hydra.variants.TypeVariant.SUM:
-                return cast(frozenlist[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]], ())
             
             case hydra.variants.TypeVariant.UNION:
                 return (union_to_record,)

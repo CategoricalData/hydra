@@ -190,7 +190,9 @@ def set_type_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], typ: 
     anns = set_annotation(key, val, type_annotation_internal(typ))
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns), (lambda : typ_), (lambda : cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(typ_, anns)))))
 
-def set_type_classes[T0](m: FrozenDict[T0, frozenset[hydra.classes.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
+def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], term: hydra.core.Term) -> hydra.core.Term:
+    r"""Set type classes on term."""
+    
     def encode_class(tc: hydra.classes.TypeClass) -> hydra.core.Term:
         match tc:
             case hydra.classes.TypeClass.EQUALITY:
@@ -201,11 +203,11 @@ def set_type_classes[T0](m: FrozenDict[T0, frozenset[hydra.classes.TypeClass]], 
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encode_pair[T1](name_classes: Tuple[T1, frozenset[hydra.classes.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
+    def encode_pair(name_classes: Tuple[hydra.core.Name, frozenset[hydra.classes.TypeClass]]) -> Tuple[hydra.core.Term, hydra.core.Term]:
         name = hydra.lib.pairs.first(name_classes)
         classes = hydra.lib.pairs.second(name_classes)
         return cast(Tuple[hydra.core.Term, hydra.core.Term], (hydra.encode.core.name(name), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.map(encode_class, hydra.lib.sets.to_list(classes)))))))
-    encoded = hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : cast(Maybe[hydra.core.Term], Nothing())), (lambda : cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map(cast(Callable[[Tuple[T0, frozenset[hydra.classes.TypeClass]]], Tuple[hydra.core.Term, hydra.core.Term]], encode_pair), hydra.lib.maps.to_list(m))))))))))
+    encoded = hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : cast(Maybe[hydra.core.Term], Nothing())), (lambda : cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map(encode_pair, hydra.lib.maps.to_list(m))))))))))
     return set_term_annotation(hydra.constants.key_classes(), encoded, term)
 
 def set_type_description(d: Maybe[str], v1: hydra.core.Type) -> hydra.core.Type:

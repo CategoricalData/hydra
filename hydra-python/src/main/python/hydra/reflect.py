@@ -14,9 +14,6 @@ def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.Eliminatio
     r"""Find the elimination inject (constructor) for a given elimination term."""
     
     match v1:
-        case hydra.core.EliminationProduct():
-            return hydra.variants.EliminationVariant.PRODUCT
-        
         case hydra.core.EliminationRecord():
             return hydra.variants.EliminationVariant.RECORD
         
@@ -30,7 +27,7 @@ def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.Eliminatio
             raise AssertionError("Unreachable: all variants handled")
 
 # All elimination variants (constructors), in a canonical order.
-elimination_variants = (hydra.variants.EliminationVariant.PRODUCT, hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP)
+elimination_variants = (hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP)
 
 def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
     r"""Find the precision of a given floating-point type."""
@@ -280,17 +277,11 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case hydra.core.TermPair():
             return hydra.variants.TermVariant.PAIR
         
-        case hydra.core.TermProduct():
-            return hydra.variants.TermVariant.PRODUCT
-        
         case hydra.core.TermRecord():
             return hydra.variants.TermVariant.RECORD
         
         case hydra.core.TermSet():
             return hydra.variants.TermVariant.SET
-        
-        case hydra.core.TermSum():
-            return hydra.variants.TermVariant.SUM
         
         case hydra.core.TermTypeApplication():
             return hydra.variants.TermVariant.TYPE_APPLICATION
@@ -314,7 +305,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
             raise AssertionError("Unreachable: all variants handled")
 
 # All term (expression) variants, in a canonical order.
-term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.FUNCTION, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.PRODUCT, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.SUM, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
+term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.FUNCTION, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
     r"""Find the type inject (constructor) for a given type."""
@@ -350,17 +341,11 @@ def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
         case hydra.core.TypePair():
             return hydra.variants.TypeVariant.PAIR
         
-        case hydra.core.TypeProduct():
-            return hydra.variants.TypeVariant.PRODUCT
-        
         case hydra.core.TypeRecord():
             return hydra.variants.TypeVariant.RECORD
         
         case hydra.core.TypeSet():
             return hydra.variants.TypeVariant.SET
-        
-        case hydra.core.TypeSum():
-            return hydra.variants.TypeVariant.SUM
         
         case hydra.core.TypeUnion():
             return hydra.variants.TypeVariant.UNION
@@ -378,4 +363,4 @@ def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
             raise AssertionError("Unreachable: all variants handled")
 
 # All type variants, in a canonical order.
-type_variants = (hydra.variants.TypeVariant.ANNOTATED, hydra.variants.TypeVariant.APPLICATION, hydra.variants.TypeVariant.EITHER, hydra.variants.TypeVariant.FUNCTION, hydra.variants.TypeVariant.FORALL, hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.WRAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.PAIR, hydra.variants.TypeVariant.PRODUCT, hydra.variants.TypeVariant.RECORD, hydra.variants.TypeVariant.SET, hydra.variants.TypeVariant.SUM, hydra.variants.TypeVariant.UNION, hydra.variants.TypeVariant.UNIT, hydra.variants.TypeVariant.VARIABLE)
+type_variants = (hydra.variants.TypeVariant.ANNOTATED, hydra.variants.TypeVariant.APPLICATION, hydra.variants.TypeVariant.EITHER, hydra.variants.TypeVariant.FUNCTION, hydra.variants.TypeVariant.FORALL, hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.WRAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.PAIR, hydra.variants.TypeVariant.RECORD, hydra.variants.TypeVariant.SET, hydra.variants.TypeVariant.UNION, hydra.variants.TypeVariant.UNIT, hydra.variants.TypeVariant.VARIABLE)

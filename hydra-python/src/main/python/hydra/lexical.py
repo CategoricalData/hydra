@@ -12,15 +12,24 @@ import hydra.graph
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
+import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
+import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.pairs
+import hydra.lib.sets
 import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 import hydra.typing
+
+def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Name:
+    def try_name(index: int) -> hydra.core.Name:
+        candidate = hydra.lib.logic.if_else(hydra.lib.equality.equal(index, 1), (lambda : name), (lambda : hydra.core.Name(hydra.lib.strings.cat((name.value, hydra.lib.literals.show_int32(index))))))
+        return hydra.lib.logic.if_else(hydra.lib.sets.member(candidate, reserved), (lambda : try_name(hydra.lib.math.add(index, 1))), (lambda : candidate))
+    return try_name(1)
 
 def lookup_element(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Binding]:
     return hydra.lib.maps.lookup(name, g.elements)
@@ -51,9 +60,9 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
 def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
     r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
     
-    def to_pair[T0](el: T0) -> Tuple[hydra.core.Name, T0]:
-        return cast(Tuple[hydra.core.Name, T0], (el.name, el))
-    return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(cast(Callable[[hydra.core.Binding], Tuple[hydra.core.Name, hydra.core.Binding]], to_pair), elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
+    def to_pair(el: hydra.core.Binding) -> Tuple[hydra.core.Name, hydra.core.Binding]:
+        return cast(Tuple[hydra.core.Name, hydra.core.Binding], (el.name, el))
+    return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
 
 # An empty graph; no elements, no primitives, no schema, and an arbitrary body.
 empty_graph = hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), cast(FrozenDict[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty()), cast(Maybe[hydra.graph.Graph], Nothing()))
