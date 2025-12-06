@@ -394,7 +394,6 @@ inferTypeOfEither cx e = (Eithers.either (\l -> Flows.bind (inferTypeOfTerm cx l
 
 inferTypeOfElimination :: (Typing_.InferenceContext -> Core.Elimination -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfElimination cx elm = ((\x -> case x of
-  Core.EliminationProduct v1 -> (inferTypeOfTupleProjection cx v1)
   Core.EliminationRecord v1 -> (inferTypeOfProjection cx v1)
   Core.EliminationUnion v1 -> (inferTypeOfCaseStatement cx v1)
   Core.EliminationWrap v1 -> (inferTypeOfUnwrap cx v1)) elm)
@@ -692,15 +691,6 @@ inferTypeOfPair cx p = (Flows.map (\results ->
 inferTypeOfPrimitive :: (Typing_.InferenceContext -> Core.Name -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfPrimitive cx name = (Maybes.maybe (Flows.fail (Strings.cat2 "No such primitive: " (Core.unName name))) (\scheme -> Flows.bind (Schemas.instantiateTypeScheme scheme) (\ts -> yieldChecked (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst)) (Maps.lookup name (Typing_.inferenceContextPrimitiveTypes cx)))
 
-inferTypeOfProduct :: (Typing_.InferenceContext -> [Core.Term] -> Compute.Flow t0 Typing_.InferenceResult)
-inferTypeOfProduct cx els = (Flows.map (\results ->  
-  let iterms = (Pairs.first results)
-  in  
-    let itypes = (Pairs.first (Pairs.second results))
-    in  
-      let isubst = (Pairs.second (Pairs.second results))
-      in (yield (Core.TermProduct iterms) (Core.TypeProduct itypes) isubst)) (inferMany cx (Lists.map (\e -> (e, "tuple element")) els)))
-
 inferTypeOfProjection :: (Typing_.InferenceContext -> Core.Projection -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfProjection cx proj =  
   let tname = (Core.projectionTypeName proj)
@@ -765,7 +755,6 @@ inferTypeOfTerm cx term desc =
           Core.TermMap v1 -> (inferTypeOfMap cx v1)
           Core.TermMaybe v1 -> (inferTypeOfOptional cx v1)
           Core.TermPair v1 -> (inferTypeOfPair cx v1)
-          Core.TermProduct v1 -> (inferTypeOfProduct cx v1)
           Core.TermRecord v1 -> (inferTypeOfRecord cx v1)
           Core.TermSet v1 -> (inferTypeOfSet cx v1)
           Core.TermTypeApplication v1 -> (inferTypeOfTypeApplication cx v1)
@@ -775,27 +764,6 @@ inferTypeOfTerm cx term desc =
           Core.TermVariable v1 -> (inferTypeOfVariable cx v1)
           Core.TermWrap v1 -> (inferTypeOfWrappedTerm cx v1)) term)
   in (Monads.withTrace desc matchTerm)
-
-inferTypeOfTupleProjection :: (t0 -> Core.TupleProjection -> Compute.Flow t1 Typing_.InferenceResult)
-inferTypeOfTupleProjection cx tp =  
-  let arity = (Core.tupleProjectionArity tp)
-  in  
-    let idx = (Core.tupleProjectionIndex tp)
-    in (Flows.bind (Schemas.freshNames arity) (\vars ->  
-      let types = (Lists.map (\x -> Core.TypeVariable x) vars)
-      in  
-        let cod = (Lists.at idx types)
-        in (Logic.ifElse (Equality.gte idx arity) (Flows.fail (Strings.cat [
-          "tuple projection index ",
-          Literals.showInt32 idx,
-          " is out of bounds for arity ",
-          Literals.showInt32 arity,
-          "."])) (Flows.pure (yield (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-          Core.tupleProjectionArity = arity,
-          Core.tupleProjectionIndex = idx,
-          Core.tupleProjectionDomain = (Just types)})))) (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Core.TypeProduct types),
-          Core.functionTypeCodomain = cod})) Substitution.idTypeSubst)))))
 
 inferTypeOfTypeLambda :: (Typing_.InferenceContext -> Core.TypeLambda -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeLambda cx ta = (inferTypeOfTerm cx (Core.typeLambdaBody ta) "type abstraction")

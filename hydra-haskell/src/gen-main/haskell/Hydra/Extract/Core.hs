@@ -307,16 +307,8 @@ pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flo
 pair kf vf term0 =  
   let extract = (\term -> (\x -> case x of
           Core.TermPair v1 -> (Flows.bind (kf (Pairs.first v1)) (\kVal -> Flows.bind (vf (Pairs.second v1)) (\vVal -> Flows.pure (kVal, vVal))))
-          Core.TermProduct v1 -> (Logic.ifElse (Equality.equal (Lists.length v1) 2) (Flows.bind (kf (Lists.head v1)) (\kVal -> Flows.bind (vf (Lists.head (Lists.tail v1))) (\vVal -> Flows.pure (kVal, vVal)))) (Monads.unexpected "pair" (Core_.term term)))
-          _ -> (Monads.unexpected "product" (Core_.term term))) term)
+          _ -> (Monads.unexpected "pair" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
-
-productType :: (Core.Type -> Compute.Flow t0 [Core.Type])
-productType typ =  
-  let stripped = (Rewriting.deannotateType typ)
-  in ((\x -> case x of
-    Core.TypeProduct v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "product type" (Core_.type_ typ))) stripped)
 
 -- | Extract a record's fields from a term
 record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])

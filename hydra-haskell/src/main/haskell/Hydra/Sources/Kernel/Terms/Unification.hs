@@ -132,8 +132,6 @@ joinTypesDef = define "joinTypes" $
       _Type_pair>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (Core.pairTypeFirst (var "l")) @@ (Core.pairTypeFirst (var "r")),
         var "joinOne" @@ (Core.pairTypeSecond (var "l")) @@ (Core.pairTypeSecond (var "r"))])],
-    _Type_product>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_product>>: "r" ~> var "joinList" @@ (var "l") @@ (var "r")],
     _Type_record>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_record>>: "r" ~> var "joinRowTypes" @@ (var "l") @@ (var "r")],
     _Type_set>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [

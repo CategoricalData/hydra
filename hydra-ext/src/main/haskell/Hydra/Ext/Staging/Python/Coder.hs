@@ -125,10 +125,6 @@ encodeApplication env app = do
     applyArgs hargs = case fun of
         TermFunction f -> case f of
             FunctionElimination elm -> case elm of
-              EliminationProduct (TupleProjection arity idx _) -> do
-                pyIdx <- encodeIntegerValue $ IntegerValueInt32 idx
-                return $ withRest $
-                  pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyExpressionToPyPrimary firstArg) [pyIdx]
               EliminationRecord (Projection _ fname) -> do
                 return $ withRest $
                   projectFromExpression firstArg $ encodeFieldName env fname
@@ -568,9 +564,6 @@ encodeTermInline env noCast term = case deannotateTerm term of
       pyExpr1 <- encode t1
       pyExpr2 <- encode t2
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple [pyExpressionToPyStarNamedExpression pyExpr1, pyExpressionToPyStarNamedExpression pyExpr2]
-    TermProduct terms -> do
-      pyExprs <- CM.mapM encode terms
-      return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
     TermRecord (Record tname fields) -> do
       pargs <- CM.mapM (encode . fieldTerm) fields
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) pargs
@@ -719,7 +712,6 @@ encodeType env typ = case deannotateType typ of
       pyFirst <- encode first
       pySecond <- encode second
       return $ nameAndParams (Py.Name "Tuple") [pyFirst, pySecond]
-    TypeProduct types -> nameAndParams (Py.Name "Tuple") <$> (CM.mapM encode types)
     TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
     TypeUnion rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
@@ -932,7 +924,6 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
         TypeMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
         TypeMaybe _ -> meta {pythonModuleMetadataUsesMaybe = True}
         TypeEither _ -> meta {pythonModuleMetadataUsesEither = True}
-        TypeProduct _ -> meta {pythonModuleMetadataUsesTuple = True}
         TypeRecord (RowType _ fields) -> meta {
             pythonModuleMetadataUsesAnnotated = L.foldl checkForAnnotated (pythonModuleMetadataUsesAnnotated meta) fields,
             pythonModuleMetadataUsesDataclass = pythonModuleMetadataUsesDataclass meta || not (L.null fields)}

@@ -334,15 +334,18 @@ nameTerm s = wrap (Core.nameLift _Name) $ string s
 true :: TTerm Term
 true = boolean True
 
--- | Create a term-encoded tuple with multiple components
+-- | Create a term-encoded tuple with multiple components using nested pairs
 -- Example: tuple [string "name", int32 42, boolean True]
 tuple :: [TTerm Term] -> TTerm Term
-tuple = Core.termProduct . Phantoms.list
+tuple [] = unit
+tuple [a] = a
+tuple [a, b] = pair a b
+tuple (a:rest) = pair a (tuple rest)
 
--- | Create a term-encoded 2-tuple
+-- | Create a term-encoded 2-tuple (same as pair)
 -- Example: tuple2 (string "name") (int32 42)
 tuple2 :: TTerm Term -> TTerm Term -> TTerm Term
-tuple2 t1 t2 = tuple [t1, t2]
+tuple2 = pair
 
 -- | Create a term-encoded 8-bit unsigned integer literal
 -- Example: uint8 255
@@ -388,12 +391,6 @@ unit = Core.termUnit
 
 injectUnitPhantom :: Name -> Name -> TTerm Term
 injectUnitPhantom tname fname = injectPhantom tname fname Core.termUnit
-
--- | Create a term-encoded tuple projection function
--- Example: untuple 3 1 extracts the second element of a 3-tuple
-untuple :: Int -> Int -> TTerm Term
-untuple arity idx = Core.termFunction $ Core.functionElimination $ Core.eliminationProduct
-  $ Core.tupleProjection (Phantoms.int32 arity) (Phantoms.int32 idx) Phantoms.nothing
 
 -- | Create a term-encoded unwrap function for a wrapped type
 -- Example: unwrap (name "Email")
@@ -492,20 +489,20 @@ compose f g = lambda "arg_" $ f @@ (g @@ var "arg_")
 identity :: TTerm Term
 identity = lambda "x_" $ var "x_"
 
--- | Create a term-encoded 3-tuple
+-- | Create a term-encoded 3-tuple using nested pairs
 -- Example: triple (int32 1) (string "test") (boolean True)
 triple :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-triple t1 t2 t3 = tuple [t1, t2, t3]
+triple t1 t2 t3 = pair t1 (pair t2 t3)
 
--- | Create a term-encoded 4-tuple
+-- | Create a term-encoded 4-tuple using nested pairs
 -- Example: tuple4 (int32 1) (string "test") (boolean True) (float32 3.14)
 tuple4 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-tuple4 t1 t2 t3 t4 = tuple [t1, t2, t3, t4]
+tuple4 t1 t2 t3 t4 = pair t1 (pair t2 (pair t3 t4))
 
--- | Create a term-encoded 5-tuple
+-- | Create a term-encoded 5-tuple using nested pairs
 -- Example: tuple5 (int32 1) (string "a") (boolean True) (float32 3.14) (int32 42)
 tuple5 :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-tuple5 t1 t2 t3 t4 t5 = tuple [t1, t2, t3, t4, t5]
+tuple5 t1 t2 t3 t4 t5 = pair t1 (pair t2 (pair t3 (pair t4 t5)))
 
 -- | Convert a Comparison enum value to a term-encoded term
 -- Example: comparison ComparisonEqualTo

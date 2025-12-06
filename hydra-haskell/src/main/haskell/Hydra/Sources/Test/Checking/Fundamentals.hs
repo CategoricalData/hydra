@@ -178,8 +178,8 @@ polymorphicApplicationsTestsDef = define "polymorphicApplicationsTests" $
     (letsTyped [
       ("id", tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x",
         T.poly ["t0"] $ T.function (T.var "t0") (T.var "t0"))] $
-      tuple [tyapp (var "id") T.int32 @@ int32 42, tyapp (var "id") T.string @@ string "hello"])
-    (T.product [T.int32, T.string]),
+      tyapps (pair (tyapp (var "id") T.int32 @@ int32 42) (tyapp (var "id") T.string @@ string "hello")) [T.int32, T.string])
+    (T.pair T.int32 T.string),
   checkTest "polymorphic const" []
     (lets ["const">: lambdas ["x", "y"] $ var "x"] $
       var "const" @@ string "keep" @@ int32 999)
@@ -200,10 +200,11 @@ polymorphicApplicationsTestsDef = define "polymorphicApplicationsTests" $
 applicationsInComplexContextsTestsDef :: TBinding TestGroup
 applicationsInComplexContextsTestsDef = define "applicationsInComplexContextsTests" $
   subgroup "Applications in complex contexts" [
-  noChange "application in tuple"
+  checkTest "application in tuple" []
     (tuple [primitive _math_add @@ int32 1 @@ int32 2,
             primitive _strings_cat2 @@ string "a" @@ string "b"])
-    (T.product [T.int32, T.string]),
+    (tyapps (pair (primitive _math_add @@ int32 1 @@ int32 2) (primitive _strings_cat2 @@ string "a" @@ string "b")) [T.int32, T.string])
+    (T.pair T.int32 T.string),
   noChange "application in record"
     (record (ref TestTypes.testTypePersonNameDef) [
       "firstName">: primitive _strings_cat2 @@ string "John" @@ string "ny",
@@ -287,10 +288,10 @@ multiParameterLambdasTestsDef = define "multiParameterLambdasTests" $
       (T.function (T.var "t1") (T.function (T.var "t2") (T.var "t1")))),
   checkTest "parameter reuse" []
     (lambda "x" $ lambda "y" $ tuple [var "x", var "x", var "y"])
-    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t1") $ tuple [var "x", var "x", var "y"])
+    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t1") $ tyapps (pair (var "x") (tyapps (pair (var "x") (var "y")) [T.var "t0", T.var "t1"])) [T.var "t0", T.pair (T.var "t0") (T.var "t1")])
     (T.forAlls ["t0", "t1"] $ T.function
       (T.var "t0") (T.function (T.var "t1")
-      (T.product [T.var "t0", T.var "t0", T.var "t1"])))]
+      (T.pair (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))))]
 
 lambdasWithOperationsTestsDef :: TBinding TestGroup
 lambdasWithOperationsTestsDef = define "lambdasWithOperationsTests" $
@@ -305,8 +306,8 @@ lambdasWithOperationsTestsDef = define "lambdasWithOperationsTests" $
     (T.forAlls ["t0", "t1"] $ T.function (T.function (T.var "t0") (T.var "t1")) (T.function (T.var "t0") (T.var "t1"))),
   checkTest "lambda with construction" []
     (lambda "x" $ lambda "y" $ tuple [var "x", var "y"])
-    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t1") $ tuple [var "x", var "y"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.product [T.var "t0", T.var "t1"])))]
+    (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "y" (T.var "t1") $ tyapps (pair (var "x") (var "y")) [T.var "t0", T.var "t1"])
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.var "t1"))))]
 
 nestedLambdasTestsDef :: TBinding TestGroup
 nestedLambdasTestsDef = define "nestedLambdasTests" $
@@ -329,8 +330,8 @@ lambdasInComplexContextsTestsDef = define "lambdasInComplexContextsTests" $
   subgroup "Lambdas in complex contexts" [
   checkTest "lambda in tuple" []
     (tuple [lambda "x" $ var "x", int32 42])
-    (tylam "t0" $ tuple [lambdaTyped "x" (T.var "t0") $ var "x", int32 42])
-    (T.forAlls ["t0"] $ T.product [T.function (T.var "t0") (T.var "t0"), T.int32]),
+    (tylam "t0" $ tyapps (pair (lambdaTyped "x" (T.var "t0") $ var "x") (int32 42)) [T.function (T.var "t0") (T.var "t0"), T.int32])
+    (T.forAlls ["t0"] $ T.pair (T.function (T.var "t0") (T.var "t0")) T.int32),
   checkTest "lambda in list" []
     (list [lambda "x" $ primitive _math_add @@ var "x" @@ int32 1,
            lambda "y" $ primitive _math_mul @@ var "y" @@ int32 2])
@@ -395,8 +396,8 @@ simpleLetBindingsTestsDef = define "simpleLetBindingsTests" $
           tuple [var "x", var "y"])
     (letsTyped [("x", int32 42, T.mono T.int32),
                 ("y", string "hello", T.mono T.string)] $
-      tuple [var "x", var "y"])
-    (T.product [T.int32, T.string])]
+      tyapps (pair (var "x") (var "y")) [T.int32, T.string])
+    (T.pair T.int32 T.string)]
 
 letTermsWithShadowingTestsDef :: TBinding TestGroup
 letTermsWithShadowingTestsDef = define "letTermsWithShadowingTests" $
@@ -417,11 +418,11 @@ letTermsWithShadowingTestsDef = define "letTermsWithShadowingTests" $
       lambdaTyped "x" (T.var "t0") $
         letsTyped [("y", var "x", T.mono $ T.var "t0")] $
           lambdaTyped "x" (T.var "t1") $
-            tuple [var "x", var "y"])
+            tyapps (pair (var "x") (var "y")) [T.var "t1", T.var "t0"])
     (T.forAlls ["t0", "t1"] $
       T.function (T.var "t0") $
         T.function (T.var "t1") $
-          T.product [T.var "t1", T.var "t0"]),
+          T.pair (T.var "t1") (T.var "t0")),
   checkTest "multiple levels of let shadowing" []
     (lets ["x">: int32 1] $
       lets ["x">: string "second"] $
@@ -442,10 +443,10 @@ letTermsWithShadowingTestsDef = define "letTermsWithShadowingTests" $
                  ("y", int32 20, T.mono T.int32)] $
         lambdaTyped "x" (T.var "t0") $
           letsTyped [("z", var "y", T.mono T.int32)] $
-            tuple [var "x", var "z"])
+            tyapps (pair (var "x") (var "z")) [T.var "t0", T.int32])
     (T.forAlls ["t0"] $
       T.function (T.var "t0") $
-        T.product [T.var "t0", T.int32])]
+        T.pair (T.var "t0") T.int32)]
 
 recursiveBindingsTestsDef :: TBinding TestGroup
 recursiveBindingsTestsDef = define "recursiveBindingsTests" $
@@ -554,8 +555,8 @@ letWithComplexExpressionsTestsDef = define "letWithComplexExpressionsTests" $
       tuple [var "id" @@ int32 42, var "id" @@ string "hello"])
     (letsTyped [("id", tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x",
                  T.poly ["t0"] $ T.function (T.var "t0") (T.var "t0"))] $
-      tuple [tyapp (var "id") T.int32 @@ int32 42, tyapp (var "id") T.string @@ string "hello"])
-    (T.product [T.int32, T.string]),
+      tyapps (pair (tyapp (var "id") T.int32 @@ int32 42) (tyapp (var "id") T.string @@ string "hello")) [T.int32, T.string])
+    (T.pair T.int32 T.string),
   checkTest "composition" []
     (lets ["compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
            "add1">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
@@ -631,9 +632,10 @@ binaryLiteralsTestsDef = define "binaryLiteralsTests" $
 literalsInComplexContextsTestsDef :: TBinding TestGroup
 literalsInComplexContextsTestsDef = define "literalsInComplexContextsTests" $
   subgroup "Literals in complex contexts" [
-  noChange "literals in tuple"
-    (tuple [boolean True, string "test", int32 42, float32 3.14])
-    (T.product [T.boolean, T.string, T.int32, T.float32]),
+  checkTest "literals in tuple" []
+    (tuple [boolean True, tuple [string "test", tuple [int32 42, float32 3.14]]])
+    (tyapps (pair (boolean True) (tyapps (pair (string "test") (tyapps (pair (int32 42) (float32 3.14)) [T.int32, T.float32])) [T.string, T.pair T.int32 T.float32])) [T.boolean, T.pair T.string (T.pair T.int32 T.float32)])
+    (T.pair T.boolean (T.pair T.string (T.pair T.int32 T.float32))),
   noChange "literals in list"
     (list [string "one", string "two", string "three"])
     (T.list T.string)]
@@ -790,8 +792,8 @@ simpleVariableLookupTestsDef = define "simpleVariableLookupTests" $
           tuple [var "x", var "y"])
     (letsTyped [("x", string "hello", T.mono T.string),
                 ("y", int32 42, T.mono T.int32)] $
-      tuple [var "x", var "y"])
-    (T.product [T.string, T.int32])]
+      tyapps (pair (var "x") (var "y")) [T.string, T.int32])
+    (T.pair T.string T.int32)]
 
 variableScopingTestsDef :: TBinding TestGroup
 variableScopingTestsDef = define "variableScopingTests" $
@@ -822,8 +824,8 @@ variableScopingTestsDef = define "variableScopingTests" $
     (tylams ["t0", "t1"] $ lambdaTyped "x" (T.var "t0") $
      letsTyped [("y", var "x", T.mono (T.var "t0"))] $
       lambdaTyped "z" (T.var "t1") $
-      tuple [var "x", var "y", var "z"])
-    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.product [T.var "t0", T.var "t0", T.var "t1"])))]
+      tyapps (pair (var "x") (tyapps (pair (var "y") (var "z")) [T.var "t0", T.var "t1"])) [T.var "t0", T.pair (T.var "t0") (T.var "t1")])
+    (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.function (T.var "t1") (T.pair (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))))]
 
 polymorphicVariablesTestsDef :: TBinding TestGroup
 polymorphicVariablesTestsDef = define "polymorphicVariablesTests" $
@@ -840,8 +842,8 @@ polymorphicVariablesTestsDef = define "polymorphicVariablesTests" $
           tuple [var "id" @@ int32 42, var "id" @@ string "test"])
     (letsTyped [("id", tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x",
                  T.poly ["t0"] $ T.function (T.var "t0") (T.var "t0"))] $
-      tuple [tyapp (var "id") T.int32 @@ int32 42, tyapp (var "id") T.string @@ string "test"])
-    (T.product [T.int32, T.string]),
+      tyapps (pair (tyapp (var "id") T.int32 @@ int32 42) (tyapp (var "id") T.string @@ string "test")) [T.int32, T.string])
+    (T.pair T.int32 T.string),
   checkTest "higher order polymorphic" []
     (lets ["apply">: lambda "f" $ lambda "x" $ var "f" @@ var "x"] $
           var "apply")

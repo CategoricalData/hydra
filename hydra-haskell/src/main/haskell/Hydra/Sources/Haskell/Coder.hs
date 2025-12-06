@@ -238,12 +238,6 @@ encodeFunctionDef = haskellCoderDefinition "encodeFunction" $
           _Elimination_wrap>>: lambda "name" $
             Flows.pure $ inject H._Expression H._Expression_variable $ ref HaskellUtils.elementReferenceDef @@ var "namespaces" @@
               (ref Names.qnameDef @@ (Maybes.fromJust $ ref Names.namespaceOfDef @@ var "name") @@ (ref HaskellUtils.newtypeAccessorNameDef @@ var "name")),
-          _Elimination_product>>: lambda "proj" $ lets [
-            "arity">: Core.tupleProjectionArity $ var "proj",
-            "idx">: Core.tupleProjectionIndex $ var "proj"] $
-            Logic.ifElse (Equality.equal (var "arity") (int32 2))
-              (Flows.pure $ ref HaskellUtils.hsvarDef @@ Logic.ifElse (Equality.equal (var "idx") (int32 0)) (string "fst") (string "snd"))
-              (Flows.fail $ string "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"),
           _Elimination_record>>: lambda "proj" $ lets [
             "dn">: Core.projectionTypeName $ var "proj",
             "fname">: Core.projectionField $ var "proj"] $
@@ -419,9 +413,6 @@ encodeTermDef = haskellCoderDefinition "encodeTerm" $
         "f" <<~ var "encode" @@ Pairs.first (var "p") $
         "s" <<~ var "encode" @@ Pairs.second (var "p") $
         Flows.pure $ inject H._Expression H._Expression_tuple $ list [var "f", var "s"],
-      _Term_product>>: lambda "terms" $
-        Flows.bind (Flows.mapList (var "encode") (var "terms")) $ lambda "hterms" $
-          Flows.pure $ inject H._Expression H._Expression_tuple $ var "hterms",
       _Term_record>>: lambda "record" $ lets [
         "sname">: Core.recordTypeName $ var "record",
         "fields">: Core.recordFields $ var "record",
@@ -555,9 +546,6 @@ encodeTypeDef = haskellCoderDefinition "encodeType" $
       "f" <<~ var "encode" @@ (Core.pairTypeFirst $ var "pt") $
       "s" <<~ var "encode" @@ (Core.pairTypeSecond $ var "pt") $
         Flows.pure $ inject H._Type H._Type_tuple $ list [var "f", var "s"],
-    _Type_product>>: lambda "types" $
-      Flows.bind (Flows.mapList (var "encode") (var "types")) $ lambda "htypes" $
-        Flows.pure $ inject H._Type H._Type_tuple $ var "htypes",
     _Type_record>>: lambda "rt" $ var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
     _Type_set>>: lambda "st" $
       Flows.map

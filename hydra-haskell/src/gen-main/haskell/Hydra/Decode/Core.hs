@@ -128,7 +128,6 @@ type_ dat = ((\x -> case x of
     (Core.Name "map", (\mt -> Flows.map (\x -> Core.TypeMap x) (mapType mt))),
     (Core.Name "maybe", (\et -> Flows.map (\x -> Core.TypeMaybe x) (type_ et))),
     (Core.Name "pair", (\pt -> Flows.map (\x -> Core.TypePair x) (pairType pt))),
-    (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.listOf type_ types))),
     (Core.Name "record", (\rt -> Flows.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),

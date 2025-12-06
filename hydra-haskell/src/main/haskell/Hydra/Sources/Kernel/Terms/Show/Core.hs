@@ -112,14 +112,6 @@ eliminationDef = define "elimination" $
   doc "Show an elimination as a string" $
   "elm" ~>
   cases _Elimination (var "elm") Nothing [
-    _Elimination_product>>: "tp" ~>
---      "domain" <~ Core.tupleProjectionDomain (var "tp") $ -- TODO: show domain if present
-      Strings.cat $ list [
-        string "[",
-        Literals.showInt32 (Core.tupleProjectionIndex $ var "tp"),
-        string "/",
-        Literals.showInt32 (Core.tupleProjectionArity $ var "tp"),
-        string "]"],
     _Elimination_record>>: "proj" ~>
       "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
       "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
@@ -355,12 +347,6 @@ termDef = define "term" $
       string ", ",
       ref termDef @@ (Pairs.second $ var "p"),
       string ")"],
-    _Term_product>>: "els" ~>
-      "termStrs" <~ Lists.map (ref termDef) (var "els") $
-      Strings.cat $ list [
-        string "(",
-        Strings.intercalate (string ", ") (var "termStrs"),
-        string ")"],
     _Term_record>>: "rec" ~>
       "tname" <~ unwrap _Name @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
@@ -488,9 +474,6 @@ typeDef = define "type" $
         string ", ",
         ref typeDef @@ var "secondTyp",
         ")"],
-    _Type_product>>: "types" ~>
-      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
-      Strings.intercalate (string "×") (var "typeStrs"),
     _Type_record>>: "rt" ~> Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
     _Type_set>>: "etyp" ~> Strings.cat $ list [
       string "set<",

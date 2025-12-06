@@ -190,12 +190,9 @@ substTypesInTermDef = define "substTypesInTerm" $
   "subst" ~> "term0" ~> lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "dflt">: var "recurse" @@ var "term",
-      "forElimination">: lambda "elm" $ cases _Elimination (var "elm")
-        (Just $ var "dflt") [
-        _Elimination_product>>: "tp" ~> var "forTupleProjection" @@ var "tp"],
       "forFunction">: lambda "f" $ cases _Function (var "f")
         (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "forElimination" @@ var "e",
+        _Function_elimination>>: "e" ~> var "dflt",
         _Function_lambda>>: "l" ~> var "forLambda" @@ var "l"],
       "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
@@ -209,11 +206,6 @@ substTypesInTermDef = define "substTypesInTerm" $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
           (ref substTypesInTermDef @@ var "subst" @@ (Core.letBody $ var "l")),
-      "forTupleProjection">: lambda "tp" $
-        Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
-          (Core.tupleProjectionArity $ var "tp")
-          (Core.tupleProjectionIndex $ var "tp")
-          (Maybes.map (lambda "types" $ Lists.map (ref substInTypeDef @@ var "subst") (var "types")) (Core.tupleProjectionDomain $ var "tp")),
       "forTypeApplication">: lambda "tt" $
          Core.termTypeApplication $ Core.typeApplicationTerm
            (ref substTypesInTermDef @@ var "subst" @@ (Core.typeApplicationTermBody $ var "tt"))

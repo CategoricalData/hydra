@@ -286,11 +286,7 @@ freeTypeVariablesInTermDef = define "freeTypeVariablesInTerm" $
       (Just $ var "dflt") [
       _Term_function>>: "f" ~> cases _Function (var "f")
         (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          (Just $ var "dflt") [
-          _Elimination_product>>: "tp" ~> optCases (Core.tupleProjectionDomain $ var "tp")
-            (Sets.empty)
-            ("typs" ~> var "allOf" @@ (Lists.map (var "tryType" @@ var "vars") $ var "typs"))],
+        _Function_elimination>>: "e" ~> var "dflt",
         _Function_lambda>>: "l" ~>
           "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
           Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l"))],
@@ -522,19 +518,10 @@ normalizeTypeVariablesInTermDef = define "normalizeTypeVariablesInTerm" $
     "boundVars" <~ Pairs.second (var "sb") $
     "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
-      -- Lambdas and tuple projections have a "domain" type which needs to be rewritten
+      -- Lambdas have a "domain" type which needs to be rewritten
       _Term_function>>: match _Function
         (Just $ var "recurse" @@ var "term") [
-        _Function_elimination>>: match _Elimination
-          (Just $ var "recurse" @@ var "term") [
-          _Elimination_product>>: "tproj" ~>
-            "domain" <~ Core.tupleProjectionDomain (var "tproj") $
-            Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $ Core.tupleProjection
-              (Core.tupleProjectionArity $ var "tproj")
-              (Core.tupleProjectionIndex $ var "tproj")
-              (Maybes.map
-                ("types" ~> Lists.map (var "substType" @@ var "subst") (var "types"))
-                (var "domain"))],
+        _Function_elimination>>: constant $ var "recurse" @@ var "term",
         _Function_lambda>>: "l" ~>
           "domain" <~ Core.lambdaDomain (var "l") $
           Core.termFunction $ Core.functionLambda $ Core.lambda
@@ -659,13 +646,7 @@ removeTypesFromTermDef = define "removeTypesFromTerm" $
       (Just $ var "rewritten") [
       _Term_function>>: "f" ~> cases _Function (var "f")
         (Just $ Core.termFunction $ var "f") [
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          (Just $ Core.termFunction $ Core.functionElimination $ var "e") [
-          _Elimination_product>>: "tp" ~> Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
-            Core.tupleProjection
-              (Core.tupleProjectionArity $ var "tp")
-              (Core.tupleProjectionIndex $ var "tp")
-              nothing],
+        _Function_elimination>>: "e" ~> Core.termFunction $ Core.functionElimination $ var "e",
         _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
           (Core.lambdaParameter $ var "l")
           nothing
@@ -862,8 +843,6 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         "rf" <~ var "recurse" @@ var "val0" @@ (Pairs.first $ var "p") $
         "rs" <~ var "recurse" @@ (Pairs.first $ var "rf") @@ (Pairs.second $ var "p") $
         pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
-      _Term_product>>: "terms" ~> var "forMany" @@ var "recurse"
-        @@ (unaryFunction Core.termProduct) @@ var "val0" @@ var "terms",
       _Term_record>>: "r" ~> var "forMany"
         @@ var "forField"
         @@ ("fields" ~> Core.termRecord $ Core.record (Core.recordTypeName $ var "r") (var "fields"))
@@ -1013,8 +992,6 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         "rf" <<~ var "recurse" @@ var "val0" @@ (Pairs.first $ var "p") $
         "rs" <<~ var "recurse" @@ (Pairs.first $ var "rf") @@ (Pairs.second $ var "p") $
         produce $ pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
-      _Term_product>>: "terms" ~> var "forMany" @@ var "recurse"
-        @@ (unaryFunction Core.termProduct) @@ var "val0" @@ var "terms",
       _Term_record>>: "r" ~> var "forMany"
         @@ var "forField"
         @@ ("fields" ~> Core.termRecord $ Core.record (Core.recordTypeName $ var "r") (var "fields"))
@@ -1056,7 +1033,6 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ (Core.fieldTerm $ var "f")) (var "f")) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_product>>: "tp" ~> Core.eliminationProduct (var "tp"),
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
@@ -1101,7 +1077,6 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "recurse" @@ (Pairs.first $ var "p"))
         (var "recurse" @@ (Pairs.second $ var "p")),
-      _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
@@ -1155,7 +1130,6 @@ rewriteTermMDef = define "rewriteTermM" $
         produce $ Core.termEither $ var "re",
       _Term_function>>: "fun" ~>
         "forElm" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-          _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
           _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
           _Elimination_union>>: "cs" ~>
             "n" <~ Core.caseStatementTypeName (var "cs") $
@@ -1200,9 +1174,6 @@ rewriteTermMDef = define "rewriteTermM" $
         "rf" <<~ var "recurse" @@ (Pairs.first $ var "p") $
         "rs" <<~ var "recurse" @@ (Pairs.second $ var "p") $
         produce $ Core.termPair $ pair (var "rf") (var "rs"),
-      _Term_product>>: "tuple" ~> Flows.map
-          ("rtuple" ~> Core.termProduct $ var "rtuple")
-          (Flows.mapList (var "recurse") (var "tuple")),
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
@@ -1246,7 +1217,6 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
     "recurse" <~ var "recurse0" @@ var "cx" $
     "forField" <~ ("field" ~> Core.fieldWithTerm (var "recurse" @@ (Core.fieldTerm $ var "field")) (var "field")) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_product>>: "tp" ~> Core.eliminationProduct (var "tp"),
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
         (Core.caseStatementTypeName $ var "cs")
@@ -1291,7 +1261,6 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "recurse" @@ (Pairs.first $ var "p"))
         (var "recurse" @@ (Pairs.second $ var "p")),
-      _Term_product>>: "tuple" ~> Core.termProduct $ Lists.map (var "recurse") (var "tuple"),
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
@@ -1328,7 +1297,6 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
       produce $ pair (var "k") (var "v")) $
     "forElimination" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-      _Elimination_product>>: "tp" ~> produce $ Core.functionElimination $ Core.eliminationProduct $ var "tp",
       _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
       _Elimination_union>>: "cs" ~>
         "n" <~ Core.caseStatementTypeName (var "cs") $
@@ -1391,9 +1359,6 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
         "rfirst" <<~ var "recurse" @@ Pairs.first (var "p") $
         "rsecond" <<~ var "recurse" @@ Pairs.second (var "p") $
         produce $ Core.termPair $ pair (var "rfirst") (var "rsecond"),
-      _Term_product>>: "tuple" ~> Flows.map
-          ("rtuple" ~> Core.termProduct $ var "rtuple")
-          (Flows.mapList (var "recurse") (var "tuple")),
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
@@ -1457,7 +1422,6 @@ rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
         (var "recurse" @@ (Core.mapTypeKeys $ var "mt"))
         (var "recurse" @@ (Core.mapTypeValues $ var "mt")),
       _Type_maybe>>: "t" ~> Core.typeMaybe $ var "recurse" @@ var "t",
-      _Type_product>>: "ts" ~> Core.typeProduct $ Lists.map (var "recurse") (var "ts"),
       _Type_record>>: "rt" ~> Core.typeRecord $ Core.rowType
         (Core.rowTypeTypeName $ var "rt")
         (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
@@ -1512,9 +1476,6 @@ rewriteTypeMDef = define "rewriteTypeM" $
     _Type_maybe>>: "t" ~>
       "rt" <<~ var "recurse" @@ var "t" $
       produce $ Core.typeMaybe $ var "rt",
-    _Type_product>>: "types" ~>
-      "rtypes" <<~ Flows.mapList (var "recurse") (var "types") $
-      produce $ Core.typeProduct $ var "rtypes",
     _Type_record>>: "rt" ~>
       "name" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
@@ -1649,7 +1610,6 @@ subtermsDef = define "subterms" $
       (Maps.toList $ var "m"),
     _Term_maybe>>: "m" ~> Maybes.maybe (list []) ("t" ~> list [var "t"]) (var "m"),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
-    _Term_product>>: "tuple" ~> var "tuple",
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
@@ -1701,10 +1661,6 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
       ("t" ~> single Accessors.termAccessorOptionalTerm $ var "t")
       (var "m"),
     _Term_pair>>: "p" ~> none, -- TODO: add accessors when TermAccessor type is updated
-    _Term_product>>: "p" ~> Lists.map
-      -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
-      ("e" ~> result (Accessors.termAccessorProductTerm $ int32 0) $ var "e")
-      (var "p"),
     _Term_record>>: "rt" ~> Lists.map
       ("f" ~> result (Accessors.termAccessorRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt"),
@@ -1754,7 +1710,6 @@ subtypesDef = define "subtypes" $
       Core.mapTypeKeys $ var "mt",
       Core.mapTypeValues $ var "mt"],
     _Type_maybe>>: "ot" ~> list [var "ot"],
-    _Type_product>>: "pt" ~> var "pt",
     _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
     _Type_set>>: "st" ~> list [var "st"],
     _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
@@ -1782,7 +1737,7 @@ termDependencyNamesDef = define "termDependencyNames" $
         (Just $ var "names") [
         _Function_primitive>>: "name" ~> var "prim" @@ var "name",
         _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          (Just $ var "names") [
+          Nothing [
           _Elimination_record>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
           _Elimination_union>>: "caseStmt" ~> var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
           _Elimination_wrap>>: "name" ~> var "nominal" @@ var "name"]],

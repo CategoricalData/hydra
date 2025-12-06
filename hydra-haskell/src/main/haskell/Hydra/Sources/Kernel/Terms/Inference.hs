@@ -110,12 +110,10 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfOptionalDef,
       el inferTypeOfPairDef,
       el inferTypeOfPrimitiveDef,
-      el inferTypeOfProductDef,
       el inferTypeOfProjectionDef,
       el inferTypeOfRecordDef,
       el inferTypeOfSetDef,
       el inferTypeOfTermDef,
-      el inferTypeOfTupleProjectionDef,
       el inferTypeOfTypeLambdaDef,
       el inferTypeOfTypeApplicationDef,
       el inferTypeOfUnitDef,
@@ -509,7 +507,6 @@ inferTypeOfEliminationDef = define "inferTypeOfElimination" $
   doc "Infer the type of an elimination" $
   "cx" ~> "elm" ~>
   cases _Elimination (var "elm") Nothing [
-    _Elimination_product>>: "tp" ~> ref inferTypeOfTupleProjectionDef @@ var "cx" @@ var "tp",
     _Elimination_record>>: "p" ~> ref inferTypeOfProjectionDef @@ var "cx" @@ var "p",
     _Elimination_union>>: "c" ~> ref inferTypeOfCaseStatementDef @@ var "cx" @@ var "c",
     _Elimination_wrap>>: "tname" ~> ref inferTypeOfUnwrapDef @@ var "cx" @@ var "tname"]
@@ -869,18 +866,6 @@ inferTypeOfPrimitiveDef = define "inferTypeOfPrimitive" $
         @@ ref Substitution.idTypeSubstDef)
     (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx"))
 
-inferTypeOfProductDef :: TBinding (InferenceContext -> [Term] -> Flow s InferenceResult)
-inferTypeOfProductDef = define "inferTypeOfProduct" $
-  doc "Infer the type of a product (tuple)" $
-  "cx" ~> "els" ~>
-  Flows.map
-    ( "results" ~>
-      "iterms" <~ Pairs.first (var "results") $
-      "itypes" <~ Pairs.first (Pairs.second $ var "results") $
-      "isubst" <~ Pairs.second (Pairs.second $ var "results") $
-      ref yieldDef @@ (Core.termProduct $ var "iterms") @@ (Core.typeProduct $ var "itypes") @@ var "isubst")
-    (ref inferManyDef @@ var "cx" @@ (Lists.map ("e" ~> pair (var "e") (string "tuple element")) $ var "els"))
-
 inferTypeOfProjectionDef :: TBinding (InferenceContext -> Projection -> Flow s InferenceResult)
 inferTypeOfProjectionDef = define "inferTypeOfProjection" $
   doc "Infer the type of a record projection" $
@@ -958,7 +943,6 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_map>>: "m" ~> ref inferTypeOfMapDef @@ var "cx" @@ var "m",
     _Term_maybe>>: "m" ~> ref inferTypeOfOptionalDef @@ var "cx" @@ var "m",
     _Term_pair>>: "p" ~> ref inferTypeOfPairDef @@ var "cx" @@ var "p",
-    _Term_product>>: "els" ~> ref inferTypeOfProductDef @@ var "cx" @@ var "els",
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",
     _Term_typeApplication>>: "tt" ~> ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
@@ -968,25 +952,6 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_variable>>: "name" ~> ref inferTypeOfVariableDef @@ var "cx" @@ var "name",
     _Term_wrap>>: "w" ~> ref inferTypeOfWrappedTermDef @@ var "cx" @@ var "w"]) $
   trace (var "desc") (var "matchTerm")
-
-inferTypeOfTupleProjectionDef :: TBinding (InferenceContext -> TupleProjection -> Flow s InferenceResult)
-inferTypeOfTupleProjectionDef = define "inferTypeOfTupleProjection" $
-  doc "Infer the type of a tuple projection" $
-  "cx" ~> "tp" ~>
-  "arity" <~ Core.tupleProjectionArity (var "tp") $
-  "idx" <~ Core.tupleProjectionIndex (var "tp") $
-  "vars" <<~ ref Schemas.freshNamesDef @@ var "arity" $
-  "types" <~ Lists.map (unaryFunction Core.typeVariable) (var "vars") $
-  "cod" <~ Lists.at (var "idx") (var "types") $
-  Logic.ifElse (Equality.gte (var "idx") (var "arity"))
-    (Flows.fail $ Strings.cat $ list [
-      "tuple projection index ", Literals.showInt32 (var "idx"),
-      " is out of bounds for arity ", Literals.showInt32 (var "arity"), "."])
-    (produce $ ref yieldDef
-      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationProduct $
-          Core.tupleProjection (var "arity") (var "idx") (just $ var "types"))
-      @@ (Core.typeFunction $ Core.functionType (Core.typeProduct $ var "types") (var "cod"))
-      @@ (ref Substitution.idTypeSubstDef))
 
 inferTypeOfTypeLambdaDef :: TBinding (InferenceContext -> TypeLambda -> Flow s InferenceResult)
 inferTypeOfTypeLambdaDef = define "inferTypeOfTypeLambda" $

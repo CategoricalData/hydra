@@ -111,11 +111,8 @@ substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)
 substTypesInTerm subst term0 =  
   let rewrite = (\recurse -> \term ->  
           let dflt = (recurse term) 
-              forElimination = (\elm -> (\x -> case x of
-                      Core.EliminationProduct v1 -> (forTupleProjection v1)
-                      _ -> dflt) elm)
               forFunction = (\f -> (\x -> case x of
-                      Core.FunctionElimination v1 -> (forElimination v1)
+                      Core.FunctionElimination _ -> dflt
                       Core.FunctionLambda v1 -> (forLambda v1)
                       _ -> dflt) f)
               forLambda = (\l -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -130,10 +127,6 @@ substTypesInTerm subst term0 =
                       in (Core.TermLet (Core.Let {
                         Core.letBindings = (Lists.map rewriteBinding (Core.letBindings l)),
                         Core.letBody = (substTypesInTerm subst (Core.letBody l))})))
-              forTupleProjection = (\tp -> Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                      Core.tupleProjectionArity = (Core.tupleProjectionArity tp),
-                      Core.tupleProjectionIndex = (Core.tupleProjectionIndex tp),
-                      Core.tupleProjectionDomain = (Maybes.map (\types -> Lists.map (substInType subst) types) (Core.tupleProjectionDomain tp))}))))
               forTypeApplication = (\tt -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                       Core.typeApplicationTermBody = (substTypesInTerm subst (Core.typeApplicationTermBody tt)),
                       Core.typeApplicationTermType = (substInType subst (Core.typeApplicationTermType tt))}))

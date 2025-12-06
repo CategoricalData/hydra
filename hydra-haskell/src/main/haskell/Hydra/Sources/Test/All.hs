@@ -26,6 +26,10 @@ moduleAndDependencies modl = M.elems $ add M.empty modl
     add m md = M.insert (moduleNamespace md) md m `M.union` M.unions (fmap (add m) (moduleTermDependencies md))
 
 testModuleAndDependencies :: Module -> [Module]
-testModuleAndDependencies modl = L.filter isTestModule (moduleTermDependencies modl)
+testModuleAndDependencies modl = L.filter isTestModule $ M.elems (getAllDeps modl)
   where
      isTestModule md = L.take 11 (unNamespace $ moduleNamespace md) == "hydra.test."
+     getAllDeps md = L.foldl addDeps M.empty (moduleTermDependencies md)
+     addDeps acc m
+       | isTestModule m = M.insert (moduleNamespace m) m acc `M.union` getAllDeps m
+       | otherwise = acc

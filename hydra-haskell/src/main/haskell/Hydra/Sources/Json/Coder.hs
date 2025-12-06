@@ -412,7 +412,6 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         (produce Json.valueNull)
         (ref untypedTermToJsonDef)
         (var "mt"),
-      _Term_product>>: lambda "els" $ ref untypedTermToJsonDef @@ (Core.termList $ var "els"),
       _Term_record>>: lambda "r" $ lets [
         "fields">: Core.recordFields $ var "r"] $ binds [
         "keyvals">: Flows.mapList (var "fieldToKeyval") (var "fields")] $

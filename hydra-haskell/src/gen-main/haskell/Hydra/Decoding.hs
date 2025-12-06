@@ -177,11 +177,9 @@ optional arg_ = ((\x -> case x of
   _ -> Nothing) (Rewriting.deannotateTerm arg_))
 
 pair :: (Core.Term -> Maybe (Core.Term, Core.Term))
-pair = (Maybes.compose matchProduct (\l -> Logic.ifElse (Equality.equal 2 (Lists.length l)) (Just (Lists.at 0 l, (Lists.at 1 l))) Nothing)) 
-  where 
-    matchProduct = (\arg_ -> (\x -> case x of
-      Core.TermProduct v1 -> (Maybes.pure v1)
-      _ -> Nothing) (Rewriting.deannotateTerm arg_))
+pair arg_ = ((\x -> case x of
+    Core.TermPair v1 -> (Just v1)
+    _ -> Nothing) (Rewriting.deannotateTerm arg_))
 
 record :: (Core.Name -> Core.Term -> Maybe [Core.Field])
 record = (nominal Core.recordTypeName Core.recordFields (\arg_ -> (\x -> case x of

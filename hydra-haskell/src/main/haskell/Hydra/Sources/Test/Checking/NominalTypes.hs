@@ -207,7 +207,7 @@ polymorphicRecordsTestsDef = define "polymorphicRecordsTests" $
 recordsInComplexContextsTestsDef :: TBinding TestGroup
 recordsInComplexContextsTestsDef = define "recordsInComplexContextsTests" $
   subgroup "Records in complex contexts" [
-  noChange "records in tuple"
+  checkTest "records in tuple" []
     (tuple [
       record (name "Person") [
         "firstName" >: string "Bob",
@@ -216,7 +216,15 @@ recordsInComplexContextsTestsDef = define "recordsInComplexContextsTests" $
       record (name "LatLon") [
         "lat" >: float32 1.0,
         "lon" >: float32 2.0]])
-    (T.product [T.var "Person", T.var "LatLon"]),
+    (tyapps (pair
+      (record (name "Person") [
+        "firstName" >: string "Bob",
+        "lastName" >: string "Jones",
+        "age" >: int32 25])
+      (record (name "LatLon") [
+        "lat" >: float32 1.0,
+        "lon" >: float32 2.0])) [T.var "Person", T.var "LatLon"])
+    (T.pair (T.var "Person") (T.var "LatLon")),
   checkTest "poly records in tuple" []
     (tuple [
       record (name "LatLonPoly") [
@@ -225,16 +233,17 @@ recordsInComplexContextsTestsDef = define "recordsInComplexContextsTests" $
       record (name "BuddyListA") [
         "head" >: string "test",
         "tail" >: optional nothing]])
-    (tuple [
-      tyapp (record (name "LatLonPoly") [
+    (tyapps (pair
+      (tyapp (record (name "LatLonPoly") [
         "lat" >: int32 1,
-        "lon" >: int32 2]) T.int32,
-      tyapp (record (name "BuddyListA") [
+        "lon" >: int32 2]) T.int32)
+      (tyapp (record (name "BuddyListA") [
         "head" >: string "test",
-        "tail" >: tyapp (optional nothing) (T.apply (T.var "BuddyListB") T.string)]) T.string])
-    (T.product [
-      T.apply (T.var "LatLonPoly") T.int32,
-      T.apply (T.var "BuddyListA") T.string]),
+        "tail" >: tyapp (optional nothing) (T.apply (T.var "BuddyListB") T.string)]) T.string))
+      [T.apply (T.var "LatLonPoly") T.int32, T.apply (T.var "BuddyListA") T.string])
+    (T.pair
+      (T.apply (T.var "LatLonPoly") T.int32)
+      (T.apply (T.var "BuddyListA") T.string)),
   checkTest "recursive record" []
     (record (name "IntList") [
       "head" >: int32 42,
@@ -421,9 +430,10 @@ recordProjectionsWithVariablesTestsDef = define "recordProjectionsWithVariablesT
      tuple [project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person",
             project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person"])
     (lambdaTyped "person" (T.var "Person") $
-     tuple [project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person",
-            project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person"])
-    (T.function (T.var "Person") (T.product [T.string, T.string]))]
+     tyapps (pair
+       (project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person")
+       (project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person")) [T.string, T.string])
+    (T.function (T.var "Person") (T.pair T.string T.string))]
 
 recordProjectionsInComplexContextsTestsDef :: TBinding TestGroup
 recordProjectionsInComplexContextsTestsDef = define "recordProjectionsInComplexContextsTests" $
@@ -444,11 +454,14 @@ recordProjectionsInComplexContextsTestsDef = define "recordProjectionsInComplexC
                  T.mono $ T.function (T.var "Person") T.string)] $
       var "getName" @@ var "person")
     T.string,
-  noChange "projection in tuple"
+  checkTest "projection in tuple" []
     (tuple [project (ref TestTypes.testTypePersonNameDef) (name "firstName"),
             project (ref TestTypes.testTypePersonNameDef) (name "age")])
-    (T.product [T.function (T.var "Person") T.string,
-                T.function (T.var "Person") T.int32]),
+    (tyapps (pair
+      (project (ref TestTypes.testTypePersonNameDef) (name "firstName"))
+      (project (ref TestTypes.testTypePersonNameDef) (name "age")))
+      [T.function (T.var "Person") T.string, T.function (T.var "Person") T.int32])
+    (T.pair (T.function (T.var "Person") T.string) (T.function (T.var "Person") T.int32)),
   noChange "projection in list"
     (list [project (ref TestTypes.testTypePersonNameDef) (name "firstName"),
            project (ref TestTypes.testTypePersonNameDef) (name "lastName")])
@@ -723,10 +736,14 @@ polymorphicUnionsFromLambdaTestsDef = define "polymorphicUnionsFromLambdaTests" 
 unionsInComplexContextsTestsDef :: TBinding TestGroup
 unionsInComplexContextsTestsDef = define "unionsInComplexContextsTests" $
   subgroup "Unions in complex contexts" [
-  noChange "union in tuple"
+  checkTest "union in tuple" []
     (tuple [inject (ref TestTypes.testTypeNumberNameDef) "int" (int32 42),
             string "context"])
-    (T.product [Core.typeVariable $ ref TestTypes.testTypeNumberNameDef, T.string]),
+    (tyapps (pair
+      (inject (ref TestTypes.testTypeNumberNameDef) "int" (int32 42))
+      (string "context"))
+      [Core.typeVariable $ ref TestTypes.testTypeNumberNameDef, T.string])
+    (T.pair (Core.typeVariable $ ref TestTypes.testTypeNumberNameDef) T.string),
   noChange "union in list"
     (list [inject (ref TestTypes.testTypeNumberNameDef) "int" (int32 1),
            inject (ref TestTypes.testTypeNumberNameDef) "float" (float32 2.5)])
@@ -1066,13 +1083,14 @@ nestedUnionEliminationsTestsDef = define "nestedUnionEliminationsTests" $
         "equalTo">: lambda "x" (int32 0),
         "greaterThan">: lambda "x" (int32 (-1))],
       string "context"])
-    (tuple [
-      match (ref TestTypes.testTypeComparisonNameDef) nothing [
+    (tyapps (pair
+      (match (ref TestTypes.testTypeComparisonNameDef) nothing [
         "lessThan">: lambdaTyped "x" T.unit (int32 1),
         "equalTo">: lambdaTyped "x" T.unit (int32 0),
-        "greaterThan">: lambdaTyped "x" T.unit (int32 (-1))],
-      string "context"])
-    (T.product [T.function (Core.typeVariable $ ref TestTypes.testTypeComparisonNameDef) T.int32, T.string])]
+        "greaterThan">: lambdaTyped "x" T.unit (int32 (-1))])
+      (string "context"))
+      [T.function (Core.typeVariable $ ref TestTypes.testTypeComparisonNameDef) T.int32, T.string])
+    (T.pair (T.function (Core.typeVariable $ ref TestTypes.testTypeComparisonNameDef) T.int32) T.string)]
 
 unionEliminationsInComplexContextsTestsDef :: TBinding TestGroup
 unionEliminationsInComplexContextsTestsDef = define "unionEliminationsInComplexContextsTests" $
@@ -1290,10 +1308,14 @@ monomorphicWrappedTermsTestsDef = define "monomorphicWrappedTermsTests" $
   noChange "wrapped integer"
     (wrap (ref TestTypes.testTypeStringAliasNameDef) (string "wrapped"))
     (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef),
-  noChange "wrapped in tuple"
+  checkTest "wrapped in tuple" []
     (tuple [wrap (ref TestTypes.testTypeStringAliasNameDef) (string "first"),
             string "second"])
-    (T.product [Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef, T.string])]
+    (tyapps (pair
+      (wrap (ref TestTypes.testTypeStringAliasNameDef) (string "first"))
+      (string "second"))
+      [Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef, T.string])
+    (T.pair (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) T.string)]
 
 polymorphicWrappedTermsTestsDef :: TBinding TestGroup
 polymorphicWrappedTermsTestsDef = define "polymorphicWrappedTermsTests" $
@@ -1337,8 +1359,8 @@ nestedWrappedTermsTestsDef = define "nestedWrappedTermsTests" $
   subgroup "Nested wrapped terms" [
   checkTest "wrapped tuple" []
     (wrap (ref TestTypes.testTypePolymorphicWrapperNameDef) (list [tuple [int32 1, string "a"]]))
-    (tyapp (wrap (ref TestTypes.testTypePolymorphicWrapperNameDef) (list [tuple [int32 1, string "a"]])) (T.product [T.int32, T.string]))
-    (T.apply (Core.typeVariable $ ref TestTypes.testTypePolymorphicWrapperNameDef) (T.product [T.int32, T.string])),
+    (tyapp (wrap (ref TestTypes.testTypePolymorphicWrapperNameDef) (list [tyapps (pair (int32 1) (string "a")) [T.int32, T.string]])) (T.pair T.int32 T.string))
+    (T.apply (Core.typeVariable $ ref TestTypes.testTypePolymorphicWrapperNameDef) (T.pair T.int32 T.string)),
   checkTest "wrapped optional" []
     (wrap (ref TestTypes.testTypePolymorphicWrapperNameDef) (list [Core.termMaybe $ just $ int32 42]))
     (tyapp (wrap (ref TestTypes.testTypePolymorphicWrapperNameDef) (list [Core.termMaybe $ just $ int32 42])) (T.optional T.int32))
@@ -1482,9 +1504,13 @@ unwrapInComplexContextsTestsDef = define "unwrapInComplexContextsTests" $
       ("wrapped", wrap (ref TestTypes.testTypeStringAliasNameDef) (string "test"), T.mono $ Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef)] $
       var "unwrapper" @@ var "wrapped")
     T.string,
-  noChange "unwrap in tuple"
+  checkTest "unwrap in tuple" []
     (tuple [unwrap (ref TestTypes.testTypeStringAliasNameDef), string "context"])
-    (T.product [T.function (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) T.string, T.string]),
+    (tyapps (pair
+      (unwrap (ref TestTypes.testTypeStringAliasNameDef))
+      (string "context"))
+      [T.function (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) T.string, T.string])
+    (T.pair (T.function (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) T.string) T.string),
   checkTest "unwrap in lambda" []
     (lambda "wrapped" $ unwrap (ref TestTypes.testTypeStringAliasNameDef) @@ var "wrapped")
     (lambdaTyped "wrapped" (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) $ unwrap (ref TestTypes.testTypeStringAliasNameDef) @@ var "wrapped")
@@ -1500,15 +1526,16 @@ multiParameterPolymorphicUnwrappersTestsDef = define "multiParameterPolymorphicU
         project (ref TestTypes.testTypeTripleNameDef) (name "third") @@ (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef) @@ var "st")])
     (tylams ["t0", "t1"] $
       lambdaTyped "st" (T.applys (Core.typeVariable $ ref TestTypes.testTypeSymmetricTripleNameDef) [T.var "t0", T.var "t1"]) $
-      tuple [
-        tyapps (project (ref TestTypes.testTypeTripleNameDef) (name "first")) [T.var "t0", T.var "t1", T.var "t0"] @@
-          (tyapps (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef)) [T.var "t0", T.var "t1"] @@ var "st"),
-        tyapps (project (ref TestTypes.testTypeTripleNameDef) (name "third")) [T.var "t0", T.var "t1", T.var "t0"] @@
-          (tyapps (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef)) [T.var "t0", T.var "t1"] @@ var "st")])
+      tyapps (pair
+        (tyapps (project (ref TestTypes.testTypeTripleNameDef) (name "first")) [T.var "t0", T.var "t1", T.var "t0"] @@
+          (tyapps (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef)) [T.var "t0", T.var "t1"] @@ var "st"))
+        (tyapps (project (ref TestTypes.testTypeTripleNameDef) (name "third")) [T.var "t0", T.var "t1", T.var "t0"] @@
+          (tyapps (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef)) [T.var "t0", T.var "t1"] @@ var "st")))
+        [T.var "t0", T.var "t0"])
     (T.forAlls ["t0", "t1"] $
       T.function
         (T.applys (Core.typeVariable $ ref TestTypes.testTypeSymmetricTripleNameDef) [T.var "t0", T.var "t1"])
-        (T.product [T.var "t0", T.var "t0"])),
+        (T.pair (T.var "t0") (T.var "t0"))),
   checkTest "unwrap and collect edges in set" []
     (lets ["getEdge" >: lambda "st" $
             project (ref TestTypes.testTypeTripleNameDef) (name "second") @@ (unwrap (ref TestTypes.testTypeSymmetricTripleNameDef) @@ var "st")] $
@@ -1582,12 +1609,13 @@ multipleUnwrapOperationsTestsDef = define "multipleUnwrapOperationsTests" $
           unwrap (ref TestTypes.testTypePolymorphicWrapperNameDef) @@ var "listWrapped"])
     (tylam "t0" $ lambdaTyped "stringWrapped" (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef) $
       lambdaTyped "listWrapped" (T.apply (Core.typeVariable $ ref TestTypes.testTypePolymorphicWrapperNameDef) (T.var "t0")) $
-        tuple [
-          unwrap (ref TestTypes.testTypeStringAliasNameDef) @@ var "stringWrapped",
-          tyapp (unwrap (ref TestTypes.testTypePolymorphicWrapperNameDef)) (T.var "t0") @@ var "listWrapped"])
+        tyapps (pair
+          (unwrap (ref TestTypes.testTypeStringAliasNameDef) @@ var "stringWrapped")
+          (tyapp (unwrap (ref TestTypes.testTypePolymorphicWrapperNameDef)) (T.var "t0") @@ var "listWrapped"))
+          [T.string, T.list $ T.var "t0"])
     (T.forAll "t0" $ T.function (Core.typeVariable $ ref TestTypes.testTypeStringAliasNameDef)
       (T.function (T.apply (Core.typeVariable $ ref TestTypes.testTypePolymorphicWrapperNameDef) (T.var "t0"))
-        (T.product [T.string, T.list $ T.var "t0"])))]
+        (T.pair T.string (T.list $ T.var "t0"))))]
 
 ------ Eliminations parent group ------
 
@@ -1614,7 +1642,8 @@ projectionsWithVariablesTestsDef = define "projectionsWithVariablesTests" $
      tuple [project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person",
             project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person"])
     (lambdaTyped "person" (T.var "Person") $
-     tuple [project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person",
-            project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person"])
-    (T.function (T.var "Person") (T.product [T.string, T.string]))]
+     tyapps (pair
+       (project (ref TestTypes.testTypePersonNameDef) (name "firstName") @@ var "person")
+       (project (ref TestTypes.testTypePersonNameDef) (name "lastName") @@ var "person")) [T.string, T.string])
+    (T.function (T.var "Person") (T.pair T.string T.string))]
 

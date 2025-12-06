@@ -30,7 +30,6 @@ cppLanguage = Coders.Language {
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = (Sets.fromList [
-      Variants.EliminationVariantProduct,
       Variants.EliminationVariantRecord,
       Variants.EliminationVariantUnion,
       Variants.EliminationVariantWrap])
@@ -63,7 +62,6 @@ cppLanguage = Coders.Language {
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
       Variants.TermVariantPair,
-      Variants.TermVariantProduct,
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
       Variants.TermVariantUnion,
@@ -79,7 +77,6 @@ cppLanguage = Coders.Language {
       Variants.TypeVariantMap,
       Variants.TypeVariantMaybe,
       Variants.TypeVariantPair,
-      Variants.TypeVariantProduct,
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,
       Variants.TypeVariantUnion,

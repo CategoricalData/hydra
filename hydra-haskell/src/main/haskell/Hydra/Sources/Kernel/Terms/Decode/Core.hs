@@ -251,9 +251,6 @@ typeDef = define "type" $
         (Core.nameLift _Type_pair)
         (lambda "pt" $ Flows.map (unaryFunction Core.typePair) $ ref pairTypeDef @@ var "pt"),
       pair
-        (Core.nameLift _Type_product)
-        (lambda "types" $ Flows.map (unaryFunction Core.typeProduct) $ ref ExtractCore.listOfDef @@ ref typeDef @@ var "types"),
-      pair
         (Core.nameLift _Type_record)
         (lambda "rt" $ Flows.map (unaryFunction Core.typeRecord) $ ref rowTypeDef @@ var "rt"),
       pair

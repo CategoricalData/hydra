@@ -117,8 +117,8 @@ emptyListsTestsDef = define "emptyListsTests" $
     (T.forAlls ["t0", "t1"] $ T.pair (T.list $ T.var "t0") (T.list $ T.var "t1")),
   checkTest "empty list in tuple" []
     (tuple [list [], string "context"])
-    (tylam "t0" $ tuple [tyapp (list []) (T.var "t0"), string "context"])
-    (T.forAll "t0" $ T.product [T.list $ T.var "t0", T.string])]
+    (tylam "t0" $ tyapps (pair (tyapp (list []) (T.var "t0")) (string "context")) [T.list $ T.var "t0", T.string])
+    (T.forAll "t0" $ T.pair (T.list $ T.var "t0") T.string)]
 
 polymorphicListsTestsDef :: TBinding TestGroup
 polymorphicListsTestsDef = define "polymorphicListsTests" $
@@ -154,11 +154,12 @@ nestedListsTestsDef = define "nestedListsTests" $
 listsInComplexContextsTestsDef :: TBinding TestGroup
 listsInComplexContextsTestsDef = define "listsInComplexContextsTests" $
   subgroup "Lists in complex contexts" [
-  noChange "multiple lists in tuple"
+  checkTest "multiple lists in tuple" []
     (tuple [
       list [int32 1, int32 2],
       list [string "a", string "b"]])
-    (T.product [T.list T.int32, T.list T.string])]
+    (tyapps (pair (list [int32 1, int32 2]) (list [string "a", string "b"])) [T.list T.int32, T.list T.string])
+    (T.pair (T.list T.int32) (T.list T.string))]
 
 ------ Maps ------
 
@@ -212,10 +213,11 @@ polymorphicMapsTestsDef = define "polymorphicMapsTests" $
 mapsInComplexContextsTestsDef :: TBinding TestGroup
 mapsInComplexContextsTestsDef = define "mapsInComplexContextsTests" $
   subgroup "Maps in complex contexts" [
-  noChange "map in tuple"
+  checkTest "map in tuple" []
     (tuple [mapTerm [(int32 1, string "one")],
             string "context"])
-    (T.product [T.map T.int32 T.string, T.string]),
+    (tyapps (pair (mapTerm [(int32 1, string "one")]) (string "context")) [T.map T.int32 T.string, T.string])
+    (T.pair (T.map T.int32 T.string) T.string),
   noChange "nested maps"
     (mapTerm [(string "outer", mapTerm [(int32 1, boolean True)])])
     (T.map T.string (T.map T.int32 T.boolean)),
@@ -243,9 +245,10 @@ mapsWithComplexTypesTestsDef = define "mapsWithComplexTypesTests" $
     (mapTerm [(int32 1, list [string "a", string "b"]),
                         (int32 2, list [string "c", string "d"])])
     (T.map T.int32 (T.list T.string)),
-  noChange "map of tuples"
+  checkTest "map of tuples" []
     (mapTerm [(string "coords", tuple [int32 10, int32 20])])
-    (T.map T.string (T.product [T.int32, T.int32]))]
+    (mapTerm [(string "coords", tyapps (pair (int32 10) (int32 20)) [T.int32, T.int32])])
+    (T.map T.string (T.pair T.int32 T.int32))]
 
 ------ Sets ------
 
@@ -294,9 +297,10 @@ polymorphicSetsTestsDef = define "polymorphicSetsTests" $
 setsInComplexContextsTestsDef :: TBinding TestGroup
 setsInComplexContextsTestsDef = define "setsInComplexContextsTests" $
   subgroup "Sets in complex contexts" [
-  noChange "set in tuple"
+  checkTest "set in tuple" []
     (tuple [Terms.set [int32 1, int32 2], string "context"])
-    (T.product [T.set T.int32, T.string]),
+    (tyapps (pair (Terms.set [int32 1, int32 2]) (string "context")) [T.set T.int32, T.string])
+    (T.pair (T.set T.int32) T.string),
   checkTest "set in let binding" []
     (lets ["numbers">: Terms.set [int32 10, int32 20, int32 30]] $
       var "numbers")
@@ -313,11 +317,14 @@ nestedSetsTestsDef = define "nestedSetsTests" $
       list [string "a", string "b"],
       list [string "c", string "d"]])
     (T.set $ T.list T.string),
-  noChange "set of tuples"
+  checkTest "set of tuples" []
     (Terms.set [
       tuple [int32 1, int32 2],
       tuple [int32 3, int32 4]])
-    (T.set $ T.product [T.int32, T.int32]),
+    (Terms.set [
+      tyapps (pair (int32 1) (int32 2)) [T.int32, T.int32],
+      tyapps (pair (int32 3) (int32 4)) [T.int32, T.int32]])
+    (T.set $ T.pair T.int32 T.int32),
   noChange "set of sets"
     (Terms.set [Terms.set [string "nested"]])
     (T.set $ T.set T.string)]
