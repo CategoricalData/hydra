@@ -890,11 +890,6 @@ rewriteTermGroup = subgroup "rewriteTerm" [
       (T.set [foo, baz])
       (T.set [bar, baz]),
 
-    -- Sums
-    rewriteTermCase "string in sum term"
-      (T.sum 0 3 foo)
-      (T.sum 0 3 bar),
-
     -- Type lambdas and type applications (System F)
     rewriteTermCase "string in type lambda body"
       (T.tylam "a" foo)

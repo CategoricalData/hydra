@@ -489,21 +489,6 @@ rowType rt = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "fields"),
       Core.fieldTerm = (Core.TermList (Lists.map fieldType (Core.rowTypeFields rt)))}]}))
 
--- | Encode a sum as a term
-sum :: (Core.Sum -> Core.Term)
-sum s = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.core.Sum"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "index"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.sumIndex s))))},
-    Core.Field {
-      Core.fieldName = (Core.Name "size"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.sumSize s))))},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (term (Core.sumTerm s))}]}))
-
 -- | Encode a term as a term (identity encoding)
 term :: (Core.Term -> Core.Term)
 term x = case x of
@@ -572,11 +557,6 @@ term x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "set"),
       Core.fieldTerm = (Core.TermSet (Sets.map term v1))}}))
-  Core.TermSum v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "sum"),
-      Core.fieldTerm = (sum v1)}}))
   Core.TermTypeApplication v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
     Core.injectionField = Core.Field {
@@ -691,11 +671,6 @@ type_ x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "set"),
       Core.fieldTerm = (type_ v1)}}))
-  Core.TypeSum v1 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.core.Type"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "sum"),
-      Core.fieldTerm = (Core.TermList (Lists.map type_ v1))}}))
   Core.TypeUnion v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Type"),
     Core.injectionField = Core.Field {

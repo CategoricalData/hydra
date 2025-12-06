@@ -418,12 +418,6 @@ untypedTermToJsonDef = define "untypedTermToJson" $
         "keyvals">: Flows.mapList (var "fieldToKeyval") (var "fields")] $
         produce $ Json.valueObject $ Maps.fromList $ Maybes.cat $ var "keyvals",
       _Term_set>>: lambda "vals" $ ref untypedTermToJsonDef @@ (Core.termList $ Sets.toList $ var "vals"),
-      _Term_sum>>: lambda "s" $ var "asRecord" @@ list [
-        Core.field (Core.name $ string "index") (Core.termLiteral $ Core.literalInteger $
-          Core.integerValueInt32 $ Core.sumIndex $ var "s"),
-        Core.field (Core.name $ string "size") (Core.termLiteral $ Core.literalInteger $
-          Core.integerValueInt32 $ Core.sumSize $ var "s"),
-        Core.field (Core.name $ string "term") (Core.sumTerm $ var "s")],
       _Term_typeLambda>>: lambda "ta" $ var "asRecord" @@ list [
         Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.typeLambdaParameter $ var "ta"),
         Core.field (Core.name $ string "body") (Core.typeLambdaBody $ var "ta")],

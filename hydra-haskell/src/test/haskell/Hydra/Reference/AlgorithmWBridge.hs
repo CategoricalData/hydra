@@ -80,14 +80,6 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
       Core.TypePair (Core.PairType first second) -> TyProd <$> toStlc first <*> toStlc second
 --      TypeRecord RowType |
 --      TypeSet Type |
-      Core.TypeSum types -> if L.length types == 0
-        then pure TyVoid
-        else if L.length types == 1
-          then Left $ "unary sums are not yet supported"
-          else do
-            stypes <- CM.mapM toStlc types
-            let rev = L.reverse stypes
-            return $ L.foldl (\a e -> TySum e a) (TySum (rev !! 1) (rev !! 0)) $ L.drop 2 rev
       Core.TypeEither (Core.EitherType left right) -> TyEither <$> toStlc left <*> toStlc right
 --      TypeUnion RowType |
       Core.TypeVariable name -> pure $ TyVar $ Core.unName name
@@ -142,14 +134,10 @@ toType ty = case ty of
   FTyList lt -> Core.TypeList $ toType lt
   FTyFn dom cod -> Core.TypeFunction $ Core.FunctionType (toType dom) (toType cod)
   FTyProd t1 t2 -> Core.TypePair $ Core.PairType (toType t1) (toType t2)
-  FTySum t1 t2 -> Core.TypeSum (toType <$> (t1:(componentsTypesOf t2)))
-    where
-      componentsTypesOf t = case t of
-        FTySum t1 t2 -> t1:(componentsTypesOf t2)
-        _ -> [t]
+  FTySum t1 t2 -> Core.TypeEither $ Core.EitherType (toType t1) (toType t2)
   FTyEither t1 t2 -> Core.TypeEither $ Core.EitherType (toType t1) (toType t2)
   FTyUnit -> Core.TypeProduct []
-  FTyVoid -> Core.TypeSum []
+  FTyVoid -> Core.TypeUnit
 
 -- | Convert a System F type expression to a Hydra type scheme
 toTypeScheme :: FTy -> Core.TypeScheme

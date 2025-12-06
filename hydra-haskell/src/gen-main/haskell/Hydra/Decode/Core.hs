@@ -131,7 +131,6 @@ type_ dat = ((\x -> case x of
     (Core.Name "product", (\types -> Flows.map (\x -> Core.TypeProduct x) (Core_.listOf type_ types))),
     (Core.Name "record", (\rt -> Flows.map (\x -> Core.TypeRecord x) (rowType rt))),
     (Core.Name "set", (\et -> Flows.map (\x -> Core.TypeSet x) (type_ et))),
-    (Core.Name "sum", (\types -> Flows.map (\x -> Core.TypeSum x) (Core_.listOf type_ types))),
     (Core.Name "union", (\rt -> Flows.map (\x -> Core.TypeUnion x) (rowType rt))),
     (Core.Name "unit", (\_ -> Flows.pure Core.TypeUnit)),
     (Core.Name "variable", (\n -> Flows.map (\x -> Core.TypeVariable x) (name n))),

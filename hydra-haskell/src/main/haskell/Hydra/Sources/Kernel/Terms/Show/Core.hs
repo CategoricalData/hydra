@@ -374,18 +374,6 @@ termDef = define "term" $
         string "{",
         Strings.intercalate (string ", ") (Lists.map (ref termDef) $ Sets.toList $ var "s"),
         string "}"],
-    _Term_sum>>: "s" ~>
-      "index" <~ Core.sumIndex (var "s") $
-      "size" <~ Core.sumSize (var "s") $
-      "t2" <~ Core.sumTerm (var "s") $
-      Strings.cat $ list [
-        string "(",
-        Literals.showInt32 $ var "index",
-        string "/",
-        Literals.showInt32 $ var "size",
-        string "=",
-        ref termDef @@ var "t2",
-        string ")"],
     _Term_typeLambda>>: "ta" ~>
       "param" <~ unwrap _Name @@ (Core.typeLambdaParameter $ var "ta") $
       "body" <~ Core.typeLambdaBody (var "ta") $
@@ -508,9 +496,6 @@ typeDef = define "type" $
       string "set<",
       ref typeDef @@ var "etyp",
       string ">"],
-    _Type_sum>>: "types" ~>
-      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
-      Strings.intercalate (string "+") (var "typeStrs"),
     _Type_union>>: "rt" ~> Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
     _Type_unit>>: constant $ string "unit",
     _Type_variable>>: "name" ~> unwrap _Name @@ var "name",

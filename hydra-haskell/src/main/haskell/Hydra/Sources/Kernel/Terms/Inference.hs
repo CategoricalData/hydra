@@ -114,7 +114,6 @@ module_ = Module (Namespace "hydra.inference") elements
       el inferTypeOfProjectionDef,
       el inferTypeOfRecordDef,
       el inferTypeOfSetDef,
-      el inferTypeOfSumDef,
       el inferTypeOfTermDef,
       el inferTypeOfTupleProjectionDef,
       el inferTypeOfTypeLambdaDef,
@@ -944,30 +943,6 @@ inferTypeOfSetDef = define "inferTypeOfSet" $
     @@ string "set element"
     @@ (Sets.toList $ var "s")
 
-inferTypeOfSumDef :: TBinding (InferenceContext -> Sum -> Flow s InferenceResult)
-inferTypeOfSumDef = define "inferTypeOfSum" $
-  doc "Infer the type of a sum type" $
-  "cx" ~> "sum" ~>
-  "i" <~ Core.sumIndex (var "sum") $
-  "s" <~ Core.sumSize (var "sum") $
-  "term" <~ Core.sumTerm (var "sum") $
-  "toType" <~ ("e" ~> Eithers.either_
-    ("t" ~> var "t")
-    ("v" ~> Core.typeVariable $ var "v")
-    (var "e")) $
-  "varOrTerm" <~ ("t" ~> "j" ~> Logic.ifElse (Equality.equal (var "i") (var "j"))
-    (Flows.pure $ left $ var "t")
-    (Flows.map (unaryFunction right) $ ref Schemas.freshNameDef)) $
-  "result" <<~ ref inferTypeOfTermDef @@ var "cx" @@ var "term" @@ string "sum term" $
-  "iterm" <~ Typing.inferenceResultTerm (var "result") $
-  "ityp" <~ Typing.inferenceResultType (var "result") $
-  "isubst" <~ Typing.inferenceResultSubst (var "result") $
-  "vars" <<~ Flows.mapList (var "varOrTerm" @@ var "ityp") (Math.range (int32 0) (Math.sub (var "s") (int32 1))) $
-  produce $ ref yieldDef
-    @@ Core.termSum (Core.sum (var "i") (var "s") (var "iterm"))
-    @@ Core.typeSum (Lists.map (var "toType") (var "vars"))
-    @@ var "isubst"
-
 inferTypeOfTermDef :: TBinding (InferenceContext -> Term -> String -> Flow s InferenceResult)
 inferTypeOfTermDef = define "inferTypeOfTerm" $
   doc "Infer the type of a given term" $
@@ -986,7 +961,6 @@ inferTypeOfTermDef = define "inferTypeOfTerm" $
     _Term_product>>: "els" ~> ref inferTypeOfProductDef @@ var "cx" @@ var "els",
     _Term_record>>: "r" ~> ref inferTypeOfRecordDef @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> ref inferTypeOfSetDef @@ var "cx" @@ var "s",
-    _Term_sum>>: "s" ~> ref inferTypeOfSumDef @@ var "cx" @@ var "s",
     _Term_typeApplication>>: "tt" ~> ref inferTypeOfTypeApplicationDef @@ var "cx" @@ var "tt",
     _Term_typeLambda>>: "ta" ~> ref inferTypeOfTypeLambdaDef @@ var "cx" @@ var "ta",
     _Term_union>>: "i" ~> ref inferTypeOfInjectionDef @@ var "cx" @@ var "i",

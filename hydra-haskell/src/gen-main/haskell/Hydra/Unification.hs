@@ -95,9 +95,6 @@ joinTypes left right comment =
                   Core.TypeSet v2 -> (Flows.pure [
                     joinOne v1 v2])
                   _ -> cannotUnify) sright)
-                Core.TypeSum v1 -> ((\x -> case x of
-                  Core.TypeSum v2 -> (joinList v1 v2)
-                  _ -> cannotUnify) sright)
                 Core.TypeUnion v1 -> ((\x -> case x of
                   Core.TypeUnion v2 -> (joinRowTypes v1 v2)
                   _ -> cannotUnify) sright)

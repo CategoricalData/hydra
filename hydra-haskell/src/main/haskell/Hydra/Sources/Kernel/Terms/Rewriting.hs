@@ -874,11 +874,6 @@ rewriteAndFoldTermDef = define "rewriteAndFoldTerm" $
         @@ ("e" ~> Core.termSet $ Sets.fromList $ var "e")
         @@ var "val0"
         @@ (Sets.toList $ var "els"),
-      _Term_sum>>: "s" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termSum $ Core.sum (Core.sumIndex $ var "s") (Core.sumSize $ var "s") (var "t"))
-        @@ var "val0"
-        @@ Core.sumTerm (var "s"),
       _Term_typeApplication>>: "ta" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
@@ -1030,11 +1025,6 @@ rewriteAndFoldTermMDef = define "rewriteAndFoldTermM" $
         @@ ("e" ~> Core.termSet $ Sets.fromList $ var "e")
         @@ var "val0"
         @@ (Sets.toList $ var "els"),
-      _Term_sum>>: "s" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termSum $ Core.sum (Core.sumIndex $ var "s") (Core.sumSize $ var "s") (var "t"))
-        @@ var "val0"
-        @@ Core.sumTerm (var "s"),
       _Term_typeApplication>>: "ta" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
@@ -1116,10 +1106,6 @@ rewriteTermDef = define "rewriteTerm" $ "f" ~> "term0" ~>
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
       _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s"),
-      _Term_sum>>: "s" ~> Core.termSum $ Core.sum
-        (Core.sumIndex $ var "s")
-        (Core.sumSize $ var "s")
-        (var "recurse" @@ (Core.sumTerm $ var "s")),
       _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
         (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
         (Core.typeApplicationTermType $ var "tt"),
@@ -1226,12 +1212,6 @@ rewriteTermMDef = define "rewriteTermM" $
       _Term_set>>: "s" ~>
         "rlist" <<~ Flows.mapList (var "recurse") (Sets.toList $ var "s") $
         produce $ Core.termSet $ Sets.fromList $ var "rlist",
-      _Term_sum>>: "sum" ~>
-        "i" <~ Core.sumIndex (var "sum") $
-        "s" <~ Core.sumSize (var "sum") $
-        "trm" <~ Core.sumTerm (var "sum") $
-        "rtrm" <<~ var "recurse" @@ var "trm" $
-        produce $ Core.termSum $ Core.sum (var "i") (var "s") (var "rtrm"),
       _Term_typeApplication>>: "tt" ~>
         "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
         produce $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
@@ -1316,10 +1296,6 @@ rewriteTermWithContextDef = define "rewriteTermWithContext" $
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
       _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s"),
-      _Term_sum>>: "s" ~> Core.termSum $ Core.sum
-        (Core.sumIndex $ var "s")
-        (Core.sumSize $ var "s")
-        (var "recurse" @@ (Core.sumTerm $ var "s")),
       _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
         (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
         (Core.typeApplicationTermType $ var "tt"),
@@ -1427,12 +1403,6 @@ rewriteTermWithContextMDef = define "rewriteTermWithContextM" $
       _Term_set>>: "s" ~>
         "rlist" <<~ Flows.mapList (var "recurse") (Sets.toList $ var "s") $
         produce $ Core.termSet $ Sets.fromList $ var "rlist",
-      _Term_sum>>: "sum" ~>
-        "i" <~ Core.sumIndex (var "sum") $
-        "s" <~ Core.sumSize (var "sum") $
-        "trm" <~ Core.sumTerm (var "sum") $
-        "rtrm" <<~ var "recurse" @@ var "trm" $
-        produce $ Core.termSum $ Core.sum (var "i") (var "s") (var "rtrm"),
       _Term_typeApplication>>: "tt" ~>
         "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
         produce $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
@@ -1492,7 +1462,6 @@ rewriteTypeDef = define "rewriteType" $ "f" ~> "typ0" ~>
         (Core.rowTypeTypeName $ var "rt")
         (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
       _Type_set>>: "t" ~> Core.typeSet $ var "recurse" @@ var "t",
-      _Type_sum>>: "ts" ~> Core.typeSum $ Lists.map (var "recurse") (var "ts"),
       _Type_union>>: "rt" ~> Core.typeUnion $ Core.rowType
         (Core.rowTypeTypeName $ var "rt")
         (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
@@ -1557,9 +1526,6 @@ rewriteTypeMDef = define "rewriteTypeM" $
     _Type_set>>: "t" ~>
       "rt" <<~ var "recurse" @@ var "t" $
       produce $ Core.typeSet $ var "rt",
-    _Type_sum>>: "types" ~>
-      "rtypes" <<~ Flows.mapList (var "recurse") (var "types") $
-      produce $ Core.typeSum $ var "rtypes",
     _Type_union>>: "rt" ~>
       "name" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
@@ -1686,7 +1652,6 @@ subtermsDef = define "subterms" $
     _Term_product>>: "tuple" ~> var "tuple",
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
-    _Term_sum>>: "st" ~> list [Core.sumTerm $ var "st"],
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
     _Term_union>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
@@ -1747,9 +1712,6 @@ subtermsWithAccessorsDef = define "subtermsWithAccessors" $
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
       ("e" ~> result (Accessors.termAccessorListElement $ int32 0) $ var "e")
       (Sets.toList $ var "s"),
-    _Term_sum>>: "st" ~>
-      single Accessors.termAccessorSumTerm $
-      Core.sumTerm $ var "st",
     _Term_typeApplication>>: "ta" ~>
       single Accessors.termAccessorTypeApplicationTerm $
       Core.typeApplicationTermBody $ var "ta",
@@ -1795,7 +1757,6 @@ subtypesDef = define "subtypes" $
     _Type_product>>: "pt" ~> var "pt",
     _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
     _Type_set>>: "st" ~> list [var "st"],
-    _Type_sum>>: "st" ~> var "st",
     _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
     _Type_unit>>: constant $ list [],
     _Type_variable>>: constant $ list [],

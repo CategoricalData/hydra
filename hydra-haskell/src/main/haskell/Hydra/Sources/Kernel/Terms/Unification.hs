@@ -139,8 +139,6 @@ joinTypesDef = define "joinTypes" $
     _Type_set>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_set>>: "r" ~> Flows.pure (list [
         var "joinOne" @@ (var "l") @@ (var "r")])],
-    _Type_sum>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_sum>>: "r" ~> var "joinList" @@ (var "l") @@ (var "r")],
     _Type_union>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_union>>: "r" ~> var "joinRowTypes" @@ (var "l") @@ (var "r")],
     _Type_unit>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [

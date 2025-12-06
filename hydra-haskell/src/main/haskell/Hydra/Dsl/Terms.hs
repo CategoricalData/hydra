@@ -8,7 +8,7 @@ import Hydra.Util
 import Hydra.Dsl.Meta.Common
 import qualified Hydra.Dsl.Literals as Literals
 
-import Prelude hiding (map, product, sum)
+import Prelude hiding (map, product)
 import Data.Int
 import qualified Data.Char as C
 import qualified Data.List as L
@@ -276,11 +276,6 @@ set = TermSet
 -- Example: string "hello world"
 string :: String -> Term
 string = TermLiteral . LiteralString
-
--- | Create a sum term
--- Example: sum 0 3 (int32 1) represents the first element of a 3-element sum
-sum :: Int -> Int -> Term -> Term
-sum idx arity term = TermSum $ Sum idx arity term
 
 triple :: Term -> Term -> Term -> Term
 triple a b c = tuple [a, b, c]

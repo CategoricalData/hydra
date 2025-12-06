@@ -29,8 +29,7 @@ module_ = Module (Namespace "hydra.test.inference.algebraicTypes") elements
       el testGroupForMapsDef,
       el testGroupForOptionalsDef,
       el testGroupForPairsDef,
-      el testGroupForSetsDef,
-      el testGroupForSumsDef]
+      el testGroupForSetsDef]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -45,8 +44,7 @@ allTestsDef = define "allTests" $
     ref testGroupForMapsDef,
     ref testGroupForOptionalsDef,
     ref testGroupForPairsDef,
-    ref testGroupForSetsDef,
-    ref testGroupForSumsDef]
+    ref testGroupForSetsDef]
 
 testGroupForEithersDef :: TBinding TestGroup
 testGroupForEithersDef = define "testGroupForEithers" $
@@ -253,22 +251,3 @@ testGroupForSetsDef = define "testGroupForSets" $
     expectPoly 2 [tag_disabledForMinimalInference]
       (set [set []])
       ["t0"] (T.set $ T.set $ T.var "t0")]
-
-testGroupForSumsDef :: TBinding TestGroup
-testGroupForSumsDef = define "testGroupForSums" $
-  supergroup "Sum terms" [
-    subgroup "Singleton sum terms" [
-      expectMono 1 [tag_disabledForMinimalInference]
-        (Terms.sum 0 1 (string "foo"))
-        (T.sum [T.string]),
-      expectPoly 2 [tag_disabledForMinimalInference]
-        (Terms.sum 0 1 (list []))
-        ["t0"] (T.sum [T.list $ T.var "t0"])],
-
-    subgroup "Non-singleton sum terms" [
-      expectPoly 1 [tag_disabledForMinimalInference]
-        (Terms.sum 0 2 (string "foo"))
-        ["t0"] (T.sum [T.string, T.var "t0"]),
-      expectPoly 2 [tag_disabledForMinimalInference]
-        (Terms.sum 1 2 (string "foo"))
-        ["t0"] (T.sum [T.var "t0", T.string])]]

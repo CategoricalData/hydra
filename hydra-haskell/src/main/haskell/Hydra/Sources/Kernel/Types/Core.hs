@@ -360,19 +360,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
             doc "The fields of this row type, excluding any inherited fields" $
             list $ core "FieldType"],
 
-      def "Sum" $
-        doc "The unlabeled equivalent of an Injection term" $
-        record [
-          "index">:
-            doc "The 0-indexed position of the variant" $
-            int32,
-          "size">:
-            doc "The total number of variants in the sum type" $
-            int32,
-          "term">:
-            doc "The term value of the variant" $
-            core "Term"],
-
       def "Term" $
         doc "A data term" $
         union [
@@ -415,9 +402,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "set">:
             doc "A set of values" $
             set $ core "Term",
-          "sum">:
-            doc "A variant tuple" $
-            core "Sum",
           "typeApplication">:
             doc "A System F type application term" $
             core "TypeApplicationTerm",
@@ -492,9 +476,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "set">:
             doc "A set type" $
             core "Type",
-          "sum">:
-            doc "A union type without field names" $
-            list (core "Type"),
           "union">:
             doc "A union type with field names" $
             core "RowType",

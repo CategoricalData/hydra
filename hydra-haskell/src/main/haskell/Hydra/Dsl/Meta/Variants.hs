@@ -80,7 +80,6 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantProduct -> _TermVariant_product
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
-  TermVariantSum -> _TermVariant_sum
   TermVariantTypeLambda -> _TermVariant_typeLambda
   TermVariantTypeApplication -> _TermVariant_typeApplication
   TermVariantUnion -> _TermVariant_union
@@ -126,9 +125,6 @@ termVariantRecord = injectUnit _TermVariant _TermVariant_record
 
 termVariantSet :: TTerm TermVariant
 termVariantSet = injectUnit _TermVariant _TermVariant_set
-
-termVariantSum :: TTerm TermVariant
-termVariantSum = injectUnit _TermVariant _TermVariant_sum
 
 termVariantTypeLambda :: TTerm TermVariant
 termVariantTypeLambda = injectUnit _TermVariant _TermVariant_typeLambda
@@ -206,9 +202,6 @@ typeVariantRecord = injectUnit _TypeVariant _TypeVariant_record
 
 typeVariantSet :: TTerm TypeVariant
 typeVariantSet = injectUnit _TypeVariant _TypeVariant_set
-
-typeVariantSum :: TTerm TypeVariant
-typeVariantSum = injectUnit _TypeVariant _TypeVariant_sum
 
 typeVariantUnion :: TTerm TypeVariant
 typeVariantUnion = injectUnit _TypeVariant _TypeVariant_union

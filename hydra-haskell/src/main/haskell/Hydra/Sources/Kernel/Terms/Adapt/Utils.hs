@@ -223,8 +223,6 @@ typeIsSupportedDef = define "typeIsSupported" $
         ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))
         (Core.rowTypeFields (var "rt"))),
     _Type_set>>: "st" ~> ref typeIsSupportedDef @@ var "constraints" @@ var "st",
-    _Type_sum>>: "types" ~>
-      andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
     _Type_union>>: "rt" ~>
       andAll (Lists.map
         ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))

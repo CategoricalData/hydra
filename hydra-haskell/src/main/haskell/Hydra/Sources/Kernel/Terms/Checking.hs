@@ -366,7 +366,6 @@ typeOfDef = define "typeOf" $
     _Term_product>>: ref typeOfTupleDef @@ var "tx" @@ var "typeArgs",
     _Term_record>>: ref typeOfRecordDef @@ var "tx" @@ var "typeArgs",
     _Term_set>>: ref typeOfSetDef @@ var "tx" @@ var "typeArgs",
-    -- TermSum (Sum idx size term1) is ignored for now. See https://github.com/CategoricalData/hydra/issues/134.
     _Term_typeApplication>>: ref typeOfTypeApplicationDef @@ var "tx" @@ var "typeArgs",
     _Term_typeLambda>>: ref typeOfTypeLambdaDef @@ var "tx" @@ var "typeArgs",
     _Term_union>>: ref typeOfInjectionDef @@ var "tx" @@ var "typeArgs",

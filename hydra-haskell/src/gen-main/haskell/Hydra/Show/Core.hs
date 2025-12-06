@@ -325,20 +325,6 @@ term t =
       "{",
       Strings.intercalate ", " (Lists.map term (Sets.toList v1)),
       "}"])
-    Core.TermSum v1 ->  
-      let index = (Core.sumIndex v1)
-      in  
-        let size = (Core.sumSize v1)
-        in  
-          let t2 = (Core.sumTerm v1)
-          in (Strings.cat [
-            "(",
-            Literals.showInt32 index,
-            "/",
-            Literals.showInt32 size,
-            "=",
-            term t2,
-            ")"])
     Core.TermTypeLambda v1 ->  
       let param = (Core.unName (Core.typeLambdaParameter v1))
       in  
@@ -473,9 +459,6 @@ type_ typ =
           "set<",
           type_ v1,
           ">"])
-        Core.TypeSum v1 ->  
-          let typeStrs = (Lists.map type_ v1)
-          in (Strings.intercalate "+" typeStrs)
         Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
         Core.TypeUnit -> "unit"
         Core.TypeVariable v1 -> (Core.unName v1)
