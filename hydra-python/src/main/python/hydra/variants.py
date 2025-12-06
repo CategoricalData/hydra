@@ -9,8 +9,6 @@ import hydra.core
 class EliminationVariant(Enum):
     r"""The identifier of an elimination constructor."""
     
-    PRODUCT = "product"
-    
     RECORD = "record"
     
     UNION = "union"
@@ -18,7 +16,6 @@ class EliminationVariant(Enum):
     WRAP = "wrap"
 
 ELIMINATION_VARIANT__NAME = hydra.core.Name("hydra.variants.EliminationVariant")
-ELIMINATION_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 ELIMINATION_VARIANT__RECORD__NAME = hydra.core.Name("record")
 ELIMINATION_VARIANT__UNION__NAME = hydra.core.Name("union")
 ELIMINATION_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
@@ -80,13 +77,9 @@ class TermVariant(Enum):
     
     PAIR = "pair"
     
-    PRODUCT = "product"
-    
     RECORD = "record"
     
     SET = "set"
-    
-    SUM = "sum"
     
     TYPE_APPLICATION = "typeApplication"
     
@@ -111,10 +104,8 @@ TERM_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TERM_VARIANT__MAP__NAME = hydra.core.Name("map")
 TERM_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
 TERM_VARIANT__PAIR__NAME = hydra.core.Name("pair")
-TERM_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TERM_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TERM_VARIANT__SET__NAME = hydra.core.Name("set")
-TERM_VARIANT__SUM__NAME = hydra.core.Name("sum")
 TERM_VARIANT__TYPE_APPLICATION__NAME = hydra.core.Name("typeApplication")
 TERM_VARIANT__TYPE_LAMBDA__NAME = hydra.core.Name("typeLambda")
 TERM_VARIANT__UNION__NAME = hydra.core.Name("union")
@@ -145,13 +136,9 @@ class TypeVariant(Enum):
     
     PAIR = "pair"
     
-    PRODUCT = "product"
-    
     RECORD = "record"
     
     SET = "set"
-    
-    SUM = "sum"
     
     UNION = "union"
     
@@ -172,10 +159,8 @@ TYPE_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
 TYPE_VARIANT__MAP__NAME = hydra.core.Name("map")
 TYPE_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
 TYPE_VARIANT__PAIR__NAME = hydra.core.Name("pair")
-TYPE_VARIANT__PRODUCT__NAME = hydra.core.Name("product")
 TYPE_VARIANT__RECORD__NAME = hydra.core.Name("record")
 TYPE_VARIANT__SET__NAME = hydra.core.Name("set")
-TYPE_VARIANT__SUM__NAME = hydra.core.Name("sum")
 TYPE_VARIANT__UNION__NAME = hydra.core.Name("union")
 TYPE_VARIANT__UNIT__NAME = hydra.core.Name("unit")
 TYPE_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")

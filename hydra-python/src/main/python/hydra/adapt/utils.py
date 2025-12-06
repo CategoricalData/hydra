@@ -133,17 +133,11 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             case hydra.core.TypePair(value=pt):
                 return hydra.lib.logic.and_(type_is_supported(constraints, pt.first), type_is_supported(constraints, pt.second))
             
-            case hydra.core.TypeProduct(value=types):
-                return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda v1: type_is_supported(constraints, v1)), types))
-            
             case hydra.core.TypeRecord(value=rt):
                 return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda field: type_is_supported(constraints, field.type)), rt.fields))
             
             case hydra.core.TypeSet(value=st):
                 return type_is_supported(constraints, st)
-            
-            case hydra.core.TypeSum(value=types2):
-                return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda v1: type_is_supported(constraints, v1)), types2))
             
             case hydra.core.TypeUnion(value=rt2):
                 return hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.map((lambda field: type_is_supported(constraints, field.type)), rt2.fields))

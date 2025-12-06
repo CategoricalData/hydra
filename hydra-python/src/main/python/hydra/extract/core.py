@@ -385,21 +385,9 @@ def pair[T0, T1](kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.
             case hydra.core.TermPair(value=p):
                 return hydra.lib.flows.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: hydra.lib.flows.pure(cast(Tuple[T0, T1], (k_val, v_val)))))))
             
-            case hydra.core.TermProduct(value=terms):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 2), (lambda : hydra.lib.flows.bind(kf(hydra.lib.lists.head(terms)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.lists.head(hydra.lib.lists.tail(terms))), (lambda v_val: hydra.lib.flows.pure(cast(Tuple[T0, T1], (k_val, v_val)))))))), (lambda : hydra.monads.unexpected("pair", hydra.show.core.term(term))))
-            
             case _:
-                return hydra.monads.unexpected("product", hydra.show.core.term(term))
+                return hydra.monads.unexpected("pair", hydra.show.core.term(term))
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
-
-def product_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Type]]:
-    stripped = hydra.rewriting.deannotate_type(typ)
-    match stripped:
-        case hydra.core.TypeProduct(value=types):
-            return hydra.lib.flows.pure(types)
-        
-        case _:
-            return hydra.monads.unexpected("product type", hydra.show.core.type(typ))
 
 def term_record(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Record]:
     r"""Extract a record from a term."""
@@ -463,15 +451,6 @@ def string(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, str]:
     r"""Extract a string value from a term."""
     
     return hydra.lib.flows.bind(literal(t), (lambda l: string_literal(l)))
-
-def sum_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Type]]:
-    stripped = hydra.rewriting.deannotate_type(typ)
-    match stripped:
-        case hydra.core.TypeSum(value=types):
-            return hydra.lib.flows.pure(types)
-        
-        case _:
-            return hydra.monads.unexpected("sum type", hydra.show.core.type(typ))
 
 def uint16_value[T0](v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
     match v:
