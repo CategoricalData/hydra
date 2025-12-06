@@ -107,7 +107,6 @@ pythonLanguageDef :: TBinding Language
 pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
     "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-      Variants.eliminationVariantProduct,
       Variants.eliminationVariantRecord,
       Variants.eliminationVariantUnion,
       Variants.eliminationVariantWrap],
@@ -137,7 +136,6 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Variants.termVariantMap,
       Variants.termVariantMaybe,
       Variants.termVariantPair,
-      Variants.termVariantProduct,
       Variants.termVariantRecord,
       Variants.termVariantSet,
       Variants.termVariantTypeApplication,
@@ -157,7 +155,6 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
       Variants.typeVariantMap,
       Variants.typeVariantMaybe,
       Variants.typeVariantPair,
-      Variants.typeVariantProduct,
       Variants.typeVariantRecord,
       Variants.typeVariantSet,
       Variants.typeVariantUnion,

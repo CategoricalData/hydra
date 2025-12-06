@@ -1333,21 +1333,19 @@ testGroupForLet = Testing.TestGroup {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))}))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "inst1"),
-                Core.TermVariable (Core.Name "inst2"),
-                (Core.TermVariable (Core.Name "rec"))])})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "inst1"), (Core.TermPair (Core.TermVariable (Core.Name "inst2"), (Core.TermVariable (Core.Name "rec"))))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeBoolean,
-                Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-                (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))])}})),
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                  Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},

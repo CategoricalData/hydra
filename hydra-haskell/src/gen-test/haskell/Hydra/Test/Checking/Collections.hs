@@ -139,21 +139,21 @@ emptyListsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "empty list in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermList [],
-          (Core.TermLiteral (Core.LiteralString "context"))]),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermList [], (Core.TermLiteral (Core.LiteralString "context")))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermProduct [
-            Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.TermList []),
-              Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}),
-            (Core.TermLiteral (Core.LiteralString "context"))])})),
+          Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermList []),
+                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermLiteral (Core.LiteralString "context")))),
+              Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeProduct [
-            Core.TypeList (Core.TypeVariable (Core.Name "t0")),
-            (Core.TypeLiteral Core.LiteralTypeString)])}))})),
+          Core.forallTypeBody = (Core.TypePair (Core.PairType {
+            Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+            Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -320,23 +320,23 @@ listsInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "multiple lists in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermList [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
-          (Core.TermList [
-            Core.TermLiteral (Core.LiteralString "a"),
-            (Core.TermLiteral (Core.LiteralString "b"))])]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermList [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
-          (Core.TermList [
-            Core.TermLiteral (Core.LiteralString "a"),
-            (Core.TermLiteral (Core.LiteralString "b"))])]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-          (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))])})),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermList [
+          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
+          Core.TermLiteral (Core.LiteralString "a"),
+          (Core.TermLiteral (Core.LiteralString "b"))]))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
+              Core.TermLiteral (Core.LiteralString "a"),
+              (Core.TermLiteral (Core.LiteralString "b"))]))),
+            Core.typeApplicationTermType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+          Core.typeApplicationTermType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+          Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -544,19 +544,21 @@ mapsInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "map in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermMap (M.fromList [
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one")))]),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermMap (M.fromList [
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one")))]),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeMap (Core.MapType {
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermMap (M.fromList [
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one")))]), (Core.TermLiteral (Core.LiteralString "context")))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermMap (M.fromList [
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one")))]), (Core.TermLiteral (Core.LiteralString "context")))),
+            Core.typeApplicationTermType = (Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+          Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)}),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+            Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)})),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -672,18 +674,18 @@ mapsWithComplexTypesTests = Testing.TestGroup {
       Testing.testCaseWithMetadataName = "map of tuples",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermMap (M.fromList [
-          (Core.TermLiteral (Core.LiteralString "coords"), (Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))]))])),
+          (Core.TermLiteral (Core.LiteralString "coords"), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))))))])),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermMap (M.fromList [
-          (Core.TermLiteral (Core.LiteralString "coords"), (Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))]))])),
+          (Core.TermLiteral (Core.LiteralString "coords"), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))])),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeMap (Core.MapType {
           Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-          Core.mapTypeValues = (Core.TypeProduct [
-            Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-            (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}))})),
+          Core.mapTypeValues = (Core.TypePair (Core.PairType {
+            Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+            Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -850,19 +852,19 @@ setsInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "set in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermSet (S.fromList [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermSet (S.fromList [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermSet (S.fromList [
+          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]), (Core.TermLiteral (Core.LiteralString "context")))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]), (Core.TermLiteral (Core.LiteralString "context")))),
+            Core.typeApplicationTermType = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+          Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -924,22 +926,22 @@ nestedSetsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataName = "set of tuples",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermSet (S.fromList [
-          Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
-          (Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])])),
+          Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))),
+          (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))))])),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermSet (S.fromList [
-          Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
-          (Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])])),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeSet (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))]))})),
+          Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}),
+          (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))])),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypeSet (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {

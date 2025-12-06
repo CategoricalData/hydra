@@ -13,15 +13,12 @@ import qualified Data.Set as S
 
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
-  EliminationVariantProduct  |
   EliminationVariantRecord  |
   EliminationVariantUnion  |
   EliminationVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
 _EliminationVariant = (Core.Name "hydra.variants.EliminationVariant")
-
-_EliminationVariant_product = (Core.Name "product")
 
 _EliminationVariant_record = (Core.Name "record")
 
@@ -77,7 +74,6 @@ data TermVariant =
   TermVariantMap  |
   TermVariantMaybe  |
   TermVariantPair  |
-  TermVariantProduct  |
   TermVariantRecord  |
   TermVariantSet  |
   TermVariantTypeApplication  |
@@ -110,8 +106,6 @@ _TermVariant_maybe = (Core.Name "maybe")
 
 _TermVariant_pair = (Core.Name "pair")
 
-_TermVariant_product = (Core.Name "product")
-
 _TermVariant_record = (Core.Name "record")
 
 _TermVariant_set = (Core.Name "set")
@@ -140,7 +134,6 @@ data TypeVariant =
   TypeVariantMap  |
   TypeVariantMaybe  |
   TypeVariantPair  |
-  TypeVariantProduct  |
   TypeVariantRecord  |
   TypeVariantSet  |
   TypeVariantUnion  |
@@ -170,8 +163,6 @@ _TypeVariant_map = (Core.Name "map")
 _TypeVariant_maybe = (Core.Name "maybe")
 
 _TypeVariant_pair = (Core.Name "pair")
-
-_TypeVariant_product = (Core.Name "product")
 
 _TypeVariant_record = (Core.Name "record")
 

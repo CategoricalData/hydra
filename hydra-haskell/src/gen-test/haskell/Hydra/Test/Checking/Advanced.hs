@@ -151,23 +151,23 @@ nestedAnnotationsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "annotated terms in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-            Core.annotatedTermAnnotation = M.empty}),
-          (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
-            Core.annotatedTermAnnotation = M.empty}))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-            Core.annotatedTermAnnotation = M.empty}),
-          (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
-            Core.annotatedTermAnnotation = M.empty}))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermAnnotated (Core.AnnotatedTerm {
+          Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+          Core.annotatedTermAnnotation = M.empty}), (Core.TermAnnotated (Core.AnnotatedTerm {
+          Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
+          Core.annotatedTermAnnotation = M.empty})))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermAnnotated (Core.AnnotatedTerm {
+              Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+              Core.annotatedTermAnnotation = M.empty}), (Core.TermAnnotated (Core.AnnotatedTerm {
+              Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "hello")),
+              Core.annotatedTermAnnotation = M.empty})))),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+          Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -221,9 +221,7 @@ annotationsInComplexContextsTests = Testing.TestGroup {
                 Core.annotatedTermAnnotation = M.empty})),
               Core.bindingType = Nothing}],
           Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "y"))]),
+            Core.annotatedTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
             Core.annotatedTermAnnotation = M.empty}))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
@@ -244,13 +242,15 @@ annotationsInComplexContextsTests = Testing.TestGroup {
                 Core.typeSchemeVariables = [],
                 Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}))}],
           Core.letBody = (Core.TermAnnotated (Core.AnnotatedTerm {
-            Core.annotatedTermBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "y"))]),
+            Core.annotatedTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+                Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
             Core.annotatedTermAnnotation = M.empty}))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {

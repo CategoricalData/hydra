@@ -1,6 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Algebraic type checking test cases: unit, pairs, products, eithers, sums, optionals
+-- | Algebraic type checking test cases: unit, pairs, eithers, optionals
 
 module Hydra.Test.Checking.AlgebraicTypes where
 
@@ -20,9 +20,7 @@ allTests = Testing.TestGroup {
   Testing.testGroupSubgroups = [
     unitTests,
     pairsTests,
-    productsTests,
     eithersTests,
-    sumsTests,
     optionalsTests],
   Testing.testGroupCases = []}
 
@@ -74,20 +72,6 @@ unitTermInPolymorphicContextTests = Testing.TestGroup {
           Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
             Core.functionTypeCodomain = Core.TypeUnit}))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "unit in tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermUnit,
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermUnit,
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeUnit,
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -281,26 +265,6 @@ pairsInComplexContextsTests = Testing.TestGroup {
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [],
   Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "pair in tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one"))),
-          (Core.TermLiteral (Core.LiteralBoolean True))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermTypeApplication (Core.TypeApplicationTerm {
-            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "one")))),
-              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}),
-          (Core.TermLiteral (Core.LiteralBoolean True))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypePair (Core.PairType {
-            Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-            Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}),
-          (Core.TypeLiteral Core.LiteralTypeBoolean)])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "pair in list",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
@@ -507,269 +471,6 @@ pairsWithComplexTypesTests = Testing.TestGroup {
         Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
           Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
           Core.pairTypeSecond = (Core.TypeVariable (Core.Name "Person"))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "pair of tuple and list",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
-          Core.TermLiteral (Core.LiteralString "a"),
-          (Core.TermLiteral (Core.LiteralString "b"))]))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-            Core.typeApplicationTermBody = (Core.TermPair (Core.TermProduct [
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
-              Core.TermLiteral (Core.LiteralString "a"),
-              (Core.TermLiteral (Core.LiteralString "b"))]))),
-            Core.typeApplicationTermType = (Core.TypeProduct [
-              Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-              (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])})),
-          Core.typeApplicationTermType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
-          Core.pairTypeFirst = (Core.TypeProduct [
-            Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-            (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))]),
-          Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []}]}
-
-productsTests :: Testing.TestGroup
-productsTests = Testing.TestGroup {
-  Testing.testGroupName = "Products",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    monomorphicProductsTests,
-    polymorphicProductsTests,
-    nestedProductsTests],
-  Testing.testGroupCases = []}
-
-monomorphicProductsTests :: Testing.TestGroup
-monomorphicProductsTests = Testing.TestGroup {
-  Testing.testGroupName = "Monomorphic products",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [],
-  Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "empty tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct []),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct []),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "singleton tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "pair tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "triple tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "mixed types",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermUnit,
-          Core.TermLiteral (Core.LiteralString "test"),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 100)))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermUnit,
-          Core.TermLiteral (Core.LiteralString "test"),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 100)))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeUnit,
-          Core.TypeLiteral Core.LiteralTypeString,
-          (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint))])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []}]}
-
-polymorphicProductsTests :: Testing.TestGroup
-polymorphicProductsTests = Testing.TestGroup {
-  Testing.testGroupName = "Polymorphic products",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [],
-  Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "lambda with var",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermLiteral (Core.LiteralString "foo"))])}))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "x"),
-            Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermLiteral (Core.LiteralString "foo"))])})))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeProduct [
-              Core.TypeVariable (Core.Name "t0"),
-              (Core.TypeLiteral Core.LiteralTypeString)])}))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "two variables",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "y"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "y"))])})))}))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
-            Core.typeLambdaParameter = (Core.Name "t1"),
-            Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
-              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "y"),
-                Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
-                Core.lambdaBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))])})))})))}))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.Name "t1"),
-            Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t1"))])}))}))}))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "repeated variable",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermVariable (Core.Name "x"))])}))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "x"),
-            Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "x"))])})))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeProduct [
-              Core.TypeVariable (Core.Name "t0"),
-              (Core.TypeVariable (Core.Name "t0"))])}))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []}]}
-
-nestedProductsTests :: Testing.TestGroup
-nestedProductsTests = Testing.TestGroup {
-  Testing.testGroupName = "Nested products",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [],
-  Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "tuple in tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))],
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermProduct [
-            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))],
-          (Core.TermLiteral (Core.LiteralString "foo"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeProduct [
-            Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)],
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "nested polymorphic",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermProduct [
-            Core.TermProduct [
-              Core.TermVariable (Core.Name "x")],
-            (Core.TermProduct [
-              Core.TermLiteral (Core.LiteralString "test")])])}))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "x"),
-            Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermProduct [
-                Core.TermVariable (Core.Name "x")],
-              (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralString "test")])])})))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeProduct [
-              Core.TypeProduct [
-                Core.TypeVariable (Core.Name "t0")],
-              (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeString])])}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -1035,30 +736,6 @@ eithersInComplexContextsTests = Testing.TestGroup {
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [],
   Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "either in tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "error"))),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermProduct [
-            Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "error")))),
-                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-              Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeProduct [
-            Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-              Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}),
-            (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "either in list",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
@@ -1341,40 +1018,7 @@ eithersWithComplexTypesTests = Testing.TestGroup {
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
             Core.eitherTypeRight = (Core.TypeVariable TestTypes.testTypePersonName)}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "either with tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermEither (Left (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralString "error"),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 404)))]))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
-          Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.TermEither (Left (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralString "error"),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 404)))]))),
-              Core.typeApplicationTermType = (Core.TypeProduct [
-                Core.TypeLiteral Core.LiteralTypeString,
-                (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])})),
-            Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}))})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeEither (Core.EitherType {
-            Core.eitherTypeLeft = (Core.TypeProduct [
-              Core.TypeLiteral Core.LiteralTypeString,
-              (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))]),
-            Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
-
-sumsTests :: Testing.TestGroup
-sumsTests = Testing.TestGroup {
-  Testing.testGroupName = "Sums",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [],
-  Testing.testGroupCases = []}
 
 optionalsTests :: Testing.TestGroup
 optionalsTests = Testing.TestGroup {
@@ -1537,20 +1181,6 @@ optionalsInComplexContextsTests = Testing.TestGroup {
   Testing.testGroupSubgroups = [],
   Testing.testGroupCases = [
     Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "optional in tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))),
-          (Core.TermLiteral (Core.LiteralString "context"))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
-    Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "optional in record",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermRecord (Core.Record {
@@ -1674,20 +1304,6 @@ optionalsWithComplexTypesTests = Testing.TestGroup {
   Testing.testGroupDescription = Nothing,
   Testing.testGroupSubgroups = [],
   Testing.testGroupCases = [
-    Testing.TestCaseWithMetadata {
-      Testing.testCaseWithMetadataName = "optional tuple",
-      Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermMaybe (Just (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-          (Core.TermLiteral (Core.LiteralString "test"))]))),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermMaybe (Just (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-          (Core.TermLiteral (Core.LiteralString "test"))]))),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeMaybe (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)]))})),
-      Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "optional map",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {

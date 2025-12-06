@@ -110,8 +110,6 @@ module_ = Module (Namespace "hydra.checking") elements
       el typeOfProjectionDef,
       el typeOfRecordDef,
       el typeOfSetDef,
-      el typeOfTupleDef,
-      el typeOfTupleProjectionDef,
       el typeOfTypeApplicationDef,
       el typeOfTypeLambdaDef,
       el typeOfUnitDef,
@@ -193,9 +191,7 @@ checkForUnboundTypeVariablesDef = define "checkForUnboundTypeVariables" $
       (Just $ var "dflt") [
       _Term_function>>: "f" ~> cases _Function (var "f")
         (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          (Just $ var "dflt") [
-          _Elimination_product>>: "tp" ~> var "checkOptionalList" @@ (Core.tupleProjectionDomain $ var "tp")],
+        _Function_elimination>>: "e" ~> var "dflt",
         _Function_lambda>>: "l" ~>
           exec (var "checkOptional" @@ (Core.lambdaDomain $ var "l")) $
           var "recurse" @@ (Core.lambdaBody $ var "l")],
@@ -351,7 +347,6 @@ typeOfDef = define "typeOf" $
       cases _Function (var "f") Nothing [
         _Function_elimination>>: "elm" ~>
           cases _Elimination (var "elm") Nothing [
-            _Elimination_product>>: ref typeOfTupleProjectionDef @@ var "tx" @@ var "typeArgs",
             _Elimination_record>>: ref typeOfProjectionDef @@ var "tx" @@ var "typeArgs",
             _Elimination_union>>: ref typeOfCaseStatementDef @@ var "tx" @@ var "typeArgs",
             _Elimination_wrap>>: ref typeOfUnwrapDef @@ var "tx" @@ var "typeArgs"],
@@ -363,7 +358,6 @@ typeOfDef = define "typeOf" $
     _Term_map>>: ref typeOfMapDef @@ var "tx" @@ var "typeArgs",
     _Term_maybe>>: ref typeOfMaybeDef @@ var "tx" @@ var "typeArgs",
     _Term_pair>>: ref typeOfPairDef @@ var "tx" @@ var "typeArgs",
-    _Term_product>>: ref typeOfTupleDef @@ var "tx" @@ var "typeArgs",
     _Term_record>>: ref typeOfRecordDef @@ var "tx" @@ var "typeArgs",
     _Term_set>>: ref typeOfSetDef @@ var "tx" @@ var "typeArgs",
     _Term_typeApplication>>: ref typeOfTypeApplicationDef @@ var "tx" @@ var "typeArgs",
@@ -697,30 +691,6 @@ typeOfSetDef = define "typeOfSet" $
        -- Verify the unified type is well-formed in the current scope
        exec (ref checkTypeVariablesDef @@ var "tx" @@ var "unifiedType") $
        produce $ Core.typeSet $ var "unifiedType")
-
-typeOfTupleDef :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)
-typeOfTupleDef = define "typeOfTuple" $
-  doc "Reconstruct the type of a tuple (product term)" $
-  "tx" ~> "typeArgs" ~> "tuple" ~>
-  "etypes" <<~ Flows.mapList (ref typeOfDef @@ var "tx" @@ list []) (var "tuple") $
-  exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "etypes")) $
-  ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ (Core.typeProduct $ var "etypes")
-
-typeOfTupleProjectionDef :: TBinding (TypeContext -> [Type] -> TupleProjection -> Flow s Type)
-typeOfTupleProjectionDef = define "typeOfTupleProjection" $
-  doc "Reconstruct the type of a tuple projection" $
-  "tx" ~> "typeArgs" ~> "tp" ~>
-  "index" <~ Core.tupleProjectionIndex (var "tp") $
-  "arity" <~ Core.tupleProjectionArity (var "tp") $
-  "mtypes" <~ Core.tupleProjectionDomain (var "tp") $
-  "t" <<~ optCases (var "mtypes")
-      (Flows.fail "untyped tuple projection")
-      ( "types" ~>
-        exec (Flows.mapList (ref checkTypeVariablesDef @@ var "tx") (var "types")) $
-        Flows.pure $ Core.typeFunction $ Core.functionType
-          (Core.typeProduct $ var "types")
-          (Lists.at (var "index") (var "types"))) $
-  ref applyTypeArgumentsToTypeDef @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfTypeApplicationDef :: TBinding (TypeContext -> [Type] -> TypeApplicationTerm -> Flow s Type)
 typeOfTypeApplicationDef = define "typeOfTypeApplication" $

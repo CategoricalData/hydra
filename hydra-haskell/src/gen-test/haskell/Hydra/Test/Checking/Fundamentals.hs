@@ -387,13 +387,11 @@ polymorphicApplicationsTests = Testing.TestGroup {
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
               Core.bindingType = Nothing}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))])})),
+          Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
@@ -410,20 +408,22 @@ polymorphicApplicationsTests = Testing.TestGroup {
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+          Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -581,31 +581,31 @@ applicationsInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "application in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}),
-          (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat2"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))}))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}),
-          (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat2"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))}))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}), (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat2"))),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))})))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}), (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat2"))),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))})))),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+          Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -988,10 +988,7 @@ multiParameterLambdasTests = Testing.TestGroup {
           Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "y"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "y"))])})))}))),
+            Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))))})))}))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -1002,10 +999,17 @@ multiParameterLambdasTests = Testing.TestGroup {
               Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
-                Core.lambdaBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x"),
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))])})))})))}))})),
+                Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+                        Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                      Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))})))),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                  Core.typeApplicationTermType = (Core.TypePair (Core.PairType {
+                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                    Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}))})))})))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -1014,10 +1018,11 @@ multiParameterLambdasTests = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t1"))])}))}))}))}))})),
+                Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                  Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                    Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}))}))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -1100,9 +1105,7 @@ lambdasWithOperationsTests = Testing.TestGroup {
           Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "y"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermProduct [
-              Core.TermVariable (Core.Name "x"),
-              (Core.TermVariable (Core.Name "y"))])})))}))),
+            Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))}))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -1113,9 +1116,11 @@ lambdasWithOperationsTests = Testing.TestGroup {
               Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
-                Core.lambdaBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))])})))})))}))})),
+                Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))}))})))})))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -1124,9 +1129,9 @@ lambdasWithOperationsTests = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t1"))])}))}))}))}))})),
+                Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -1275,27 +1280,29 @@ lambdasInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "lambda in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "x"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))]),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "x"),
+          Core.lambdaDomain = Nothing,
+          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
-          Core.typeLambdaBody = (Core.TermProduct [
-            Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
-              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-            (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])})),
+          Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t0"))),
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+              Core.typeApplicationTermType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
-          Core.forallTypeBody = (Core.TypeProduct [
-            Core.TypeFunction (Core.FunctionType {
+          Core.forallTypeBody = (Core.TypePair (Core.PairType {
+            Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}),
-            (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}))})),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+            Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -1590,9 +1597,7 @@ simpleLetBindingsTests = Testing.TestGroup {
               Core.bindingName = (Core.Name "y"),
               Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "hello")),
               Core.bindingType = Nothing}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermVariable (Core.Name "y"))])})),
+          Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
@@ -1607,12 +1612,14 @@ simpleLetBindingsTests = Testing.TestGroup {
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [],
                 Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}))}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermVariable (Core.Name "y"))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+          Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -1671,9 +1678,7 @@ letTermsWithShadowingTests = Testing.TestGroup {
             Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "y"))])})))}))}))),
+              Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))}))}))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -1692,9 +1697,11 @@ letTermsWithShadowingTests = Testing.TestGroup {
                 Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
-                  Core.lambdaBody = (Core.TermProduct [
-                    Core.TermVariable (Core.Name "x"),
-                    (Core.TermVariable (Core.Name "y"))])})))}))})))}))})),
+                  Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+                      Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))})),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}))})))}))})))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -1703,9 +1710,9 @@ letTermsWithShadowingTests = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t1"),
-                  (Core.TypeVariable (Core.Name "t0"))])}))}))}))}))})),
+                Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t1")),
+                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -1780,9 +1787,7 @@ letTermsWithShadowingTests = Testing.TestGroup {
                   Core.bindingName = (Core.Name "z"),
                   Core.bindingTerm = (Core.TermVariable (Core.Name "y")),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "z"))])}))})))})),
+              Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "z"))))}))})))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermLet (Core.Let {
@@ -1810,16 +1815,18 @@ letTermsWithShadowingTests = Testing.TestGroup {
                     Core.bindingType = (Just (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}],
-                Core.letBody = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "z"))])}))})))}))})),
+                Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "z")))),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeProduct [
-              Core.TypeVariable (Core.Name "t0"),
-              (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])}))}))})),
+            Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+              Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+              Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -2387,13 +2394,11 @@ letWithComplexExpressionsTests = Testing.TestGroup {
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
               Core.bindingType = Nothing}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))])})),
+          Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
@@ -2410,20 +2415,22 @@ letWithComplexExpressionsTests = Testing.TestGroup {
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+          Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -2753,21 +2760,33 @@ literalsInComplexContextsTests = Testing.TestGroup {
     Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = "literals in tuple",
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
-        Testing.typeCheckingTestCaseInput = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralBoolean True),
-          Core.TermLiteral (Core.LiteralString "test"),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-          (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14)))]),
-        Testing.typeCheckingTestCaseOutputTerm = (Core.TermProduct [
-          Core.TermLiteral (Core.LiteralBoolean True),
-          Core.TermLiteral (Core.LiteralString "test"),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-          (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14)))]),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral Core.LiteralTypeBoolean,
-          Core.TypeLiteral Core.LiteralTypeString,
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))])})),
+        Testing.typeCheckingTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermPair (Core.TermLiteral (Core.LiteralString "test"), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14))))))))),
+        Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralString "test"), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14))))),
+                    Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))})))),
+                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeApplicationTermType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))})))),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeBoolean)})),
+          Core.typeApplicationTermType = (Core.TypePair (Core.PairType {
+            Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+            Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+              Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeBoolean),
+          Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+            Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+            Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+              Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -3375,9 +3394,7 @@ simpleVariableLookupTests = Testing.TestGroup {
               Core.bindingName = (Core.Name "y"),
               Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
               Core.bindingType = Nothing}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermVariable (Core.Name "y"))])})),
+          Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
@@ -3392,12 +3409,14 @@ simpleVariableLookupTests = Testing.TestGroup {
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [],
                 Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermVariable (Core.Name "x"),
-            (Core.TermVariable (Core.Name "y"))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral Core.LiteralTypeString,
-          (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))])})),
+          Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y")))),
+              Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
+          Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -3524,10 +3543,7 @@ variableScopingTests = Testing.TestGroup {
             Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "z"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermProduct [
-                Core.TermVariable (Core.Name "x"),
-                Core.TermVariable (Core.Name "y"),
-                (Core.TermVariable (Core.Name "z"))])})))}))}))),
+              Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermPair (Core.TermVariable (Core.Name "y"), (Core.TermVariable (Core.Name "z"))))))})))}))}))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermTypeLambda (Core.TypeLambda {
           Core.typeLambdaParameter = (Core.Name "t0"),
           Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
@@ -3546,10 +3562,17 @@ variableScopingTests = Testing.TestGroup {
                 Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "z"),
                   Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t1"))),
-                  Core.lambdaBody = (Core.TermProduct [
-                    Core.TermVariable (Core.Name "x"),
-                    Core.TermVariable (Core.Name "y"),
-                    (Core.TermVariable (Core.Name "z"))])})))}))})))}))})),
+                  Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                          Core.typeApplicationTermBody = (Core.TermPair (Core.TermVariable (Core.Name "y"), (Core.TermVariable (Core.Name "z")))),
+                          Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                        Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t1"))})))),
+                      Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))})),
+                    Core.typeApplicationTermType = (Core.TypePair (Core.PairType {
+                      Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                      Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}))})))}))})))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = (Core.Name "t0"),
           Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -3558,10 +3581,11 @@ variableScopingTests = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                Core.functionTypeCodomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t1"))])}))}))}))}))})),
+                Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                  Core.pairTypeSecond = (Core.TypePair (Core.PairType {
+                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                    Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))}))}))}))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}
 
@@ -3624,13 +3648,11 @@ polymorphicVariablesTests = Testing.TestGroup {
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
               Core.bindingType = Nothing}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))}))])})),
+          Core.letBody = (Core.TermPair (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))}))))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
             Core.Binding {
@@ -3647,20 +3669,22 @@ polymorphicVariablesTests = Testing.TestGroup {
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}],
-          Core.letBody = (Core.TermProduct [
-            Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}),
-            (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
-                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))}))])})),
-        Testing.typeCheckingTestCaseOutputType = (Core.TypeProduct [
-          Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32),
-          (Core.TypeLiteral Core.LiteralTypeString)])})),
+          Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "id")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "test"))})))),
+              Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+        Testing.typeCheckingTestCaseOutputType = (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {

@@ -102,7 +102,7 @@ field n = Field (Name n)
 
 -- | First element projection function for pairs
 first :: Term
-first = untuple 2 0
+first = primitive $ Name "hydra.lib.pairs.first"
 
 -- | Create a floating-point literal with specified precision
 -- Example: float (FloatValueFloat32 3.14)
@@ -265,7 +265,7 @@ right term = TermEither (Right term)
 
 -- | Second element projection function for pairs
 second :: Term
-second = untuple 2 1
+second = primitive $ Name "hydra.lib.pairs.second"
 
 -- | Create a set of terms
 -- Example: set (S.fromList [string "a", string "b", string "c"])
@@ -278,22 +278,33 @@ string :: String -> Term
 string = TermLiteral . LiteralString
 
 triple :: Term -> Term -> Term -> Term
-triple a b c = tuple [a, b, c]
+triple a b c = pair a (pair b c)
 
 -- | Boolean true literal
 true :: Term
 true = boolean True
 
--- | Create a product (tuple) with multiple components
--- Example: product [string "name", int32 42, true]
+-- | Create a tuple using nested pairs (deprecated: use pair directly)
+-- Example: tuple2 a b creates pair a b
+-- Example: tuple3 a b c creates pair a (pair b c)
 tuple :: [Term] -> Term
-tuple = TermProduct
+tuple [] = unit
+tuple [a] = a
+tuple [a, b] = pair a b
+tuple (a:rest) = pair a (tuple rest)
+
+-- | Create a 2-tuple (same as pair)
+tuple2 :: Term -> Term -> Term
+tuple2 = pair
+
+tuple3 :: Term -> Term -> Term -> Term
+tuple3 a b c = pair a (pair b c)
 
 tuple4 :: Term -> Term -> Term -> Term -> Term
-tuple4 a b c d = tuple [a, b, c, d]
+tuple4 a b c d = pair a (pair b (pair c d))
 
 tuple5 :: Term -> Term -> Term -> Term -> Term -> Term
-tuple5 a b c d e = tuple [a, b, c, d, e]
+tuple5 a b c d e = pair a (pair b (pair c (pair d e)))
 
 tyapp :: Term -> Type -> Term
 tyapp term typ = TermTypeApplication $ TypeApplicationTerm term typ
@@ -346,11 +357,6 @@ uint64 = literal . Literals.uint64
 -- | Unit value (empty record)
 unit :: Term
 unit = TermUnit
-
--- | Create a untyped tuple projection function
--- Example: untuple 3 1 Nothing extracts the second element of a 3-tuple
-untuple :: Int -> Int -> Term
-untuple arity idx = TermFunction $ FunctionElimination $ EliminationProduct $ TupleProjection arity idx Nothing
 
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")

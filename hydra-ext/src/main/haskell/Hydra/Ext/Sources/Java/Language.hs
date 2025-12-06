@@ -113,7 +113,6 @@ javaLanguageDef :: TBinding Language
 javaLanguageDef = javaLanguageDefinition "javaLanguage" $
   doc "Language constraints for Java" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantProduct,
     Variants.eliminationVariantRecord,
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
@@ -147,7 +146,6 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     Variants.termVariantMap,
     Variants.termVariantMaybe,
     Variants.termVariantPair,
-    Variants.termVariantProduct,
     Variants.termVariantRecord,
     Variants.termVariantSet,
     Variants.termVariantUnion,
@@ -164,16 +162,12 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
     Variants.typeVariantPair,
-    Variants.typeVariantProduct,
     Variants.typeVariantRecord,
     Variants.typeVariantSet,
     Variants.typeVariantUnion,
     Variants.typeVariantVariable,
     Variants.typeVariantWrap],
-  "typePredicate">: lambda "typ" $ cases _Type (var "typ")
-    (Just true) [
-    _Type_product>>: lambda "types" $
-      Equality.lt (Lists.length $ var "types") (ref javaMaxTupleLengthDef)]] $
+  "typePredicate">: constant true] $
   Coders.language
     (Coders.languageName $ string "hydra.ext.java")
     (Coders.languageConstraints

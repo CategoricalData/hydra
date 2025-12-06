@@ -453,10 +453,7 @@ invalidApplicationTests = Testing.TestGroup {
           Testing.testCaseWithMetadataName = "#4",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {
             Testing.inferenceFailureTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
+              Core.applicationFunction = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))))),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "index"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -746,9 +743,7 @@ recursiveTypeTests = Testing.TestGroup {
               Core.letBindings = [
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
-                  Core.bindingTerm = (Core.TermProduct [
-                    Core.TermVariable (Core.Name "x"),
-                    (Core.TermVariable (Core.Name "x"))]),
+                  Core.bindingTerm = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x")))),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -862,9 +857,7 @@ recursiveTypeTests = Testing.TestGroup {
                   Core.bindingType = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "g"),
-                  Core.bindingTerm = (Core.TermProduct [
-                    Core.TermVariable (Core.Name "f"),
-                    (Core.TermVariable (Core.Name "f"))]),
+                  Core.bindingTerm = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "f")))),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,

@@ -473,18 +473,6 @@ encodeElimination env marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return jexp
-  EliminationProduct (TupleProjection arity idx _) -> if arity > javaMaxTupleLength
-      then fail $ "Tuple eliminations of arity greater than " ++ show javaMaxTupleLength ++ " are unsupported"
-      else pure $ case marg of
-        Nothing -> javaLambda var $ accessExpr $ javaIdentifierToJavaExpression $ variableToJavaIdentifier var
-          where
-            var = Name "w"
-        Just jarg -> accessExpr jarg
-    where
-      accessExpr jarg = javaFieldAccessToJavaExpression $ Java.FieldAccess qual accessor
-        where
-          accessor = javaIdentifier $ "object" ++ show (idx + 1)
-          qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
   EliminationUnion (CaseStatement tname def fields) -> do
      case marg of
       Nothing -> do
@@ -747,11 +735,6 @@ encodeTerm env term0 = encodeInternal [] [] term0
           let tupleTypeName = "hydra.util.Tuple.Tuple2"
           return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) [jterm1, jterm2] Nothing
 
-        TermProduct terms -> do
-          jterms <- CM.mapM encode terms
-          let tupleTypeName = "hydra.util.Tuple.Tuple" ++ show (length terms)
-          return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) jterms Nothing
-
         TermRecord (Record name fields) -> do
           fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
           let consId = nameToJavaName aliases name
@@ -967,11 +950,6 @@ encodeType aliases boundVars t =  case deannotateType t of
       jfirst <- encode first >>= javaTypeToJavaReferenceType
       jsecond <- encode second >>= javaTypeToJavaReferenceType
       return $ javaRefType [jfirst, jsecond] hydraUtilPackageName "Tuple.Tuple2"
-    TypeProduct types -> case types of
-      [] -> unit
-      _ -> do
-        jtypes <- CM.mapM encode types >>= mapM javaTypeToJavaReferenceType
-        return $ javaRefType jtypes hydraUtilPackageName $ "Tuple.Tuple" ++ (show $ length types)
     TypeRecord (RowType _Unit []) -> unit
     TypeRecord (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing

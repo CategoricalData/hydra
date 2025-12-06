@@ -216,8 +216,6 @@ typeIsSupportedDef = define "typeIsSupported" $
     _Type_pair>>: "pt" ~> Logic.and
       (ref typeIsSupportedDef @@ var "constraints" @@ Core.pairTypeFirst (var "pt"))
       (ref typeIsSupportedDef @@ var "constraints" @@ Core.pairTypeSecond (var "pt")),
-    _Type_product>>: "types" ~>
-      andAll (Lists.map (ref typeIsSupportedDef @@ var "constraints") (var "types")),
     _Type_record>>: "rt" ~>
       andAll (Lists.map
         ("field" ~> ref typeIsSupportedDef @@ var "constraints" @@ Core.fieldTypeType (var "field"))

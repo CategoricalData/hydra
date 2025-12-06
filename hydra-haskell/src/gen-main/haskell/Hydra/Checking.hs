@@ -89,9 +89,7 @@ checkForUnboundTypeVariables cx term0 =
                     let checkOptionalList = (\ml -> Flows.bind (Flows.mapMaybe (\l -> Flows.mapList check l) ml) (\_ -> Flows.pure ()))
                     in ((\x -> case x of
                       Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionElimination v2 -> ((\x -> case x of
-                          Core.EliminationProduct v3 -> (checkOptionalList (Core.tupleProjectionDomain v3))
-                          _ -> dflt) v2)
+                        Core.FunctionElimination _ -> dflt
                         Core.FunctionLambda v2 -> (Flows.bind (checkOptional (Core.lambdaDomain v2)) (\_ -> recurse (Core.lambdaBody v2)))
                         _ -> dflt) v1)
                       Core.TermLet v1 ->  
@@ -227,7 +225,6 @@ typeOf tx typeArgs term =
           Core.TermEither v1 -> (typeOfEither tx typeArgs v1)
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionElimination v2 -> ((\x -> case x of
-              Core.EliminationProduct v3 -> (typeOfTupleProjection tx typeArgs v3)
               Core.EliminationRecord v3 -> (typeOfProjection tx typeArgs v3)
               Core.EliminationUnion v3 -> (typeOfCaseStatement tx typeArgs v3)
               Core.EliminationWrap v3 -> (typeOfUnwrap tx typeArgs v3)) v2)
@@ -239,7 +236,6 @@ typeOf tx typeArgs term =
           Core.TermMap v1 -> (typeOfMap tx typeArgs v1)
           Core.TermMaybe v1 -> (typeOfMaybe tx typeArgs v1)
           Core.TermPair v1 -> (typeOfPair tx typeArgs v1)
-          Core.TermProduct v1 -> (typeOfTuple tx typeArgs v1)
           Core.TermRecord v1 -> (typeOfRecord tx typeArgs v1)
           Core.TermSet v1 -> (typeOfSet tx typeArgs v1)
           Core.TermTypeApplication v1 -> (typeOfTypeApplication tx typeArgs v1)
@@ -459,20 +455,6 @@ typeOfRecord tx typeArgs record =
 
 typeOfSet :: (Typing.TypeContext -> [Core.Type] -> S.Set Core.Term -> Compute.Flow t0 Core.Type)
 typeOfSet tx typeArgs els = (Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Flows.pure (Core.TypeSet (Lists.head typeArgs))) (Flows.fail "set type applied to more or less than one argument")) (Flows.bind (Flows.mapList (typeOf tx []) (Sets.toList els)) (\eltypes -> Flows.bind (checkSameType tx "set elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables tx unifiedType) (\_ -> Flows.pure (Core.TypeSet unifiedType))))))
-
-typeOfTuple :: (Typing.TypeContext -> [Core.Type] -> [Core.Term] -> Compute.Flow t0 Core.Type)
-typeOfTuple tx typeArgs tuple = (Flows.bind (Flows.mapList (typeOf tx []) tuple) (\etypes -> Flows.bind (Flows.mapList (checkTypeVariables tx) etypes) (\_ -> applyTypeArgumentsToType tx typeArgs (Core.TypeProduct etypes))))
-
-typeOfTupleProjection :: (Typing.TypeContext -> [Core.Type] -> Core.TupleProjection -> Compute.Flow t0 Core.Type)
-typeOfTupleProjection tx typeArgs tp =  
-  let index = (Core.tupleProjectionIndex tp)
-  in  
-    let arity = (Core.tupleProjectionArity tp)
-    in  
-      let mtypes = (Core.tupleProjectionDomain tp)
-      in (Flows.bind (Maybes.maybe (Flows.fail "untyped tuple projection") (\types -> Flows.bind (Flows.mapList (checkTypeVariables tx) types) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
-        Core.functionTypeDomain = (Core.TypeProduct types),
-        Core.functionTypeCodomain = (Lists.at index types)})))) mtypes) (\t -> applyTypeArgumentsToType tx typeArgs t))
 
 typeOfTypeApplication :: (Typing.TypeContext -> [Core.Type] -> Core.TypeApplicationTerm -> Compute.Flow t0 Core.Type)
 typeOfTypeApplication tx typeArgs tyapp =  

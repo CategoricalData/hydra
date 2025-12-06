@@ -85,9 +85,6 @@ joinTypes left right comment =
                     joinOne (Core.pairTypeFirst v1) (Core.pairTypeFirst v2),
                     (joinOne (Core.pairTypeSecond v1) (Core.pairTypeSecond v2))])
                   _ -> cannotUnify) sright)
-                Core.TypeProduct v1 -> ((\x -> case x of
-                  Core.TypeProduct v2 -> (joinList v1 v2)
-                  _ -> cannotUnify) sright)
                 Core.TypeRecord v1 -> ((\x -> case x of
                   Core.TypeRecord v2 -> (joinRowTypes v1 v2)
                   _ -> cannotUnify) sright)

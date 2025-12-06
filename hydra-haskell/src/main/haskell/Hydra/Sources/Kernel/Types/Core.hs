@@ -110,9 +110,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         union [
-          "product">:
-            doc "Eliminates a tuple by projecting the component at a given 0-indexed offset" $
-            core "TupleProjection",
           "record">:
             doc "Eliminates a record by projecting a given field" $
             core "Projection",
@@ -393,9 +390,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "pair">:
             doc "A pair (2-tuple)" $
             pair (core "Term") (core "Term"),
-          "product">:
-            doc "A tuple" $
-            list (core "Term"),
           "record">:
             doc "A record term" $
             core "Record",
@@ -420,19 +414,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "wrap">:
             doc "A wrapped term; an instance of a wrapper type (newtype)" $
             core "WrappedTerm"],
-
-      def "TupleProjection" $
-        doc "A tuple elimination; a projection from an integer-indexed product" $
-        record [
-          "arity">:
-            doc "The arity of the tuple"
-            int32,
-          "index">:
-            doc "The 0-indexed offset from the beginning of the tuple"
-            int32,
-          "domain">:
-            doc "An optional domain for the projection; this is a list of component types" $
-            optional $ list $ core "Type"],
 
       def "Type" $
         doc "A data type" $
@@ -467,9 +448,6 @@ module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes i
           "pair">:
             doc "A pair (2-tuple) type" $
             core "PairType",
-          "product">:
-            doc "A tuple type" $
-            list (core "Type"),
           "record">:
             doc "A record type" $
             core "RowType",

@@ -1,6 +1,8 @@
 -- | A domain-specific language for constructing Hydra types in Haskell.
 module Hydra.Dsl.Types where
 
+import Prelude hiding (product)
+
 import Hydra.Core
 import Hydra.Dsl.Meta.Common
 import Hydra.Constants
@@ -176,10 +178,13 @@ pair first second = TypePair $ PairType first second
 poly :: [String] -> Type -> TypeScheme
 poly vs t = TypeScheme (Name <$> vs) t
 
--- | Create a product type (tuple) with multiple components
--- Example: product [string, int32, boolean]
+-- | Create a product type using nested pairs (deprecated: use pair directly)
+-- Example: product [string, int32, boolean] creates pair string (pair int32 boolean)
 product :: [Type] -> Type
-product = TypeProduct
+product [] = unit
+product [a] = a
+product [a, b] = pair a b
+product (a:rest) = pair a (product rest)
 
 -- | Create a record type with the given fields and the default type name
 -- Example: record ["name">: string, "age">: int32]

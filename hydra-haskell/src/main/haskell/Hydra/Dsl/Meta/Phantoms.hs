@@ -310,11 +310,6 @@ unit = TTerm Terms.unit
 injectUnit :: Name -> Name -> TTerm a
 injectUnit name fname = TTerm $ Terms.inject name fname Terms.unit
 
--- | Create a tuple projection function
--- Example: untuple 3 1 extracts the second element of a 3-tuple
-untuple :: Int -> Int -> TTerm (a -> b)
-untuple arity idx = TTerm $ Terms.untuple arity idx
-
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")
 unwrap :: Name -> TTerm (a -> b)

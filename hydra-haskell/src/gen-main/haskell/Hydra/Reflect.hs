@@ -17,7 +17,6 @@ import qualified Data.Set as S
 -- | Find the elimination inject (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Variants.EliminationVariant)
 eliminationVariant x = case x of
-  Core.EliminationProduct _ -> Variants.EliminationVariantProduct
   Core.EliminationRecord _ -> Variants.EliminationVariantRecord
   Core.EliminationUnion _ -> Variants.EliminationVariantUnion
   Core.EliminationWrap _ -> Variants.EliminationVariantWrap
@@ -25,7 +24,6 @@ eliminationVariant x = case x of
 -- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Variants.EliminationVariant]
 eliminationVariants = [
-  Variants.EliminationVariantProduct,
   Variants.EliminationVariantRecord,
   Variants.EliminationVariantUnion,
   Variants.EliminationVariantWrap]
@@ -172,7 +170,6 @@ termVariant x = case x of
   Core.TermMap _ -> Variants.TermVariantMap
   Core.TermMaybe _ -> Variants.TermVariantMaybe
   Core.TermPair _ -> Variants.TermVariantPair
-  Core.TermProduct _ -> Variants.TermVariantProduct
   Core.TermRecord _ -> Variants.TermVariantRecord
   Core.TermSet _ -> Variants.TermVariantSet
   Core.TermTypeApplication _ -> Variants.TermVariantTypeApplication
@@ -194,7 +191,6 @@ termVariants = [
   Variants.TermVariantMap,
   Variants.TermVariantMaybe,
   Variants.TermVariantPair,
-  Variants.TermVariantProduct,
   Variants.TermVariantRecord,
   Variants.TermVariantSet,
   Variants.TermVariantTypeLambda,
@@ -217,7 +213,6 @@ typeVariant x = case x of
   Core.TypeMap _ -> Variants.TypeVariantMap
   Core.TypeMaybe _ -> Variants.TypeVariantMaybe
   Core.TypePair _ -> Variants.TypeVariantPair
-  Core.TypeProduct _ -> Variants.TypeVariantProduct
   Core.TypeRecord _ -> Variants.TypeVariantRecord
   Core.TypeSet _ -> Variants.TypeVariantSet
   Core.TypeUnion _ -> Variants.TypeVariantUnion
@@ -239,7 +234,6 @@ typeVariants = [
   Variants.TypeVariantWrap,
   Variants.TypeVariantMaybe,
   Variants.TypeVariantPair,
-  Variants.TypeVariantProduct,
   Variants.TypeVariantRecord,
   Variants.TypeVariantSet,
   Variants.TypeVariantUnion,

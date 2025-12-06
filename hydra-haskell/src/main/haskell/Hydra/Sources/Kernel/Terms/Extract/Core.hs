@@ -114,7 +114,6 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el maybeTermDef,
      el maybeTypeDef,
      el pairDef,
-     el productTypeDef,
      el recordDef,
      el recordTypeDef,
      el setDef,
@@ -624,33 +623,14 @@ pairDef = define "pair" $
   "kf" ~> "vf" ~> "term0" ~>
   "extract" <~ ("term" ~> cases _Term (var "term")
     (Just (ref Monads.unexpectedDef
-      @@ "product"
+      @@ "pair"
       @@ (ref ShowCore.termDef @@ var "term"))) [
     _Term_pair>>: "p" ~>
       "kVal" <<~ var "kf" @@ (Pairs.first $ var "p") $
       "vVal" <<~ var "vf" @@ (Pairs.second $ var "p") $
-      produce (pair (var "kVal") (var "vVal")),
-    _Term_product>>: "terms" ~>
-      Logic.ifElse (Equality.equal (Lists.length (var "terms")) (int32 2))
-        ("kVal" <<~ var "kf" @@ (Lists.head (var "terms")) $
-         "vVal" <<~ var "vf" @@ (Lists.head (Lists.tail (var "terms"))) $
-         produce (pair (var "kVal") (var "vVal")))
-        (ref Monads.unexpectedDef
-          @@ "pair"
-          @@ (ref ShowCore.termDef @@ var "term"))]) $
+      produce (pair (var "kVal") (var "vVal"))]) $
   "term" <<~ ref Lexical.stripAndDereferenceTermDef @@ var "term0" $
   var "extract" @@ var "term"
-
-productTypeDef :: TBinding (Type -> Flow s [Type])
-productTypeDef = define "productType" $
-  doc "Extract the component types from a product type" $
-  "typ" ~>
-  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
-  cases _Type (var "stripped")
-    (Just (ref Monads.unexpectedDef
-      @@ "product type"
-      @@ (ref ShowCore.typeDef @@ var "typ"))) [
-    _Type_product>>: "types" ~> Flows.pure (var "types")]
 
 -- TODO: nonstandard; move me
 recordDef :: TBinding (Name -> Term -> Flow Graph [Field])

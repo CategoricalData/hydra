@@ -51,10 +51,6 @@ hydraTermToStlc context term = case term of
       return $ foldr (\el acc -> App (App (Const Cons) el) acc) (Const Nil) sels
     Core.TermLiteral lit -> pure $ Const $ PrimLiteral lit
     Core.TermPair (t1, t2) -> pair <$> toStlc t1 <*> toStlc t2
-    Core.TermProduct els -> case els of
-      [] -> pure $ Const TT
-      [t1, t2] -> pair <$> toStlc t1 <*> toStlc t2
-      _ -> Left $ "products with arity other than 0 or 2 are not supported"
     Core.TermEither et -> case et of
       Left l -> App (Const Inl) <$> toStlc l
       Right r -> App (Const Inr) <$> toStlc r
@@ -115,7 +111,7 @@ toTerm expr = case expr of
     PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
     Nil -> Core.TermList []
     Pair -> Terms.lambdas ["a", "b"] $ Terms.pair (Terms.var "a") (Terms.var "b")
-    TT -> Core.TermProduct []
+    TT -> Core.TermUnit
     _ -> Terms.string $ "unexpected primitive: " ++ show prim
     -- Note: other prims are unsupported; they can be added here as needed
   FLetrec bindings env -> Core.TermLet $ Core.Let (fmap bindingToHydra bindings) (toTerm env)
@@ -136,7 +132,7 @@ toType ty = case ty of
   FTyProd t1 t2 -> Core.TypePair $ Core.PairType (toType t1) (toType t2)
   FTySum t1 t2 -> Core.TypeEither $ Core.EitherType (toType t1) (toType t2)
   FTyEither t1 t2 -> Core.TypeEither $ Core.EitherType (toType t1) (toType t2)
-  FTyUnit -> Core.TypeProduct []
+  FTyUnit -> Core.TypeUnit
   FTyVoid -> Core.TypeUnit
 
 -- | Convert a System F type expression to a Hydra type scheme

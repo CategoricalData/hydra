@@ -131,10 +131,6 @@ encodeFunction :: (Module.Namespaces Ast.ModuleName -> Core.Function -> Compute.
 encodeFunction namespaces fun = ((\x -> case x of
   Core.FunctionElimination v1 -> ((\x -> case x of
     Core.EliminationWrap v2 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v2)) (Utils.newtypeAccessorName v2)))))
-    Core.EliminationProduct v2 ->  
-      let arity = (Core.tupleProjectionArity v2) 
-          idx = (Core.tupleProjectionIndex v2)
-      in (Logic.ifElse (Equality.equal arity 2) (Flows.pure (Utils.hsvar (Logic.ifElse (Equality.equal idx 0) "fst" "snd"))) (Flows.fail "Eliminations for tuples of arity > 2 are not supported yet in the Haskell coder"))
     Core.EliminationRecord v2 ->  
       let dn = (Core.projectionTypeName v2) 
           fname = (Core.projectionField v2)
@@ -255,7 +251,6 @@ encodeTerm namespaces term =
         Core.TermPair v1 -> (Flows.bind (encode (Pairs.first v1)) (\f -> Flows.bind (encode (Pairs.second v1)) (\s -> Flows.pure (Ast.ExpressionTuple [
           f,
           s]))))
-        Core.TermProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\hterms -> Flows.pure (Ast.ExpressionTuple hterms)))
         Core.TermRecord v1 ->  
           let sname = (Core.recordTypeName v1) 
               fields = (Core.recordFields v1)
@@ -354,7 +349,6 @@ encodeType namespaces typ =
     Core.TypePair v1 -> (Flows.bind (encode (Core.pairTypeFirst v1)) (\f -> Flows.bind (encode (Core.pairTypeSecond v1)) (\s -> Flows.pure (Ast.TypeTuple [
       f,
       s]))))
-    Core.TypeProduct v1 -> (Flows.bind (Flows.mapList encode v1) (\htypes -> Flows.pure (Ast.TypeTuple htypes)))
     Core.TypeRecord v1 -> (ref (Core.rowTypeTypeName v1))
     Core.TypeSet v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
       Flows.pure (Ast.TypeVariable (Utils.rawName "S.Set")),

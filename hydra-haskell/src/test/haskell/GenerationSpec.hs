@@ -8,3 +8,4 @@ import qualified Test.Hspec as H
 
 spec :: H.Spec
 spec = Generation.spec
+--spec = pure ()

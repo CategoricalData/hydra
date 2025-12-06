@@ -8,6 +8,7 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Types as T
+import Hydra.Sources.Libraries
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -65,19 +66,13 @@ testGroupForProjectionsDef = define "testGroupForProjections" $
         (project (ref TestTypes.testTypePersonNameDef) (name "firstName"))
         (T.function (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) T.string)],
 
-    subgroup "Tuple projections" [
+    subgroup "Pair projections" [
       expectPoly 1 [tag_disabledForMinimalInference]
-        (untuple 2 0)
-        ["t0", "t1"] (T.function (T.product [T.var "t0", T.var "t1"]) (T.var "t0")),
+        (primitive _pairs_first)
+        ["t0", "t1"] (T.function (T.pair (T.var "t0") (T.var "t1")) (T.var "t0")),
       expectMono 2 [tag_disabledForMinimalInference]
-        (untuple 2 1 @@ tuple2 (int32 42) (string "foo"))
-        T.string,
-      expectPoly 3 [tag_disabledForMinimalInference]
-        (lambda "x" $ untuple 1 0 @@ tuple [var "x"])
-        ["t0"] (T.function (T.var "t0") (T.var "t0")),
-      expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "x" $ untuple 3 2 @@ tuple [var "x", var "x", int32 42])
-        ["t0"] (T.function (T.var "t0") T.int32)]]
+        (primitive _pairs_second @@ pair (int32 42) (string "foo"))
+        T.string]]
 
 testGroupForRecordsDef :: TBinding TestGroup
 testGroupForRecordsDef = define "testGroupForRecords" $

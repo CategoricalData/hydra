@@ -432,20 +432,6 @@ passOptional t =
       Compute.adapterTarget = (Core.TypeMaybe (Compute.adapterTarget adapter)),
       Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
--- | Pass through product types
-passProduct :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
-passProduct t =  
-  let encdec = (\ads -> \dir -> \term -> (\x -> case x of
-          Core.TermProduct v1 -> (Flows.bind (Flows.sequence (Lists.zipWith (\term -> \ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) term) v1 ads)) (\newTuple -> Flows.pure (Core.TermProduct newTuple)))) term)
-  in ((\x -> case x of
-    Core.TypeProduct v1 -> (Flows.bind (Flows.mapList termAdapter v1) (\ads ->  
-      let lossy = (Lists.foldl Logic.or False (Lists.map Compute.adapterIsLossy ads))
-      in (Flows.pure (Compute.Adapter {
-        Compute.adapterIsLossy = lossy,
-        Compute.adapterSource = t,
-        Compute.adapterTarget = (Core.TypeProduct (Lists.map Compute.adapterTarget ads)),
-        Compute.adapterCoder = (Utils.bidirectional (encdec ads))}))))) t)
-
 -- | Pass through record types
 passRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passRecord t =  
@@ -600,8 +586,6 @@ termAdapter typ =
                     passOptional,
                     maybeToList]
                   Variants.TypeVariantPair -> []
-                  Variants.TypeVariantProduct -> [
-                    passProduct]
                   Variants.TypeVariantRecord -> [
                     passRecord]
                   Variants.TypeVariantSet -> [
@@ -629,7 +613,6 @@ termAdapter typ =
                     Variants.TypeVariantMaybe -> [
                       maybeToList]
                     Variants.TypeVariantPair -> []
-                    Variants.TypeVariantProduct -> []
                     Variants.TypeVariantRecord -> []
                     Variants.TypeVariantSet -> [
                       setToList]

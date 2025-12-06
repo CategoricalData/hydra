@@ -107,7 +107,6 @@ csharpLanguageDef :: TBinding Language
 csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
   "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-    Variants.eliminationVariantProduct,
     Variants.eliminationVariantRecord,
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
@@ -145,7 +144,6 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
     Variants.termVariantLiteral,
     Variants.termVariantMap,
     Variants.termVariantMaybe,
-    Variants.termVariantProduct,
     Variants.termVariantRecord,
     Variants.termVariantSet,
     Variants.termVariantUnion,
@@ -160,7 +158,6 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
     Variants.typeVariantLiteral,
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
-    Variants.typeVariantProduct,
     Variants.typeVariantRecord,
     Variants.typeVariantSet,
     Variants.typeVariantUnion,

@@ -119,25 +119,22 @@ testGroupForProjections = Testing.TestGroup {
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
     Testing.TestGroup {
-      Testing.testGroupName = "Tuple projections",
+      Testing.testGroupName = "Pair projections",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-              Core.tupleProjectionArity = 2,
-              Core.tupleProjectionIndex = 0,
-              Core.tupleProjectionDomain = Nothing})))),
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
                 (Core.Name "t1")],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeProduct [
-                  Core.TypeVariable (Core.Name "t0"),
-                  (Core.TypeVariable (Core.Name "t1"))]),
+                Core.functionTypeDomain = (Core.TypePair (Core.PairType {
+                  Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
+                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
@@ -146,62 +143,11 @@ testGroupForProjections = Testing.TestGroup {
           Testing.testCaseWithMetadataName = "#2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
             Testing.inferenceTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                Core.tupleProjectionArity = 2,
-                Core.tupleProjectionIndex = 1,
-                Core.tupleProjectionDomain = Nothing})))),
-              Core.applicationArgument = (Core.TermProduct [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
-                (Core.TermLiteral (Core.LiteralString "foo"))])})),
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+              Core.applicationArgument = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#3",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                  Core.tupleProjectionArity = 1,
-                  Core.tupleProjectionIndex = 0,
-                  Core.tupleProjectionDomain = Nothing})))),
-                Core.applicationArgument = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x")])}))}))),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#4",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationProduct (Core.TupleProjection {
-                  Core.tupleProjectionArity = 3,
-                  Core.tupleProjectionIndex = 2,
-                  Core.tupleProjectionDomain = Nothing})))),
-                Core.applicationArgument = (Core.TermProduct [
-                  Core.TermVariable (Core.Name "x"),
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])}))}))),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
