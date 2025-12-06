@@ -122,7 +122,6 @@ module_ = Module (Namespace "hydra.extract.core") elements
      el setTypeDef,
      el stringDef,
      el stringLiteralDef,
-     el sumTypeDef,
      el termRecordDef,
      el uint16Def,
      el uint16ValueDef,
@@ -727,17 +726,6 @@ stringLiteralDef = define "stringLiteral" $
       @@ "string"
       @@ (ref ShowCore.literalDef @@ var "v"))) [
     _Literal_string>>: "s" ~> Flows.pure (var "s")]
-
-sumTypeDef :: TBinding (Type -> Flow s [Type])
-sumTypeDef = define "sumType" $
-  doc "Extract the component types from a sum type" $
-  "typ" ~>
-  "stripped" <~ ref Rewriting.deannotateTypeDef @@ var "typ" $
-  cases _Type (var "stripped")
-    (Just (ref Monads.unexpectedDef
-      @@ "sum type"
-      @@ (ref ShowCore.typeDef @@ var "typ"))) [
-    _Type_sum>>: "types" ~> Flows.pure (var "types")]
 
 termRecordDef :: TBinding (Term -> Flow Graph Record)
 termRecordDef = define "termRecord" $

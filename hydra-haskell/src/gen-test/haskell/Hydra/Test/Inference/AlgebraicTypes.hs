@@ -24,8 +24,7 @@ allTests = Testing.TestGroup {
     testGroupForMaps,
     testGroupForOptionals,
     testGroupForPairs,
-    testGroupForSets,
-    testGroupForSums],
+    testGroupForSets],
   Testing.testGroupCases = []}
 
 testGroupForEithers :: Testing.TestGroup
@@ -873,81 +872,3 @@ testGroupForSets = Testing.TestGroup {
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
-
-testGroupForSums :: Testing.TestGroup
-testGroupForSums = Testing.TestGroup {
-  Testing.testGroupName = "Sum terms",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    Testing.TestGroup {
-      Testing.testGroupName = "Singleton sum terms",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [],
-      Testing.testGroupCases = [
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#1",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 0,
-              Core.sumSize = 1,
-              Core.sumTerm = (Core.TermLiteral (Core.LiteralString "foo"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeSum [
-                Core.TypeLiteral Core.LiteralTypeString])}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#2",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 0,
-              Core.sumSize = 1,
-              Core.sumTerm = (Core.TermList [])})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeSum [
-                Core.TypeList (Core.TypeVariable (Core.Name "t0"))])}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]}]},
-    Testing.TestGroup {
-      Testing.testGroupName = "Non-singleton sum terms",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [],
-      Testing.testGroupCases = [
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#1",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 0,
-              Core.sumSize = 2,
-              Core.sumTerm = (Core.TermLiteral (Core.LiteralString "foo"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeSum [
-                Core.TypeLiteral Core.LiteralTypeString,
-                (Core.TypeVariable (Core.Name "t0"))])}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "#2",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
-            Testing.inferenceTestCaseInput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 1,
-              Core.sumSize = 2,
-              Core.sumTerm = (Core.TermLiteral (Core.LiteralString "foo"))})),
-            Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeSum [
-                Core.TypeVariable (Core.Name "t0"),
-                (Core.TypeLiteral Core.LiteralTypeString)])}})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference"]}]}],
-  Testing.testGroupCases = []}

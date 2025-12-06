@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Algebraic type checking test cases: unit, pairs, products, eithers, sums, optionals
+-- | Algebraic type checking test cases: unit, pairs, products, eithers, optionals
 module Hydra.Sources.Test.Checking.AlgebraicTypes where
 
 -- Standard imports for kernel tests
@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.checking.algebraicTypes") elements
     [TestGraph.module_]
     kernelTypesModules
-    (Just "Algebraic type checking test cases: unit, pairs, products, eithers, sums, optionals")
+    (Just "Algebraic type checking test cases: unit, pairs, products, eithers, optionals")
   where
     elements = [
       el allTestsDef,
@@ -46,7 +46,6 @@ module_ = Module (Namespace "hydra.test.checking.algebraicTypes") elements
       el eithersInComplexContextsTestsDef,
       el nestedEithersTestsDef,
       el eithersWithComplexTypesTestsDef,
-      el sumsTestsDef,
       el optionalsTestsDef,
       el monomorphicOptionalsTestsDef,
       el polymorphicOptionalsTestsDef,
@@ -64,7 +63,6 @@ allTestsDef = define "allTests" $
   ref pairsTestsDef,
   ref productsTestsDef,
   ref eithersTestsDef,
-  ref sumsTestsDef,
   ref optionalsTestsDef]
 
 ------ Helper functions ------
@@ -409,12 +407,6 @@ eithersWithComplexTypesTestsDef = define "eithersWithComplexTypesTests" $
     (left $ tuple [string "error", int32 404])
     (tylam "t0" $ tyapps (left $ tuple [string "error", int32 404]) [T.product [T.string, T.int32], T.var "t0"])
     (T.forAlls ["t0"] $ T.either_ (T.product [T.string, T.int32]) (T.var "t0"))]
-
------- Sums ------
-
-sumsTestsDef :: TBinding TestGroup
-sumsTestsDef = define "sumsTests" $
-  subgroup "Sums" []
 
 ------ Optionals ------
 

@@ -2866,20 +2866,6 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "string in sum term",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
-            Testing.rewriteTermTestCaseInput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 0,
-              Core.sumSize = 3,
-              Core.sumTerm = (Core.TermLiteral (Core.LiteralString "foo"))})),
-            Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
-            Testing.rewriteTermTestCaseOutput = (Core.TermSum (Core.Sum {
-              Core.sumIndex = 0,
-              Core.sumSize = 3,
-              Core.sumTerm = (Core.TermLiteral (Core.LiteralString "bar"))}))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "string in type lambda body",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
             Testing.rewriteTermTestCaseInput = (Core.TermTypeLambda (Core.TypeLambda {

@@ -263,16 +263,6 @@ untypedTermToJson term =
       let fields = (Core.recordFields v1)
       in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat keyvals)))))
     Core.TermSet v1 -> (untypedTermToJson (Core.TermList (Sets.toList v1)))
-    Core.TermSum v1 -> (asRecord [
-      Core.Field {
-        Core.fieldName = (Core.Name "index"),
-        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.sumIndex v1))))},
-      Core.Field {
-        Core.fieldName = (Core.Name "size"),
-        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Core.sumSize v1))))},
-      Core.Field {
-        Core.fieldName = (Core.Name "term"),
-        Core.fieldTerm = (Core.sumTerm v1)}])
     Core.TermTypeLambda v1 -> (asRecord [
       Core.Field {
         Core.fieldName = (Core.Name "parameter"),

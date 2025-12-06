@@ -92,7 +92,6 @@ module_ = Module (Namespace "hydra.adapt.terms") elements
       el passProductDef,
       el passRecordDef,
       el passSetDef,
-      el passSumDef,
       el passUnionDef,
       el passUnitDef,
       el passWrappedDef,
@@ -583,29 +582,6 @@ passSetDef = define "passSet" $
         (MetaTypes.set (Compute.adapterTarget (var "ad")))
         (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "ad")))]
 
-passSumDef :: TBinding TypeAdapter
-passSumDef = define "passSum" $
-  doc "Pass through sum types" $
-  "t" ~>
-  "encdec" <~ ("ads" ~> "dir" ~> "term" ~> cases _Term (var "term")
-    Nothing [
-    _Term_sum>>: "s" ~>
-      "i" <~ Core.sumIndex (var "s") $
-      "n" <~ Core.sumSize (var "s") $
-      "term" <~ Core.sumTerm (var "s") $
-      "newTerm" <<~ ref AdaptUtils.encodeDecodeDef @@ var "dir" @@ (Compute.adapterCoder (Lists.at (var "i") (var "ads"))) @@ var "term" $
-      produce (Core.termSum (Core.sum (var "i") (var "n") (var "newTerm")))]) $
-  cases _Type (var "t")
-    Nothing [
-    _Type_sum>>: "types" ~>
-      "ads" <<~ Flows.mapList (ref termAdapterDef) (var "types") $
-      "lossy" <~ Logic.ors (Lists.map (unaryFunction Compute.adapterIsLossy) (var "ads")) $
-      produce (Compute.adapter
-        (var "lossy")
-        (var "t")
-        (Core.typeSum (Lists.map (unaryFunction Compute.adapterTarget) (var "ads")))
-        (ref AdaptUtils.bidirectionalDef @@ (var "encdec" @@ var "ads")))]
-
 passUnionDef :: TBinding TypeAdapter
 passUnionDef = define "passUnion" $
   doc "Pass through union types" $
@@ -841,7 +817,6 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_product>>: constant (list [ref passProductDef]),
     _TypeVariant_record>>: constant (list [ref passRecordDef]),
     _TypeVariant_set>>: constant (list [ref passSetDef]),
-    _TypeVariant_sum>>: constant (list [ref passSumDef]),
     _TypeVariant_union>>: constant (list [ref passUnionDef]),
     _TypeVariant_unit>>: constant (list [ref passUnitDef]),
     _TypeVariant_variable>>: constant (list []),
@@ -861,7 +836,6 @@ termAdapterDef = define "termAdapter" $
     _TypeVariant_product>>: constant (list []),
     _TypeVariant_record>>: constant (list []),
     _TypeVariant_set>>: constant (list [ref setToListDef]),
-    _TypeVariant_sum>>: constant (list []),
     _TypeVariant_union>>: constant (list [ref unionToRecordDef]),
     _TypeVariant_unit>>: constant (list [ref unitToRecordDef]),
     _TypeVariant_variable>>: constant (list []),

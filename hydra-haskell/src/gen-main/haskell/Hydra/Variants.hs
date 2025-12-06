@@ -80,7 +80,6 @@ data TermVariant =
   TermVariantProduct  |
   TermVariantRecord  |
   TermVariantSet  |
-  TermVariantSum  |
   TermVariantTypeApplication  |
   TermVariantTypeLambda  |
   TermVariantUnion  |
@@ -117,8 +116,6 @@ _TermVariant_record = (Core.Name "record")
 
 _TermVariant_set = (Core.Name "set")
 
-_TermVariant_sum = (Core.Name "sum")
-
 _TermVariant_typeApplication = (Core.Name "typeApplication")
 
 _TermVariant_typeLambda = (Core.Name "typeLambda")
@@ -146,7 +143,6 @@ data TypeVariant =
   TypeVariantProduct  |
   TypeVariantRecord  |
   TypeVariantSet  |
-  TypeVariantSum  |
   TypeVariantUnion  |
   TypeVariantUnit  |
   TypeVariantVariable  |
@@ -180,8 +176,6 @@ _TypeVariant_product = (Core.Name "product")
 _TypeVariant_record = (Core.Name "record")
 
 _TypeVariant_set = (Core.Name "set")
-
-_TypeVariant_sum = (Core.Name "sum")
 
 _TypeVariant_union = (Core.Name "union")
 
