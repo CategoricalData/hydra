@@ -244,7 +244,7 @@ def type_to_type_scheme(t0: hydra.core.Type) -> hydra.core.TypeScheme:
     return helper(cast(frozenlist[hydra.core.Name], ()), t0)
 
 def instantiate_type[T0](typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
-    return hydra.lib.flows.bind(instantiate_type_scheme(type_to_type_scheme(typ)), (lambda ts: hydra.lib.flows.pure(ts.type)))
+    return hydra.lib.flows.bind(instantiate_type_scheme(type_to_type_scheme(typ)), (lambda ts: hydra.lib.flows.pure(type_scheme_to_f_type(ts))))
 
 def is_enum_row_type(rt: hydra.core.RowType) -> bool:
     r"""Check if a row type represents an enum (all fields are unit-typed)."""
@@ -279,6 +279,19 @@ def is_serializable(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Gr
         return hydra.lib.lists.map(hydra.reflect.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
     return hydra.lib.flows.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map(variants, hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.variants.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(False, cast(Callable[[hydra.core.Type], hydra.core.Type], hydra.lib.equality.identity), el.name))
 
+def is_serializable_by_name(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
+    r"""Check if a type (by name) is serializable, resolving all type dependencies."""
+    
+    def variants(typ: hydra.core.Type) -> frozenlist[hydra.variants.TypeVariant]:
+        return hydra.lib.lists.map(hydra.reflect.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ))
+    return hydra.lib.flows.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map(variants, hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.variants.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(False, cast(Callable[[hydra.core.Type], hydra.core.Type], hydra.lib.equality.identity), name))
+
+def is_serializable_type(typ: hydra.core.Type) -> bool:
+    r"""Check if a type is serializable (no function types in the type itself)."""
+    
+    all_variants = hydra.lib.sets.from_list(hydra.lib.lists.map(hydra.reflect.type_variant, hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), cast(frozenlist[hydra.core.Type], ()), typ)))
+    return hydra.lib.logic.not_(hydra.lib.sets.member(hydra.variants.TypeVariant.FUNCTION, all_variants))
+
 def module_dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace."""
     
@@ -294,6 +307,31 @@ def nominal_application(tname: hydra.core.Name, args: frozenlist[hydra.core.Type
     r"""Apply type arguments to a nominal type."""
     
     return hydra.lib.lists.foldl((lambda t, a: cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(t, a)))), cast(hydra.core.Type, hydra.core.TypeVariable(tname)), args)
+
+def partition_definitions(defs: frozenlist[hydra.module.Definition]) -> Tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
+    r"""Partition a list of definitions into type definitions and term definitions."""
+    
+    def get_type(def_: hydra.module.Definition) -> Maybe[hydra.module.TypeDefinition]:
+        match def_:
+            case hydra.module.DefinitionType(value=td):
+                return cast(Maybe[hydra.module.TypeDefinition], Just(td))
+            
+            case hydra.module.DefinitionTerm():
+                return cast(Maybe[hydra.module.TypeDefinition], Nothing())
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def get_term(def_: hydra.module.Definition) -> Maybe[hydra.module.TermDefinition]:
+        match def_:
+            case hydra.module.DefinitionType():
+                return cast(Maybe[hydra.module.TermDefinition], Nothing())
+            
+            case hydra.module.DefinitionTerm(value=td):
+                return cast(Maybe[hydra.module.TermDefinition], Just(td))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(Tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]], (hydra.lib.maybes.cat(hydra.lib.lists.map(get_type, defs)), hydra.lib.maybes.cat(hydra.lib.lists.map(get_term, defs))))
 
 def require_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
     r"""Require a type by name."""
@@ -383,3 +421,15 @@ def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) ->
         name = hydra.lib.pairs.first(pair)
         return cast(Tuple[hydra.core.Name, hydra.core.Binding], (name, hydra.core.Binding(name, hydra.encode.core.type(hydra.lib.pairs.second(pair)), cast(Maybe[hydra.core.TypeScheme], Nothing()))))
     return cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_element, hydra.lib.maps.to_list(type_map))))
+
+def with_lambda_context[T0, T1, T2](get_context: Callable[[T0], hydra.typing.TypeContext], set_context: Callable[[hydra.typing.TypeContext, T0], T1], env: T0, lam: hydra.core.Lambda, body: Callable[[T1], T2]) -> T2:
+    new_context = extend_type_context_for_lambda(get_context(env), lam)
+    return body(set_context(new_context, env))
+
+def with_let_context[T0, T1, T2](get_context: Callable[[T0], hydra.typing.TypeContext], set_context: Callable[[hydra.typing.TypeContext, T0], T1], env: T0, letrec: hydra.core.Let, body: Callable[[T1], T2]) -> T2:
+    new_context = extend_type_context_for_let(get_context(env), letrec)
+    return body(set_context(new_context, env))
+
+def with_type_lambda_context[T0, T1, T2](get_context: Callable[[T0], hydra.typing.TypeContext], set_context: Callable[[hydra.typing.TypeContext, T0], T1], env: T0, tlam: hydra.core.TypeLambda, body: Callable[[T1], T2]) -> T2:
+    new_context = extend_type_context_for_type_lambda(get_context(env), tlam)
+    return body(set_context(new_context, env))
