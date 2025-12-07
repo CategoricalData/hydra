@@ -4,7 +4,8 @@ r"""String representations of hydra.core types."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import Just, Maybe, frozenlist
+from decimal import Decimal
+from hydra.dsl.python import Either, FrozenDict, Just, Maybe, frozenlist
 from typing import cast
 import hydra.core
 import hydra.lib.eithers
@@ -162,19 +163,11 @@ def type(typ: hydra.core.Type) -> str:
             second_typ = pt.second
             return hydra.lib.strings.cat(("(", type(first_typ), ", ", type(second_typ), ")"))
         
-        case hydra.core.TypeProduct(value=types):
-            type_strs = hydra.lib.lists.map(type, types)
-            return hydra.lib.strings.intercalate("×", type_strs)
-        
         case hydra.core.TypeRecord(value=rt):
             return hydra.lib.strings.cat2("record", show_row_type(rt))
         
         case hydra.core.TypeSet(value=etyp3):
             return hydra.lib.strings.cat(("set<", type(etyp3), ">"))
-        
-        case hydra.core.TypeSum(value=types2):
-            type_strs = hydra.lib.lists.map(type, types2)
-            return hydra.lib.strings.intercalate("+", type_strs)
         
         case hydra.core.TypeUnion(value=rt2):
             return hydra.lib.strings.cat2("union", show_row_type(rt2))
@@ -286,9 +279,6 @@ def elimination(elm: hydra.core.Elimination) -> str:
     r"""Show an elimination as a string."""
     
     match elm:
-        case hydra.core.EliminationProduct(value=tp):
-            return hydra.lib.strings.cat(("[", hydra.lib.literals.show_int32(tp.index), "/", hydra.lib.literals.show_int32(tp.arity), "]"))
-        
         case hydra.core.EliminationRecord(value=proj):
             tname = proj.type_name.value
             fname = proj.field.value
@@ -402,10 +392,6 @@ def term(t: hydra.core.Term) -> str:
         case hydra.core.TermPair(value=p):
             return hydra.lib.strings.cat(("(", term(hydra.lib.pairs.first(p)), ", ", term(hydra.lib.pairs.second(p)), ")"))
         
-        case hydra.core.TermProduct(value=els2):
-            term_strs = hydra.lib.lists.map(term, els2)
-            return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(", ", term_strs), ")"))
-        
         case hydra.core.TermRecord(value=rec):
             tname = rec.type_name.value
             flds = rec.fields
@@ -413,12 +399,6 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermSet(value=s):
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(term, hydra.lib.sets.to_list(s))), "}"))
-        
-        case hydra.core.TermSum(value=s2):
-            index = s2.index
-            size = s2.size
-            t2 = s2.term
-            return hydra.lib.strings.cat(("(", hydra.lib.literals.show_int32(index), "/", hydra.lib.literals.show_int32(size), "=", term(t2), ")"))
         
         case hydra.core.TermTypeLambda(value=ta):
             param = ta.parameter.value

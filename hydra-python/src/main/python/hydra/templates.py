@@ -125,9 +125,6 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
         case hydra.core.TypeMaybe(value=ot):
             return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing()))))), (lambda : hydra.lib.flows.bind(inst(ot), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Just(e)))))))))
         
-        case hydra.core.TypeProduct(value=types):
-            return hydra.lib.flows.bind(hydra.lib.flows.map_list(inst, types), (lambda es: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermProduct(es)))))
-        
         case hydra.core.TypeRecord(value=rt):
             tname = rt.type_name
             fields = rt.fields

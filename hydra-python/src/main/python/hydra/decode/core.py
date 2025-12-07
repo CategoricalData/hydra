@@ -4,7 +4,7 @@ r"""Decode hydra.core types from the hydra.core.Term type."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import FrozenDict, frozenlist
 from typing import cast
 import hydra.compute
 import hydra.core

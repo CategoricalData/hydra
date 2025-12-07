@@ -44,10 +44,8 @@ def topological_sort[T0](pairs: frozenlist[Tuple[T0, frozenlist[T0]]]) -> Either
     with_cycles = hydra.lib.lists.filter(cast(Callable[[frozenlist[T0]], bool], is_cycle), sccs)
     return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles), (lambda : cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Right(hydra.lib.lists.concat(sccs)))), (lambda : cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Left(with_cycles))))
 
-def topological_sort_nodes[T0, T1, T2](get_key: T0, get_adj: Callable[[T1], frozenlist[T2]], nodes: frozenlist[T1]) -> frozenlist[frozenlist[T1]]:
-    def nodes_by_key[T3]() -> FrozenDict[T3, T1]:
-        return cast(FrozenDict[T3, T1], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: cast(Tuple[T109083[t109083], T1], (get_key(n), n))), nodes)))
-    def pairs[T3]() -> frozenlist[Tuple[T3, frozenlist[T2]]]:
-        return hydra.lib.lists.map((lambda n: cast(Tuple[T109097[t109097], frozenlist[T2]], (get_key(n), get_adj(n)))), nodes)
-    comps = topological_sort_components(cast(frozenlist[Tuple[T2, frozenlist[T2]]], pairs))
-    return hydra.lib.lists.map((lambda c: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda k: hydra.lib.maps.lookup(k, cast(FrozenDict[T2, T1], nodes_by_key))), c))), comps)
+def topological_sort_nodes[T0, T1](get_key: Callable[[T0], T1], get_adj: Callable[[T0], frozenlist[T1]], nodes: frozenlist[T0]) -> frozenlist[frozenlist[T0]]:
+    nodes_by_key = cast(FrozenDict[T1, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: cast(Tuple[T1, T0], (get_key(n), n))), nodes)))
+    pairs = hydra.lib.lists.map((lambda n: cast(Tuple[T1, frozenlist[T1]], (get_key(n), get_adj(n)))), nodes)
+    comps = topological_sort_components(pairs)
+    return hydra.lib.lists.map((lambda c: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda k: hydra.lib.maps.lookup(k, nodes_by_key)), c))), comps)

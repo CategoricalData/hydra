@@ -3,7 +3,8 @@
 r"""Mapping of hydra.core constructs in a host language like Haskell or Java  to their native Hydra counterparts as terms.  This includes an implementation of LambdaGraph's epsilon encoding (types to terms)."""
 
 from __future__ import annotations
-from hydra.dsl.python import Either, Left, Right
+from decimal import Decimal
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import cast
 import hydra.core
 import hydra.lib.eithers

@@ -40,17 +40,11 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
         case hydra.variants.TermVariant.PAIR:
             return "pair"
         
-        case hydra.variants.TermVariant.PRODUCT:
-            return "product"
-        
         case hydra.variants.TermVariant.RECORD:
             return "record"
         
         case hydra.variants.TermVariant.SET:
             return "set"
-        
-        case hydra.variants.TermVariant.SUM:
-            return "sum"
         
         case hydra.variants.TermVariant.TYPE_LAMBDA:
             return "typeLambda"
@@ -107,17 +101,11 @@ def type_variant(v1: hydra.variants.TypeVariant) -> str:
         case hydra.variants.TypeVariant.PAIR:
             return "pair"
         
-        case hydra.variants.TypeVariant.PRODUCT:
-            return "product"
-        
         case hydra.variants.TypeVariant.RECORD:
             return "record"
         
         case hydra.variants.TypeVariant.SET:
             return "set"
-        
-        case hydra.variants.TypeVariant.SUM:
-            return "sum"
         
         case hydra.variants.TypeVariant.UNION:
             return "union"

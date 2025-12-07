@@ -68,17 +68,10 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
     
     def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
         dflt = recurse(term)
-        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Term:
-            match elm:
-                case hydra.core.EliminationProduct(value=tp):
-                    return for_tuple_projection(tp)
-                
-                case _:
-                    return dflt
         def for_function(f: hydra.core.Function) -> hydra.core.Term:
             match f:
-                case hydra.core.FunctionElimination(value=e):
-                    return for_elimination(e)
+                case hydra.core.FunctionElimination():
+                    return dflt
                 
                 case hydra.core.FunctionLambda(value=l):
                     return for_lambda(l)
@@ -91,8 +84,6 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, subst_types_in_term(subst, b.term), hydra.lib.maybes.map((lambda v1: subst_in_type_scheme(subst, v1)), b.type))
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map(rewrite_binding, l.bindings), subst_types_in_term(subst, l.body))))
-        def for_tuple_projection(tp: hydra.core.TupleProjection) -> hydra.core.Term:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationProduct(hydra.core.TupleProjection(tp.arity, tp.index, hydra.lib.maybes.map((lambda types: hydra.lib.lists.map((lambda v1: subst_in_type(subst, v1)), types)), tp.domain))))))))
         def for_type_application(tt: hydra.core.TypeApplicationTerm) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(subst_types_in_term(subst, tt.body), subst_in_type(subst, tt.type))))
         def for_type_lambda(ta: hydra.core.TypeLambda) -> hydra.core.Term:
