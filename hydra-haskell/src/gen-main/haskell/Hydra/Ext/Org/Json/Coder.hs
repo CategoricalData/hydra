@@ -147,15 +147,15 @@ termCoder typ =
           Compute.coderDecode = (\n -> (\x -> case x of
             Json.ValueObject v2 -> (Flows.bind (Flows.mapList decodeEntry (Maps.toList v2)) (\entries -> Flows.pure (Core.TermMap (Maps.fromList entries))))
             _ -> (Monads.unexpected "mapping" (showValue n))) n)}))))))
-    Core.TypeMaybe v1 -> (Flows.bind (termCoder v1) (\oc -> Flows.pure (Compute.Coder {
-      Compute.coderEncode = (\t ->  
-        let stripped = (Rewriting.deannotateTerm t)
+    Core.TypeMaybe v1 -> (Flows.bind (termCoder v1) (\maybeElementCoder -> Flows.pure (Compute.Coder {
+      Compute.coderEncode = (\maybeTerm ->  
+        let strippedMaybeTerm = (Rewriting.deannotateTerm maybeTerm)
         in ((\x -> case x of
-          Core.TermMaybe v2 -> (Maybes.maybe (Flows.pure Json.ValueNull) (Compute.coderEncode oc) v2)
-          _ -> (Monads.unexpected "optional term" (Core___.term t))) stripped)),
-      Compute.coderDecode = (\n -> (\x -> case x of
+          Core.TermMaybe v2 -> (Logic.ifElse (Maybes.isNothing v2) (Flows.pure Json.ValueNull) (Flows.bind (Compute.coderEncode maybeElementCoder (Maybes.fromJust v2)) (\encodedInner -> Flows.pure encodedInner)))
+          _ -> (Monads.unexpected "optional term" (Core___.term maybeTerm))) strippedMaybeTerm)),
+      Compute.coderDecode = (\jsonVal -> (\x -> case x of
         Json.ValueNull -> (Flows.pure (Core.TermMaybe Nothing))
-        _ -> (Flows.bind (Compute.coderDecode oc n) (\decoded -> Flows.pure (Core.TermMaybe (Just decoded))))) n)})))
+        _ -> (Flows.bind (Compute.coderDecode maybeElementCoder jsonVal) (\decodedInner -> Flows.pure (Core.TermMaybe (Just decodedInner))))) jsonVal)})))
     Core.TypeRecord v1 -> (recordCoder v1)
     Core.TypeUnit -> (Flows.pure unitCoder)
     Core.TypeVariable v1 -> (Flows.pure (Compute.Coder {
