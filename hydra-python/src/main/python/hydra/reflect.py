@@ -3,7 +3,8 @@
 r"""Reflection functions for working with term, type, and literal type variants, as well as numeric precision."""
 
 from __future__ import annotations
-from hydra.dsl.python import frozenlist
+from decimal import Decimal
+from hydra.dsl.python import Either, FrozenDict, Maybe, frozenlist
 from typing import cast
 import hydra.core
 import hydra.lib.lists

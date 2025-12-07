@@ -4,7 +4,7 @@ r"""Functions for reducing terms and types, i.e. performing computations."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import Maybe, Nothing, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Maybe, Nothing, frozenlist
 from typing import cast
 import hydra.arity
 import hydra.checking

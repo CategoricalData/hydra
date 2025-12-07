@@ -245,7 +245,7 @@ def type_of[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
             
             case _:
                 return hydra.lib.flows.fail(hydra.lib.strings.cat(("unsupported term variant in typeOf: ", hydra.show.meta.term_variant(hydra.reflect.term_variant(term)))))
-    return hydra.monads.with_trace(hydra.lib.strings.cat(("checking type of: ", hydra.show.core.term(term), " (vars: ", hydra.formatting.show_list((lambda v1: v1.value), hydra.lib.sets.to_list(tx.variables)), ", typeArgs: ", hydra.formatting.show_list(hydra.show.core.type, type_args), ")")), check)
+    return hydra.monads.with_trace("typeOf", check)
 
 def type_of_annotated_term[T0](tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], at: hydra.core.AnnotatedTerm) -> hydra.compute.Flow[T0, hydra.core.Type]:
     return type_of(tx, type_args, at.body)

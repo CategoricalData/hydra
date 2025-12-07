@@ -23,7 +23,6 @@ module Hydra.Ext.Staging.CoderUtils (
 
 import Hydra.Kernel
 import Hydra.Typing
-import qualified Hydra.Show.Core as ShowCore
 
 import qualified Data.List as L
 
@@ -67,8 +66,7 @@ data FunctionStructure env = FunctionStructure {
 -- - env: The initial environment
 -- - term: The term to analyze
 analyzeFunctionTerm :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
-analyzeFunctionTerm getTC setTC env term = withTrace ("analyzeFunctionTerm for " ++ ShowCore.term term) $
-  gather True env [] [] [] [] [] term
+analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
   where
     gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
         -- Lambda: collect parameter and domain, extend environment

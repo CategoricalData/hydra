@@ -366,17 +366,8 @@ typeOfDef = define "typeOf" $
     _Term_unit>>: constant $ ref typeOfUnitDef @@ var "tx" @@ var "typeArgs",
     _Term_variable>>: ref typeOfVariableDef @@ var "tx" @@ var "typeArgs",
     _Term_wrap>>: ref typeOfWrappedTermDef @@ var "tx" @@ var "typeArgs"]) $
-  trace (Strings.cat $ list [
-    string "checking type of: ",
-    ref ShowCore.termDef @@ var "term",
-    string " (vars: ",
-    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Sets.toList $ Typing.typeContextVariables $ var "tx"),
-    string ", typeArgs: ",
-    ref Formatting.showListDef @@ ref ShowCore.typeDef @@ var "typeArgs",
---    string ", types: ",
---    ref Formatting.showListDef @@ unaryFunction Core.unName @@ (Maps.keys $ Typing.typeContextTypes $ var "tx"),
---    ref Formatting.showListDef @@ ("p" ~> Core.unName (first $ var "p") ++ ": " ++ (ref ShowCore.typeDef @@ (second $ var "p"))) @@ (Maps.toList $ Typing.typeContextTypes $ var "tx"),
-    string ")"]) $
+  trace (string "typeOf") $
+--  trace (string "typeOf " ++ (ref ShowCore.termDef @@ var "term")) $ -- For debugging only; risk of slow execution and stack overflow on deeply nested terms
   var "check"
 
 typeOfAnnotatedTermDef :: TBinding (TypeContext -> [Type] -> AnnotatedTerm -> Flow s Type)

@@ -23,7 +23,6 @@ import qualified Data.Map   as M
 import qualified Data.Set   as S
 import qualified Data.Maybe as Y
 import qualified Text.Read  as TR
-import Debug.Trace
 
 
 -- | Temporary metadata which is used to create the header section of a Python file
@@ -97,9 +96,9 @@ wrapLazyArguments name args
 encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
     PyGraph g _ <- getState
-    arity <- typeArity <$> (withTrace ("debug 2" ) $ typeOf (pythonEnvironmentTypeContext env) [] fun)
+    arity <- typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
     let term = TermApplication app
-    typ <- withTrace ("debug 3") $ typeOf (pythonEnvironmentTypeContext env) [] term
+    typ <- typeOf (pythonEnvironmentTypeContext env) [] term
     pargs <- CM.mapM (encodeTermInline env False) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
@@ -178,9 +177,8 @@ encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAsDef env) bindings
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
---  DefinitionTerm (TermDefinition name term _) -> withTrace ("data element " ++ unName name) $ do
   DefinitionTerm (TermDefinition name term _) ->
-    withTrace ("data element " ++ unName name ++ ": " ++ ShowCore.term term) $ do
+    withTrace ("data element " ++ unName name) $ do
 
 --    if name == Name "hydra.adapt.utils.encodeDecode"
 --    then fail $ "term: " ++ ShowCore.term term
@@ -226,6 +224,7 @@ encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam -> do
     fs <- withTrace "analyze function term for lambda" $
+--    fs <- withTrace ("analyze function term for lambda: " ++ ShowCore.function f) $
       analyzePythonFunction env (TermFunction $ FunctionLambda lam)
     let params = functionStructureParams fs
         bindings = functionStructureBindings fs
@@ -615,7 +614,7 @@ encodeTermInline env noCast term = case deannotateTerm term of
 
 -- | Encode a term to a list of statements, with the last statement as the return value.
 encodeTermMultiline :: PythonEnvironment -> Term -> Flow PyGraph [Py.Statement]
-encodeTermMultiline env term = withTrace ("encodeTermMultiline: " ++ ShowCore.term term) $ if L.length args == 1
+encodeTermMultiline env term = if L.length args == 1
     then withArg body (L.head args)
     else dflt
   where
@@ -801,29 +800,21 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
 encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph Py.Expression
 encodeVariable env name args = do
   PyGraph g _ <- getState
-
-  let nameStr = case name of Name n -> n
-      debugMsg = if "subst" `L.isInfixOf` nameStr || "Subst" `L.isInfixOf` nameStr
-        then trace ("DEBUG encodeTerm TermVariable: name=" ++ show name ++
-                    ", args=" ++ show (L.length args) ++
-                    ", lookupElement=" ++ show (Y.isJust $ lookupElement g name) ++
-                    ", lookupPrimitive=" ++ show (Y.isJust $ lookupPrimitive g name)) ()
-        else ()
-  return $ debugMsg `seq` (if L.null args
+  return $ if L.null args
     then case lookupElement g name of
       -- Lambda-bound variables, as well as primitive functions
       Nothing -> case (lookupPrimitive g name) of
-        Nothing -> trace ("  -> asVariable (not found)") asVariable
+        Nothing -> asVariable
         Just prim -> if primitiveArity prim == 0
-          then trace ("  -> asFunctionCall (primitive arity 0)") asFunctionCall
-          else trace ("  -> asVariable (primitive arity > 0)") asVariable
+          then asFunctionCall
+          else asVariable
       -- Let-bound variables (elements)
       -- Call if it's a wrapped term (monadic thunk)
       Just el@(Binding _ _term (Just _ts)) -> if isFunctionCall el
-        then trace ("  -> asFunctionCall (isFunctionCall True)") asFunctionCall
-        else trace ("  -> asVariable (isFunctionCall False)") asVariable
-      Just _ -> trace ("  -> asVariable (element no type scheme)") asVariable
-     else asFunctionCall)
+        then asFunctionCall
+        else asVariable
+      Just _ -> asVariable
+    else asFunctionCall
   where
     asVariable = termVariableReference env name
     asFunctionCall = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) args
@@ -852,32 +843,33 @@ environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
 
 extendMetaForTerm :: Bool -> PythonModuleMetadata -> Term -> PythonModuleMetadata
-extendMetaForTerm topLevel meta0 t = case t of
-    TermEither e -> case e of
-      Left _ -> meta {pythonModuleMetadataUsesLeft = True}
-      Right _ -> meta {pythonModuleMetadataUsesRight = True}
-    TermFunction f -> case f of
-      FunctionLambda (Lambda _ (Just dom) body) -> if topLevel
-          then extendMetaForType True False dom meta
-          else meta
-      _ -> meta
-    TermLet (Let bindings body) -> L.foldl forBinding (extendMetaForTerm False meta body) bindings
-      where
-        forBinding meta (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
-          then meta
-          else extendMetaForType True True (typeSchemeType ts) (extendMetaForTerm True meta term1)
-    TermLiteral l -> case l of
-      LiteralFloat fv -> case fv of
-        FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
-        _ -> meta
-      _ -> meta
-    TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
-    TermMaybe m -> case m of
-      Nothing -> meta {pythonModuleMetadataUsesNothing = True}
-      Just _ -> meta {pythonModuleMetadataUsesJust = True}
-    _ -> meta
+extendMetaForTerm topLevel meta0 t = foldOverTerm TraversalOrderPre step meta0 t
   where
-    meta = L.foldl (extendMetaForTerm False) meta0 $ subterms t
+    step meta term = case term of
+      TermEither e -> case e of
+        Left _ -> meta {pythonModuleMetadataUsesLeft = True}
+        Right _ -> meta {pythonModuleMetadataUsesRight = True}
+      TermFunction f -> case f of
+        FunctionLambda (Lambda _ (Just dom) _) -> if topLevel
+            then extendMetaForType True False dom meta
+            else meta
+        _ -> meta
+      TermLet (Let bindings _) -> L.foldl forBinding meta bindings
+        where
+          forBinding m (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
+            then m
+            else extendMetaForType True True (typeSchemeType ts) m
+          forBinding m _ = m
+      TermLiteral l -> case l of
+        LiteralFloat fv -> case fv of
+          FloatValueBigfloat _ -> meta {pythonModuleMetadataUsesDecimal = True}
+          _ -> meta
+        _ -> meta
+      TermMap _ -> meta {pythonModuleMetadataUsesFrozenDict = True}
+      TermMaybe m -> case m of
+        Nothing -> meta {pythonModuleMetadataUsesNothing = True}
+        Just _ -> meta {pythonModuleMetadataUsesJust = True}
+      _ -> meta
 
 extendMetaForType :: Bool -> Bool -> Type -> PythonModuleMetadata -> PythonModuleMetadata
 extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ

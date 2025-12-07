@@ -247,14 +247,7 @@ typeOf tx typeArgs term =
           _ -> (Flows.fail (Strings.cat [
             "unsupported term variant in typeOf: ",
             (Meta.termVariant (Reflect.termVariant term))]))) term)
-  in (Monads.withTrace (Strings.cat [
-    "checking type of: ",
-    Core__.term term,
-    " (vars: ",
-    Formatting.showList Core.unName (Sets.toList (Typing.typeContextVariables tx)),
-    ", typeArgs: ",
-    Formatting.showList Core__.type_ typeArgs,
-    ")"]) check)
+  in (Monads.withTrace "typeOf" check)
 
 typeOfAnnotatedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.AnnotatedTerm -> Compute.Flow t0 Core.Type)
 typeOfAnnotatedTerm tx typeArgs at = (typeOf tx typeArgs (Core.annotatedTermBody at))
