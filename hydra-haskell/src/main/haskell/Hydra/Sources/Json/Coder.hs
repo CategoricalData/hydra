@@ -261,7 +261,7 @@ termCoderDef = define "termCoder" $
         "kc">: ref termCoderDef @@ var "kt",
         "vc">: ref termCoderDef @@ var "vt",
         "cx">: ref Monads.getStateDef] $ lets [
-        "isStringKey">: Equality.equal (ref Rewriting.deannotateTypeDef @@ var "kt") MetaTypes.string,
+        "isStringKey">: Equality.equal (ref Rewriting.deannotateTypeDef @@ var "kt") (Core.typeLiteral Core.literalTypeString),
         "toString">: lambda "v" $ Logic.ifElse (var "isStringKey")
           (cases _Term (ref Rewriting.deannotateTermDef @@ var "v")
             (Just $ ref ShowCore.termDef @@ var "v") [
@@ -293,21 +293,23 @@ termCoderDef = define "termCoder" $
             _Value_object>>: lambda "m" $ binds [
               "entries">: Flows.mapList (var "decodeEntry") $ Maps.toList $ var "m"] $
               produce $ Core.termMap $ Maps.fromList $ var "entries"]),
-      _Type_maybe>>: lambda "ot" $ binds [
-        "oc">: ref termCoderDef @@ var "ot"] $
+      _Type_maybe>>: lambda "maybeElementType" $ binds [
+        "maybeElementCoder">: ref termCoderDef @@ var "maybeElementType"] $
         produce $ Compute.coder
-          (lambda "t" $ lets [
-            "stripped">: ref Rewriting.deannotateTermDef @@ var "t"] $
-            cases _Term (var "stripped")
-              (Just $ ref Monads.unexpectedDef @@ string "optional term" @@ (ref ShowCore.termDef @@ var "t")) [
-              _Term_maybe>>: lambda "el" $ Maybes.maybe
-                (produce Json.valueNull)
-                (Compute.coderEncode $ var "oc")
-                (var "el")])
-          (lambda "n" $ cases _Value (var "n")
+          (lambda "maybeTerm" $ lets [
+            "strippedMaybeTerm">: ref Rewriting.deannotateTermDef @@ var "maybeTerm"] $
+            cases _Term (var "strippedMaybeTerm")
+              (Just $ ref Monads.unexpectedDef @@ string "optional term" @@ (ref ShowCore.termDef @@ var "maybeTerm")) [
+              _Term_maybe>>: lambda "maybeContents" $
+                Logic.ifElse (Maybes.isNothing $ var "maybeContents")
+                  (produce Json.valueNull)
+                  (binds [
+                    "encodedInner">: Compute.coderEncode (var "maybeElementCoder") @@ (Maybes.fromJust $ var "maybeContents")] $
+                    produce $ var "encodedInner")])
+          (lambda "jsonVal" $ cases _Value (var "jsonVal")
             (Just $ binds [
-              "decoded">: Compute.coderDecode (var "oc") @@ var "n"] $
-              produce $ Core.termMaybe $ just $ var "decoded") [
+              "decodedInner">: Compute.coderDecode (var "maybeElementCoder") @@ var "jsonVal"] $
+              produce $ Core.termMaybe $ just $ var "decodedInner") [
             _Value_null>>: constant $ produce $ Core.termMaybe nothing]),
       _Type_record>>: lambda "rt" $ ref recordCoderDef @@ var "rt",
       _Type_unit>>: constant $ produce $ ref unitCoderDef,
