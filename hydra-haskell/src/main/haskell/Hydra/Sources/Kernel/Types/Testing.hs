@@ -477,7 +477,7 @@ testCaseWithMetadata = define "TestCaseWithMetadata" $
       testCase,
     "description">:
       doc "An optional description of the test" $
-      T.optional T.string,
+      T.maybe T.string,
     "tags">:
       doc "Zero or more tags for categorizing the test" $
       T.list tag]
@@ -491,7 +491,7 @@ testGroup = define "TestGroup" $
       T.string,
     "description">:
       doc "An optional description of the group" $
-      T.optional T.string,
+      T.maybe T.string,
     "subgroups">:
       doc "Nested test groups" $
       T.list testGroup,

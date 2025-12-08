@@ -79,7 +79,7 @@ module' = define "Module" $
       T.list module',
     "description">:
       doc "An optional human-readable description of the module" $
-      T.optional T.string]
+      T.maybe T.string]
 
 namespace :: Binding
 namespace = define "Namespace" $
@@ -103,7 +103,7 @@ qualifiedName = define "QualifiedName" $
   T.record [
     "namespace">:
       doc "The optional namespace" $
-      T.optional namespace,
+      T.maybe namespace,
     "local">:
       doc "The local name"
       T.string]
