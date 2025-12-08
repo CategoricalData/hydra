@@ -48,10 +48,10 @@ edge = define "Edge" $
       Core.name,
     "out">:
       doc "The field representing the out-projection of the edge. Defaults to 'out'." $
-      T.optional Core.name,
+      T.maybe Core.name,
     "in">:
       doc "The field representing the in-projection of the edge. Defaults to 'in'." $
-      T.optional Core.name]
+      T.maybe Core.name]
 
 graphPattern :: Binding
 graphPattern = define "GraphPattern" $
