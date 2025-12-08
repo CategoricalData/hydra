@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Dsl.TypesSpec where
 
 import Hydra.Kernel
@@ -17,21 +15,21 @@ checkFunctionSyntax = do
 
     H.it "Function arrows are supported" $ do
       check
-        ("a" --> "b")
-        (function (var "a") (var "b"))
+        ("a" ~> "b")
+        (function (variable "a") (variable "b"))
       check
-        (string --> int32)
+        (string ~> int32)
         (function string int32)
 
     H.it "Function arrows are right-associative" $ do
       check
-        ("a" --> "b" --> "c")
-        ("a" --> ("b" --> "c"))
+        ("a" ~> "b" ~> "c")
+        ("a" ~> ("b" ~> "c"))
 
     H.it "Functions bind less tightly than application" $ do
       check
-        ("a" @@ "b" --> "c" @@ "d")
-        (("a" @@ "b") --> ("c" @@ "d"))
+        ("a" @@ "b" ~> "c" @@ "d")
+        (("a" @@ "b") ~> ("c" @@ "d"))
 
 checkHelperFunctions :: H.SpecWith ()
 checkHelperFunctions = do
@@ -39,8 +37,8 @@ checkHelperFunctions = do
 
     H.it "Check n-ary functions" $ do
       check
-        (functionMany ["a", "b"])
-        (function "a" "b")
+        (functionMany [variable "a", variable "b"])
+        (function (variable "a") (variable "b"))
       check
         (functionMany [int32, string, boolean])
         (function int32 $ function string boolean)

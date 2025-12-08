@@ -251,9 +251,9 @@ shrinkers typ = trivialShrinker ++ case typ of
         dropPairs = [(Types.map kt vt, \(TermMap m) -> TermMap . M.fromList <$> dropAny (M.toList m))]
     TypeMaybe ot -> toNothing : promoteType : shrinkType
       where
-        toNothing = (Types.optional ot, \(TermMaybe m) -> optional <$> Y.maybe [] (const [Nothing]) m)
+        toNothing = (Types.maybe ot, \(TermMaybe m) -> optional <$> Y.maybe [] (const [Nothing]) m)
         promoteType = (ot, \(TermMaybe m) -> Y.maybeToList m)
-        shrinkType = (\(t, m) -> (Types.optional t,
+        shrinkType = (\(t, m) -> (Types.maybe t,
           \(TermMaybe mb) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
     TypeRecord (RowType name sfields) -> dropFields
         ++ shrinkFieldNames (TypeRecord . RowType name) (record name) (\(TermRecord (Record _ dfields)) -> dfields) sfields
