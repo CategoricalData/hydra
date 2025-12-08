@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Graph where
 
 -- Standard type-level kernel imports
@@ -34,44 +32,44 @@ graph = define "Graph" $
     -- TODO: remove this; replace it with 'environment'
     "elements">:
       doc "All of the elements in the graph" $
-      T.map (use Core.name) (use Core.binding),
+      T.map Core.name Core.binding,
     "environment">:
       doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
-      T.map (use Core.name) (T.optional $ use Core.term),
+      T.map Core.name (T.optional Core.term),
     "types">:
       doc "The typing environment of the graph" $
-      T.map (use Core.name) (use Core.typeScheme),
+      T.map Core.name Core.typeScheme,
     "body">:
-      doc "The body of the term which generated this context" $
-      use Core.term,
+      doc "The body of the term which generated this context"
+      Core.term,
     "primitives">:
       doc "All supported primitive constants and functions, by name" $
-      T.map (use Core.name) (use primitive),
+      T.map Core.name primitive,
     "schema">:
       doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
-      T.optional $ use graph]
+      T.optional graph]
 
 primitive :: Binding
 primitive = define "Primitive" $
   doc "A built-in function" $
   T.record [
     "name">:
-      doc "The unique name of the primitive function" $
-      use Core.name,
+      doc "The unique name of the primitive function"
+      Core.name,
     "type">:
-      doc "The type signature of the primitive function" $
-      use Core.typeScheme,
+      doc "The type signature of the primitive function"
+      Core.typeScheme,
     "implementation">:
       doc "A concrete implementation of the primitive function" $
-      T.list (use Core.term) ~> (use Compute.flow @@ use graph @@ use Core.term)]
+      T.list Core.term ~> Compute.flow @@ graph @@ Core.term]
 
 termCoder :: Binding
 termCoder = define "TermCoder" $
   doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
   T.forAll "a" $ T.record [
     "type">:
-      doc "The Hydra type of encoded terms" $
-      use Core.type_,
+      doc "The Hydra type of encoded terms"
+      Core.type_,
     "coder">:
       doc "A coder between Hydra terms and instances of the given type" $
-      use Compute.coder @@ use graph @@ use graph @@ use Core.term @@ T.var "a"]
+      Compute.coder @@ graph @@ graph @@ Core.term @@ "a"]

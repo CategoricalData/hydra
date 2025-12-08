@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Topology where
 
 -- Standard type-level kernel imports
@@ -30,17 +28,17 @@ module_ = Module ns elements [] [Core.module_] $
 graph :: Binding
 graph = define "Graph" $
   doc "A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors" $
-  T.map (use vertex) (T.list $ use vertex)
+  T.map vertex (T.list vertex)
 
 orderingIsomorphism :: Binding
 orderingIsomorphism = define "OrderingIsomorphism" $
   T.forAll "a" $ T.record [
     "encode">:
       doc "Mapping from source ordering to target ordering" $
-      T.list (T.var "a") ~> T.list (T.var "a"),
+      T.list "a" ~> T.list "a",
     "decode">:
       doc "Mapping from target ordering to source ordering" $
-      T.list (T.var "a") ~> T.list (T.var "a")]
+      T.list "a" ~> T.list "a"]
 
 tarjanState :: Binding
 tarjanState = define "TarjanState" $
@@ -50,19 +48,19 @@ tarjanState = define "TarjanState" $
       T.int32,
     "indices">:
       doc "Mapping from vertices to their indices in the DFS traversal" $
-      T.map (use vertex) T.int32,
+      T.map vertex T.int32,
     "lowLinks">:
       doc "Mapping from vertices to their lowest reachable index in the DFS traversal" $
-      T.map (use vertex) T.int32,
+      T.map vertex T.int32,
     "stack">:
       doc "Current DFS stack, with vertices in reverse order" $
-      T.list $ use vertex,
+      T.list vertex,
     "onStack">:
       doc "Set of vertices currently on the stack, for quick lookup" $
-      T.set (use vertex),
+      T.set vertex,
     "sccs">:
       doc "Accumulated strongly connected components, each a list of vertices" $
-      T.list $ T.list $ use vertex]
+      T.list $ T.list vertex]
 
 vertex :: Binding
 vertex = define "Vertex" $

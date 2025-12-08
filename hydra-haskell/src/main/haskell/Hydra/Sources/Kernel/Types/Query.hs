@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Query where
 
 -- Standard type-level kernel imports
@@ -46,36 +44,36 @@ edge = define "Edge" $
   doc "An abstract edge based on a record type" $
   T.record [
     "type">:
-      doc "The name of a record type, for which the edge also specifies an out- and an in- projection" $
-      use Core.name,
+      doc "The name of a record type, for which the edge also specifies an out- and an in- projection"
+      Core.name,
     "out">:
       doc "The field representing the out-projection of the edge. Defaults to 'out'." $
-      T.optional $ use Core.name,
+      T.optional Core.name,
     "in">:
       doc "The field representing the in-projection of the edge. Defaults to 'in'." $
-      T.optional $ use Core.name]
+      T.optional Core.name]
 
 graphPattern :: Binding
 graphPattern = define "GraphPattern" $
   doc "A query pattern which matches within a designated component subgraph" $
   T.record [
     "graph">:
-      doc "The name of the component graph" $
-      use Core.name,
+      doc "The name of the component graph"
+      Core.name,
     "patterns">:
       doc "The patterns to match within the subgraph" $
-      T.list (use pattern)]
+      T.list pattern]
 
 node :: Binding
 node = define "Node" $
   doc "A node in a query expression; it may be a term, a variable, or a wildcard" $
   T.union [
     "term">:
-      doc "A graph term; an expression which is valid in the graph being matched" $
-      use Core.term,
+      doc "A graph term; an expression which is valid in the graph being matched"
+      Core.term,
     "variable">:
-      doc "A query variable, not to be confused with a variable term" $
-      use variable,
+      doc "A query variable, not to be confused with a variable term"
+      variable,
     "wildcard">:
       doc "An anonymous variable which we do not care to join across patterns" T.unit]
 
@@ -84,34 +82,34 @@ path = define "Path" $
   doc "A query path" $
   T.union [
     "step">:
-      doc "A path given by a single step" $
-      use step,
+      doc "A path given by a single step"
+      step,
     "regex">:
-      doc "A path given by a regular expression quantifier applied to another path" $
-      use regexSequence,
+      doc "A path given by a regular expression quantifier applied to another path"
+      regexSequence,
     "inverse">:
-      doc "A path given by the inverse of another path" $
-      use path]
+      doc "A path given by the inverse of another path"
+      path]
 
 pattern :: Binding
 pattern = define "Pattern" $
   doc "A query pattern" $
   T.union [
     "triple">:
-      doc "A subject/predicate/object pattern" $
-      use triplePattern,
+      doc "A subject/predicate/object pattern"
+      triplePattern,
     "negation">:
-      doc "The negation of another pattern" $
-      use pattern,
+      doc "The negation of another pattern"
+      pattern,
     "conjunction">:
       doc "The conjunction ('and') of several other patterns" $
-      T.list (use pattern),
+      T.list pattern,
     "disjunction">:
       doc "The disjunction (inclusive 'or') of several other patterns" $
-      T.list (use pattern),
+      T.list pattern,
     "graph">:
-      doc "A pattern which matches within a named subgraph" $
-      use graphPattern]
+      doc "A pattern which matches within a named subgraph"
+      graphPattern]
 
 query :: Binding
 query = define "Query" $
@@ -119,10 +117,10 @@ query = define "Query" $
   T.record [
     "variables">:
       doc "The variables selected by the query" $
-      T.list $ use variable,
+      T.list variable,
     "patterns">:
       doc "The patterns to be matched" $
-      T.list (use pattern)]
+      T.list pattern]
 
 range :: Binding
 range = define "Range" $
@@ -145,46 +143,46 @@ regexQuantifier = define "RegexQuantifier" $
     "oneOrMore">: doc "The + quantifier; matches one or more occurrences" T.unit,
     "exactly">: doc "The {n} quantifier; matches exactly n occurrences" T.int32,
     "atLeast">: doc "The {n,} quantifier; matches at least n occurrences" T.int32,
-    "range">: doc "The {n, m} quantifier; matches between n and m (inclusive) occurrences" $ use range]
+    "range">: doc "The {n, m} quantifier; matches between n and m (inclusive) occurrences" range]
 
 regexSequence :: Binding
 regexSequence = define "RegexSequence" $
   doc "A path with a regex quantifier" $
   T.record [
     "path">:
-      doc "The path to which the quantifier applies" $
-      use path,
+      doc "The path to which the quantifier applies"
+      path,
     "quantifier">:
-      doc "The quantifier" $
-      use regexQuantifier]
+      doc "The quantifier"
+      regexQuantifier]
 
 step :: Binding
 step = define "Step" $
   doc "An atomic function as part of a query. When applied to a graph, steps are typed by function types." $
   T.union [
     "edge">:
-      doc "An out-to-in traversal of an abstract edge" $
-      use edge,
+      doc "An out-to-in traversal of an abstract edge"
+      edge,
     "project">:
-      doc "A projection from a record through one of its fields" $
-      use Core.projection,
+      doc "A projection from a record through one of its fields"
+      Core.projection,
     "compare">:
-      doc "A comparison of two terms" $
-      use comparisonConstraint]
+      doc "A comparison of two terms"
+      comparisonConstraint]
 
 triplePattern :: Binding
 triplePattern = define "TriplePattern" $
   doc "A subject/predicate/object pattern" $
   T.record [
     "subject">:
-      doc "The subject of the pattern" $
-      use node,
+      doc "The subject of the pattern"
+      node,
     "predicate">:
-      doc "The predicate (property) of the pattern" $
-      use path,
+      doc "The predicate (property) of the pattern"
+      path,
     "object">:
-      doc "The object of the pattern" $
-      use node]
+      doc "The object of the pattern"
+      node]
 
 variable :: Binding
 variable = define "Variable" $

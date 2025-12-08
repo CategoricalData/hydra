@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Ast where
 
 -- Standard type-level kernel imports
@@ -60,53 +58,53 @@ bracketExpr = define "BracketExpr" $
   doc "An expression enclosed by brackets" $
   T.record [
     "brackets">:
-      doc "The bracket pair enclosing the expression" $
-      use brackets,
+      doc "The bracket pair enclosing the expression"
+      brackets,
     "enclosed">:
-      doc "The expression within the brackets" $
-      use expr,
+      doc "The expression within the brackets"
+      expr,
     "style">:
-      doc "The formatting style for the bracketed block" $
-      use blockStyle]
+      doc "The formatting style for the bracketed block"
+      blockStyle]
 
 brackets :: Binding
 brackets = define "Brackets" $
   doc "Matching open and close bracket symbols" $
   T.record [
     "open">:
-      doc "The opening bracket symbol" $
-      use symbol,
+      doc "The opening bracket symbol"
+      symbol,
     "close">:
-      doc "The closing bracket symbol" $
-      use symbol]
+      doc "The closing bracket symbol"
+      symbol]
 
 expr :: Binding
 expr = define "Expr" $
   doc "An abstract expression" $
   T.union [
     "const">:
-      doc "A constant symbol" $
-      use symbol,
+      doc "A constant symbol"
+      symbol,
     "indent">:
-      doc "An indented expression" $
-      use indentedExpression,
+      doc "An indented expression"
+      indentedExpression,
     "op">:
-      doc "An operator expression" $
-      use opExpr,
+      doc "An operator expression"
+      opExpr,
     "brackets">:
-      doc "A bracketed expression" $
-      use bracketExpr]
+      doc "A bracketed expression"
+      bracketExpr]
 
 indentedExpression :: Binding
 indentedExpression = define "IndentedExpression" $
   doc "An expression indented in a certain style" $
   T.record [
     "style">:
-      doc "The indentation style" $
-      use indentStyle,
+      doc "The indentation style"
+      indentStyle,
     "expr">:
-      doc "The expression to be indented" $
-      use expr]
+      doc "The expression to be indented"
+      expr]
 
 indentStyle :: Binding
 indentStyle = define "IndentStyle" $
@@ -124,42 +122,42 @@ op = define "Op" $
   doc "An operator symbol" $
   T.record [
     "symbol">:
-      doc "The operator symbol" $
-      use symbol,
+      doc "The operator symbol"
+      symbol,
     "padding">:
-      doc "The padding around the operator" $
-      use padding,
+      doc "The padding around the operator"
+      padding,
     "precedence">:
-      doc "The precedence of the operator" $
-      use precedence,
+      doc "The precedence of the operator"
+      precedence,
     "associativity">:
-      doc "The associativity of the operator" $
-      use associativity]
+      doc "The associativity of the operator"
+      associativity]
 
 opExpr :: Binding
 opExpr = define "OpExpr" $
   doc "An operator expression" $
   T.record [
     "op">:
-      doc "The operator" $
-      use op,
+      doc "The operator"
+      op,
     "lhs">:
-      doc "The left-hand side operand" $
-      use expr,
+      doc "The left-hand side operand"
+      expr,
     "rhs">:
-      doc "The right-hand side operand" $
-      use expr]
+      doc "The right-hand side operand"
+      expr]
 
 padding :: Binding
 padding = define "Padding" $
   doc "Left and right padding for an operator" $
   T.record [
     "left">:
-      doc "Padding to the left of the operator" $
-      use ws,
+      doc "Padding to the left of the operator"
+      ws,
     "right">:
-      doc "Padding to the right of the operator" $
-      use ws]
+      doc "Padding to the right of the operator"
+      ws]
 
 precedence :: Binding
 precedence = define "Precedence" $

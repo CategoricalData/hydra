@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 -- | A model for Hydra labeled-BNF grammars
 
 module Hydra.Sources.Kernel.Types.Grammar where
@@ -41,7 +39,7 @@ constant = define "Constant" $
 grammar :: Binding
 grammar = define "Grammar" $
   doc "An enhanced Backus-Naur form (BNF) grammar" $
-  T.wrap $ T.list $ use production
+  T.wrap $ T.list production
 
 label :: Binding
 label = define "Label" $
@@ -53,11 +51,11 @@ labeledPattern = define "LabeledPattern" $
   doc "A pattern together with a name (label)" $
   T.record [
     "label">:
-      doc "The label for the pattern" $
-      use label,
+      doc "The label for the pattern"
+      label,
     "pattern">:
-      doc "The pattern being labeled" $
-      use pattern]
+      doc "The pattern being labeled"
+      pattern]
 
 pattern :: Binding
 pattern = define "Pattern" $
@@ -65,48 +63,48 @@ pattern = define "Pattern" $
   T.union [
     "alternatives">:
       doc "A choice between alternative patterns" $
-      T.list $ use pattern,
+      T.list pattern,
     "constant">:
-      doc "A constant (terminal) pattern" $
-      use constant,
+      doc "A constant (terminal) pattern"
+      constant,
     "ignored">:
-      doc "A pattern to be ignored (not captured)" $
-      use pattern,
+      doc "A pattern to be ignored (not captured)"
+      pattern,
     "labeled">:
-      doc "A labeled pattern" $
-      use labeledPattern,
+      doc "A labeled pattern"
+      labeledPattern,
     "nil">:
       doc "An empty pattern" $
       T.unit,
     "nonterminal">:
-      doc "A nonterminal symbol reference" $
-      use symbol,
+      doc "A nonterminal symbol reference"
+      symbol,
     "option">:
-      doc "An optional pattern (zero or one occurrence)" $
-      use pattern,
+      doc "An optional pattern (zero or one occurrence)"
+      pattern,
     "plus">:
-      doc "One or more occurrences of a pattern" $
-      use pattern,
+      doc "One or more occurrences of a pattern"
+      pattern,
     "regex">:
-      doc "A regular expression pattern" $
-      use regex,
+      doc "A regular expression pattern"
+      regex,
     "sequence">:
       doc "A sequence of patterns" $
-      T.list $ use pattern,
+      T.list pattern,
     "star">:
-      doc "Zero or more occurrences of a pattern" $
-      use pattern]
+      doc "Zero or more occurrences of a pattern"
+      pattern]
 
 production :: Binding
 production = define "Production" $
   doc "A BNF production" $
   T.record [
     "symbol">:
-      doc "The nonterminal symbol being defined" $
-      use symbol,
+      doc "The nonterminal symbol being defined"
+      symbol,
     "pattern">:
-      doc "The pattern which defines the symbol" $
-      use pattern]
+      doc "The pattern which defines the symbol"
+      pattern]
 
 regex :: Binding
 regex = define "Regex" $

@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Testing where
 
 -- Standard type-level kernel imports
@@ -75,17 +73,17 @@ alphaConversionTestCase = define "AlphaConversionTestCase" $
   doc "A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term" $
   T.record [
     "term">:
-      doc "The term on which to perform alpha conversion" $
-      use Core.term,
+      doc "The term on which to perform alpha conversion"
+      Core.term,
     "oldVariable">:
-      doc "The variable name to replace" $
-      use Core.name,
+      doc "The variable name to replace"
+      Core.name,
     "newVariable">:
-      doc "The new variable name" $
-      use Core.name,
+      doc "The new variable name"
+      Core.name,
     "result">:
-      doc "The expected result term after alpha conversion" $
-      use Core.term]
+      doc "The expected result term after alpha conversion"
+      Core.term]
 
 evaluationStyle :: Binding
 evaluationStyle = define "EvaluationStyle" $
@@ -97,11 +95,11 @@ caseConversionTestCase = define "CaseConversionTestCase" $
   doc "A test case which checks that strings are converted between different case conventions correctly" $
   T.record [
     "fromConvention">:
-      doc "The source case convention" $
-      use Util.caseConvention,
+      doc "The source case convention"
+      Util.caseConvention,
     "toConvention">:
-      doc "The target case convention" $
-      use Util.caseConvention,
+      doc "The target case convention"
+      Util.caseConvention,
     "fromString">:
       doc "The input string" $
       T.string,
@@ -116,11 +114,11 @@ delegatedEvaluationTestCase = define "DelegatedEvaluationTestCase" $
     <> " as expected when translated into that language") $
   T.record [
     "input">:
-      doc "The first of two terms which should evaluate to the same expression" $
-      use Core.term,
+      doc "The first of two terms which should evaluate to the same expression"
+      Core.term,
     "output">:
-      doc "The second of two terms which should evaluate to the same expression" $
-      use Core.term]
+      doc "The second of two terms which should evaluate to the same expression"
+      Core.term]
 
 etaExpansionTestCase :: Binding
 etaExpansionTestCase = define "EtaExpansionTestCase" $
@@ -128,33 +126,33 @@ etaExpansionTestCase = define "EtaExpansionTestCase" $
     <> " and compares the result with the expected result") $
   T.record [
     "input">:
-      doc "The term to eta expand" $
-      use Core.term,
+      doc "The term to eta expand"
+      Core.term,
     "output">:
-      doc "The expected result" $
-      use Core.term]
+      doc "The expected result"
+      Core.term]
 
 deannotateTermTestCase :: Binding
 deannotateTermTestCase = define "DeannotateTermTestCase" $
   doc "A test case which strips all annotations from a term and compares the result with the expected term" $
   T.record [
     "input">:
-      doc "The term to deannotate" $
-      use Core.term,
+      doc "The term to deannotate"
+      Core.term,
     "output">:
-      doc "The expected deannotated term" $
-      use Core.term]
+      doc "The expected deannotated term"
+      Core.term]
 
 deannotateTypeTestCase :: Binding
 deannotateTypeTestCase = define "DeannotateTypeTestCase" $
   doc "A test case which strips all annotations from a type and compares the result with the expected type" $
   T.record [
     "input">:
-      doc "The type to deannotate" $
-      use Core.type_,
+      doc "The type to deannotate"
+      Core.type_,
     "output">:
-      doc "The expected deannotated type" $
-      use Core.type_]
+      doc "The expected deannotated type"
+      Core.type_]
 
 flattenLetTermsTestCase :: Binding
 flattenLetTermsTestCase = define "FlattenLetTermsTestCase" $
@@ -162,11 +160,11 @@ flattenLetTermsTestCase = define "FlattenLetTermsTestCase" $
     <> " lifting inner bindings to the outer let, and compares the result with the expected term") $
   T.record [
     "input">:
-      doc "The term to flatten" $
-      use Core.term,
+      doc "The term to flatten"
+      Core.term,
     "output">:
-      doc "The expected flattened term" $
-      use Core.term]
+      doc "The expected flattened term"
+      Core.term]
 
 foldOperation :: Binding
 foldOperation = define "FoldOperation" $
@@ -187,28 +185,28 @@ foldOverTermTestCase = define "FoldOverTermTestCase" $
   doc "A test case which applies a fold operation over a term and compares the result" $
   T.record [
     "input">:
-      doc "The term to fold over" $
-      use Core.term,
+      doc "The term to fold over"
+      Core.term,
     "traversalOrder">:
-      doc "The traversal order (pre or post)" $
-      use Coders.traversalOrder,
+      doc "The traversal order (pre or post)"
+      Coders.traversalOrder,
     "operation">:
-      doc "The fold operation to apply" $
-      use foldOperation,
+      doc "The fold operation to apply"
+      foldOperation,
     "output">:
-      doc "The expected result of the fold" $
-      use Core.term]
+      doc "The expected result of the fold"
+      Core.term]
 
 freeVariablesTestCase :: Binding
 freeVariablesTestCase = define "FreeVariablesTestCase" $
   doc "A test case which computes the free variables of a term and compares the result with an expected set of names" $
   T.record [
     "input">:
-      doc "The term to analyze" $
-      use Core.term,
+      doc "The term to analyze"
+      Core.term,
     "output">:
       doc "The expected set of free variable names" $
-      T.set $ use Core.name]
+      T.set Core.name]
 
 termRewriter :: Binding
 termRewriter = define "TermRewriter" $
@@ -226,14 +224,14 @@ rewriteTermTestCase = define "RewriteTermTestCase" $
   doc "A test case which applies a term rewriter and compares the result" $
   T.record [
     "input">:
-      doc "The term to rewrite" $
-      use Core.term,
+      doc "The term to rewrite"
+      Core.term,
     "rewriter">:
-      doc "The rewriter to apply" $
-      use termRewriter,
+      doc "The rewriter to apply"
+      termRewriter,
     "output">:
-      doc "The expected rewritten term" $
-      use Core.term]
+      doc "The expected rewritten term"
+      Core.term]
 
 typeRewriter :: Binding
 typeRewriter = define "TypeRewriter" $
@@ -248,47 +246,47 @@ rewriteTypeTestCase = define "RewriteTypeTestCase" $
   doc "A test case which applies a type rewriter and compares the result" $
   T.record [
     "input">:
-      doc "The type to rewrite" $
-      use Core.type_,
+      doc "The type to rewrite"
+      Core.type_,
     "rewriter">:
-      doc "The rewriter to apply" $
-      use typeRewriter,
+      doc "The rewriter to apply"
+      typeRewriter,
     "output">:
-      doc "The expected rewritten type" $
-      use Core.type_]
+      doc "The expected rewritten type"
+      Core.type_]
 
 evaluationTestCase :: Binding
 evaluationTestCase = define "EvaluationTestCase" $
   doc "A test case which evaluates (reduces) a given term and compares it with the expected result" $
   T.record [
     "evaluationStyle">:
-      doc "The evaluation style (eager or lazy)" $
-      use evaluationStyle,
+      doc "The evaluation style (eager or lazy)"
+      evaluationStyle,
     "input">:
-      doc "The term to evaluate" $
-      use Core.term,
+      doc "The term to evaluate"
+      Core.term,
     "output">:
-      doc "The expected result" $
-      use Core.term]
+      doc "The expected result"
+      Core.term]
 
 inferenceFailureTestCase :: Binding
 inferenceFailureTestCase = define "InferenceFailureTestCase" $
   doc "A test case providing a term for which type inference is expected to fail" $
   T.record [
     "input">:
-      doc "The term for which inference should fail" $
-      use Core.term]
+      doc "The term for which inference should fail"
+      Core.term]
 
 inferenceTestCase :: Binding
 inferenceTestCase = define "InferenceTestCase" $
   doc "A test case which performs type inference on a given term and compares the result with an expected type scheme" $
   T.record [
     "input">:
-      doc "The term to infer" $
-      use Core.term,
+      doc "The term to infer"
+      Core.term,
     "output">:
-      doc "The expected type scheme" $
-      use Core.typeScheme]
+      doc "The expected type scheme"
+      Core.typeScheme]
 
 jsonCoderTestCase :: Binding
 jsonCoderTestCase = define "JsonCoderTestCase" $
@@ -296,19 +294,19 @@ jsonCoderTestCase = define "JsonCoderTestCase" $
     <> " and verifies that decoding produces the original term (round-trip)") $
   T.record [
     "type">:
-      doc "The Hydra type that determines how the term is encoded/decoded" $
-      use Core.type_,
+      doc "The Hydra type that determines how the term is encoded/decoded"
+      Core.type_,
     "term">:
-      doc "The Hydra term to encode" $
-      use Core.term,
+      doc "The Hydra term to encode"
+      Core.term,
     "json">:
-      doc "The expected JSON value" $
-      use Json.value]
+      doc "The expected JSON value"
+      Json.value]
 
 jsonParserTestCase :: Binding
 jsonParserTestCase = define "JsonParserTestCase" $
   doc "A test case which parses a JSON string and compares the result with an expected JSON value" $
-  use parserTestCase @@ use Json.value
+  parserTestCase @@ Json.value
 
 liftLambdaAboveLetTestCase :: Binding
 liftLambdaAboveLetTestCase = define "LiftLambdaAboveLetTestCase" $
@@ -316,16 +314,16 @@ liftLambdaAboveLetTestCase = define "LiftLambdaAboveLetTestCase" $
     <> " and compares the result with the expected term") $
   T.record [
     "input">:
-      doc "The term to transform" $
-      use Core.term,
+      doc "The term to transform"
+      Core.term,
     "output">:
-      doc "The expected transformed term" $
-      use Core.term]
+      doc "The expected transformed term"
+      Core.term]
 
 jsonWriterTestCase :: Binding
 jsonWriterTestCase = define "JsonWriterTestCase" $
   doc "A test case which serializes a JSON value to a string and compares it to the expected string" $
-  use writerTestCase @@ use Json.value
+  writerTestCase @@ Json.value
 
 parserTestCase :: Binding
 parserTestCase = define "ParserTestCase" $
@@ -336,7 +334,7 @@ parserTestCase = define "ParserTestCase" $
       T.string,
     "output">:
       doc "The expected parse result" $
-      use Parsing.parseResult @@ T.var "a"]
+      Parsing.parseResult @@ "a"]
 
 tag :: Binding
 tag = define "Tag" $
@@ -348,23 +346,23 @@ testCodec = define "TestCodec" $
   doc "A codec for generating compiled test files from test groups into a target programming language" $
   T.record [
     "language">:
-      doc "The name of the target programming language" $
-      use Coders.languageName,
+      doc "The name of the target programming language"
+      Coders.languageName,
     "fileExtension">:
-      doc "The file extension for test files (e.g., 'hs', 'java', 'py')" $
-      use Module.fileExtension,
+      doc "The file extension for test files (e.g., 'hs', 'java', 'py')"
+      Module.fileExtension,
     "encodeTerm">:
       doc "A function for encoding Hydra terms into the target language" $
-      use Core.term ~> (use Compute.flow @@ use Graph.graph @@ T.string),
+      Core.term ~> Compute.flow @@ Graph.graph @@ T.string,
     "encodeType">:
       doc "A function for encoding Hydra types into the target language" $
-      use Core.type_ ~> (use Compute.flow @@ use Graph.graph @@ T.string),
+      Core.type_ ~> Compute.flow @@ Graph.graph @@ T.string,
     "formatTestName">:
       doc "A function for formatting test case names according to the target language's conventions" $
       T.string ~> T.string,
     "formatModuleName">:
       doc "A function for formatting module names according to the target language's conventions" $
-      use Module.namespace ~> T.string,
+      Module.namespace ~> T.string,
     "testCaseTemplate">:
       doc "A template string for individual test case assertions" $
       T.string,
@@ -379,93 +377,93 @@ testCodec = define "TestCodec" $
       T.string,
     "findImports">:
       doc "A function that determines the necessary imports for a given set of dependencies" $
-      T.set (use Core.name) ~> T.list T.string]
+      T.set Core.name ~> T.list T.string]
 
 testCase :: Binding
 testCase = define "TestCase" $
   doc "A simple test case with an input and an expected output" $
   T.union [
     "alphaConversion">:
-      doc "An alpha conversion test" $
-      use alphaConversionTestCase,
+      doc "An alpha conversion test"
+      alphaConversionTestCase,
     "caseConversion">:
-      doc "A case conversion test" $
-      use caseConversionTestCase,
+      doc "A case conversion test"
+      caseConversionTestCase,
     "deannotateTerm">:
-      doc "A deannotate term test" $
-      use deannotateTermTestCase,
+      doc "A deannotate term test"
+      deannotateTermTestCase,
     "deannotateType">:
-      doc "A deannotate type test" $
-      use deannotateTypeTestCase,
+      doc "A deannotate type test"
+      deannotateTypeTestCase,
     "delegatedEvaluation">:
-      doc "A delegated evaluation test" $
-      use delegatedEvaluationTestCase,
+      doc "A delegated evaluation test"
+      delegatedEvaluationTestCase,
     "etaExpansion">:
-      doc "An eta expansion test" $
-      use etaExpansionTestCase,
+      doc "An eta expansion test"
+      etaExpansionTestCase,
     "flattenLetTerms">:
-      doc "A flatten let terms test" $
-      use flattenLetTermsTestCase,
+      doc "A flatten let terms test"
+      flattenLetTermsTestCase,
     "freeVariables">:
-      doc "A free variables test" $
-      use freeVariablesTestCase,
+      doc "A free variables test"
+      freeVariablesTestCase,
     "evaluation">:
-      doc "A term evaluation test" $
-      use evaluationTestCase,
+      doc "A term evaluation test"
+      evaluationTestCase,
     "inference">:
-      doc "A type inference test" $
-      use inferenceTestCase,
+      doc "A type inference test"
+      inferenceTestCase,
     "inferenceFailure">:
-      doc "A type inference failure test" $
-      use inferenceFailureTestCase,
+      doc "A type inference failure test"
+      inferenceFailureTestCase,
     "jsonCoder">:
-      doc "A JSON coder (round-trip) test" $
-      use jsonCoderTestCase,
+      doc "A JSON coder (round-trip) test"
+      jsonCoderTestCase,
     "jsonParser">:
-      doc "A JSON parser test" $
-      use jsonParserTestCase,
+      doc "A JSON parser test"
+      jsonParserTestCase,
     "jsonWriter">:
-      doc "A JSON writer test" $
-      use jsonWriterTestCase,
+      doc "A JSON writer test"
+      jsonWriterTestCase,
     "liftLambdaAboveLet">:
-      doc "A lift lambda above let test" $
-      use liftLambdaAboveLetTestCase,
+      doc "A lift lambda above let test"
+      liftLambdaAboveLetTestCase,
     "serialization">:
-      doc "An AST serialization test" $
-      use serializationTestCase,
+      doc "An AST serialization test"
+      serializationTestCase,
     "simplifyTerm">:
-      doc "A simplify term test" $
-      use simplifyTermTestCase,
+      doc "A simplify term test"
+      simplifyTermTestCase,
     "topologicalSort">:
-      doc "A topological sort test" $
-      use topologicalSortTestCase,
+      doc "A topological sort test"
+      topologicalSortTestCase,
     "topologicalSortBindings">:
-      doc "A topological sort bindings test" $
-      use topologicalSortBindingsTestCase,
+      doc "A topological sort bindings test"
+      topologicalSortBindingsTestCase,
     "topologicalSortSCC">:
-      doc "A topological sort with SCC detection test" $
-      use topologicalSortSCCTestCase,
+      doc "A topological sort with SCC detection test"
+      topologicalSortSCCTestCase,
     "typeChecking">:
-      doc "A type checking test" $
-      use typeCheckingTestCase,
+      doc "A type checking test"
+      typeCheckingTestCase,
     "typeCheckingFailure">:
-      doc "A type checking failure test (currently unused)" $
-      use typeCheckingFailureTestCase,
+      doc "A type checking failure test (currently unused)"
+      typeCheckingFailureTestCase,
     "typeReduction">:
-      doc "A type reduction test" $
-      use typeReductionTestCase,
+      doc "A type reduction test"
+      typeReductionTestCase,
     "normalizeTypeVariables">:
-      doc "A normalize type variables test" $
-      use normalizeTypeVariablesTestCase,
+      doc "A normalize type variables test"
+      normalizeTypeVariablesTestCase,
     "foldOverTerm">:
-      doc "A fold over term test" $
-      use foldOverTermTestCase,
+      doc "A fold over term test"
+      foldOverTermTestCase,
     "rewriteTerm">:
-      doc "A rewrite term test" $
-      use rewriteTermTestCase,
+      doc "A rewrite term test"
+      rewriteTermTestCase,
     "rewriteType">:
-      doc "A rewrite type test" $
-      use rewriteTypeTestCase]
+      doc "A rewrite type test"
+      rewriteTypeTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $
@@ -475,14 +473,14 @@ testCaseWithMetadata = define "TestCaseWithMetadata" $
       doc "The name of the test case" $
       T.string,
     "case">:
-      doc "The test case itself" $
-      use testCase,
+      doc "The test case itself"
+      testCase,
     "description">:
       doc "An optional description of the test" $
       T.optional T.string,
     "tags">:
       doc "Zero or more tags for categorizing the test" $
-      T.list $ use tag]
+      T.list tag]
 
 testGroup :: Binding
 testGroup = define "TestGroup" $
@@ -496,32 +494,32 @@ testGroup = define "TestGroup" $
       T.optional T.string,
     "subgroups">:
       doc "Nested test groups" $
-      T.list (use testGroup),
+      T.list testGroup,
     "cases">:
       doc "The test cases in this group" $
-      T.list (use testCaseWithMetadata)]
+      T.list testCaseWithMetadata]
 
 typeCheckingTestCase :: Binding
 typeCheckingTestCase = define "TypeCheckingTestCase" $
   doc "A test case which performs type checking on a given term and compares the result with an expected annotated term and type" $
   T.record [
     "input">:
-      doc "An untyped term on which to perform inference, then type check" $
-      use Core.term,
+      doc "An untyped term on which to perform inference, then type check"
+      Core.term,
     "outputTerm">:
-      doc "The expected fully annotated System F term after type inference" $
-      use Core.term,
+      doc "The expected fully annotated System F term after type inference"
+      Core.term,
     "outputType">:
-      doc "The expected inferred type" $
-      use Core.type_]
+      doc "The expected inferred type"
+      Core.type_]
 
 typeCheckingFailureTestCase :: Binding
 typeCheckingFailureTestCase = define "TypeCheckingFailureTestCase" $
   doc "A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases." $
   T.record [
     "input">:
-      doc "The term for which type checking should fail" $
-      use Core.term]
+      doc "The term for which type checking should fail"
+      Core.term]
 
 topologicalSortBindingsTestCase :: Binding
 topologicalSortBindingsTestCase = define "TopologicalSortBindingsTestCase" $
@@ -530,10 +528,10 @@ topologicalSortBindingsTestCase = define "TopologicalSortBindingsTestCase" $
   T.record [
     "bindings">:
       doc "The bindings as a list of (name, term) pairs" $
-      T.list (T.pair (use Core.name) (use Core.term)),
+      T.list (T.pair Core.name Core.term),
     "expected">:
       doc "The expected groups of bindings in topological order" $
-      T.list (T.list (T.pair (use Core.name) (use Core.term)))]
+      T.list (T.list (T.pair Core.name Core.term))]
 
 topologicalSortTestCase :: Binding
 topologicalSortTestCase = define "TopologicalSortTestCase" $
@@ -564,8 +562,8 @@ serializationTestCase = define "SerializationTestCase" $
   doc "A test case which serializes an AST expression to a string and compares it with the expected output" $
   T.record [
     "input">:
-      doc "The AST expression to serialize" $
-      use Ast.expr,
+      doc "The AST expression to serialize"
+      Ast.expr,
     "output">:
       doc "The expected serialized string" $
       T.string]
@@ -576,11 +574,11 @@ simplifyTermTestCase = define "SimplifyTermTestCase" $
     <> " and compares the result with the expected term") $
   T.record [
     "input">:
-      doc "The term to simplify" $
-      use Core.term,
+      doc "The term to simplify"
+      Core.term,
     "output">:
-      doc "The expected simplified term" $
-      use Core.term]
+      doc "The expected simplified term"
+      Core.term]
 
 normalizeTypeVariablesTestCase :: Binding
 normalizeTypeVariablesTestCase = define "NormalizeTypeVariablesTestCase" $
@@ -588,30 +586,30 @@ normalizeTypeVariablesTestCase = define "NormalizeTypeVariablesTestCase" $
     <> " (renaming them to t0, t1, t2, etc.) and compares the result with the expected term") $
   T.record [
     "input">:
-      doc "The term with type annotations to normalize" $
-      use Core.term,
+      doc "The term with type annotations to normalize"
+      Core.term,
     "output">:
-      doc "The expected term with normalized type variable names" $
-      use Core.term]
+      doc "The expected term with normalized type variable names"
+      Core.term]
 
 typeReductionTestCase :: Binding
 typeReductionTestCase = define "TypeReductionTestCase" $
   doc "A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type" $
   T.record [
     "input">:
-      doc "The type to reduce" $
-      use Core.type_,
+      doc "The type to reduce"
+      Core.type_,
     "output">:
-      doc "The expected reduced type" $
-      use Core.type_]
+      doc "The expected reduced type"
+      Core.type_]
 
 writerTestCase :: Binding
 writerTestCase = define "WriterTestCase" $
   doc "A test case which writes a value to a string and compares it to the expected string" $
   T.forAll "a" $ T.record [
     "input">:
-      doc "The input value to write" $
-      T.var "a",
+      doc "The input value to write"
+      "a",
     "output">:
       doc "The expected string" $
       T.string]

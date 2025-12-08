@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Workflow where
 
 -- Standard type-level kernel imports
@@ -36,10 +34,10 @@ hydraSchemaSpec = define "HydraSchemaSpec" $
   T.record [
     "modules">:
       doc "The modules to include in the schema graph" $
-      T.list $ use Module.module',
+      T.list Module.module',
     "typeName">:
-      doc "The name of the top-level type; all data which passes through the workflow will be instances of this type" $
-      use Core.name]
+      doc "The name of the top-level type; all data which passes through the workflow will be instances of this type"
+      Core.name]
 
 lastMile :: Binding
 lastMile = define "LastMile" $
@@ -47,11 +45,11 @@ lastMile = define "LastMile" $
   T.forAlls ["s", "a"] $ T.record [
     "encoder">:
       doc "An encoder for terms to a list of output objects" $
-      use Core.type_ ~> (use Compute.flow @@ T.var "s"
-        @@ (use Core.term ~> (use Graph.graph ~> (use Compute.flow @@ T.var "s" @@ T.list (T.var "a"))))),
+      Core.type_ ~> Compute.flow @@ "s"
+        @@ (Core.term ~> Graph.graph ~> Compute.flow @@ "s" @@ T.list "a"),
     "serializer">:
       doc "A function which serializes a list of output objects to a string representation" $
-      T.list (T.var "a") ~> (use Compute.flow @@ T.var "s" @@ T.string),
+      T.list "a" ~> Compute.flow @@ "s" @@ T.string,
     "fileExtension">:
       doc "A file extension for the generated file(s)" $
       T.string]
@@ -61,8 +59,8 @@ schemaSpec = define "SchemaSpec" $
   doc "The specification of a schema at the source end of a workflow" $
   T.union [
     "hydra">:
-      doc "A native Hydra schema" $
-      use hydraSchemaSpec,
+      doc "A native Hydra schema"
+      hydraSchemaSpec,
     "file">:
       doc "A schema provided as a file, available at the given file path" $
       T.string,
@@ -78,8 +76,8 @@ transformWorkflow = define "TransformWorkflow" $
       doc "A descriptive name for the workflow" $
       T.string,
     "schemaSpec">:
-      doc "The schema specification" $
-      use schemaSpec,
+      doc "The schema specification"
+      schemaSpec,
     "srcDir">:
       doc "The source directory" $
       T.string,

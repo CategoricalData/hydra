@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Constraints where
 
 -- Standard type-level kernel imports
@@ -31,19 +29,19 @@ pathEquation = define "PathEquation" $
   doc "A declared equivalence between two abstract paths in a graph" $
   T.record [
     "left">:
-      doc "The left-hand side of the equation" $
-      use Query.path,
+      doc "The left-hand side of the equation"
+      Query.path,
     "right">:
-      doc "The right-hand side of the equation" $
-      use Query.path]
+      doc "The right-hand side of the equation"
+      Query.path]
 
 patternImplication :: Binding
 patternImplication = define "PatternImplication" $
   doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
   T.record [
     "antecedent">:
-      doc "The pattern which, if it matches, triggers the constraint" $
-      use Query.pattern,
+      doc "The pattern which, if it matches, triggers the constraint"
+      Query.pattern,
     "consequent">:
-      doc "The pattern which must also match when the antecedent matches" $
-      use Query.pattern]
+      doc "The pattern which must also match when the antecedent matches"
+      Query.pattern]
