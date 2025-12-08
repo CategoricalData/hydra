@@ -78,7 +78,7 @@ flowState = define "FlowState" $
   T.forAlls ["s", "v"] $ T.record [
     "value">:
       doc "The resulting value, or nothing in the case of failure" $
-      T.optional "v",
+      T.maybe "v",
     "state">:
       doc "The final state"
       "s",

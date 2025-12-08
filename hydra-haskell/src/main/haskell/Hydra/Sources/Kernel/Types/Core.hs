@@ -113,7 +113,7 @@ binding = define "Binding" $
       term,
     "type">:
       doc "The optional type of the bound term" $
-      T.optional typeScheme]
+      T.maybe typeScheme]
 
 caseStatement :: Binding
 caseStatement = define "CaseStatement" $
@@ -124,7 +124,7 @@ caseStatement = define "CaseStatement" $
       name,
     "default">:
       doc "An optional default case, used if none of the explicit cases match" $
-      T.optional term,
+      T.maybe term,
     "cases">:
       doc "A list of case alternatives, one per union field" $
       T.list field]
@@ -323,7 +323,7 @@ lambda = define "Lambda" $
       name,
     "domain">:
       doc "An optional domain type for the lambda" $
-      T.optional type_,
+      T.maybe type_,
     "body">:
       doc "The body of the lambda"
       term]
@@ -452,7 +452,7 @@ term = define "Term" $
       T.map term term,
     "maybe">:
       doc "An optional value" $
-      T.optional term,
+      T.maybe term,
     "pair">:
       doc "A pair (2-tuple)" $
       T.pair term term,

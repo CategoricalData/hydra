@@ -35,7 +35,7 @@ graph = define "Graph" $
       T.map Core.name Core.binding,
     "environment">:
       doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
-      T.map Core.name (T.optional Core.term),
+      T.map Core.name (T.maybe Core.term),
     "types">:
       doc "The typing environment of the graph" $
       T.map Core.name Core.typeScheme,
@@ -47,7 +47,7 @@ graph = define "Graph" $
       T.map Core.name primitive,
     "schema">:
       doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
-      T.optional graph]
+      T.maybe graph]
 
 primitive :: Binding
 primitive = define "Primitive" $

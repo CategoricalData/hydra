@@ -1,7 +1,7 @@
 -- | A domain-specific language for constructing Hydra types in Haskell.
 module Hydra.Dsl.Types where
 
-import Prelude hiding (product)
+import Prelude hiding (maybe, product)
 
 import Hydra.Core
 import Hydra.Dsl.AsType
@@ -169,10 +169,15 @@ mono = TypeScheme [] . asType
 nonNegativeInt32 :: Type
 nonNegativeInt32 = int32
 
--- | Optional (nullable) type
+-- | Maybe (optional/nullable) type
+-- Example: maybe string
+maybe :: AsType a => a -> Type
+maybe = TypeMaybe . asType
+
+-- | Optional (nullable) type (alias for 'maybe')
 -- Example: optional string
 optional :: AsType a => a -> Type
-optional = TypeMaybe . asType
+optional = maybe
 
 -- | Create a pair type
 -- Example: pair string int32
