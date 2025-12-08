@@ -4,41 +4,45 @@ module Hydra.Sources.Kernel.Types.Tabular where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms                 as Terms
-import           Hydra.Dsl.Types                 as Types
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Data.List                       as L
-import qualified Data.Map                        as M
-import qualified Data.Set                        as S
-import qualified Data.Maybe                      as Y
 
+
+ns :: Namespace
+ns = Namespace "hydra.tabular"
+
+define :: String -> Type -> Binding
+define = defineType ns
 
 module_ :: Module
 module_ = Module ns elements [] [Core.module_] $
-    Just ("A simple, untyped tabular data model, suitable for CSVs and TSVs")
+    Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"
   where
-    ns = Namespace "hydra.tabular"
-    def = datatype ns
-    tabular = typeref ns
-
     elements = [
+      dataRow,
+      headerRow,
+      table]
 
-      def "DataRow" $
-        doc "A data row, containing optional-valued cells; one per column" $
-        forAll "v" $ wrap $ list $ optional "v",
+dataRow :: Binding
+dataRow = define "DataRow" $
+  doc "A data row, containing optional-valued cells; one per column" $
+  T.forAll "v" $ T.wrap $ T.list $ T.optional (T.var "v")
 
-      def "HeaderRow" $
-        doc "A header row, containing column names (but no types or data)" $
-        wrap $ list string,
+headerRow :: Binding
+headerRow = define "HeaderRow" $
+  doc "A header row, containing column names (but no types or data)" $
+  T.wrap $ T.list T.string
 
-      def "Table" $
-        doc "A simple table as in a CSV file, having an optional header row and any number of data rows" $
-        forAll "v" $ record [
-          "header">:
-            doc "The optional header row of the table. If present, the header must have the same number of cells as each data row." $
-            optional $ tabular "HeaderRow",
-          "data">:
-            doc "The data rows of the table. Each row must have the same number of cells." $
-            list (tabular "DataRow" @@ "v")]]
+table :: Binding
+table = define "Table" $
+  doc "A simple table as in a CSV file, having an optional header row and any number of data rows" $
+  T.forAll "v" $ T.record [
+    "header">:
+      doc "The optional header row of the table. If present, the header must have the same number of cells as each data row." $
+      T.optional $ use headerRow,
+    "data">:
+      doc "The data rows of the table. Each row must have the same number of cells." $
+      T.list (use dataRow @@ T.var "v")]
