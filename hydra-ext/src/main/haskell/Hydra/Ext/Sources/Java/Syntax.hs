@@ -4,52 +4,286 @@ module Hydra.Ext.Sources.Java.Syntax where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-javaSyntaxModule :: Module
-javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
+ns :: Namespace
+ns = Namespace "hydra.ext.java.syntax"
+
+def :: String -> Type -> Binding
+def = datatype ns
+
+java :: String -> Type
+java = typeref ns
+
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just ("A Java syntax module. Based on the Oracle Java SE 12 BNF:\n" ++
       "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++
       "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")
   where
-    ns = Namespace "hydra.ext.java.syntax"
-    def = datatype ns
-    java = typeref ns
-
     elements = [
+      identifier,
+      typeIdentifier,
+      literal,
+      integerLiteral,
+      floatingPointLiteral,
+      stringLiteral,
+      type_,
+      primitiveTypeWithAnnotations,
+      primitiveType_,
+      numericType,
+      integralType,
+      floatingPointType,
+      referenceType,
+      classOrInterfaceType,
+      classType,
+      classTypeQualifier,
+      interfaceType,
+      typeVariable,
+      arrayType,
+      arrayType_Variant,
+      dims,
+      typeParameter,
+      typeParameterModifier,
+      typeBound,
+      typeBound_ClassOrInterface,
+      additionalBound,
+      typeArgument,
+      wildcard,
+      wildcardBounds,
+      moduleName,
+      packageName,
+      typeName,
+      expressionName,
+      methodName,
+      packageOrTypeName,
+      ambiguousName,
+      compilationUnit,
+      ordinaryCompilationUnit,
+      modularCompilationUnit,
+      packageDeclaration,
+      packageModifier,
+      importDeclaration,
+      singleTypeImportDeclaration,
+      typeImportOnDemandDeclaration,
+      singleStaticImportDeclaration,
+      staticImportOnDemandDeclaration,
+      typeDeclaration,
+      typeDeclarationWithComments,
+      moduleDeclaration,
+      moduleDirective,
+      moduleDirective_Requires,
+      moduleDirective_ExportsOrOpens,
+      moduleDirective_Provides,
+      requiresModifier,
+      classDeclaration,
+      normalClassDeclaration,
+      classModifier,
+      classBody,
+      classBodyDeclaration,
+      classBodyDeclarationWithComments,
+      classMemberDeclaration,
+      fieldDeclaration,
+      fieldModifier,
+      variableDeclarator,
+      variableDeclaratorId,
+      variableInitializer,
+      unannType,
+      unannClassType,
+      methodDeclaration,
+      methodModifier,
+      methodHeader,
+      result,
+      methodDeclarator,
+      receiverParameter,
+      formalParameter,
+      formalParameter_Simple,
+      variableArityParameter,
+      variableModifier,
+      throws,
+      exceptionType,
+      methodBody,
+      instanceInitializer,
+      staticInitializer,
+      constructorDeclaration,
+      constructorModifier,
+      constructorDeclarator,
+      simpleTypeName,
+      constructorBody,
+      explicitConstructorInvocation,
+      explicitConstructorInvocation_Variant,
+      enumDeclaration,
+      enumBody,
+      enumBody_Element,
+      enumConstant,
+      enumConstantModifier,
+      interfaceDeclaration,
+      normalInterfaceDeclaration,
+      interfaceModifier,
+      interfaceBody,
+      interfaceMemberDeclaration,
+      constantDeclaration,
+      constantModifier,
+      interfaceMethodDeclaration,
+      interfaceMethodModifier,
+      annotationTypeDeclaration,
+      annotationTypeBody,
+      annotationTypeMemberDeclaration,
+      annotationTypeElementDeclaration,
+      annotationTypeElementModifier,
+      defaultValue,
+      annotation,
+      normalAnnotation,
+      elementValuePair,
+      elementValue,
+      elementValueArrayInitializer,
+      markerAnnotation,
+      singleElementAnnotation,
+      arrayInitializer,
+      block,
+      blockStatement,
+      localVariableDeclarationStatement,
+      localVariableDeclaration,
+      localVariableType,
+      statement,
+      statementNoShortIf,
+      statementWithoutTrailingSubstatement,
+      labeledStatement,
+      labeledStatementNoShortIf,
+      expressionStatement,
+      statementExpression,
+      ifThenStatement,
+      ifThenElseStatement,
+      ifThenElseStatementNoShortIf,
+      assertStatement,
+      assertStatement_Pair,
+      switchStatement,
+      switchBlock,
+      switchBlock_Pair,
+      switchBlockStatementGroup,
+      switchLabel,
+      enumConstantName,
+      whileStatement,
+      whileStatementNoShortIf,
+      doStatement,
+      forStatement,
+      forStatementNoShortIf,
+      basicForStatement,
+      forCond,
+      basicForStatementNoShortIf,
+      forInit,
+      forUpdate,
+      enhancedForStatement,
+      enhancedForCond,
+      enhancedForStatementNoShortIf,
+      breakStatement,
+      continueStatement,
+      returnStatement,
+      throwStatement,
+      synchronizedStatement,
+      tryStatement,
+      tryStatement_Simple,
+      tryStatement_WithFinally,
+      catches,
+      catchClause,
+      catchFormalParameter,
+      catchType,
+      finally_,
+      tryWithResourcesStatement,
+      resourceSpecification,
+      resource,
+      resource_Local,
+      variableAccess,
+      primary,
+      primaryNoNewArray,
+      classLiteral,
+      typeNameArray,
+      numericTypeArray,
+      booleanArray,
+      classInstanceCreationExpression,
+      classInstanceCreationExpression_Qualifier,
+      unqualifiedClassInstanceCreationExpression,
+      classOrInterfaceTypeToInstantiate,
+      annotatedIdentifier,
+      typeArgumentsOrDiamond,
+      fieldAccess,
+      fieldAccess_Qualifier,
+      arrayAccess,
+      arrayAccess_Variant,
+      methodInvocation,
+      methodInvocation_Header,
+      methodInvocation_Complex,
+      methodInvocation_Variant,
+      methodReference,
+      methodReference_Expression,
+      methodReference_Primary,
+      methodReference_ReferenceType,
+      methodReference_Super,
+      methodReference_New,
+      methodReference_Array,
+      arrayCreationExpression,
+      arrayCreationExpression_Primitive,
+      arrayCreationExpression_ClassOrInterface,
+      arrayCreationExpression_PrimitiveArray,
+      arrayCreationExpression_ClassOrInterfaceArray,
+      dimExpr,
+      expression,
+      lambdaExpression,
+      lambdaParameters,
+      lambdaParameter_,
+      lambdaParameter_Normal,
+      lambdaParameterType,
+      lambdaBody_,
+      assignmentExpression,
+      assignment,
+      leftHandSide,
+      assignmentOperator,
+      conditionalExpression,
+      conditionalExpression_TernaryCond,
+      conditionalExpression_TernaryLambda,
+      conditionalOrExpression,
+      conditionalAndExpression,
+      inclusiveOrExpression,
+      exclusiveOrExpression,
+      andExpression,
+      equalityExpression,
+      equalityExpression_Binary,
+      relationalExpression,
+      relationalExpression_LessThan,
+      relationalExpression_GreaterThan,
+      relationalExpression_LessThanEqual,
+      relationalExpression_GreaterThanEqual,
+      relationalExpression_InstanceOf,
+      shiftExpression,
+      shiftExpression_Binary,
+      additiveExpression,
+      additiveExpression_Binary,
+      multiplicativeExpression,
+      multiplicativeExpression_Binary,
+      unaryExpression,
+      preIncrementExpression,
+      preDecrementExpression,
+      unaryExpressionNotPlusMinus,
+      postfixExpression,
+      postIncrementExpression,
+      postDecrementExpression,
+      castExpression,
+      castExpression_Primitive,
+      castExpression_NotPlusMinus,
+      castExpression_Lambda,
+      castExpression_RefAndBounds,
+      constantExpression]
 
 --Productions from §3 (Lexical Structure)
 
 --Identifier:
 --  IdentifierChars but not a Keyword or BooleanLiteral or NullLiteral
-      def "Identifier" $ wrap string,
+identifier :: Binding
+identifier = def "Identifier" $ T.wrap T.string
+
 --IdentifierChars:
 --  JavaLetter {JavaLetterOrDigit}
 --
@@ -61,151 +295,183 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 
 --TypeIdentifier:
 --  Identifier but not var
-      def "TypeIdentifier" $ wrap $ java "Identifier",
+typeIdentifier :: Binding
+typeIdentifier = def "TypeIdentifier" $ T.wrap $ java "Identifier"
 
 --Literal:
-      def "Literal" $
-        union [
+literal :: Binding
+literal = def "Literal" $
+  T.union [
 --  NullLiteral
-          "null">: unit,
+    "null">: T.unit,
 --  IntegerLiteral
-          "integer">: java "IntegerLiteral",
+    "integer">: java "IntegerLiteral",
 --  FloatingPointLiteral
-          "floatingPoint">: java "FloatingPointLiteral",
+    "floatingPoint">: java "FloatingPointLiteral",
 --  BooleanLiteral
-          "boolean">: boolean,
+    "boolean">: T.boolean,
 --  CharacterLiteral
-          "character">: uint16,
+    "character">: T.uint16,
 --  StringLiteral
-          "string">: java "StringLiteral"],
-      def "IntegerLiteral" $
-        doc "Note: this is an approximation which ignores encoding" $
-        wrap bigint,
-      def "FloatingPointLiteral" $
-        doc "Note: this is an approximation which ignores encoding" $
-        wrap bigfloat,
-      def "StringLiteral" $
-        doc "Note: this is an approximation which ignores encoding" $
-        wrap string,
+    "string">: java "StringLiteral"]
+
+integerLiteral :: Binding
+integerLiteral = def "IntegerLiteral" $
+  doc "Note: this is an approximation which ignores encoding" $
+  T.wrap T.bigint
+
+floatingPointLiteral :: Binding
+floatingPointLiteral = def "FloatingPointLiteral" $
+  doc "Note: this is an approximation which ignores encoding" $
+  T.wrap T.bigfloat
+
+stringLiteral :: Binding
+stringLiteral = def "StringLiteral" $
+  doc "Note: this is an approximation which ignores encoding" $
+  T.wrap T.string
 
 --Productions from §4 (Types, Values, and Variables)
 
 --Type:
-      def "Type" $ union [
+type_ :: Binding
+type_ = def "Type" $ T.union [
 --  PrimitiveType
-          "primitive">: java "PrimitiveTypeWithAnnotations",
+    "primitive">: java "PrimitiveTypeWithAnnotations",
 --  ReferenceType
-          "reference">: java "ReferenceType"],
+    "reference">: java "ReferenceType"]
 
 --PrimitiveType:
-      def "PrimitiveTypeWithAnnotations" $ record [
-        "type">: java "PrimitiveType",
-        "annotations">: list $ java "Annotation"],
-      def "PrimitiveType" $ union [
+primitiveTypeWithAnnotations :: Binding
+primitiveTypeWithAnnotations = def "PrimitiveTypeWithAnnotations" $ T.record [
+  "type">: java "PrimitiveType",
+  "annotations">: T.list $ java "Annotation"]
+
+primitiveType_ :: Binding
+primitiveType_ = def "PrimitiveType" $ T.union [
 --  {Annotation} NumericType
-        "numeric">: java "NumericType",
+  "numeric">: java "NumericType",
 --  {Annotation} boolean
-        "boolean">: unit],
+  "boolean">: T.unit]
 
 --NumericType:
-      def "NumericType" $ union [
+numericType :: Binding
+numericType = def "NumericType" $ T.union [
 --  IntegralType
-        "integral">: java "IntegralType",
+  "integral">: java "IntegralType",
 --  FloatingPointType
-        "floatingPoint">: java "FloatingPointType"],
+  "floatingPoint">: java "FloatingPointType"]
 
 --IntegralType:
-      def "IntegralType" $ enum [
+integralType :: Binding
+integralType = def "IntegralType" $ T.enum [
 --  (one of)
 --  byte short int long char
-        "byte", "short", "int", "long", "char"],
+  "byte", "short", "int", "long", "char"]
 
 --FloatingPointType:
-      def "FloatingPointType" $ enum [
+floatingPointType :: Binding
+floatingPointType = def "FloatingPointType" $ T.enum [
 --  (one of)
 --  float double
-        "float", "double"],
+  "float", "double"]
 
 --ReferenceType:
-      def "ReferenceType" $ union [
+referenceType :: Binding
+referenceType = def "ReferenceType" $ T.union [
 --  ClassOrInterfaceType
-        "classOrInterface">: java "ClassOrInterfaceType",
+  "classOrInterface">: java "ClassOrInterfaceType",
 --  TypeVariable
-        "variable">: java "TypeVariable",
+  "variable">: java "TypeVariable",
 --  ArrayType
-        "array">: java "ArrayType"],
+  "array">: java "ArrayType"]
 
 --ClassOrInterfaceType:
-      def "ClassOrInterfaceType" $ union [
+classOrInterfaceType :: Binding
+classOrInterfaceType = def "ClassOrInterfaceType" $ T.union [
 --  ClassType
-        "class">: java "ClassType",
+  "class">: java "ClassType",
 --  InterfaceType
-        "interface">: java "InterfaceType"],
+  "interface">: java "InterfaceType"]
 
 --ClassType:
-      def "ClassType" $ record [
-        "annotations">: list $ java "Annotation",
-        "qualifier">: java "ClassTypeQualifier",
-        "identifier">: java "TypeIdentifier",
-        "arguments">: list $ java "TypeArgument"],
-      def "ClassTypeQualifier" $ union [
+classType :: Binding
+classType = def "ClassType" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "qualifier">: java "ClassTypeQualifier",
+  "identifier">: java "TypeIdentifier",
+  "arguments">: T.list $ java "TypeArgument"]
+
+classTypeQualifier :: Binding
+classTypeQualifier = def "ClassTypeQualifier" $ T.union [
 --  {Annotation} TypeIdentifier [TypeArguments]
-        "none">: unit,
+  "none">: T.unit,
 --  PackageName . {Annotation} TypeIdentifier [TypeArguments]
-        "package">: java "PackageName",
+  "package">: java "PackageName",
 --  ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
-        "parent">: java "ClassOrInterfaceType"],
+  "parent">: java "ClassOrInterfaceType"]
 
 --InterfaceType:
 --  ClassType
-      def "InterfaceType" $ wrap $ java "ClassType",
+interfaceType :: Binding
+interfaceType = def "InterfaceType" $ T.wrap $ java "ClassType"
 
 --TypeVariable:
 --  {Annotation} TypeIdentifier
-      def "TypeVariable" $ record [
-        "annotations">: list $ java "Annotation",
-        "identifier">: java "TypeIdentifier"],
+typeVariable :: Binding
+typeVariable = def "TypeVariable" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "identifier">: java "TypeIdentifier"]
 
 --ArrayType:
-      def "ArrayType" $ record [
-        "dims">: java "Dims",
-        "variant">: java "ArrayType_Variant"],
-      def "ArrayType_Variant" $ union [
+arrayType :: Binding
+arrayType = def "ArrayType" $ T.record [
+  "dims">: java "Dims",
+  "variant">: java "ArrayType_Variant"]
+
+arrayType_Variant :: Binding
+arrayType_Variant = def "ArrayType_Variant" $ T.union [
 --  PrimitiveType Dims
-        "primitive">: java "PrimitiveTypeWithAnnotations",
+  "primitive">: java "PrimitiveTypeWithAnnotations",
 --  ClassOrInterfaceType Dims
-        "classOrInterface">: java "ClassOrInterfaceType",
+  "classOrInterface">: java "ClassOrInterfaceType",
 --  TypeVariable Dims
-        "variable">: java "TypeVariable"],
+  "variable">: java "TypeVariable"]
 
 --Dims:
 --  {Annotation} [ ] {{Annotation} [ ]}
-      def "Dims" $ wrap $ list $ list $ java "Annotation",
+dims :: Binding
+dims = def "Dims" $ T.wrap $ T.list $ T.list $ java "Annotation"
 
 --TypeParameter:
 --  {TypeParameterModifier} TypeIdentifier [TypeBound]
-      def "TypeParameter" $ record [
-        "modifiers">: list $ java "TypeParameterModifier",
-        "identifier">: java "TypeIdentifier",
-        "bound">: optional $ java "TypeBound"],
+typeParameter :: Binding
+typeParameter = def "TypeParameter" $ T.record [
+  "modifiers">: T.list $ java "TypeParameterModifier",
+  "identifier">: java "TypeIdentifier",
+  "bound">: T.maybe $ java "TypeBound"]
 
 --TypeParameterModifier:
 --  Annotation
-      def "TypeParameterModifier" $ wrap $ java "Annotation",
+typeParameterModifier :: Binding
+typeParameterModifier = def "TypeParameterModifier" $ T.wrap $ java "Annotation"
 
 --TypeBound:
-      def "TypeBound" $ union [
+typeBound :: Binding
+typeBound = def "TypeBound" $ T.union [
 --  extends TypeVariable
-        "variable">: java "TypeVariable",
+  "variable">: java "TypeVariable",
 --  extends ClassOrInterfaceType {AdditionalBound}
-        "classOrInterface">: java "TypeBound_ClassOrInterface"],
-      def "TypeBound_ClassOrInterface" $ record [
-        "type">: java "ClassOrInterfaceType",
-        "additional">: list $ java "AdditionalBound"],
+  "classOrInterface">: java "TypeBound_ClassOrInterface"]
+
+typeBound_ClassOrInterface :: Binding
+typeBound_ClassOrInterface = def "TypeBound_ClassOrInterface" $ T.record [
+  "type">: java "ClassOrInterfaceType",
+  "additional">: T.list $ java "AdditionalBound"]
 
 --AdditionalBound:
 --  & InterfaceType
-      def "AdditionalBound" $ wrap $ java "InterfaceType",
+additionalBound :: Binding
+additionalBound = def "AdditionalBound" $ T.wrap $ java "InterfaceType"
 
 --TypeArguments:
 --  < TypeArgumentList >
@@ -213,213 +479,248 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 --  TypeArgument {, TypeArgument}
 
 --TypeArgument:
-      def "TypeArgument" $ union [
+typeArgument :: Binding
+typeArgument = def "TypeArgument" $ T.union [
 --  ReferenceType
-        "reference">: java "ReferenceType",
+  "reference">: java "ReferenceType",
 --  Wildcard
-        "wildcard">: java "Wildcard"],
+  "wildcard">: java "Wildcard"]
 
 --Wildcard:
 --  {Annotation} ? [WildcardBounds]
-      def "Wildcard" $ record [
-        "annotations">: list $ java "Annotation",
-        "wildcard">: optional $ java "WildcardBounds"],
+wildcard :: Binding
+wildcard = def "Wildcard" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "wildcard">: T.maybe $ java "WildcardBounds"]
 
 --WildcardBounds:
-      def "WildcardBounds" $ union [
+wildcardBounds :: Binding
+wildcardBounds = def "WildcardBounds" $ T.union [
 --  extends ReferenceType
-        "extends">: java "ReferenceType",
+  "extends">: java "ReferenceType",
 --  super ReferenceType
-        "super">: java "ReferenceType"],
+  "super">: java "ReferenceType"]
 
 --Productions from §6 (Names)
 
 --ModuleName:
-      def "ModuleName" $ record [
+moduleName :: Binding
+moduleName = def "ModuleName" $ T.record [
 --  Identifier
-        "identifier">: java "Identifier",
+  "identifier">: java "Identifier",
 --  ModuleName . Identifier
-        "name">: optional $ java "ModuleName"],
+  "name">: T.maybe $ java "ModuleName"]
 
 --PackageName:
 --  Identifier
 --  PackageName . Identifier
-      def "PackageName" $ wrap $ list $ java "Identifier",
+packageName :: Binding
+packageName = def "PackageName" $ T.wrap $ T.list $ java "Identifier"
 
 --TypeName:
-      def "TypeName" $ record [
+typeName :: Binding
+typeName = def "TypeName" $ T.record [
 --  TypeIdentifier
-        "identifier">: java "TypeIdentifier",
+  "identifier">: java "TypeIdentifier",
 --  PackageOrTypeName . TypeIdentifier
-        "qualifier">: optional $ java "PackageOrTypeName"],
+  "qualifier">: T.maybe $ java "PackageOrTypeName"]
 
 --ExpressionName:
 --  Identifier
 --  AmbiguousName . Identifier
-      def "ExpressionName" $ record [
-        "qualifier">: optional $ java "AmbiguousName",
-        "identifier">: java "Identifier"],
+expressionName :: Binding
+expressionName = def "ExpressionName" $ T.record [
+  "qualifier">: T.maybe $ java "AmbiguousName",
+  "identifier">: java "Identifier"]
 
 --MethodName:
 --  Identifier
-      def "MethodName" $ wrap $ java "Identifier",
+methodName :: Binding
+methodName = def "MethodName" $ T.wrap $ java "Identifier"
 
 --PackageOrTypeName:
 --  Identifier
 --  PackageOrTypeName . Identifier
-      def "PackageOrTypeName" $ wrap $ list $ java "Identifier",
+packageOrTypeName :: Binding
+packageOrTypeName = def "PackageOrTypeName" $ T.wrap $ T.list $ java "Identifier"
 
 --AmbiguousName:
 --  Identifier
 --  AmbiguousName . Identifier
-      def "AmbiguousName" $ wrap $ list $ java "Identifier",
+ambiguousName :: Binding
+ambiguousName = def "AmbiguousName" $ T.wrap $ T.list $ java "Identifier"
 
 --Productions from §7 (Packages and Modules)
 
 --CompilationUnit:
-      def "CompilationUnit" $ union [
+compilationUnit :: Binding
+compilationUnit = def "CompilationUnit" $ T.union [
 --  OrdinaryCompilationUnit
-        "ordinary">: java "OrdinaryCompilationUnit",
+  "ordinary">: java "OrdinaryCompilationUnit",
 --  ModularCompilationUnit
-        "modular">: java "ModularCompilationUnit"],
+  "modular">: java "ModularCompilationUnit"]
 
 --OrdinaryCompilationUnit:
 --  [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
-      def "OrdinaryCompilationUnit" $ record [
-        "package">: optional $ java "PackageDeclaration",
-        "imports">: list $ java "ImportDeclaration",
-        "types">: list $ java "TypeDeclarationWithComments"],
+ordinaryCompilationUnit :: Binding
+ordinaryCompilationUnit = def "OrdinaryCompilationUnit" $ T.record [
+  "package">: T.maybe $ java "PackageDeclaration",
+  "imports">: T.list $ java "ImportDeclaration",
+  "types">: T.list $ java "TypeDeclarationWithComments"]
 
 --ModularCompilationUnit:
 --  {ImportDeclaration} ModuleDeclaration
-      def "ModularCompilationUnit" $ record [
-        "imports">: list $ java "ImportDeclaration",
-        "module">: java "ModuleDeclaration"],
+modularCompilationUnit :: Binding
+modularCompilationUnit = def "ModularCompilationUnit" $ T.record [
+  "imports">: T.list $ java "ImportDeclaration",
+  "module">: java "ModuleDeclaration"]
 
 --PackageDeclaration:
 --  {PackageModifier} package Identifier {. Identifier} ;
-      def "PackageDeclaration" $ record [
-        "modifiers">: list $ java "PackageModifier",
-        "identifiers">: list $ java "Identifier"],
+packageDeclaration :: Binding
+packageDeclaration = def "PackageDeclaration" $ T.record [
+  "modifiers">: T.list $ java "PackageModifier",
+  "identifiers">: T.list $ java "Identifier"]
 
 --PackageModifier:
 --  Annotation
-      def "PackageModifier" $ wrap $ java "Annotation",
+packageModifier :: Binding
+packageModifier = def "PackageModifier" $ T.wrap $ java "Annotation"
 
 --ImportDeclaration:
-      def "ImportDeclaration" $ union [
+importDeclaration :: Binding
+importDeclaration = def "ImportDeclaration" $ T.union [
 --  SingleTypeImportDeclaration
-        "singleType">: java "SingleTypeImportDeclaration",
+  "singleType">: java "SingleTypeImportDeclaration",
 --  TypeImportOnDemandDeclaration
-        "typeImportOnDemand">: java "TypeImportOnDemandDeclaration",
+  "typeImportOnDemand">: java "TypeImportOnDemandDeclaration",
 --  SingleStaticImportDeclaration
-        "singleStaticImport">: java "SingleStaticImportDeclaration",
+  "singleStaticImport">: java "SingleStaticImportDeclaration",
 --  StaticImportOnDemandDeclaration
-        "staticImportOnDemand">: java "StaticImportOnDemandDeclaration"],
+  "staticImportOnDemand">: java "StaticImportOnDemandDeclaration"]
 
 --SingleTypeImportDeclaration:
 --  import TypeName ;
-      def "SingleTypeImportDeclaration" $ wrap $ java "TypeName",
+singleTypeImportDeclaration :: Binding
+singleTypeImportDeclaration = def "SingleTypeImportDeclaration" $ T.wrap $ java "TypeName"
 
 --TypeImportOnDemandDeclaration:
 --  import PackageOrTypeName . * ;
-      def "TypeImportOnDemandDeclaration" $ wrap $ java "PackageOrTypeName",
+typeImportOnDemandDeclaration :: Binding
+typeImportOnDemandDeclaration = def "TypeImportOnDemandDeclaration" $ T.wrap $ java "PackageOrTypeName"
 
 --SingleStaticImportDeclaration:
 --  import static TypeName . Identifier ;
-      def "SingleStaticImportDeclaration" $ record [
-        "typeName">: java "TypeName",
-        "identifier">: java "Identifier"],
+singleStaticImportDeclaration :: Binding
+singleStaticImportDeclaration = def "SingleStaticImportDeclaration" $ T.record [
+  "typeName">: java "TypeName",
+  "identifier">: java "Identifier"]
 
 --StaticImportOnDemandDeclaration:
 --  import static TypeName . * ;
-      def "StaticImportOnDemandDeclaration" $ wrap $ java "TypeName",
+staticImportOnDemandDeclaration :: Binding
+staticImportOnDemandDeclaration = def "StaticImportOnDemandDeclaration" $ T.wrap $ java "TypeName"
 
 --TypeDeclaration:
-      def "TypeDeclaration" $ union [
+typeDeclaration :: Binding
+typeDeclaration = def "TypeDeclaration" $ T.union [
 --  ClassDeclaration
-        "class">: java "ClassDeclaration",
+  "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        "interface">: java "InterfaceDeclaration",
+  "interface">: java "InterfaceDeclaration",
 --  ;
-        "none">: unit],
-      def "TypeDeclarationWithComments" $
-        record [
-          "value">: java "TypeDeclaration",
-          "comments">: optional string],
+  "none">: T.unit]
+
+typeDeclarationWithComments :: Binding
+typeDeclarationWithComments = def "TypeDeclarationWithComments" $
+  T.record [
+    "value">: java "TypeDeclaration",
+    "comments">: T.maybe T.string]
 
 --ModuleDeclaration:
 --  {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }
-      def "ModuleDeclaration" $ record [
-        "annotations">: list $ java "Annotation",
-        "open">: boolean,
-        "identifiers">: list $ java "Identifier",
-        "directives">: list $ list $ java "ModuleDirective"],
+moduleDeclaration :: Binding
+moduleDeclaration = def "ModuleDeclaration" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "open">: T.boolean,
+  "identifiers">: T.list $ java "Identifier",
+  "directives">: T.list $ T.list $ java "ModuleDirective"]
 
 --ModuleDirective:
-      def "ModuleDirective" $ union [
+moduleDirective :: Binding
+moduleDirective = def "ModuleDirective" $ T.union [
 --  requires {RequiresModifier} ModuleName ;
-        "requires">: java "ModuleDirective_Requires",
+  "requires">: java "ModuleDirective_Requires",
 --  exports PackageName [to ModuleName {, ModuleName}] ;
-        "exports">: java "ModuleDirective_ExportsOrOpens",
+  "exports">: java "ModuleDirective_ExportsOrOpens",
 --  opens PackageName [to ModuleName {, ModuleName}] ;
-        "opens">: java "ModuleDirective_ExportsOrOpens",
+  "opens">: java "ModuleDirective_ExportsOrOpens",
 --  uses TypeName ;
-        "uses">: java "TypeName",
+  "uses">: java "TypeName",
 --  provides TypeName with TypeName {, TypeName} ;
-        "provides">: java "ModuleDirective_Provides"],
-      def "ModuleDirective_Requires" $ record [
-        "modifiers">: list $ java "RequiresModifier",
-        "module">: java "ModuleName"],
-      def "ModuleDirective_ExportsOrOpens" $ record [
-        "package">: java "PackageName",
-        "modules">:
-          doc "At least one module" $
-          list $ java "ModuleName"],
-      def "ModuleDirective_Provides" $ record [
-        "to">: java "TypeName",
-        "with">:
-          doc "At least one type" $
-          list $ java "TypeName"],
+  "provides">: java "ModuleDirective_Provides"]
+
+moduleDirective_Requires :: Binding
+moduleDirective_Requires = def "ModuleDirective_Requires" $ T.record [
+  "modifiers">: T.list $ java "RequiresModifier",
+  "module">: java "ModuleName"]
+
+moduleDirective_ExportsOrOpens :: Binding
+moduleDirective_ExportsOrOpens = def "ModuleDirective_ExportsOrOpens" $ T.record [
+  "package">: java "PackageName",
+  "modules">:
+    doc "At least one module" $
+    T.list $ java "ModuleName"]
+
+moduleDirective_Provides :: Binding
+moduleDirective_Provides = def "ModuleDirective_Provides" $ T.record [
+  "to">: java "TypeName",
+  "with">:
+    doc "At least one type" $
+    T.list $ java "TypeName"]
 
 --RequiresModifier:
-      def "RequiresModifier" $ enum [
+requiresModifier :: Binding
+requiresModifier = def "RequiresModifier" $ T.enum [
 --  (one of)
 --  transitive static
-        "transitive", "static"],
+  "transitive", "static"]
 
 --Productions from §8 (Classes)
 
 --ClassDeclaration:
-      def "ClassDeclaration" $ union [
+classDeclaration :: Binding
+classDeclaration = def "ClassDeclaration" $ T.union [
 --  NormalClassDeclaration
-        "normal">: java "NormalClassDeclaration",
+  "normal">: java "NormalClassDeclaration",
 --  EnumDeclaration
-        "enum">: java "EnumDeclaration"],
+  "enum">: java "EnumDeclaration"]
 
 --NormalClassDeclaration:
 --  {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
-      def "NormalClassDeclaration" $ record [
-        "modifiers">: list $ java "ClassModifier",
-        "identifier">: java "TypeIdentifier",
-        "parameters">: list $ java "TypeParameter",
-        "extends">: optional $ java "ClassType",
-        "implements">: list $ java "InterfaceType",
-        "body">: java "ClassBody"],
+normalClassDeclaration :: Binding
+normalClassDeclaration = def "NormalClassDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ClassModifier",
+  "identifier">: java "TypeIdentifier",
+  "parameters">: T.list $ java "TypeParameter",
+  "extends">: T.maybe $ java "ClassType",
+  "implements">: T.list $ java "InterfaceType",
+  "body">: java "ClassBody"]
 
 --ClassModifier:
-      def "ClassModifier" $ union [
+classModifier :: Binding
+classModifier = def "ClassModifier" $ T.union [
 --  (one of)
 --  Annotation public protected private
 --  abstract static final strictfp
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "protected">: unit,
-        "private">: unit,
-        "abstract">: unit,
-        "static">: unit,
-        "final">: unit,
-        "strictfp">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "protected">: T.unit,
+  "private">: T.unit,
+  "abstract">: T.unit,
+  "static">: T.unit,
+  "final">: T.unit,
+  "strictfp">: T.unit]
 
 --TypeParameters:
 --  < TypeParameterList >
@@ -434,84 +735,96 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 
 --ClassBody:
 --  { {ClassBodyDeclaration} }
-      def "ClassBody" $ wrap $ list $ java "ClassBodyDeclarationWithComments",
+classBody :: Binding
+classBody = def "ClassBody" $ T.wrap $ T.list $ java "ClassBodyDeclarationWithComments"
 
 --ClassBodyDeclaration:
-      def "ClassBodyDeclaration" $ union [
+classBodyDeclaration :: Binding
+classBodyDeclaration = def "ClassBodyDeclaration" $ T.union [
 --  ClassMemberDeclaration
-        "classMember">: java "ClassMemberDeclaration",
+  "classMember">: java "ClassMemberDeclaration",
 --  InstanceInitializer
-        "instanceInitializer">: java "InstanceInitializer",
+  "instanceInitializer">: java "InstanceInitializer",
 --  StaticInitializer
-        "staticInitializer">: java "StaticInitializer",
+  "staticInitializer">: java "StaticInitializer",
 --  ConstructorDeclaration
-        "constructorDeclaration">: java "ConstructorDeclaration"],
-      def "ClassBodyDeclarationWithComments" $
-        record [
-          "value">: java "ClassBodyDeclaration",
-          "comments">: optional string],
+  "constructorDeclaration">: java "ConstructorDeclaration"]
+
+classBodyDeclarationWithComments :: Binding
+classBodyDeclarationWithComments = def "ClassBodyDeclarationWithComments" $
+  T.record [
+    "value">: java "ClassBodyDeclaration",
+    "comments">: T.maybe T.string]
 
 --ClassMemberDeclaration:
-      def "ClassMemberDeclaration" $ union [
+classMemberDeclaration :: Binding
+classMemberDeclaration = def "ClassMemberDeclaration" $ T.union [
 --  FieldDeclaration
-        "field">: java "FieldDeclaration",
+  "field">: java "FieldDeclaration",
 --  MethodDeclaration
-        "method">: java "MethodDeclaration",
+  "method">: java "MethodDeclaration",
 --  ClassDeclaration
-        "class">: java "ClassDeclaration",
+  "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        "interface">: java "InterfaceDeclaration",
+  "interface">: java "InterfaceDeclaration",
 --  ;
-        "none">: unit],
+  "none">: T.unit]
 
 --FieldDeclaration:
 --  {FieldModifier} UnannType VariableDeclaratorList ;
-      def "FieldDeclaration" $ record [
-        "modifiers">: list $ java "FieldModifier",
-        "unannType">: java "UnannType",
-        "variableDeclarators">: nonemptyList $ java "VariableDeclarator"],
+fieldDeclaration :: Binding
+fieldDeclaration = def "FieldDeclaration" $ T.record [
+  "modifiers">: T.list $ java "FieldModifier",
+  "unannType">: java "UnannType",
+  "variableDeclarators">: nonemptyList $ java "VariableDeclarator"]
 
 --FieldModifier:
 --  (one of)
-      def "FieldModifier" $ union [
+fieldModifier :: Binding
+fieldModifier = def "FieldModifier" $ T.union [
 --  Annotation public protected private
 --  static final transient volatile
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "protected">: unit,
-        "private">: unit,
-        "static">: unit,
-        "final">: unit,
-        "transient">: unit,
-        "volatile">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "protected">: T.unit,
+  "private">: T.unit,
+  "static">: T.unit,
+  "final">: T.unit,
+  "transient">: T.unit,
+  "volatile">: T.unit]
 
 --VariableDeclaratorList:
 --  VariableDeclarator {, VariableDeclarator}
 --VariableDeclarator:
 --  VariableDeclaratorId [= VariableInitializer]
-      def "VariableDeclarator" $ record [
-        "id">: java "VariableDeclaratorId",
-        "initializer">: optional $ java "VariableInitializer"],
+variableDeclarator :: Binding
+variableDeclarator = def "VariableDeclarator" $ T.record [
+  "id">: java "VariableDeclaratorId",
+  "initializer">: T.maybe $ java "VariableInitializer"]
 
 --VariableDeclaratorId:
 --  Identifier [Dims]
-      def "VariableDeclaratorId" $ record [
-        "identifier">: java "Identifier",
-        "dims">: optional $ java "Dims"],
+variableDeclaratorId :: Binding
+variableDeclaratorId = def "VariableDeclaratorId" $ T.record [
+  "identifier">: java "Identifier",
+  "dims">: T.maybe $ java "Dims"]
 
 --VariableInitializer:
-      def "VariableInitializer" $ union [
+variableInitializer :: Binding
+variableInitializer = def "VariableInitializer" $ T.union [
 --  Expression
-        "expression">: java "Expression",
+  "expression">: java "Expression",
 --  ArrayInitializer
-        "arrayInitializer">: java "ArrayInitializer"],
+  "arrayInitializer">: java "ArrayInitializer"]
 
 --UnannType:
 --  UnannPrimitiveType
 --  UnannReferenceType
-      def "UnannType" $
-        doc "A Type which does not allow annotations" $
-        wrap $ java "Type",
+unannType :: Binding
+unannType = def "UnannType" $
+  doc "A Type which does not allow annotations" $
+  T.wrap $ java "Type"
+
 --UnannPrimitiveType:
 --  NumericType
 --  boolean
@@ -526,9 +839,11 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 --  TypeIdentifier [TypeArguments]
 --  PackageName . {Annotation} TypeIdentifier [TypeArguments]
 --  UnannClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
-      def "UnannClassType" $
-        doc "A ClassType which does not allow annotations" $
-        wrap $ java "ClassType",
+unannClassType :: Binding
+unannClassType = def "UnannClassType" $
+  doc "A ClassType which does not allow annotations" $
+  T.wrap $ java "ClassType"
+
 --UnannInterfaceType:
 --  UnannClassType
 --UnannTypeVariable:
@@ -540,193 +855,223 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 
 --MethodDeclaration:
 --  {MethodModifier} MethodHeader MethodBody
-      def "MethodDeclaration" $ record [
-        "annotations">:
-          doc "Note: simple methods cannot have annotations" $
-          list $ java "Annotation",
-        "modifiers">: list $ java "MethodModifier",
-        "header">: java "MethodHeader",
-        "body">: java "MethodBody"],
+methodDeclaration :: Binding
+methodDeclaration = def "MethodDeclaration" $ T.record [
+  "annotations">:
+    doc "Note: simple methods cannot have annotations" $
+    T.list $ java "Annotation",
+  "modifiers">: T.list $ java "MethodModifier",
+  "header">: java "MethodHeader",
+  "body">: java "MethodBody"]
 
 --MethodModifier:
 --  (one of)
-      def "MethodModifier" $ union [
+methodModifier :: Binding
+methodModifier = def "MethodModifier" $ T.union [
 --  Annotation public protected private
 --  abstract static final synchronized native strictfp
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "protected">: unit,
-        "private">: unit,
-        "abstract">: unit,
-        "static">: unit,
-        "final">: unit,
-        "synchronized">: unit,
-        "native">: unit,
-        "strictfb">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "protected">: T.unit,
+  "private">: T.unit,
+  "abstract">: T.unit,
+  "static">: T.unit,
+  "final">: T.unit,
+  "synchronized">: T.unit,
+  "native">: T.unit,
+  "strictfb">: T.unit]
 
 --MethodHeader:
 --  Result MethodDeclarator [Throws]
 --  TypeParameters {Annotation} Result MethodDeclarator [Throws]
-      def "MethodHeader" $ record [
-        "parameters">: list $ java "TypeParameter",
-        "result">: java "Result",
-        "declarator">: java "MethodDeclarator",
-        "throws">: optional $ java "Throws"],
+methodHeader :: Binding
+methodHeader = def "MethodHeader" $ T.record [
+  "parameters">: T.list $ java "TypeParameter",
+  "result">: java "Result",
+  "declarator">: java "MethodDeclarator",
+  "throws">: T.maybe $ java "Throws"]
 
 --Result:
-      def "Result" $ union [
+result :: Binding
+result = def "Result" $ T.union [
 --  UnannType
-        "type">: java "UnannType",
+  "type">: java "UnannType",
 --  void
-        "void">: unit],
+  "void">: T.unit]
 
 --MethodDeclarator:
 --  Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
-      def "MethodDeclarator" $ record [
-        "identifier">: java "Identifier",
-        "receiverParameter">: optional $ java "ReceiverParameter",
-        "formalParameters">: nonemptyList $ java "FormalParameter"],
+methodDeclarator :: Binding
+methodDeclarator = def "MethodDeclarator" $ T.record [
+  "identifier">: java "Identifier",
+  "receiverParameter">: T.maybe $ java "ReceiverParameter",
+  "formalParameters">: nonemptyList $ java "FormalParameter"]
 
 --ReceiverParameter:
 --  {Annotation} UnannType [Identifier .] this
-      def "ReceiverParameter" $ record [
-        "annotations">: list $ java "Annotation",
-        "unannType">: java "UnannType",
-        "identifier">: optional $ java "Identifier"],
+receiverParameter :: Binding
+receiverParameter = def "ReceiverParameter" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "unannType">: java "UnannType",
+  "identifier">: T.maybe $ java "Identifier"]
 
 --FormalParameterList:
 --  FormalParameter {, FormalParameter}
 --FormalParameter:
-      def "FormalParameter" $ union [
+formalParameter :: Binding
+formalParameter = def "FormalParameter" $ T.union [
 --  {VariableModifier} UnannType VariableDeclaratorId
-        "simple">: java "FormalParameter_Simple",
+  "simple">: java "FormalParameter_Simple",
 --  VariableArityParameter
-        "variableArity">: java "VariableArityParameter"],
-      def "FormalParameter_Simple" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "UnannType",
-        "id">: java "VariableDeclaratorId"],
+  "variableArity">: java "VariableArityParameter"]
+
+formalParameter_Simple :: Binding
+formalParameter_Simple = def "FormalParameter_Simple" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "UnannType",
+  "id">: java "VariableDeclaratorId"]
 
 --VariableArityParameter:
 --  {VariableModifier} UnannType {Annotation} ... Identifier
-      def "VariableArityParameter" $ record [
-        "modifiers">: java "VariableModifier",
-        "type">: java "UnannType",
-        "annotations">: list $ java "Annotation",
-        "identifier">: java "Identifier"],
+variableArityParameter :: Binding
+variableArityParameter = def "VariableArityParameter" $ T.record [
+  "modifiers">: java "VariableModifier",
+  "type">: java "UnannType",
+  "annotations">: T.list $ java "Annotation",
+  "identifier">: java "Identifier"]
 
 --VariableModifier:
-      def "VariableModifier" $ union [
+variableModifier :: Binding
+variableModifier = def "VariableModifier" $ T.union [
 --  Annotation
-        "annotation">: java "Annotation",
+  "annotation">: java "Annotation",
 --  final
-        "final">: unit],
+  "final">: T.unit]
 
 --Throws:
 --  throws ExceptionTypeList
-      def "Throws" $ wrap $ nonemptyList $ java "ExceptionType",
+throws :: Binding
+throws = def "Throws" $ T.wrap $ nonemptyList $ java "ExceptionType"
 
 --ExceptionTypeList:
 --  ExceptionType {, ExceptionType}
 --ExceptionType:
-      def "ExceptionType" $ union [
+exceptionType :: Binding
+exceptionType = def "ExceptionType" $ T.union [
 --  ClassType
-        "class">: java "ClassType",
+  "class">: java "ClassType",
 --  TypeVariable
-        "variable">: java "TypeVariable"],
+  "variable">: java "TypeVariable"]
 
 --MethodBody:
-      def "MethodBody" $ union [
+methodBody :: Binding
+methodBody = def "MethodBody" $ T.union [
 --  Block
-        "block">: java "Block",
+  "block">: java "Block",
 --  ;
-        "none">: unit],
+  "none">: T.unit]
 
 --InstanceInitializer:
 --  Block
-      def "InstanceInitializer" $ wrap $ java "Block",
+instanceInitializer :: Binding
+instanceInitializer = def "InstanceInitializer" $ T.wrap $ java "Block"
 
 --StaticInitializer:
 --  static Block
-      def "StaticInitializer" $ wrap $ java "Block",
+staticInitializer :: Binding
+staticInitializer = def "StaticInitializer" $ T.wrap $ java "Block"
 
 --ConstructorDeclaration:
 --  {ConstructorModifier} ConstructorDeclarator [Throws] ConstructorBody
-      def "ConstructorDeclaration" $ record [
-        "modifiers">: list $ java "ConstructorModifier",
-        "constructor">: java "ConstructorDeclarator",
-        "throws">: optional $ java "Throws",
-        "body">: java "ConstructorBody"],
+constructorDeclaration :: Binding
+constructorDeclaration = def "ConstructorDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ConstructorModifier",
+  "constructor">: java "ConstructorDeclarator",
+  "throws">: T.maybe $ java "Throws",
+  "body">: java "ConstructorBody"]
 
 --ConstructorModifier:
 --  (one of)
-      def "ConstructorModifier" $ union [
+constructorModifier :: Binding
+constructorModifier = def "ConstructorModifier" $ T.union [
 --  Annotation public protected private
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "protected">: unit,
-        "private">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "protected">: T.unit,
+  "private">: T.unit]
 
 --ConstructorDeclarator:
 --  [TypeParameters] SimpleTypeName ( [ReceiverParameter ,] [FormalParameterList] )
-      def "ConstructorDeclarator" $ record [
-        "parameters">: list $ java "TypeParameter",
-        "name">: java "SimpleTypeName",
-        "receiverParameter">: optional $ java "ReceiverParameter",
-        "formalParameters">: nonemptyList $ java "FormalParameter"],
+constructorDeclarator :: Binding
+constructorDeclarator = def "ConstructorDeclarator" $ T.record [
+  "parameters">: T.list $ java "TypeParameter",
+  "name">: java "SimpleTypeName",
+  "receiverParameter">: T.maybe $ java "ReceiverParameter",
+  "formalParameters">: nonemptyList $ java "FormalParameter"]
 
 --SimpleTypeName:
 --  TypeIdentifier
-      def "SimpleTypeName" $ wrap $ java "TypeIdentifier",
+simpleTypeName :: Binding
+simpleTypeName = def "SimpleTypeName" $ T.wrap $ java "TypeIdentifier"
 
 --ConstructorBody:
 --  { [ExplicitConstructorInvocation] [BlockStatements] }
-      def "ConstructorBody" $ record [
-        "invocation">: optional $ java "ExplicitConstructorInvocation",
-        "statements">: list $ java "BlockStatement"],
+constructorBody :: Binding
+constructorBody = def "ConstructorBody" $ T.record [
+  "invocation">: T.maybe $ java "ExplicitConstructorInvocation",
+  "statements">: T.list $ java "BlockStatement"]
 
 --ExplicitConstructorInvocation:
-      def "ExplicitConstructorInvocation" $ record [
-        "typeArguments">: list $ java "TypeArgument",
-        "arguments">: list $ java "Expression",
-        "variant">: java "ExplicitConstructorInvocation_Variant"],
-      def "ExplicitConstructorInvocation_Variant" $ union [
+explicitConstructorInvocation :: Binding
+explicitConstructorInvocation = def "ExplicitConstructorInvocation" $ T.record [
+  "typeArguments">: T.list $ java "TypeArgument",
+  "arguments">: T.list $ java "Expression",
+  "variant">: java "ExplicitConstructorInvocation_Variant"]
+
+explicitConstructorInvocation_Variant :: Binding
+explicitConstructorInvocation_Variant = def "ExplicitConstructorInvocation_Variant" $ T.union [
 --  [TypeArguments] this ( [ArgumentList] ) ;
-        "this">: unit,
+  "this">: T.unit,
 --  [TypeArguments] super ( [ArgumentList] ) ;
 --  ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
-        "super">: optional $ java "ExpressionName",
+  "super">: T.maybe $ java "ExpressionName",
 --  Primary . [TypeArguments] super ( [ArgumentList] ) ;
-        "primary">: java "Primary"],
+  "primary">: java "Primary"]
 
 --EnumDeclaration:
 --  {ClassModifier} enum TypeIdentifier [Superinterfaces] EnumBody
-      def "EnumDeclaration" $ record [
-        "modifiers">: list $ java "ClassModifier",
-        "identifier">: java "TypeIdentifier",
-        "implements">: list $ java "InterfaceType",
-        "body">: java "EnumBody"],
+enumDeclaration :: Binding
+enumDeclaration = def "EnumDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ClassModifier",
+  "identifier">: java "TypeIdentifier",
+  "implements">: T.list $ java "InterfaceType",
+  "body">: java "EnumBody"]
 
 --EnumBody:
 --  { [EnumConstantList] [,] [EnumBodyDeclarations] }
-      def "EnumBody" $ wrap $ list $ java "EnumBody_Element",
-      def "EnumBody_Element" $ record [
-        "constants">: list $ java "EnumConstant",
-        "bodyDeclarations">: list $ java "ClassBodyDeclaration"],
+enumBody :: Binding
+enumBody = def "EnumBody" $ T.wrap $ T.list $ java "EnumBody_Element"
+
+enumBody_Element :: Binding
+enumBody_Element = def "EnumBody_Element" $ T.record [
+  "constants">: T.list $ java "EnumConstant",
+  "bodyDeclarations">: T.list $ java "ClassBodyDeclaration"]
 
 --EnumConstantList:
 --  EnumConstant {, EnumConstant}
 --EnumConstant:
 --  {EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody]
-      def "EnumConstant" $ record [
-        "modifiers">: list $ java "EnumConstantModifier",
-        "identifier">: java "Identifier",
-        "arguments">: list $ list $ java "Expression",
-        "body">: optional $ java "ClassBody"],
+enumConstant :: Binding
+enumConstant = def "EnumConstant" $ T.record [
+  "modifiers">: T.list $ java "EnumConstantModifier",
+  "identifier">: java "Identifier",
+  "arguments">: T.list $ T.list $ java "Expression",
+  "body">: T.maybe $ java "ClassBody"]
 
 --EnumConstantModifier:
 --  Annotation
-      def "EnumConstantModifier" $ wrap $ java "Annotation",
+enumConstantModifier :: Binding
+enumConstantModifier = def "EnumConstantModifier" $ T.wrap $ java "Annotation"
 
 --EnumBodyDeclarations:
 --  ; {ClassBodyDeclaration}
@@ -734,187 +1079,212 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 --Productions from §9 (Interfaces)
 
 --InterfaceDeclaration:
-      def "InterfaceDeclaration" $ union [
+interfaceDeclaration :: Binding
+interfaceDeclaration = def "InterfaceDeclaration" $ T.union [
 --  NormalInterfaceDeclaration
-        "normalInterface">: java "NormalInterfaceDeclaration",
+  "normalInterface">: java "NormalInterfaceDeclaration",
 --  AnnotationTypeDeclaration
-        "annotationType">: java "AnnotationTypeDeclaration"],
+  "annotationType">: java "AnnotationTypeDeclaration"]
 
 --NormalInterfaceDeclaration:
 --  {InterfaceModifier} interface TypeIdentifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
-      def "NormalInterfaceDeclaration" $ record [
-        "modifiers">: list $ java "InterfaceModifier",
-        "identifier">: java "TypeIdentifier",
-        "parameters">: list $ java "TypeParameter",
-        "extends">: list $ java "InterfaceType",
-        "body">: java "InterfaceBody"],
+normalInterfaceDeclaration :: Binding
+normalInterfaceDeclaration = def "NormalInterfaceDeclaration" $ T.record [
+  "modifiers">: T.list $ java "InterfaceModifier",
+  "identifier">: java "TypeIdentifier",
+  "parameters">: T.list $ java "TypeParameter",
+  "extends">: T.list $ java "InterfaceType",
+  "body">: java "InterfaceBody"]
 
 --InterfaceModifier:
 --  (one of)
-      def "InterfaceModifier" $ union [
+interfaceModifier :: Binding
+interfaceModifier = def "InterfaceModifier" $ T.union [
 --  Annotation public protected private
 --  abstract static strictfp
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "protected">: unit,
-        "private">: unit,
-        "abstract">: unit,
-        "static">: unit,
-        "strictfb">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "protected">: T.unit,
+  "private">: T.unit,
+  "abstract">: T.unit,
+  "static">: T.unit,
+  "strictfb">: T.unit]
 
 --ExtendsInterfaces:
 --  extends InterfaceTypeList
 
 --InterfaceBody:
 --  { {InterfaceMemberDeclaration} }
-      def "InterfaceBody" $ wrap $ list $ java "InterfaceMemberDeclaration",
+interfaceBody :: Binding
+interfaceBody = def "InterfaceBody" $ T.wrap $ T.list $ java "InterfaceMemberDeclaration"
 
 --InterfaceMemberDeclaration:
-      def "InterfaceMemberDeclaration" $ union [
+interfaceMemberDeclaration :: Binding
+interfaceMemberDeclaration = def "InterfaceMemberDeclaration" $ T.union [
 --  ConstantDeclaration
-        "constant">: java "ConstantDeclaration",
+  "constant">: java "ConstantDeclaration",
 --  InterfaceMethodDeclaration
-        "interfaceMethod">: java "InterfaceMethodDeclaration",
+  "interfaceMethod">: java "InterfaceMethodDeclaration",
 --  ClassDeclaration
-        "class">: java "ClassDeclaration",
+  "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        "interface">: java "InterfaceDeclaration"],
+  "interface">: java "InterfaceDeclaration"]
 --  ;
 
 --ConstantDeclaration:
 --  {ConstantModifier} UnannType VariableDeclaratorList ;
-      def "ConstantDeclaration" $ record [
-        "modifiers">: list $ java "ConstantModifier",
-        "type">: java "UnannType",
-        "variables">: nonemptyList $ java "VariableDeclarator"],
+constantDeclaration :: Binding
+constantDeclaration = def "ConstantDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ConstantModifier",
+  "type">: java "UnannType",
+  "variables">: nonemptyList $ java "VariableDeclarator"]
 
 --ConstantModifier:
 --  (one of)
-      def "ConstantModifier" $ union [
+constantModifier :: Binding
+constantModifier = def "ConstantModifier" $ T.union [
 --  Annotation public
 --  static final
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "static">: unit,
-        "final">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "static">: T.unit,
+  "final">: T.unit]
 
 --InterfaceMethodDeclaration:
 --  {InterfaceMethodModifier} MethodHeader MethodBody
-      def "InterfaceMethodDeclaration" $ record [
-        "modifiers">: list $ java "InterfaceMethodModifier",
-        "header">: java "MethodHeader",
-        "body">: java "MethodBody"],
+interfaceMethodDeclaration :: Binding
+interfaceMethodDeclaration = def "InterfaceMethodDeclaration" $ T.record [
+  "modifiers">: T.list $ java "InterfaceMethodModifier",
+  "header">: java "MethodHeader",
+  "body">: java "MethodBody"]
 
 --InterfaceMethodModifier:
 --  (one of)
-      def "InterfaceMethodModifier" $ union [
+interfaceMethodModifier :: Binding
+interfaceMethodModifier = def "InterfaceMethodModifier" $ T.union [
 --  Annotation public private
 --  abstract default static strictfp
-        "annotation">: java "Annotation",
-        "public">: unit,
-        "private">: unit,
-        "abstract">: unit,
-        "default">: unit,
-        "static">: unit,
-        "strictfp">: unit],
+  "annotation">: java "Annotation",
+  "public">: T.unit,
+  "private">: T.unit,
+  "abstract">: T.unit,
+  "default">: T.unit,
+  "static">: T.unit,
+  "strictfp">: T.unit]
 
 --AnnotationTypeDeclaration:
 --  {InterfaceModifier} @ interface TypeIdentifier AnnotationTypeBody
-      def "AnnotationTypeDeclaration" $ record [
-        "modifiers">: list $ java "InterfaceModifier",
-        "identifier">: java "TypeIdentifier",
-        "body">: java "AnnotationTypeBody"],
+annotationTypeDeclaration :: Binding
+annotationTypeDeclaration = def "AnnotationTypeDeclaration" $ T.record [
+  "modifiers">: T.list $ java "InterfaceModifier",
+  "identifier">: java "TypeIdentifier",
+  "body">: java "AnnotationTypeBody"]
 
 --AnnotationTypeBody:
 --  { {AnnotationTypeMemberDeclaration} }
-      def "AnnotationTypeBody" $ wrap $ list $ list $ java "AnnotationTypeMemberDeclaration",
+annotationTypeBody :: Binding
+annotationTypeBody = def "AnnotationTypeBody" $ T.wrap $ T.list $ T.list $ java "AnnotationTypeMemberDeclaration"
 
 --AnnotationTypeMemberDeclaration:
-      def "AnnotationTypeMemberDeclaration" $ union [
+annotationTypeMemberDeclaration :: Binding
+annotationTypeMemberDeclaration = def "AnnotationTypeMemberDeclaration" $ T.union [
 --  AnnotationTypeElementDeclaration
-        "annotationType">: java "AnnotationTypeElementDeclaration",
+  "annotationType">: java "AnnotationTypeElementDeclaration",
 --  ConstantDeclaration
-        "constant">: java "ConstantDeclaration",
+  "constant">: java "ConstantDeclaration",
 --  ClassDeclaration
-        "class">: java "ClassDeclaration",
+  "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        "interface">: java "InterfaceDeclaration"],
+  "interface">: java "InterfaceDeclaration"]
 --  ;
 
 --AnnotationTypeElementDeclaration:
 --  {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
-      def "AnnotationTypeElementDeclaration" $ record [
-        "modifiers">: list $ java "AnnotationTypeElementModifier",
-        "type">: java "UnannType",
-        "identifier">: java "Identifier",
-        "dims">: optional $ java "Dims",
-        "default">: optional $ java "DefaultValue"],
+annotationTypeElementDeclaration :: Binding
+annotationTypeElementDeclaration = def "AnnotationTypeElementDeclaration" $ T.record [
+  "modifiers">: T.list $ java "AnnotationTypeElementModifier",
+  "type">: java "UnannType",
+  "identifier">: java "Identifier",
+  "dims">: T.maybe $ java "Dims",
+  "default">: T.maybe $ java "DefaultValue"]
 
 --AnnotationTypeElementModifier:
 --  (one of)
-      def "AnnotationTypeElementModifier" $ union [
+annotationTypeElementModifier :: Binding
+annotationTypeElementModifier = def "AnnotationTypeElementModifier" $ T.union [
 --  Annotation public
-        "public">: java "Annotation",
+  "public">: java "Annotation",
 --  abstract
-        "abstract">: unit],
+  "abstract">: T.unit]
 
 --DefaultValue:
 --  default ElementValue
-      def "DefaultValue" $ wrap $ java "ElementValue",
+defaultValue :: Binding
+defaultValue = def "DefaultValue" $ T.wrap $ java "ElementValue"
 
 --Annotation:
-      def "Annotation" $ union [
+annotation :: Binding
+annotation = def "Annotation" $ T.union [
 --  NormalAnnotation
-        "normal">: java "NormalAnnotation",
+  "normal">: java "NormalAnnotation",
 --  MarkerAnnotation
-        "marker">: java "MarkerAnnotation",
+  "marker">: java "MarkerAnnotation",
 --  SingleElementAnnotation
-        "singleElement">: java "SingleElementAnnotation"],
+  "singleElement">: java "SingleElementAnnotation"]
 
 --NormalAnnotation:
 --  @ TypeName ( [ElementValuePairList] )
-      def "NormalAnnotation" $ record [
-        "typeName">: java "TypeName",
-        "pairs">: list $ java "ElementValuePair"],
+normalAnnotation :: Binding
+normalAnnotation = def "NormalAnnotation" $ T.record [
+  "typeName">: java "TypeName",
+  "pairs">: T.list $ java "ElementValuePair"]
 
 --ElementValuePairList:
 --  ElementValuePair {, ElementValuePair}
 --ElementValuePair:
 --  Identifier = ElementValue
-      def "ElementValuePair" $ record [
-        "key">: java "Identifier",
-        "value">: java "ElementValue"],
+elementValuePair :: Binding
+elementValuePair = def "ElementValuePair" $ T.record [
+  "key">: java "Identifier",
+  "value">: java "ElementValue"]
 
 --ElementValue:
-      def "ElementValue" $ union [
+elementValue :: Binding
+elementValue = def "ElementValue" $ T.union [
 --  ConditionalExpression
-        "conditionalExpression">: java "ConditionalExpression",
+  "conditionalExpression">: java "ConditionalExpression",
 --  ElementValueArrayInitializer
-        "elementValueArrayInitializer">: java "ElementValueArrayInitializer",
+  "elementValueArrayInitializer">: java "ElementValueArrayInitializer",
 --  Annotation
-        "annotation">: java "Annotation"],
+  "annotation">: java "Annotation"]
 
 --ElementValueArrayInitializer:
 --  { [ElementValueList] [,] }
-      def "ElementValueArrayInitializer" $ wrap $ list $ java "ElementValue",
+elementValueArrayInitializer :: Binding
+elementValueArrayInitializer = def "ElementValueArrayInitializer" $ T.wrap $ T.list $ java "ElementValue"
+
 --ElementValueList:
 --  ElementValue {, ElementValue}
 
 --MarkerAnnotation:
 --  @ TypeName
-      def "MarkerAnnotation" $ wrap $ java "TypeName",
+markerAnnotation :: Binding
+markerAnnotation = def "MarkerAnnotation" $ T.wrap $ java "TypeName"
 
 --SingleElementAnnotation:
-      def "SingleElementAnnotation" $ record [
+singleElementAnnotation :: Binding
+singleElementAnnotation = def "SingleElementAnnotation" $ T.record [
 --  @ TypeName ( ElementValue )
-        "name">: java "TypeName",
-        "value">: optional $ java "ElementValue"],
+  "name">: java "TypeName",
+  "value">: T.maybe $ java "ElementValue"]
 
 --  Productions from §10 (Arrays)
 
 --ArrayInitializer:
 --  { [VariableInitializerList] [,] }
-      def "ArrayInitializer" $ wrap $ list $ list $ java "VariableInitializer",
+arrayInitializer :: Binding
+arrayInitializer = def "ArrayInitializer" $ T.wrap $ T.list $ T.list $ java "VariableInitializer"
+
 --VariableInitializerList:
 --  VariableInitializer {, VariableInitializer}
 
@@ -922,846 +1292,1025 @@ javaSyntaxModule = Module ns elements [Core.module_] [Core.module_] $
 
 --Block:
 --  { [BlockStatements] }
-      def "Block" $ wrap $ list $ java "BlockStatement",
+block :: Binding
+block = def "Block" $ T.wrap $ T.list $ java "BlockStatement"
 
 --BlockStatements:
 --  BlockStatement {BlockStatement}
 --BlockStatement:
-      def "BlockStatement" $ union [
+blockStatement :: Binding
+blockStatement = def "BlockStatement" $ T.union [
 --  LocalVariableDeclarationStatement
-        "localVariableDeclaration">: java "LocalVariableDeclarationStatement",
+  "localVariableDeclaration">: java "LocalVariableDeclarationStatement",
 --  ClassDeclaration
-        "class">: java "ClassDeclaration",
+  "class">: java "ClassDeclaration",
 --  Statement
-        "statement">: java "Statement"],
+  "statement">: java "Statement"]
 
 --LocalVariableDeclarationStatement:
 --  LocalVariableDeclaration ;
-      def "LocalVariableDeclarationStatement" $ wrap $ java "LocalVariableDeclaration",
+localVariableDeclarationStatement :: Binding
+localVariableDeclarationStatement = def "LocalVariableDeclarationStatement" $ T.wrap $ java "LocalVariableDeclaration"
 
 --LocalVariableDeclaration:
 --  {VariableModifier} LocalVariableType VariableDeclaratorList
-      def "LocalVariableDeclaration" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "LocalVariableType",
-        "declarators">: nonemptyList $ java "VariableDeclarator"],
+localVariableDeclaration :: Binding
+localVariableDeclaration = def "LocalVariableDeclaration" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "LocalVariableType",
+  "declarators">: nonemptyList $ java "VariableDeclarator"]
 
 --LocalVariableType:
-      def "LocalVariableType" $ union [
+localVariableType :: Binding
+localVariableType = def "LocalVariableType" $ T.union [
 --  UnannType
-        "type">: java "UnannType",
+  "type">: java "UnannType",
 --  var
-        "var">: unit],
+  "var">: T.unit]
 
 --Statement:
-      def "Statement" $ union [
+statement :: Binding
+statement = def "Statement" $ T.union [
 --  StatementWithoutTrailingSubstatement
-        "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
+  "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
 --  LabeledStatement
-        "labeled">: java "LabeledStatement",
+  "labeled">: java "LabeledStatement",
 --  IfThenStatement
-        "ifThen">: java "IfThenStatement",
+  "ifThen">: java "IfThenStatement",
 --  IfThenElseStatement
-        "ifThenElse">: java "IfThenElseStatement",
+  "ifThenElse">: java "IfThenElseStatement",
 --  WhileStatement
-        "while">: java "WhileStatement",
+  "while">: java "WhileStatement",
 --  ForStatement
-        "for">: java "ForStatement"],
+  "for">: java "ForStatement"]
 
 --StatementNoShortIf:
-      def "StatementNoShortIf" $ union [
+statementNoShortIf :: Binding
+statementNoShortIf = def "StatementNoShortIf" $ T.union [
 --  StatementWithoutTrailingSubstatement
-        "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
+  "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
 --  LabeledStatementNoShortIf
-        "labeled">: java "LabeledStatementNoShortIf",
+  "labeled">: java "LabeledStatementNoShortIf",
 --  IfThenElseStatementNoShortIf
-        "ifThenElse">: java "IfThenElseStatementNoShortIf",
+  "ifThenElse">: java "IfThenElseStatementNoShortIf",
 --  WhileStatementNoShortIf
-        "while">: java "WhileStatementNoShortIf",
+  "while">: java "WhileStatementNoShortIf",
 --  ForStatementNoShortIf
-        "for">: java "ForStatementNoShortIf"],
+  "for">: java "ForStatementNoShortIf"]
 
 --StatementWithoutTrailingSubstatement:
-      def "StatementWithoutTrailingSubstatement" $ union [
+statementWithoutTrailingSubstatement :: Binding
+statementWithoutTrailingSubstatement = def "StatementWithoutTrailingSubstatement" $ T.union [
 --  Block
-        "block">: java "Block",
+  "block">: java "Block",
 --  EmptyStatement
-        "empty">: unit,
+  "empty">: T.unit,
 --  ExpressionStatement
-        "expression">: java "ExpressionStatement",
+  "expression">: java "ExpressionStatement",
 --  AssertStatement
-        "assert">: java "AssertStatement",
+  "assert">: java "AssertStatement",
 --  SwitchStatement
-        "switch">: java "SwitchStatement",
+  "switch">: java "SwitchStatement",
 --  DoStatement
-        "do">: java "DoStatement",
+  "do">: java "DoStatement",
 --  BreakStatement
-        "break">: java "BreakStatement",
+  "break">: java "BreakStatement",
 --  ContinueStatement
-        "continue">: java "ContinueStatement",
+  "continue">: java "ContinueStatement",
 --  ReturnStatement
-        "return">: java "ReturnStatement",
+  "return">: java "ReturnStatement",
 --  SynchronizedStatement
-        "synchronized">: java "SynchronizedStatement",
+  "synchronized">: java "SynchronizedStatement",
 --  ThrowStatement
-        "throw">: java "ThrowStatement",
+  "throw">: java "ThrowStatement",
 --  TryStatement
-        "try">: java "TryStatement"],
+  "try">: java "TryStatement"]
 
 --EmptyStatement:
 --  ;
 --LabeledStatement:
 --  Identifier : Statement
-      def "LabeledStatement" $ record [
-        "identifier">: java "Identifier",
-        "statement">: java "Statement"],
+labeledStatement :: Binding
+labeledStatement = def "LabeledStatement" $ T.record [
+  "identifier">: java "Identifier",
+  "statement">: java "Statement"]
 
 --LabeledStatementNoShortIf:
 --  Identifier : StatementNoShortIf
-      def "LabeledStatementNoShortIf" $ record [
-        "identifier">: java "Identifier",
-        "statement">: java "StatementNoShortIf"],
+labeledStatementNoShortIf :: Binding
+labeledStatementNoShortIf = def "LabeledStatementNoShortIf" $ T.record [
+  "identifier">: java "Identifier",
+  "statement">: java "StatementNoShortIf"]
 
 --ExpressionStatement:
 --  StatementExpression ;
-      def "ExpressionStatement" $ wrap $ java "StatementExpression",
+expressionStatement :: Binding
+expressionStatement = def "ExpressionStatement" $ T.wrap $ java "StatementExpression"
 
 --StatementExpression:
-      def "StatementExpression" $ union [
+statementExpression :: Binding
+statementExpression = def "StatementExpression" $ T.union [
 --  Assignment
-        "assignment">: java "Assignment",
+  "assignment">: java "Assignment",
 --  PreIncrementExpression
-        "preIncrement">: java "PreIncrementExpression",
+  "preIncrement">: java "PreIncrementExpression",
 --  PreDecrementExpression
-        "preDecrement">: java "PreDecrementExpression",
+  "preDecrement">: java "PreDecrementExpression",
 --  PostIncrementExpression
-        "postIncrement">: java "PostIncrementExpression",
+  "postIncrement">: java "PostIncrementExpression",
 --  PostDecrementExpression
-        "postDecrement">: java "PostDecrementExpression",
+  "postDecrement">: java "PostDecrementExpression",
 --  MethodInvocation
-        "methodInvocation">: java "MethodInvocation",
+  "methodInvocation">: java "MethodInvocation",
 --  ClassInstanceCreationExpression
-        "classInstanceCreation">: java "ClassInstanceCreationExpression"],
+  "classInstanceCreation">: java "ClassInstanceCreationExpression"]
 
 --IfThenStatement:
 --  if ( Expression ) Statement
-      def "IfThenStatement" $ record [
-        "expression">: java "Expression",
-        "statement">: java "Statement"],
+ifThenStatement :: Binding
+ifThenStatement = def "IfThenStatement" $ T.record [
+  "expression">: java "Expression",
+  "statement">: java "Statement"]
 
 --IfThenElseStatement:
 --  if ( Expression ) StatementNoShortIf else Statement
-      def "IfThenElseStatement" $ record [
-        "cond">: optional $ java "Expression",
-        "then">: java "StatementNoShortIf",
-        "else">: java "Statement"],
+ifThenElseStatement :: Binding
+ifThenElseStatement = def "IfThenElseStatement" $ T.record [
+  "cond">: T.maybe $ java "Expression",
+  "then">: java "StatementNoShortIf",
+  "else">: java "Statement"]
 
 --IfThenElseStatementNoShortIf:
 --  if ( Expression ) StatementNoShortIf else StatementNoShortIf
-      def "IfThenElseStatementNoShortIf" $ record [
-        "cond">: optional $ java "Expression",
-        "then">: java "StatementNoShortIf",
-        "else">: java "StatementNoShortIf"],
+ifThenElseStatementNoShortIf :: Binding
+ifThenElseStatementNoShortIf = def "IfThenElseStatementNoShortIf" $ T.record [
+  "cond">: T.maybe $ java "Expression",
+  "then">: java "StatementNoShortIf",
+  "else">: java "StatementNoShortIf"]
 
 --AssertStatement:
-      def "AssertStatement" $ union [
+assertStatement :: Binding
+assertStatement = def "AssertStatement" $ T.union [
 --  assert Expression ;
-        "single">: java "Expression",
+  "single">: java "Expression",
 --  assert Expression : Expression ;
-        "pair">: java "AssertStatement_Pair"],
-      def "AssertStatement_Pair" $ record [
-        "first">: java "Expression",
-        "second">: java "Expression"],
+  "pair">: java "AssertStatement_Pair"]
+
+assertStatement_Pair :: Binding
+assertStatement_Pair = def "AssertStatement_Pair" $ T.record [
+  "first">: java "Expression",
+  "second">: java "Expression"]
 
 --SwitchStatement:
 --  switch ( Expression ) SwitchBlock
-      def "SwitchStatement" $ record [
-        "cond">: java "Expression",
-        "block">: java "SwitchBlock"],
+switchStatement :: Binding
+switchStatement = def "SwitchStatement" $ T.record [
+  "cond">: java "Expression",
+  "block">: java "SwitchBlock"]
 
 --SwitchBlock:
 --  { {SwitchBlockStatementGroup} {SwitchLabel} }
-      def "SwitchBlock" $ wrap $ list $ java "SwitchBlock_Pair",
-      def "SwitchBlock_Pair" $ record [
-        "statements">: list $ java "SwitchBlockStatementGroup",
-        "labels">: list $ java "SwitchLabel"],
+switchBlock :: Binding
+switchBlock = def "SwitchBlock" $ T.wrap $ T.list $ java "SwitchBlock_Pair"
+
+switchBlock_Pair :: Binding
+switchBlock_Pair = def "SwitchBlock_Pair" $ T.record [
+  "statements">: T.list $ java "SwitchBlockStatementGroup",
+  "labels">: T.list $ java "SwitchLabel"]
 
 --SwitchBlockStatementGroup:
 --  SwitchLabels BlockStatements
-      def "SwitchBlockStatementGroup" $ record [
-        "labels">: nonemptyList $ java "SwitchLabel",
-        "statements">: nonemptyList $ java "BlockStatement"],
+switchBlockStatementGroup :: Binding
+switchBlockStatementGroup = def "SwitchBlockStatementGroup" $ T.record [
+  "labels">: nonemptyList $ java "SwitchLabel",
+  "statements">: nonemptyList $ java "BlockStatement"]
 
 --SwitchLabels:
 --  SwitchLabel {SwitchLabel}
 --SwitchLabel:
-      def "SwitchLabel" $ union [
+switchLabel :: Binding
+switchLabel = def "SwitchLabel" $ T.union [
 --  case ConstantExpression :
-        "constant">: java "ConstantExpression",
+  "constant">: java "ConstantExpression",
 --  case EnumConstantName :
-        "enumConstant">: java "EnumConstantName",
+  "enumConstant">: java "EnumConstantName",
 --  default :
-        "default">: unit],
+  "default">: T.unit]
 
 --EnumConstantName:
 --  Identifier
-      def "EnumConstantName" $ wrap $ java "Identifier",
+enumConstantName :: Binding
+enumConstantName = def "EnumConstantName" $ T.wrap $ java "Identifier"
 
 --WhileStatement:
 --  while ( Expression ) Statement
-      def "WhileStatement" $ record [
-        "cond">: optional $ java "Expression",
-        "body">: java "Statement"],
+whileStatement :: Binding
+whileStatement = def "WhileStatement" $ T.record [
+  "cond">: T.maybe $ java "Expression",
+  "body">: java "Statement"]
 
 --WhileStatementNoShortIf:
 --  while ( Expression ) StatementNoShortIf
-      def "WhileStatementNoShortIf" $ record [
-        "cond">: optional $ java "Expression",
-        "body">: java "StatementNoShortIf"],
+whileStatementNoShortIf :: Binding
+whileStatementNoShortIf = def "WhileStatementNoShortIf" $ T.record [
+  "cond">: T.maybe $ java "Expression",
+  "body">: java "StatementNoShortIf"]
 
 --DoStatement:
 --  do Statement while ( Expression ) ;
-      def "DoStatement" $ record [
-        "body">: java "Statement",
-        "conde">: optional $ java "Expression"],
+doStatement :: Binding
+doStatement = def "DoStatement" $ T.record [
+  "body">: java "Statement",
+  "conde">: T.maybe $ java "Expression"]
 
 --ForStatement:
-      def "ForStatement" $ union [
+forStatement :: Binding
+forStatement = def "ForStatement" $ T.union [
 --  BasicForStatement
-        "basic">: java "BasicForStatement",
+  "basic">: java "BasicForStatement",
 --  EnhancedForStatement
-        "enhanced">: java "EnhancedForStatement"],
+  "enhanced">: java "EnhancedForStatement"]
 
 --ForStatementNoShortIf:
-      def "ForStatementNoShortIf" $ union [
+forStatementNoShortIf :: Binding
+forStatementNoShortIf = def "ForStatementNoShortIf" $ T.union [
 --  BasicForStatementNoShortIf
-        "basic">: java "BasicForStatementNoShortIf",
+  "basic">: java "BasicForStatementNoShortIf",
 --  EnhancedForStatementNoShortIf
-        "enhanced">: java "EnhancedForStatementNoShortIf"],
+  "enhanced">: java "EnhancedForStatementNoShortIf"]
 
 --BasicForStatement:
 --  for ( [ForInit] ; [Expression] ; [ForUpdate] ) Statement
-      def "BasicForStatement" $ record [
-        "cond">: java "ForCond",
-        "body">: java "Statement"],
-      def "ForCond" $ record [
-        "init">: optional $ java "ForInit",
-        "cond">: optional $ java "Expression",
-        "update">: optional $ java "ForUpdate"],
+basicForStatement :: Binding
+basicForStatement = def "BasicForStatement" $ T.record [
+  "cond">: java "ForCond",
+  "body">: java "Statement"]
+
+forCond :: Binding
+forCond = def "ForCond" $ T.record [
+  "init">: T.maybe $ java "ForInit",
+  "cond">: T.maybe $ java "Expression",
+  "update">: T.maybe $ java "ForUpdate"]
+
 --BasicForStatementNoShortIf:
 --  for ( [ForInit] ; [Expression] ; [ForUpdate] ) StatementNoShortIf
-      def "BasicForStatementNoShortIf" $ record [
-        "cond">: java "ForCond",
-        "body">: java "StatementNoShortIf"],
+basicForStatementNoShortIf :: Binding
+basicForStatementNoShortIf = def "BasicForStatementNoShortIf" $ T.record [
+  "cond">: java "ForCond",
+  "body">: java "StatementNoShortIf"]
 
 --ForInit:
-      def "ForInit" $ union [
+forInit :: Binding
+forInit = def "ForInit" $ T.union [
 --  StatementExpressionList
-        "statements">: nonemptyList $ java "StatementExpression",
+  "statements">: nonemptyList $ java "StatementExpression",
 --  LocalVariableDeclaration
-        "localVariable">: java "LocalVariableDeclaration"],
+  "localVariable">: java "LocalVariableDeclaration"]
 
 --ForUpdate:
 --  StatementExpressionList
-      def "ForUpdate" $ wrap $ nonemptyList $ java "StatementExpression",
+forUpdate :: Binding
+forUpdate = def "ForUpdate" $ T.wrap $ nonemptyList $ java "StatementExpression"
+
 --  StatementExpressionList:
 --  StatementExpression {, StatementExpression}
 
 --EnhancedForStatement:
-      def "EnhancedForStatement" $ record [
+enhancedForStatement :: Binding
+enhancedForStatement = def "EnhancedForStatement" $ T.record [
 --  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) Statement
-        "cond">: java "EnhancedForCond",
-        "body">: java "Statement"],
-      def "EnhancedForCond" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "LocalVariableType",
-        "id">: java "VariableDeclaratorId",
-        "expression">: java "Expression"],
+  "cond">: java "EnhancedForCond",
+  "body">: java "Statement"]
+
+enhancedForCond :: Binding
+enhancedForCond = def "EnhancedForCond" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "LocalVariableType",
+  "id">: java "VariableDeclaratorId",
+  "expression">: java "Expression"]
+
 --EnhancedForStatementNoShortIf:
 --  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) StatementNoShortIf
-      def "EnhancedForStatementNoShortIf" $ record [
-        "cond">: java "EnhancedForCond",
-        "body">: java "StatementNoShortIf"],
+enhancedForStatementNoShortIf :: Binding
+enhancedForStatementNoShortIf = def "EnhancedForStatementNoShortIf" $ T.record [
+  "cond">: java "EnhancedForCond",
+  "body">: java "StatementNoShortIf"]
 
 --BreakStatement:
 --  break [Identifier] ;
-      def "BreakStatement" $ wrap $ optional $ java "Identifier",
+breakStatement :: Binding
+breakStatement = def "BreakStatement" $ T.wrap $ T.maybe $ java "Identifier"
 
 --ContinueStatement:
 --  continue [Identifier] ;
-      def "ContinueStatement" $ wrap $ optional $ java "Identifier",
+continueStatement :: Binding
+continueStatement = def "ContinueStatement" $ T.wrap $ T.maybe $ java "Identifier"
 
 --ReturnStatement:
 --  return [Expression] ;
-      def "ReturnStatement" $ wrap $ optional $ java "Expression",
+returnStatement :: Binding
+returnStatement = def "ReturnStatement" $ T.wrap $ T.maybe $ java "Expression"
 
 --ThrowStatement:
 --  throw Expression ;
-      def "ThrowStatement" $ wrap $ java "Expression",
+throwStatement :: Binding
+throwStatement = def "ThrowStatement" $ T.wrap $ java "Expression"
 
 --SynchronizedStatement:
 --  synchronized ( Expression ) Block
-      def "SynchronizedStatement" $ record [
-        "expression">: java "Expression",
-        "block">: java "Block"],
+synchronizedStatement :: Binding
+synchronizedStatement = def "SynchronizedStatement" $ T.record [
+  "expression">: java "Expression",
+  "block">: java "Block"]
 
 --TryStatement:
-      def "TryStatement" $ union [
+tryStatement :: Binding
+tryStatement = def "TryStatement" $ T.union [
 --  try Block Catches
-        "simple">: java "TryStatement_Simple",
+  "simple">: java "TryStatement_Simple",
 --  try Block [Catches] Finally
-        "withFinally">: java "TryStatement_WithFinally",
+  "withFinally">: java "TryStatement_WithFinally",
 --  TryWithResourcesStatement
-        "withResources">: java "TryWithResourcesStatement"],
-      def "TryStatement_Simple" $ record [
-        "block">: java "Block",
-        "catches">: java "Catches"],
-      def "TryStatement_WithFinally" $ record [
-        "block">: java "Block",
-        "catches">: optional $ java "Catches",
-        "finally">: java "Finally"],
+  "withResources">: java "TryWithResourcesStatement"]
+
+tryStatement_Simple :: Binding
+tryStatement_Simple = def "TryStatement_Simple" $ T.record [
+  "block">: java "Block",
+  "catches">: java "Catches"]
+
+tryStatement_WithFinally :: Binding
+tryStatement_WithFinally = def "TryStatement_WithFinally" $ T.record [
+  "block">: java "Block",
+  "catches">: T.maybe $ java "Catches",
+  "finally">: java "Finally"]
 
 --Catches:
 --  CatchClause {CatchClause}
-      def "Catches" $ wrap $ list $ java "CatchClause",
+catches :: Binding
+catches = def "Catches" $ T.wrap $ T.list $ java "CatchClause"
 
 --CatchClause:
 --  catch ( CatchFormalParameter ) Block
-      def "CatchClause" $ record [
-        "parameter">: optional $ java "CatchFormalParameter",
-        "block">: java "Block"],
+catchClause :: Binding
+catchClause = def "CatchClause" $ T.record [
+  "parameter">: T.maybe $ java "CatchFormalParameter",
+  "block">: java "Block"]
 
 --CatchFormalParameter:
 --  {VariableModifier} CatchType VariableDeclaratorId
-      def "CatchFormalParameter" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "CatchType",
-        "id">: java "VariableDeclaratorId"],
+catchFormalParameter :: Binding
+catchFormalParameter = def "CatchFormalParameter" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "CatchType",
+  "id">: java "VariableDeclaratorId"]
 
 --CatchType:
 --  UnannClassType {| ClassType}
-      def "CatchType" $ record [
-        "type">: java "UnannClassType",
-        "types">: list $ java "ClassType"],
+catchType :: Binding
+catchType = def "CatchType" $ T.record [
+  "type">: java "UnannClassType",
+  "types">: T.list $ java "ClassType"]
 
 --Finally:
 --  finally Block
-      def "Finally" $ wrap $ java "Block",
+finally_ :: Binding
+finally_ = def "Finally" $ T.wrap $ java "Block"
 
 --TryWithResourcesStatement:
 --  try ResourceSpecification Block [Catches] [Finally]
-      def "TryWithResourcesStatement" $ record [
-        "resourceSpecification">: java "ResourceSpecification",
-        "block">: java "Block",
-        "catches">: optional $ java "Catches",
-        "finally">: optional $ java "Finally"],
+tryWithResourcesStatement :: Binding
+tryWithResourcesStatement = def "TryWithResourcesStatement" $ T.record [
+  "resourceSpecification">: java "ResourceSpecification",
+  "block">: java "Block",
+  "catches">: T.maybe $ java "Catches",
+  "finally">: T.maybe $ java "Finally"]
 
 --ResourceSpecification:
 --  ( ResourceList [;] )
-      def "ResourceSpecification" $ wrap $ list $ java "Resource",
+resourceSpecification :: Binding
+resourceSpecification = def "ResourceSpecification" $ T.wrap $ T.list $ java "Resource"
 
 --ResourceList:
 --  Resource {; Resource}
 --Resource:
-      def "Resource" $ union [
+resource :: Binding
+resource = def "Resource" $ T.union [
 --  {VariableModifier} LocalVariableType Identifier = Expression
-        "local">: java "Resource_Local",
+  "local">: java "Resource_Local",
 --  VariableAccess
-        "variable">: java "VariableAccess"],
-      def "Resource_Local" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "LocalVariableType",
-        "identifier">: java "Identifier",
-        "expression">: java "Expression"],
+  "variable">: java "VariableAccess"]
+
+resource_Local :: Binding
+resource_Local = def "Resource_Local" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "LocalVariableType",
+  "identifier">: java "Identifier",
+  "expression">: java "Expression"]
 
 --VariableAccess:
-      def "VariableAccess" $ union [
+variableAccess :: Binding
+variableAccess = def "VariableAccess" $ T.union [
 --  ExpressionName
-        "expressionName">: java "ExpressionName",
+  "expressionName">: java "ExpressionName",
 --  FieldAccess
-        "fieldAccess">: java "FieldAccess"],
+  "fieldAccess">: java "FieldAccess"]
 
 --Productions from §15 (Expressions)
 
 --Primary:
-      def "Primary" $ union [
+primary :: Binding
+primary = def "Primary" $ T.union [
 --  PrimaryNoNewArray
-        "noNewArray">: java "PrimaryNoNewArray",
+  "noNewArray">: java "PrimaryNoNewArray",
 --  ArrayCreationExpression
-        "arrayCreation">: java "ArrayCreationExpression"],
+  "arrayCreation">: java "ArrayCreationExpression"]
 
 --PrimaryNoNewArray:
-      def "PrimaryNoNewArray" $ union [
+primaryNoNewArray :: Binding
+primaryNoNewArray = def "PrimaryNoNewArray" $ T.union [
 --  Literal
-        "literal">: java "Literal",
+  "literal">: java "Literal",
 --  ClassLiteral
-        "classLiteral">: java "ClassLiteral",
+  "classLiteral">: java "ClassLiteral",
 --  this
-        "this">: unit,
+  "this">: T.unit,
 --  TypeName . this
-        "dotThis">: java "TypeName",
+  "dotThis">: java "TypeName",
 --  ( Expression )
-        "parens">: java "Expression",
+  "parens">: java "Expression",
 --  ClassInstanceCreationExpression
-        "classInstance">: java "ClassInstanceCreationExpression",
+  "classInstance">: java "ClassInstanceCreationExpression",
 --  FieldAccess
-        "fieldAccess">: java "FieldAccess",
+  "fieldAccess">: java "FieldAccess",
 --  ArrayAccess
-        "arrayAccess">: java "ArrayAccess",
+  "arrayAccess">: java "ArrayAccess",
 --  MethodInvocation
-        "methodInvocation">: java "MethodInvocation",
+  "methodInvocation">: java "MethodInvocation",
 --  MethodReference
-        "methodReference">: java "MethodReference"],
+  "methodReference">: java "MethodReference"]
 
 --ClassLiteral:
-      def "ClassLiteral" $ union [
+classLiteral :: Binding
+classLiteral = def "ClassLiteral" $ T.union [
 --  TypeName {[ ]} . class
-        "type">: java "TypeNameArray",
+  "type">: java "TypeNameArray",
 --  NumericType {[ ]} . class
-        "numericType">: java "NumericTypeArray",
+  "numericType">: java "NumericTypeArray",
 --  boolean {[ ]} . class
-        "boolean">: java "BooleanArray",
+  "boolean">: java "BooleanArray",
 --  void . class
-        "void">: unit],
-      def "TypeNameArray" $ union [
-        "simple">: java "TypeName",
-        "array">: java "TypeNameArray"],
-      def "NumericTypeArray" $ union [
-        "simple">: java "NumericType",
-        "array">: java "NumericTypeArray"],
-      def "BooleanArray" $ union [
-        "simple">: unit,
-        "array">: java "BooleanArray"],
+  "void">: T.unit]
+
+typeNameArray :: Binding
+typeNameArray = def "TypeNameArray" $ T.union [
+  "simple">: java "TypeName",
+  "array">: java "TypeNameArray"]
+
+numericTypeArray :: Binding
+numericTypeArray = def "NumericTypeArray" $ T.union [
+  "simple">: java "NumericType",
+  "array">: java "NumericTypeArray"]
+
+booleanArray :: Binding
+booleanArray = def "BooleanArray" $ T.union [
+  "simple">: T.unit,
+  "array">: java "BooleanArray"]
 
 --ClassInstanceCreationExpression:
 --  UnqualifiedClassInstanceCreationExpression
 --  ExpressionName . UnqualifiedClassInstanceCreationExpression
 --  Primary . UnqualifiedClassInstanceCreationExpression
-      def "ClassInstanceCreationExpression" $ record [
-        "qualifier">: optional $ java "ClassInstanceCreationExpression_Qualifier",
-        "expression">: java "UnqualifiedClassInstanceCreationExpression"],
-      def "ClassInstanceCreationExpression_Qualifier" $ union [
-        "expression">: java "ExpressionName",
-        "primary">: java "Primary"],
+classInstanceCreationExpression :: Binding
+classInstanceCreationExpression = def "ClassInstanceCreationExpression" $ T.record [
+  "qualifier">: T.maybe $ java "ClassInstanceCreationExpression_Qualifier",
+  "expression">: java "UnqualifiedClassInstanceCreationExpression"]
+
+classInstanceCreationExpression_Qualifier :: Binding
+classInstanceCreationExpression_Qualifier = def "ClassInstanceCreationExpression_Qualifier" $ T.union [
+  "expression">: java "ExpressionName",
+  "primary">: java "Primary"]
 
 --UnqualifiedClassInstanceCreationExpression:
 --  new [TypeArguments] ClassOrInterfaceTypeToInstantiate ( [ArgumentList] ) [ClassBody]
-      def "UnqualifiedClassInstanceCreationExpression" $ record [
-        "typeArguments">: list $ java "TypeArgument",
-        "classOrInterface">: java "ClassOrInterfaceTypeToInstantiate",
-        "arguments">: list $ java "Expression",
-        "body">: optional $ java "ClassBody"],
+unqualifiedClassInstanceCreationExpression :: Binding
+unqualifiedClassInstanceCreationExpression = def "UnqualifiedClassInstanceCreationExpression" $ T.record [
+  "typeArguments">: T.list $ java "TypeArgument",
+  "classOrInterface">: java "ClassOrInterfaceTypeToInstantiate",
+  "arguments">: T.list $ java "Expression",
+  "body">: T.maybe $ java "ClassBody"]
 
 --ClassOrInterfaceTypeToInstantiate:
 --  {Annotation} Identifier {. {Annotation} Identifier} [TypeArgumentsOrDiamond]
-      def "ClassOrInterfaceTypeToInstantiate" $ record [
-        "identifiers">: nonemptyList $ java "AnnotatedIdentifier",
-        "typeArguments">: optional $ java "TypeArgumentsOrDiamond"],
-      def "AnnotatedIdentifier" $ record [
-        "annotations">: list $ java "Annotation",
-        "identifier">: java "Identifier"],
+classOrInterfaceTypeToInstantiate :: Binding
+classOrInterfaceTypeToInstantiate = def "ClassOrInterfaceTypeToInstantiate" $ T.record [
+  "identifiers">: nonemptyList $ java "AnnotatedIdentifier",
+  "typeArguments">: T.maybe $ java "TypeArgumentsOrDiamond"]
+
+annotatedIdentifier :: Binding
+annotatedIdentifier = def "AnnotatedIdentifier" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "identifier">: java "Identifier"]
 
 --TypeArgumentsOrDiamond:
-      def "TypeArgumentsOrDiamond" $ union [
+typeArgumentsOrDiamond :: Binding
+typeArgumentsOrDiamond = def "TypeArgumentsOrDiamond" $ T.union [
 --  TypeArguments
-        "arguments">: nonemptyList $ java "TypeArgument",
+  "arguments">: nonemptyList $ java "TypeArgument",
 --  <>
-        "diamond">: unit],
+  "diamond">: T.unit]
 
 --FieldAccess:
-      def "FieldAccess" $ record [
-        "qualifier">: java "FieldAccess_Qualifier",
-        "identifier">: java "Identifier"],
-      def "FieldAccess_Qualifier" $ union [
+fieldAccess :: Binding
+fieldAccess = def "FieldAccess" $ T.record [
+  "qualifier">: java "FieldAccess_Qualifier",
+  "identifier">: java "Identifier"]
+
+fieldAccess_Qualifier :: Binding
+fieldAccess_Qualifier = def "FieldAccess_Qualifier" $ T.union [
 --  Primary . Identifier
-        "primary">: java "Primary",
+  "primary">: java "Primary",
 --  super . Identifier
-        "super">: unit,
+  "super">: T.unit,
 --  TypeName . super . Identifier
-        "typed">: java "TypeName"],
+  "typed">: java "TypeName"]
 
 --ArrayAccess:
-      def "ArrayAccess" $ record [
-        "expression">: optional $ java "Expression",
-        "variant">: java "ArrayAccess_Variant"],
-      def "ArrayAccess_Variant" $ union [
+arrayAccess :: Binding
+arrayAccess = def "ArrayAccess" $ T.record [
+  "expression">: T.maybe $ java "Expression",
+  "variant">: java "ArrayAccess_Variant"]
+
+arrayAccess_Variant :: Binding
+arrayAccess_Variant = def "ArrayAccess_Variant" $ T.union [
 --  ExpressionName [ Expression ]
-        "name">: java "ExpressionName",
+  "name">: java "ExpressionName",
 --  PrimaryNoNewArray [ Expression ]
-        "primary">: java "PrimaryNoNewArray"],
+  "primary">: java "PrimaryNoNewArray"]
 
 --MethodInvocation:
-      def "MethodInvocation" $ record [
-        "header">: java "MethodInvocation_Header",
-        "arguments">: list $ java "Expression"],
-      def "MethodInvocation_Header" $ union [
+methodInvocation :: Binding
+methodInvocation = def "MethodInvocation" $ T.record [
+  "header">: java "MethodInvocation_Header",
+  "arguments">: T.list $ java "Expression"]
+
+methodInvocation_Header :: Binding
+methodInvocation_Header = def "MethodInvocation_Header" $ T.union [
 --  MethodName ( [ArgumentList] )
-        "simple">: java "MethodName",
-        "complex">: java "MethodInvocation_Complex"],
-      def "MethodInvocation_Complex" $ record [
-        "variant">: java "MethodInvocation_Variant",
-        "typeArguments">: list $ java "TypeArgument",
-        "identifier">: java "Identifier"],
-      def "MethodInvocation_Variant" $ union [
+  "simple">: java "MethodName",
+  "complex">: java "MethodInvocation_Complex"]
+
+methodInvocation_Complex :: Binding
+methodInvocation_Complex = def "MethodInvocation_Complex" $ T.record [
+  "variant">: java "MethodInvocation_Variant",
+  "typeArguments">: T.list $ java "TypeArgument",
+  "identifier">: java "Identifier"]
+
+methodInvocation_Variant :: Binding
+methodInvocation_Variant = def "MethodInvocation_Variant" $ T.union [
 --  TypeName . [TypeArguments] Identifier ( [ArgumentList] )
-        "type">: java "TypeName",
+  "type">: java "TypeName",
 --  ExpressionName . [TypeArguments] Identifier ( [ArgumentList] )
-        "expression">: java "ExpressionName",
+  "expression">: java "ExpressionName",
 --  Primary . [TypeArguments] Identifier ( [ArgumentList] )
-        "primary">: java "Primary",
+  "primary">: java "Primary",
 --  super . [TypeArguments] Identifier ( [ArgumentList] )
-        "super">: unit,
+  "super">: T.unit,
 --  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
-        "typeSuper">: java "TypeName"],
+  "typeSuper">: java "TypeName"]
 
 --ArgumentList:
 --  Expression {, Expression}
 
 --MethodReference:
-      def "MethodReference" $ union [
+methodReference :: Binding
+methodReference = def "MethodReference" $ T.union [
 --  ExpressionName :: [TypeArguments] Identifier
-        "expression">: java "MethodReference_Expression",
+  "expression">: java "MethodReference_Expression",
 --  Primary :: [TypeArguments] Identifier
-        "primary">: java "MethodReference_Primary",
+  "primary">: java "MethodReference_Primary",
 --  ReferenceType :: [TypeArguments] Identifier
-        "referenceType">: java"MethodReference_ReferenceType",
+  "referenceType">: java"MethodReference_ReferenceType",
 --  super :: [TypeArguments] Identifier
 --  TypeName . super :: [TypeArguments] Identifier
-        "super">: java "MethodReference_Super",
+  "super">: java "MethodReference_Super",
 --  ClassType :: [TypeArguments] new
-        "new">: java "MethodReference_New",
+  "new">: java "MethodReference_New",
 --  ArrayType :: new
-        "array">: java "MethodReference_Array"],
-      def "MethodReference_Expression" $ record [
-        "name">: java "ExpressionName",
-        "typeArguments">: list $ java "TypeArgument",
-        "identifier">: java "Identifier"],
-      def "MethodReference_Primary" $ record [
-        "primary">: java "Primary",
-        "typeArguments">: list $ java "TypeArgument",
-        "identifier">: java "Identifier"],
-      def "MethodReference_ReferenceType" $ record [
-        "referenceType">: java "ReferenceType",
-        "typeArguments">: list $ java "TypeArgument",
-        "identifier">: java "Identifier"],
-      def "MethodReference_Super" $ record [
-        "typeArguments">: list $ java "TypeArgument",
-        "identifier">: java "Identifier",
-        "super">: boolean],
-      def "MethodReference_New" $ record [
-        "classType">: java "ClassType",
-        "typeArguments">: list $ java "TypeArgument"],
-      def "MethodReference_Array" $ wrap $ java "ArrayType",
+  "array">: java "MethodReference_Array"]
+
+methodReference_Expression :: Binding
+methodReference_Expression = def "MethodReference_Expression" $ T.record [
+  "name">: java "ExpressionName",
+  "typeArguments">: T.list $ java "TypeArgument",
+  "identifier">: java "Identifier"]
+
+methodReference_Primary :: Binding
+methodReference_Primary = def "MethodReference_Primary" $ T.record [
+  "primary">: java "Primary",
+  "typeArguments">: T.list $ java "TypeArgument",
+  "identifier">: java "Identifier"]
+
+methodReference_ReferenceType :: Binding
+methodReference_ReferenceType = def "MethodReference_ReferenceType" $ T.record [
+  "referenceType">: java "ReferenceType",
+  "typeArguments">: T.list $ java "TypeArgument",
+  "identifier">: java "Identifier"]
+
+methodReference_Super :: Binding
+methodReference_Super = def "MethodReference_Super" $ T.record [
+  "typeArguments">: T.list $ java "TypeArgument",
+  "identifier">: java "Identifier",
+  "super">: T.boolean]
+
+methodReference_New :: Binding
+methodReference_New = def "MethodReference_New" $ T.record [
+  "classType">: java "ClassType",
+  "typeArguments">: T.list $ java "TypeArgument"]
+
+methodReference_Array :: Binding
+methodReference_Array = def "MethodReference_Array" $ T.wrap $ java "ArrayType"
 
 --ArrayCreationExpression:
-      def "ArrayCreationExpression" $ union [
+arrayCreationExpression :: Binding
+arrayCreationExpression = def "ArrayCreationExpression" $ T.union [
 --  new PrimitiveType DimExprs [Dims]
-        "primitive">: java "ArrayCreationExpression_Primitive",
+  "primitive">: java "ArrayCreationExpression_Primitive",
 --  new ClassOrInterfaceType DimExprs [Dims]
-        "classOrInterface">: java "ArrayCreationExpression_ClassOrInterface",
+  "classOrInterface">: java "ArrayCreationExpression_ClassOrInterface",
 --  new PrimitiveType Dims ArrayInitializer
-        "primitiveArray">: java "ArrayCreationExpression_PrimitiveArray",
+  "primitiveArray">: java "ArrayCreationExpression_PrimitiveArray",
 --  new ClassOrInterfaceType Dims ArrayInitializer
-        "classOrInterfaceArray">: java "ArrayCreationExpression_ClassOrInterfaceArray"],
-      def "ArrayCreationExpression_Primitive" $ record [
-        "type">: java "PrimitiveTypeWithAnnotations",
-        "dimExprs">: nonemptyList $ java "DimExpr",
-        "dims">: optional $ java "Dims"],
-      def "ArrayCreationExpression_ClassOrInterface" $ record [
-        "type">: java "ClassOrInterfaceType",
-        "dimExprs">: nonemptyList $ java "DimExpr",
-        "dims">: optional $ java "Dims"],
-      def "ArrayCreationExpression_PrimitiveArray" $ record [
-        "type">: java "PrimitiveTypeWithAnnotations",
-        "dims">: nonemptyList $ java "Dims",
-        "array">: java "ArrayInitializer"],
-      def "ArrayCreationExpression_ClassOrInterfaceArray" $ record [
-        "type">: java "ClassOrInterfaceType",
-        "dims">: nonemptyList $ java "Dims",
-        "array">: java "ArrayInitializer"],
+  "classOrInterfaceArray">: java "ArrayCreationExpression_ClassOrInterfaceArray"]
+
+arrayCreationExpression_Primitive :: Binding
+arrayCreationExpression_Primitive = def "ArrayCreationExpression_Primitive" $ T.record [
+  "type">: java "PrimitiveTypeWithAnnotations",
+  "dimExprs">: nonemptyList $ java "DimExpr",
+  "dims">: T.maybe $ java "Dims"]
+
+arrayCreationExpression_ClassOrInterface :: Binding
+arrayCreationExpression_ClassOrInterface = def "ArrayCreationExpression_ClassOrInterface" $ T.record [
+  "type">: java "ClassOrInterfaceType",
+  "dimExprs">: nonemptyList $ java "DimExpr",
+  "dims">: T.maybe $ java "Dims"]
+
+arrayCreationExpression_PrimitiveArray :: Binding
+arrayCreationExpression_PrimitiveArray = def "ArrayCreationExpression_PrimitiveArray" $ T.record [
+  "type">: java "PrimitiveTypeWithAnnotations",
+  "dims">: nonemptyList $ java "Dims",
+  "array">: java "ArrayInitializer"]
+
+arrayCreationExpression_ClassOrInterfaceArray :: Binding
+arrayCreationExpression_ClassOrInterfaceArray = def "ArrayCreationExpression_ClassOrInterfaceArray" $ T.record [
+  "type">: java "ClassOrInterfaceType",
+  "dims">: nonemptyList $ java "Dims",
+  "array">: java "ArrayInitializer"]
 
 --DimExprs:
 --  DimExpr {DimExpr}
 --DimExpr:
 --  {Annotation} [ Expression ]
-      def "DimExpr" $ record [
-        "annotations">: list $ java "Annotation",
-        "expression">: optional $ java "Expression"],
+dimExpr :: Binding
+dimExpr = def "DimExpr" $ T.record [
+  "annotations">: T.list $ java "Annotation",
+  "expression">: T.maybe $ java "Expression"]
 
 --Expression:
-      def "Expression" $ union [
+expression :: Binding
+expression = def "Expression" $ T.union [
 --  LambdaExpression
-        "lambda">: java "LambdaExpression",
+  "lambda">: java "LambdaExpression",
 --  AssignmentExpression
-        "assignment">: java "AssignmentExpression"],
+  "assignment">: java "AssignmentExpression"]
 
 --LambdaExpression:
 --  LambdaParameters -> LambdaBody
-      def "LambdaExpression" $ record [
-        "parameters">: java "LambdaParameters",
-        "body">: java "LambdaBody"],
+lambdaExpression :: Binding
+lambdaExpression = def "LambdaExpression" $ T.record [
+  "parameters">: java "LambdaParameters",
+  "body">: java "LambdaBody"]
 
 --LambdaParameters:
 --  ( [LambdaParameterList] )
 --  Identifier
-      def "LambdaParameters" $ union [
-        "tuple">: list $ java "LambdaParameters",
-        "single">: java "Identifier"],
+lambdaParameters :: Binding
+lambdaParameters = def "LambdaParameters" $ T.union [
+  "tuple">: T.list $ java "LambdaParameters",
+  "single">: java "Identifier"]
 
 --LambdaParameterList:
 --  LambdaParameter {, LambdaParameter}
 --  Identifier {, Identifier}
 --LambdaParameter:
-      def "LambdaParameter" $ union [
+lambdaParameter_ :: Binding
+lambdaParameter_ = def "LambdaParameter" $ T.union [
 --  {VariableModifier} LambdaParameterType VariableDeclaratorId
-        "normal">: java "LambdaParameter_Normal",
+  "normal">: java "LambdaParameter_Normal",
 --  VariableArityParameter
-        "variableArity">: java "VariableArityParameter"],
-      def "LambdaParameter_Normal" $ record [
-        "modifiers">: list $ java "VariableModifier",
-        "type">: java "LambdaParameterType",
-        "id">: java "VariableDeclaratorId"],
+  "variableArity">: java "VariableArityParameter"]
+
+lambdaParameter_Normal :: Binding
+lambdaParameter_Normal = def "LambdaParameter_Normal" $ T.record [
+  "modifiers">: T.list $ java "VariableModifier",
+  "type">: java "LambdaParameterType",
+  "id">: java "VariableDeclaratorId"]
 
 --LambdaParameterType:
-      def "LambdaParameterType" $ union [
+lambdaParameterType :: Binding
+lambdaParameterType = def "LambdaParameterType" $ T.union [
 --  UnannType
-        "type">: java "UnannType",
+  "type">: java "UnannType",
 --  var
-        "var">: unit],
+  "var">: T.unit]
 
 --LambdaBody:
-      def "LambdaBody" $ union [
+lambdaBody_ :: Binding
+lambdaBody_ = def "LambdaBody" $ T.union [
 --  Expression
-        "expression">: java "Expression",
+  "expression">: java "Expression",
 --  Block
-        "block">: java "Block"],
+  "block">: java "Block"]
 
 --AssignmentExpression:
-      def "AssignmentExpression" $ union [
+assignmentExpression :: Binding
+assignmentExpression = def "AssignmentExpression" $ T.union [
 --  ConditionalExpression
-        "conditional">: java "ConditionalExpression",
+  "conditional">: java "ConditionalExpression",
 --  Assignment
-        "assignment">: java "Assignment"],
+  "assignment">: java "Assignment"]
 
 --Assignment:
 --  LeftHandSide AssignmentOperator Expression
-      def "Assignment" $ record [
-        "lhs">: java "LeftHandSide",
-        "op">: java "AssignmentOperator",
-        "expression">: java "Expression"],
+assignment :: Binding
+assignment = def "Assignment" $ T.record [
+  "lhs">: java "LeftHandSide",
+  "op">: java "AssignmentOperator",
+  "expression">: java "Expression"]
 
 --LeftHandSide:
-      def "LeftHandSide" $ union [
+leftHandSide :: Binding
+leftHandSide = def "LeftHandSide" $ T.union [
 --  ExpressionName
-        "expressionName">: java "ExpressionName",
+  "expressionName">: java "ExpressionName",
 --  FieldAccess
-        "fieldAccess">: java "FieldAccess",
+  "fieldAccess">: java "FieldAccess",
 --  ArrayAccess
-        "arrayAccess">: java "ArrayAccess"],
+  "arrayAccess">: java "ArrayAccess"]
 
 --AssignmentOperator:
 --  (one of)
-      def "AssignmentOperator" $ enum [
+assignmentOperator :: Binding
+assignmentOperator = def "AssignmentOperator" $ T.enum [
 --  =  *=  /=  %=  +=  -=  <<=  >>=  >>>=  &=  ^=  |=
-        "simple", "times", "div", "mod", "plus", "minus",
-        "shiftLeft", "shiftRight", "shiftRightZeroFill", "and", "xor", "or"],
+  "simple", "times", "div", "mod", "plus", "minus",
+  "shiftLeft", "shiftRight", "shiftRightZeroFill", "and", "xor", "or"]
 
 --ConditionalExpression:
-      def "ConditionalExpression" $ union [
+conditionalExpression :: Binding
+conditionalExpression = def "ConditionalExpression" $ T.union [
 --  ConditionalOrExpression
-        "simple">: java "ConditionalOrExpression",
+  "simple">: java "ConditionalOrExpression",
 --  ConditionalOrExpression ? Expression : ConditionalExpression
-        "ternaryCond">: java "ConditionalExpression_TernaryCond",
+  "ternaryCond">: java "ConditionalExpression_TernaryCond",
 --  ConditionalOrExpression ? Expression : LambdaExpression
-        "ternaryLambda">: java "ConditionalExpression_TernaryLambda"],
-      def "ConditionalExpression_TernaryCond" $ record [
-        "cond">: java "ConditionalOrExpression",
-        "ifTrue">: java "Expression",
-        "ifFalse">: java "ConditionalExpression"],
-      def "ConditionalExpression_TernaryLambda" $ record [
-        "cond">: java "ConditionalOrExpression",
-        "ifTrue">: java "Expression",
-        "ifFalse">: java "LambdaExpression"],
+  "ternaryLambda">: java "ConditionalExpression_TernaryLambda"]
+
+conditionalExpression_TernaryCond :: Binding
+conditionalExpression_TernaryCond = def "ConditionalExpression_TernaryCond" $ T.record [
+  "cond">: java "ConditionalOrExpression",
+  "ifTrue">: java "Expression",
+  "ifFalse">: java "ConditionalExpression"]
+
+conditionalExpression_TernaryLambda :: Binding
+conditionalExpression_TernaryLambda = def "ConditionalExpression_TernaryLambda" $ T.record [
+  "cond">: java "ConditionalOrExpression",
+  "ifTrue">: java "Expression",
+  "ifFalse">: java "LambdaExpression"]
 
 --ConditionalOrExpression:
 --  ConditionalAndExpression
 --  ConditionalOrExpression || ConditionalAndExpression
-      def "ConditionalOrExpression" $ wrap $ nonemptyList $ java "ConditionalAndExpression",
+conditionalOrExpression :: Binding
+conditionalOrExpression = def "ConditionalOrExpression" $ T.wrap $ nonemptyList $ java "ConditionalAndExpression"
 
 --ConditionalAndExpression:
 --  InclusiveOrExpression
 --  ConditionalAndExpression && InclusiveOrExpression
-      def "ConditionalAndExpression" $ wrap $ nonemptyList $ java "InclusiveOrExpression",
+conditionalAndExpression :: Binding
+conditionalAndExpression = def "ConditionalAndExpression" $ T.wrap $ nonemptyList $ java "InclusiveOrExpression"
 
 --InclusiveOrExpression:
 --  ExclusiveOrExpression
 --  InclusiveOrExpression | ExclusiveOrExpression
-      def "InclusiveOrExpression" $ wrap $ nonemptyList $ java "ExclusiveOrExpression",
+inclusiveOrExpression :: Binding
+inclusiveOrExpression = def "InclusiveOrExpression" $ T.wrap $ nonemptyList $ java "ExclusiveOrExpression"
 
 --ExclusiveOrExpression:
 --  AndExpression
 --  ExclusiveOrExpression ^ AndExpression
-      def "ExclusiveOrExpression" $ wrap $ nonemptyList $ java "AndExpression",
+exclusiveOrExpression :: Binding
+exclusiveOrExpression = def "ExclusiveOrExpression" $ T.wrap $ nonemptyList $ java "AndExpression"
 
 --AndExpression:
 --  EqualityExpression
 --  AndExpression & EqualityExpression
-      def "AndExpression" $ wrap $ nonemptyList $ java "EqualityExpression",
+andExpression :: Binding
+andExpression = def "AndExpression" $ T.wrap $ nonemptyList $ java "EqualityExpression"
 
 --EqualityExpression:
-      def "EqualityExpression" $ union [
+equalityExpression :: Binding
+equalityExpression = def "EqualityExpression" $ T.union [
 --  RelationalExpression
-        "unary">: java "RelationalExpression",
+  "unary">: java "RelationalExpression",
 --  EqualityExpression == RelationalExpression
-        "equal">: java "EqualityExpression_Binary",
+  "equal">: java "EqualityExpression_Binary",
 --  EqualityExpression != RelationalExpression
-        "notEqual">: java "EqualityExpression_Binary"],
-      def "EqualityExpression_Binary" $ record [
-        "lhs">: java "EqualityExpression",
-        "rhs">: java "RelationalExpression"],
+  "notEqual">: java "EqualityExpression_Binary"]
+
+equalityExpression_Binary :: Binding
+equalityExpression_Binary = def "EqualityExpression_Binary" $ T.record [
+  "lhs">: java "EqualityExpression",
+  "rhs">: java "RelationalExpression"]
 
 --RelationalExpression:
-      def "RelationalExpression" $ union [
+relationalExpression :: Binding
+relationalExpression = def "RelationalExpression" $ T.union [
 --  ShiftExpression
-        "simple">: java "ShiftExpression",
+  "simple">: java "ShiftExpression",
 --  RelationalExpression < ShiftExpression
-        "lessThan">: java "RelationalExpression_LessThan",
+  "lessThan">: java "RelationalExpression_LessThan",
 --  RelationalExpression > ShiftExpression
-        "greaterThan">: java "RelationalExpression_GreaterThan",
+  "greaterThan">: java "RelationalExpression_GreaterThan",
 --  RelationalExpression <= ShiftExpression
-        "lessThanEqual">: java "RelationalExpression_LessThanEqual",
+  "lessThanEqual">: java "RelationalExpression_LessThanEqual",
 --  RelationalExpression >= ShiftExpression
-        "greaterThanEqual">: java "RelationalExpression_GreaterThanEqual",
+  "greaterThanEqual">: java "RelationalExpression_GreaterThanEqual",
 --  RelationalExpression instanceof ReferenceType
-        "instanceof">: java "RelationalExpression_InstanceOf"],
-      def "RelationalExpression_LessThan" $ record [
-        "lhs">: java "RelationalExpression",
-        "rhs">: java "ShiftExpression"],
-      def "RelationalExpression_GreaterThan" $ record [
-        "lhs">: java "RelationalExpression",
-        "rhs">: java "ShiftExpression"],
-      def "RelationalExpression_LessThanEqual" $ record [
-        "lhs">: java "RelationalExpression",
-        "rhs">: java "ShiftExpression"],
-      def "RelationalExpression_GreaterThanEqual" $ record [
-        "lhs">: java "RelationalExpression",
-        "rhs">: java "ShiftExpression"],
-      def "RelationalExpression_InstanceOf" $ record [
-        "lhs">: java "RelationalExpression",
-        "rhs">: java "ReferenceType"],
+  "instanceof">: java "RelationalExpression_InstanceOf"]
+
+relationalExpression_LessThan :: Binding
+relationalExpression_LessThan = def "RelationalExpression_LessThan" $ T.record [
+  "lhs">: java "RelationalExpression",
+  "rhs">: java "ShiftExpression"]
+
+relationalExpression_GreaterThan :: Binding
+relationalExpression_GreaterThan = def "RelationalExpression_GreaterThan" $ T.record [
+  "lhs">: java "RelationalExpression",
+  "rhs">: java "ShiftExpression"]
+
+relationalExpression_LessThanEqual :: Binding
+relationalExpression_LessThanEqual = def "RelationalExpression_LessThanEqual" $ T.record [
+  "lhs">: java "RelationalExpression",
+  "rhs">: java "ShiftExpression"]
+
+relationalExpression_GreaterThanEqual :: Binding
+relationalExpression_GreaterThanEqual = def "RelationalExpression_GreaterThanEqual" $ T.record [
+  "lhs">: java "RelationalExpression",
+  "rhs">: java "ShiftExpression"]
+
+relationalExpression_InstanceOf :: Binding
+relationalExpression_InstanceOf = def "RelationalExpression_InstanceOf" $ T.record [
+  "lhs">: java "RelationalExpression",
+  "rhs">: java "ReferenceType"]
 
 --ShiftExpression:
-      def "ShiftExpression" $ union [
+shiftExpression :: Binding
+shiftExpression = def "ShiftExpression" $ T.union [
 --  AdditiveExpression
-        "unary">: java "AdditiveExpression",
+  "unary">: java "AdditiveExpression",
 --  ShiftExpression << AdditiveExpression
-        "shiftLeft">: java "ShiftExpression_Binary",
+  "shiftLeft">: java "ShiftExpression_Binary",
 --  ShiftExpression >> AdditiveExpression
-        "shiftRight">: java "ShiftExpression_Binary",
+  "shiftRight">: java "ShiftExpression_Binary",
 --  ShiftExpression >>> AdditiveExpression
-        "shiftRightZeroFill">: java "ShiftExpression_Binary"],
-      def "ShiftExpression_Binary" $ record [
-        "lhs">: java "ShiftExpression",
-        "rhs">: java "AdditiveExpression"],
+  "shiftRightZeroFill">: java "ShiftExpression_Binary"]
+
+shiftExpression_Binary :: Binding
+shiftExpression_Binary = def "ShiftExpression_Binary" $ T.record [
+  "lhs">: java "ShiftExpression",
+  "rhs">: java "AdditiveExpression"]
 
 --AdditiveExpression:
-      def "AdditiveExpression" $ union [
+additiveExpression :: Binding
+additiveExpression = def "AdditiveExpression" $ T.union [
 --  MultiplicativeExpression
-        "unary">: java "MultiplicativeExpression",
+  "unary">: java "MultiplicativeExpression",
 --  AdditiveExpression + MultiplicativeExpression
-        "plus">: java "AdditiveExpression_Binary",
+  "plus">: java "AdditiveExpression_Binary",
 --  AdditiveExpression - MultiplicativeExpression
-        "minus">: java "AdditiveExpression_Binary"],
-      def "AdditiveExpression_Binary" $ record [
-        "lhs">: java "AdditiveExpression",
-        "rhs">: java "MultiplicativeExpression"],
+  "minus">: java "AdditiveExpression_Binary"]
+
+additiveExpression_Binary :: Binding
+additiveExpression_Binary = def "AdditiveExpression_Binary" $ T.record [
+  "lhs">: java "AdditiveExpression",
+  "rhs">: java "MultiplicativeExpression"]
 
 --MultiplicativeExpression:
-      def "MultiplicativeExpression" $ union [
+multiplicativeExpression :: Binding
+multiplicativeExpression = def "MultiplicativeExpression" $ T.union [
 --  UnaryExpression
-        "unary">: java "UnaryExpression",
+  "unary">: java "UnaryExpression",
 --  MultiplicativeExpression * UnaryExpression
-        "times">: java "MultiplicativeExpression_Binary",
+  "times">: java "MultiplicativeExpression_Binary",
 --  MultiplicativeExpression / UnaryExpression
-        "divide">: java "MultiplicativeExpression_Binary",
+  "divide">: java "MultiplicativeExpression_Binary",
 --  MultiplicativeExpression % UnaryExpression
-        "mod">: java "MultiplicativeExpression_Binary"],
-      def "MultiplicativeExpression_Binary" $ record [
-        "lhs">: java "MultiplicativeExpression",
-        "rhs">: java "UnaryExpression"],
+  "mod">: java "MultiplicativeExpression_Binary"]
+
+multiplicativeExpression_Binary :: Binding
+multiplicativeExpression_Binary = def "MultiplicativeExpression_Binary" $ T.record [
+  "lhs">: java "MultiplicativeExpression",
+  "rhs">: java "UnaryExpression"]
 
 --UnaryExpression:
-      def "UnaryExpression" $ union [
+unaryExpression :: Binding
+unaryExpression = def "UnaryExpression" $ T.union [
 --  PreIncrementExpression
-        "preIncrement">: java "PreIncrementExpression",
+  "preIncrement">: java "PreIncrementExpression",
 --  PreDecrementExpression
-        "preDecrement">: java "PreDecrementExpression",
+  "preDecrement">: java "PreDecrementExpression",
 --  + UnaryExpression
-        "plus">: java "UnaryExpression",
+  "plus">: java "UnaryExpression",
 --  - UnaryExpression
-        "minus">: java "UnaryExpression",
+  "minus">: java "UnaryExpression",
 --  UnaryExpressionNotPlusMinus
-        "other">: java "UnaryExpressionNotPlusMinus"],
+  "other">: java "UnaryExpressionNotPlusMinus"]
 
 --PreIncrementExpression:
 --  ++ UnaryExpression
-      def "PreIncrementExpression" $ wrap $ java "UnaryExpression",
+preIncrementExpression :: Binding
+preIncrementExpression = def "PreIncrementExpression" $ T.wrap $ java "UnaryExpression"
 
 --PreDecrementExpression:
 --  -- UnaryExpression
-      def "PreDecrementExpression" $ wrap $ java "UnaryExpression",
+preDecrementExpression :: Binding
+preDecrementExpression = def "PreDecrementExpression" $ T.wrap $ java "UnaryExpression"
 
 --UnaryExpressionNotPlusMinus:
-      def "UnaryExpressionNotPlusMinus" $ union [
+unaryExpressionNotPlusMinus :: Binding
+unaryExpressionNotPlusMinus = def "UnaryExpressionNotPlusMinus" $ T.union [
 --  PostfixExpression
-        "postfix">: java "PostfixExpression",
+  "postfix">: java "PostfixExpression",
 --  ~ UnaryExpression
-        "tilde">: java "UnaryExpression",
+  "tilde">: java "UnaryExpression",
 --  ! UnaryExpression
-        "not">: java "UnaryExpression",
+  "not">: java "UnaryExpression",
 --  CastExpression
-        "cast">: java "CastExpression"],
+  "cast">: java "CastExpression"]
 
 --PostfixExpression:
-      def "PostfixExpression" $ union [
+postfixExpression :: Binding
+postfixExpression = def "PostfixExpression" $ T.union [
 --  Primary
-        "primary">: java "Primary",
+  "primary">: java "Primary",
 --  ExpressionName
-        "name">: java "ExpressionName",
+  "name">: java "ExpressionName",
 --  PostIncrementExpression
-        "postIncrement">: java "PostIncrementExpression",
+  "postIncrement">: java "PostIncrementExpression",
 --  PostDecrementExpression
-        "postDecrement">: java "PostDecrementExpression"],
+  "postDecrement">: java "PostDecrementExpression"]
 
 --PostIncrementExpression:
 --  PostfixExpression ++
-      def "PostIncrementExpression" $ wrap $ java "PostfixExpression",
+postIncrementExpression :: Binding
+postIncrementExpression = def "PostIncrementExpression" $ T.wrap $ java "PostfixExpression"
 
 --PostDecrementExpression:
 --  PostfixExpression --
-      def "PostDecrementExpression" $ wrap $ java "PostfixExpression",
+postDecrementExpression :: Binding
+postDecrementExpression = def "PostDecrementExpression" $ T.wrap $ java "PostfixExpression"
 
 --CastExpression:
-      def "CastExpression" $ union [
+castExpression :: Binding
+castExpression = def "CastExpression" $ T.union [
 --  ( PrimitiveType ) UnaryExpression
-        "primitive">: java "CastExpression_Primitive",
+  "primitive">: java "CastExpression_Primitive",
 --  ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
-        "notPlusMinus">: java "CastExpression_NotPlusMinus",
+  "notPlusMinus">: java "CastExpression_NotPlusMinus",
 --  ( ReferenceType {AdditionalBound} ) LambdaExpression
-        "lambda">: java "CastExpression_Lambda"],
-      def "CastExpression_Primitive" $ record [
-        "type">: java "PrimitiveTypeWithAnnotations",
-        "expression">: java "UnaryExpression"],
-      def "CastExpression_NotPlusMinus" $ record [
-        "refAndBounds">: java "CastExpression_RefAndBounds",
-        "expression">: java "UnaryExpression"],
-      def "CastExpression_Lambda" $ record [
-        "refAndBounds">: java "CastExpression_RefAndBounds",
-        "expression">: java "LambdaExpression"],
-      def "CastExpression_RefAndBounds" $ record [
-        "type">: java "ReferenceType",
-        "bounds">: list $ java "AdditionalBound"],
+  "lambda">: java "CastExpression_Lambda"]
+
+castExpression_Primitive :: Binding
+castExpression_Primitive = def "CastExpression_Primitive" $ T.record [
+  "type">: java "PrimitiveTypeWithAnnotations",
+  "expression">: java "UnaryExpression"]
+
+castExpression_NotPlusMinus :: Binding
+castExpression_NotPlusMinus = def "CastExpression_NotPlusMinus" $ T.record [
+  "refAndBounds">: java "CastExpression_RefAndBounds",
+  "expression">: java "UnaryExpression"]
+
+castExpression_Lambda :: Binding
+castExpression_Lambda = def "CastExpression_Lambda" $ T.record [
+  "refAndBounds">: java "CastExpression_RefAndBounds",
+  "expression">: java "LambdaExpression"]
+
+castExpression_RefAndBounds :: Binding
+castExpression_RefAndBounds = def "CastExpression_RefAndBounds" $ T.record [
+  "type">: java "ReferenceType",
+  "bounds">: T.list $ java "AdditionalBound"]
 
 --ConstantExpression:
 --  Expression
-      def "ConstantExpression" $ wrap $ java "Expression"]
+constantExpression :: Binding
+constantExpression = def "ConstantExpression" $ T.wrap $ java "Expression"

@@ -97,7 +97,7 @@ import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 
 import Hydra.Pg.Model as PG
-import Hydra.Ext.Sources.Pg.Model
+import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 
 
 validationDefinition :: String -> TTerm a -> TBinding a
@@ -106,7 +106,7 @@ validationDefinition = definitionInModule pgValidationModule
 pgValidationModule :: Module
 pgValidationModule = Module (Namespace "hydra.pg.validation") elements
     []
-    [pgModelModule] $
+    [PgModel.module_] $
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [

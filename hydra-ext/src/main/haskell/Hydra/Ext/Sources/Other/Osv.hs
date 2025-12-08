@@ -4,150 +4,173 @@ module Hydra.Ext.Sources.Other.Osv where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
+
+ns :: Namespace
+ns = Namespace "hydra.ext.dev.osv.schema"
+
+define :: String -> Type -> Binding
+define = defineType ns
+
+osv :: String -> Type
+osv = typeref ns
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
-osvSchemaModule :: Module
-osvSchemaModule = Module ns elements [] [] $
+module_ :: Module
+module_ = Module ns elements [] [] $
     Just "See https://ossf.github.io/osv-schema"
   where
-    ns = Namespace "hydra.ext.dev.osv.schema"
-    def = datatype ns
-    osv = typeref ns
-
     elements = [
+      credited,
+      ecosystem,
+      entry,
+      event,
+      id_,
+      markdown,
+      osvVersion,
+      package_,
+      packageVersions,
+      reference,
+      referenceType,
+      severity,
+      severityScore,
+      severityType,
+      timestamp,
+      url,
+      version,
+      versionOrStar,
+      versionOrZero,
+      versionRange,
+      versionType]
 
-      def "Credited" $
-        record [
-          "name">: string,
-          "contact">: optional $ list $ osv "Url"],
+credited :: Binding
+credited = define "Credited" $
+  T.record [
+    "name">: T.string,
+    "contact">: T.maybe $ T.list $ osv "Url"]
 
-      def "Ecosystem" $
-        doc ("One of a limited set of defined ecosystems, currently "
-          ++ "Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub") $
-        wrap string,
+ecosystem :: Binding
+ecosystem = define "Ecosystem" $
+  doc ("One of a limited set of defined ecosystems, currently "
+    ++ "Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub") $
+  T.wrap T.string
 
-      def "Entry" $
-        record [
-          "schemaVersion">:
-            doc "The default value is '1.0.0', matching version 1.0 of the OSV Schema" $
-            optional $ osv "OsvVersion",
-          "id">: osv "Id",
-          "modified">: osv "Timestamp",
-          "published">: optional $ osv "Timestamp",
-          "withdrawn">: optional $ osv "Timestamp",
-          "aliases">: optional $ list $ osv "Id",
-          "related">: optional $ list $ osv "Id",
-          "summary">: optional string,
-          "details">: optional $ osv "Markdown",
-          "severity">: optional $ list $ osv "Severity",
-          "affected">: optional  $ list $ osv "PackageVersions",
-          "references">: optional $ list $ osv "Reference",
-          "credits">: optional $ list $ osv "Credited"],
+entry :: Binding
+entry = define "Entry" $
+  T.record [
+    "schemaVersion">:
+      doc "The default value is '1.0.0', matching version 1.0 of the OSV Schema" $
+      T.maybe $ osv "OsvVersion",
+    "id">: osv "Id",
+    "modified">: osv "Timestamp",
+    "published">: T.maybe $ osv "Timestamp",
+    "withdrawn">: T.maybe $ osv "Timestamp",
+    "aliases">: T.maybe $ T.list $ osv "Id",
+    "related">: T.maybe $ T.list $ osv "Id",
+    "summary">: T.maybe T.string,
+    "details">: T.maybe $ osv "Markdown",
+    "severity">: T.maybe $ T.list $ osv "Severity",
+    "affected">: T.maybe  $ T.list $ osv "PackageVersions",
+    "references">: T.maybe $ T.list $ osv "Reference",
+    "credits">: T.maybe $ T.list $ osv "Credited"]
 
-      def "Event" $
-        union [
-          "introduced">: osv "VersionOrZero",
-          "fixed">: osv "Version",
-          "lastAffected">: osv "Version",
-          "limit">: osv "VersionOrStar"],
+event :: Binding
+event = define "Event" $
+  T.union [
+    "introduced">: osv "VersionOrZero",
+    "fixed">: osv "Version",
+    "lastAffected">: osv "Version",
+    "limit">: osv "VersionOrStar"]
 
-      def "Id" $
-        doc ("A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used "
-          ++ "by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v") $
-        wrap string,
+id_ :: Binding
+id_ = define "Id" $
+  doc ("A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used "
+    ++ "by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v") $
+  T.wrap T.string
 
-      def "Markdown" $
-        doc "CommonMark markdown text" $
-        wrap string,
+markdown :: Binding
+markdown = define "Markdown" $
+  doc "CommonMark markdown text" $
+  T.wrap T.string
 
-      def "OsvVersion" $
-        doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix" $
-        wrap string,
+osvVersion :: Binding
+osvVersion = define "OsvVersion" $
+  doc "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix" $
+  T.wrap T.string
 
-      def "Package" $
-        record [
-          "ecosystem">: osv "Ecosystem",
-          "name">: string,
-          "purl">: optional $ osv "Url"],
+package_ :: Binding
+package_ = define "Package" $
+  T.record [
+    "ecosystem">: osv "Ecosystem",
+    "name">: T.string,
+    "purl">: T.maybe $ osv "Url"]
 
-      def "PackageVersions" $
-        record [
-          "package">: osv "Package",
-          "ranges">: optional $ list $ osv "VersionRange",
-          "versions">: optional $ list $ osv "Version"],
+packageVersions :: Binding
+packageVersions = define "PackageVersions" $
+  T.record [
+    "package">: osv "Package",
+    "ranges">: T.maybe $ T.list $ osv "VersionRange",
+    "versions">: T.maybe $ T.list $ osv "Version"]
 
-      def "Reference" $
-        record [
-          "type">: osv "ReferenceType",
-          "url">: osv "Url"],
+reference :: Binding
+reference = define "Reference" $
+  T.record [
+    "type">: osv "ReferenceType",
+    "url">: osv "Url"]
 
-      def "ReferenceType" $
-        doc "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB" $
-        wrap string,
+referenceType :: Binding
+referenceType = define "ReferenceType" $
+  doc "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB" $
+  T.wrap T.string
 
-      def "Severity" $
-        record [
-          "type">: osv "SeverityType",
-          "score">: osv "SeverityScore"],
+severity :: Binding
+severity = define "Severity" $
+  T.record [
+    "type">: osv "SeverityType",
+    "score">: osv "SeverityScore"]
 
-      def "SeverityScore" $ wrap string,
+severityScore :: Binding
+severityScore = define "SeverityScore" $ T.wrap T.string
 
-      def "SeverityType" $
-        doc "The value CVSS_V3, or future supported types" $
-        wrap string,
+severityType :: Binding
+severityType = define "SeverityType" $
+  doc "The value CVSS_V3, or future supported types" $
+  T.wrap T.string
 
-      def "Timestamp" $
-        doc "An RFC3339-formatted timestamp in UTC (ending in 'Z')" $
-        wrap string,
+timestamp :: Binding
+timestamp = define "Timestamp" $
+  doc "An RFC3339-formatted timestamp in UTC (ending in 'Z')" $
+  T.wrap T.string
 
-      def "Url" $ wrap string,
+url :: Binding
+url = define "Url" $ T.wrap T.string
 
-      def "Version" $
-        doc "A version number in an ecosystem-specific format" $
-        wrap string,
+version :: Binding
+version = define "Version" $
+  doc "A version number in an ecosystem-specific format" $
+  T.wrap T.string
 
-      def "VersionOrStar" $
-        doc "An ecosystem-specific version number, or the string '*' representing infinity" $
-        wrap string,
+versionOrStar :: Binding
+versionOrStar = define "VersionOrStar" $
+  doc "An ecosystem-specific version number, or the string '*' representing infinity" $
+  T.wrap T.string
 
-      def "VersionOrZero" $
-        doc "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version" $
-        wrap string,
+versionOrZero :: Binding
+versionOrZero = define "VersionOrZero" $
+  doc "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version" $
+  T.wrap T.string
 
-      def "VersionRange" $
-        record [
-          "type">: osv "VersionType",
-          "repo">: optional $ osv "Url",
-          "events">: list $ osv "Event"],
+versionRange :: Binding
+versionRange = define "VersionRange" $
+  T.record [
+    "type">: osv "VersionType",
+    "repo">: T.maybe $ osv "Url",
+    "events">: T.list $ osv "Event"]
 
-      def "VersionType" $
-        doc "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT" $
-        wrap string]
+versionType :: Binding
+versionType = define "VersionType" $
+  doc "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT" $
+  T.wrap T.string

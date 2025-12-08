@@ -1,760 +1,813 @@
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Cpp.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-cppNs = Namespace "hydra.ext.cpp.syntax"
-cpp = typeref cppNs
+ns :: Namespace
+ns = Namespace "hydra.ext.cpp.syntax"
 
-cppSyntaxModule :: Module
-cppSyntaxModule = Module cppNs elements [Core.module_] [Core.module_] $
-    Just ("A C++ syntax model, focusing on features for representing algebraic data types and declarative computations")
+define :: String -> Type -> Binding
+define = defineType ns
+
+cpp :: String -> Type
+cpp = typeref ns
+
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
+    Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations"
   where
-    def = datatype cppNs
-
     elements = accessSpecifiers ++ declarationTypes ++ expressionTypes ++ statementTypes
                ++ typeTypes ++ literalTypes ++ containers ++ utilities ++ operatorTypes
 
-    accessSpecifiers = [
-      def "AccessSpecifier" $ enum ["public", "protected", "private", "none"]]
+    accessSpecifiers = [accessSpecifier]
 
-    -- Declaration-related types
     declarationTypes = [
--- <program> ::= <include-directives> <declarations>
-      def "Program" $ record [
-        "preprocessorDirectives">: list $ cpp "PreprocessorDirective",
-        "includes">: list $ cpp "IncludeDirective",
-        "declarations">: list $ cpp "Declaration"],
+      program, includeDirective, declaration, namespaceDeclaration, typedefDeclaration,
+      classDeclaration, templateDeclaration, preprocessorDirective, pragmaDirective,
+      defineDirective, undefDirective, ifdefDirective, ifndefDirective, ifDirective,
+      elifDirective, elseDirective, endifDirective, lineDirective, errorDirective,
+      warningDirective, classSpecifier, classKey, baseSpecifier, classBody,
+      memberSpecification, memberDeclaration, constructorDeclaration, memInitializer,
+      destructorDeclaration, functionDeclaration, functionSpecifierPrefix, functionSpecifierSuffix,
+      parameter, functionBody, variableDeclaration, variantDeclaration, productDeclaration,
+      containerDeclaration, listDeclaration, mapDeclaration, setDeclaration, optionalDeclaration]
 
--- <include-directive> ::= "#include" "<" <identifier> ">" | "#include" "\"" <identifier> "\""
-      def "IncludeDirective" $ record [
-        "name">: string,
-        "isSystem">: boolean],
-
--- <declaration> ::= <class-declaration> | <function-declaration> | <variable-declaration> | <typedef-declaration> | <namespace-declaration> | <template-declaration>
-      def "Declaration" $ union [
-        "preprocessor">: cpp "PreprocessorDirective",
-        "class">: cpp "ClassDeclaration",
-        "function">: cpp "FunctionDeclaration",
-        "variable">: cpp "VariableDeclaration",
-        "typedef">: cpp "TypedefDeclaration",
-        "namespace">: cpp "NamespaceDeclaration",
-        "template">: cpp "TemplateDeclaration"],
-
--- <namespace-declaration> ::= "namespace" <identifier> "{" <declarations> "}" ";"
-      def "NamespaceDeclaration" $ record [
-        "name">: string,
-        "declarations">: list $ cpp "Declaration"],
-
--- <typedef-declaration> ::= "typedef" <type-expression> <identifier> ";" | "using" <identifier> "=" <type-expression> ";"
-      def "TypedefDeclaration" $ record [
-        "name">: string,
-        "type">: cpp "TypeExpression",
-        "isUsing">: boolean],
-
--- <class-declaration> ::= <class-specifier> <class-body>
-      def "ClassDeclaration" $ record [
-        "specifier">: cpp "ClassSpecifier",
-        "body">: optional $ cpp "ClassBody"],
-
--- <template-declaration> ::= "template" "<" "typename" <identifier> ("," "typename" <identifier>)* ">" <declaration>
-      def "TemplateDeclaration" $ record [
-        "inline">: boolean,
-        "parameters">: list string,
-        "declaration">: cpp "Declaration"],
-
--- <preprocessor-directive> ::= <include-directive> | <pragma-directive> | <define-directive> | <undef-directive> | <ifdef-directive> | <ifndef-directive> | <if-directive> | <elif-directive> | <else-directive> | <endif-directive> | <line-directive> | <error-directive> | <warning-directive>
-      def "PreprocessorDirective" $ union [
-        "include">: cpp "IncludeDirective",  -- Already defined
-        "pragma">: cpp "PragmaDirective",
-        "define">: cpp "DefineDirective",
-        "undef">: cpp "UndefDirective",
-        "ifdef">: cpp "IfdefDirective",
-        "ifndef">: cpp "IfndefDirective",
-        "if">: cpp "IfDirective",
-        "elif">: cpp "ElifDirective",
-        "else">: cpp "ElseDirective",
-        "endif">: cpp "EndifDirective",
-        "line">: cpp "LineDirective",
-        "error">: cpp "ErrorDirective",
-        "warning">: cpp "WarningDirective"],
-
--- <pragma-directive> ::= "#pragma" <pragma-content>
-      def "PragmaDirective" $ record [
-        "content">: string],
-
--- <define-directive> ::= "#define" <identifier> <replacement-list>
-      def "DefineDirective" $ record [
-        "name">: string,
-        "parameters">: optional $ list string,
-        "replacement">: optional string],
-
--- <undef-directive> ::= "#undef" <identifier>
-      def "UndefDirective" $ record [
-        "name">: string],
-
--- <ifdef-directive> ::= "#ifdef" <identifier>
-      def "IfdefDirective" $ record [
-        "identifier">: string],
-
--- <ifndef-directive> ::= "#ifndef" <identifier>
-      def "IfndefDirective" $ record [
-        "identifier">: string],
-
--- <if-directive> ::= "#if" <constant-expression>
-      def "IfDirective" $ record [
-        "condition">: string],
-
--- <elif-directive> ::= "#elif" <constant-expression>
-      def "ElifDirective" $ record [
-        "condition">: string],
-
--- <else-directive> ::= "#else"
-      def "ElseDirective" $ unit,
-
--- <endif-directive> ::= "#endif"
-      def "EndifDirective" $ unit,
-
--- <line-directive> ::= "#line" <line-number> <filename>
-      def "LineDirective" $ record [
-        "lineNumber">: int32,
-        "filename">: optional string],
-
--- <error-directive> ::= "#error" <message>
-      def "ErrorDirective" $ record [
-        "message">: string],
-
--- <warning-directive> ::= "#warning" <message>
-      def "WarningDirective" $ record [
-        "message">: string],
-
--- <class-specifier> ::= <class-key> <identifier> <inheritance-list>
-      def "ClassSpecifier" $ record [
-        "key">: cpp "ClassKey",
-        "name">: string,
-        "inheritance">: list $ cpp "BaseSpecifier"],
-
--- <class-key> ::= "class" | "enum" | "enum class" | "struct"
-      def "ClassKey" $ enum ["class", "enum", "enumClass", "struct"],
-
--- <base-specifier> ::= <access-specifier> <identifier>
-      def "BaseSpecifier" $ record [
-        "access">: cpp "AccessSpecifier",
-        "name">: string],
-
--- <class-body> ::= "{" <member-specifications> "}" ";"
-      def "ClassBody" $ wrap $ list $ cpp "MemberSpecification",
-
--- <member-specification> ::= <access-specifier> ":" | <member-declaration>
-      def "MemberSpecification" $ union [
-        "accessLabel">: cpp "AccessSpecifier",
-        "member">: cpp "MemberDeclaration"],
-
--- <member-declaration> ::= <function-declaration> | <variable-declaration> | <constructor-declaration> | <destructor-declaration> | <nested-class-declaration> | <template-declaration>
-      def "MemberDeclaration" $ union [
-        "function">: cpp "FunctionDeclaration",
-        "variable">: cpp "VariableDeclaration",
-        "constructor">: cpp "ConstructorDeclaration",
-        "destructor">: cpp "DestructorDeclaration",
-        "nestedClass">: cpp "ClassDeclaration",
-        "template">: cpp "TemplateDeclaration"],
-
--- <constructor-declaration> ::= <identifier> "(" <parameter-list> ")" <constructor-initializers> <function-body>
-      def "ConstructorDeclaration" $ record [
-        "name">: string,
-        "parameters">: list $ cpp "Parameter",
-        "initializers">: list $ cpp "MemInitializer",
-        "body">: cpp "FunctionBody"],
-
--- <mem-initializer> ::= <identifier> "(" <expression-list> ")"
-      def "MemInitializer" $ record [
-        "name">: string,
-        "arguments">: list $ cpp "Expression"],
-
--- <destructor-declaration> ::= <prefix-specifiers> "~" <identifier> "(" ")" <suffix-specifiers> <function-body>
-      def "DestructorDeclaration" $ record [
-        "prefixSpecifiers" >: list (cpp "FunctionSpecifierPrefix"),
-        "name" >: string,
-        "suffixSpecifiers" >: list (cpp "FunctionSpecifierSuffix"),
-        "body" >: cpp "FunctionBody"],
-
--- <function-declaration> ::= <prefix-specifiers> <type-expression> <identifier> "(" <parameter-list> ")" <suffix-specifiers> <function-body>
-      def "FunctionDeclaration" $ record [
-        "prefixSpecifiers" >: list (cpp "FunctionSpecifierPrefix"),
-        "returnType" >: cpp "TypeExpression",
-        "name" >: string,
-        "parameters" >: list (cpp "Parameter"),
-        "suffixSpecifiers" >: list (cpp "FunctionSpecifierSuffix"),
-        "body" >: cpp "FunctionBody"],
-
--- <function-prefix-specifier> ::= "virtual" | "static"
-      def "FunctionSpecifierPrefix" $ enum ["inline", "virtual", "static", "explicit"],
-
--- <function-suffix-specifier> ::= "const" | "noexcept" | "override" | "final"
-      def "FunctionSpecifierSuffix" $ enum ["const", "noexcept", "override", "final"],
-
--- <parameter> ::= <type-expression> <identifier> <default-arg>
-      def "Parameter" $ record [
-        "type">: cpp "TypeExpression",
-        "name">: string,
-        "unnamed">: boolean,
-        "defaultValue">: optional $ cpp "Expression"],
-
--- <function-body> ::= <compound-statement> | ";" | "= 0;" | "= default;"
-      def "FunctionBody" $ union [
-        "compound">: cpp "CompoundStatement",
-        "declaration">: unit,
-        "pure">: unit,
-        "default">: unit],
-
--- <variable-declaration> ::= <type-expression> <identifier> <initializer> ";" | "auto" <identifier> <initializer> ";"
-      def "VariableDeclaration" $ record [
-        "type">: optional $ cpp "TypeExpression",
-        "name">: string,
-        "initializer">: optional $ cpp "Expression",
-        "isAuto">: boolean],
-
--- <variant-declaration> ::= "std::variant" "<" <type-list> ">" <identifier> ";"
-      def "VariantDeclaration" $ record [
-        "types">: list $ cpp "TypeExpression",
-        "name">: string],
-
--- <product-declaration> ::= "struct" <identifier> "{" <field-declarations> "}" ";"
-      def "ProductDeclaration" $ record [
-        "name">: string,
-        "fields">: list $ cpp "VariableDeclaration"],
-
--- <container-declaration> ::= <list-declaration> | <map-declaration> | <set-declaration> | <optional-declaration>
-      def "ContainerDeclaration" $ union [
-        "list">: cpp "ListDeclaration",
-        "map">: cpp "MapDeclaration",
-        "set">: cpp "SetDeclaration",
-        "optional">: cpp "OptionalDeclaration"],
-
--- <list-declaration> ::= "std::vector" "<" <type-expression> ">" <identifier> ";"
-      def "ListDeclaration" $ record [
-        "elementType">: cpp "TypeExpression",
-        "name">: string],
-
--- <map-declaration> ::= "std::map" "<" <type-expression> "," <type-expression> ">" <identifier> ";"
-      def "MapDeclaration" $ record [
-        "keyType">: cpp "TypeExpression",
-        "valueType">: cpp "TypeExpression",
-        "name">: string],
-
--- <set-declaration> ::= "std::set" "<" <type-expression> ">" <identifier> ";"
-      def "SetDeclaration" $ record [
-        "elementType">: cpp "TypeExpression",
-        "name">: string],
-
--- <optional-declaration> ::= "std::optional" "<" <type-expression> ">" <identifier> ";"
-      def "OptionalDeclaration" $ record [
-        "valueType">: cpp "TypeExpression",
-        "name">: string]]
-
-    -- Expression-related types
     expressionTypes = [
--- <expression> ::= <assignment-expression> | <expression> "," <assignment-expression>
-      def "Expression" $ union [
-        "assignment">: cpp "AssignmentExpression",
-        "comma">: cpp "CommaExpression"],
+      expression, commaExpression, assignmentExpression, explicitAssignment, assignmentOperator,
+      conditionalExpression, ternaryExpression, logicalOrExpression, logicalOrOperation,
+      logicalAndExpression, logicalAndOperation, inclusiveOrExpression, bitwiseOrOperation,
+      exclusiveOrExpression, bitwiseXorOperation, andExpression, bitwiseAndOperation,
+      equalityExpression, equalOperation, notEqualOperation, relationalExpression,
+      lessOperation, greaterOperation, lessEqualOperation, greaterEqualOperation,
+      shiftExpression, leftShiftOperation, rightShiftOperation, additiveExpression,
+      addOperation, subtractOperation, multiplicativeExpression, multiplyOperation,
+      divideOperation, moduloOperation, unaryExpression, unaryOperation, unaryOperator,
+      sizeofExpression, postfixExpression, subscriptOperation, functionCallOperation,
+      memberAccessOperation, pointerMemberAccessOperation, templateFunctionCallOperation,
+      primaryExpression, lambdaExpression, captureList, capture, patternMatch, visitor,
+      overloadedLambdas, functionApplication, functionIdentifier, qualifiedIdentifier]
 
-      def "CommaExpression" $ record [
-        "left">: cpp "Expression",
-        "right">: cpp "AssignmentExpression"],
-
--- <assignment-expression> ::= <conditional-expression> | <logical-or-expression> <assignment-operator> <assignment-expression>
-      def "AssignmentExpression" $ union [
-        "conditional">: cpp "ConditionalExpression",
-        "assignment">: cpp "ExplicitAssignment"],
-
-      def "ExplicitAssignment" $ record [
-        "left">: cpp "LogicalOrExpression",
-        "op">: cpp "AssignmentOperator",
-        "right">: cpp "AssignmentExpression"],
-
--- <assignment-operator> ::= "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | "&=" | "^=" | "|="
-      def "AssignmentOperator" $ enum [
-        "assign", "plusAssign", "minusAssign", "multiplyAssign", "divideAssign",
-        "moduloAssign", "leftShiftAssign", "rightShiftAssign", "bitwiseAndAssign",
-        "bitwiseXorAssign", "bitwiseOrAssign"],
-
--- <conditional-expression> ::= <logical-or-expression> | <logical-or-expression> "?" <expression> ":" <conditional-expression>
-      def "ConditionalExpression" $ union [
-        "logicalOr">: cpp "LogicalOrExpression",
-        "ternary">: cpp "TernaryExpression"],
-
-      def "TernaryExpression" $ record [
-        "condition">: cpp "LogicalOrExpression",
-        "trueExpr">: cpp "Expression",
-        "falseExpr">: cpp "ConditionalExpression"],
-
--- <logical-or-expression> ::= <logical-and-expression> | <logical-or-expression> "||" <logical-and-expression>
-      def "LogicalOrExpression" $ union [
-        "logicalAnd">: cpp "LogicalAndExpression",
-        "logicalOr">: cpp "LogicalOrOperation"],
-
-      def "LogicalOrOperation" $ record [
-        "left">: cpp "LogicalOrExpression",
-        "right">: cpp "LogicalAndExpression"],
-
--- <logical-and-expression> ::= <inclusive-or-expression> | <logical-and-expression> "&&" <inclusive-or-expression>
-      def "LogicalAndExpression" $ union [
-        "inclusiveOr">: cpp "InclusiveOrExpression",
-        "logicalAnd">: cpp "LogicalAndOperation"],
-
-      def "LogicalAndOperation" $ record [
-        "left">: cpp "LogicalAndExpression",
-        "right">: cpp "InclusiveOrExpression"],
-
--- <inclusive-or-expression> ::= <exclusive-or-expression> | <inclusive-or-expression> "|" <exclusive-or-expression>
-      def "InclusiveOrExpression" $ union [
-        "exclusiveOr">: cpp "ExclusiveOrExpression",
-        "bitwiseOr">: cpp "BitwiseOrOperation"],
-
-      def "BitwiseOrOperation" $ record [
-        "left">: cpp "InclusiveOrExpression",
-        "right">: cpp "ExclusiveOrExpression"],
-
--- <exclusive-or-expression> ::= <and-expression> | <exclusive-or-expression> "^" <and-expression>
-      def "ExclusiveOrExpression" $ union [
-        "and">: cpp "AndExpression",
-        "bitwiseXor">: cpp "BitwiseXorOperation"],
-
-      def "BitwiseXorOperation" $ record [
-        "left">: cpp "ExclusiveOrExpression",
-        "right">: cpp "AndExpression"],
-
--- <and-expression> ::= <equality-expression> | <and-expression> "&" <equality-expression>
-      def "AndExpression" $ union [
-        "equality">: cpp "EqualityExpression",
-        "bitwiseAnd">: cpp "BitwiseAndOperation"],
-
-      def "BitwiseAndOperation" $ record [
-        "left">: cpp "AndExpression",
-        "right">: cpp "EqualityExpression"],
-
--- <equality-expression> ::= <relational-expression> | <equality-expression> "==" <relational-expression> | <equality-expression> "!=" <relational-expression>
-      def "EqualityExpression" $ union [
-        "relational">: cpp "RelationalExpression",
-        "equal">: cpp "EqualOperation",
-        "notEqual">: cpp "NotEqualOperation"],
-
-      def "EqualOperation" $ record [
-        "left">: cpp "EqualityExpression",
-        "right">: cpp "RelationalExpression"],
-
-      def "NotEqualOperation" $ record [
-        "left">: cpp "EqualityExpression",
-        "right">: cpp "RelationalExpression"],
-
--- <relational-expression> ::= <shift-expression> | <relational-expression> "<" <shift-expression> | <relational-expression> ">" <shift-expression> | <relational-expression> "<=" <shift-expression> | <relational-expression> ">=" <shift-expression>
-      def "RelationalExpression" $ union [
-        "shift">: cpp "ShiftExpression",
-        "less">: cpp "LessOperation",
-        "greater">: cpp "GreaterOperation",
-        "lessEqual">: cpp "LessEqualOperation",
-        "greaterEqual">: cpp "GreaterEqualOperation"],
-
-      def "LessOperation" $ record [
-        "left">: cpp "RelationalExpression",
-        "right">: cpp "ShiftExpression"],
-
-      def "GreaterOperation" $ record [
-        "left">: cpp "RelationalExpression",
-        "right">: cpp "ShiftExpression"],
-
-      def "LessEqualOperation" $ record [
-        "left">: cpp "RelationalExpression",
-        "right">: cpp "ShiftExpression"],
-
-      def "GreaterEqualOperation" $ record [
-        "left">: cpp "RelationalExpression",
-        "right">: cpp "ShiftExpression"],
-
--- <shift-expression> ::= <additive-expression> | <shift-expression> "<<" <additive-expression> | <shift-expression> ">>" <additive-expression>
-      def "ShiftExpression" $ union [
-        "additive">: cpp "AdditiveExpression",
-        "leftShift">: cpp "LeftShiftOperation",
-        "rightShift">: cpp "RightShiftOperation"],
-
-      def "LeftShiftOperation" $ record [
-        "left">: cpp "ShiftExpression",
-        "right">: cpp "AdditiveExpression"],
-
-      def "RightShiftOperation" $ record [
-        "left">: cpp "ShiftExpression",
-        "right">: cpp "AdditiveExpression"],
-
--- <additive-expression> ::= <multiplicative-expression> | <additive-expression> "+" <multiplicative-expression> | <additive-expression> "-" <multiplicative-expression>
-      def "AdditiveExpression" $ union [
-        "multiplicative">: cpp "MultiplicativeExpression",
-        "add">: cpp "AddOperation",
-        "subtract">: cpp "SubtractOperation"],
-
-      def "AddOperation" $ record [
-        "left">: cpp "AdditiveExpression",
-        "right">: cpp "MultiplicativeExpression"],
-
-      def "SubtractOperation" $ record [
-        "left">: cpp "AdditiveExpression",
-        "right">: cpp "MultiplicativeExpression"],
-
--- <multiplicative-expression> ::= <unary-expression> | <multiplicative-expression> "*" <unary-expression> | <multiplicative-expression> "/" <unary-expression> | <multiplicative-expression> "%" <unary-expression>
-      def "MultiplicativeExpression" $ union [
-        "unary">: cpp "UnaryExpression",
-        "multiply">: cpp "MultiplyOperation",
-        "divide">: cpp "DivideOperation",
-        "modulo">: cpp "ModuloOperation"],
-
-      def "MultiplyOperation" $ record [
-        "left">: cpp "MultiplicativeExpression",
-        "right">: cpp "UnaryExpression"],
-
-      def "DivideOperation" $ record [
-        "left">: cpp "MultiplicativeExpression",
-        "right">: cpp "UnaryExpression"],
-
-      def "ModuloOperation" $ record [
-        "left">: cpp "MultiplicativeExpression",
-        "right">: cpp "UnaryExpression"],
-
--- <unary-expression> ::= <postfix-expression> | <unary-operator> <unary-expression> | <sizeof-expression>
-      def "UnaryExpression" $ union [
-        "postfix">: cpp "PostfixExpression",
-        "unaryOp">: cpp "UnaryOperation",
-        "sizeof">: cpp "SizeofExpression"],
-
-      def "UnaryOperation" $ record [
-        "operator">: cpp "UnaryOperator",
-        "operand">: cpp "UnaryExpression"],
-
--- <unary-operator> ::= "+" | "-" | "!" | "~" | "*" | "&" | "++" | "--"
-      def "UnaryOperator" $ enum [
-        "plus", "minus", "logicalNot", "bitwiseNot", "dereference",
-        "addressOf", "preIncrement", "preDecrement"],
-
--- <sizeof-expression> ::= "sizeof" "(" <type-expression> ")"
-      def "SizeofExpression" $ wrap $ cpp "TypeExpression",
-
--- <postfix-expression> ::= <primary-expression> | <postfix-expression> "[" <expression> "]" | <postfix-expression> "(" <expression-list> ")" | <postfix-expression> "." <identifier> | <postfix-expression> "->" <identifier> | <postfix-expression> "++" | <postfix-expression> "--"
-      def "PostfixExpression" $ union [
-        "primary">: cpp "PrimaryExpression",
-        "subscript">: cpp "SubscriptOperation",
-        "functionCall">: cpp "FunctionCallOperation",
-        "templateFunctionCall">: cpp "TemplateFunctionCallOperation",
-        "memberAccess">: cpp "MemberAccessOperation",
-        "pointerMemberAccess">: cpp "PointerMemberAccessOperation",
-        "postIncrement">: cpp "PostfixExpression",
-        "postDecrement">: cpp "PostfixExpression"],
-
-      def "SubscriptOperation" $ record [
-        "array">: cpp "PostfixExpression",
-        "index">: cpp "Expression"],
-
-      def "FunctionCallOperation" $ record [
-        "function">: cpp "PostfixExpression",
-        "arguments">: list $ cpp "Expression"],
-
-      def "MemberAccessOperation" $ record [
-        "object">: cpp "PostfixExpression",
-        "member">: string],
-
-      def "PointerMemberAccessOperation" $ record [
-        "pointer">: cpp "PostfixExpression",
-        "member">: string],
-
-      def "TemplateFunctionCallOperation" $ record [
-        "function">: cpp "PostfixExpression",
-        "templateArguments">: list $ cpp "TemplateArgument",
-        "arguments">: list $ cpp "Expression"],
-
--- <primary-expression> ::= <identifier> | <literal> | "(" <expression> ")" | <lambda-expression>
-      def "PrimaryExpression" $ union [
-        "identifier">: string,
-        "literal">: cpp "Literal",
-        "parenthesized">: cpp "Expression",
-        "lambda">: cpp "LambdaExpression"],
-
--- <lambda-expression> ::= "[" <capture-list> "]" <lambda-parameters> <lambda-specifiers> <compound-statement>
-      def "LambdaExpression" $ record [
-        "captures">: cpp "CaptureList",
-        "parameters">: list $ cpp "Parameter",
-        "returnType">: optional $ cpp "TypeExpression",
-        "body">: cpp "CompoundStatement"],
-
--- <capture-list> ::= <capture> | <capture> "," <capture-list> | ε | "="
-      def "CaptureList" $ union [
-        "captureByValue">: unit,
-        "captures">: list $ cpp "Capture"],
-
--- <capture> ::= "&" <identifier> | <identifier>
-      def "Capture" $ record [
-        "name">: string,
-        "byReference">: boolean],
-
--- <pattern-match> ::= "std::visit" "(" <visitor> "," <variant-expression> ")"
-      def "PatternMatch" $ record [
-        "visitor">: cpp "Visitor",
-        "variant">: cpp "Expression"],
-
--- <visitor> ::= <lambda-expression> | <overloaded-lambdas>
-      def "Visitor" $ union [
-        "lambda">: cpp "LambdaExpression",
-        "overloaded">: cpp "OverloadedLambdas"],
-
--- <overloaded-lambdas> ::= "overloaded" "{" <lambda-list> "}"
-      def "OverloadedLambdas" $ wrap $ list $ cpp "LambdaExpression",
-
--- <function-application> ::= <function-identifier> "(" <expression-list> ")"
-      def "FunctionApplication" $ record [
-        "function">: cpp "FunctionIdentifier",
-        "arguments">: list $ cpp "Expression"],
-
--- <function-identifier> ::= <identifier> | <identifier> "::" <identifier>
-      def "FunctionIdentifier" $ union [
-        "simple">: string,
-        "qualified">: cpp "QualifiedIdentifier"],
-
-      def "QualifiedIdentifier" $ record [
-        "namespace">: string,
-        "name">: string]]
-
-    -- Statement-related types
     statementTypes = [
--- <statement> ::= <labeled-statement> | <compound-statement> | <selection-statement> | <iteration-statement> | <jump-statement> | <declaration-statement> | <expression-statement>
-      def "Statement" $ union [
-        "labeled">: cpp "LabeledStatement",
-        "compound">: cpp "CompoundStatement",
-        "selection">: cpp "SelectionStatement",
-        "switch">: cpp "SwitchStatement",
-        "iteration">: cpp "IterationStatement",
-        "jump">: cpp "JumpStatement",
-        "declaration">: cpp "VariableDeclaration",
-        "expression">: cpp "Expression"],
+      statement, labeledStatement, compoundStatement, selectionStatement, switchStatement,
+      caseStatement, caseValue, iterationStatement, whileStatement, doStatement,
+      forStatement, forInit, rangeForStatement, jumpStatement, expressionStatement]
 
--- <labeled-statement> ::= <identifier> ":" <statement>
-      def "LabeledStatement" $ record [
-        "label">: string,
-        "statement">: cpp "Statement"],
-
--- <compound-statement> ::= "{" <statement-list> "}"
-      def "CompoundStatement" $ wrap $ list $ cpp "Statement",
-
--- <selection-statement> ::= "if" "(" <expression> ")" <statement> <else-clause>
-      def "SelectionStatement" $ record [
-        "condition">: cpp "Expression",
-        "thenBranch">: cpp "Statement",
-        "elseBranch">: optional $ cpp "Statement"],
-
--- <switch-statement> ::= "switch" "(" <expression> ")" "{" <case-statement>* "}"
-      def "SwitchStatement" $ record [
-        "value">: cpp "Expression",
-        "cases">: list $ cpp "CaseStatement"],
-
--- <case-statement> ::= "case" <expression> ":" <statement>* | "default" ":" <statement>*
-      def "CaseStatement" $ union [
-        "case">: cpp "CaseValue",
-        "default">: cpp "Statement"],
-
--- <case-value> ::= <expression> <statement>*
-      def "CaseValue" $ record [
-        "value">: cpp "Expression",
-        "statement">: cpp "Statement"],
-
--- <iteration-statement> ::= <while-statement> | <do-statement> | <for-statement> | <range-for-statement>
-      def "IterationStatement" $ union [
-        "while">: cpp "WhileStatement",
-        "do">: cpp "DoStatement",
-        "for">: cpp "ForStatement",
-        "rangeFor">: cpp "RangeForStatement"],
-
--- <while-statement> ::= "while" "(" <expression> ")" <statement>
-      def "WhileStatement" $ record [
-        "condition">: cpp "Expression",
-        "body">: cpp "Statement"],
-
--- <do-statement> ::= "do" <statement> "while" "(" <expression> ")" ";"
-      def "DoStatement" $ record [
-        "body">: cpp "Statement",
-        "condition">: cpp "Expression"],
-
--- <for-statement> ::= "for" "(" <for-init> ";" <expression> ";" <expression> ")" <statement>
-      def "ForStatement" $ record [
-        "init">: cpp "ForInit",
-        "condition">: cpp "Expression",
-        "increment">: cpp "Expression",
-        "body">: cpp "Statement"],
-
--- <for-init> ::= <expression> | <variable-declaration> | ε
-      def "ForInit" $ union [
-        "expression">: cpp "Expression",
-        "declaration">: cpp "VariableDeclaration",
-        "empty">: unit],
-
--- <range-for-statement> ::= "for" "(" <type-expression> <identifier> ":" <expression> ")" <statement>
-      def "RangeForStatement" $ record [
-        "type">: cpp "TypeExpression",
-        "variable">: string,
-        "range">: cpp "Expression",
-        "body">: cpp "Statement"],
-
--- <jump-statement> ::= "break" ";" | "continue" ";" | "return" <expression> ";" | "return" ";" | "throw" <expression> ";"
-      def "JumpStatement" $ union [
-        "break">: unit,
-        "continue">: unit,
-        "returnValue">: cpp "Expression",
-        "returnVoid">: unit,
-        "throw">: cpp "Expression"],
-
--- <expression-statement> ::= <expression> ";"
-      def "ExpressionStatement" $ wrap $ cpp "Expression"]
-
-    -- Type-related types
     typeTypes = [
--- <type-expression> ::= <basic-type> | <qualified-type> | <template-type> | <function-type> | <auto-type>
-      def "TypeExpression" $ union [
-        "basic">: cpp "BasicType",
-        "qualified">: cpp "QualifiedType",
-        "template">: cpp "TemplateType",
-        "function">: cpp "FunctionType",
-        "auto">: unit],
+      typeExpression, basicType, qualifiedType, typeQualifier, templateType,
+      templateArgument, functionType_]
 
--- <basic-type> ::= "void" | "bool" | "char" | "int" | "float" | "double" | "std::string" | <identifier>
-      def "BasicType" $ union [
-        "void">: unit,
-        "bool">: unit,
-        "char">: unit,
-        "int">: unit,
-        "float">: unit,
-        "double">: unit,
-        "string">: unit,
-        "auto">: unit,
-        "named">: string],
-
--- <qualified-type> ::= <type-expression> <type-qualifier>
-      def "QualifiedType" $ record [
-        "baseType">: cpp "TypeExpression",
-        "qualifier">: cpp "TypeQualifier"],
-
--- <type-qualifier> ::= "const" | "&" | "&&" | "*"
-      def "TypeQualifier" $ enum ["const", "lvalueRef", "rvalueRef", "pointer"],
-
--- <template-type> ::= <identifier> "<" <template-arg-list> ">"
-      def "TemplateType" $ record [
-        "name">: string,
-        "arguments">: list $ cpp "TemplateArgument"],
-
--- <template-arg> ::= <type-expression> | <expression>
-      def "TemplateArgument" $ union [
-        "type">: cpp "TypeExpression",
-        "value">: cpp "Expression"],
-
--- <function-type> ::= <type-expression> "(" <parameter-list> ")"
-      def "FunctionType" $ record [
-        "returnType">: cpp "TypeExpression",
-        "parameters">: list $ cpp "Parameter"]]
-
-    -- Literal-related types
     literalTypes = [
--- <literal> ::= <integer-literal> | <floating-literal> | <character-literal> | <string-literal> | <boolean-literal> | <null-literal>
-      def "Literal" $ union [
-        "integer">: cpp "IntegerLiteral",
-        "floating">: cpp "FloatingLiteral",
-        "character">: cpp "CharacterLiteral",
-        "string">: cpp "StringLiteral",
-        "boolean">: cpp "BooleanLiteral",
-        "null">: unit],
+      literal, integerLiteral, floatingLiteral, characterLiteral, stringLiteral, booleanLiteral]
 
--- <integer-literal> ::= <decimal-literal> | <hexadecimal-literal> | <octal-literal> | <binary-literal>
-      def "IntegerLiteral" $ union [
-        "decimal">: bigint,
-        "hexadecimal">: string,
-        "octal">: string,
-        "binary">: string],
+    containers = [vector, map_, mapEntry, set_, optional]
 
--- <floating-literal> ::= <fractional-constant> <exponent-part> | <digit-sequence> <exponent-part>
-      def "FloatingLiteral" $ wrap bigfloat,
+    operatorTypes = [binaryOperator]
 
--- <character-literal> ::= "'" <c-char> "'"
-      def "CharacterLiteral" $ wrap string,
+    utilities = [identifier_, comment]
 
--- <string-literal> ::= "\"" <s-char-sequence> "\""
-      def "StringLiteral" $ wrap string,
+-- Access specifiers
+accessSpecifier :: Binding
+accessSpecifier = define "AccessSpecifier" $ T.enum ["public", "protected", "private", "none"]
 
--- <boolean-literal> ::= "true" | "false"
-      def "BooleanLiteral" $ wrap boolean]
+-- Declaration-related types
+program :: Binding
+program = define "Program" $ T.record [
+  "preprocessorDirectives">: T.list $ cpp "PreprocessorDirective",
+  "includes">: T.list $ cpp "IncludeDirective",
+  "declarations">: T.list $ cpp "Declaration"]
 
-    -- Container-related types
-    containers = [
-      def "Vector" $ record [
-        "elementType">: cpp "TypeExpression",
-        "elements">: list $ cpp "Expression"],
+includeDirective :: Binding
+includeDirective = define "IncludeDirective" $ T.record [
+  "name">: T.string,
+  "isSystem">: T.boolean]
 
-      def "Map" $ record [
-        "keyType">: cpp "TypeExpression",
-        "valueType">: cpp "TypeExpression",
-        "entries">: list $ cpp "MapEntry"],
+declaration :: Binding
+declaration = define "Declaration" $ T.union [
+  "preprocessor">: cpp "PreprocessorDirective",
+  "class">: cpp "ClassDeclaration",
+  "function">: cpp "FunctionDeclaration",
+  "variable">: cpp "VariableDeclaration",
+  "typedef">: cpp "TypedefDeclaration",
+  "namespace">: cpp "NamespaceDeclaration",
+  "template">: cpp "TemplateDeclaration"]
 
-      def "MapEntry" $ record [
-        "key">: cpp "Expression",
-        "value">: cpp "Expression"],
+namespaceDeclaration :: Binding
+namespaceDeclaration = define "NamespaceDeclaration" $ T.record [
+  "name">: T.string,
+  "declarations">: T.list $ cpp "Declaration"]
 
-      def "Set" $ record [
-        "elementType">: cpp "TypeExpression",
-        "elements">: list $ cpp "Expression"],
+typedefDeclaration :: Binding
+typedefDeclaration = define "TypedefDeclaration" $ T.record [
+  "name">: T.string,
+  "type">: cpp "TypeExpression",
+  "isUsing">: T.boolean]
 
-      def "Optional" $ record [
-        "valueType">: cpp "TypeExpression",
-        "value">: optional $ cpp "Expression"]]
+classDeclaration :: Binding
+classDeclaration = define "ClassDeclaration" $ T.record [
+  "specifier">: cpp "ClassSpecifier",
+  "body">: T.optional $ cpp "ClassBody"]
 
-    -- Operator types
-    operatorTypes = [
-      def "BinaryOperator" $ enum [
-        "plus", "minus", "multiply", "divide", "modulo",
-        "bitwiseAnd", "bitwiseOr", "bitwiseXor",
-        "logicalAnd", "logicalOr",
-        "equal", "notEqual", "less", "greater", "lessEqual", "greaterEqual",
-        "leftShift", "rightShift"]]
+templateDeclaration :: Binding
+templateDeclaration = define "TemplateDeclaration" $ T.record [
+  "inline">: T.boolean,
+  "parameters">: T.list T.string,
+  "declaration">: cpp "Declaration"]
 
-    -- Utility types
-    utilities = [
-      def "Identifier" string,
+preprocessorDirective :: Binding
+preprocessorDirective = define "PreprocessorDirective" $ T.union [
+  "include">: cpp "IncludeDirective",
+  "pragma">: cpp "PragmaDirective",
+  "define">: cpp "DefineDirective",
+  "undef">: cpp "UndefDirective",
+  "ifdef">: cpp "IfdefDirective",
+  "ifndef">: cpp "IfndefDirective",
+  "if">: cpp "IfDirective",
+  "elif">: cpp "ElifDirective",
+  "else">: cpp "ElseDirective",
+  "endif">: cpp "EndifDirective",
+  "line">: cpp "LineDirective",
+  "error">: cpp "ErrorDirective",
+  "warning">: cpp "WarningDirective"]
 
-      def "Comment" $ record [
-        "text">: string,
-        "isMultiline">: boolean]]
+pragmaDirective :: Binding
+pragmaDirective = define "PragmaDirective" $ T.record [
+  "content">: T.string]
+
+defineDirective :: Binding
+defineDirective = define "DefineDirective" $ T.record [
+  "name">: T.string,
+  "parameters">: T.optional $ T.list T.string,
+  "replacement">: T.optional T.string]
+
+undefDirective :: Binding
+undefDirective = define "UndefDirective" $ T.record [
+  "name">: T.string]
+
+ifdefDirective :: Binding
+ifdefDirective = define "IfdefDirective" $ T.record [
+  "identifier">: T.string]
+
+ifndefDirective :: Binding
+ifndefDirective = define "IfndefDirective" $ T.record [
+  "identifier">: T.string]
+
+ifDirective :: Binding
+ifDirective = define "IfDirective" $ T.record [
+  "condition">: T.string]
+
+elifDirective :: Binding
+elifDirective = define "ElifDirective" $ T.record [
+  "condition">: T.string]
+
+elseDirective :: Binding
+elseDirective = define "ElseDirective" T.unit
+
+endifDirective :: Binding
+endifDirective = define "EndifDirective" T.unit
+
+lineDirective :: Binding
+lineDirective = define "LineDirective" $ T.record [
+  "lineNumber">: T.int32,
+  "filename">: T.optional T.string]
+
+errorDirective :: Binding
+errorDirective = define "ErrorDirective" $ T.record [
+  "message">: T.string]
+
+warningDirective :: Binding
+warningDirective = define "WarningDirective" $ T.record [
+  "message">: T.string]
+
+classSpecifier :: Binding
+classSpecifier = define "ClassSpecifier" $ T.record [
+  "key">: cpp "ClassKey",
+  "name">: T.string,
+  "inheritance">: T.list $ cpp "BaseSpecifier"]
+
+classKey :: Binding
+classKey = define "ClassKey" $ T.enum ["class", "enum", "enumClass", "struct"]
+
+baseSpecifier :: Binding
+baseSpecifier = define "BaseSpecifier" $ T.record [
+  "access">: cpp "AccessSpecifier",
+  "name">: T.string]
+
+classBody :: Binding
+classBody = define "ClassBody" $ T.wrap $ T.list $ cpp "MemberSpecification"
+
+memberSpecification :: Binding
+memberSpecification = define "MemberSpecification" $ T.union [
+  "accessLabel">: cpp "AccessSpecifier",
+  "member">: cpp "MemberDeclaration"]
+
+memberDeclaration :: Binding
+memberDeclaration = define "MemberDeclaration" $ T.union [
+  "function">: cpp "FunctionDeclaration",
+  "variable">: cpp "VariableDeclaration",
+  "constructor">: cpp "ConstructorDeclaration",
+  "destructor">: cpp "DestructorDeclaration",
+  "nestedClass">: cpp "ClassDeclaration",
+  "template">: cpp "TemplateDeclaration"]
+
+constructorDeclaration :: Binding
+constructorDeclaration = define "ConstructorDeclaration" $ T.record [
+  "name">: T.string,
+  "parameters">: T.list $ cpp "Parameter",
+  "initializers">: T.list $ cpp "MemInitializer",
+  "body">: cpp "FunctionBody"]
+
+memInitializer :: Binding
+memInitializer = define "MemInitializer" $ T.record [
+  "name">: T.string,
+  "arguments">: T.list $ cpp "Expression"]
+
+destructorDeclaration :: Binding
+destructorDeclaration = define "DestructorDeclaration" $ T.record [
+  "prefixSpecifiers" >: T.list (cpp "FunctionSpecifierPrefix"),
+  "name" >: T.string,
+  "suffixSpecifiers" >: T.list (cpp "FunctionSpecifierSuffix"),
+  "body" >: cpp "FunctionBody"]
+
+functionDeclaration :: Binding
+functionDeclaration = define "FunctionDeclaration" $ T.record [
+  "prefixSpecifiers" >: T.list (cpp "FunctionSpecifierPrefix"),
+  "returnType" >: cpp "TypeExpression",
+  "name" >: T.string,
+  "parameters" >: T.list (cpp "Parameter"),
+  "suffixSpecifiers" >: T.list (cpp "FunctionSpecifierSuffix"),
+  "body" >: cpp "FunctionBody"]
+
+functionSpecifierPrefix :: Binding
+functionSpecifierPrefix = define "FunctionSpecifierPrefix" $ T.enum ["inline", "virtual", "static", "explicit"]
+
+functionSpecifierSuffix :: Binding
+functionSpecifierSuffix = define "FunctionSpecifierSuffix" $ T.enum ["const", "noexcept", "override", "final"]
+
+parameter :: Binding
+parameter = define "Parameter" $ T.record [
+  "type">: cpp "TypeExpression",
+  "name">: T.string,
+  "unnamed">: T.boolean,
+  "defaultValue">: T.optional $ cpp "Expression"]
+
+functionBody :: Binding
+functionBody = define "FunctionBody" $ T.union [
+  "compound">: cpp "CompoundStatement",
+  "declaration">: T.unit,
+  "pure">: T.unit,
+  "default">: T.unit]
+
+variableDeclaration :: Binding
+variableDeclaration = define "VariableDeclaration" $ T.record [
+  "type">: T.optional $ cpp "TypeExpression",
+  "name">: T.string,
+  "initializer">: T.optional $ cpp "Expression",
+  "isAuto">: T.boolean]
+
+variantDeclaration :: Binding
+variantDeclaration = define "VariantDeclaration" $ T.record [
+  "types">: T.list $ cpp "TypeExpression",
+  "name">: T.string]
+
+productDeclaration :: Binding
+productDeclaration = define "ProductDeclaration" $ T.record [
+  "name">: T.string,
+  "fields">: T.list $ cpp "VariableDeclaration"]
+
+containerDeclaration :: Binding
+containerDeclaration = define "ContainerDeclaration" $ T.union [
+  "list">: cpp "ListDeclaration",
+  "map">: cpp "MapDeclaration",
+  "set">: cpp "SetDeclaration",
+  "optional">: cpp "OptionalDeclaration"]
+
+listDeclaration :: Binding
+listDeclaration = define "ListDeclaration" $ T.record [
+  "elementType">: cpp "TypeExpression",
+  "name">: T.string]
+
+mapDeclaration :: Binding
+mapDeclaration = define "MapDeclaration" $ T.record [
+  "keyType">: cpp "TypeExpression",
+  "valueType">: cpp "TypeExpression",
+  "name">: T.string]
+
+setDeclaration :: Binding
+setDeclaration = define "SetDeclaration" $ T.record [
+  "elementType">: cpp "TypeExpression",
+  "name">: T.string]
+
+optionalDeclaration :: Binding
+optionalDeclaration = define "OptionalDeclaration" $ T.record [
+  "valueType">: cpp "TypeExpression",
+  "name">: T.string]
+
+-- Expression-related types
+expression :: Binding
+expression = define "Expression" $ T.union [
+  "assignment">: cpp "AssignmentExpression",
+  "comma">: cpp "CommaExpression"]
+
+commaExpression :: Binding
+commaExpression = define "CommaExpression" $ T.record [
+  "left">: cpp "Expression",
+  "right">: cpp "AssignmentExpression"]
+
+assignmentExpression :: Binding
+assignmentExpression = define "AssignmentExpression" $ T.union [
+  "conditional">: cpp "ConditionalExpression",
+  "assignment">: cpp "ExplicitAssignment"]
+
+explicitAssignment :: Binding
+explicitAssignment = define "ExplicitAssignment" $ T.record [
+  "left">: cpp "LogicalOrExpression",
+  "op">: cpp "AssignmentOperator",
+  "right">: cpp "AssignmentExpression"]
+
+assignmentOperator :: Binding
+assignmentOperator = define "AssignmentOperator" $ T.enum [
+  "assign", "plusAssign", "minusAssign", "multiplyAssign", "divideAssign",
+  "moduloAssign", "leftShiftAssign", "rightShiftAssign", "bitwiseAndAssign",
+  "bitwiseXorAssign", "bitwiseOrAssign"]
+
+conditionalExpression :: Binding
+conditionalExpression = define "ConditionalExpression" $ T.union [
+  "logicalOr">: cpp "LogicalOrExpression",
+  "ternary">: cpp "TernaryExpression"]
+
+ternaryExpression :: Binding
+ternaryExpression = define "TernaryExpression" $ T.record [
+  "condition">: cpp "LogicalOrExpression",
+  "trueExpr">: cpp "Expression",
+  "falseExpr">: cpp "ConditionalExpression"]
+
+logicalOrExpression :: Binding
+logicalOrExpression = define "LogicalOrExpression" $ T.union [
+  "logicalAnd">: cpp "LogicalAndExpression",
+  "logicalOr">: cpp "LogicalOrOperation"]
+
+logicalOrOperation :: Binding
+logicalOrOperation = define "LogicalOrOperation" $ T.record [
+  "left">: cpp "LogicalOrExpression",
+  "right">: cpp "LogicalAndExpression"]
+
+logicalAndExpression :: Binding
+logicalAndExpression = define "LogicalAndExpression" $ T.union [
+  "inclusiveOr">: cpp "InclusiveOrExpression",
+  "logicalAnd">: cpp "LogicalAndOperation"]
+
+logicalAndOperation :: Binding
+logicalAndOperation = define "LogicalAndOperation" $ T.record [
+  "left">: cpp "LogicalAndExpression",
+  "right">: cpp "InclusiveOrExpression"]
+
+inclusiveOrExpression :: Binding
+inclusiveOrExpression = define "InclusiveOrExpression" $ T.union [
+  "exclusiveOr">: cpp "ExclusiveOrExpression",
+  "bitwiseOr">: cpp "BitwiseOrOperation"]
+
+bitwiseOrOperation :: Binding
+bitwiseOrOperation = define "BitwiseOrOperation" $ T.record [
+  "left">: cpp "InclusiveOrExpression",
+  "right">: cpp "ExclusiveOrExpression"]
+
+exclusiveOrExpression :: Binding
+exclusiveOrExpression = define "ExclusiveOrExpression" $ T.union [
+  "and">: cpp "AndExpression",
+  "bitwiseXor">: cpp "BitwiseXorOperation"]
+
+bitwiseXorOperation :: Binding
+bitwiseXorOperation = define "BitwiseXorOperation" $ T.record [
+  "left">: cpp "ExclusiveOrExpression",
+  "right">: cpp "AndExpression"]
+
+andExpression :: Binding
+andExpression = define "AndExpression" $ T.union [
+  "equality">: cpp "EqualityExpression",
+  "bitwiseAnd">: cpp "BitwiseAndOperation"]
+
+bitwiseAndOperation :: Binding
+bitwiseAndOperation = define "BitwiseAndOperation" $ T.record [
+  "left">: cpp "AndExpression",
+  "right">: cpp "EqualityExpression"]
+
+equalityExpression :: Binding
+equalityExpression = define "EqualityExpression" $ T.union [
+  "relational">: cpp "RelationalExpression",
+  "equal">: cpp "EqualOperation",
+  "notEqual">: cpp "NotEqualOperation"]
+
+equalOperation :: Binding
+equalOperation = define "EqualOperation" $ T.record [
+  "left">: cpp "EqualityExpression",
+  "right">: cpp "RelationalExpression"]
+
+notEqualOperation :: Binding
+notEqualOperation = define "NotEqualOperation" $ T.record [
+  "left">: cpp "EqualityExpression",
+  "right">: cpp "RelationalExpression"]
+
+relationalExpression :: Binding
+relationalExpression = define "RelationalExpression" $ T.union [
+  "shift">: cpp "ShiftExpression",
+  "less">: cpp "LessOperation",
+  "greater">: cpp "GreaterOperation",
+  "lessEqual">: cpp "LessEqualOperation",
+  "greaterEqual">: cpp "GreaterEqualOperation"]
+
+lessOperation :: Binding
+lessOperation = define "LessOperation" $ T.record [
+  "left">: cpp "RelationalExpression",
+  "right">: cpp "ShiftExpression"]
+
+greaterOperation :: Binding
+greaterOperation = define "GreaterOperation" $ T.record [
+  "left">: cpp "RelationalExpression",
+  "right">: cpp "ShiftExpression"]
+
+lessEqualOperation :: Binding
+lessEqualOperation = define "LessEqualOperation" $ T.record [
+  "left">: cpp "RelationalExpression",
+  "right">: cpp "ShiftExpression"]
+
+greaterEqualOperation :: Binding
+greaterEqualOperation = define "GreaterEqualOperation" $ T.record [
+  "left">: cpp "RelationalExpression",
+  "right">: cpp "ShiftExpression"]
+
+shiftExpression :: Binding
+shiftExpression = define "ShiftExpression" $ T.union [
+  "additive">: cpp "AdditiveExpression",
+  "leftShift">: cpp "LeftShiftOperation",
+  "rightShift">: cpp "RightShiftOperation"]
+
+leftShiftOperation :: Binding
+leftShiftOperation = define "LeftShiftOperation" $ T.record [
+  "left">: cpp "ShiftExpression",
+  "right">: cpp "AdditiveExpression"]
+
+rightShiftOperation :: Binding
+rightShiftOperation = define "RightShiftOperation" $ T.record [
+  "left">: cpp "ShiftExpression",
+  "right">: cpp "AdditiveExpression"]
+
+additiveExpression :: Binding
+additiveExpression = define "AdditiveExpression" $ T.union [
+  "multiplicative">: cpp "MultiplicativeExpression",
+  "add">: cpp "AddOperation",
+  "subtract">: cpp "SubtractOperation"]
+
+addOperation :: Binding
+addOperation = define "AddOperation" $ T.record [
+  "left">: cpp "AdditiveExpression",
+  "right">: cpp "MultiplicativeExpression"]
+
+subtractOperation :: Binding
+subtractOperation = define "SubtractOperation" $ T.record [
+  "left">: cpp "AdditiveExpression",
+  "right">: cpp "MultiplicativeExpression"]
+
+multiplicativeExpression :: Binding
+multiplicativeExpression = define "MultiplicativeExpression" $ T.union [
+  "unary">: cpp "UnaryExpression",
+  "multiply">: cpp "MultiplyOperation",
+  "divide">: cpp "DivideOperation",
+  "modulo">: cpp "ModuloOperation"]
+
+multiplyOperation :: Binding
+multiplyOperation = define "MultiplyOperation" $ T.record [
+  "left">: cpp "MultiplicativeExpression",
+  "right">: cpp "UnaryExpression"]
+
+divideOperation :: Binding
+divideOperation = define "DivideOperation" $ T.record [
+  "left">: cpp "MultiplicativeExpression",
+  "right">: cpp "UnaryExpression"]
+
+moduloOperation :: Binding
+moduloOperation = define "ModuloOperation" $ T.record [
+  "left">: cpp "MultiplicativeExpression",
+  "right">: cpp "UnaryExpression"]
+
+unaryExpression :: Binding
+unaryExpression = define "UnaryExpression" $ T.union [
+  "postfix">: cpp "PostfixExpression",
+  "unaryOp">: cpp "UnaryOperation",
+  "sizeof">: cpp "SizeofExpression"]
+
+unaryOperation :: Binding
+unaryOperation = define "UnaryOperation" $ T.record [
+  "operator">: cpp "UnaryOperator",
+  "operand">: cpp "UnaryExpression"]
+
+unaryOperator :: Binding
+unaryOperator = define "UnaryOperator" $ T.enum [
+  "plus", "minus", "logicalNot", "bitwiseNot", "dereference",
+  "addressOf", "preIncrement", "preDecrement"]
+
+sizeofExpression :: Binding
+sizeofExpression = define "SizeofExpression" $ T.wrap $ cpp "TypeExpression"
+
+postfixExpression :: Binding
+postfixExpression = define "PostfixExpression" $ T.union [
+  "primary">: cpp "PrimaryExpression",
+  "subscript">: cpp "SubscriptOperation",
+  "functionCall">: cpp "FunctionCallOperation",
+  "templateFunctionCall">: cpp "TemplateFunctionCallOperation",
+  "memberAccess">: cpp "MemberAccessOperation",
+  "pointerMemberAccess">: cpp "PointerMemberAccessOperation",
+  "postIncrement">: cpp "PostfixExpression",
+  "postDecrement">: cpp "PostfixExpression"]
+
+subscriptOperation :: Binding
+subscriptOperation = define "SubscriptOperation" $ T.record [
+  "array">: cpp "PostfixExpression",
+  "index">: cpp "Expression"]
+
+functionCallOperation :: Binding
+functionCallOperation = define "FunctionCallOperation" $ T.record [
+  "function">: cpp "PostfixExpression",
+  "arguments">: T.list $ cpp "Expression"]
+
+memberAccessOperation :: Binding
+memberAccessOperation = define "MemberAccessOperation" $ T.record [
+  "object">: cpp "PostfixExpression",
+  "member">: T.string]
+
+pointerMemberAccessOperation :: Binding
+pointerMemberAccessOperation = define "PointerMemberAccessOperation" $ T.record [
+  "pointer">: cpp "PostfixExpression",
+  "member">: T.string]
+
+templateFunctionCallOperation :: Binding
+templateFunctionCallOperation = define "TemplateFunctionCallOperation" $ T.record [
+  "function">: cpp "PostfixExpression",
+  "templateArguments">: T.list $ cpp "TemplateArgument",
+  "arguments">: T.list $ cpp "Expression"]
+
+primaryExpression :: Binding
+primaryExpression = define "PrimaryExpression" $ T.union [
+  "identifier">: T.string,
+  "literal">: cpp "Literal",
+  "parenthesized">: cpp "Expression",
+  "lambda">: cpp "LambdaExpression"]
+
+lambdaExpression :: Binding
+lambdaExpression = define "LambdaExpression" $ T.record [
+  "captures">: cpp "CaptureList",
+  "parameters">: T.list $ cpp "Parameter",
+  "returnType">: T.optional $ cpp "TypeExpression",
+  "body">: cpp "CompoundStatement"]
+
+captureList :: Binding
+captureList = define "CaptureList" $ T.union [
+  "captureByValue">: T.unit,
+  "captures">: T.list $ cpp "Capture"]
+
+capture :: Binding
+capture = define "Capture" $ T.record [
+  "name">: T.string,
+  "byReference">: T.boolean]
+
+patternMatch :: Binding
+patternMatch = define "PatternMatch" $ T.record [
+  "visitor">: cpp "Visitor",
+  "variant">: cpp "Expression"]
+
+visitor :: Binding
+visitor = define "Visitor" $ T.union [
+  "lambda">: cpp "LambdaExpression",
+  "overloaded">: cpp "OverloadedLambdas"]
+
+overloadedLambdas :: Binding
+overloadedLambdas = define "OverloadedLambdas" $ T.wrap $ T.list $ cpp "LambdaExpression"
+
+functionApplication :: Binding
+functionApplication = define "FunctionApplication" $ T.record [
+  "function">: cpp "FunctionIdentifier",
+  "arguments">: T.list $ cpp "Expression"]
+
+functionIdentifier :: Binding
+functionIdentifier = define "FunctionIdentifier" $ T.union [
+  "simple">: T.string,
+  "qualified">: cpp "QualifiedIdentifier"]
+
+qualifiedIdentifier :: Binding
+qualifiedIdentifier = define "QualifiedIdentifier" $ T.record [
+  "namespace">: T.string,
+  "name">: T.string]
+
+-- Statement-related types
+statement :: Binding
+statement = define "Statement" $ T.union [
+  "labeled">: cpp "LabeledStatement",
+  "compound">: cpp "CompoundStatement",
+  "selection">: cpp "SelectionStatement",
+  "switch">: cpp "SwitchStatement",
+  "iteration">: cpp "IterationStatement",
+  "jump">: cpp "JumpStatement",
+  "declaration">: cpp "VariableDeclaration",
+  "expression">: cpp "Expression"]
+
+labeledStatement :: Binding
+labeledStatement = define "LabeledStatement" $ T.record [
+  "label">: T.string,
+  "statement">: cpp "Statement"]
+
+compoundStatement :: Binding
+compoundStatement = define "CompoundStatement" $ T.wrap $ T.list $ cpp "Statement"
+
+selectionStatement :: Binding
+selectionStatement = define "SelectionStatement" $ T.record [
+  "condition">: cpp "Expression",
+  "thenBranch">: cpp "Statement",
+  "elseBranch">: T.optional $ cpp "Statement"]
+
+switchStatement :: Binding
+switchStatement = define "SwitchStatement" $ T.record [
+  "value">: cpp "Expression",
+  "cases">: T.list $ cpp "CaseStatement"]
+
+caseStatement :: Binding
+caseStatement = define "CaseStatement" $ T.union [
+  "case">: cpp "CaseValue",
+  "default">: cpp "Statement"]
+
+caseValue :: Binding
+caseValue = define "CaseValue" $ T.record [
+  "value">: cpp "Expression",
+  "statement">: cpp "Statement"]
+
+iterationStatement :: Binding
+iterationStatement = define "IterationStatement" $ T.union [
+  "while">: cpp "WhileStatement",
+  "do">: cpp "DoStatement",
+  "for">: cpp "ForStatement",
+  "rangeFor">: cpp "RangeForStatement"]
+
+whileStatement :: Binding
+whileStatement = define "WhileStatement" $ T.record [
+  "condition">: cpp "Expression",
+  "body">: cpp "Statement"]
+
+doStatement :: Binding
+doStatement = define "DoStatement" $ T.record [
+  "body">: cpp "Statement",
+  "condition">: cpp "Expression"]
+
+forStatement :: Binding
+forStatement = define "ForStatement" $ T.record [
+  "init">: cpp "ForInit",
+  "condition">: cpp "Expression",
+  "increment">: cpp "Expression",
+  "body">: cpp "Statement"]
+
+forInit :: Binding
+forInit = define "ForInit" $ T.union [
+  "expression">: cpp "Expression",
+  "declaration">: cpp "VariableDeclaration",
+  "empty">: T.unit]
+
+rangeForStatement :: Binding
+rangeForStatement = define "RangeForStatement" $ T.record [
+  "type">: cpp "TypeExpression",
+  "variable">: T.string,
+  "range">: cpp "Expression",
+  "body">: cpp "Statement"]
+
+jumpStatement :: Binding
+jumpStatement = define "JumpStatement" $ T.union [
+  "break">: T.unit,
+  "continue">: T.unit,
+  "returnValue">: cpp "Expression",
+  "returnVoid">: T.unit,
+  "throw">: cpp "Expression"]
+
+expressionStatement :: Binding
+expressionStatement = define "ExpressionStatement" $ T.wrap $ cpp "Expression"
+
+-- Type-related types
+typeExpression :: Binding
+typeExpression = define "TypeExpression" $ T.union [
+  "basic">: cpp "BasicType",
+  "qualified">: cpp "QualifiedType",
+  "template">: cpp "TemplateType",
+  "function">: cpp "FunctionType",
+  "auto">: T.unit]
+
+basicType :: Binding
+basicType = define "BasicType" $ T.union [
+  "void">: T.unit,
+  "bool">: T.unit,
+  "char">: T.unit,
+  "int">: T.unit,
+  "float">: T.unit,
+  "double">: T.unit,
+  "string">: T.unit,
+  "auto">: T.unit,
+  "named">: T.string]
+
+qualifiedType :: Binding
+qualifiedType = define "QualifiedType" $ T.record [
+  "baseType">: cpp "TypeExpression",
+  "qualifier">: cpp "TypeQualifier"]
+
+typeQualifier :: Binding
+typeQualifier = define "TypeQualifier" $ T.enum ["const", "lvalueRef", "rvalueRef", "pointer"]
+
+templateType :: Binding
+templateType = define "TemplateType" $ T.record [
+  "name">: T.string,
+  "arguments">: T.list $ cpp "TemplateArgument"]
+
+templateArgument :: Binding
+templateArgument = define "TemplateArgument" $ T.union [
+  "type">: cpp "TypeExpression",
+  "value">: cpp "Expression"]
+
+functionType_ :: Binding
+functionType_ = define "FunctionType" $ T.record [
+  "returnType">: cpp "TypeExpression",
+  "parameters">: T.list $ cpp "Parameter"]
+
+-- Literal-related types
+literal :: Binding
+literal = define "Literal" $ T.union [
+  "integer">: cpp "IntegerLiteral",
+  "floating">: cpp "FloatingLiteral",
+  "character">: cpp "CharacterLiteral",
+  "string">: cpp "StringLiteral",
+  "boolean">: cpp "BooleanLiteral",
+  "null">: T.unit]
+
+integerLiteral :: Binding
+integerLiteral = define "IntegerLiteral" $ T.union [
+  "decimal">: T.bigint,
+  "hexadecimal">: T.string,
+  "octal">: T.string,
+  "binary">: T.string]
+
+floatingLiteral :: Binding
+floatingLiteral = define "FloatingLiteral" $ T.wrap T.bigfloat
+
+characterLiteral :: Binding
+characterLiteral = define "CharacterLiteral" $ T.wrap T.string
+
+stringLiteral :: Binding
+stringLiteral = define "StringLiteral" $ T.wrap T.string
+
+booleanLiteral :: Binding
+booleanLiteral = define "BooleanLiteral" $ T.wrap T.boolean
+
+-- Container-related types
+vector :: Binding
+vector = define "Vector" $ T.record [
+  "elementType">: cpp "TypeExpression",
+  "elements">: T.list $ cpp "Expression"]
+
+map_ :: Binding
+map_ = define "Map" $ T.record [
+  "keyType">: cpp "TypeExpression",
+  "valueType">: cpp "TypeExpression",
+  "entries">: T.list $ cpp "MapEntry"]
+
+mapEntry :: Binding
+mapEntry = define "MapEntry" $ T.record [
+  "key">: cpp "Expression",
+  "value">: cpp "Expression"]
+
+set_ :: Binding
+set_ = define "Set" $ T.record [
+  "elementType">: cpp "TypeExpression",
+  "elements">: T.list $ cpp "Expression"]
+
+optional :: Binding
+optional = define "Optional" $ T.record [
+  "valueType">: cpp "TypeExpression",
+  "value">: T.optional $ cpp "Expression"]
+
+-- Operator types
+binaryOperator :: Binding
+binaryOperator = define "BinaryOperator" $ T.enum [
+  "plus", "minus", "multiply", "divide", "modulo",
+  "bitwiseAnd", "bitwiseOr", "bitwiseXor",
+  "logicalAnd", "logicalOr",
+  "equal", "notEqual", "less", "greater", "lessEqual", "greaterEqual",
+  "leftShift", "rightShift"]
+
+-- Utility types
+identifier_ :: Binding
+identifier_ = define "Identifier" T.string
+
+comment :: Binding
+comment = define "Comment" $ T.record [
+  "text">: T.string,
+  "isMultiline">: T.boolean]

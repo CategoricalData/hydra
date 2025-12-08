@@ -401,7 +401,7 @@ _Let_bindings = (Core.Name "bindings")
 
 _Let_in = (Core.Name "in")
 
--- | Some constructions allow the binding of a variable to value. This is called a “let-binder”.
+-- | Some constructions allow the binding of a variable to value. This is called a 'let-binder'.
 data LetBinder = 
   LetBinder {
     letBinderName :: Name,

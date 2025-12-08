@@ -1130,6 +1130,18 @@ _OptionalStringArgumentAndNestedTraversal_string = (Core.Name "string")
 
 _OptionalStringArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
 
+data OptionalTraversalScopeArgumentAndIntegerArgument = 
+  OptionalTraversalScopeArgumentAndIntegerArgument {
+    optionalTraversalScopeArgumentAndIntegerArgumentScope :: (Maybe TraversalScopeArgument),
+    optionalTraversalScopeArgumentAndIntegerArgumentLong :: IntegerArgument}
+  deriving (Eq, Ord, Read, Show)
+
+_OptionalTraversalScopeArgumentAndIntegerArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
+
+_OptionalTraversalScopeArgumentAndIntegerArgument_scope = (Core.Name "scope")
+
+_OptionalTraversalScopeArgumentAndIntegerArgument_long = (Core.Name "long")
+
 data SelectArgs = 
   SelectArgsColumn TraversalColumnArgument |
   SelectArgsPopStrings PopStringsArgument |
@@ -1173,18 +1185,6 @@ _TraversalPopArgumentAndNestedTraversal = (Core.Name "hydra.ext.org.apache.tinke
 _TraversalPopArgumentAndNestedTraversal_pop = (Core.Name "pop")
 
 _TraversalPopArgumentAndNestedTraversal_traversal = (Core.Name "traversal")
-
-data OptionalTraversalScopeArgumentAndIntegerArgument = 
-  OptionalTraversalScopeArgumentAndIntegerArgument {
-    optionalTraversalScopeArgumentAndIntegerArgumentScope :: (Maybe TraversalScopeArgument),
-    optionalTraversalScopeArgumentAndIntegerArgumentLong :: IntegerArgument}
-  deriving (Eq, Ord, Read, Show)
-
-_OptionalTraversalScopeArgumentAndIntegerArgument = (Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
-
-_OptionalTraversalScopeArgumentAndIntegerArgument_scope = (Core.Name "scope")
-
-_OptionalTraversalScopeArgumentAndIntegerArgument_long = (Core.Name "long")
 
 data TailArgs = 
   TailArgs {

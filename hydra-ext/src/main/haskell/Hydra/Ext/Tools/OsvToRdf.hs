@@ -18,7 +18,7 @@ import Hydra.Ext.Staging.Rdf.Serde
 import Hydra.Workflow
 import qualified Hydra.Ext.Staging.Rdf.Utils as RdfUt
 
-import Hydra.Ext.Sources.Other.Osv
+import qualified Hydra.Ext.Sources.Other.Osv as OsvSource
 import qualified Hydra.Ext.Dev.Osv.Schema as Osv
 
 import System.IO
@@ -79,7 +79,7 @@ osvJsonDirectoryToNtriples srcDir destDir = do
           osvJsonToNtriples coder (combine srcDir srcFile) (combine destDir destFile)
           return True
 
-osvContext = modulesToGraph [osvSchemaModule]
+osvContext = modulesToGraph [OsvSource.module_]
 
 osvInstanceContext = emptyInstanceContext osvContext
 

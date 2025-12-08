@@ -1,111 +1,97 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.TypeScript.Model where
 
 -- Standard imports for type-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-typeScriptNs = Namespace "hydra.ext.typeScript.model"
-ts = typeref typeScriptNs
+ns :: Namespace
+ns = Namespace "hydra.ext.typeScript.model"
 
-typeScriptModelModule :: Module
-typeScriptModelModule = Module typeScriptNs elements [Core.module_] [Core.module_] $
-    Just ("A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation")
+define :: String -> Type -> Binding
+define = defineType ns
+
+ts :: String -> Type
+ts = typeref ns
+
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
+    Just "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation"
   where
-    def = datatype typeScriptNs
     elements = [
+      functionType,
+      parameter,
+      primitiveType_,
+      type_]
 
-      def "FunctionType" $
-        record [
-          "parameters">: list $ ts "Parameter",
-          "range">: ts "Type"],
+functionType :: Binding
+functionType = define "FunctionType" $
+  T.record [
+    "parameters">: T.list $ ts "Parameter",
+    "range">: ts "Type"]
 
-      def "Parameter" $
-        record [
-          "name">: string,
-          "type">: ts "Type"],
+parameter :: Binding
+parameter = define "Parameter" $
+  T.record [
+    "name">: T.string,
+    "type">: ts "Type"]
 
-      def "PrimitiveType" $
-        union [
-          "bigint">:
-            doc "integers in the arbitrary precision format"
-            unit,
-          "boolean">:
-            doc "true and false"
-            unit,
-          "null">:
-            doc "equivalent to the unit type"
-            unit,
-          "number">:
-            doc "a double-precision IEEE 754 floating point"
-            unit,
-          "object">:
-            doc "similar to records"
-            unit,
-          "string">:
-            doc "an immutable UTF-16 string"
-            unit,
-          "symbol">:
-            doc "a unique value usually used as a key"
-            unit,
-          "undefined">:
-            doc "also equivalent to the unit type"
-            unit],
+primitiveType_ :: Binding
+primitiveType_ = define "PrimitiveType" $
+  T.union [
+    "bigint">:
+      doc "integers in the arbitrary precision format"
+      T.unit,
+    "boolean">:
+      doc "true and false"
+      T.unit,
+    "null">:
+      doc "equivalent to the unit type"
+      T.unit,
+    "number">:
+      doc "a double-precision IEEE 754 floating point"
+      T.unit,
+    "object">:
+      doc "similar to records"
+      T.unit,
+    "string">:
+      doc "an immutable UTF-16 string"
+      T.unit,
+    "symbol">:
+      doc "a unique value usually used as a key"
+      T.unit,
+    "undefined">:
+      doc "also equivalent to the unit type"
+      T.unit]
 
-      def "Type" $
-        union [
-          "array">:
-            doc "mutable arrays, also written Array<T>" $
-            ts "Type",
-          "function">:
-            doc "functions" $
-            ts "FunctionType",
-          "never">:
-            doc "the bottom type"
-            unit,
-          "objectLiteral">:
-            doc "e.g. { property: Type }"
-            unit,
-          "primitive">:
-            doc "A primitive type" $
-            ts "PrimitiveType",
-          "tuple">:
-            doc "tuples, which are fixed-length but mutable" $
-            list $ ts "Type",
-          "unknown">:
-            doc "The top type"
-            unit,
-          "void">:
-            doc "for functions with no documented return value"
-            unit]
-        ]
+type_ :: Binding
+type_ = define "Type" $
+  T.union [
+    "array">:
+      doc "mutable arrays, also written Array<T>" $
+      ts "Type",
+    "function">:
+      doc "functions" $
+      ts "FunctionType",
+    "never">:
+      doc "the bottom type"
+      T.unit,
+    "objectLiteral">:
+      doc "e.g. { property: Type }"
+      T.unit,
+    "primitive">:
+      doc "A primitive type" $
+      ts "PrimitiveType",
+    "tuple">:
+      doc "tuples, which are fixed-length but mutable" $
+      T.list $ ts "Type",
+    "unknown">:
+      doc "The top type"
+      T.unit,
+    "void">:
+      doc "for functions with no documented return value"
+      T.unit]
