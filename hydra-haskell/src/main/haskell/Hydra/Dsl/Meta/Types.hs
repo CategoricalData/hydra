@@ -14,7 +14,7 @@ import Hydra.Dsl.Meta.Base
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-import Prelude hiding (either, map, product, sum)
+import Prelude hiding (either, map, maybe, product, sum)
 
 
 -- Operators
@@ -162,10 +162,15 @@ mono t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables $ Phantoms.list [],
   Phantoms.field _TypeScheme_type t]
 
--- | Create a term-encoded optional (nullable) type
+-- | Create a term-encoded maybe (optional/nullable) type
+-- Example: maybe string
+maybe :: TTerm Type -> TTerm Type
+maybe = typeMaybe
+
+-- | Create a term-encoded optional (nullable) type (alias for 'maybe')
 -- Example: optional string
 optional :: TTerm Type -> TTerm Type
-optional = typeMaybe
+optional = maybe
 
 -- | Create a term-encoded pair type
 -- Example: pair string int32
@@ -237,9 +242,14 @@ unit :: TTerm Type
 unit = typeUnit
 
 -- | Create a term-encoded type variable
+-- Example: variable "a"
+variable :: String -> TTerm Type
+variable = typeVariable . name
+
+-- | Create a term-encoded type variable (alias for 'variable')
 -- Example: var "a"
 var :: String -> TTerm Type
-var = typeVariable . name
+var = variable
 
 wrap :: TTerm Name -> TTerm Type -> TTerm Type
 wrap name t = typeWrap $ wrappedType name t
