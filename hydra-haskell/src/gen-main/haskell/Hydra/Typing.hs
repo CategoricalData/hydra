@@ -11,7 +11,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | The context provided to type inference, including various typing enviroments.
+-- | The context provided to type inference, including various typing environments.
 data InferenceContext = 
   InferenceContext {
     -- | A fixed typing environment which is derived from the schema of the graph.

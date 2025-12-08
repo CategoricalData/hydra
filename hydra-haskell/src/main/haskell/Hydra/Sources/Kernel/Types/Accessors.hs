@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Accessors where
 
 -- Standard type-level kernel imports
@@ -33,14 +31,14 @@ accessorEdge = define "AccessorEdge" $
   doc "An edge in an accessor graph, connecting two nodes via a path" $
   T.record [
     "source">:
-      doc "The source node of the edge" $
-      use accessorNode,
+      doc "The source node of the edge"
+      accessorNode,
     "path">:
-      doc "The accessor path connecting source to target" $
-      use accessorPath,
+      doc "The accessor path connecting source to target"
+      accessorPath,
     "target">:
-      doc "The target node of the edge" $
-      use accessorNode]
+      doc "The target node of the edge"
+      accessorNode]
 
 accessorGraph :: Binding
 accessorGraph = define "AccessorGraph" $
@@ -48,91 +46,91 @@ accessorGraph = define "AccessorGraph" $
   T.record [
     "nodes">:
       doc "All nodes in the graph" $
-      T.list $ use accessorNode,
+      T.list accessorNode,
     "edges">:
       doc "All edges in the graph" $
-      T.list $ use accessorEdge]
+      T.list accessorEdge]
 
 accessorNode :: Binding
 accessorNode = define "AccessorNode" $
   doc "A node in an accessor graph, representing a term or subterm" $
   T.record [
     "name">:
-      doc "The qualified name of the term" $
-      use Core.name,
+      doc "The qualified name of the term"
+      Core.name,
     "label">:
-      doc "A human-readable label for the node" $
+      doc "A human-readable label for the node"
       T.string,
     "id" >:
-      doc "A unique identifier for the node" $
+      doc "A unique identifier for the node"
       T.string]
 
 accessorPath :: Binding
 accessorPath = define "AccessorPath" $
   doc "A sequence of term accessors forming a path through a term" $
-  T.wrap $ T.list $ use termAccessor
+  T.wrap $ T.list termAccessor
 
 termAccessor :: Binding
 termAccessor = define "TermAccessor" $
   doc "A function which maps from a term to a particular immediate subterm" $
   T.union [
     "annotatedBody">:
-      doc "Access the body of an annotated term" $
+      doc "Access the body of an annotated term"
       T.unit,
     "applicationFunction">:
-      doc "Access the function of an application term" $
+      doc "Access the function of an application term"
       T.unit,
     "applicationArgument">:
-      doc "Access the argument of an application term" $
+      doc "Access the argument of an application term"
       T.unit,
     "lambdaBody">:
-      doc "Access the body of a lambda term" $
+      doc "Access the body of a lambda term"
       T.unit,
     "unionCasesDefault">:
-      doc "Access the default case of a union elimination" $
+      doc "Access the default case of a union elimination"
       T.unit,
     "unionCasesBranch">:
-      doc "Access a specific branch of a union elimination by field name" $
-      use Core.name,
+      doc "Access a specific branch of a union elimination by field name"
+      Core.name,
     "letBody">:
-      doc "Access the body of a let term" $
+      doc "Access the body of a let term"
       T.unit,
     "letBinding">:
-      doc "Access a specific binding in a let term by variable name" $
-      use Core.name,
+      doc "Access a specific binding in a let term by variable name"
+      Core.name,
     "listElement">:
-      doc "Access an element of a list by index" $
+      doc "Access an element of a list by index"
       T.int32,
     "mapKey">:
-      doc "Access a key in a map by index" $
+      doc "Access a key in a map by index"
       T.int32,
     "mapValue">:
-      doc "Access a value in a map by index" $
+      doc "Access a value in a map by index"
       T.int32,
     "maybeTerm">:
-      doc "Access the term inside a Just value" $
+      doc "Access the term inside a Just value"
       T.unit,
     "productTerm">:
-      doc "Access an element of a product (tuple) by index" $
+      doc "Access an element of a product (tuple) by index"
       T.int32,
     "recordField">:
-      doc "Access a field of a record by field name" $
-      use Core.name,
+      doc "Access a field of a record by field name"
+      Core.name,
     "setElement">:
-      doc "Access an element of a set by index" $
+      doc "Access an element of a set by index"
       T.int32,
     "sumTerm">:
-      doc "Access the term inside a sum variant" $
+      doc "Access the term inside a sum variant"
       T.unit,
     "typeLambdaBody">:
-      doc "Access the body of a type lambda term" $
+      doc "Access the body of a type lambda term"
       T.unit,
     "typeApplicationTerm">:
-      doc "Access the term being applied to a type" $
+      doc "Access the term being applied to a type"
       T.unit,
     "injectionTerm">:
-      doc "Access the term inside a union injection" $
+      doc "Access the term inside a union injection"
       T.unit,
     "wrappedTerm">:
-      doc "Access the term inside a wrapped term" $
+      doc "Access the term inside a wrapped term"
       T.unit]

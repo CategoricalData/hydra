@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Parsing where
 
 -- Standard type-level kernel imports
@@ -44,18 +42,18 @@ parseResult = define "ParseResult" $
   T.forAll "a" $ T.union [
     "success">:
       doc "A successful parse, with a value and the remaining unparsed input" $
-      use parseSuccess @@ T.var "a",
+      parseSuccess @@ "a",
     "failure">:
-      doc "A failed parse, with an error message and the remaining input" $
-      use parseError]
+      doc "A failed parse, with an error message and the remaining input"
+      parseError]
 
 parseSuccess :: Binding
 parseSuccess = define "ParseSuccess" $
   doc "A successful parse result" $
   T.forAll "a" $ T.record [
     "value">:
-      doc "The parsed value" $
-      T.var "a",
+      doc "The parsed value"
+      "a",
     "remainder">:
       doc "The remaining unparsed input" $
       T.string]
@@ -64,4 +62,4 @@ parser :: Binding
 parser = define "Parser" $
   doc "A parser which consumes characters from a string and produces a value" $
   T.forAll "a" $ T.wrap $
-    T.string ~> (use parseResult @@ T.var "a")
+    T.string ~> parseResult @@ "a"

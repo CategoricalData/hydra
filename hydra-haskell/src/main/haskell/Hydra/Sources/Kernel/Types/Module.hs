@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Module where
 
 -- Standard type-level kernel imports
@@ -38,11 +36,11 @@ definition = define "Definition" $
   doc "A definition, which may be either a term or type definition" $
   T.union [
     "term">:
-      doc "A term definition" $
-      use termDefinition,
+      doc "A term definition"
+      termDefinition,
     "type">:
-      doc "A type definition" $
-      use typeDefinition]
+      doc "A type definition"
+      typeDefinition]
 
 fileExtension :: Binding
 fileExtension = define "FileExtension" $
@@ -54,31 +52,31 @@ library = define "Library" $
   doc "A library of primitive functions" $
   T.record [
     "namespace">:
-      doc "A common prefix for all primitive function names in the library" $
-      use namespace,
+      doc "A common prefix for all primitive function names in the library"
+      namespace,
     "prefix">:
-      doc "A preferred namespace prefix for function names in the library" $
+      doc "A preferred namespace prefix for function names in the library"
       T.string,
     "primitives">:
       doc "The primitives defined in this library" $
-      T.list $ use Graph.primitive]
+      T.list Graph.primitive]
 
 module' :: Binding
 module' = define "Module" $
   doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
   T.record [
     "namespace">:
-      doc "A common prefix for all element names in the module" $
-      use namespace,
+      doc "A common prefix for all element names in the module"
+      namespace,
     "elements">:
       doc "The elements defined in this module" $
-      T.list $ use Core.binding,
+      T.list Core.binding,
     "termDependencies">:
       doc "Any modules which the term expressions of this module directly depend upon" $
-      T.list $ use module',
+      T.list module',
     "typeDependencies">:
       doc "Any modules which the type expressions of this module directly depend upon" $
-      T.list $ use module',
+      T.list module',
     "description">:
       doc "An optional human-readable description of the module" $
       T.optional T.string]
@@ -94,10 +92,10 @@ namespaces = define "Namespaces" $
   T.forAll "n" $ T.record [
     "focus">:
       doc "The namespace in focus, together with its associated value" $
-      T.pair (use namespace) (T.var "n"),
+      T.pair namespace "n",
     "mapping">:
       doc "A mapping of namespaces to values" $
-      T.map (use namespace) (T.var "n")]
+      T.map namespace "n"]
 
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
@@ -105,9 +103,9 @@ qualifiedName = define "QualifiedName" $
   T.record [
     "namespace">:
       doc "The optional namespace" $
-      T.optional $ use namespace,
+      T.optional namespace,
     "local">:
-      doc "The local name" $
+      doc "The local name"
       T.string]
 
 termDefinition :: Binding
@@ -115,23 +113,23 @@ termDefinition = define "TermDefinition" $
   doc "A term-level definition, including a name, a term, and the type of the term" $
   T.record [
     "name">:
-      doc "The name of the term" $
-      use Core.name,
+      doc "The name of the term"
+      Core.name,
     "term">:
-      doc "The term being defined" $
-      use Core.term,
+      doc "The term being defined"
+      Core.term,
     "type">:
-      doc "The type of the term" $
-      use Core.type_]
+      doc "The type of the term"
+      Core.type_]
 
 typeDefinition :: Binding
 typeDefinition = define "TypeDefinition" $
   doc "A type-level definition, including a name and the type" $
   T.record [
     "name">:
-      doc "The name of the type" $
-      use Core.name,
+      doc "The name of the type"
+      Core.name,
     -- TODO: consider using TypeScheme here instead of Type
     "type">:
-      doc "The type being defined" $
-      use Core.type_]
+      doc "The type being defined"
+      Core.type_]

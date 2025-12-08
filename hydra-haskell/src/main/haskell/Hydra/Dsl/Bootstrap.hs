@@ -1,10 +1,20 @@
 -- | A bootstrapping DSL, used for Hydra's inner core models
 
-module Hydra.Dsl.Bootstrap where
+module Hydra.Dsl.Bootstrap (
+  module Hydra.Dsl.AsType,
+  bootstrapGraph,
+  datatype,
+  qualify,
+  typeref,
+  defineType,
+  use,
+  useType,
+) where
 
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Core
+import Hydra.Dsl.AsType
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Graph
 import Hydra.Lexical

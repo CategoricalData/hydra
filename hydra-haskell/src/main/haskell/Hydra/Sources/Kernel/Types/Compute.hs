@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Compute where
 
 -- Standard type-level kernel imports
@@ -34,17 +32,17 @@ adapter = define "Adapter" $
   doc "A two-level bidirectional encoder which adapts types to types and terms to terms" $
   T.forAlls ["s1", "s2", "t1", "t2", "v1", "v2"] $ T.record [
     "isLossy">:
-      doc "Whether information may be lost in the course of this adaptation" $
+      doc "Whether information may be lost in the course of this adaptation"
       T.boolean,
     "source">:
-      doc "The source type" $
-      T.var "t1",
+      doc "The source type"
+      "t1",
     "target">:
-      doc "The target type" $
-      T.var "t2",
+      doc "The target type"
+      "t2",
     "coder">:
       doc "The coder for transforming instances of the source type to instances of the target type" $
-      use coder @@ T.var "s1" @@ T.var "s2" @@ T.var "v1" @@ T.var "v2"]
+      coder @@ "s1" @@ "s2" @@ "v1" @@ "v2"]
 
 bicoder :: Binding
 bicoder = define "Bicoder" $
@@ -52,10 +50,10 @@ bicoder = define "Bicoder" $
   T.forAlls ["s1", "s2", "t1", "t2", "v1", "v2"] $ T.record [
     "encode">:
       doc "A function from source types to adapters" $
-      T.var "t1" ~> (use adapter @@ T.var "s1" @@ T.var "s2" @@ T.var "t1" @@ T.var "t2" @@ T.var "v1" @@ T.var "v2"),
+      "t1" ~> adapter @@ "s1" @@ "s2" @@ "t1" @@ "t2" @@ "v1" @@ "v2",
     "decode">:
       doc "A function from target types to adapters" $
-      T.var "t2" ~> (use adapter @@ T.var "s2" @@ T.var "s1" @@ T.var "t2" @@ T.var "t1" @@ T.var "v2" @@ T.var "v1")]
+      "t2" ~> adapter @@ "s2" @@ "s1" @@ "t2" @@ "t1" @@ "v2" @@ "v1"]
 
 coder :: Binding
 coder = define "Coder" $
@@ -63,16 +61,16 @@ coder = define "Coder" $
   T.forAlls ["s1", "s2", "v1", "v2"] $ T.record [
     "encode">:
       doc "A function from source values to a flow of target values" $
-      T.var "v1" ~> (use flow @@ T.var "s1" @@ T.var "v2"),
+      "v1" ~> flow @@ "s1" @@ "v2",
     "decode">:
       doc "A function from target values to a flow of source values" $
-      T.var "v2" ~> (use flow @@ T.var "s2" @@ T.var "v1")]
+      "v2" ~> flow @@ "s2" @@ "v1"]
 
 flow :: Binding
 flow = define "Flow" $
   doc "A variant of the State monad with built-in logging and error handling" $
   T.forAlls ["s", "v"] $ T.wrap $
-  T.var "s" ~> (use trace ~> (use flowState @@ T.var "s" @@ T.var "v"))
+  "s" ~> trace ~> flowState @@ "s" @@ "v"
 
 flowState :: Binding
 flowState = define "FlowState" $
@@ -80,13 +78,13 @@ flowState = define "FlowState" $
   T.forAlls ["s", "v"] $ T.record [
     "value">:
       doc "The resulting value, or nothing in the case of failure" $
-      T.optional (T.var "v"),
+      T.optional "v",
     "state">:
-      doc "The final state" $
-      T.var "s",
+      doc "The final state"
+      "s",
     "trace">:
-      doc "The trace (log) produced during evaluation" $
-      use trace]
+      doc "The trace (log) produced during evaluation"
+      trace]
 
 trace :: Binding
 trace = define "Trace" $
@@ -100,4 +98,4 @@ trace = define "Trace" $
       T.list T.string,
     "other">:
       doc "A map of string keys to arbitrary terms as values, for application-specific use" $
-      T.map (use Core.name) (use Core.term)]
+      T.map Core.name Core.term]

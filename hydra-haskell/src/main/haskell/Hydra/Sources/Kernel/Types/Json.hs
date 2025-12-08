@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 -- | A simple JSON model. This model is part of the Hydra kernel, despite JSON being an external language; JSON support is built in to Hydra
 
 module Hydra.Sources.Kernel.Types.Json where
@@ -32,7 +30,7 @@ value = define "Value" $
   T.union [
     "array">:
       doc "A JSON array" $
-      T.list $ use value,
+      T.list value,
     "boolean">:
       doc "A boolean value" $
       T.boolean,
@@ -44,7 +42,7 @@ value = define "Value" $
       T.bigfloat, -- TODO: JSON numbers are decimal-encoded
     "object">:
       doc "A JSON object as a set of key/value pairs" $
-      T.map T.string (use value),
+      T.map T.string value,
     "string">:
       doc "A string value" $
       T.string]
