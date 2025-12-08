@@ -1,103 +1,119 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | A model for Hydra labeled-BNF grammars
 
 module Hydra.Sources.Kernel.Types.Grammar where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms                 as Terms
-import           Hydra.Dsl.Types                 as Types
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Data.List                       as L
-import qualified Data.Map                        as M
-import qualified Data.Set                        as S
-import qualified Data.Maybe                      as Y
 
+
+ns :: Namespace
+ns = Namespace "hydra.grammar"
+
+define :: String -> Type -> Binding
+define = defineType ns
 
 module_ :: Module
 module_ = Module ns elements [] [Core.module_] $
     Just "A common API for BNF-based grammars, specifying context-free languages"
   where
-    ns = Namespace "hydra.grammar"
-    grammar = typeref ns
-    def = datatype ns
-
     elements = [
+      constant,
+      grammar,
+      label,
+      labeledPattern,
+      pattern,
+      production,
+      regex,
+      symbol]
 
-      def "Constant" $
-        doc "A constant pattern" $
-        wrap string,
+constant :: Binding
+constant = define "Constant" $
+  doc "A constant pattern" $
+  T.wrap T.string
 
-      def "Grammar" $
-        doc "An enhanced Backus-Naur form (BNF) grammar" $
-        wrap $ list $ grammar "Production",
+grammar :: Binding
+grammar = define "Grammar" $
+  doc "An enhanced Backus-Naur form (BNF) grammar" $
+  T.wrap $ T.list $ use production
 
-      def "Label" $
-        doc "A name for a pattern" $
-        wrap string,
+label :: Binding
+label = define "Label" $
+  doc "A name for a pattern" $
+  T.wrap T.string
 
-      def "LabeledPattern" $
-        doc "A pattern together with a name (label)" $
-        record [
-        "label">:
-          doc "The label for the pattern" $
-          grammar "Label",
-        "pattern">:
-          doc "The pattern being labeled" $
-          grammar "Pattern"],
+labeledPattern :: Binding
+labeledPattern = define "LabeledPattern" $
+  doc "A pattern together with a name (label)" $
+  T.record [
+    "label">:
+      doc "The label for the pattern" $
+      use label,
+    "pattern">:
+      doc "The pattern being labeled" $
+      use pattern]
 
-      def "Pattern" $
-        doc "A pattern which matches valid expressions in the language" $
-        union [
-          "alternatives">:
-            doc "A choice between alternative patterns" $
-            list $ grammar "Pattern",
-          "constant">:
-            doc "A constant (terminal) pattern" $
-            grammar "Constant",
-          "ignored">:
-            doc "A pattern to be ignored (not captured)" $
-            grammar "Pattern",
-          "labeled">:
-            doc "A labeled pattern" $
-            grammar "LabeledPattern",
-          "nil">:
-            doc "An empty pattern" $
-            unit,
-          "nonterminal">:
-            doc "A nonterminal symbol reference" $
-            grammar "Symbol",
-          "option">:
-            doc "An optional pattern (zero or one occurrence)" $
-            grammar "Pattern",
-          "plus">:
-            doc "One or more occurrences of a pattern" $
-            grammar "Pattern",
-          "regex">:
-            doc "A regular expression pattern" $
-            grammar "Regex",
-          "sequence">:
-            doc "A sequence of patterns" $
-            list $ grammar "Pattern",
-          "star">:
-            doc "Zero or more occurrences of a pattern" $
-            grammar "Pattern"],
+pattern :: Binding
+pattern = define "Pattern" $
+  doc "A pattern which matches valid expressions in the language" $
+  T.union [
+    "alternatives">:
+      doc "A choice between alternative patterns" $
+      T.list $ use pattern,
+    "constant">:
+      doc "A constant (terminal) pattern" $
+      use constant,
+    "ignored">:
+      doc "A pattern to be ignored (not captured)" $
+      use pattern,
+    "labeled">:
+      doc "A labeled pattern" $
+      use labeledPattern,
+    "nil">:
+      doc "An empty pattern" $
+      T.unit,
+    "nonterminal">:
+      doc "A nonterminal symbol reference" $
+      use symbol,
+    "option">:
+      doc "An optional pattern (zero or one occurrence)" $
+      use pattern,
+    "plus">:
+      doc "One or more occurrences of a pattern" $
+      use pattern,
+    "regex">:
+      doc "A regular expression pattern" $
+      use regex,
+    "sequence">:
+      doc "A sequence of patterns" $
+      T.list $ use pattern,
+    "star">:
+      doc "Zero or more occurrences of a pattern" $
+      use pattern]
 
-      def "Production" $
-        doc "A BNF production" $
-        record [
-          "symbol">:
-            doc "The nonterminal symbol being defined" $
-            grammar "Symbol",
-          "pattern">:
-            doc "The pattern which defines the symbol" $
-            grammar "Pattern"],
+production :: Binding
+production = define "Production" $
+  doc "A BNF production" $
+  T.record [
+    "symbol">:
+      doc "The nonterminal symbol being defined" $
+      use symbol,
+    "pattern">:
+      doc "The pattern which defines the symbol" $
+      use pattern]
 
-      def "Regex" $
-        doc "A regular expression" $
-        wrap string,
+regex :: Binding
+regex = define "Regex" $
+  doc "A regular expression" $
+  T.wrap T.string
 
-      def "Symbol" $
-        doc "A nonterminal symbol" $
-        wrap string]
+symbol :: Binding
+symbol = define "Symbol" $
+  doc "A nonterminal symbol" $
+  T.wrap T.string

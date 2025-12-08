@@ -3,112 +3,120 @@
 module Hydra.Sources.Kernel.Types.Coders where
 
 -- Standard type-level kernel imports
-import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
+import           Hydra.Kernel hiding (language, languageName, languageConstraints)
+import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms                 as Terms
-import           Hydra.Dsl.Types                 as Types
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Data.List                       as L
-import qualified Data.Map                        as M
-import qualified Data.Set                        as S
-import qualified Data.Maybe                      as Y
-
-import qualified Hydra.Sources.Kernel.Types.Compute  as Compute
-import qualified Hydra.Sources.Kernel.Types.Graph    as Graph
+import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
+
+ns :: Namespace
+ns = Namespace "hydra.coders"
+
+define :: String -> Type -> Binding
+define = defineType ns
 
 module_ :: Module
 module_ = Module ns elements [Graph.module_, Compute.module_, Variants.module_] [Core.module_] $
     Just "Abstractions for paired transformations between languages"
   where
-    ns = Namespace "hydra.coders"
-    core = typeref $ moduleNamespace Core.module_
-    compute = typeref $ moduleNamespace Compute.module_
-    graph = typeref $ moduleNamespace Graph.module_
-    variants = typeref $ moduleNamespace Variants.module_
-    coders = typeref ns
-
-    def = datatype ns
-
     elements = [
+      adapterContext,
+      coderDirection,
+      language,
+      languageConstraints,
+      languageName,
+      symmetricAdapter,
+      traversalOrder,
+      typeAdapter]
 
-      def "AdapterContext" $
-        doc "An evaluation context together with a source language and a target language" $
-        record [
-          "graph">:
-            doc "The underlying graph of elements and primitives" $
-            graph "Graph",
-          "language">:
-            doc "The language being encoded or decoded" $
-            coders "Language",
-          "adapters">:
-            doc "A map of type names to adapters for those types" $
-            Types.map (core "Name") (compute "Adapter"
-            @@ coders "AdapterContext" @@ coders "AdapterContext"
-            @@ core "Type" @@ core "Type"
-            @@ core "Term" @@ core "Term")],
+adapterContext :: Binding
+adapterContext = define "AdapterContext" $
+  doc "An evaluation context together with a source language and a target language" $
+  T.record [
+    "graph">:
+      doc "The underlying graph of elements and primitives" $
+      use Graph.graph,
+    "language">:
+      doc "The language being encoded or decoded" $
+      use language,
+    "adapters">:
+      doc "A map of type names to adapters for those types" $
+      T.map (use Core.name) (use Compute.adapter
+        @@ use adapterContext @@ use adapterContext
+        @@ use Core.type_ @@ use Core.type_
+        @@ use Core.term @@ use Core.term)]
 
-      def "CoderDirection" $
-        doc "Indicates either the 'out' or the 'in' direction of a coder" $
-        enum [
-          "encode",
-          "decode"],
+coderDirection :: Binding
+coderDirection = define "CoderDirection" $
+  doc "Indicates either the 'out' or the 'in' direction of a coder" $
+  T.enum [
+    "encode",
+    "decode"]
 
-      def "Language" $
-        doc "A named language together with language-specific constraints" $
-        record [
-          "name">:
-            doc "The unique name of the language" $
-            coders "LanguageName",
-          "constraints">:
-            doc "The constraints which characterize the language" $
-            coders "LanguageConstraints"],
+language :: Binding
+language = define "Language" $
+  doc "A named language together with language-specific constraints" $
+  T.record [
+    "name">:
+      doc "The unique name of the language" $
+      use languageName,
+    "constraints">:
+      doc "The constraints which characterize the language" $
+      use languageConstraints]
 
-      def "LanguageConstraints" $
-        doc "A set of constraints on valid type and term expressions, characterizing a language" $
-        record [
-          "eliminationVariants">:
-            doc "All supported elimination variants" $
-            Types.set $ variants "EliminationVariant",
-          "literalVariants">:
-            doc "All supported literal variants" $
-            Types.set $ variants "LiteralVariant",
-          "floatTypes">:
-            doc "All supported float types" $
-            Types.set $ core "FloatType",
-          "functionVariants">:
-            doc "All supported function variants" $
-            Types.set $ variants "FunctionVariant",
-          "integerTypes">:
-            doc "All supported integer types" $
-            Types.set $ core "IntegerType",
-          "termVariants">:
-            doc "All supported term variants" $
-            Types.set $ variants "TermVariant",
-          "typeVariants">:
-            doc "All supported type variants" $
-            Types.set $ variants "TypeVariant",
-          "types">:
-            doc "A logical set of types, as a predicate which tests a type for inclusion" $
-            core "Type" --> boolean],
+languageConstraints :: Binding
+languageConstraints = define "LanguageConstraints" $
+  doc "A set of constraints on valid type and term expressions, characterizing a language" $
+  T.record [
+    "eliminationVariants">:
+      doc "All supported elimination variants" $
+      T.set $ use Variants.eliminationVariant,
+    "literalVariants">:
+      doc "All supported literal variants" $
+      T.set $ use Variants.literalVariant,
+    "floatTypes">:
+      doc "All supported float types" $
+      T.set $ use Core.floatType,
+    "functionVariants">:
+      doc "All supported function variants" $
+      T.set $ use Variants.functionVariant,
+    "integerTypes">:
+      doc "All supported integer types" $
+      T.set $ use Core.integerType,
+    "termVariants">:
+      doc "All supported term variants" $
+      T.set $ use Variants.termVariant,
+    "typeVariants">:
+      doc "All supported type variants" $
+      T.set $ use Variants.typeVariant,
+    "types">:
+      doc "A logical set of types, as a predicate which tests a type for inclusion" $
+      use Core.type_ ~> T.boolean]
 
-      def "LanguageName" $
-        doc "The unique name of a language" $
-        wrap string,
+languageName :: Binding
+languageName = define "LanguageName" $
+  doc "The unique name of a language" $
+  T.wrap T.string
 
-      def "SymmetricAdapter" $
-        doc "A bidirectional encoder which maps between the same type and term languages on either side" $
-        forAlls ["s", "t", "v"] $ compute "Adapter" @@ "s" @@ "s" @@ "t" @@ "t" @@ "v" @@ "v",
+symmetricAdapter :: Binding
+symmetricAdapter = define "SymmetricAdapter" $
+  doc "A bidirectional encoder which maps between the same type and term languages on either side" $
+  T.forAlls ["s", "t", "v"] $ use Compute.adapter @@ T.var "s" @@ T.var "s" @@ T.var "t" @@ T.var "t" @@ T.var "v" @@ T.var "v"
 
-      def "TraversalOrder" $
-        doc "Specifies either a pre-order or post-order traversal" $
-        union [
-          "pre">: doc "Pre-order traversal" unit,
-          "post">: doc "Post-order traversal" unit],
+traversalOrder :: Binding
+traversalOrder = define "TraversalOrder" $
+  doc "Specifies either a pre-order or post-order traversal" $
+  T.union [
+    "pre">: doc "Pre-order traversal" T.unit,
+    "post">: doc "Post-order traversal" T.unit]
 
-      def "TypeAdapter" $
-        doc "A function which maps a Hydra type to a symmetric adapter between types and terms" $
-        core "Type" --> compute "Flow" @@ coders "AdapterContext" @@
-          (coders "SymmetricAdapter" @@ coders "AdapterContext" @@ core "Type" @@ core "Term")]
+typeAdapter :: Binding
+typeAdapter = define "TypeAdapter" $
+  doc "A function which maps a Hydra type to a symmetric adapter between types and terms" $
+  use Core.type_ ~> (use Compute.flow @@ use adapterContext @@
+    (use symmetricAdapter @@ use adapterContext @@ use Core.type_ @@ use Core.term))
