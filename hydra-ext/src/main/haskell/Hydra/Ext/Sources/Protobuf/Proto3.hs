@@ -1,199 +1,214 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Protobuf.Proto3 where
 
 -- Standard imports for type-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-proto3Ns = Namespace "hydra.ext.protobuf.proto3"
-proto3 = typeref proto3Ns
+ns :: Namespace
+ns = Namespace "hydra.ext.protobuf.proto3"
 
-proto3Module :: Module
-proto3Module = Module proto3Ns elements [Core.module_] [Core.module_] $
+define :: String -> Type -> Binding
+define = defineType ns
+
+proto3 :: String -> Type
+proto3 = typeref ns
+
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just ("A model for Protocol Buffers v3 enum and message types, designed as a target for transformations."
       ++ "This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto,"
       ++ " as well as the proto3 reference documentation")
   where
-    def = datatype proto3Ns
     elements = [
+      definition,
+      enumDefinition,
+      enumValue,
+      enumValueName,
+      field,
+      fieldName_,
+      fieldType,
+      fileReference,
+      mapType,
+      messageDefinition,
+      option,
+      packageName,
+      protoFile,
+      scalarType,
+      simpleType,
+      typeName,
+      typeReference,
+      value]
 
-      def "Definition" $
-        union [
-          "enum">: proto3 "EnumDefinition",
-          "message">: proto3 "MessageDefinition"],
+definition :: Binding
+definition = define "Definition" $
+  T.union [
+    "enum">: proto3 "EnumDefinition",
+    "message">: proto3 "MessageDefinition"]
 
-      def "EnumDefinition" $
-        doc "Enum type definition" $
-        record [
-          "name">:
-            doc "Enum type name" $
-            proto3 "TypeName",
-          "values">:
-            doc "Enum value definitions" $
-            list $ proto3 "EnumValue",
-          "options">:
-            doc "Protocol buffer options" $
-            list $ proto3 "Option"],
+enumDefinition :: Binding
+enumDefinition = define "EnumDefinition" $
+  doc "Enum type definition" $
+  T.record [
+    "name">:
+      doc "Enum type name" $
+      proto3 "TypeName",
+    "values">:
+      doc "Enum value definitions" $
+      T.list $ proto3 "EnumValue",
+    "options">:
+      doc "Protocol buffer options" $
+      T.list $ proto3 "Option"]
 
-      def "EnumValue" $
-        doc "Enum value definition" $
-        record [
-          "name">:
-            doc "Enum value name" $
-            proto3 "EnumValueName",
-          "number">:
-            doc "Enum value number"
-            int32,
-          "options">:
-            doc "Protocol buffer options" $
-            list $ proto3 "Option"],
+enumValue :: Binding
+enumValue = define "EnumValue" $
+  doc "Enum value definition" $
+  T.record [
+    "name">:
+      doc "Enum value name" $
+      proto3 "EnumValueName",
+    "number">:
+      doc "Enum value number"
+      T.int32,
+    "options">:
+      doc "Protocol buffer options" $
+      T.list $ proto3 "Option"]
 
-      def "EnumValueName" $
-        wrap string,
+enumValueName :: Binding
+enumValueName = define "EnumValueName" $
+  T.wrap T.string
 
-      def "Field" $
-        doc "A single field of a message type" $
-        record [
-          "name">:
-            doc "The field name" $
-            proto3 "FieldName",
-          "jsonName">:
-            doc "The field JSON name" $
-            optional string,
-          "type">:
-            doc "The datatype of the field" $
-            proto3 "FieldType",
-          "number">:
-            doc "The field number"
-            int32,
-          "options">:
-            doc "The protocol buffer options" $
-            list $ proto3 "Option"],
+field :: Binding
+field = define "Field" $
+  doc "A single field of a message type" $
+  T.record [
+    "name">:
+      doc "The field name" $
+      proto3 "FieldName",
+    "jsonName">:
+      doc "The field JSON name" $
+      T.optional T.string,
+    "type">:
+      doc "The datatype of the field" $
+      proto3 "FieldType",
+    "number">:
+      doc "The field number"
+      T.int32,
+    "options">:
+      doc "The protocol buffer options" $
+      T.list $ proto3 "Option"]
 
-      def "FieldName" $
-        doc "The name of a field" $
-        wrap string,
+fieldName_ :: Binding
+fieldName_ = define "FieldName" $
+  doc "The name of a field" $
+  T.wrap T.string
 
-      def "FieldType" $
-        union [
-          "map">: proto3 "MapType",
-          "oneof">: list $ proto3 "Field",
-          "repeated">: proto3 "SimpleType",
-          "simple">: proto3 "SimpleType"],
+fieldType :: Binding
+fieldType = define "FieldType" $
+  T.union [
+    "map">: proto3 "MapType",
+    "oneof">: T.list $ proto3 "Field",
+    "repeated">: proto3 "SimpleType",
+    "simple">: proto3 "SimpleType"]
 
-      def "FileReference" $
-        wrap string,
+fileReference :: Binding
+fileReference = define "FileReference" $
+  T.wrap T.string
 
-      def "MapType" $
-        record [
-          "keys">: proto3 "SimpleType",
-          "values">: proto3 "SimpleType"],
+mapType :: Binding
+mapType = define "MapType" $
+  T.record [
+    "keys">: proto3 "SimpleType",
+    "values">: proto3 "SimpleType"]
 
-      def "MessageDefinition" $
-        doc "A protocol buffer message type" $
-        record [
-          "name">:
-            doc "The fully qualified message name" $
-            proto3 "TypeName",
-          "fields">:
-            doc "The list of fields" $
-            list $ proto3 "Field",
-          "options">:
-            doc "The protocol buffer options" $
-            list $ proto3 "Option"],
+messageDefinition :: Binding
+messageDefinition = define "MessageDefinition" $
+  doc "A protocol buffer message type" $
+  T.record [
+    "name">:
+      doc "The fully qualified message name" $
+      proto3 "TypeName",
+    "fields">:
+      doc "The list of fields" $
+      T.list $ proto3 "Field",
+    "options">:
+      doc "The protocol buffer options" $
+      T.list $ proto3 "Option"]
 
-      def "Option" $
-        doc ("A protocol buffer option, which can be attached to a message, field, " ++
-             "enumeration, etc") $
-        record [
-          "name">:
-            doc ("The option's name. For protobuf built-in options (options defined in " ++
-                 "descriptor.proto), this is the short name. For example, `\"map_entry\"`. " ++
-                 "For custom options, it should be the fully-qualified name. For example, " ++
-                 "`\"google.api.http\"`.")
-            string,
-          "value">:
-            doc ("The option's value") $
-            proto3 "Value"],
+option :: Binding
+option = define "Option" $
+  doc ("A protocol buffer option, which can be attached to a message, field, " ++
+       "enumeration, etc") $
+  T.record [
+    "name">:
+      doc ("The option's name. For protobuf built-in options (options defined in " ++
+           "descriptor.proto), this is the short name. For example, `\"map_entry\"`. " ++
+           "For custom options, it should be the fully-qualified name. For example, " ++
+           "`\"google.api.http\"`.")
+      T.string,
+    "value">:
+      doc ("The option's value") $
+      proto3 "Value"]
 
-      def "PackageName" $
-        wrap string,
+packageName :: Binding
+packageName = define "PackageName" $
+  T.wrap T.string
 
-      def "ProtoFile" $
-        doc "A .proto file, usually containing one or more enum or message type definitions" $
-        record [
-          "package">: proto3 "PackageName",
-          "imports">: list $ proto3 "FileReference",
-          "types">: list $ proto3 "Definition",
-          "options">: list $ proto3 "Option"],
+protoFile :: Binding
+protoFile = define "ProtoFile" $
+  doc "A .proto file, usually containing one or more enum or message type definitions" $
+  T.record [
+    "package">: proto3 "PackageName",
+    "imports">: T.list $ proto3 "FileReference",
+    "types">: T.list $ proto3 "Definition",
+    "options">: T.list $ proto3 "Option"]
 
-      def "ScalarType" $
-        doc "One of several Proto3 scalar types" $
-        enum [
-          "bool",
-          "bytes",
-          "double",
-          "fixed32",
-          "fixed64",
-          "float",
-          "int32",
-          "int64",
-          "sfixed32",
-          "sfixed64",
-          "sint32",
-          "sint64",
-          "string",
-          "uint32",
-          "uint64"],
+scalarType :: Binding
+scalarType = define "ScalarType" $
+  doc "One of several Proto3 scalar types" $
+  T.enum [
+    "bool",
+    "bytes",
+    "double",
+    "fixed32",
+    "fixed64",
+    "float",
+    "int32",
+    "int64",
+    "sfixed32",
+    "sfixed64",
+    "sint32",
+    "sint64",
+    "string",
+    "uint32",
+    "uint64"]
 
-      def "SimpleType" $
-        doc "A scalar type or a reference to an enum type or message type" $
-        union [
-          "reference">: proto3 "TypeName",
-          "scalar">: proto3 "ScalarType"],
+simpleType :: Binding
+simpleType = define "SimpleType" $
+  doc "A scalar type or a reference to an enum type or message type" $
+  T.union [
+    "reference">: proto3 "TypeName",
+    "scalar">: proto3 "ScalarType"]
 
-      def "TypeName" $
-        doc "The local name of an enum type or message type" $
-        wrap string,
+typeName :: Binding
+typeName = define "TypeName" $
+  doc "The local name of an enum type or message type" $
+  T.wrap T.string
 
-      def "TypeReference" $
-        doc "A reference to an enum type or message type" $
-        wrap string,
+typeReference :: Binding
+typeReference = define "TypeReference" $
+  doc "A reference to an enum type or message type" $
+  T.wrap T.string
 
-      def "Value" $
-        doc "A scalar value" $
-        union [
-          "boolean">: boolean,
-          "string">: string
-          -- Add other scalar value types as needed
-        ]]
+value :: Binding
+value = define "Value" $
+  doc "A scalar value" $
+  T.union [
+    "boolean">: T.boolean,
+    "string">: T.string
+    -- Add other scalar value types as needed
+  ]

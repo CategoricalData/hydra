@@ -4,152 +4,176 @@ module Hydra.Ext.Sources.Pegasus.Pdl where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
 
 
-pegasusPdlModule :: Module
-pegasusPdlModule = Module ns elements [Json.module_] [Core.module_] $
+ns :: Namespace
+ns = Namespace "hydra.ext.pegasus.pdl"
+
+define :: String -> Type -> Binding
+define = defineType ns
+
+pdl :: String -> Type
+pdl = typeref ns
+
+json :: String -> Type
+json = typeref $ moduleNamespace Json.module_
+
+module_ :: Module
+module_ = Module ns elements [Json.module_] [Core.module_] $
     Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")
   where
-    ns = Namespace "hydra.ext.pegasus.pdl"
-    def = datatype ns
-    pdl = typeref ns
-    json = typeref $ moduleNamespace Json.module_
-
     elements = [
+      annotations,
+      enumField,
+      enumFieldName,
+      enumSchema,
+      fieldName_,
+      namedSchema,
+      namedSchemaType,
+      name_,
+      namespace_,
+      package_,
+      primitiveType_,
+      propertyKey,
+      property_,
+      qualifiedName,
+      recordField,
+      recordSchema,
+      schema,
+      schemaFile,
+      unionMember,
+      unionSchema]
 
-      def "Annotations" $
-        doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
-        record [
-          "doc">: optional string,
-          "deprecated">: boolean],
+annotations :: Binding
+annotations = define "Annotations" $
+  doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
+  T.record [
+    "doc">: T.maybe T.string,
+    "deprecated">: T.boolean]
 
-      def "EnumField" $
-        record [
-          "name">: pdl "EnumFieldName",
-          "annotations">: pdl "Annotations"],
+enumField :: Binding
+enumField = define "EnumField" $
+  T.record [
+    "name">: pdl "EnumFieldName",
+    "annotations">: pdl "Annotations"]
 
-      def "EnumFieldName" $
-        wrap string,
+enumFieldName :: Binding
+enumFieldName = define "EnumFieldName" $
+  T.wrap T.string
 
-      def "EnumSchema" $
-        record [
-          "fields">: list $ pdl "EnumField"],
+enumSchema :: Binding
+enumSchema = define "EnumSchema" $
+  T.record [
+    "fields">: T.list $ pdl "EnumField"]
 
-      def "FieldName" $
-        wrap string,
+fieldName_ :: Binding
+fieldName_ = define "FieldName" $
+  T.wrap T.string
 
-      def "NamedSchema" $
-        record [
-          "qualifiedName">: pdl "QualifiedName",
-          "type">: pdl "NamedSchemaType",
-          "annotations">: pdl "Annotations"],
+namedSchema :: Binding
+namedSchema = define "NamedSchema" $
+  T.record [
+    "qualifiedName">: pdl "QualifiedName",
+    "type">: pdl "NamedSchemaType",
+    "annotations">: pdl "Annotations"]
 
-      def "NamedSchemaType" $
-        union [
-          "record">: pdl "RecordSchema",
-          "enum">: pdl "EnumSchema",
-          "typeref">: pdl "Schema"],
+namedSchemaType :: Binding
+namedSchemaType = define "NamedSchemaType" $
+  T.union [
+    "record">: pdl "RecordSchema",
+    "enum">: pdl "EnumSchema",
+    "typeref">: pdl "Schema"]
 
-      def "Name" $
-        wrap string,
+name_ :: Binding
+name_ = define "Name" $
+  T.wrap T.string
 
-      def "Namespace" $
-        wrap string,
+namespace_ :: Binding
+namespace_ = define "Namespace" $
+  T.wrap T.string
 
-      def "Package" $
-        wrap string,
+package_ :: Binding
+package_ = define "Package" $
+  T.wrap T.string
 
-      def "PrimitiveType" $
-        enum [
-          "boolean",
-          "bytes",
-          "double",
-          "float",
-          "int",
-          "long",
-          "string"],
+primitiveType_ :: Binding
+primitiveType_ = define "PrimitiveType" $
+  T.enum [
+    "boolean",
+    "bytes",
+    "double",
+    "float",
+    "int",
+    "long",
+    "string"]
 
-      def "PropertyKey" $
-        wrap string,
+propertyKey :: Binding
+propertyKey = define "PropertyKey" $
+  T.wrap T.string
 
-      def "Property" $
-        record [
-          "key">: pdl "PropertyKey",
-          "value">: optional $ json "Value"],
+property_ :: Binding
+property_ = define "Property" $
+  T.record [
+    "key">: pdl "PropertyKey",
+    "value">: T.maybe $ json "Value"]
 
-      def "QualifiedName" $
-        record [
-          "name">: pdl "Name",
-          "namespace">: optional $ pdl "Namespace"],
+qualifiedName :: Binding
+qualifiedName = define "QualifiedName" $
+  T.record [
+    "name">: pdl "Name",
+    "namespace">: T.maybe $ pdl "Namespace"]
 
-      def "RecordField" $
-        record [
-          "name">: pdl "FieldName",
-          "value">: pdl "Schema",
-          "optional">: boolean,
-          -- Note: the default value for an enum-valued must be one of the enumerated string symbols
-          "default">: optional $ json "Value",
-          "annotations">: pdl "Annotations"],
+recordField :: Binding
+recordField = define "RecordField" $
+  doc "Note: the default value for an enum-valued must be one of the enumerated string symbols" $
+  T.record [
+    "name">: pdl "FieldName",
+    "value">: pdl "Schema",
+    "optional">: T.boolean,
+    "default">: T.maybe $ json "Value",
+    "annotations">: pdl "Annotations"]
 
-      def "RecordSchema" $
-        record [
-          "fields">: list $ pdl "RecordField",
-          -- Note: all included schemas must be record schemas
-          "includes">: list $ pdl "NamedSchema"],
+recordSchema :: Binding
+recordSchema = define "RecordSchema" $
+  doc "Note: all included schemas must be record schemas" $
+  T.record [
+    "fields">: T.list $ pdl "RecordField",
+    "includes">: T.list $ pdl "NamedSchema"]
 
-      def "Schema" $
-        union [
-          "array">: pdl "Schema",
-          "fixed">: int32,
-          "inline">: pdl "NamedSchema",
-          "map">: pdl "Schema",
-          "named">: pdl "QualifiedName",
-          "null">: unit,
-          "primitive">: pdl "PrimitiveType",
-          "union">: pdl "UnionSchema"],
+schema :: Binding
+schema = define "Schema" $
+  T.union [
+    "array">: pdl "Schema",
+    "fixed">: T.int32,
+    "inline">: pdl "NamedSchema",
+    "map">: pdl "Schema",
+    "named">: pdl "QualifiedName",
+    "null">: T.unit,
+    "primitive">: pdl "PrimitiveType",
+    "union">: pdl "UnionSchema"]
 
-      def "SchemaFile" $
-        record [
-          "namespace">: pdl "Namespace",
-          "package">: optional $ pdl "Package",
-          "imports">: list $ pdl "QualifiedName",
-          "schemas">: list $ pdl "NamedSchema"],
+schemaFile :: Binding
+schemaFile = define "SchemaFile" $
+  T.record [
+    "namespace">: pdl "Namespace",
+    "package">: T.maybe $ pdl "Package",
+    "imports">: T.list $ pdl "QualifiedName",
+    "schemas">: T.list $ pdl "NamedSchema"]
 
-      def "UnionMember" $
-        record [
-          "alias">: optional $ pdl "FieldName",
-          "value">: pdl "Schema",
-          -- Note: annotations are only available for aliased members
-          "annotations">: pdl "Annotations"],
+unionMember :: Binding
+unionMember = define "UnionMember" $
+  doc "Note: annotations are only available for aliased members" $
+  T.record [
+    "alias">: T.maybe $ pdl "FieldName",
+    "value">: pdl "Schema",
+    "annotations">: pdl "Annotations"]
 
-      -- Note: unions are not allowed as member types of other unions
-      def "UnionSchema" $
-        wrap $ list $ pdl "UnionMember"]
+unionSchema :: Binding
+unionSchema = define "UnionSchema" $
+  doc "Note: unions are not allowed as member types of other unions" $
+  T.wrap $ T.list $ pdl "UnionMember"

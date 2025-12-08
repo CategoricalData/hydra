@@ -8,111 +8,111 @@ module Hydra.Ext.Sources.All (
 import Hydra.Kernel
 import Hydra.Sources.All
 
-import Hydra.Ext.Sources.Avro.Schema
+import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 import Hydra.Ext.Sources.Cpp.Language
-import Hydra.Ext.Sources.Cpp.Syntax
+import qualified Hydra.Ext.Sources.Cpp.Syntax as CppSyntax
 import Hydra.Ext.Sources.Csharp.Language
-import Hydra.Ext.Sources.Csharp.Syntax
-import Hydra.Ext.Sources.Cypher.Features
-import Hydra.Ext.Sources.Cypher.OpenCypher
-import Hydra.Ext.Sources.Delta.Parquet
-import Hydra.Ext.Sources.Gql.OpenGql
-import Hydra.Ext.Sources.Gql.PathAlgebra.Expressions
-import Hydra.Ext.Sources.Gql.PathAlgebra.Syntax
+import qualified Hydra.Ext.Sources.Csharp.Syntax as CsharpSyntax
+import qualified Hydra.Ext.Sources.Cypher.Features as CypherFeatures
+import qualified Hydra.Ext.Sources.Cypher.OpenCypher as OpenCypher
+import qualified Hydra.Ext.Sources.Delta.Parquet as DeltaParquet
+import qualified Hydra.Ext.Sources.Gql.OpenGql as OpenGql
+import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
+import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax as PathAlgebraSyntax
 import Hydra.Ext.Sources.Graphql.Syntax
-import Hydra.Ext.Sources.Graphviz.Dot
+import qualified Hydra.Ext.Sources.Graphviz.Dot as Dot
 import Hydra.Ext.Sources.Java.Language
-import Hydra.Ext.Sources.Java.Syntax
+import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
 import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Ext.Sources.Json.Schema.Language as JsonSchemaLanguage
-import Hydra.Ext.Sources.Kusto.Kql
-import Hydra.Ext.Sources.Other.Atlas
-import Hydra.Ext.Sources.Other.AzureDtld
-import Hydra.Ext.Sources.Other.Coq
+import qualified Hydra.Ext.Sources.Kusto.Kql as Kql
+import qualified Hydra.Ext.Sources.Other.Atlas as Atlas
+import qualified Hydra.Ext.Sources.Other.AzureDtld as AzureDtld
+import qualified Hydra.Ext.Sources.Other.Coq as Coq
 import Hydra.Ext.Sources.Other.Datalog
-import Hydra.Ext.Sources.Other.GeoJson
-import Hydra.Ext.Sources.Other.IanaRelations
-import Hydra.Ext.Sources.Other.Osv
-import Hydra.Ext.Sources.Other.StacItems
-import Hydra.Ext.Sources.Owl.Syntax
-import Hydra.Ext.Sources.Parquet.Format
-import Hydra.Ext.Sources.Pegasus.Pdl
-import Hydra.Ext.Sources.Pg.Graphson.Syntax
-import Hydra.Ext.Sources.Pg.Mapping
-import Hydra.Ext.Sources.Pg.Model
-import Hydra.Ext.Sources.Pg.Query
+import qualified Hydra.Ext.Sources.Other.GeoJson as GeoJson
+import qualified Hydra.Ext.Sources.Other.IanaRelations as IanaRelations
+import qualified Hydra.Ext.Sources.Other.Osv as Osv
+import qualified Hydra.Ext.Sources.Other.StacItems as StacItems
+import qualified Hydra.Ext.Sources.Owl.Syntax as OwlSyntax
+import qualified Hydra.Ext.Sources.Parquet.Format as ParquetFormat
+import qualified Hydra.Ext.Sources.Pegasus.Pdl as Pdl
+import qualified Hydra.Ext.Sources.Pg.Graphson.Syntax as GraphsonSyntax
+import qualified Hydra.Ext.Sources.Pg.Mapping as PgMapping
+import qualified Hydra.Ext.Sources.Pg.Model as PgModel
+import qualified Hydra.Ext.Sources.Pg.Query as PgQuery
 import Hydra.Ext.Sources.Pg.Validation
-import Hydra.Ext.Sources.Protobuf.Any
+import qualified Hydra.Ext.Sources.Protobuf.Any as ProtobufAny
 import Hydra.Ext.Sources.Protobuf.Language
-import Hydra.Ext.Sources.Protobuf.Proto3
-import Hydra.Ext.Sources.Protobuf.SourceContext
+import qualified Hydra.Ext.Sources.Protobuf.Proto3 as Proto3
+import qualified Hydra.Ext.Sources.Protobuf.SourceContext as ProtobufSourceContext
 import Hydra.Ext.Sources.Python.Language
-import Hydra.Ext.Sources.Python.Syntax
-import Hydra.Ext.Sources.Rdf.Syntax
-import Hydra.Ext.Sources.Scala.Meta
-import Hydra.Ext.Sources.Shacl.Model
+import qualified Hydra.Ext.Sources.Python.Syntax as PythonSyntax
+import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
+import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
+import qualified Hydra.Ext.Sources.Shacl.Model as ShaclModel
 import Hydra.Ext.Sources.Shex.Syntax
 import Hydra.Ext.Sources.Sql.Ansi
-import Hydra.Ext.Sources.Tinkerpop.Features
-import Hydra.Ext.Sources.Tinkerpop.Gremlin
+import qualified Hydra.Ext.Sources.Tinkerpop.Features as TinkerpopFeatures
+import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin as Gremlin
 import Hydra.Ext.Sources.TypeScript.Language
-import Hydra.Ext.Sources.TypeScript.Model
-import Hydra.Ext.Sources.Xml.Schema
+import qualified Hydra.Ext.Sources.TypeScript.Model as TypeScriptModel
+import qualified Hydra.Ext.Sources.Xml.Schema as XmlSchema
 
 
 hydraExtModules :: [Module]
 hydraExtModules = otherModules ++ gqlModules
   where
     otherModules = [
-      atlasModelModule,
-      avroSchemaModule,
-      coqSyntaxModule,
+      Atlas.module_,
+      AvroSchema.module_,
+      Coq.module_,
       cppLanguageModule,
-      cppSyntaxModule,
+      CppSyntax.module_,
       csharpLanguageModule,
-      csharpSyntaxModule,
+      CsharpSyntax.module_,
       datalogSyntaxModule,
-      deltaParquetModule,
-      dotModule,
-      dtldModule,
-      geoJsonModule,
+      DeltaParquet.module_,
+      Dot.module_,
+      AzureDtld.module_,
+      GeoJson.module_,
       graphqlSyntaxModule,
-      graphsonSyntaxModule,
-      gremlinModule,
-      ianaRelationsModule,
+      GraphsonSyntax.module_,
+      Gremlin.module_,
+      IanaRelations.module_,
       javaLanguageModule,
-      javaSyntaxModule,
+      JavaSyntax.module_,
       JsonSchema.module_,
       JsonSchemaLanguage.module_,
-      kqlModule,
-      openCypherFeaturesModule,
-      openCypherModule,
-      osvSchemaModule,
-      owlSyntaxModule,
-      parquetFormatModule,
-      pegasusPdlModule,
-      pgMappingModule,
-      pgModelModule,
-      pgQueryModule,
+      Kql.module_,
+      CypherFeatures.module_,
+      OpenCypher.module_,
+      Osv.module_,
+      OwlSyntax.module_,
+      ParquetFormat.module_,
+      Pdl.module_,
+      PgMapping.module_,
+      PgModel.module_,
+      PgQuery.module_,
       pgValidationModule,
-      proto3Module,
-      protobufAnyModule,
+      Proto3.module_,
+      ProtobufAny.module_,
       protobufLanguageModule,
-      protobufSourceContextModule,
+      ProtobufSourceContext.module_,
       pythonLanguageModule,
-      pythonSyntaxModule,
-      rdfSyntaxModule,
-      scalaMetaModule,
-      shaclModelModule,
+      PythonSyntax.module_,
+      RdfSyntax.module_,
+      ScalaMeta.module_,
+      ShaclModel.module_,
       shexSyntaxModule,
       sqlModule,
-      stacModule,
-      tinkerpopFeaturesModule,
+      StacItems.module_,
+      TinkerpopFeatures.module_,
       typeScriptLanguageModule,
-      typeScriptModelModule,
-      xmlSchemaModule]
+      TypeScriptModel.module_,
+      XmlSchema.module_]
 
 gqlModules = [
-  openGqlModule,
-  pathAlgebraExpressionsModule,
-  pathAlgebraSyntaxModule]
+  OpenGql.module_,
+  PathAlgebraExpressions.module_,
+  PathAlgebraSyntax.module_]

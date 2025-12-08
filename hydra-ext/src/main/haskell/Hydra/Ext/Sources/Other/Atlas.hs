@@ -4,130 +4,131 @@ module Hydra.Ext.Sources.Other.Atlas where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 -- Additional imports
-import Hydra.Ext.Sources.Xml.Schema
+import qualified Hydra.Ext.Sources.Xml.Schema as XmlSchema
 
 
-atlasModelModule :: Module
-atlasModelModule = Module ns elements [xmlSchemaModule] [] $
+ns :: Namespace
+ns = Namespace "hydra.ext.org.apache.atlas"
+
+define :: String -> Type -> Binding
+define = defineType ns
+
+atlas :: String -> Type
+atlas = typeref ns
+
+xsd :: String -> Type
+xsd = typeref (moduleNamespace XmlSchema.module_)
+
+module_ :: Module
+module_ = Module ns elements [XmlSchema.module_] [] $
     Just ("The Apache Atlas meta-model\n" ++
       "Based on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n" ++
       "  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model")
   where
-    ns = Namespace "hydra.ext.org.apache.atlas"
-    def = datatype ns
-    atlas = typeref ns
-    xsd = typeref (moduleNamespace xmlSchemaModule)
-
     elements = [
+      atlasAttributeDef,
+      atlasAttributeDef_Cardinality,
+      atlasAttributeDef_IndexType,
+      atlasBaseTypeDef,
+      atlasConstraintDef,
+      atlasEntityDef,
+      atlasRelationshipAttributeDef,
+      atlasStructDef,
+      typeCategory]
 
-      def "AtlasAttributeDef" $
-        doc "class that captures details of a struct-attribute." $
-        record [
-          "name">: optional string,
-          "typeName">: optional string,
-          "isOptional">: boolean,
-          "cardinality">: optional $ atlas "AtlasAttributeDef_Cardinality",
-          "valuesMinCount">: int32,
-          "valuesMaxCount">: int32,
-          "isUnique">: boolean,
-          "isIndexable">: boolean,
-          "includeInNotification">: boolean,
-          "defaultValue">: optional string,
-          "description">: optional string,
-          "searchWeight">: int32,
-          "indexType">: optional $ atlas "AtlasAttributeDef_IndexType",
-          "constraints">: list $ atlas "AtlasConstraintDef",
-          "options">: Types.map string string,
-          "displayName">: optional string],
+atlasAttributeDef :: Binding
+atlasAttributeDef = define "AtlasAttributeDef" $
+  doc "class that captures details of a struct-attribute." $
+  T.record [
+    "name">: T.maybe T.string,
+    "typeName">: T.maybe T.string,
+    "isOptional">: T.boolean,
+    "cardinality">: T.maybe $ atlas "AtlasAttributeDef_Cardinality",
+    "valuesMinCount">: T.int32,
+    "valuesMaxCount">: T.int32,
+    "isUnique">: T.boolean,
+    "isIndexable">: T.boolean,
+    "includeInNotification">: T.boolean,
+    "defaultValue">: T.maybe T.string,
+    "description">: T.maybe T.string,
+    "searchWeight">: T.int32,
+    "indexType">: T.maybe $ atlas "AtlasAttributeDef_IndexType",
+    "constraints">: T.list $ atlas "AtlasConstraintDef",
+    "options">: T.map T.string T.string,
+    "displayName">: T.maybe T.string]
 
-      def "AtlasAttributeDef_Cardinality" $ enum ["single", "list", "set"],
+atlasAttributeDef_Cardinality :: Binding
+atlasAttributeDef_Cardinality = define "AtlasAttributeDef_Cardinality" $ T.enum ["single", "list", "set"]
 
-      def "AtlasAttributeDef_IndexType" $ enum ["default", "string"],
+atlasAttributeDef_IndexType :: Binding
+atlasAttributeDef_IndexType = define "AtlasAttributeDef_IndexType" $ T.enum ["default", "string"]
 
-      def "AtlasBaseTypeDef" $
-        doc "Base class that captures common-attributes for all Atlas types." $
-        record [
-          "category">: optional $ atlas "TypeCategory",
-          "guid">: optional string,
-          "createdBy">: optional string,
-          "updatedBy">: optional string,
-          "createTime">: optional $ xsd "DateTime",
-          "updateTime">: optional $ xsd "DateTime",
-          "version">: optional int64,
-          "name">: optional string,
-          "description">: optional string,
-          "typeVersion">: optional string,
-          "serviceType">: optional string,
-          "options">: Types.map string string],
+atlasBaseTypeDef :: Binding
+atlasBaseTypeDef = define "AtlasBaseTypeDef" $
+  doc "Base class that captures common-attributes for all Atlas types." $
+  T.record [
+    "category">: T.maybe $ atlas "TypeCategory",
+    "guid">: T.maybe T.string,
+    "createdBy">: T.maybe T.string,
+    "updatedBy">: T.maybe T.string,
+    "createTime">: T.maybe $ xsd "DateTime",
+    "updateTime">: T.maybe $ xsd "DateTime",
+    "version">: T.maybe T.int64,
+    "name">: T.maybe T.string,
+    "description">: T.maybe T.string,
+    "typeVersion">: T.maybe T.string,
+    "serviceType">: T.maybe T.string,
+    "options">: T.map T.string T.string]
 
-      def "AtlasConstraintDef" $
-        doc "class that captures details of a constraint." $
-        record [
-          "type">: optional string,
-          "params">: Types.map string string], -- Map<String, Object>
+atlasConstraintDef :: Binding
+atlasConstraintDef = define "AtlasConstraintDef" $
+  doc "class that captures details of a constraint." $
+  T.record [
+    "type">: T.maybe T.string,
+    "params">: T.map T.string T.string] -- Map<String, Object>
 
-      def "AtlasEntityDef" $
-        doc "class that captures details of a entity-type." $
-        record [
-          "asAtlasStructDef">: atlas "AtlasStructDef",
+atlasEntityDef :: Binding
+atlasEntityDef = define "AtlasEntityDef" $
+  doc "class that captures details of a entity-type." $
+  T.record [
+    "asAtlasStructDef">: atlas "AtlasStructDef",
 
-          "superTypes">:
-            Types.set string,
+    "superTypes">:
+      T.set T.string,
 
-          "subTypes">:
-            doc "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef" $
-            Types.set string,
+    "subTypes">:
+      doc "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef" $
+      T.set T.string,
 
-          "relationshipAttributeDefs">:
-            doc "the value of this field is derived from all the relationshipDefs this entityType is referenced in" $
-            list $ atlas "AtlasRelationshipAttributeDef",
+    "relationshipAttributeDefs">:
+      doc "the value of this field is derived from all the relationshipDefs this entityType is referenced in" $
+      T.list $ atlas "AtlasRelationshipAttributeDef",
 
-          "businessAttributeDefs">:
-            doc "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in" $
-            Types.map string (list $ atlas "AtlasAttributeDef")],
+    "businessAttributeDefs">:
+      doc "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in" $
+      T.map T.string (T.list $ atlas "AtlasAttributeDef")]
 
-        def "AtlasRelationshipAttributeDef" $
-          doc "class that captures details of a struct-attribute." $
-          record [
-            "asAtlasAttributeDef">: atlas "AtlasAttributeDef",
-            "relationshipTypeName">: optional string,
-            "isLegacyAttribute">: boolean],
+atlasRelationshipAttributeDef :: Binding
+atlasRelationshipAttributeDef = define "AtlasRelationshipAttributeDef" $
+  doc "class that captures details of a struct-attribute." $
+  T.record [
+    "asAtlasAttributeDef">: atlas "AtlasAttributeDef",
+    "relationshipTypeName">: T.maybe T.string,
+    "isLegacyAttribute">: T.boolean]
 
-        def "AtlasStructDef" $
-          doc "class that captures details of a struct-type." $
-          record [
-            "asAtlasBaseTypeDef">: atlas "AtlasBaseTypeDef",
+atlasStructDef :: Binding
+atlasStructDef = define "AtlasStructDef" $
+  doc "class that captures details of a struct-type." $
+  T.record [
+    "asAtlasBaseTypeDef">: atlas "AtlasBaseTypeDef",
 
-            "attributeDefs">: list $ atlas "AtlasAttributeDef"],
+    "attributeDefs">: T.list $ atlas "AtlasAttributeDef"]
 
-        def "TypeCategory" $ enum [
-          "primitive", "objectIdType", "enum", "struct", "classification", "entity", "array", "map", "relationship", "businessMetadata"]]
+typeCategory :: Binding
+typeCategory = define "TypeCategory" $ T.enum [
+  "primitive", "objectIdType", "enum", "struct", "classification", "entity", "array", "map", "relationship", "businessMetadata"]
