@@ -58,21 +58,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
     QC.property $ \mi -> checkSerialization yamlStringCoder
       (TypeApplicationTerm
         (optional $ (Just . int32) =<< mi)
-        (Types.optional Types.int32))
+        (Types.maybe Types.int32))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization yamlStringCoder
       (TypeApplicationTerm
         (optional $ Just $ optional $ (Just . int32) =<< mi)
-        (Types.optional $ Types.optional Types.int32))
+        (Types.maybe $ Types.maybe Types.int32))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization yamlStringCoder
       (TypeApplicationTerm
         (optional Nothing)
-        (Types.optional $ Types.optional Types.int32))
+        (Types.maybe $ Types.maybe Types.int32))
       "[]"
 
 checkRecordsAndUnions :: H.SpecWith ()
@@ -92,7 +92,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization yamlStringCoder
       (TypeApplicationTerm
         (record testTypeName [Field (Name "one") $ optional $ Just $ string "test", Field (Name "two") $ optional Nothing])
-        (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32]))
+        (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.maybe Types.string, Types.field "two" $ Types.maybe Types.int32]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $

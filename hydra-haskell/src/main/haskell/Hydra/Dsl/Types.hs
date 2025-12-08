@@ -246,9 +246,14 @@ union :: [FieldType] -> Type
 union fields = TypeUnion $ RowType placeholderName fields
 
 -- | Create a type variable with the given name
+-- Example: variable "a"
+variable :: String -> Type
+variable = TypeVariable . Name
+
+-- | Create a type variable with the given name (alias for 'variable')
 -- Example: var "a"
 var :: String -> Type
-var = TypeVariable . Name
+var = variable
 
 -- | Create a wrapped type (newtype) with a provided base type and the default type name
 -- Example: wrap string
