@@ -14,8 +14,14 @@ import qualified Data.Map as M
 -- Operators
 
 -- | Function type constructor with infix syntax
--- Example: int32 --> string
+-- Example: int32 ~> string
 -- Use this for more readable function type definitions
+infixr 0 ~>
+(~>) :: Type -> Type -> Type
+dom ~> cod = function dom cod
+
+-- | Function type constructor with infix syntax (deprecated, use ~> instead)
+-- Example: int32 --> string
 infixr 0 -->
 (-->) :: Type -> Type -> Type
 dom --> cod = function dom cod

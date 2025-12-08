@@ -4,44 +4,48 @@ module Hydra.Sources.Kernel.Types.Util where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import qualified Hydra.Dsl.Terms                 as Terms
-import           Hydra.Dsl.Types                 as Types
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Data.List                       as L
-import qualified Data.Map                        as M
-import qualified Data.Set                        as S
-import qualified Data.Maybe                      as Y
 
+
+ns :: Namespace
+ns = Namespace "hydra.util"
+
+define :: String -> Type -> Binding
+define = defineType ns
 
 module_ :: Module
 module_ = Module ns elements [] [Core.module_] $
-    Just ("General-purpose utility types used across Hydra.")
+    Just "General-purpose utility types used across Hydra."
   where
-    ns = Namespace "hydra.util"
-    util = typeref ns
-    def = datatype ns
-
     elements = [
+      caseConvention,
+      comparison,
+      precision]
 
-      def "CaseConvention" $
-        doc "A naming convention for symbols, such as camelCase or snake_case" $
-        Types.enum ["camel", "pascal", "lowerSnake", "upperSnake"],
+caseConvention :: Binding
+caseConvention = define "CaseConvention" $
+  doc "A naming convention for symbols, such as camelCase or snake_case" $
+  T.enum ["camel", "pascal", "lowerSnake", "upperSnake"]
 
-      def "Comparison" $
-        doc "An equality judgement: less than, equal to, or greater than" $
-        enum [
-          "lessThan",
-          "equalTo",
-          "greaterThan"],
+comparison :: Binding
+comparison = define "Comparison" $
+  doc "An equality judgement: less than, equal to, or greater than" $
+  T.enum [
+    "lessThan",
+    "equalTo",
+    "greaterThan"]
 
-      def "Precision" $
-        doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
-        union [
-          "arbitrary">:
-            doc "Arbitrary precision" $
-            unit,
-          "bits">:
-            doc "Precision to a specified number of bits" $
-            int32]]
+precision :: Binding
+precision = define "Precision" $
+  doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
+  T.union [
+    "arbitrary">:
+      doc "Arbitrary precision" $
+      T.unit,
+    "bits">:
+      doc "Precision to a specified number of bits" $
+      T.int32]

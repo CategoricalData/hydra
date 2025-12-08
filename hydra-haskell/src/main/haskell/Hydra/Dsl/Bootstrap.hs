@@ -50,3 +50,17 @@ qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
 typeref :: Namespace -> String -> Type
 typeref ns = TypeVariable . qualify ns . Name
+
+-- | New DSL helpers (Option 1 from dsl-redesign-options.md)
+
+-- | Define a type in a namespace
+defineType :: Namespace -> String -> Type -> Binding
+defineType = datatype
+
+-- | Reference a type by its binding
+use :: Binding -> Type
+use b = TypeVariable (bindingName b)
+
+-- | Reference a type in a namespace (old style, for migration)
+useType :: Namespace -> String -> Type
+useType = typeref
