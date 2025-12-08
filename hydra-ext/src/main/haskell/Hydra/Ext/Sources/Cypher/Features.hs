@@ -1,73 +1,51 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Cypher.Features where
 
 -- Standard imports for type-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
 import qualified Data.Maybe                             as Y
 
 -- Additional imports
 import Hydra.Ext.Sources.Cypher.Functions
-import qualified Control.Monad as CM
 
+
+ns :: Namespace
+ns = Namespace "hydra.ext.cypher.features"
+
+cypherFeatures :: String -> Type
+cypherFeatures = typeref ns
 
 data FeatureSet = FeatureSet {
   featureSetName :: String,
   featureSetDescription :: String,
   featureSetChildren :: [FeatureSet]}
 
-openCypherFeaturesModule :: Module
-openCypherFeaturesModule = Module ns elements [Core.module_] [Core.module_] $
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
       ++ "Based on the OpenCypher grammar and the list of standard Cypher functions at "
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
       ++ " Current as of August 2024.")
   where
-    ns = Namespace "hydra.ext.cypher.features"
-    cypherFeatures = typeref ns
-
     elements = featureSetToType <$> flatten openCypherFeatures
       where
         flatten fs = if L.null children then [] else (fs:(L.concat (flatten <$> children)))
           where
             children = featureSetChildren fs
-    featureSetToType (FeatureSet name desc children) = datatype ns (featureSetName name) $
-        doc (featureSetDesc desc) $ record (toField <$> children)
+    featureSetToType (FeatureSet name desc children) = datatype ns (featureSetNameToTypeName name) $
+        doc (featureSetDesc desc) $ T.record (toField <$> children)
       where
         toField (FeatureSet name1 desc1 children1) = (decapitalize name1)>: if L.null children1
-          then doc (featureSetDesc desc1) boolean
-          else doc (featureSetDesc desc1) $ cypherFeatures $ featureSetName name1
+          then doc (featureSetDesc desc1) T.boolean
+          else doc (featureSetDesc desc1) $ cypherFeatures $ featureSetNameToTypeName name1
           where
             fieldDesc = "Whether to expect " ++ desc1
-    featureSetName name = capitalize name ++ "Features"
+    featureSetNameToTypeName name = capitalize name ++ "Features"
     featureSetDesc desc = capitalize desc
 
 openCypherFeatures :: FeatureSet
@@ -234,21 +212,21 @@ openCypherFeatures =  FeatureSet "Cypher"
 -- Usage:
 --   writeProtobuf "/tmp/proto" [openCypherFeaturesEnumModule]
 openCypherFeaturesEnumModule :: Module
-openCypherFeaturesEnumModule = Module ns elements [Core.module_] [Core.module_] $
+openCypherFeaturesEnumModule = Module ns2 elements [Core.module_] [Core.module_] $
     Just ("A model with an enumeration of (Open)Cypher features.")
   where
-    ns = Namespace "hydra.org/opencypher/features"
-    def = datatype ns
+    ns2 = Namespace "hydra.org/opencypher/features"
+    def = datatype ns2
     elements = [
       def "CypherFeature" $
         doc "An enumeration of (Open)Cypher features."
         openCypherFeaturesEnum]
 
 openCypherFeaturesEnum :: Type
-openCypherFeaturesEnum = union $ gatherFields True "" openCypherFeatures
+openCypherFeaturesEnum = T.union $ gatherFields True "" openCypherFeatures
   where
     gatherFields root prefix (FeatureSet name desc children) = if L.null children
-        then [FieldType (Name selfName) $ doc (capitalize desc) unit]
+        then [FieldType (Name selfName) $ doc (capitalize desc) T.unit]
         else L.concat (gatherFields False selfName <$> children)
       where
         --selfName = capitalize name

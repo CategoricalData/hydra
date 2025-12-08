@@ -149,7 +149,7 @@ data LinkRelationType =
   LinkRelationTypeNext  |
   -- | Refers to the immediately following archive resource. [RFC5005]
   LinkRelationTypeNext_archive  |
-  -- | Indicates that the context’s original author or publisher does not endorse the link target. [HTML]
+  -- | Indicates that the context's original author or publisher does not endorse the link target. [HTML]
   LinkRelationTypeNofollow  |
   -- | Indicates that any newly created top-level browsing context which results from following the link will not be an auxiliary browsing context. [HTML]
   LinkRelationTypeNoopener  |

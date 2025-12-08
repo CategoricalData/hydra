@@ -168,6 +168,7 @@ _QualifiedName_name = (Core.Name "name")
 
 _QualifiedName_namespace = (Core.Name "namespace")
 
+-- | Note: the default value for an enum-valued must be one of the enumerated string symbols
 data RecordField = 
   RecordField {
     recordFieldName :: FieldName,
@@ -189,6 +190,7 @@ _RecordField_default = (Core.Name "default")
 
 _RecordField_annotations = (Core.Name "annotations")
 
+-- | Note: all included schemas must be record schemas
 data RecordSchema = 
   RecordSchema {
     recordSchemaFields :: [RecordField],
@@ -248,6 +250,7 @@ _SchemaFile_imports = (Core.Name "imports")
 
 _SchemaFile_schemas = (Core.Name "schemas")
 
+-- | Note: annotations are only available for aliased members
 data UnionMember = 
   UnionMember {
     unionMemberAlias :: (Maybe FieldName),
@@ -263,6 +266,7 @@ _UnionMember_value = (Core.Name "value")
 
 _UnionMember_annotations = (Core.Name "annotations")
 
+-- | Note: unions are not allowed as member types of other unions
 newtype UnionSchema = 
   UnionSchema {
     unUnionSchema :: [UnionMember]}

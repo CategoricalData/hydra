@@ -4,1396 +4,1234 @@ module Hydra.Ext.Sources.Scala.Meta where
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
-import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
-import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
-import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
-import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
-import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
-import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
-import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
-import qualified Hydra.Sources.Kernel.Types.Query       as Query
-import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
-import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
-import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
-import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
-import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
-import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
-import qualified Data.Int                               as I
-import qualified Data.List                              as L
-import qualified Data.Map                               as M
-import qualified Data.Set                               as S
-import qualified Data.Maybe                             as Y
+import           Hydra.Dsl.Types ((>:))
+import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-scalaMetaModule :: Module
-scalaMetaModule = Module ns elements [Core.module_] [Core.module_] $
+ns :: Namespace
+ns = Namespace "hydra.ext.scala.meta"
+
+def :: String -> Type -> Binding
+def = datatype ns
+
+meta :: String -> Type
+meta = typeref ns
+
+module_ :: Module
+module_ = Module ns elements [Core.module_] [Core.module_] $
     Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
-    ns = Namespace "hydra.ext.scala.meta"
-    def = datatype ns
-    meta = typeref ns
-
     elements = [
+      predefString,
+      scalaSymbol,
+      tree,
+      ref,
+      stat,
+      name,
+      lit,
+      data_,
+      data_Ref,
+      data_This,
+      data_Super,
+      data_Name,
+      data_Anonymous,
+      data_Select,
+      data_Interpolate,
+      data_Xml,
+      data_Apply,
+      data_ApplyUsing,
+      data_ApplyType,
+      data_ApplyInfix,
+      data_ApplyUnary,
+      data_Assign,
+      data_Return,
+      data_Throw,
+      data_Ascribe,
+      data_Annotate,
+      data_Tuple,
+      data_Block,
+      data_EndMarker,
+      data_If,
+      data_QuotedMacroExpr,
+      data_QuotedMacroType,
+      data_SplicedMacroExpr,
+      data_Match,
+      data_Try,
+      data_TryWithHandler,
+      data_FunctionData,
+      data_ContextFunction,
+      data_Function,
+      data_PolyFunction,
+      data_PartialFunction,
+      data_While,
+      data_Do,
+      data_For,
+      data_ForYield,
+      data_New,
+      data_NewAnonymous,
+      data_Placeholder,
+      data_Eta,
+      data_Repeated,
+      data_Param,
+      type_,
+      type_Ref,
+      type_Name,
+      type_AnonymousName,
+      type_Select,
+      type_Project,
+      type_Singleton,
+      type_Apply,
+      type_ApplyInfix,
+      type_FunctionType,
+      type_Function,
+      type_PolyFunction,
+      type_ContextFunction,
+      type_ImplicitFunction,
+      type_Tuple,
+      type_With,
+      type_And,
+      type_Or,
+      type_Refine,
+      type_Existential,
+      type_Annotate,
+      type_Lambda,
+      type_Macro,
+      type_Method,
+      type_Placeholder,
+      typeBounds,
+      type_ByName,
+      type_Repeated,
+      type_Var,
+      type_TypedParam,
+      type_Param,
+      type_Match,
+      pat,
+      pat_Var,
+      pat_Bind,
+      pat_Alternative,
+      pat_Tuple,
+      pat_Repeated,
+      pat_Extract,
+      pat_ExtractInfix,
+      pat_Interpolate,
+      pat_Xml,
+      pat_Typed,
+      pat_Macro,
+      pat_Given,
+      member,
+      member_Data,
+      member_Type,
+      decl,
+      decl_Val,
+      decl_Var,
+      decl_Def,
+      decl_Type,
+      decl_Given,
+      defn,
+      defn_Val,
+      defn_Var,
+      defn_Given,
+      defn_Enum,
+      defn_EnumCase,
+      defn_RepeatedEnumCase,
+      defn_GivenAlias,
+      defn_ExtensionGroup,
+      defn_Def,
+      defn_Macro,
+      defn_Type,
+      defn_Class,
+      defn_Trait,
+      defn_Object,
+      pkg,
+      pkg_Object,
+      ctor,
+      ctor_Primary,
+      ctor_Secondary,
+      init_,
+      self,
+      template,
+      mod_,
+      mod_Annot,
+      mod_Private,
+      mod_Protected,
+      enumerator,
+      enumerator_Generator,
+      enumerator_CaseGenerator,
+      enumerator_Val,
+      enumerator_Guard,
+      importExportStat,
+      import_,
+      export_,
+      importer,
+      importee,
+      importee_Given,
+      importee_Name,
+      importee_Rename,
+      importee_Unimport,
+      caseTree,
+      case_,
+      typeCase,
+      source,
+      quasi]
 
-      def "PredefString" $ --  See scala/Predef.scala
-        wrap string,
+predefString :: Binding
+predefString = def "PredefString" $ --  See scala/Predef.scala
+  T.wrap T.string
 
-      def "ScalaSymbol" $ --  See scala/Symbol.scala
-        record [
-          "name">: string],
+scalaSymbol :: Binding
+scalaSymbol = def "ScalaSymbol" $ --  See scala/Symbol.scala
+  T.record [
+    "name">: T.string]
 
---  scala/meta/Trees.scala source below this line. Hydra type definitions inline
+tree :: Binding
+tree = def "Tree" $ --  Note: ignoring fields of Tree and InternalTree for now
+  T.union [
+    "ref">: meta "Ref",
+    "stat">: meta "Stat",
+    "type">: meta "Type",
+    "bounds">: meta "TypeBounds",
+    "pat">: meta "Pat",
+    "member">: meta "Member",
+    "ctor">: meta "Ctor",
+    "template">: meta "Template",
+    "mod">: meta "Mod",
+    "enumerator">: meta "Enumerator",
+    "importer">: meta "Importer",
+    "importee">: meta "Importee",
+    "caseTree">: meta "CaseTree",
+    "source">: meta "Source",
+    "quasi">: meta "Quasi"]
 
--- package scala.meta
---
--- import org.scalameta.invariants._
--- import scala.meta.classifiers._
--- import scala.meta.inputs._
--- import scala.meta.tokens._
--- import scala.meta.prettyprinters._
--- import scala.meta.internal.trees._
--- import scala.meta.internal.trees.Metadata.binaryCompatField
--- @root trait Tree extends InternalTree {
-      def "Tree" $ --  Note: ignoring fields of Tree and InternalTree for now
-        union [
-          "ref">: meta "Ref",
-          "stat">: meta "Stat",
-          "type">: meta "Type",
-          "bounds">: meta "TypeBounds",
-          "pat">: meta "Pat",
-          "member">: meta "Member",
-          "ctor">: meta "Ctor",
-          "template">: meta "Template",
-          "mod">: meta "Mod",
-          "enumerator">: meta "Enumerator",
-          "importer">: meta "Importer",
-          "importee">: meta "Importee",
-          "caseTree">: meta "CaseTree",
-          "source">: meta "Source",
-          "quasi">: meta "Quasi"],
---   def parent: Option[Tree]
---   def children: List[Tree]
---
---   def pos: Position
---   def tokens(implicit dialect: Dialect): Tokens
---
---   final override def canEqual(that: Any): Boolean = this eq that.asInstanceOf[AnyRef]
---   final override def equals(that: Any): Boolean = this eq that.asInstanceOf[AnyRef]
---   final override def hashCode: Int = System.identityHashCode(this)
---   final override def toString = scala.meta.internal.prettyprinters.TreeToString(this)
--- }
---
--- object Tree extends InternalTreeXtensions {
---   implicit def classifiable[T <: Tree]: Classifiable[T] = null
---   implicit def showStructure[T <: Tree]: Structure[T] =
---     scala.meta.internal.prettyprinters.TreeStructure.apply[T]
---   implicit def showSyntax[T <: Tree](implicit dialect: Dialect): Syntax[T] =
---     scala.meta.internal.prettyprinters.TreeSyntax.apply[T](dialect)
--- }
---
--- @branch trait Ref extends Tree
-      def "Ref" $
-        union [
-          "name">: meta "Name",
-          "init">: meta "Init"],
--- @branch trait Stat extends Tree
-      def "Stat" $
-        union [
-          "term">: meta "Data",
-          "decl">: meta "Decl",
-          "defn">: meta "Defn",
-          "importExport">: meta "ImportExportStat"],
---
--- @branch trait Name extends Ref { def value: String }
-      def "Name" $
-        union [
-          "value">: string,
-          "anonymous">: unit,
-          "indeterminate">: meta "PredefString"],
--- object Name {
---   def apply(value: String): Name = if (value == "") Name.Anonymous() else Name.Indeterminate(value)
---   def unapply(name: Name): Option[String] = Some(name.value)
---   @ast class Anonymous() extends Name {
---     def value = ""
---     checkParent(ParentChecks.NameAnonymous)
---   }
---   @ast class Indeterminate(value: Predef.String @nonEmpty) extends Name
--- }
---
--- @branch trait Lit extends Data with Pat with Type {
-      def "Lit" $
-        union [
---   def value: Any
--- }
--- object Lit {
---   def unapply(arg: Lit): Option[Any] = Some(arg.value)
---   @ast class Null() extends Lit { def value: Any = null }
-          "null">: unit,
---   @ast class Int(value: scala.Int) extends Lit
-          "int">: int32,
---   // NOTE: Lit.Double/Float are strings to work the same across JS/JVM. Example:
---   // 1.4f.toString == "1.399999976158142" // in JS
---   // 1.4f.toString == "1.4"               // in JVM
---   // See https://www.scala-js.org/doc/semantics.html-- tostring-of-float-double-and-unit
---   @ast class Double(format: scala.Predef.String) extends Lit { val value = format.toDouble }
-          "double">: float64,
---   object Double { def apply(double: scala.Double): Double = Lit.Double(double.toString) }
---   @ast class Float(format: scala.Predef.String) extends Lit { val value = format.toFloat }
-          "float">: float32,
---   object Float { def apply(float: scala.Float): Float = Lit.Float(float.toString) }
---   @ast class Byte(value: scala.Byte) extends Lit
-          "byte">: int8,
---   @ast class Short(value: scala.Short) extends Lit
-          "short">: int16,
---   @ast class Char(value: scala.Char) extends Lit
-          "char">: uint16,
---   @ast class Long(value: scala.Long) extends Lit
-          "long">: int64,
---   @ast class Boolean(value: scala.Boolean) extends Lit
-          "boolean">: boolean,
---   @ast class Unit() extends Lit { def value: Any = () }
-          "unit">: unit,
---   @ast class String(value: scala.Predef.String) extends Lit
-          "string">: string,
---   @ast class Symbol(value: scala.Symbol) extends Lit
-          "symbol">: meta "ScalaSymbol"],
--- }
---
--- @branch trait Data extends Stat
-      def "Data" $
-        union [
-          "lit">: meta "Lit",
-          "ref">: meta "Data_Ref",
-          "interpolate">: meta "Data_Interpolate",
-          "xml">: meta "Data_Xml",
-          "apply">: meta "Data_Apply",
-          "applyUsing">: meta "Data_ApplyUsing",
-          "applyType">: meta "Data_ApplyType",
-          "assign">: meta "Data_Assign",
-          "return">: meta "Data_Return",
-          "throw">: meta "Data_Throw",
-          "ascribe">: meta "Data_Ascribe",
-          "annotate">: meta "Data_Annotate",
-          "tuple">: meta "Data_Tuple",
-          "block">: meta "Data_Block",
-          "endMarker">: meta "Data_EndMarker",
-          "if">: meta "Data_If",
-          "quotedMacroExpr">: meta "Data_QuotedMacroExpr",
-          "quotedMacroType">: meta "Data_QuotedMacroType",
-          "splicedMacroExpr">: meta "Data_SplicedMacroExpr",
-          "match">: meta "Data_Match",
-          "try">: meta "Data_Try",
-          "tryWithHandler">: meta "Data_TryWithHandler",
-          "functionData">: meta "Data_FunctionData",
-          "polyFunction">: meta "Data_PolyFunction",
-          "partialFunction">: meta "Data_PartialFunction",
-          "while">: meta "Data_While",
-          "do">: meta "Data_Do",
-          "for">: meta "Data_For",
-          "forYield">: meta "Data_ForYield",
-          "new">: meta "Data_New",
-          "newAnonymous">: meta "Data_NewAnonymous",
-          "placeholder">: meta "Data_Placeholder",
-          "eta">: meta "Data_Eta",
-          "repeated">: meta "Data_Repeated",
-          "param">: meta "Data_Param"],
--- object Data {
---   @branch trait Ref extends Data with scala.meta.Ref
-      def "Data_Ref" $
-        union [
-          "this">: meta "Data_This",
-          "super">: meta "Data_Super",
-          "name">: meta "Data_Name",
-          "anonymous">: meta "Data_Anonymous",
-          "select">: meta "Data_Select",
-          "applyUnary">: meta "Data_ApplyUnary"],
---   @ast class This(qual: scala.meta.Name) extends Data_Ref
-      def "Data_This" $
-        wrap unit,
---   @ast class Super(thisp: scala.meta.Name, superp: scala.meta.Name) extends Data_Ref
-      def "Data_Super" $
-        record [
-          "thisp">: meta "Name",
-          "superp">: meta "Name"],
---   @ast class Name(value: Predef.String @nonEmpty) extends scala.meta.Name with Data_Ref with Pat
-      def "Data_Name" $
-        record [
-          "value">: meta "PredefString"],
---   @ast class Anonymous() extends scala.meta.Name with Data_Ref {
-      def "Data_Anonymous" $
-        wrap unit,
---     def value = ""
---     checkParent(ParentChecks.AnonymousImport)
---   }
---   @ast class Select(qual: Data, name: Data_Name) extends Data_Ref with Pat
-      def "Data_Select" $
-        record [
-          "qual">: meta "Data",
-          "name">: meta "Data_Name"],
---   @ast class Interpolate(prefix: Name, parts: List[Lit] @nonEmpty, args: List[Data]) extends Data {
-      def "Data_Interpolate" $
-        record [
-          "prefix">: meta "Data_Name",
-          "parts">: list $ meta "Lit",
-          "args">: list $ meta "Data"],
---     checkFields(parts.length == args.length + 1)
---   }
---   @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Data]) extends Data {
-      def "Data_Xml" $
-        record [
-          "parts">: list $ meta "Lit",
-          "args">: list $ meta "Data"],
---     checkFields(parts.length == args.length + 1)
---   }
---   @ast class Apply(fun: Data, args: List[Data]) extends Data
-      def "Data_Apply" $
-        record [
-          "fun">: meta "Data",
-          "args">: list $ meta "Data"],
---   @ast class ApplyUsing(fun: Data, args: List[Data]) extends Data
-      def "Data_ApplyUsing" $
-        record [
-          "fun">: meta "Data",
-          "targs">: list $ meta "Data"],
---   @ast class ApplyType(fun: Data, targs: List[Type] @nonEmpty) extends Data
-      def "Data_ApplyType" $
-        record [
-          "lhs">: meta "Data",
-          "op">: meta "Data_Name",
-          "targs">: list $ meta "Type",
-          "args">: list $ meta "Data"],
---   @ast class ApplyInfix(lhs: Data, op: Name, targs: List[Type], args: List[Data]) extends Data
-      def "Data_ApplyInfix" $
-        record [
-          "lhs">: meta "Data",
-          "op">: meta "Data_Name",
-          "targs">: list $ meta "Type",
-          "args">: list $ meta "Data"],
---   @ast class ApplyUnary(op: Name, arg: Data) extends Data_Ref {
-      def "Data_ApplyUnary" $
-        record [
-          "op">: meta "Data_Name",
-          "arg">: meta "Data"],
---     checkFields(op.isUnaryOp)
---   }
---   @ast class Assign(lhs: Data, rhs: Data) extends Data {
-      def "Data_Assign" $
-        record [
-          "lhs">: meta "Data",
-          "rhs">: meta "Data"],
---     checkFields(lhs.is[Data_Quasi] || lhs.is[Data_Ref] || lhs.is[Data_Apply])
---     checkParent(ParentChecks.DataAssign)
---   }
---   @ast class Return(expr: Data) extends Data
-      def "Data_Return" $
-        record [
-          "expr">: meta "Data"],
---   @ast class Throw(expr: Data) extends Data
-      def "Data_Throw" $
-        record [
-          "expr">: meta "Data"],
---   @ast class Ascribe(expr: Data, tpe: Type) extends Data
-      def "Data_Ascribe" $
-        record [
-          "expr">: meta "Data",
-          "tpe">: meta "Type"],
---   @ast class Annotate(expr: Data, annots: List[Mod_Annot] @nonEmpty) extends Data
-      def "Data_Annotate" $
-        record [
-          "expr">: meta "Data",
-          "annots">: list $ meta "Mod_Annot"],
---   @ast class Tuple(args: List[Data] @nonEmpty) extends Data {
-      def "Data_Tuple" $
-        record [
-          "args">: list $ meta "Data"],
---     // tuple must have more than one element
---     // however, this element may be Quasi with "hidden" list of elements inside
---     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Data_Quasi]))
---   }
---   @ast class Block(stats: List[Stat]) extends Data {
-      def "Data_Block" $
-        record [
-          "stats">: list $ meta "Stat"],
---     // extension group block can have declarations without body too
---     checkFields(stats.forall(st => st.isBlockStat || st.is[Decl]))
---   }
---   @ast class EndMarker(name: Data_Name) extends Data
-      def "Data_EndMarker" $
-        record [
-          "name">: meta "Data_Name"],
---   @ast class If(cond: Data, thenp: Data, elsep: Data) extends Data {
-      def "Data_If" $
-        record [
-          "cond">: meta "Data",
-          "thenp">: meta "Data",
-          "elsep">: meta "Data"],
---     @binaryCompatField(since = "4.4.0")
---     private var _mods: List[Mod] = Nil
---   }
---   @ast class QuotedMacroExpr(body: Data) extends Data
-      def "Data_QuotedMacroExpr" $
-        record [
-          "body">: meta "Data"],
---   @ast class QuotedMacroType(tpe: Type) extends Data
-      def "Data_QuotedMacroType" $
-        record [
-          "tpe">: meta "Type"],
---   @ast class SplicedMacroExpr(body: Data) extends Data
-      def "Data_SplicedMacroExpr" $
-        record [
-          "body">: meta "Data"],
---   @ast class Match(expr: Data, cases: List[Case] @nonEmpty) extends Data {
-      def "Data_Match" $
-        record [
-          "expr">: meta "Data",
-          "cases">: list $ meta "Case"],
---     @binaryCompatField(since = "4.4.5")
---     private var _mods: List[Mod] = Nil
---   }
---   @ast class Try(expr: Data, catchp: List[Case], finallyp: Option[Data]) extends Data
-      def "Data_Try" $
-        record [
-          "expr">: meta "Data",
-          "catchp">: list $ meta "Case",
-          "finallyp">: optional $ meta "Data"],
---   @ast class TryWithHandler(expr: Data, catchp: Data, finallyp: Option[Data]) extends Data
-      def "Data_TryWithHandler" $
-        record [
-          "expr">: meta "Data",
-          "catchp">: meta "Data",
-          "finallyp">: optional $ meta "Data"],
---
---   @branch trait FunctionData extends Data {
-      def "Data_FunctionData" $
-        union [
-          "contextFunction">: meta "Data_ContextFunction",
-          "function">: meta "Data_Function"],
---     def params: List[Data_Param]
---     def body: Data
---   }
---   @ast class ContextFunction(params: List[Data_Param], body: Data) extends FunctionData {
-      def "Data_ContextFunction" $
-        record [
-          "params">: list $ meta "Data_Param",
-          "body">: meta "Data"],
---     checkFields(
---       params.forall(param =>
---         param.is[Data_Param.Quasi] ||
---           (param.name.is[scala.meta.Name.Anonymous] ==> param.default.isEmpty)
---       )
---     )
---   }
---   @ast class Function(params: List[Data_Param], body: Data) extends FunctionData {
-      def "Data_Function" $
-        record [
-          "params">: list $ meta "Data_Param",
-          "body">: meta "Data"],
---     checkFields(
---       params.forall(param =>
---         param.is[Data_Param.Quasi] ||
---           (param.name.is[scala.meta.Name.Anonymous] ==> param.default.isEmpty)
---       )
---     )
---     checkFields(
---       params.exists(_.is[Data_Param.Quasi]) ||
---         params.exists(_.mods.exists(_.is[Mod_Implicit])) ==> (params.length == 1)
---     )
---   }
---   @ast class PolyFunction(tparams: List[Type_Param], body: Data) extends Data
-      def "Data_PolyFunction" $
-        record [
-          "tparams">: list $ meta "Type_Param",
-          "body">: meta "Data"],
---   @ast class PartialFunction(cases: List[Case] @nonEmpty) extends Data
-      def "Data_PartialFunction" $
-        record [
-          "cases">: list $ meta "Case"],
---   @ast class While(expr: Data, body: Data) extends Data
-      def "Data_While" $
-        record [
-          "expr">: meta "Data",
-          "body">: meta "Data"],
---   @ast class Do(body: Data, expr: Data) extends Data
-      def "Data_Do" $
-        record [
-          "body">: meta "Data",
-          "expr">: meta "Data"],
---   @ast class For(enums: List[Enumerator] @nonEmpty, body: Data) extends Data {
-      def "Data_For" $
-        record [
-          "enums">: list $ meta "Enumerator"],
---     checkFields(
---       enums.head.is[Enumerator_Generator] || enums.head.is[Enumerator_CaseGenerator] || enums.head
---         .is[Enumerator_Quasi]
---     )
---   }
---   @ast class ForYield(enums: List[Enumerator] @nonEmpty, body: Data) extends Data
-      def "Data_ForYield" $
-        record [
-          "enums">: list $ meta "Enumerator"],
---   @ast class New(init: Init) extends Data
-      def "Data_New" $
-        record [
-          "init">: meta "Init"],
---   @ast class NewAnonymous(templ: Template) extends Data
-      def "Data_NewAnonymous" $
-        record [
-          "templ">: meta "Template"],
---   @ast class Placeholder() extends Data
-      def "Data_Placeholder"
-        unit,
---   @ast class Eta(expr: Data) extends Data
-      def "Data_Eta" $
-        record [
-          "expr">: meta "Data"],
---   @ast class Repeated(expr: Data) extends Data {
-      def "Data_Repeated" $
-        record [
-          "expr">: meta "Data"],
---     checkParent(ParentChecks.DataRepeated)
---   }
---   @ast class Param(mods: List[Mod], name: meta.Name, decltpe: Option[Type], default: Option[Data])
---       extends Member
-      def "Data_Param" $
-        record [
-          "mods">: list $ meta "Mod",
-          "name">: meta "Name",
-          "decltpe">: optional $ meta "Type",
-          "default">: optional $ meta "Data"],
---   def fresh(): Data_Name = fresh("fresh")
---   def fresh(prefix: String): Data_Name = Data_Name(prefix + Fresh.nextId())
--- }
---
--- @branch trait Type extends Tree
-      def "Type" $
-        union [
-          "ref">: meta "Type_Ref",
-          "anonymousName">: meta "Type_AnonymousName",
-          "apply">: meta "Type_Apply",
-          "applyInfix">: meta "Type_ApplyInfix",
-          "functionType">: meta "Type_FunctionType",
-          "polyFunction">: meta "Type_PolyFunction",
-          "implicitFunction">: meta "Type_ImplicitFunction",
-          "tuple">: meta "Type_Tuple",
-          "with">: meta "Type_With",
-          "and">: meta "Type_And",
-          "or">: meta "Type_Or",
-          "refine">: meta "Type_Refine",
-          "existential">: meta "Type_Existential",
-          "annotate">: meta "Type_Annotate",
-          "lambda">: meta "Type_Lambda",
-          "macro">: meta "Type_Macro",
-          "method">: meta "Type_Method",
-          "placeholder">: meta "Type_Placeholder",
-          "byName">: meta "Type_ByName",
-          "repeated">: meta "Type_Repeated",
-          "var">: meta "Type_Var",
-          "typedParam">: meta "Type_TypedParam",
-          "match">: meta "Type_Match"],
--- object Type {
---   @branch trait Ref extends Type with scala.meta.Ref
-      def "Type_Ref" $
-        union [
-          "name">: meta "Type_Name",
-          "select">: meta "Type_Select",
-          "project">: meta "Type_Project",
-          "singleton">: meta "Type_Singleton"],
---   @ast class Name(value: String @nonEmpty) extends scala.meta.Name with Type_Ref
-      def "Type_Name" $
-        record [
-          "value">: string],
---   @ast class AnonymousName() extends Type
-      def "Type_AnonymousName" $
-        wrap unit,
---   @ast class Select(qual: Data_Ref, name: Type_Name) extends Type_Ref {
-      def "Type_Select" $
-        record [
-          "qual">: meta "Data_Ref",
-          "name">: meta "Type_Name"],
---     checkFields(qual.isPath || qual.is[Data_Super] || qual.is[Data_Ref.Quasi])
---   }
---   @ast class Project(qual: Type, name: Type_Name) extends Type_Ref
-      def "Type_Project" $
-        record [
-          "qual">: meta "Type",
-          "name">: meta "Type_Name"],
---   @ast class Singleton(ref: Data_Ref) extends Type_Ref {
-      def "Type_Singleton" $
-        record [
-          "ref">: meta "Data_Ref"],
---     checkFields(ref.isPath || ref.is[Data_Super])
---   }
---   @ast class Apply(tpe: Type, args: List[Type] @nonEmpty) extends Type
-      def "Type_Apply" $
-        record [
-          "tpe">: meta "Type",
-          "args">: list $ meta "Type"],
---   @ast class ApplyInfix(lhs: Type, op: Name, rhs: Type) extends Type
-      def "Type_ApplyInfix" $
-        record [
-          "lhs">: meta "Type",
-          "op">: meta "Type_Name",
-          "rhs">: meta "Type"],
---   @branch trait FunctionType extends Type {
-      def "Type_FunctionType" $
-        union [
-          "function">: meta "Type_Function",
-          "contextFunction">: meta "Type_ContextFunction"],
---     def params: List[Type]
---     def res: Type
---   }
---   @ast class Function(params: List[Type], res: Type) extends FunctionType
-      def "Type_Function" $
-        record [
-          "params">: list $ meta "Type",
-          "res">: meta "Type"],
---   @ast class PolyFunction(tparams: List[Type_Param], tpe: Type) extends Type
-      def "Type_PolyFunction" $
-        record [
-          "tparams">: list $ meta "Type_Param",
-          "tpe">: meta "Type"],
---   @ast class ContextFunction(params: List[Type], res: Type) extends FunctionType
-      def "Type_ContextFunction" $
-        record [
-          "params">: list $ meta "Type",
-          "res">: meta "Type"],
---   @ast @deprecated("Implicit functions are not supported in any dialect")
---   class ImplicitFunction(
-      def "Type_ImplicitFunction" $
-        record [
---       params: List[Type],
-          "params">: list $ meta "Type",
---       res: Type
-          "res">: meta "Type"],
---   ) extends Type
---   @ast class Tuple(args: List[Type] @nonEmpty) extends Type {
-      def "Type_Tuple" $
-        record [
-          "args">: list $ meta "Type"],
---     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Type_Quasi]))
---   }
---   @ast class With(lhs: Type, rhs: Type) extends Type
-      def "Type_With" $
-        record [
-          "lhs">: meta "Type",
-          "rhs">: meta "Type"],
---   @ast class And(lhs: Type, rhs: Type) extends Type
-      def "Type_And" $
-        record [
-          "lhs">: meta "Type",
-          "rhs">: meta "Type"],
---   @ast class Or(lhs: Type, rhs: Type) extends Type
-      def "Type_Or" $
-        record [
-          "lhs">: meta "Type",
-          "rhs">: meta "Type"],
---   @ast class Refine(tpe: Option[Type], stats: List[Stat]) extends Type {
-      def "Type_Refine" $
-        record [
-          "tpe">: optional $ meta "Type",
-          "stats">: list $ meta "Stat"],
---     checkFields(stats.forall(_.isRefineStat))
---   }
---   @ast class Existential(tpe: Type, stats: List[Stat] @nonEmpty) extends Type {
-      def "Type_Existential" $
-        record [
-          "tpe">: meta "Type",
-          "stats">: list $ meta "Stat"],
---     checkFields(stats.forall(_.isExistentialStat))
---   }
---   @ast class Annotate(tpe: Type, annots: List[Mod_Annot] @nonEmpty) extends Type
-      def "Type_Annotate" $
-        record [
-          "tpe">: meta "Type",
-          "annots">: list $ meta "Mod_Annot"],
---   @ast class Lambda(tparams: List[Type_Param], tpe: Type) extends Type {
-      def "Type_Lambda" $
-        record [
-          "tparams">: list $ meta "Type_Param",
-          "tpe">: meta "Type"],
---     checkParent(ParentChecks.LambdaType)
---   }
---   @ast class Macro(body: Data) extends Type
-      def "Type_Macro" $
-        record [
-          "body">: meta "Data"],
---   @deprecated("Method type syntax is no longer supported in any dialect", "4.4.3")
---   @ast class Method(paramss: List[List[Data_Param]], tpe: Type) extends Type {
-      def "Type_Method" $
-        record [
-          "paramss">: list $ list $ meta "Data_Param",
-          "tpe">: meta "Type"],
---     checkParent(ParentChecks.TypeMethod)
---   }
---   @ast class Placeholder(bounds: Bounds) extends Type
-      def "Type_Placeholder" $
-        record [
-          "bounds">: meta "TypeBounds"],
---   @ast class Bounds(lo: Option[Type], hi: Option[Type]) extends Tree
-      def "TypeBounds" $
-        record [
-          "lo">: optional $ meta "Type",
-          "hi">: optional $ meta "Type"],
---   @ast class ByName(tpe: Type) extends Type {
-      def "Type_ByName" $
-        record [
-          "tpe">: meta "Type"],
---     checkParent(ParentChecks.TypeByName)
---   }
---   @ast class Repeated(tpe: Type) extends Type {
-      def "Type_Repeated" $
-        record [
-          "tpe">: meta "Type"],
---     checkParent(ParentChecks.TypeRepeated)
---   }
---   @ast class Var(name: Name) extends Type with Member_Type {
-      def "Type_Var" $
-        record [
-          "name">: meta "Type_Name"],
---     checkFields(name.value(0).isLower)
---     checkParent(ParentChecks.TypeVar)
---   }
---
---   @ast class TypedParam(name: Name, typ: Type) extends Type with Member_Type
-      def "Type_TypedParam" $
-        record [
-          "name">: meta "Name",
-          "typ">: meta "Type"],
---   @ast class Param(
-      def "Type_Param" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: meta.Name,
-          "name">: meta "Name",
---       tparams: List[Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       tbounds: TypeBounds,
-          "tbounds">: list $ meta "TypeBounds",
---       vbounds: List[Type],
-          "vbounds">: list $ meta "Type",
---       cbounds: List[Type]
-          "cbounds">: list $ meta "Type"],
---   ) extends Member
---
---   @ast class Match(tpe: Type, cases: List[TypeCase] @nonEmpty) extends Type
-      def "Type_Match" $
-        record [
-          "tpe">: meta "Type",
-          "cases">: list $ meta "TypeCase"],
---   def fresh(): Type_Name = fresh("fresh")
---   def fresh(prefix: String): Type_Name = Type_Name(prefix + Fresh.nextId())
--- }
---
--- @branch trait Pat extends Tree
-      def "Pat" $
-        union [
-          "var">: meta "Pat_Var",
-          "wildcard">: unit,
-          "seqWildcard">: unit,
-          "bind">: meta "Pat_Bind",
-          "alternative">: meta "Pat_Alternative",
-          "tuple">: meta "Pat_Tuple",
-          "repeated">: meta "Pat_Repeated",
-          "extract">: meta "Pat_Extract",
-          "extractInfix">: meta "Pat_ExtractInfix",
-          "interpolate">: meta "Pat_Interpolate",
-          "xml">: meta "Pat_Xml",
-          "typed">: meta "Pat_Typed",
-          "macro">: meta "Pat_Macro",
-          "given">: meta "Pat_Given"],
--- object Pat {
---   @ast class Var(name: scala.meta.Data_Name) extends Pat with Member_Data { @
-      def "Pat_Var" $
-        record [
-          "name">: meta "Data_Name"],
---     // NOTE: can't do this check here because of things like `val X = 2`
---     // checkFields(name.value(0).isLower)
---     checkParent(ParentChecks.PatVar)
---   }
---   @ast class Wildcard() extends Pat
---   @ast class SeqWildcard() extends Pat {
---     checkParent(ParentChecks.PatSeqWildcard)
---   }
---   @ast class Bind(lhs: Pat, rhs: Pat) extends Pat {
-      def "Pat_Bind" $
-        record [
-          "lhs">: meta "Pat",
-          "rhs">: meta "Pat"],
---     checkFields(lhs.is[Pat_Var] || lhs.is[Pat_Quasi])
---   }
---   @ast class Alternative(lhs: Pat, rhs: Pat) extends Pat
-      def "Pat_Alternative" $
-        record [
-          "lhs">: meta "Pat",
-          "rhs">: meta "Pat"],
---   @ast class Tuple(args: List[Pat] @nonEmpty) extends Pat {
-      def "Pat_Tuple" $
-        record [
-          "args">: list $ meta "Pat"],
---     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Pat_Quasi]))
---   }
---   @ast class Repeated(name: scala.meta.Data_Name) extends Pat
-      def "Pat_Repeated" $
-        record [
-          "name">: meta "Data_Name"],
---   @ast class Extract(fun: Data, args: List[Pat]) extends Pat {
-      def "Pat_Extract" $
-        record [
-          "fun">: meta "Data",
-          "args">: list $ meta "Pat"],
---     checkFields(fun.isExtractor)
---   }
---   @ast class ExtractInfix(lhs: Pat, op: Data_Name, rhs: List[Pat]) extends Pat
-      def "Pat_ExtractInfix" $
-        record [
-          "lhs">: meta "Pat",
-          "op">: meta "Data_Name",
-          "rhs">: list $ meta "Pat"],
---   @ast class Interpolate(prefix: Data_Name, parts: List[Lit] @nonEmpty, args: List[Pat])
-      def "Pat_Interpolate" $
-        record [
-          "prefix">: meta "Data_Name",
-          "parts">: list $ meta "Lit"],
---       extends Pat {
---     checkFields(parts.length == args.length + 1)
---   }
---   @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Pat]) extends Pat {
-      def "Pat_Xml" $
-        record [
-          "parts">: list $ meta "Lit",
-          "args">: list $ meta "Pat"],
---     checkFields(parts.length == args.length + 1)
---   }
---   @ast class Typed(lhs: Pat, rhs: Type) extends Pat {
-      def "Pat_Typed" $
-        record [
-          "lhs">: meta "Pat",
-          "rhs">: meta "Type"],
---     checkFields(!rhs.is[Type_Var] && !rhs.is[Type_Placeholder])
---   }
---   @ast class Macro(body: Data) extends Pat {
-      def "Pat_Macro" $
-        record [
-          "body">: meta "Data"],
---     checkFields(body.is[Data_QuotedMacroExpr] || body.is[Data_QuotedMacroType])
---   }
---   @ast class Given(tpe: Type) extends Pat
-      def "Pat_Given" $
-        record [
-          "tpe">: meta "Type"],
---   def fresh(): Pat_Var = Pat_Var(Data_fresh())
---   def fresh(prefix: String): Pat_Var = Pat_Var(Data_fresh(prefix))
--- }
---
--- @branch trait Member extends Tree {
-      def "Member" $
-        union [
-          "term">: meta "Member_Data",
-          "type">: meta "Member_Type",
-          "termParam">: meta "Data_Param",
-          "typeParam">: meta "Type_Param",
-          "self">: meta "Self"],
---   def name: Name
--- }
--- object Member {
---   @branch trait Data extends Member {
-      def "Member_Data" $
-        union [
-          "pkg">: meta "Pkg",
-          "object">: meta "Pkg_Object"],
---     def name: scala.meta.Data_Name
---   }
---   @branch trait Type extends Member {
-      def "Member_Type" $
-        record [
---     def name: scala.meta.Type_Name
-          "name">: meta "Type_Name"],
---   }
--- }
---
--- @branch trait Decl extends Stat
-      def "Decl" $
-        union [
-          "val">: meta "Decl_Val",
-          "var">: meta "Decl_Var",
-          "def">: meta "Decl_Def",
-          "type">: meta "Decl_Type",
-          "given">: meta "Decl_Given"],
--- object Decl {
---   @ast class Val(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
-      def "Decl_Val" $
-        record [
-          "mods">: list $ meta "Mod",
-          "pats">: list $ meta "Pat",
-          "decltpe">: meta "Type"],
---   @ast class Var(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
-      def "Decl_Var" $
-        record [
-          "mods">: list $ meta "Mod",
-          "pats">: list $ meta "Pat",
-          "decltpe">: meta "Type"],
---   @ast class Def(
-      def "Decl_Def" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Data_Name,
-          "name">: meta "Data_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       paramss: List[List[Data_Param]],
-          "paramss">: list $ list $ meta "Data_Param",
---       decltpe: scala.meta.Type
-          "decltpe">: meta "Type"],
---   ) extends Decl with Member_Data @
-      --   @ast class Type(
-      def "Decl_Type" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Type_Name,
-          "name">: meta "Type_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       bounds: scala.meta.TypeBounds
-          "bounds">: meta "TypeBounds"],
---   ) extends Decl with Member_Type
---   @ast class Given(
-      def "Decl_Given" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Data_Name,
-          "name">: meta "Data_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       sparams: List[List[Data_Param]],
-          "sparams">: list $ list $ meta "Data_Param",
---       decltpe: scala.meta.Type
-          "decltpe">: meta "Type"],
---   ) extends Decl with Member_Data @
--- }
---
--- @branch trait Defn extends Stat
-      def "Defn" $
-        union [
-          "val">: meta "Defn_Val",
-          "var">: meta "Defn_Var",
-          "given">: meta "Defn_Given",
-          "enum">: meta "Defn_Enum",
-          "enumCase">: meta "Defn_EnumCase",
-          "repeatedEnumCase">: meta "Defn_RepeatedEnumCase",
-          "givenAlias">: meta "Defn_GivenAlias",
-          "extensionGroup">: meta "Defn_ExtensionGroup",
-          "def">: meta "Defn_Def",
-          "macro">: meta "Defn_Macro",
-          "type">: meta "Defn_Type",
-          "class">: meta "Defn_Class",
-          "trait">: meta "Defn_Trait",
-          "object">: meta "Defn_Object"],
--- object Defn {
---   @ast class Val(
-      def "Defn_Val" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       pats: List[Pat] @nonEmpty,
-          "pats">: list $ meta "Pat",
---       decltpe: Option[scala.meta.Type],
-          "decltpe">: optional $ meta "Type",
---       rhs: Data
-          "rhs">: meta "Data"],
---   ) extends Defn {
---     checkFields(pats.forall(!_.is[Data_Name]))
---   }
---   @ast class Var(
-      def "Defn_Var" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       pats: List[Pat] @nonEmpty,
-          "pats">: list $ meta "Pat",
---       decltpe: Option[scala.meta.Type],
-          "decltpe">: meta "Type",
---       rhs: Option[Data]
-          "rhs">: optional $ meta "Data"],
---   ) extends Defn {
---     checkFields(pats.forall(!_.is[Data_Name]))
---     checkFields(decltpe.nonEmpty || rhs.nonEmpty)
---     checkFields(rhs.isEmpty ==> pats.forall(_.is[Pat_Var]))
---   }
---   @ast class Given(
-      def "Defn_Given" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Name,
-          "name">: meta "Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ list $ meta "Type_Param",
---       sparams: List[List[Data_Param]],
-          "sparams">: list $ list $ meta "Data_Param",
---       templ: Template
-          "templ">: meta "Template"],
---   ) extends Defn
---   @ast class Enum(
-      def "Defn_Enum" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Type_Name,
-          "name">: meta "Type_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       ctor: Ctor_Primary,
-          "ctor">: meta "Ctor_Primary",
---       templ: Template
-          "template">: meta "Template"],
---   ) extends Defn with Member_Type
---   @ast class EnumCase(
-      def "Defn_EnumCase" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Data_Name,
-          "name">: meta "Data_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       ctor: Ctor_Primary,
-          "ctor">: meta "Ctor_Primary",
---       inits: List[Init]
-          "inits">: list $ meta "Init"],
---   ) extends Defn with Member_Data { @
---     checkParent(ParentChecks.EnumCase)
---   }
---   @ast class RepeatedEnumCase(
-      def "Defn_RepeatedEnumCase" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       cases: List[Data_Name]
-          "cases">: list $ meta "Data_Name"],
---   ) extends Defn {
---     checkParent(ParentChecks.EnumCase)
---   }
---   @ast class GivenAlias(
-      def "Defn_GivenAlias" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Name,
-          "name">: meta "Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ list $ meta "Type_Param",
---       sparams: List[List[Data_Param]],
-          "sparams">: list $ list $ meta "Data_Param",
---       decltpe: scala.meta.Type,
-          "decltpe">: meta "Type",
---       body: Data
-          "body">: meta "Data"],
---   ) extends Defn
---   @ast class ExtensionGroup(
-      def "Defn_ExtensionGroup" $
-        record [
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       paramss: List[List[Data_Param]],
-          "parmss">: list $ list $ meta "Data_Param",
---       body: Stat
-          "body">: meta "Stat"],
---   ) extends Defn
---   @ast class Def(
-      def "Defn_Def" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Data_Name,
-          "name">: meta "Data_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       paramss: List[List[Data_Param]],
-          "paramss">: list $ list $ meta "Data_Param",
---       decltpe: Option[scala.meta.Type],
-          "decltpe">: optional $ meta "Type",
---       body: Data
-          "body">: meta "Data"],
---   ) extends Defn with Member_Data { @
---     checkFields(paramss.forall(onlyLastParamCanBeRepeated))
---   }
---   @ast class Macro(
-      def "Defn_Macro" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Data_Name,
-          "name">: meta "Data_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       paramss: List[List[Data_Param]],
-          "paramss">: list $ list $ meta "Data_Param",
---       decltpe: Option[scala.meta.Type],
-          "decltpe">: optional $ meta "Type",
---       body: Data
-          "body">: meta "Data"],
---   ) extends Defn with Member_Data @
---   @ast class Type(
-      def "Defn_Type" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Type_Name,
-          "name">: meta "Type_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       body: scala.meta.Type
-          "body">: meta "Type"],
---   ) extends Defn with Member_Type {
---     @binaryCompatField("4.4.0")
---     private var _bounds: scala.meta.TypeBounds = scala.meta.TypeBounds(None, None)
---   }
---   @ast class Class(
-      def "Defn_Class" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Type_Name,
-          "name">: meta "Type_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       ctor: Ctor_Primary,
-          "ctor">: meta "Ctor_Primary",
---       templ: Template
-          "template">: meta "Template"],
---   ) extends Defn with Member_Type
---   @ast class Trait(
-      def "Defn_Trait" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: scala.meta.Type_Name,
-          "name">: meta "Type_Name",
---       tparams: List[scala.meta.Type_Param],
-          "tparams">: list $ meta "Type_Param",
---       ctor: Ctor_Primary,
-          "ctor">: meta "Ctor_Primary",
---       templ: Template
-          "template">: meta "Template"],
---   ) extends Defn with Member_Type {
---     checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
---   }
---   @ast class Object(mods: List[Mod], name: Data_Name, templ: Template)
-      def "Defn_Object" $
-        record [
-          "name">: meta "Data_Name"], --  from Member_Data
---       extends Defn with Member_Data { @
---     checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
---   }
--- }
---
--- @ast class Pkg(ref: Data_Ref, stats: List[Stat]) extends Member_Data with Stat { @
-      def "Pkg" $
-        record [
-          "name">: meta "Data_Name", --  from Member_Data
-          "ref">: meta "Data_Ref",
-          "stats">: list $ meta "Stat"],
---   checkFields(ref.isQualId)
---   def name: Data_Name = ref match {
---     case name: Data_Name => name
---     case Data_Select(_, name: Data_Name) => name
---   }
--- }
--- object Pkg {
---   @ast class Object(mods: List[Mod], name: Data_Name, templ: Template)
---       extends Member_Data with Stat { @
-      def "Pkg_Object" $
-        record [
-          "mods">: list $ meta "Mod",
-          "name">: meta "Data_Name",
-          "template">: meta "Template"],
---     checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
---   }
--- }
---
--- // NOTE: The names of Ctor_Primary and Ctor_Secondary here is always Name.Anonymous.
--- // While seemingly useless, this name is crucial to one of the key principles behind the semantic API:
--- // "every definition and every reference should carry a name".
--- @branch trait Ctor extends Tree with Member
-      def "Ctor" $
-        union [
-          "primary">: meta "Ctor_Primary",
-          "secondary">: meta "Ctor_Secondary"],
--- object Ctor {
---   @ast class Primary(mods: List[Mod], name: Name, paramss: List[List[Data_Param]]) extends Ctor
-      def "Ctor_Primary" $
-        record [
-          "mods">: list $ meta "Mod",
-          "name">: meta "Name",
-          "paramss">: list $ list $ meta "Data_Param"],
---   @ast class Secondary(
-      def "Ctor_Secondary" $
-        record [
---       mods: List[Mod],
-          "mods">: list $ meta "Mod",
---       name: Name,
-          "name">: meta "Name",
---       paramss: List[List[Data_Param]] @nonEmpty,
-          "paramss">: list $ list $ meta "Data_Param",
---       init: Init,
-          "init">: meta "Init",
---       stats: List[Stat]
-          "stats">: list $ meta "Stat"],
---   ) extends Ctor with Stat {
---     checkFields(stats.forall(_.isBlockStat))
---   }
--- }
---
--- // NOTE: The name here is always Name.Anonymous.
--- // See comments to Ctor_Primary and Ctor_Secondary for justification.
--- @ast class Init(tpe: Type, name: Name, argss: List[List[Data]]) extends Ref {
-      def "Init" $
-        record [
-          "tpe">: meta "Type",
-          "name">: meta "Name",
-          "argss">: list $ list $ meta "Data"],
---   checkFields(tpe.isConstructable)
---   checkParent(ParentChecks.Init)
--- }
---
--- @ast class Self(name: Name, decltpe: Option[Type]) extends Member
-      def "Self" $
-        wrap unit,
---
--- @ast class Template(
-      def "Template" $
-        record [
---     early: List[Stat],
-          "early">: list $ meta "Stat",
---     inits: List[Init],
-          "inits">: list $ meta "Init",
---     self: Self,
-          "self">: meta "Self",
---     stats: List[Stat]
-          "stats">: list $ meta "Stat"],
--- ) extends Tree {
---   @binaryCompatField("4.4.0")
---   private var _derives: List[Type] = Nil
---   checkFields(early.forall(_.isEarlyStat && inits.nonEmpty))
---   checkFields(stats.forall(_.isTemplateStat))
--- }
---
--- @branch trait Mod extends Tree
-      def "Mod" $
-        union [
-          "annot">: meta "Mod_Annot",
-          "private">: meta "Mod_Private",
-          "protected">: meta "Mod_Protected",
-          "implicit">: unit,
-          "final">: unit,
-          "sealed">: unit,
-          "open">: unit,
-          "super">: unit,
-          "override">: unit,
-          "case">: unit,
-          "abstract">: unit,
-          "covariant">: unit,
-          "contravariant">: unit,
-          "lazy">: unit,
-          "valParam">: unit,
-          "varParam">: unit,
-          "infix">: unit,
-          "inline">: unit,
-          "using">: unit,
-          "opaque">: unit,
-          "transparent">: unit],
--- object Mod {
---   @ast class Annot(init: Init) extends Mod {
-      def "Mod_Annot" $
-        record [
-          "init">: meta "Init"],
---     @deprecated("Use init instead", "1.9.0")
---     def body = init
---   }
---   @ast class Private(within: Ref) extends Mod {
-      def "Mod_Private" $
-        record [
-          "within">: meta "Ref"],
---     checkFields(within.isWithin)
---   }
---   @ast class Protected(within: Ref) extends Mod {
-      def "Mod_Protected" $
-        record [
-          "within">: meta "Ref"],
---     checkFields(within.isWithin)
---   }
---   @ast class Implicit() extends Mod
---   @ast class Final() extends Mod
---   @ast class Sealed() extends Mod
---   @ast class Open() extends Mod
---   @deprecated("Super traits introduced in dotty, but later removed.")
---   @ast class Super() extends Mod
---   @ast class Override() extends Mod
---   @ast class Case() extends Mod
---   @ast class Abstract() extends Mod
---   @ast class Covariant() extends Mod
---   @ast class Contravariant() extends Mod
---   @ast class Lazy() extends Mod
---   @ast class ValParam() extends Mod
---   @ast class VarParam() extends Mod
---   @ast class Infix() extends Mod
---   @ast class Inline() extends Mod
---   @ast class Using() extends Mod
---   @ast class Opaque() extends Mod
---   @ast class Transparent() extends Mod
--- }
---
--- @branch trait Enumerator extends Tree
-      def "Enumerator" $
-        union [
-          "generator">: meta "Enumerator_Generator",
-          "caseGenerator">: meta "Enumerator_CaseGenerator",
-          "val">: meta "Enumerator_Val",
-          "guard">: meta "Enumerator_Guard"],
--- object Enumerator {
---   @ast class Generator(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator_Generator" $
-        record [
-          "pat">: meta "Pat",
-          "rhs">: meta "Data"],
---   @ast class CaseGenerator(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator_CaseGenerator" $
-        record [
-          "pat">: meta "Pat",
-          "rhs">: meta "Data"],
---   @ast class Val(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator_Val" $
-        record [
-          "pat">: meta "Pat",
-          "rhs">: meta "Data"],
---   @ast class Guard(cond: Data) extends Enumerator
-      def "Enumerator_Guard" $
-        record [
-          "cond">: meta "Data"],
--- }
---
--- @branch trait ImportExportStat extends Stat {
-      def "ImportExportStat" $
-        union [
-          "import">: meta "Import",
-          "export">: meta "Export"],
---   def importers: List[Importer]
--- }
--- @ast class Import(importers: List[Importer] @nonEmpty) extends ImportExportStat
-      def "Import" $
-        record [
-          "importers">: list $ meta "Importer"],
--- @ast class Export(importers: List[Importer] @nonEmpty) extends ImportExportStat
-      def "Export" $
-        record [
-          "importers">: list $ meta "Importer"],
---
--- @ast class Importer(ref: Data_Ref, importees: List[Importee] @nonEmpty) extends Tree {
-      def "Importer" $
-        record [
-          "ref">: meta "Data_Ref",
-          "importees">: list $ meta "Importee"],
---   checkFields(ref.isStableId)
--- }
---
--- @branch trait Importee extends Tree with Ref
-      def "Importee" $
-        union [
-          "wildcard">: unit,
-          "given">: meta "Importee_Given",
-          "givenAll">: unit,
-          "name">: meta "Importee_Name",
-          "rename">: meta "Importee_Rename",
-          "unimport">: meta "Importee_Unimport"],
--- object Importee {
---   @ast class Wildcard() extends Importee
---   @ast class Given(tpe: Type) extends Importee
-      def "Importee_Given" $
-        record [
-          "tpe">: meta "Type"],
---   @ast class GivenAll() extends Importee
---   @ast class Name(name: scala.meta.Name) extends Importee {
-      def "Importee_Name" $
-        record [
-          "name">: meta "Name"],
---     checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
---   }
---   @ast class Rename(name: scala.meta.Name, rename: scala.meta.Name) extends Importee {
-      def "Importee_Rename" $
-        record [
-          "name">: meta "Name",
-          "rename">: meta "Name"],
---     checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
---     checkFields(rename.is[scala.meta.Name.Quasi] || rename.is[scala.meta.Name.Indeterminate])
---   }
---   @ast class Unimport(name: scala.meta.Name) extends Importee {
-      def "Importee_Unimport" $
-        record [
-          "name">: meta "Name"],
---     checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
---   }
--- }
---
--- @branch trait CaseTree extends Tree {
-      def "CaseTree" $
-        union [
-          "case">: meta "Case",
-          "typeCase">: meta "TypeCase"],
---   def pat: Tree
---   def body: Tree
--- }
--- @ast class Case(pat: Pat, cond: Option[Data], body: Data) extends CaseTree
-      def "Case" $
-        record [
-          "pat">: meta "Pat",
-          "cond">: optional $ meta "Data",
-          "body">: meta "Data"],
--- @ast class TypeCase(pat: Type, body: Type) extends CaseTree
-      def "TypeCase" $
-        record [
-          "pat">: meta "Type",
-          "body">: meta "Type"],
---
--- @ast class Source(stats: List[Stat]) extends Tree {
-      def "Source" $
-        record [
-          "stats">: list $ meta "Stat"],
---   // NOTE: This validation has been removed to allow dialects with top-level terms.
---   // Ideally, we should push the validation into a dialect-specific prettyprinter when -- 220 is fixed.
---   // checkFields(stats.forall(_.isTopLevelStat))
--- }
---
--- package internal.trees {
---   // NOTE: Quasi is a base trait for a whole bunch of classes.
---   // Every root, branch and ast trait/class among scala.meta trees (except for quasis themselves)
---   // has a corresponding quasi, e.g. Data_Quasi or Type_Quasi.
---   //
---   // Here's how quasis represent unquotes
---   // (XXX below depends on the position where the unquote occurs, e.g. q"$x" will result in Data_Quasi):
---   //   * $x => XXX.Quasi(0, XXX.Name("x"))
---   //   * ..$xs => XXX.Quasi(1, XXX.Quasi(0, XXX.Name("xs"))
---   //   * ...$xss => XXX.Quasi(2, XXX.Quasi(0, XXX.Name("xss"))
---   //   * ..{$fs($args)} => Complex ellipses aren't supported yet
---   @branch trait Quasi extends Tree {
-      def "Quasi" $ --  TODO
-        wrap unit]
---     def rank: Int
---     def tree: Tree
---     def pt: Class[_]
---     def become[T <: Quasi: AstInfo]: T
---   }
---
---   @registry object All
--- }
+ref :: Binding
+ref = def "Ref" $
+  T.union [
+    "name">: meta "Name",
+    "init">: meta "Init"]
+
+stat :: Binding
+stat = def "Stat" $
+  T.union [
+    "term">: meta "Data",
+    "decl">: meta "Decl",
+    "defn">: meta "Defn",
+    "importExport">: meta "ImportExportStat"]
+
+name :: Binding
+name = def "Name" $
+  T.union [
+    "value">: T.string,
+    "anonymous">: T.unit,
+    "indeterminate">: meta "PredefString"]
+
+lit :: Binding
+lit = def "Lit" $
+  T.union [
+    "null">: T.unit,
+    "int">: T.int32,
+    "double">: T.float64,
+    "float">: T.float32,
+    "byte">: T.int8,
+    "short">: T.int16,
+    "char">: T.uint16,
+    "long">: T.int64,
+    "boolean">: T.boolean,
+    "unit">: T.unit,
+    "string">: T.string,
+    "symbol">: meta "ScalaSymbol"]
+
+data_ :: Binding
+data_ = def "Data" $
+  T.union [
+    "lit">: meta "Lit",
+    "ref">: meta "Data_Ref",
+    "interpolate">: meta "Data_Interpolate",
+    "xml">: meta "Data_Xml",
+    "apply">: meta "Data_Apply",
+    "applyUsing">: meta "Data_ApplyUsing",
+    "applyType">: meta "Data_ApplyType",
+    "assign">: meta "Data_Assign",
+    "return">: meta "Data_Return",
+    "throw">: meta "Data_Throw",
+    "ascribe">: meta "Data_Ascribe",
+    "annotate">: meta "Data_Annotate",
+    "tuple">: meta "Data_Tuple",
+    "block">: meta "Data_Block",
+    "endMarker">: meta "Data_EndMarker",
+    "if">: meta "Data_If",
+    "quotedMacroExpr">: meta "Data_QuotedMacroExpr",
+    "quotedMacroType">: meta "Data_QuotedMacroType",
+    "splicedMacroExpr">: meta "Data_SplicedMacroExpr",
+    "match">: meta "Data_Match",
+    "try">: meta "Data_Try",
+    "tryWithHandler">: meta "Data_TryWithHandler",
+    "functionData">: meta "Data_FunctionData",
+    "polyFunction">: meta "Data_PolyFunction",
+    "partialFunction">: meta "Data_PartialFunction",
+    "while">: meta "Data_While",
+    "do">: meta "Data_Do",
+    "for">: meta "Data_For",
+    "forYield">: meta "Data_ForYield",
+    "new">: meta "Data_New",
+    "newAnonymous">: meta "Data_NewAnonymous",
+    "placeholder">: meta "Data_Placeholder",
+    "eta">: meta "Data_Eta",
+    "repeated">: meta "Data_Repeated",
+    "param">: meta "Data_Param"]
+
+data_Ref :: Binding
+data_Ref = def "Data_Ref" $
+  T.union [
+    "this">: meta "Data_This",
+    "super">: meta "Data_Super",
+    "name">: meta "Data_Name",
+    "anonymous">: meta "Data_Anonymous",
+    "select">: meta "Data_Select",
+    "applyUnary">: meta "Data_ApplyUnary"]
+
+data_This :: Binding
+data_This = def "Data_This" $
+  T.wrap T.unit
+
+data_Super :: Binding
+data_Super = def "Data_Super" $
+  T.record [
+    "thisp">: meta "Name",
+    "superp">: meta "Name"]
+
+data_Name :: Binding
+data_Name = def "Data_Name" $
+  T.record [
+    "value">: meta "PredefString"]
+
+data_Anonymous :: Binding
+data_Anonymous = def "Data_Anonymous" $
+  T.wrap T.unit
+
+data_Select :: Binding
+data_Select = def "Data_Select" $
+  T.record [
+    "qual">: meta "Data",
+    "name">: meta "Data_Name"]
+
+data_Interpolate :: Binding
+data_Interpolate = def "Data_Interpolate" $
+  T.record [
+    "prefix">: meta "Data_Name",
+    "parts">: T.list $ meta "Lit",
+    "args">: T.list $ meta "Data"]
+
+data_Xml :: Binding
+data_Xml = def "Data_Xml" $
+  T.record [
+    "parts">: T.list $ meta "Lit",
+    "args">: T.list $ meta "Data"]
+
+data_Apply :: Binding
+data_Apply = def "Data_Apply" $
+  T.record [
+    "fun">: meta "Data",
+    "args">: T.list $ meta "Data"]
+
+data_ApplyUsing :: Binding
+data_ApplyUsing = def "Data_ApplyUsing" $
+  T.record [
+    "fun">: meta "Data",
+    "targs">: T.list $ meta "Data"]
+
+data_ApplyType :: Binding
+data_ApplyType = def "Data_ApplyType" $
+  T.record [
+    "lhs">: meta "Data",
+    "op">: meta "Data_Name",
+    "targs">: T.list $ meta "Type",
+    "args">: T.list $ meta "Data"]
+
+data_ApplyInfix :: Binding
+data_ApplyInfix = def "Data_ApplyInfix" $
+  T.record [
+    "lhs">: meta "Data",
+    "op">: meta "Data_Name",
+    "targs">: T.list $ meta "Type",
+    "args">: T.list $ meta "Data"]
+
+data_ApplyUnary :: Binding
+data_ApplyUnary = def "Data_ApplyUnary" $
+  T.record [
+    "op">: meta "Data_Name",
+    "arg">: meta "Data"]
+
+data_Assign :: Binding
+data_Assign = def "Data_Assign" $
+  T.record [
+    "lhs">: meta "Data",
+    "rhs">: meta "Data"]
+
+data_Return :: Binding
+data_Return = def "Data_Return" $
+  T.record [
+    "expr">: meta "Data"]
+
+data_Throw :: Binding
+data_Throw = def "Data_Throw" $
+  T.record [
+    "expr">: meta "Data"]
+
+data_Ascribe :: Binding
+data_Ascribe = def "Data_Ascribe" $
+  T.record [
+    "expr">: meta "Data",
+    "tpe">: meta "Type"]
+
+data_Annotate :: Binding
+data_Annotate = def "Data_Annotate" $
+  T.record [
+    "expr">: meta "Data",
+    "annots">: T.list $ meta "Mod_Annot"]
+
+data_Tuple :: Binding
+data_Tuple = def "Data_Tuple" $
+  T.record [
+    "args">: T.list $ meta "Data"]
+
+data_Block :: Binding
+data_Block = def "Data_Block" $
+  T.record [
+    "stats">: T.list $ meta "Stat"]
+
+data_EndMarker :: Binding
+data_EndMarker = def "Data_EndMarker" $
+  T.record [
+    "name">: meta "Data_Name"]
+
+data_If :: Binding
+data_If = def "Data_If" $
+  T.record [
+    "cond">: meta "Data",
+    "thenp">: meta "Data",
+    "elsep">: meta "Data"]
+
+data_QuotedMacroExpr :: Binding
+data_QuotedMacroExpr = def "Data_QuotedMacroExpr" $
+  T.record [
+    "body">: meta "Data"]
+
+data_QuotedMacroType :: Binding
+data_QuotedMacroType = def "Data_QuotedMacroType" $
+  T.record [
+    "tpe">: meta "Type"]
+
+data_SplicedMacroExpr :: Binding
+data_SplicedMacroExpr = def "Data_SplicedMacroExpr" $
+  T.record [
+    "body">: meta "Data"]
+
+data_Match :: Binding
+data_Match = def "Data_Match" $
+  T.record [
+    "expr">: meta "Data",
+    "cases">: T.list $ meta "Case"]
+
+data_Try :: Binding
+data_Try = def "Data_Try" $
+  T.record [
+    "expr">: meta "Data",
+    "catchp">: T.list $ meta "Case",
+    "finallyp">: T.maybe $ meta "Data"]
+
+data_TryWithHandler :: Binding
+data_TryWithHandler = def "Data_TryWithHandler" $
+  T.record [
+    "expr">: meta "Data",
+    "catchp">: meta "Data",
+    "finallyp">: T.maybe $ meta "Data"]
+
+data_FunctionData :: Binding
+data_FunctionData = def "Data_FunctionData" $
+  T.union [
+    "contextFunction">: meta "Data_ContextFunction",
+    "function">: meta "Data_Function"]
+
+data_ContextFunction :: Binding
+data_ContextFunction = def "Data_ContextFunction" $
+  T.record [
+    "params">: T.list $ meta "Data_Param",
+    "body">: meta "Data"]
+
+data_Function :: Binding
+data_Function = def "Data_Function" $
+  T.record [
+    "params">: T.list $ meta "Data_Param",
+    "body">: meta "Data"]
+
+data_PolyFunction :: Binding
+data_PolyFunction = def "Data_PolyFunction" $
+  T.record [
+    "tparams">: T.list $ meta "Type_Param",
+    "body">: meta "Data"]
+
+data_PartialFunction :: Binding
+data_PartialFunction = def "Data_PartialFunction" $
+  T.record [
+    "cases">: T.list $ meta "Case"]
+
+data_While :: Binding
+data_While = def "Data_While" $
+  T.record [
+    "expr">: meta "Data",
+    "body">: meta "Data"]
+
+data_Do :: Binding
+data_Do = def "Data_Do" $
+  T.record [
+    "body">: meta "Data",
+    "expr">: meta "Data"]
+
+data_For :: Binding
+data_For = def "Data_For" $
+  T.record [
+    "enums">: T.list $ meta "Enumerator"]
+
+data_ForYield :: Binding
+data_ForYield = def "Data_ForYield" $
+  T.record [
+    "enums">: T.list $ meta "Enumerator"]
+
+data_New :: Binding
+data_New = def "Data_New" $
+  T.record [
+    "init">: meta "Init"]
+
+data_NewAnonymous :: Binding
+data_NewAnonymous = def "Data_NewAnonymous" $
+  T.record [
+    "templ">: meta "Template"]
+
+data_Placeholder :: Binding
+data_Placeholder = def "Data_Placeholder"
+  T.unit
+
+data_Eta :: Binding
+data_Eta = def "Data_Eta" $
+  T.record [
+    "expr">: meta "Data"]
+
+data_Repeated :: Binding
+data_Repeated = def "Data_Repeated" $
+  T.record [
+    "expr">: meta "Data"]
+
+data_Param :: Binding
+data_Param = def "Data_Param" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "decltpe">: T.maybe $ meta "Type",
+    "default">: T.maybe $ meta "Data"]
+
+type_ :: Binding
+type_ = def "Type" $
+  T.union [
+    "ref">: meta "Type_Ref",
+    "anonymousName">: meta "Type_AnonymousName",
+    "apply">: meta "Type_Apply",
+    "applyInfix">: meta "Type_ApplyInfix",
+    "functionType">: meta "Type_FunctionType",
+    "polyFunction">: meta "Type_PolyFunction",
+    "implicitFunction">: meta "Type_ImplicitFunction",
+    "tuple">: meta "Type_Tuple",
+    "with">: meta "Type_With",
+    "and">: meta "Type_And",
+    "or">: meta "Type_Or",
+    "refine">: meta "Type_Refine",
+    "existential">: meta "Type_Existential",
+    "annotate">: meta "Type_Annotate",
+    "lambda">: meta "Type_Lambda",
+    "macro">: meta "Type_Macro",
+    "method">: meta "Type_Method",
+    "placeholder">: meta "Type_Placeholder",
+    "byName">: meta "Type_ByName",
+    "repeated">: meta "Type_Repeated",
+    "var">: meta "Type_Var",
+    "typedParam">: meta "Type_TypedParam",
+    "match">: meta "Type_Match"]
+
+type_Ref :: Binding
+type_Ref = def "Type_Ref" $
+  T.union [
+    "name">: meta "Type_Name",
+    "select">: meta "Type_Select",
+    "project">: meta "Type_Project",
+    "singleton">: meta "Type_Singleton"]
+
+type_Name :: Binding
+type_Name = def "Type_Name" $
+  T.record [
+    "value">: T.string]
+
+type_AnonymousName :: Binding
+type_AnonymousName = def "Type_AnonymousName" $
+  T.wrap T.unit
+
+type_Select :: Binding
+type_Select = def "Type_Select" $
+  T.record [
+    "qual">: meta "Data_Ref",
+    "name">: meta "Type_Name"]
+
+type_Project :: Binding
+type_Project = def "Type_Project" $
+  T.record [
+    "qual">: meta "Type",
+    "name">: meta "Type_Name"]
+
+type_Singleton :: Binding
+type_Singleton = def "Type_Singleton" $
+  T.record [
+    "ref">: meta "Data_Ref"]
+
+type_Apply :: Binding
+type_Apply = def "Type_Apply" $
+  T.record [
+    "tpe">: meta "Type",
+    "args">: T.list $ meta "Type"]
+
+type_ApplyInfix :: Binding
+type_ApplyInfix = def "Type_ApplyInfix" $
+  T.record [
+    "lhs">: meta "Type",
+    "op">: meta "Type_Name",
+    "rhs">: meta "Type"]
+
+type_FunctionType :: Binding
+type_FunctionType = def "Type_FunctionType" $
+  T.union [
+    "function">: meta "Type_Function",
+    "contextFunction">: meta "Type_ContextFunction"]
+
+type_Function :: Binding
+type_Function = def "Type_Function" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+type_PolyFunction :: Binding
+type_PolyFunction = def "Type_PolyFunction" $
+  T.record [
+    "tparams">: T.list $ meta "Type_Param",
+    "tpe">: meta "Type"]
+
+type_ContextFunction :: Binding
+type_ContextFunction = def "Type_ContextFunction" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+type_ImplicitFunction :: Binding
+type_ImplicitFunction = def "Type_ImplicitFunction" $
+  T.record [
+    "params">: T.list $ meta "Type",
+    "res">: meta "Type"]
+
+type_Tuple :: Binding
+type_Tuple = def "Type_Tuple" $
+  T.record [
+    "args">: T.list $ meta "Type"]
+
+type_With :: Binding
+type_With = def "Type_With" $
+  T.record [
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
+
+type_And :: Binding
+type_And = def "Type_And" $
+  T.record [
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
+
+type_Or :: Binding
+type_Or = def "Type_Or" $
+  T.record [
+    "lhs">: meta "Type",
+    "rhs">: meta "Type"]
+
+type_Refine :: Binding
+type_Refine = def "Type_Refine" $
+  T.record [
+    "tpe">: T.maybe $ meta "Type",
+    "stats">: T.list $ meta "Stat"]
+
+type_Existential :: Binding
+type_Existential = def "Type_Existential" $
+  T.record [
+    "tpe">: meta "Type",
+    "stats">: T.list $ meta "Stat"]
+
+type_Annotate :: Binding
+type_Annotate = def "Type_Annotate" $
+  T.record [
+    "tpe">: meta "Type",
+    "annots">: T.list $ meta "Mod_Annot"]
+
+type_Lambda :: Binding
+type_Lambda = def "Type_Lambda" $
+  T.record [
+    "tparams">: T.list $ meta "Type_Param",
+    "tpe">: meta "Type"]
+
+type_Macro :: Binding
+type_Macro = def "Type_Macro" $
+  T.record [
+    "body">: meta "Data"]
+
+type_Method :: Binding
+type_Method = def "Type_Method" $
+  T.record [
+    "paramss">: T.list $ T.list $ meta "Data_Param",
+    "tpe">: meta "Type"]
+
+type_Placeholder :: Binding
+type_Placeholder = def "Type_Placeholder" $
+  T.record [
+    "bounds">: meta "TypeBounds"]
+
+typeBounds :: Binding
+typeBounds = def "TypeBounds" $
+  T.record [
+    "lo">: T.maybe $ meta "Type",
+    "hi">: T.maybe $ meta "Type"]
+
+type_ByName :: Binding
+type_ByName = def "Type_ByName" $
+  T.record [
+    "tpe">: meta "Type"]
+
+type_Repeated :: Binding
+type_Repeated = def "Type_Repeated" $
+  T.record [
+    "tpe">: meta "Type"]
+
+type_Var :: Binding
+type_Var = def "Type_Var" $
+  T.record [
+    "name">: meta "Type_Name"]
+
+type_TypedParam :: Binding
+type_TypedParam = def "Type_TypedParam" $
+  T.record [
+    "name">: meta "Name",
+    "typ">: meta "Type"]
+
+type_Param :: Binding
+type_Param = def "Type_Param" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "tbounds">: T.list $ meta "TypeBounds",
+    "vbounds">: T.list $ meta "Type",
+    "cbounds">: T.list $ meta "Type"]
+
+type_Match :: Binding
+type_Match = def "Type_Match" $
+  T.record [
+    "tpe">: meta "Type",
+    "cases">: T.list $ meta "TypeCase"]
+
+pat :: Binding
+pat = def "Pat" $
+  T.union [
+    "var">: meta "Pat_Var",
+    "wildcard">: T.unit,
+    "seqWildcard">: T.unit,
+    "bind">: meta "Pat_Bind",
+    "alternative">: meta "Pat_Alternative",
+    "tuple">: meta "Pat_Tuple",
+    "repeated">: meta "Pat_Repeated",
+    "extract">: meta "Pat_Extract",
+    "extractInfix">: meta "Pat_ExtractInfix",
+    "interpolate">: meta "Pat_Interpolate",
+    "xml">: meta "Pat_Xml",
+    "typed">: meta "Pat_Typed",
+    "macro">: meta "Pat_Macro",
+    "given">: meta "Pat_Given"]
+
+pat_Var :: Binding
+pat_Var = def "Pat_Var" $
+  T.record [
+    "name">: meta "Data_Name"]
+
+pat_Bind :: Binding
+pat_Bind = def "Pat_Bind" $
+  T.record [
+    "lhs">: meta "Pat",
+    "rhs">: meta "Pat"]
+
+pat_Alternative :: Binding
+pat_Alternative = def "Pat_Alternative" $
+  T.record [
+    "lhs">: meta "Pat",
+    "rhs">: meta "Pat"]
+
+pat_Tuple :: Binding
+pat_Tuple = def "Pat_Tuple" $
+  T.record [
+    "args">: T.list $ meta "Pat"]
+
+pat_Repeated :: Binding
+pat_Repeated = def "Pat_Repeated" $
+  T.record [
+    "name">: meta "Data_Name"]
+
+pat_Extract :: Binding
+pat_Extract = def "Pat_Extract" $
+  T.record [
+    "fun">: meta "Data",
+    "args">: T.list $ meta "Pat"]
+
+pat_ExtractInfix :: Binding
+pat_ExtractInfix = def "Pat_ExtractInfix" $
+  T.record [
+    "lhs">: meta "Pat",
+    "op">: meta "Data_Name",
+    "rhs">: T.list $ meta "Pat"]
+
+pat_Interpolate :: Binding
+pat_Interpolate = def "Pat_Interpolate" $
+  T.record [
+    "prefix">: meta "Data_Name",
+    "parts">: T.list $ meta "Lit"]
+
+pat_Xml :: Binding
+pat_Xml = def "Pat_Xml" $
+  T.record [
+    "parts">: T.list $ meta "Lit",
+    "args">: T.list $ meta "Pat"]
+
+pat_Typed :: Binding
+pat_Typed = def "Pat_Typed" $
+  T.record [
+    "lhs">: meta "Pat",
+    "rhs">: meta "Type"]
+
+pat_Macro :: Binding
+pat_Macro = def "Pat_Macro" $
+  T.record [
+    "body">: meta "Data"]
+
+pat_Given :: Binding
+pat_Given = def "Pat_Given" $
+  T.record [
+    "tpe">: meta "Type"]
+
+member :: Binding
+member = def "Member" $
+  T.union [
+    "term">: meta "Member_Data",
+    "type">: meta "Member_Type",
+    "termParam">: meta "Data_Param",
+    "typeParam">: meta "Type_Param",
+    "self">: meta "Self"]
+
+member_Data :: Binding
+member_Data = def "Member_Data" $
+  T.union [
+    "pkg">: meta "Pkg",
+    "object">: meta "Pkg_Object"]
+
+member_Type :: Binding
+member_Type = def "Member_Type" $
+  T.record [
+    "name">: meta "Type_Name"]
+
+decl :: Binding
+decl = def "Decl" $
+  T.union [
+    "val">: meta "Decl_Val",
+    "var">: meta "Decl_Var",
+    "def">: meta "Decl_Def",
+    "type">: meta "Decl_Type",
+    "given">: meta "Decl_Given"]
+
+decl_Val :: Binding
+decl_Val = def "Decl_Val" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "pats">: T.list $ meta "Pat",
+    "decltpe">: meta "Type"]
+
+decl_Var :: Binding
+decl_Var = def "Decl_Var" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "pats">: T.list $ meta "Pat",
+    "decltpe">: meta "Type"]
+
+decl_Def :: Binding
+decl_Def = def "Decl_Def" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "paramss">: T.list $ T.list $ meta "Data_Param",
+    "decltpe">: meta "Type"]
+
+decl_Type :: Binding
+decl_Type = def "Decl_Type" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Type_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "bounds">: meta "TypeBounds"]
+
+decl_Given :: Binding
+decl_Given = def "Decl_Given" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "sparams">: T.list $ T.list $ meta "Data_Param",
+    "decltpe">: meta "Type"]
+
+defn :: Binding
+defn = def "Defn" $
+  T.union [
+    "val">: meta "Defn_Val",
+    "var">: meta "Defn_Var",
+    "given">: meta "Defn_Given",
+    "enum">: meta "Defn_Enum",
+    "enumCase">: meta "Defn_EnumCase",
+    "repeatedEnumCase">: meta "Defn_RepeatedEnumCase",
+    "givenAlias">: meta "Defn_GivenAlias",
+    "extensionGroup">: meta "Defn_ExtensionGroup",
+    "def">: meta "Defn_Def",
+    "macro">: meta "Defn_Macro",
+    "type">: meta "Defn_Type",
+    "class">: meta "Defn_Class",
+    "trait">: meta "Defn_Trait",
+    "object">: meta "Defn_Object"]
+
+defn_Val :: Binding
+defn_Val = def "Defn_Val" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "pats">: T.list $ meta "Pat",
+    "decltpe">: T.maybe $ meta "Type",
+    "rhs">: meta "Data"]
+
+defn_Var :: Binding
+defn_Var = def "Defn_Var" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "pats">: T.list $ meta "Pat",
+    "decltpe">: meta "Type",
+    "rhs">: T.maybe $ meta "Data"]
+
+defn_Given :: Binding
+defn_Given = def "Defn_Given" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ T.list $ meta "Type_Param",
+    "sparams">: T.list $ T.list $ meta "Data_Param",
+    "templ">: meta "Template"]
+
+defn_Enum :: Binding
+defn_Enum = def "Defn_Enum" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Type_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "ctor">: meta "Ctor_Primary",
+    "template">: meta "Template"]
+
+defn_EnumCase :: Binding
+defn_EnumCase = def "Defn_EnumCase" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "ctor">: meta "Ctor_Primary",
+    "inits">: T.list $ meta "Init"]
+
+defn_RepeatedEnumCase :: Binding
+defn_RepeatedEnumCase = def "Defn_RepeatedEnumCase" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "cases">: T.list $ meta "Data_Name"]
+
+defn_GivenAlias :: Binding
+defn_GivenAlias = def "Defn_GivenAlias" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "tparams">: T.list $ T.list $ meta "Type_Param",
+    "sparams">: T.list $ T.list $ meta "Data_Param",
+    "decltpe">: meta "Type",
+    "body">: meta "Data"]
+
+defn_ExtensionGroup :: Binding
+defn_ExtensionGroup = def "Defn_ExtensionGroup" $
+  T.record [
+    "tparams">: T.list $ meta "Type_Param",
+    "parmss">: T.list $ T.list $ meta "Data_Param",
+    "body">: meta "Stat"]
+
+defn_Def :: Binding
+defn_Def = def "Defn_Def" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "paramss">: T.list $ T.list $ meta "Data_Param",
+    "decltpe">: T.maybe $ meta "Type",
+    "body">: meta "Data"]
+
+defn_Macro :: Binding
+defn_Macro = def "Defn_Macro" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "paramss">: T.list $ T.list $ meta "Data_Param",
+    "decltpe">: T.maybe $ meta "Type",
+    "body">: meta "Data"]
+
+defn_Type :: Binding
+defn_Type = def "Defn_Type" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Type_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "body">: meta "Type"]
+
+defn_Class :: Binding
+defn_Class = def "Defn_Class" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Type_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "ctor">: meta "Ctor_Primary",
+    "template">: meta "Template"]
+
+defn_Trait :: Binding
+defn_Trait = def "Defn_Trait" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Type_Name",
+    "tparams">: T.list $ meta "Type_Param",
+    "ctor">: meta "Ctor_Primary",
+    "template">: meta "Template"]
+
+defn_Object :: Binding
+defn_Object = def "Defn_Object" $
+  T.record [
+    "name">: meta "Data_Name"]
+
+pkg :: Binding
+pkg = def "Pkg" $
+  T.record [
+    "name">: meta "Data_Name",
+    "ref">: meta "Data_Ref",
+    "stats">: T.list $ meta "Stat"]
+
+pkg_Object :: Binding
+pkg_Object = def "Pkg_Object" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Data_Name",
+    "template">: meta "Template"]
+
+ctor :: Binding
+ctor = def "Ctor" $
+  T.union [
+    "primary">: meta "Ctor_Primary",
+    "secondary">: meta "Ctor_Secondary"]
+
+ctor_Primary :: Binding
+ctor_Primary = def "Ctor_Primary" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "paramss">: T.list $ T.list $ meta "Data_Param"]
+
+ctor_Secondary :: Binding
+ctor_Secondary = def "Ctor_Secondary" $
+  T.record [
+    "mods">: T.list $ meta "Mod",
+    "name">: meta "Name",
+    "paramss">: T.list $ T.list $ meta "Data_Param",
+    "init">: meta "Init",
+    "stats">: T.list $ meta "Stat"]
+
+init_ :: Binding
+init_ = def "Init" $
+  T.record [
+    "tpe">: meta "Type",
+    "name">: meta "Name",
+    "argss">: T.list $ T.list $ meta "Data"]
+
+self :: Binding
+self = def "Self" $
+  T.wrap T.unit
+
+template :: Binding
+template = def "Template" $
+  T.record [
+    "early">: T.list $ meta "Stat",
+    "inits">: T.list $ meta "Init",
+    "self">: meta "Self",
+    "stats">: T.list $ meta "Stat"]
+
+mod_ :: Binding
+mod_ = def "Mod" $
+  T.union [
+    "annot">: meta "Mod_Annot",
+    "private">: meta "Mod_Private",
+    "protected">: meta "Mod_Protected",
+    "implicit">: T.unit,
+    "final">: T.unit,
+    "sealed">: T.unit,
+    "open">: T.unit,
+    "super">: T.unit,
+    "override">: T.unit,
+    "case">: T.unit,
+    "abstract">: T.unit,
+    "covariant">: T.unit,
+    "contravariant">: T.unit,
+    "lazy">: T.unit,
+    "valParam">: T.unit,
+    "varParam">: T.unit,
+    "infix">: T.unit,
+    "inline">: T.unit,
+    "using">: T.unit,
+    "opaque">: T.unit,
+    "transparent">: T.unit]
+
+mod_Annot :: Binding
+mod_Annot = def "Mod_Annot" $
+  T.record [
+    "init">: meta "Init"]
+
+mod_Private :: Binding
+mod_Private = def "Mod_Private" $
+  T.record [
+    "within">: meta "Ref"]
+
+mod_Protected :: Binding
+mod_Protected = def "Mod_Protected" $
+  T.record [
+    "within">: meta "Ref"]
+
+enumerator :: Binding
+enumerator = def "Enumerator" $
+  T.union [
+    "generator">: meta "Enumerator_Generator",
+    "caseGenerator">: meta "Enumerator_CaseGenerator",
+    "val">: meta "Enumerator_Val",
+    "guard">: meta "Enumerator_Guard"]
+
+enumerator_Generator :: Binding
+enumerator_Generator = def "Enumerator_Generator" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+enumerator_CaseGenerator :: Binding
+enumerator_CaseGenerator = def "Enumerator_CaseGenerator" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+enumerator_Val :: Binding
+enumerator_Val = def "Enumerator_Val" $
+  T.record [
+    "pat">: meta "Pat",
+    "rhs">: meta "Data"]
+
+enumerator_Guard :: Binding
+enumerator_Guard = def "Enumerator_Guard" $
+  T.record [
+    "cond">: meta "Data"]
+
+importExportStat :: Binding
+importExportStat = def "ImportExportStat" $
+  T.union [
+    "import">: meta "Import",
+    "export">: meta "Export"]
+
+import_ :: Binding
+import_ = def "Import" $
+  T.record [
+    "importers">: T.list $ meta "Importer"]
+
+export_ :: Binding
+export_ = def "Export" $
+  T.record [
+    "importers">: T.list $ meta "Importer"]
+
+importer :: Binding
+importer = def "Importer" $
+  T.record [
+    "ref">: meta "Data_Ref",
+    "importees">: T.list $ meta "Importee"]
+
+importee :: Binding
+importee = def "Importee" $
+  T.union [
+    "wildcard">: T.unit,
+    "given">: meta "Importee_Given",
+    "givenAll">: T.unit,
+    "name">: meta "Importee_Name",
+    "rename">: meta "Importee_Rename",
+    "unimport">: meta "Importee_Unimport"]
+
+importee_Given :: Binding
+importee_Given = def "Importee_Given" $
+  T.record [
+    "tpe">: meta "Type"]
+
+importee_Name :: Binding
+importee_Name = def "Importee_Name" $
+  T.record [
+    "name">: meta "Name"]
+
+importee_Rename :: Binding
+importee_Rename = def "Importee_Rename" $
+  T.record [
+    "name">: meta "Name",
+    "rename">: meta "Name"]
+
+importee_Unimport :: Binding
+importee_Unimport = def "Importee_Unimport" $
+  T.record [
+    "name">: meta "Name"]
+
+caseTree :: Binding
+caseTree = def "CaseTree" $
+  T.union [
+    "case">: meta "Case",
+    "typeCase">: meta "TypeCase"]
+
+case_ :: Binding
+case_ = def "Case" $
+  T.record [
+    "pat">: meta "Pat",
+    "cond">: T.maybe $ meta "Data",
+    "body">: meta "Data"]
+
+typeCase :: Binding
+typeCase = def "TypeCase" $
+  T.record [
+    "pat">: meta "Type",
+    "body">: meta "Type"]
+
+source :: Binding
+source = def "Source" $
+  T.record [
+    "stats">: T.list $ meta "Stat"]
+
+quasi :: Binding
+quasi = def "Quasi" $ --  TODO
+  T.wrap T.unit
