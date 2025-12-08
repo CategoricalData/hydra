@@ -149,7 +149,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
-      (Types.optional Types.string)
+      (Types.maybe Types.string)
       (Types.list Types.string)
       False
       (optional $ string <$> ms)
@@ -189,8 +189,8 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       [TypeVariantLiteral, TypeVariantMaybe, TypeVariantRecord]
       eitherStringOrInt8Type
       (TypeRecord $ RowType eitherStringOrInt8TypeName [
-        Types.field "left" $ Types.optional Types.string,
-        Types.field "right" $ Types.optional Types.int16])
+        Types.field "left" $ Types.maybe Types.string,
+        Types.field "right" $ Types.maybe Types.int16])
       False
       (inject eitherStringOrInt8TypeName (Name "right") (int8 i))
       (record eitherStringOrInt8TypeName [
