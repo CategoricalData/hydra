@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Phantoms where
 
 -- Standard type-level kernel imports
@@ -30,13 +28,13 @@ tBinding = define "TBinding" $
   doc "An association of a named term (element) with a phantom type" $
   T.forAll "a" $ T.record [
     "name">:
-      doc "The name of the term" $
-      use Core.name,
+      doc "The name of the term"
+      Core.name,
     "term">:
       doc "The term with its phantom type" $
-      use tTerm @@ T.var "a"]
+      tTerm @@ "a"]
 
 tTerm :: Binding
 tTerm = define "TTerm" $
   doc "An association of a term with a phantom type" $
-  T.forAll "a" $ T.wrap $ use Core.term
+  T.forAll "a" $ T.wrap Core.term

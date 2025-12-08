@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Relational where
 
 -- Standard type-level kernel imports
@@ -46,33 +44,33 @@ columnSchema = define "ColumnSchema" $
   doc "An abstract specification of the domain represented by a column in a relation; a role" $
   T.forAll "t" $ T.record [
     "name">:
-      doc "A unique name for the column" $
-      use columnName,
+      doc "A unique name for the column"
+      columnName,
     "domain">:
-      doc "The domain (type) of the column" $
-      T.var "t"]
+      doc "The domain (type) of the column"
+      "t"]
 
 foreignKey :: Binding
 foreignKey = define "ForeignKey" $
   doc "A mapping from certain columns of a source relation to primary key columns of a target relation" $
   T.record [
     "foreignRelation">:
-      doc "The name of the target relation" $
-      use relationName,
+      doc "The name of the target relation"
+      relationName,
     "keys">:
       doc ("The mapping of source column names to target column names."
          ++ " The target column names must together make up the primary key of the target relation.") $
-      nonemptyMap (use columnName) (use columnName)]
+      nonemptyMap columnName columnName]
 
 primaryKey :: Binding
 primaryKey = define "PrimaryKey" $
   doc "A primary key of a relation, specified either as a single column, or as a list of columns" $
-  T.wrap $ nonemptyList $ use columnName
+  T.wrap $ nonemptyList columnName
 
 relation :: Binding
 relation = define "Relation" $
   doc "A set of distinct n-tuples; a table" $
-  T.forAll "v" $ T.wrap $ T.list (use row @@ T.var "v")
+  T.forAll "v" $ T.wrap $ T.list (row @@ "v")
 
 relationName :: Binding
 relationName = define "RelationName" $
@@ -84,24 +82,24 @@ relationSchema = define "RelationSchema" $
   doc "An abstract relation; the name and columns of a relation without its actual data" $
   T.forAll "t" $ T.record [
     "name">:
-      doc "A unique name for the relation" $
-      use relationName,
+      doc "A unique name for the relation"
+      relationName,
     "columns">:
       doc "A list of column specifications" $
-      nonemptyList $ use columnSchema @@ T.var "t",
+      nonemptyList $ columnSchema @@ "t",
     "primaryKeys">:
       doc "Any number of primary keys for the relation, each of which must be valid for this relation" $
-      T.list $ use primaryKey,
+      T.list primaryKey,
     "foreignKeys">:
       doc "Any number of foreign keys, each of which must be valid for both this relation and the target relation" $
-      T.list $ use foreignKey]
+      T.list foreignKey]
 
 relationship :: Binding
 relationship = define "Relationship" $
   doc "A domain-unordered (string-indexed, rather than position-indexed) relation" $
-  T.forAll "v" $ T.wrap $ T.set $ T.map (use columnName) (T.var "v")
+  T.forAll "v" $ T.wrap $ T.set $ T.map columnName "v"
 
 row :: Binding
 row = define "Row" $
   doc "An n-tuple which is an element of a given relation" $
-  T.forAll "v" $ T.wrap $ nonemptyList (T.var "v")
+  T.forAll "v" $ T.wrap $ nonemptyList "v"

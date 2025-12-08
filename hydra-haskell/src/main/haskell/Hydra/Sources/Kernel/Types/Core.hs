@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Types.Core where
 
 import Hydra.Kernel hiding (literalType)
@@ -64,130 +62,130 @@ annotatedTerm = define "AnnotatedTerm" $
   doc "A term together with an annotation" $
   T.record [
     "body">:
-      doc "The term being annotated" $
-      use term,
+      doc "The term being annotated"
+      term,
     "annotation">:
       doc "The annotation as a map from keys to values" $
-      T.map (use name) (use term)]
+      T.map name term]
 
 annotatedType :: Binding
 annotatedType = define "AnnotatedType" $
   doc "A type together with an annotation" $
   T.record [
     "body">:
-      doc "The type being annotated" $
-      use type_,
+      doc "The type being annotated"
+      type_,
     "annotation">:
       doc "The annotation as a map from keys to values" $
-      T.map (use name) (use term)]
+      T.map name term]
 
 application :: Binding
 application = define "Application" $
   doc "A term which applies a function to an argument" $
   T.record [
     "function">:
-      doc "The left-hand side of the application" $
-      use term,
+      doc "The left-hand side of the application"
+      term,
     "argument">:
-      doc "The right-hand side of the application" $
-      use term]
+      doc "The right-hand side of the application"
+      term]
 
 applicationType :: Binding
 applicationType = define "ApplicationType" $
   doc "The type-level analog of an application term" $
   T.record [
     "function">:
-      doc "The left-hand side of the application" $
-      use type_,
+      doc "The left-hand side of the application"
+      type_,
     "argument">:
-      doc "The right-hand side of the application" $
-      use type_]
+      doc "The right-hand side of the application"
+      type_]
 
 binding :: Binding
 binding = define "Binding" $
   doc "A field with an optional type scheme, used to bind variables to terms in a 'let' expression" $
   T.record [
     "name">:
-      doc "The name of the bound variable" $
-      use name,
+      doc "The name of the bound variable"
+      name,
     "term">:
-      doc "The term to which the variable is bound" $
-      use term,
+      doc "The term to which the variable is bound"
+      term,
     "type">:
       doc "The optional type of the bound term" $
-      T.optional (use typeScheme)]
+      T.optional typeScheme]
 
 caseStatement :: Binding
 caseStatement = define "CaseStatement" $
   doc "A union elimination; a case statement" $
   T.record [
     "typeName">:
-      doc "The name of the union type" $
-      use name,
+      doc "The name of the union type"
+      name,
     "default">:
       doc "An optional default case, used if none of the explicit cases match" $
-      T.optional (use term),
+      T.optional term,
     "cases">:
       doc "A list of case alternatives, one per union field" $
-      T.list (use field)]
+      T.list field]
 
 eitherType :: Binding
 eitherType = define "EitherType" $
   doc "A type which provides a choice between a 'left' type and a 'right' type" $
   T.record [
     "left">:
-      doc "The 'left' alternative" $
-      use type_,
+      doc "The 'left' alternative"
+      type_,
     "right">:
-      doc "The 'right' alternative" $
-      use type_]
+      doc "The 'right' alternative"
+      type_]
 
 pairType :: Binding
 pairType = define "PairType" $
   doc "A type which pairs a 'first' type and a 'second' type" $
   T.record [
     "first">:
-      doc "The first component of the pair" $
-      use type_,
+      doc "The first component of the pair"
+      type_,
     "second">:
-      doc "The second component of the pair" $
-      use type_]
+      doc "The second component of the pair"
+      type_]
 
 elimination :: Binding
 elimination = define "Elimination" $
   doc "A corresponding elimination for an introduction term" $
   T.union [
     "record">:
-      doc "Eliminates a record by projecting a given field" $
-      use projection,
+      doc "Eliminates a record by projecting a given field"
+      projection,
     "union">:
-      doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
-      use caseStatement,
+      doc "Eliminates a union term by matching over the fields of the union. This is a case statement."
+      caseStatement,
     "wrap">:
-      doc "Unwrap a wrapped term" $
-      use name]
+      doc "Unwrap a wrapped term"
+      name]
 
 field :: Binding
 field = define "Field" $
   doc "A name/term pair" $
   T.record [
     "name">:
-      doc "The name of the field" $
-      use name,
+      doc "The name of the field"
+      name,
     "term">:
-      doc "The term value of the field" $
-      use term]
+      doc "The term value of the field"
+      term]
 
 fieldType :: Binding
 fieldType = define "FieldType" $
   doc "A name/type pair" $
   T.record [
     "name">:
-      doc "The name of the field" $
-      use name,
+      doc "The name of the field"
+      name,
     "type">:
-      doc "The type of the field" $
-      use type_]
+      doc "The type of the field"
+      type_]
 
 floatType :: Binding
 floatType = define "FloatType" $
@@ -219,47 +217,47 @@ forallType = define "ForallType" $
   doc "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term." $
   T.record [
     "parameter">:
-      doc "The variable which is bound by the lambda" $
-      use name,
+      doc "The variable which is bound by the lambda"
+      name,
     "body">:
-      doc "The body of the lambda" $
-      use type_]
+      doc "The body of the lambda"
+      type_]
 
 function :: Binding
 function = define "Function" $
   doc "A function" $
   T.union [
     "elimination">:
-      doc "An elimination for any of a few term variants" $
-      use elimination,
+      doc "An elimination for any of a few term variants"
+      elimination,
     "lambda">:
-      doc "A function abstraction (lambda)" $
-      use lambda,
+      doc "A function abstraction (lambda)"
+      lambda,
     "primitive">:
-      doc "A reference to a built-in (primitive) function" $
-      use name]
+      doc "A reference to a built-in (primitive) function"
+      name]
 
 functionType :: Binding
 functionType = define "FunctionType" $
   doc "A function type, also known as an arrow type" $
   T.record [
     "domain">:
-      doc "The domain (input) type of the function" $
-      use type_,
+      doc "The domain (input) type of the function"
+      type_,
     "codomain">:
-      doc "The codomain (output) type of the function" $
-      use type_]
+      doc "The codomain (output) type of the function"
+      type_]
 
 injection :: Binding
 injection = define "Injection" $
   doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
   T.record [
     "typeName">:
-      doc "The name of the union type" $
-      use name,
+      doc "The name of the union type"
+      name,
     "field">:
-      doc "The field being injected, including its name and value" $
-      use field]
+      doc "The field being injected, including its name and value"
+      field]
 
 integerType :: Binding
 integerType = define "IntegerType" $
@@ -321,14 +319,14 @@ lambda = define "Lambda" $
   doc "A function abstraction (lambda)" $
   T.record [
     "parameter">:
-      doc "The parameter of the lambda" $
-      use name,
+      doc "The parameter of the lambda"
+      name,
     "domain">:
       doc "An optional domain type for the lambda" $
-      T.optional (use type_),
+      T.optional type_,
     "body">:
-      doc "The body of the lambda" $
-      use term]
+      doc "The body of the lambda"
+      term]
 
 let_ :: Binding
 let_ = define "Let" $
@@ -336,10 +334,10 @@ let_ = define "Let" $
   T.record [
     "bindings">:
       doc "The list of variable bindings" $
-      T.list (use binding),
+      T.list binding,
     "body">:
-      doc "The body term in which the variables are bound" $
-      use term]
+      doc "The body term in which the variables are bound"
+      term]
 
 literal :: Binding
 literal = define "Literal" $
@@ -350,11 +348,11 @@ literal = define "Literal" $
     "boolean">:
       doc "A boolean literal" T.boolean,
     "float">:
-      doc "A floating-point literal" $
-      use floatValue,
+      doc "A floating-point literal"
+      floatValue,
     "integer">:
-      doc "An integer literal" $
-      use integerValue,
+      doc "An integer literal"
+      integerValue,
     "string">:
       doc "A string literal" T.string]
 
@@ -367,11 +365,11 @@ literalType = define "LiteralType" $
     "boolean">:
       doc "The type of a boolean (true/false) value" T.unit,
     "float">:
-      doc "The type of a floating-point value" $
-      use floatType,
+      doc "The type of a floating-point value"
+      floatType,
     "integer">:
-      doc "The type of an integer value" $
-      use integerType,
+      doc "The type of an integer value"
+      integerType,
     "string">:
       doc "The type of a string value" T.unit]
 
@@ -380,11 +378,11 @@ mapType = define "MapType" $
   doc "A map type" $
   T.record [
     "keys">:
-      doc "The type of keys in the map" $
-      use type_,
+      doc "The type of keys in the map"
+      type_,
     "values">:
-      doc "The type of values in the map" $
-      use type_]
+      doc "The type of values in the map"
+      type_]
 
 name :: Binding
 name = define "Name" $
@@ -396,167 +394,167 @@ projection = define "Projection" $
   doc "A record elimination; a projection" $
   T.record [
     "typeName">:
-      doc "The name of the record type" $
-      use name,
+      doc "The name of the record type"
+      name,
     "field">:
-      doc "The name of the projected field" $
-      use name]
+      doc "The name of the projected field"
+      name]
 
 record :: Binding
 record = define "Record" $
   doc "A record, or labeled tuple; a map of field names to terms" $
   T.record [
     "typeName">:
-      doc "The name of the record type" $
-      use name,
+      doc "The name of the record type"
+      name,
     "fields">:
       doc "The fields of the record, as a list of name/term pairs" $
-      T.list (use field)]
+      T.list field]
 
 rowType :: Binding
 rowType = define "RowType" $
   doc "A labeled record or union type" $
   T.record [
     "typeName">:
-      doc "The name of the row type, which must correspond to the name of a Type element" $
-      use name,
+      doc "The name of the row type, which must correspond to the name of a Type element"
+      name,
     "fields">:
       doc "The fields of this row type, excluding any inherited fields" $
-      T.list (use fieldType)]
+      T.list fieldType]
 
 term :: Binding
 term = define "Term" $
   doc "A data term" $
   T.union [
     "annotated">:
-      doc "A term annotated with metadata" $
-      use annotatedTerm,
+      doc "A term annotated with metadata"
+      annotatedTerm,
     "application">:
-      doc "A function application" $
-      use application,
+      doc "A function application"
+      application,
     "either">:
       doc "An either value" $
-      T.either_ (use term) (use term),
+      T.either_ term term,
     "function">:
-      doc "A function term" $
-      use function,
+      doc "A function term"
+      function,
     "let">:
-      doc "A 'let' term, which binds variables to terms" $
-      use let_,
+      doc "A 'let' term, which binds variables to terms"
+      let_,
     "list">:
       doc "A list" $
-      T.list (use term),
+      T.list term,
     "literal">:
-      doc "A literal value" $
-      use literal,
+      doc "A literal value"
+      literal,
     "map">:
       doc "A map of keys to values" $
-      T.map (use term) (use term),
+      T.map term term,
     "maybe">:
       doc "An optional value" $
-      T.optional (use term),
+      T.optional term,
     "pair">:
       doc "A pair (2-tuple)" $
-      T.pair (use term) (use term),
+      T.pair term term,
     "record">:
-      doc "A record term" $
-      use record,
+      doc "A record term"
+      record,
     "set">:
       doc "A set of values" $
-      T.set (use term),
+      T.set term,
     "typeApplication">:
-      doc "A System F type application term" $
-      use typeApplicationTerm,
+      doc "A System F type application term"
+      typeApplicationTerm,
     "typeLambda">:
-      doc "A System F type abstraction term" $
-      use typeLambda,
+      doc "A System F type abstraction term"
+      typeLambda,
     "union">:
-      doc "An injection; an instance of a union type" $
-      use injection,
+      doc "An injection; an instance of a union type"
+      injection,
     "unit">:
       doc "A unit value; a term with no value" $
       T.unit,
     "variable">:
-      doc "A variable reference" $
-      use name,
+      doc "A variable reference"
+      name,
     "wrap">:
-      doc "A wrapped term; an instance of a wrapper type (newtype)" $
-      use wrappedTerm]
+      doc "A wrapped term; an instance of a wrapper type (newtype)"
+      wrappedTerm]
 
 type_ :: Binding
 type_ = define "Type" $
   doc "A data type" $
   T.union [
     "annotated">:
-      doc "An annotated type" $
-      use annotatedType,
+      doc "An annotated type"
+      annotatedType,
     "application">:
-      doc "A type application" $
-      use applicationType,
+      doc "A type application"
+      applicationType,
     "either">:
-      doc "An either (sum) type" $
-      use eitherType,
+      doc "An either (sum) type"
+      eitherType,
     "forall">:
-      doc "A universally quantified (polymorphic) type" $
-      use forallType,
+      doc "A universally quantified (polymorphic) type"
+      forallType,
     "function">:
-      doc "A function type" $
-      use functionType,
+      doc "A function type"
+      functionType,
     "list">:
-      doc "A list type" $
-      use type_,
+      doc "A list type"
+      type_,
     "literal">:
-      doc "A literal type" $
-      use literalType,
+      doc "A literal type"
+      literalType,
     "map">:
-      doc "A map type" $
-      use mapType,
+      doc "A map type"
+      mapType,
     "maybe">:
-      doc "An optional type" $
-      use type_,
+      doc "An optional type"
+      type_,
     "pair">:
-      doc "A pair (2-tuple) type" $
-      use pairType,
+      doc "A pair (2-tuple) type"
+      pairType,
     "record">:
-      doc "A record type" $
-      use rowType,
+      doc "A record type"
+      rowType,
     "set">:
-      doc "A set type" $
-      use type_,
+      doc "A set type"
+      type_,
     "union">:
-      doc "A union type with field names" $
-      use rowType,
+      doc "A union type with field names"
+      rowType,
     "unit">:
       doc "The unit type" $
       T.unit,
     "variable">:
-      doc "A type variable" $
-      use name,
+      doc "A type variable"
+      name,
     "wrap">:
-      doc "A wrapped type (newtype)" $
-      use wrappedType]
+      doc "A wrapped type (newtype)"
+      wrappedType]
 
 typeApplicationTerm :: Binding
 typeApplicationTerm = define "TypeApplicationTerm" $
   doc "A term applied to a type; a type application" $
   T.record [
     "body">:
-      doc "The term being applied to a type" $
-      use term,
+      doc "The term being applied to a type"
+      term,
     "type">:
-      doc "The type argument" $
-      use type_]
+      doc "The type argument"
+      type_]
 
 typeLambda :: Binding
 typeLambda = define "TypeLambda" $
   doc "A System F type abstraction term" $
   T.record [
     "parameter">:
-      doc "The type variable introduced by the abstraction" $
-      use name,
+      doc "The type variable introduced by the abstraction"
+      name,
     "body">:
-      doc "The body of the abstraction" $
-      use term]
+      doc "The body of the abstraction"
+      term]
 
 typeScheme :: Binding
 typeScheme = define "TypeScheme" $
@@ -564,29 +562,29 @@ typeScheme = define "TypeScheme" $
   T.record [
     "variables">:
       doc "The free type variables" $
-      T.list (use name),
+      T.list name,
     "type">:
-      doc "The type expression" $
-      use type_]
+      doc "The type expression"
+      type_]
 
 wrappedTerm :: Binding
 wrappedTerm = define "WrappedTerm" $
   doc "A term wrapped in a type name" $
   T.record [
     "typeName">:
-      doc "The name of the wrapper type" $
-      use name,
+      doc "The name of the wrapper type"
+      name,
     "body">:
-      doc "The wrapped term" $
-      use term]
+      doc "The wrapped term"
+      term]
 
 wrappedType :: Binding
 wrappedType = define "WrappedType" $
   doc "A type wrapped in a type name; a newtype" $
   T.record [
     "typeName">:
-      doc "The name of the wrapper (newtype)" $
-      use name,
+      doc "The name of the wrapper (newtype)"
+      name,
     "body">:
-      doc "The wrapped type" $
-      use type_]
+      doc "The wrapped type"
+      type_]

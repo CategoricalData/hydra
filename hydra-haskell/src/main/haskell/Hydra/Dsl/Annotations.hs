@@ -6,6 +6,7 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Annotations
+import Hydra.Dsl.AsType
 import Hydra.Formatting
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -26,52 +27,52 @@ bounded min max = annotMin . annotMax
     annotMax t = Y.maybe t (`setMaxLength` t) max
     annotMin t = Y.maybe t (`setMinLength` t) max
 
-boundedList :: Maybe Int -> Maybe Int -> Type -> Type
-boundedList min max et = bounded min max $ Types.list et
+boundedList :: AsType a => Maybe Int -> Maybe Int -> a -> Type
+boundedList min max et = bounded min max $ Types.list (asType et)
 
-boundedMap :: Maybe Int -> Maybe Int -> Type -> Type -> Type
-boundedMap min max kt vt = bounded min max $ Types.map kt vt
+boundedMap :: (AsType a, AsType b) => Maybe Int -> Maybe Int -> a -> b -> Type
+boundedMap min max kt vt = bounded min max $ Types.map (asType kt) (asType vt)
 
-boundedSet :: Maybe Int -> Maybe Int -> Type -> Type
-boundedSet min max et = bounded min max $ Types.set et
+boundedSet :: AsType a => Maybe Int -> Maybe Int -> a -> Type
+boundedSet min max et = bounded min max $ Types.set (asType et)
 
 boundedString :: Maybe Int -> Maybe Int -> Type
 boundedString min max = bounded min max Types.string
 
-deprecated :: Type -> Type
-deprecated = setTypeAnnotation key_deprecated (Just $ Terms.boolean True)
+deprecated :: AsType a => a -> Type
+deprecated = setTypeAnnotation key_deprecated (Just $ Terms.boolean True) . asType
 
-doc :: String -> Type -> Type
-doc s = setTypeDescription (Just s)
+doc :: AsType a => String -> a -> Type
+doc s = setTypeDescription (Just s) . asType
 
-doc70 :: String -> Type -> Type
+doc70 :: AsType a => String -> a -> Type
 doc70 = doc . wrapLine 70
 
-doc80 :: String -> Type -> Type
+doc80 :: AsType a => String -> a -> Type
 doc80 = doc . wrapLine 80
 
 dataDoc :: String -> Term -> Term
 dataDoc s = setTermDescription (Just s)
 
-exclude :: Type -> Type
-exclude = setTypeAnnotation key_exclude $ Just $ Terms.boolean True
+exclude :: AsType a => a -> Type
+exclude = setTypeAnnotation key_exclude (Just $ Terms.boolean True) . asType
 
-minLengthList :: Int -> Type -> Type
+minLengthList :: AsType a => Int -> a -> Type
 minLengthList len = boundedList (Just len) Nothing
 
-nonemptyList :: Type -> Type
+nonemptyList :: AsType a => a -> Type
 nonemptyList = minLengthList 1
 
-nonemptyMap :: Type -> Type -> Type
+nonemptyMap :: (AsType a, AsType b) => a -> b -> Type
 nonemptyMap = boundedMap (Just 1) Nothing
 
-note :: String -> Type -> Type
+note :: AsType a => String -> a -> Type
 note s = doc $ "Note: " ++ s
 
-preserveFieldName :: Type -> Type
-preserveFieldName = setTypeAnnotation key_preserveFieldName (Just $ Terms.boolean True)
+preserveFieldName :: AsType a => a -> Type
+preserveFieldName = setTypeAnnotation key_preserveFieldName (Just $ Terms.boolean True) . asType
 
-see :: String -> Type -> Type
+see :: AsType a => String -> a -> Type
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type -> Type
@@ -80,5 +81,5 @@ setMaxLength m = setTypeAnnotation key_maxLength (Just $ Terms.int32 m)
 setMinLength :: Int -> Type -> Type
 setMinLength m = setTypeAnnotation key_minLength (Just $ Terms.int32 m)
 
-twoOrMoreList :: Type -> Type
+twoOrMoreList :: AsType a => a -> Type
 twoOrMoreList = boundedList (Just 2) Nothing
