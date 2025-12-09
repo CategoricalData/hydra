@@ -20,7 +20,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.maps") elements [] [] $
     Just "Test cases for hydra.lib.maps primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 emptyStringMap = intStringMap []
 intStringMapOrEmpty = intStringMap
@@ -153,8 +153,8 @@ mapsFindWithDefault = subgroup "findWithDefault" [
     test name def k m result = primCase name _maps_findWithDefault [
       MetaTerms.string def, int32 k, intStringMap m] (MetaTerms.string result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maps primitives" $
     supergroup "hydra.lib.maps primitives" [
       mapsEmpty,

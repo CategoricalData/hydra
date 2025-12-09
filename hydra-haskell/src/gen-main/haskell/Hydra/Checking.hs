@@ -64,25 +64,7 @@ checkForUnboundTypeVariables cx term0 =
                         let freevars = (Rewriting.freeVariablesInType typ)
                         in  
                           let badvars = (Sets.difference (Sets.difference freevars vars) svars)
-                          in (Logic.ifElse (Sets.null badvars) (Flows.pure ()) (Flows.fail (Strings.cat [
-                            Strings.cat [
-                              Strings.cat [
-                                Strings.cat [
-                                  Strings.cat [
-                                    Strings.cat [
-                                      "unbound type variables: {",
-                                      (Strings.intercalate ", " (Lists.map Core.unName (Sets.toList badvars)))],
-                                    "} in type "],
-                                  (Core__.type_ typ)],
-                                " at path: "],
-                              (Strings.intercalate " >> " (Lists.reverse trace))],
-                            (Maybes.maybe "none" (\binding -> Strings.cat [
-                              Strings.cat [
-                                Strings.cat [
-                                  ". bound term = ",
-                                  (Core__.term (Core.bindingTerm binding))],
-                                ". bound type = "],
-                              (Maybes.maybe "none" Core__.typeScheme (Core.bindingType binding))]) lbinding)]))))
+                          in (Logic.ifElse (Sets.null badvars) (Flows.pure ()) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "unbound type variables: {" (Strings.intercalate ", " (Lists.map Core.unName (Sets.toList badvars)))) "} in type ") (Core__.type_ typ)) " at path: ") (Strings.intercalate " >> " (Lists.reverse trace))) (Maybes.maybe "none" (\binding -> Strings.cat2 (Strings.cat2 (Strings.cat2 ". bound term = " (Core__.term (Core.bindingTerm binding))) ". bound type = ") (Maybes.maybe "none" Core__.typeScheme (Core.bindingType binding))) lbinding)))))
                 in  
                   let checkOptional = (\m -> Flows.bind (Flows.mapMaybe check m) (\_ -> Flows.pure ()))
                   in  
@@ -116,23 +98,7 @@ checkNominalApplication tx tname typeArgs = (Flows.bind (Schemas.requireSchemaTy
       let varslen = (Lists.length vars)
       in  
         let argslen = (Lists.length typeArgs)
-        in (Logic.ifElse (Equality.equal varslen argslen) (Flows.pure ()) (Flows.fail (Strings.cat [
-          Strings.cat [
-            Strings.cat [
-              Strings.cat [
-                Strings.cat [
-                  Strings.cat [
-                    Strings.cat [
-                      Strings.cat [
-                        "nominal type ",
-                        (Core.unName tname)],
-                      " applied to the wrong number of type arguments: "],
-                    "(expected "],
-                  (Literals.showInt32 varslen)],
-                " arguments, got "],
-              (Literals.showInt32 argslen)],
-            "): "],
-          (Formatting.showList Core__.type_ typeArgs)])))))
+        in (Logic.ifElse (Equality.equal varslen argslen) (Flows.pure ()) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "nominal type " (Core.unName tname)) " applied to the wrong number of type arguments: ") "(expected ") (Literals.showInt32 varslen)) " arguments, got ") (Literals.showInt32 argslen)) "): ") (Formatting.showList Core__.type_ typeArgs))))))
 
 checkSameType :: (Typing.TypeContext -> String -> [Core.Type] -> Compute.Flow t0 Core.Type)
 checkSameType tx desc types = (Logic.ifElse (typesAllEffectivelyEqual tx types) (Flows.pure (Lists.head types)) (Flows.fail (Strings.cat [
@@ -170,16 +136,8 @@ checkTypeSubst cx subst =
           in  
             let badPairs = (Lists.filter (\p -> Sets.member (Pairs.first p) badVars) (Maps.toList s))
             in  
-              let printPair = (\p -> Strings.cat [
-                      Strings.cat [
-                        Core.unName (Pairs.first p),
-                        " --> "],
-                      (Core__.type_ (Pairs.second p))])
-              in (Logic.ifElse (Sets.null badVars) (Flows.pure subst) (Flows.fail (Strings.cat [
-                Strings.cat [
-                  "Schema type(s) incorrectly unified: {",
-                  (Strings.intercalate ", " (Lists.map printPair badPairs))],
-                "}"])))
+              let printPair = (\p -> Strings.cat2 (Strings.cat2 (Core.unName (Pairs.first p)) " --> ") (Core__.type_ (Pairs.second p)))
+              in (Logic.ifElse (Sets.null badVars) (Flows.pure subst) (Flows.fail (Strings.cat2 (Strings.cat2 "Schema type(s) incorrectly unified: {" (Strings.intercalate ", " (Lists.map printPair badPairs))) "}")))
 
 checkTypeVariables :: (Typing.TypeContext -> Core.Type -> Compute.Flow t0 ())
 checkTypeVariables tx typ =  
@@ -302,9 +260,7 @@ typeOfEither :: (Typing.TypeContext -> [Core.Type] -> Either Core.Term Core.Term
 typeOfEither tx typeArgs et =  
   let checkLength =  
           let n = (Lists.length typeArgs)
-          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat [
-            "either type requires 2 type arguments, got ",
-            (Literals.showInt32 n)])))
+          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat2 "either type requires 2 type arguments, got " (Literals.showInt32 n))))
   in (Flows.bind checkLength (\_ -> Eithers.either (\leftTerm -> Flows.bind (typeOf tx [] leftTerm) (\leftType -> Flows.bind (checkTypeVariables tx leftType) (\_ -> Flows.pure (Core.TypeEither (Core.EitherType {
     Core.eitherTypeLeft = leftType,
     Core.eitherTypeRight = (Lists.at 1 typeArgs)}))))) (\rightTerm -> Flows.bind (typeOf tx [] rightTerm) (\rightType -> Flows.bind (checkTypeVariables tx rightType) (\_ -> Flows.pure (Core.TypeEither (Core.EitherType {
@@ -391,11 +347,7 @@ typeOfMaybe :: (Typing.TypeContext -> [Core.Type] -> Maybe Core.Term -> Compute.
 typeOfMaybe tx typeArgs mt =  
   let forNothing =  
           let n = (Lists.length typeArgs)
-          in (Logic.ifElse (Equality.equal n 1) (Flows.pure (Core.TypeMaybe (Lists.head typeArgs))) (Flows.fail (Strings.cat [
-            Strings.cat [
-              "optional type applied to ",
-              (Literals.showInt32 n)],
-            " argument(s). Expected 1."])))
+          in (Logic.ifElse (Equality.equal n 1) (Flows.pure (Core.TypeMaybe (Lists.head typeArgs))) (Flows.fail (Strings.cat2 (Strings.cat2 "optional type applied to " (Literals.showInt32 n)) " argument(s). Expected 1.")))
   in  
     let forJust = (\term -> Flows.bind (Flows.bind (typeOf tx [] term) (\termType -> Flows.bind (checkTypeVariables tx termType) (\_ -> Flows.pure (Core.TypeMaybe termType)))) (\t -> applyTypeArgumentsToType tx typeArgs t))
     in (Maybes.maybe forNothing forJust mt)
@@ -404,9 +356,7 @@ typeOfPair :: (Typing.TypeContext -> [Core.Type] -> (Core.Term, Core.Term) -> Co
 typeOfPair tx typeArgs p =  
   let checkLength =  
           let n = (Lists.length typeArgs)
-          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat [
-            "pair type requires 2 type arguments, got ",
-            (Literals.showInt32 n)])))
+          in (Logic.ifElse (Equality.equal n 2) (Flows.pure ()) (Flows.fail (Strings.cat2 "pair type requires 2 type arguments, got " (Literals.showInt32 n))))
   in (Flows.bind checkLength (\_ ->  
     let pairFst = (Pairs.first p)
     in  

@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.flows") elements [Monads.module_] [] $
     Just "Test cases for hydra.lib.flows primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 testTrace :: TTerm Term
 testTrace = MetaTerms.traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
@@ -31,9 +31,9 @@ flowsBind = subgroup "bind" [
   test "bind multiply" (primitive _math_mul) (int32 3) (int32 4) (int32 12)]
   where
     test testName op x y result = evalCaseWithTags testName [tag_requiresInterp]
-      (unFlowTerm @@ (metaref Monads.bindDef
-        @@ (metaref Monads.pureDef @@ x)
-        @@ (lambda "n" (metaref Monads.pureDef @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.bind
+        @@ (metaref Monads.pure @@ x)
+        @@ (lambda "n" (metaref Monads.pure @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just result) unit testTrace)
 
 -- | Test cases for flows.fail: creates a failing flow
@@ -42,7 +42,7 @@ flowsFail = subgroup "fail" [
   test "fail with message"]
   where
     test testName = evalCaseWithTags testName []
-      (unFlowTerm @@ (metaref Monads.failDef @@ MetaTerms.string "test error message") @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.fail @@ MetaTerms.string "test error message") @@ unit @@ testTrace)
       (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: test error message ()"]))
 
 -- | Build an empty trace with custom messages
@@ -59,7 +59,7 @@ flowsMap = subgroup "map" [
   test "map abs" (primitive _math_abs) (int32 (-3)) (int32 3)]
   where
     test testName fn inVal outVal = evalCaseWithTags testName [tag_requiresInterp]
-      (unFlowTerm @@ (metaref Monads.mapDef @@ fn @@ (metaref Monads.pureDef @@ inVal)) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.map @@ fn @@ (metaref Monads.pure @@ inVal)) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just outVal) unit testTrace)
 
 -- | Test cases for flows.pure: lifts a value into a successful flow
@@ -71,11 +71,11 @@ flowsPure = subgroup "pure" [
   test "pure string" (string "hello")]
   where
     test testName val = evalCaseWithTags testName []
-      (unFlowTerm @@ (metaref Monads.pureDef @@ val) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.pure @@ val) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just val) unit testTrace)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.flows primitives" $
     supergroup "hydra.lib.flows primitives" [
       flowsBind,

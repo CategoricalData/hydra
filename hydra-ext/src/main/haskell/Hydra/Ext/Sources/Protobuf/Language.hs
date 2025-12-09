@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Protobuf.Language (protobufLanguageModule) where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -98,15 +96,15 @@ protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
 protobufLanguageModule :: Module
 protobufLanguageModule = Module (Namespace "hydra.ext.protobuf.language")
-  [el protobufLanguageDef, el protobufReservedWordsDef]
+  [toBinding protobufLanguage, toBinding protobufReservedWords]
   [Lexical.module_, Rewriting.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints for Protobuf v3"
 
-protobufLanguageDef :: TBinding Language
-protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
+protobufLanguage :: TBinding Language
+protobufLanguage = protobufLanguageDefinition "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [],
+  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
@@ -116,7 +114,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.fromList $ list [],
+  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt32,
     Core.integerTypeInt64,
@@ -152,7 +150,7 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
     (Just true) [
     _Type_map>>: lambda "mt" $ lets [
       "valuesType">: Core.mapTypeValues $ var "mt",
-      "stripped">: ref Rewriting.deannotateTypeDef @@ var "valuesType"] $
+      "stripped">: Rewriting.deannotateType @@ var "valuesType"] $
       cases _Type (var "stripped")
         (Just true) [
         _Type_maybe>>: constant false]]] $
@@ -168,8 +166,8 @@ protobufLanguageDef = protobufLanguageDefinition "protobufLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-protobufReservedWordsDef :: TBinding (S.Set String)
-protobufReservedWordsDef = protobufLanguageDefinition "protobufReservedWords" $
+protobufReservedWords :: TBinding (S.Set String)
+protobufReservedWords = protobufLanguageDefinition "protobufReservedWords" $
   doc "A set of reserved words in Protobuf" $ lets [
   "fieldNames">:
     doc "See: http://google.github.io/proto-lens/reserved-names.html" $

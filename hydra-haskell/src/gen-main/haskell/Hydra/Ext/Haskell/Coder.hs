@@ -74,7 +74,7 @@ constructModule namespaces mod defs =
               Module.DefinitionType v1 ->  
                 let name = (Module.typeDefinitionName v1) 
                     typ = (Module.typeDefinitionType v1)
-                in (toTypeDeclarationsFromDef namespaces name typ)
+                in (toTypeDeclarationsFrom namespaces name typ)
               Module.DefinitionTerm v1 -> (Flows.bind (toDataDeclaration namespaces v1) (\d -> Flows.pure [
                 d]))) def)
       importName = (\name -> Ast.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name))))
@@ -447,10 +447,10 @@ nameDecls g namespaces name typ =
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
 toDataDeclaration :: (Module.Namespaces Ast.ModuleName -> Module.TermDefinition -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
-toDataDeclaration namespaces termDef =  
-  let name = (Module.termDefinitionName termDef) 
-      term = (Module.termDefinitionTerm termDef)
-      typ = (Module.termDefinitionType termDef)
+toDataDeclaration namespaces def =  
+  let name = (Module.termDefinitionName def) 
+      term = (Module.termDefinitionTerm def)
+      typ = (Module.termDefinitionType def)
       hname = (Utils.simpleName (Names.localNameOf name))
       rewriteValueBinding = (\vb -> (\x -> case x of
               Ast.ValueBindingSimple v1 ->  
@@ -606,8 +606,8 @@ toTypeDeclarations namespaces el term =
         nameDecls_,
         tdecls])))))))))))
 
-toTypeDeclarationsFromDef :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
-toTypeDeclarationsFromDef namespaces elementName typ =  
+toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
+toTypeDeclarationsFrom namespaces elementName typ =  
   let lname = (Names.localNameOf elementName) 
       hname = (Utils.simpleName lname)
       declHead = (\name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Ast.DeclarationHeadSimple name) ( 

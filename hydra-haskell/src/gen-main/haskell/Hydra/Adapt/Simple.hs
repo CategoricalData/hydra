@@ -165,9 +165,7 @@ adaptTerm constraints litmap term0 =
               tryTerm = (\term ->  
                       let supportedVariant = (Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                       in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
-          in (Flows.bind (recurse term0) (\term1 -> Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat [
-            "no alternatives for term: ",
-            (Core_.term term1)])) (\term2 -> Flows.pure term2) mterm))))
+          in (Flows.bind (recurse term0) (\term1 -> Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Flows.pure term2) mterm))))
   in (Rewriting.rewriteTermM rewrite term0)
 
 adaptType :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Compute.Flow t0 Core.Type)
@@ -184,9 +182,7 @@ adaptType constraints litmap type0 =
               let supportedVariant = (Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
               in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ)))
   in  
-    let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Maybes.maybe (Flows.fail (Strings.cat [
-            "no alternatives for type: ",
-            (Core_.type_ typ)])) (\type2 -> Flows.pure type2) (tryType type1)))
+    let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))) (\type2 -> Flows.pure type2) (tryType type1)))
     in (Rewriting.rewriteTypeM rewrite type0)
 
 adaptTypeScheme :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)

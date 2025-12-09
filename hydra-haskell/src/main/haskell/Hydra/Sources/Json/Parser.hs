@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Json.Parser where
 
@@ -72,24 +71,24 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.json.parser"
     elements = [
-      el whitespaceDef,
-      el tokenDef,
-      el jsonNullDef,
-      el jsonBoolDef,
-      el digitDef,
-      el digitsDef,
-      el jsonIntegerPartDef,
-      el jsonFractionPartDef,
-      el jsonExponentPartDef,
-      el jsonNumberDef,
-      el jsonEscapeCharDef,
-      el jsonStringCharDef,
-      el jsonStringDef,
-      el jsonArrayDef,
-      el jsonKeyValueDef,
-      el jsonObjectDef,
-      el jsonValueDef,
-      el parseJsonDef]
+      toBinding whitespace,
+      toBinding token,
+      toBinding jsonNull,
+      toBinding jsonBool,
+      toBinding digit,
+      toBinding digits,
+      toBinding jsonIntegerPart,
+      toBinding jsonFractionPart,
+      toBinding jsonExponentPart,
+      toBinding jsonNumber,
+      toBinding jsonEscapeChar,
+      toBinding jsonStringChar,
+      toBinding jsonString,
+      toBinding jsonArray,
+      toBinding jsonKeyValue,
+      toBinding jsonObject,
+      toBinding jsonValue,
+      toBinding parseJson]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -140,12 +139,12 @@ letterBCode :: TTerm Int
 letterBCode = int32 98    -- 'b'
 
 -- | Parse zero or more whitespace characters
-whitespaceDef :: TBinding (Parser ())
-whitespaceDef = define "whitespace" $
+whitespace :: TBinding (Parser ())
+whitespace = define "whitespace" $
   doc "Parse zero or more JSON whitespace characters (space, tab, newline, carriage return)" $
-  ref Parsers.mapDef @@ (constant unit) @@
-    (ref Parsers.manyDef @@
-      (ref Parsers.satisfyDef @@ ("c" ~>
+  Parsers.map @@ (constant unit) @@
+    (Parsers.many @@
+      (Parsers.satisfy @@ ("c" ~>
         Logic.ors (list [
           Equality.equal (var "c") spaceCode,
           Equality.equal (var "c") tabCode,
@@ -153,205 +152,205 @@ whitespaceDef = define "whitespace" $
           Equality.equal (var "c") returnCode]))))
 
 -- | Parse a token followed by optional whitespace
-tokenDef :: TBinding (Parser a -> Parser a)
-tokenDef = define "token" $
+token :: TBinding (Parser a -> Parser a)
+token = define "token" $
   doc "Parse a token followed by optional whitespace" $
   "p" ~>
-    ref Parsers.bindDef @@ var "p" @@ ("x" ~>
-      ref Parsers.bindDef @@ ref whitespaceDef @@ (constant $
-        ref Parsers.pureDef @@ var "x"))
+    Parsers.bind @@ var "p" @@ ("x" ~>
+      Parsers.bind @@ whitespace @@ (constant $
+        Parsers.pure @@ var "x"))
 
 -- | Parse JSON null
-jsonNullDef :: TBinding (Parser J.Value)
-jsonNullDef = define "jsonNull" $
+jsonNull :: TBinding (Parser J.Value)
+jsonNull = define "jsonNull" $
   doc "Parse JSON null value" $
-  ref Parsers.mapDef @@ (constant Json.valueNull) @@
-    (ref tokenDef @@ (ref Parsers.stringDef @@ string "null"))
+  Parsers.map @@ (constant Json.valueNull) @@
+    (token @@ (Parsers.string_ @@ string "null"))
 
 -- | Parse JSON boolean
-jsonBoolDef :: TBinding (Parser J.Value)
-jsonBoolDef = define "jsonBool" $
+jsonBool :: TBinding (Parser J.Value)
+jsonBool = define "jsonBool" $
   doc "Parse JSON boolean (true or false)" $
-  ref Parsers.altDef
-    @@ (ref Parsers.mapDef @@ (constant $ Json.valueBoolean true) @@
-        (ref tokenDef @@ (ref Parsers.stringDef @@ string "true")))
-    @@ (ref Parsers.mapDef @@ (constant $ Json.valueBoolean false) @@
-        (ref tokenDef @@ (ref Parsers.stringDef @@ string "false")))
+  Parsers.alt
+    @@ (Parsers.map @@ (constant $ Json.valueBoolean true) @@
+        (token @@ (Parsers.string_ @@ string "true")))
+    @@ (Parsers.map @@ (constant $ Json.valueBoolean false) @@
+        (token @@ (Parsers.string_ @@ string "false")))
 
 -- | Parse a single digit (0-9)
-digitDef :: TBinding (Parser Int)
-digitDef = define "digit" $
+digit :: TBinding (Parser Int)
+digit = define "digit" $
   doc "Parse a single digit (0-9)" $
-  ref Parsers.satisfyDef @@ ("c" ~>
+  Parsers.satisfy @@ ("c" ~>
     Logic.and
       (Equality.gte (var "c") zeroCode)
       (Equality.lte (var "c") nineCode))
 
 -- | Parse one or more digits and convert to string
-digitsDef :: TBinding (Parser String)
-digitsDef = define "digits" $
+digits :: TBinding (Parser String)
+digits = define "digits" $
   doc "Parse one or more digits as a string" $
-  ref Parsers.mapDef @@ (unaryFunction Strings.fromList) @@
-    (ref Parsers.someDef @@ ref digitDef)
+  Parsers.map @@ (unaryFunction Strings.fromList) @@
+    (Parsers.some @@ digit)
 
 -- | Parse the integer part of a JSON number
-jsonIntegerPartDef :: TBinding (Parser String)
-jsonIntegerPartDef = define "jsonIntegerPart" $
+jsonIntegerPart :: TBinding (Parser String)
+jsonIntegerPart = define "jsonIntegerPart" $
   doc "Parse the integer part of a JSON number (optional minus, then digits)" $
-  ref Parsers.bindDef @@
-    (ref Parsers.optionalDef @@ (ref Parsers.charDef @@ minusCode)) @@
+  Parsers.bind @@
+    (Parsers.optional @@ (Parsers.char @@ minusCode)) @@
     ("sign" ~>
-      ref Parsers.bindDef @@ ref digitsDef @@ ("digits" ~>
-        ref Parsers.pureDef @@
+      Parsers.bind @@ digits @@ ("digits" ~>
+        Parsers.pure @@
           (Maybes.maybe
             (var "digits")
             (constant $ string "-" ++ var "digits")
             (var "sign"))))
 
 -- | Parse the fractional part of a JSON number
-jsonFractionPartDef :: TBinding (Parser (Maybe String))
-jsonFractionPartDef = define "jsonFractionPart" $
+jsonFractionPart :: TBinding (Parser (Maybe String))
+jsonFractionPart = define "jsonFractionPart" $
   doc "Parse the optional fractional part of a JSON number" $
-  ref Parsers.optionalDef @@
-    (ref Parsers.bindDef @@ (ref Parsers.charDef @@ dotCode) @@ (constant $
-      ref Parsers.mapDef @@ ("d" ~> string "." ++ var "d") @@ ref digitsDef))
+  Parsers.optional @@
+    (Parsers.bind @@ (Parsers.char @@ dotCode) @@ (constant $
+      Parsers.map @@ ("d" ~> string "." ++ var "d") @@ digits))
 
 -- | Parse the exponent part of a JSON number
-jsonExponentPartDef :: TBinding (Parser (Maybe String))
-jsonExponentPartDef = define "jsonExponentPart" $
+jsonExponentPart :: TBinding (Parser (Maybe String))
+jsonExponentPart = define "jsonExponentPart" $
   doc "Parse the optional exponent part of a JSON number" $
-  ref Parsers.optionalDef @@
-    (ref Parsers.bindDef @@
-      (ref Parsers.satisfyDef @@ ("c" ~>
+  Parsers.optional @@
+    (Parsers.bind @@
+      (Parsers.satisfy @@ ("c" ~>
         Logic.or (Equality.equal (var "c") letterELower)
                  (Equality.equal (var "c") letterEUpper))) @@
       (constant $
-        ref Parsers.bindDef @@
-          (ref Parsers.optionalDef @@
-            (ref Parsers.satisfyDef @@ ("c" ~>
+        Parsers.bind @@
+          (Parsers.optional @@
+            (Parsers.satisfy @@ ("c" ~>
               Logic.or (Equality.equal (var "c") plusCode)
                        (Equality.equal (var "c") minusCode)))) @@
           ("sign" ~>
-            ref Parsers.mapDef @@
+            Parsers.map @@
               ("digits" ~>
                 string "e" ++
                 Maybes.maybe (string "") (unaryFunction Strings.fromList <.> unaryFunction Lists.pure) (var "sign") ++
                 var "digits") @@
-              ref digitsDef)))
+              digits)))
 
 -- | Parse a JSON number
-jsonNumberDef :: TBinding (Parser J.Value)
-jsonNumberDef = define "jsonNumber" $
+jsonNumber :: TBinding (Parser J.Value)
+jsonNumber = define "jsonNumber" $
   doc "Parse a JSON number (integer, decimal, or scientific notation)" $
-  ref tokenDef @@
-    (ref Parsers.bindDef @@ ref jsonIntegerPartDef @@ ("intPart" ~>
-      ref Parsers.bindDef @@ ref jsonFractionPartDef @@ ("fracPart" ~>
-        ref Parsers.bindDef @@ ref jsonExponentPartDef @@ ("expPart" ~>
+  token @@
+    (Parsers.bind @@ jsonIntegerPart @@ ("intPart" ~>
+      Parsers.bind @@ jsonFractionPart @@ ("fracPart" ~>
+        Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
           "numStr" <~
             (var "intPart" ++
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
-          ref Parsers.pureDef @@
+          Parsers.pure @@
             (Json.valueNumber (Maybes.maybe (bigfloat 0.0) (unaryFunction Equality.identity) (Literals.readBigfloat (var "numStr"))))))))
 
 -- | Parse a JSON escape character
-jsonEscapeCharDef :: TBinding (Parser Int)
-jsonEscapeCharDef = define "jsonEscapeChar" $
+jsonEscapeChar :: TBinding (Parser Int)
+jsonEscapeChar = define "jsonEscapeChar" $
   doc "Parse a JSON escape sequence after the backslash" $
-  ref Parsers.choiceDef @@ list [
-    ref Parsers.mapDef @@ (constant quoteCode) @@ (ref Parsers.charDef @@ quoteCode),
-    ref Parsers.mapDef @@ (constant backslashCode) @@ (ref Parsers.charDef @@ backslashCode),
-    ref Parsers.mapDef @@ (constant $ int32 47) @@ (ref Parsers.charDef @@ int32 47),  -- '/'
-    ref Parsers.mapDef @@ (constant $ int32 8) @@ (ref Parsers.charDef @@ letterBCode),   -- '\b'
-    ref Parsers.mapDef @@ (constant $ int32 12) @@ (ref Parsers.charDef @@ letterFCode),  -- '\f'
-    ref Parsers.mapDef @@ (constant newlineCode) @@ (ref Parsers.charDef @@ letterNCode), -- '\n'
-    ref Parsers.mapDef @@ (constant returnCode) @@ (ref Parsers.charDef @@ letterRCode),  -- '\r'
-    ref Parsers.mapDef @@ (constant tabCode) @@ (ref Parsers.charDef @@ letterTCode)]     -- '\t'
+  Parsers.choice @@ list [
+    Parsers.map @@ (constant quoteCode) @@ (Parsers.char @@ quoteCode),
+    Parsers.map @@ (constant backslashCode) @@ (Parsers.char @@ backslashCode),
+    Parsers.map @@ (constant $ int32 47) @@ (Parsers.char @@ int32 47),  -- '/'
+    Parsers.map @@ (constant $ int32 8) @@ (Parsers.char @@ letterBCode),   -- '\b'
+    Parsers.map @@ (constant $ int32 12) @@ (Parsers.char @@ letterFCode),  -- '\f'
+    Parsers.map @@ (constant newlineCode) @@ (Parsers.char @@ letterNCode), -- '\n'
+    Parsers.map @@ (constant returnCode) @@ (Parsers.char @@ letterRCode),  -- '\r'
+    Parsers.map @@ (constant tabCode) @@ (Parsers.char @@ letterTCode)]     -- '\t'
     -- Note: \uXXXX unicode escapes not yet implemented
 
 -- | Parse a single JSON string character
-jsonStringCharDef :: TBinding (Parser Int)
-jsonStringCharDef = define "jsonStringChar" $
+jsonStringChar :: TBinding (Parser Int)
+jsonStringChar = define "jsonStringChar" $
   doc "Parse a single character in a JSON string (handling escapes)" $
-  ref Parsers.altDef @@
+  Parsers.alt @@
     -- Escape sequence
-    (ref Parsers.bindDef @@ (ref Parsers.charDef @@ backslashCode) @@ (constant $
-      ref jsonEscapeCharDef)) @@
+    (Parsers.bind @@ (Parsers.char @@ backslashCode) @@ (constant $
+      jsonEscapeChar)) @@
     -- Regular character (not quote or backslash)
-    (ref Parsers.satisfyDef @@ ("c" ~>
+    (Parsers.satisfy @@ ("c" ~>
       Logic.and
         (Logic.not $ Equality.equal (var "c") quoteCode)
         (Logic.not $ Equality.equal (var "c") backslashCode)))
 
 -- | Parse a JSON string
-jsonStringDef :: TBinding (Parser J.Value)
-jsonStringDef = define "jsonString" $
+jsonString :: TBinding (Parser J.Value)
+jsonString = define "jsonString" $
   doc "Parse a JSON string value" $
-  ref tokenDef @@
-    (ref Parsers.bindDef @@ (ref Parsers.charDef @@ quoteCode) @@ (constant $
-      ref Parsers.bindDef @@ (ref Parsers.manyDef @@ ref jsonStringCharDef) @@ ("chars" ~>
-        ref Parsers.bindDef @@ (ref Parsers.charDef @@ quoteCode) @@ (constant $
-          ref Parsers.pureDef @@ (Json.valueString (Strings.fromList (var "chars")))))))
+  token @@
+    (Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+      Parsers.bind @@ (Parsers.many @@ jsonStringChar) @@ ("chars" ~>
+        Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+          Parsers.pure @@ (Json.valueString (Strings.fromList (var "chars")))))))
 
 -- | Parse a JSON array
-jsonArrayDef :: TBinding (Parser J.Value)
-jsonArrayDef = define "jsonArray" $
+jsonArray :: TBinding (Parser J.Value)
+jsonArray = define "jsonArray" $
   doc "Parse a JSON array" $
-  ref Parsers.mapDef @@ (unaryFunction Json.valueArray) @@
-    (ref Parsers.betweenDef
-      @@ (ref tokenDef @@ (ref Parsers.charDef @@ bracketOpenCode))
-      @@ (ref tokenDef @@ (ref Parsers.charDef @@ bracketCloseCode))
-      @@ (ref Parsers.sepByDef
-          @@ ref jsonValueDef
-          @@ (ref tokenDef @@ (ref Parsers.charDef @@ commaCode))))
+  Parsers.map @@ (unaryFunction Json.valueArray) @@
+    (Parsers.between
+      @@ (token @@ (Parsers.char @@ bracketOpenCode))
+      @@ (token @@ (Parsers.char @@ bracketCloseCode))
+      @@ (Parsers.sepBy
+          @@ jsonValue
+          @@ (token @@ (Parsers.char @@ commaCode))))
 
 -- | Parse a JSON key-value pair
-jsonKeyValueDef :: TBinding (Parser (String, J.Value))
-jsonKeyValueDef = define "jsonKeyValue" $
+jsonKeyValue :: TBinding (Parser (String, J.Value))
+jsonKeyValue = define "jsonKeyValue" $
   doc "Parse a JSON object key-value pair" $
-  ref Parsers.bindDef @@
-    (ref tokenDef @@
-      (ref Parsers.bindDef @@ (ref Parsers.charDef @@ quoteCode) @@ (constant $
-        ref Parsers.bindDef @@ (ref Parsers.manyDef @@ ref jsonStringCharDef) @@ ("chars" ~>
-          ref Parsers.bindDef @@ (ref Parsers.charDef @@ quoteCode) @@ (constant $
-            ref Parsers.pureDef @@ (Strings.fromList (var "chars"))))))) @@
+  Parsers.bind @@
+    (token @@
+      (Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+        Parsers.bind @@ (Parsers.many @@ jsonStringChar) @@ ("chars" ~>
+          Parsers.bind @@ (Parsers.char @@ quoteCode) @@ (constant $
+            Parsers.pure @@ (Strings.fromList (var "chars"))))))) @@
     ("key" ~>
-      ref Parsers.bindDef @@ (ref tokenDef @@ (ref Parsers.charDef @@ colonCode)) @@ (constant $
-        ref Parsers.mapDef @@ ("v" ~> pair (var "key") (var "v")) @@ ref jsonValueDef))
+      Parsers.bind @@ (token @@ (Parsers.char @@ colonCode)) @@ (constant $
+        Parsers.map @@ ("v" ~> pair (var "key") (var "v")) @@ jsonValue))
 
 -- | Parse a JSON object
-jsonObjectDef :: TBinding (Parser J.Value)
-jsonObjectDef = define "jsonObject" $
+jsonObject :: TBinding (Parser J.Value)
+jsonObject = define "jsonObject" $
   doc "Parse a JSON object" $
-  ref Parsers.mapDef @@ (unaryFunction Json.valueObject <.> unaryFunction Maps.fromList) @@
-    (ref Parsers.betweenDef
-      @@ (ref tokenDef @@ (ref Parsers.charDef @@ braceOpenCode))
-      @@ (ref tokenDef @@ (ref Parsers.charDef @@ braceCloseCode))
-      @@ (ref Parsers.sepByDef
-          @@ ref jsonKeyValueDef
-          @@ (ref tokenDef @@ (ref Parsers.charDef @@ commaCode))))
+  Parsers.map @@ (unaryFunction Json.valueObject <.> unaryFunction Maps.fromList) @@
+    (Parsers.between
+      @@ (token @@ (Parsers.char @@ braceOpenCode))
+      @@ (token @@ (Parsers.char @@ braceCloseCode))
+      @@ (Parsers.sepBy
+          @@ jsonKeyValue
+          @@ (token @@ (Parsers.char @@ commaCode))))
 
 -- | Parse any JSON value
-jsonValueDef :: TBinding (Parser J.Value)
-jsonValueDef = define "jsonValue" $
+jsonValue :: TBinding (Parser J.Value)
+jsonValue = define "jsonValue" $
   doc "Parse any JSON value" $
-  ref Parsers.choiceDef @@ list [
-    ref jsonNullDef,
-    ref jsonBoolDef,
-    ref jsonNumberDef,
-    ref jsonStringDef,
-    ref jsonArrayDef,
-    ref jsonObjectDef]
+  Parsers.choice @@ list [
+    jsonNull,
+    jsonBool,
+    jsonNumber,
+    jsonString,
+    jsonArray,
+    jsonObject]
 
 -- | Parse a JSON document (value with optional surrounding whitespace)
-parseJsonDef :: TBinding (String -> ParseResult J.Value)
-parseJsonDef = define "parseJson" $
+parseJson :: TBinding (String -> ParseResult J.Value)
+parseJson = define "parseJson" $
   doc "Parse a JSON document from a string" $
   "input" ~>
     Parsing.runParser
-      (ref Parsers.bindDef @@ ref whitespaceDef @@ (constant $
-        ref Parsers.bindDef @@ ref jsonValueDef @@ ("v" ~>
-          ref Parsers.bindDef @@ ref whitespaceDef @@ (constant $
-            ref Parsers.bindDef @@ ref Parsers.eofDef @@ (constant $
-              ref Parsers.pureDef @@ var "v")))))
+      (Parsers.bind @@ whitespace @@ (constant $
+        Parsers.bind @@ jsonValue @@ ("v" ~>
+          Parsers.bind @@ whitespace @@ (constant $
+            Parsers.bind @@ Parsers.eof @@ (constant $
+              Parsers.pure @@ var "v")))))
       (var "input")

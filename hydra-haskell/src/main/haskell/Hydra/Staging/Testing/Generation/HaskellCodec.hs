@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Staging.Testing.Generation.HaskellCodec where
 
 import Hydra.Kernel hiding (map)

@@ -1,9 +1,17 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Serialization where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  angleBraces, angleBracesList, braces, bracesList, brackets, bracketsList, bracesListAdaptive,
+  bracketList, bracketListAdaptive, cat, commaSep, cst, curlyBlock, curlyBraces, curlyBracesList,
+  customIndent, customIndentBlock, dotSep, doubleNewlineSep, doubleQuoted, doubleSpace,
+  expressionLength, fullBlockStyle, fullName, halfBlockStyle, halfIndent, ifx, indent, indentBlock,
+  indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, newline, newlineSep, noSep,
+  noPad, noPadding, num, op, orOp, orSep, parenList, parens, parensList, parentheses, parenthesize,
+  prefix, printExpr, printGraph, semicolonSep, sep, singleQuoted, space, spaceSep, squareBrackets,
+  sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
+  unsupportedVariant, withComma, withSemi)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -65,171 +73,171 @@ module_ = Module (Namespace "hydra.serialization") elements
     Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")
   where
    elements = [
-     el angleBracesDef,
-     el angleBracesListDef,
-     el bracesListAdaptiveDef,
-     el bracketListDef,
-     el bracketListAdaptiveDef,
-     el bracketsDef,
-     el commaSepDef,
-     el curlyBlockDef,
-     el curlyBracesDef,
-     el curlyBracesListDef,
-     el cstDef,
-     el customIndentDef,
-     el customIndentBlockDef,
-     el dotSepDef,
-     el doubleNewlineSepDef,
-     el doubleSpaceDef,
-     el expressionLengthDef,
-     el fullBlockStyleDef,
-     el halfBlockStyleDef,
-     el ifxDef,
-     el indentDef,
-     el indentBlockDef,
-     el indentSubsequentLinesDef,
-     el infixWsDef,
-     el infixWsListDef,
-     el inlineStyleDef,
-     el newlineSepDef,
-     el noPaddingDef,
-     el noSepDef,
-     el numDef,
-     el opDef,
-     el orOpDef,
-     el orSepDef,
-     el parenListDef,
-     el parensDef,
-     el parenthesesDef,
-     el parenthesizeDef,
-     el prefixDef,
-     el printExprDef,
-     el semicolonSepDef,
-     el sepDef,
-     el spaceSepDef,
-     el squareBracketsDef,
-     el symDef,
-     el symbolSepDef,
-     el tabIndentDef,
-     el tabIndentDoubleSpaceDef,
-     el tabIndentSingleSpaceDef,
-     el unsupportedTypeDef,
-     el unsupportedVariantDef,
-     el withCommaDef,
-     el withSemiDef]
+     toBinding angleBraces,
+     toBinding angleBracesList,
+     toBinding bracesListAdaptive,
+     toBinding bracketList,
+     toBinding bracketListAdaptive,
+     toBinding brackets,
+     toBinding commaSep,
+     toBinding curlyBlock,
+     toBinding curlyBraces,
+     toBinding curlyBracesList,
+     toBinding cst,
+     toBinding customIndent,
+     toBinding customIndentBlock,
+     toBinding dotSep,
+     toBinding doubleNewlineSep,
+     toBinding doubleSpace,
+     toBinding expressionLength,
+     toBinding fullBlockStyle,
+     toBinding halfBlockStyle,
+     toBinding ifx,
+     toBinding indent,
+     toBinding indentBlock,
+     toBinding indentSubsequentLines,
+     toBinding infixWs,
+     toBinding infixWsList,
+     toBinding inlineStyle,
+     toBinding newlineSep,
+     toBinding noPadding,
+     toBinding noSep,
+     toBinding num,
+     toBinding op,
+     toBinding orOp,
+     toBinding orSep,
+     toBinding parenList,
+     toBinding parens,
+     toBinding parentheses,
+     toBinding parenthesize,
+     toBinding prefix,
+     toBinding printExpr,
+     toBinding semicolonSep,
+     toBinding sep,
+     toBinding spaceSep,
+     toBinding squareBrackets,
+     toBinding sym,
+     toBinding symbolSep,
+     toBinding tabIndent,
+     toBinding tabIndentDoubleSpace,
+     toBinding tabIndentSingleSpace,
+     toBinding unsupportedType,
+     toBinding unsupportedVariant,
+     toBinding withComma,
+     toBinding withSemi]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-angleBracesDef :: TBinding Brackets
-angleBracesDef = define "angleBraces" $
-  Ast.brackets (ref symDef @@ string "<") (ref symDef @@ string ">")
+angleBraces :: TBinding Brackets
+angleBraces = define "angleBraces" $
+  Ast.brackets (sym @@ string "<") (sym @@ string ">")
 
-angleBracesListDef :: TBinding (BlockStyle -> [Expr] -> Expr)
-angleBracesListDef = define "angleBracesList" $
+angleBracesList :: TBinding (BlockStyle -> [Expr] -> Expr)
+angleBracesList = define "angleBracesList" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "<>")
-      (ref bracketsDef @@ ref angleBracesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
+      (cst @@ string "<>")
+      (brackets @@ angleBraces @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-bracesListAdaptiveDef :: TBinding ([Expr] -> Expr)
-bracesListAdaptiveDef = define "bracesListAdaptive" $
+bracesListAdaptive :: TBinding ([Expr] -> Expr)
+bracesListAdaptive = define "bracesListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
-  "inlineList" <~ ref curlyBracesListDef @@ nothing @@ ref inlineStyleDef @@ var "els" $
-  Logic.ifElse (Equality.gt (ref expressionLengthDef @@ var "inlineList") (int32 70))
-    (ref curlyBracesListDef @@ nothing @@ ref halfBlockStyleDef @@ var "els")
+  "inlineList" <~ curlyBracesList @@ nothing @@ inlineStyle @@ var "els" $
+  Logic.ifElse (Equality.gt (expressionLength @@ var "inlineList") (int32 70))
+    (curlyBracesList @@ nothing @@ halfBlockStyle @@ var "els")
     (var "inlineList")
 
-bracketListAdaptiveDef :: TBinding ([Expr] -> Expr)
-bracketListAdaptiveDef = define "bracketListAdaptive" $
+bracketListAdaptive :: TBinding ([Expr] -> Expr)
+bracketListAdaptive = define "bracketListAdaptive" $
   doc "Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression." $
   "els" ~>
-  "inlineList" <~ ref bracketListDef @@ ref inlineStyleDef @@ var "els" $
-  Logic.ifElse (Equality.gt (ref expressionLengthDef @@ var "inlineList") (int32 70))
-    (ref bracketListDef @@ ref halfBlockStyleDef @@ var "els")
+  "inlineList" <~ bracketList @@ inlineStyle @@ var "els" $
+  Logic.ifElse (Equality.gt (expressionLength @@ var "inlineList") (int32 70))
+    (bracketList @@ halfBlockStyle @@ var "els")
     (var "inlineList")
 
-bracketListDef :: TBinding (BlockStyle -> [Expr] -> Expr)
-bracketListDef = define "bracketList" $
+bracketList :: TBinding (BlockStyle -> [Expr] -> Expr)
+bracketList = define "bracketList" $
   "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "[]")
-      (ref bracketsDef @@ ref squareBracketsDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
+      (cst @@ string "[]")
+      (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-bracketsDef :: TBinding (Brackets -> BlockStyle -> Expr -> Expr)
-bracketsDef = define "brackets" $
+brackets :: TBinding (Brackets -> BlockStyle -> Expr -> Expr)
+brackets = define "brackets" $
   "br" ~> "style" ~> "e" ~>
     Ast.exprBrackets $ Ast.bracketExpr (var "br") (var "e") (var "style")
 
-commaSepDef :: TBinding (BlockStyle -> [Expr] -> Expr)
-commaSepDef = define "commaSep" $
-  ref symbolSepDef @@ string ","
+commaSep :: TBinding (BlockStyle -> [Expr] -> Expr)
+commaSep = define "commaSep" $
+  symbolSep @@ string ","
 
-cstDef :: TBinding (String -> Expr)
-cstDef = define "cst" $
-  "s" ~> Ast.exprConst $ ref symDef @@ var "s"
+cst :: TBinding (String -> Expr)
+cst = define "cst" $
+  "s" ~> Ast.exprConst $ sym @@ var "s"
 
-curlyBlockDef :: TBinding (BlockStyle -> Expr -> Expr)
-curlyBlockDef = define "curlyBlock" $
+curlyBlock :: TBinding (BlockStyle -> Expr -> Expr)
+curlyBlock = define "curlyBlock" $
   "style" ~> "e" ~>
-    ref curlyBracesListDef @@ nothing @@ var "style" @@ (list [var "e"])
+    curlyBracesList @@ nothing @@ var "style" @@ (list [var "e"])
 
-curlyBracesDef :: TBinding Brackets
-curlyBracesDef = define "curlyBraces" $
-  Ast.brackets (ref symDef @@ string "{") (ref symDef @@ string "}")
+curlyBraces :: TBinding Brackets
+curlyBraces = define "curlyBraces" $
+  Ast.brackets (sym @@ string "{") (sym @@ string "}")
 
-curlyBracesListDef :: TBinding (Maybe String -> BlockStyle -> [Expr] -> Expr)
-curlyBracesListDef = define "curlyBracesList" $
+curlyBracesList :: TBinding (Maybe String -> BlockStyle -> [Expr] -> Expr)
+curlyBracesList = define "curlyBracesList" $
   "msymb" ~> "style" ~> "els" ~>
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "{}")
-      (ref bracketsDef @@ ref curlyBracesDef @@ var "style" @@
-        (ref symbolSepDef @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
+      (cst @@ string "{}")
+      (brackets @@ curlyBraces @@ var "style" @@
+        (symbolSep @@ (Maybes.fromMaybe (string ",") (var "msymb")) @@ var "style" @@ var "els"))
 
-customIndentBlockDef :: TBinding (String -> [Expr] -> Expr)
-customIndentBlockDef = define "customIndentBlock" $
+customIndentBlock :: TBinding (String -> [Expr] -> Expr)
+customIndentBlock = define "customIndentBlock" $
   "idt" ~> "els" ~>
     "head" <~ Lists.head (var "els") $
     "rest" <~ Lists.tail (var "els") $
     "idtOp" <~ (Ast.op
-      (ref symDef @@ string "")
+      (sym @@ string "")
       (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "")
+      (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
-        (ref ifxDef @@ var "idtOp" @@ var "head" @@ (ref newlineSepDef @@ var "rest")))
+        (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ var "rest")))
 
-customIndentDef :: TBinding (String -> String -> String)
-customIndentDef = define "customIndent" $
+customIndent :: TBinding (String -> String -> String)
+customIndent = define "customIndent" $
   "idt" ~> "s" ~> Strings.cat $
     Lists.intersperse (string "\n") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Strings.lines $ var "s"
 
-dotSepDef :: TBinding ([Expr] -> Expr)
-dotSepDef = define "dotSep" $
-  ref sepDef @@ (Ast.op
-    (ref symDef @@ string ".")
+dotSep :: TBinding ([Expr] -> Expr)
+dotSep = define "dotSep" $
+  sep @@ (Ast.op
+    (sym @@ string ".")
     (Ast.padding Ast.wsNone Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-doubleNewlineSepDef :: TBinding ([Expr] -> Expr)
-doubleNewlineSepDef = define "doubleNewlineSep" $
-  ref sepDef @@ (Ast.op
-    (ref symDef @@ string "")
+doubleNewlineSep :: TBinding ([Expr] -> Expr)
+doubleNewlineSep = define "doubleNewlineSep" $
+  sep @@ (Ast.op
+    (sym @@ string "")
     (Ast.padding Ast.wsBreak Ast.wsBreak)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-doubleSpaceDef :: TBinding String
-doubleSpaceDef = define "doubleSpace" $
+doubleSpace :: TBinding String
+doubleSpace = define "doubleSpace" $
   string "  "
 
-expressionLengthDef :: TBinding (Expr -> Int)
-expressionLengthDef = define "expressionLength" $
+expressionLength :: TBinding (Expr -> Int)
+expressionLength = define "expressionLength" $
   doc "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it." $
   "e" ~>
   "symbolLength" <~ ("s" ~> Strings.length $ Ast.unSymbol $ var "s") $
@@ -252,10 +260,10 @@ expressionLengthDef = define "expressionLength" $
     Math.add
       (var "bracketsLength" @@ (Ast.bracketExprBrackets $ var "be"))
       (Math.add
-        (ref expressionLengthDef @@ (Ast.bracketExprEnclosed $ var "be"))
+        (expressionLength @@ (Ast.bracketExprEnclosed $ var "be"))
         (var "blockStyleLength" @@ (Ast.bracketExprStyle $ var "be")))) $
   "indentedExpressionLength" <~ ("ie" ~>
-    "baseLen" <~ ref expressionLengthDef @@ (Ast.indentedExpressionExpr $ var "ie") $
+    "baseLen" <~ expressionLength @@ (Ast.indentedExpressionExpr $ var "ie") $
     "indentLen" <~ cases _IndentStyle (Ast.indentedExpressionStyle $ var "ie") Nothing [
       _IndentStyle_allLines>>: "s" ~> Strings.length $ var "s",
       _IndentStyle_subsequentLines>>: "s" ~> Strings.length $ var "s"] $
@@ -268,8 +276,8 @@ expressionLengthDef = define "expressionLength" $
     Math.add (var "symLen") $ Math.add (var "leftLen") (var "rightLen")) $
   "opExprLength" <~ ("oe" ~>
     "opLen" <~ var "opLength" @@ (Ast.opExprOp $ var "oe") $
-    "leftLen" <~ ref expressionLengthDef @@ (Ast.opExprLhs $ var "oe") $
-    "rightLen" <~ ref expressionLengthDef @@ (Ast.opExprRhs $ var "oe") $
+    "leftLen" <~ expressionLength @@ (Ast.opExprLhs $ var "oe") $
+    "rightLen" <~ expressionLength @@ (Ast.opExprRhs $ var "oe") $
     Math.add (var "opLen") $ Math.add (var "leftLen") (var "rightLen")) $
   cases _Expr (var "e") Nothing [
     _Expr_const>>: "s" ~> var "symbolLength" @@ var "s",
@@ -277,124 +285,124 @@ expressionLengthDef = define "expressionLength" $
     _Expr_op>>: "oe" ~> var "opExprLength" @@ var "oe",
     _Expr_brackets>>: "be" ~> var "bracketExprLength" @@ var "be"]
 
-fullBlockStyleDef :: TBinding BlockStyle
-fullBlockStyleDef = define "fullBlockStyle" $
-  Ast.blockStyle (just $ ref doubleSpaceDef) true true
+fullBlockStyle :: TBinding BlockStyle
+fullBlockStyle = define "fullBlockStyle" $
+  Ast.blockStyle (just doubleSpace) true true
 
-halfBlockStyleDef :: TBinding BlockStyle
-halfBlockStyleDef = define "halfBlockStyle" $
-  Ast.blockStyle (just $ ref doubleSpaceDef) true false
+halfBlockStyle :: TBinding BlockStyle
+halfBlockStyle = define "halfBlockStyle" $
+  Ast.blockStyle (just doubleSpace) true false
 
-ifxDef :: TBinding (Op -> Expr -> Expr -> Expr)
-ifxDef = define "ifx" $
+ifx :: TBinding (Op -> Expr -> Expr -> Expr)
+ifx = define "ifx" $
   "op" ~> "lhs" ~> "rhs" ~>
     Ast.exprOp $ Ast.opExpr (var "op") (var "lhs") (var "rhs")
 
-indentBlockDef :: TBinding ([Expr] -> Expr)
-indentBlockDef = define "indentBlock" $
-  ref customIndentBlockDef @@ ref doubleSpaceDef
+indentBlock :: TBinding ([Expr] -> Expr)
+indentBlock = define "indentBlock" $
+  customIndentBlock @@ doubleSpace
 
-indentDef :: TBinding (String -> String)
-indentDef = define "indent" $
-  ref customIndentDef @@ ref doubleSpaceDef
+indent :: TBinding (String -> String)
+indent = define "indent" $
+  customIndent @@ doubleSpace
 
-indentSubsequentLinesDef :: TBinding (String -> Expr -> Expr)
-indentSubsequentLinesDef = define "indentSubsequentLines" $
+indentSubsequentLines :: TBinding (String -> Expr -> Expr)
+indentSubsequentLines = define "indentSubsequentLines" $
   "idt" ~> "e" ~>
     Ast.exprIndent $ Ast.indentedExpression (Ast.indentStyleSubsequentLines $ var "idt") (var "e")
 
-infixWsDef :: TBinding (String -> Expr -> Expr -> Expr)
-infixWsDef = define "infixWs" $
+infixWs :: TBinding (String -> Expr -> Expr -> Expr)
+infixWs = define "infixWs" $
   "op" ~> "l" ~> "r" ~>
-    ref spaceSepDef @@ list [var "l", ref cstDef @@ var "op", var "r"]
+    spaceSep @@ list [var "l", cst @@ var "op", var "r"]
 
-infixWsListDef :: TBinding (String -> [Expr] -> Expr)
-infixWsListDef = define "infixWsList" $
+infixWsList :: TBinding (String -> [Expr] -> Expr)
+infixWsList = define "infixWsList" $
   "op" ~> "opers" ~>
-  "opExpr" <~ ref cstDef @@ var "op" $
+  "opExpr" <~ cst @@ var "op" $
   "foldFun" <~ ("e" ~> "r" ~>
     Logic.ifElse (Lists.null $ var "e")
       (list [var "r"])
       (Lists.cons (var "r") $ Lists.cons (var "opExpr") (var "e"))) $
-  ref spaceSepDef @@ (Lists.foldl (var "foldFun") (list []) $ Lists.reverse $ var "opers")
+  spaceSep @@ (Lists.foldl (var "foldFun") (list ([] :: [TTerm Expr])) $ Lists.reverse $ var "opers")
 
-inlineStyleDef :: TBinding BlockStyle
-inlineStyleDef = define "inlineStyle" $
+inlineStyle :: TBinding BlockStyle
+inlineStyle = define "inlineStyle" $
   Ast.blockStyle nothing false false
 
-newlineSepDef :: TBinding ([Expr] -> Expr)
-newlineSepDef = define "newlineSep" $
-  ref sepDef @@ (Ast.op
-    (ref symDef @@ string "")
+newlineSep :: TBinding ([Expr] -> Expr)
+newlineSep = define "newlineSep" $
+  sep @@ (Ast.op
+    (sym @@ string "")
     (Ast.padding Ast.wsNone Ast.wsBreak)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-noPaddingDef :: TBinding Padding
-noPaddingDef = define "noPadding" $
+noPadding :: TBinding Padding
+noPadding = define "noPadding" $
   Ast.padding Ast.wsNone Ast.wsNone
 
-noSepDef :: TBinding ([Expr] -> Expr)
-noSepDef = define "noSep" $
-  ref sepDef @@ (Ast.op
-    (ref symDef @@ string "")
+noSep :: TBinding ([Expr] -> Expr)
+noSep = define "noSep" $
+  sep @@ (Ast.op
+    (sym @@ string "")
     (Ast.padding Ast.wsNone Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-numDef :: TBinding (Int -> Expr)
-numDef = define "num" $
-  "i" ~> ref cstDef @@ (Literals.showInt32 $ var "i")
+num :: TBinding (Int -> Expr)
+num = define "num" $
+  "i" ~> cst @@ (Literals.showInt32 $ var "i")
 
-opDef :: TBinding (String -> Int -> Associativity -> Op)
-opDef = define "op" $
+op :: TBinding (String -> Int -> Associativity -> Op)
+op = define "op" $
   "s" ~> "p" ~> "assoc" ~>
     Ast.op
-      (ref symDef @@ var "s")
+      (sym @@ var "s")
       (Ast.padding Ast.wsSpace Ast.wsSpace)
       (Ast.precedence $ var "p")
       (var "assoc")
 
-orOpDef :: TBinding (Bool -> Op)
-orOpDef = define "orOp" $
+orOp :: TBinding (Bool -> Op)
+orOp = define "orOp" $
   "newlines" ~> Ast.op
-    (ref symDef @@ string "|")
+    (sym @@ string "|")
     (Ast.padding Ast.wsSpace (Logic.ifElse (var "newlines") Ast.wsBreak Ast.wsSpace))
     (Ast.precedence $ int32 0)
     Ast.associativityNone
 
-orSepDef :: TBinding (BlockStyle -> [Expr] -> Expr)
-orSepDef = define "orSep" $
+orSep :: TBinding (BlockStyle -> [Expr] -> Expr)
+orSep = define "orSep" $
   "style" ~> "l" ~>
     "h" <~ Lists.head (var "l") $
     "r" <~ Lists.tail (var "l") $
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
     Logic.ifElse (Lists.null $ var "l")
-      (ref cstDef @@ string "")
+      (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
-        (ref ifxDef @@ (ref orOpDef @@ var "newlines") @@ var "h" @@ (ref orSepDef @@ var "style" @@ var "r")))
+        (ifx @@ (orOp @@ var "newlines") @@ var "h" @@ (orSep @@ var "style" @@ var "r")))
 
-parenListDef :: TBinding (Bool -> [Expr] -> Expr)
-parenListDef = define "parenList" $
+parenList :: TBinding (Bool -> [Expr] -> Expr)
+parenList = define "parenList" $
   "newlines" ~> "els" ~>
     "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
-      (ref halfBlockStyleDef)
-      (ref inlineStyleDef)) $
+      (halfBlockStyle)
+      (inlineStyle)) $
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "()")
-      (ref bracketsDef @@ ref parenthesesDef @@ var "style" @@ (ref commaSepDef @@ var "style" @@ var "els"))
+      (cst @@ string "()")
+      (brackets @@ parentheses @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
-parensDef :: TBinding (Expr -> Expr)
-parensDef = define "parens" $
-  ref bracketsDef @@ ref parenthesesDef @@ ref inlineStyleDef
+parens :: TBinding (Expr -> Expr)
+parens = define "parens" $
+  brackets @@ parentheses @@ inlineStyle
 
-parenthesesDef :: TBinding Brackets
-parenthesesDef = define "parentheses" $
-  Ast.brackets (ref symDef @@ string "(") (ref symDef @@ string ")")
+parentheses :: TBinding Brackets
+parentheses = define "parentheses" $
+  Ast.brackets (sym @@ string "(") (sym @@ string ")")
 
-parenthesizeDef :: TBinding (Expr -> Expr)
-parenthesizeDef = define "parenthesize" $
+parenthesize :: TBinding (Expr -> Expr)
+parenthesize = define "parenthesize" $
   "exp" ~>
     "assocLeft" <~ ("a" ~> cases _Associativity (var "a")
       (Just true) [
@@ -406,21 +414,21 @@ parenthesizeDef = define "parenthesize" $
       _Expr_brackets>>: "bracketExpr" ~>
         Ast.exprBrackets $ Ast.bracketExpr
           (Ast.bracketExprBrackets $ var "bracketExpr")
-          (ref parenthesizeDef @@ (Ast.bracketExprEnclosed $ var "bracketExpr"))
+          (parenthesize @@ (Ast.bracketExprEnclosed $ var "bracketExpr"))
           (Ast.bracketExprStyle $ var "bracketExpr"),
       _Expr_const>>: "ignored" ~> var "exp",
       _Expr_indent>>: "indentExpr" ~>
         Ast.exprIndent $ Ast.indentedExpression
           (Ast.indentedExpressionStyle $ var "indentExpr")
-          (ref parenthesizeDef @@ (Ast.indentedExpressionExpr $ var "indentExpr")),
+          (parenthesize @@ (Ast.indentedExpressionExpr $ var "indentExpr")),
       _Expr_op>>: "opExpr" ~>
         "op" <~ Ast.opExprOp (var "opExpr") $
         "prec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "op") $
         "assoc" <~ Ast.opAssociativity (var "op") $
         "lhs" <~ Ast.opExprLhs (var "opExpr") $
         "rhs" <~ Ast.opExprRhs (var "opExpr") $
-        "lhs'" <~ ref parenthesizeDef @@ var "lhs" $
-        "rhs'" <~ ref parenthesizeDef @@ var "rhs" $
+        "lhs'" <~ parenthesize @@ var "lhs" $
+        "rhs'" <~ parenthesize @@ var "rhs" $
         "lhs2" <~ cases _Expr (var "lhs'")
           (Just $ var "lhs'") [
           _Expr_op>>: "lopExpr" ~>
@@ -430,11 +438,11 @@ parenthesizeDef = define "parenthesize" $
             "comparison" <~ Equality.compare (var "prec") (var "lprec") $
             cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "lhs'",
-              _Comparison_greaterThan>>: constant (ref parensDef @@ var "lhs'"),
+              _Comparison_greaterThan>>: constant (parens @@ var "lhs'"),
               _Comparison_equalTo>>: constant $ Logic.ifElse
                 (Logic.and (var "assocLeft" @@ var "assoc") (var "assocLeft" @@ var "lassoc"))
                 (var "lhs'")
-                (ref parensDef @@ var "lhs'")]] $
+                (parens @@ var "lhs'")]] $
         "rhs2" <~ cases _Expr (var "rhs'") (Just $ var "rhs'") [
           _Expr_op>>: "ropExpr" ~>
             "rop" <~ Ast.opExprOp (var "ropExpr") $
@@ -443,25 +451,25 @@ parenthesizeDef = define "parenthesize" $
             "comparison" <~ Equality.compare (var "prec") (var "rprec") $
             cases _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "rhs'",
-              _Comparison_greaterThan>>: constant (ref parensDef @@ var "rhs'"),
+              _Comparison_greaterThan>>: constant (parens @@ var "rhs'"),
               _Comparison_equalTo>>: constant $ Logic.ifElse
                 (Logic.and (var "assocRight" @@ var "assoc") (var "assocRight" @@ var "rassoc"))
                 (var "rhs'")
-                (ref parensDef @@ var "rhs'")]] $
+                (parens @@ var "rhs'")]] $
         Ast.exprOp $ Ast.opExpr (var "op") (var "lhs2") (var "rhs2")]
 
-prefixDef :: TBinding (String -> Expr -> Expr)
-prefixDef = define "prefix" $
+prefix :: TBinding (String -> Expr -> Expr)
+prefix = define "prefix" $
   "p" ~> "expr" ~>
   "preOp" <~ Ast.op
-    (ref symDef @@ var "p")
+    (sym @@ var "p")
     (Ast.padding Ast.wsNone Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone $
-  ref ifxDef @@ var "preOp" @@ (ref cstDef @@ string "") @@ var "expr"
+  ifx @@ var "preOp" @@ (cst @@ string "") @@ var "expr"
 
-printExprDef :: TBinding (Expr -> String)
-printExprDef = define "printExpr" $
+printExpr :: TBinding (Expr -> String)
+printExpr = define "printExpr" $
   "e" ~>
   "pad" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
     _Ws_none>>: constant $ string "",
@@ -470,13 +478,13 @@ printExprDef = define "printExpr" $
     _Ws_breakAndIndent>>: "ignored" ~> string "\n",
     _Ws_doubleBreak>>: constant $ string "\n\n"]) $
   "idt" <~ ("ws" ~> "s" ~> cases _Ws (var "ws") (Just $ var "s") [
-    _Ws_breakAndIndent>>: "indentStr" ~> ref customIndentDef @@ var "indentStr" @@ var "s"]) $
+    _Ws_breakAndIndent>>: "indentStr" ~> customIndent @@ var "indentStr" @@ var "s"]) $
   cases _Expr (var "e") Nothing [
     _Expr_const>>: "symbol" ~> Ast.unSymbol $ var "symbol",
     _Expr_indent>>: "indentExpr" ~>
       "style" <~ Ast.indentedExpressionStyle (var "indentExpr") $
       "expr" <~ Ast.indentedExpressionExpr (var "indentExpr") $
-      "lns" <~ Strings.lines (ref printExprDef @@ var "expr") $
+      "lns" <~ Strings.lines (printExpr @@ var "expr") $
       "ilns" <~ cases _IndentStyle (var "style") Nothing [
         _IndentStyle_allLines>>: "idt" ~> Lists.map ("line" ~> var "idt" ++ var "line") (var "lns"),
         _IndentStyle_subsequentLines>>: "idt" ~>
@@ -492,8 +500,8 @@ printExprDef = define "printExpr" $
       "padr" <~ Ast.paddingRight (var "padding") $
       "l" <~ Ast.opExprLhs (var "opExpr") $
       "r" <~ Ast.opExprRhs (var "opExpr") $
-      "lhs" <~ var "idt" @@ var "padl" @@ (ref printExprDef @@ var "l") $
-      "rhs" <~ var "idt" @@ var "padr" @@ (ref printExprDef @@ var "r") $
+      "lhs" <~ var "idt" @@ var "padl" @@ (printExpr @@ var "l") $
+      "rhs" <~ var "idt" @@ var "padr" @@ (printExpr @@ var "r") $
       var "lhs" ++ (var "pad" @@ var "padl") ++ var "sym" ++ (var "pad" @@ var "padr") ++ var "rhs",
     _Expr_brackets>>: "bracketExpr" ~>
       "brackets" <~ Ast.bracketExprBrackets (var "bracketExpr") $
@@ -501,48 +509,48 @@ printExprDef = define "printExpr" $
       "r" <~ Ast.unSymbol (Ast.bracketsClose $ var "brackets") $
       "e" <~ Ast.bracketExprEnclosed (var "bracketExpr") $
       "style" <~ Ast.bracketExprStyle (var "bracketExpr") $
-      "body" <~ ref printExprDef @@ var "e" $
+      "body" <~ printExpr @@ var "e" $
       "doIndent" <~ Ast.blockStyleIndent (var "style") $
       "nlBefore" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
       "nlAfter" <~ Ast.blockStyleNewlineAfterContent (var "style") $
-      "ibody" <~ Maybes.maybe (var "body") ("idt" ~> ref customIndentDef @@ var "idt" @@ var "body") (var "doIndent") $
+      "ibody" <~ Maybes.maybe (var "body") ("idt" ~> customIndent @@ var "idt" @@ var "body") (var "doIndent") $
       "pre" <~ Logic.ifElse (var "nlBefore") (string "\n") (string "") $
       "suf" <~ Logic.ifElse (var "nlAfter") (string "\n") (string "") $
       var "l" ++ var "pre" ++ var "ibody" ++ var "suf" ++ var "r"]
 
-semicolonSepDef :: TBinding ([Expr] -> Expr)
-semicolonSepDef = define "semicolonSep" $
-  ref symbolSepDef @@ string ";" @@ ref inlineStyleDef
+semicolonSep :: TBinding ([Expr] -> Expr)
+semicolonSep = define "semicolonSep" $
+  symbolSep @@ string ";" @@ inlineStyle
 
-sepDef :: TBinding (Op -> [Expr] -> Expr)
-sepDef = define "sep" $
+sep :: TBinding (Op -> [Expr] -> Expr)
+sep = define "sep" $
   "op" ~> "els" ~>
     "h" <~ Lists.head (var "els") $
     "r" <~ Lists.tail (var "els") $
     Logic.ifElse (Lists.null $ var "els")
-      (ref cstDef @@ string "")
+      (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Lists.head $ var "els")
-        (ref ifxDef @@ var "op" @@ var "h" @@ (ref sepDef @@ var "op" @@ var "r")))
+        (ifx @@ var "op" @@ var "h" @@ (sep @@ var "op" @@ var "r")))
 
-spaceSepDef :: TBinding ([Expr] -> Expr)
-spaceSepDef = define "spaceSep" $
-  ref sepDef @@ (Ast.op
-    (ref symDef @@ string "")
+spaceSep :: TBinding ([Expr] -> Expr)
+spaceSep = define "spaceSep" $
+  sep @@ (Ast.op
+    (sym @@ string "")
     (Ast.padding Ast.wsSpace Ast.wsNone)
     (Ast.precedence $ int32 0)
     Ast.associativityNone)
 
-squareBracketsDef :: TBinding Brackets
-squareBracketsDef = define "squareBrackets" $
-  Ast.brackets (ref symDef @@ string "[") (ref symDef @@ string "]")
+squareBrackets :: TBinding Brackets
+squareBrackets = define "squareBrackets" $
+  Ast.brackets (sym @@ string "[") (sym @@ string "]")
 
-symDef :: TBinding (String -> Symbol)
-symDef = define "sym" $
+sym :: TBinding (String -> Symbol)
+sym = define "sym" $
   "s" ~> Ast.symbol (var "s")
 
-symbolSepDef :: TBinding (String -> BlockStyle -> [Expr] -> Expr)
-symbolSepDef = define "symbolSep" $
+symbolSep :: TBinding (String -> BlockStyle -> [Expr] -> Expr)
+symbolSep = define "symbolSep" $
   "symb" ~> "style" ~> "l" ~>
     "h" <~  Lists.head (var "l") $
     "r" <~ Lists.tail (var "l") $
@@ -555,43 +563,43 @@ symbolSepDef = define "symbolSep" $
         Ast.wsBreak
         Ast.wsDoubleBreak)) $
     "commaOp" <~ (Ast.op
-      (ref symDef @@ var "symb")
+      (sym @@ var "symb")
       (Ast.padding Ast.wsNone (var "break"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
     Logic.ifElse (Lists.null $ var "l")
-      (ref cstDef @@ string "")
+      (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
         (Lists.head $ var "l")
-        (ref ifxDef @@ var "commaOp" @@ var "h" @@ (ref symbolSepDef @@ var "symb" @@ var "style" @@ var "r")))
+        (ifx @@ var "commaOp" @@ var "h" @@ (symbolSep @@ var "symb" @@ var "style" @@ var "r")))
 
-tabIndentDef :: TBinding (Expr -> Expr)
-tabIndentDef = define "tabIndent" $
+tabIndent :: TBinding (Expr -> Expr)
+tabIndent = define "tabIndent" $
   "e" ~> Ast.exprIndent $ Ast.indentedExpression
     (Ast.indentStyleAllLines $ string "    ")
     (var "e")
 
-tabIndentDoubleSpaceDef :: TBinding ([Expr] -> Expr)
-tabIndentDoubleSpaceDef = define "tabIndentDoubleSpace" $
-  "exprs" ~> ref tabIndentDef @@ (ref doubleNewlineSepDef @@ var "exprs")
+tabIndentDoubleSpace :: TBinding ([Expr] -> Expr)
+tabIndentDoubleSpace = define "tabIndentDoubleSpace" $
+  "exprs" ~> tabIndent @@ (doubleNewlineSep @@ var "exprs")
 
-tabIndentSingleSpaceDef :: TBinding ([Expr] -> Expr)
-tabIndentSingleSpaceDef = define "tabIndentSingleSpace" $
-  "exprs" ~> ref tabIndentDef @@ (ref newlineSepDef @@ var "exprs")
+tabIndentSingleSpace :: TBinding ([Expr] -> Expr)
+tabIndentSingleSpace = define "tabIndentSingleSpace" $
+  "exprs" ~> tabIndent @@ (newlineSep @@ var "exprs")
 
-unsupportedTypeDef :: TBinding (String -> Expr)
-unsupportedTypeDef = define "unsupportedType" $
-  "label" ~> ref cstDef @@ ("[" ++ var "label" ++ "]")
+unsupportedType :: TBinding (String -> Expr)
+unsupportedType = define "unsupportedType" $
+  "label" ~> cst @@ (string "[" ++ var "label" ++ string "]")
 
-unsupportedVariantDef :: TBinding (String -> a -> Expr)
-unsupportedVariantDef = define "unsupportedVariant" $
+unsupportedVariant :: TBinding (String -> a -> Expr)
+unsupportedVariant = define "unsupportedVariant" $
   "label" ~> "obj" ~>
-    ref cstDef @@ ("[unsupported " ++ var "label" ++ ": " ++ (Literals.showString $ var "obj") ++ "]")
+    cst @@ (string "[unsupported " ++ var "label" ++ string ": " ++ (Literals.showString $ var "obj") ++ string "]")
 
-withCommaDef :: TBinding (Expr -> Expr)
-withCommaDef = define "withComma" $
-  "e" ~> ref noSepDef @@ list [var "e", ref cstDef @@ string ","]
+withComma :: TBinding (Expr -> Expr)
+withComma = define "withComma" $
+  "e" ~> noSep @@ list [var "e", cst @@ string ","]
 
-withSemiDef :: TBinding (Expr -> Expr)
-withSemiDef = define "withSemi" $
-  "e" ~> ref noSepDef @@ list [var "e", ref cstDef @@ string ";"]
+withSemi :: TBinding (Expr -> Expr)
+withSemi = define "withSemi" $
+  "e" ~> noSep @@ list [var "e", cst @@ string ";"]

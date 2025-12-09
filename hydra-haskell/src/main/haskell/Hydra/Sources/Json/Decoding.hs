@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Json.Decoding where
 
@@ -104,55 +103,55 @@ module_ = Module (Namespace "hydra.ext.org.json.decoding") elements
     Just "Decoding functions for JSON data"
   where
    elements = [
-     Phantoms.el decodeArrayDef,
-     Phantoms.el decodeBooleanDef,
-     Phantoms.el decodeFieldDef,
---     Phantoms.el decodeNumberDef, TODO: restore
-     Phantoms.el decodeObjectDef,
-     Phantoms.el decodeOptionalFieldDef,
-     Phantoms.el decodeStringDef]
+     Phantoms.toBinding decodeArray,
+     Phantoms.toBinding decodeBoolean,
+     Phantoms.toBinding decodeField,
+--     Phantoms.toBinding decodeNumber, TODO: restore
+     Phantoms.toBinding decodeObject,
+     Phantoms.toBinding decodeOptionalField,
+     Phantoms.toBinding decodeString]
 
 define :: String -> TTerm a -> TBinding a
 define label = definitionInModule module_ ("decode" <> label)
 
-decodeArrayDef :: TBinding ((Value -> Flow s a) -> Value -> Flow s [a])
-decodeArrayDef  = define "Array" $
-  lambda "decodeElem" $ match _Value (Just $ Flows.fail "expected an array") [
+decodeArray :: TBinding ((Value -> Flow s a) -> Value -> Flow s [a])
+decodeArray  = define "Array" $
+  lambda "decodeElem" $ match _Value (Just $ Flows.fail (string "expected an array")) [
     _Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
 
-decodeBooleanDef :: TBinding (Value -> Flow s Bool)
-decodeBooleanDef  = define "Boolean" $
-  match _Value (Just $ Flows.fail $ "expected a boolean") [
+decodeBoolean :: TBinding (Value -> Flow s Bool)
+decodeBoolean  = define "Boolean" $
+  match _Value (Just $ Flows.fail (string "expected a boolean")) [
     _Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
-decodeFieldDef :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
-decodeFieldDef  = define "Field" $
+decodeField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
+decodeField  = define "Field" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
-      (ref decodeOptionalFieldDef @@ var "decodeValue" @@ var "name" @@ var "m")
+      (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
       (primitive _maybes_maybe
-        @@ (Flows.fail $ Strings.cat2 "missing field: " (var "name"))
+        @@ (Flows.fail $ Strings.cat2 (string "missing field: ") (var "name"))
         @@ (lambda "f" $ Flows.pure $ var "f"))
 
-decodeNumberDef :: TBinding (Value -> Flow s Double)
-decodeNumberDef  = define "Number" $
-  match _Value (Just $ Flows.fail "expected a number") [
+decodeNumber :: TBinding (Value -> Flow s Double)
+decodeNumber  = define "Number" $
+  match _Value (Just $ Flows.fail (string "expected a number")) [
     _Value_number>>: lambda "n" $ Flows.pure $ var "n"]
 
-decodeObjectDef :: TBinding (Value -> Flow s (M.Map String Value))
-decodeObjectDef  = define "Object" $
-  match _Value (Just $ Flows.fail "expected an object") [
+decodeObject :: TBinding (Value -> Flow s (M.Map String Value))
+decodeObject  = define "Object" $
+  match _Value (Just $ Flows.fail (string "expected an object")) [
     _Value_object>>: lambda "o" $ Flows.pure $ var "o"]
 
-decodeOptionalFieldDef :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
-decodeOptionalFieldDef  = define "OptionalField" $
+decodeOptionalField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
+decodeOptionalField  = define "OptionalField" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (primitive _maybes_maybe
         @@ (Flows.pure nothing)
         @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))
 
-decodeStringDef :: TBinding (Value -> Flow s String)
-decodeStringDef  = define "String" $
-  match _Value (Just $ Flows.fail "expected a string") [
+decodeString :: TBinding (Value -> Flow s String)
+decodeString  = define "String" $
+  match _Value (Just $ Flows.fail (string "expected a string")) [
     _Value_string>>: lambda "s" $ Flows.pure $ var "s"]

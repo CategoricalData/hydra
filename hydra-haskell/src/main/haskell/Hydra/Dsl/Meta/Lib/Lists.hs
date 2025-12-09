@@ -1,8 +1,11 @@
 -- | Phantom-typed term DSL for the hydra.lib.lists library
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Lib.Lists where
 
 import Hydra.Phantoms
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
@@ -35,11 +38,11 @@ dropWhile = primitive2 _lists_dropWhile
 elem :: Eq a => TTerm a -> TTerm [a] -> TTerm Bool
 elem = primitive2 _lists_elem
 
-filter :: TTerm (a -> Bool) -> TTerm [a] -> TTerm [a]
-filter = primitive2 _lists_filter
+filter :: AsTerm t [a] => TTerm (a -> Bool) -> t -> TTerm [a]
+filter p xs = primitive2 _lists_filter p (asTerm xs)
 
-foldl :: TTerm (b -> a -> b) -> TTerm b -> TTerm [a] -> TTerm b
-foldl = primitive3 _lists_foldl
+foldl :: AsTerm f (b -> a -> b) => f -> TTerm b -> TTerm [a] -> TTerm b
+foldl f = primitive3 _lists_foldl (asTerm f)
 
 group :: Eq a => TTerm [a] -> TTerm [[a]]
 group = primitive1 _lists_group
@@ -62,8 +65,10 @@ last = primitive1 _lists_last
 length :: TTerm [a] -> TTerm Int
 length = primitive1 _lists_length
 
-map :: TTerm (a -> b) -> TTerm [a] -> TTerm [b]
-map = primitive2 _lists_map
+-- | Map a function over a list
+-- Accepts TTerm or TBinding for both arguments (via AsTerm)
+map :: (AsTerm f (a -> b), AsTerm t [a]) => f -> t -> TTerm [b]
+map f l = primitive2 _lists_map (asTerm f) (asTerm l)
 
 nub :: Eq a => TTerm [a] -> TTerm [a]
 nub = primitive1 _lists_nub
@@ -74,8 +79,8 @@ null = primitive1 _lists_null
 pure :: TTerm a -> TTerm [a]
 pure = primitive1 _lists_pure
 
-replicate :: TTerm Int -> TTerm a -> TTerm [a]
-replicate = primitive2 _lists_replicate
+replicate :: AsTerm t a => TTerm Int -> t -> TTerm [a]
+replicate n x = primitive2 _lists_replicate n (asTerm x)
 
 reverse :: TTerm [a] -> TTerm [a]
 reverse = primitive1 _lists_reverse

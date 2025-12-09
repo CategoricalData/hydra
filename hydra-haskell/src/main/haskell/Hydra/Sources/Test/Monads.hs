@@ -18,7 +18,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.monads") elements [Monads.module_] [] $
     Just "Test cases for hydra.monads functions"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 testTrace :: TTerm Term
 testTrace = traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
@@ -30,7 +30,7 @@ pureTests = subgroup "pure" [
   test "string" (string "hello")]
   where
     test testName val = evalCaseWithTags testName []
-      (unFlowTerm @@ (metaref Monads.pureDef @@ val) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.pure @@ val) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just val) unit testTrace)
 
 -- | Test cases for map: transforms the value inside a flow
@@ -40,7 +40,7 @@ mapTests = subgroup "map" [
   test "map absolute" (primitive _math_abs) (int32 (-3)) (int32 3)]
   where
     test testName fn inVal outVal = evalCaseWithTags testName [tag_requiresInterp]
-      (unFlowTerm @@ (metaref Monads.mapDef @@ fn @@ (metaref Monads.pureDef @@ inVal)) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.map @@ fn @@ (metaref Monads.pure @@ inVal)) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just outVal) unit testTrace)
 
 -- | Test cases for bind: chains flow computations together
@@ -50,7 +50,7 @@ bindTests = subgroup "bind" [
   test "bind multiply" (primitive _math_mul) (int32 3) (int32 4) (int32 12)]
   where
     test testName op x y result = evalCaseWithTags testName [tag_requiresInterp]
-      (unFlowTerm @@ (metaref Monads.bindDef @@ (metaref Monads.pureDef @@ x) @@ (lambda "n" (metaref Monads.pureDef @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
+      (unFlowTerm @@ (metaref Monads.bind @@ (metaref Monads.pure @@ x) @@ (lambda "n" (metaref Monads.pure @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just result) unit testTrace)
 
 -- | Build an empty trace with custom messages
@@ -67,16 +67,16 @@ errorTraceTests = subgroup "error traces" [
   evalCaseWithTags "Error traces are in the right order" [tag_requiresInterp]
     -- Input: withTrace "one" $ withTrace "two" $ fail "oops"
     (unFlowTerm
-      @@ (metaref Monads.withTraceDef @@ string "one"
-          @@ (metaref Monads.withTraceDef @@ string "two"
-              @@ (metaref Monads.failDef @@ string "oops")))
+      @@ (metaref Monads.withTrace @@ string "one"
+          @@ (metaref Monads.withTrace @@ string "two"
+              @@ (metaref Monads.fail @@ string "oops")))
       @@ unit
       @@ testTrace)
     -- Output: FlowState Nothing () (Trace [] ["Error: oops (one > two)"] {})
     (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: oops (one > two)"]))]
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.monads functions" $
     supergroup "monads" [
       pureTests,

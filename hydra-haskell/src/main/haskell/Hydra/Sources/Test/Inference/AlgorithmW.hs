@@ -22,21 +22,21 @@ module_ = Module (Namespace "hydra.test.inference.algorithmW") elements
     (Just "Algorithm W inference tests")
   where
     elements = [
-      el allTestsDef,
-      el testGroupForSystemFDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding testGroupForSystemF]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
   Phantoms.doc "Algorithm W test cases" $
   supergroup "Algorithm W test cases" [
-    ref testGroupForSystemFDef]
+    testGroupForSystemF]
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
-testGroupForSystemFDef :: TBinding TestGroup
-testGroupForSystemFDef = define "testGroupForSystemF" $
+testGroupForSystemF :: TBinding TestGroup
+testGroupForSystemF = define "testGroupForSystemF" $
   subgroup "STLC to System F" [
 
 --  --Untyped input:

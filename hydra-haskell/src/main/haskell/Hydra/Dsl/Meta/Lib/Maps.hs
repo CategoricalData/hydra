@@ -1,8 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Phantom-typed term DSL for the hydra.lib.maps library
 
 module Hydra.Dsl.Meta.Lib.Maps where
 
 import Hydra.Phantoms
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
@@ -28,8 +31,8 @@ filter = primitive2 _maps_filter
 filterWithKey :: TTerm (k -> v -> Bool) -> TTerm (Map k v) -> TTerm (Map k v)
 filterWithKey = primitive2 _maps_filterWithKey
 
-findWithDefault :: TTerm v -> TTerm k -> TTerm (Map k v) -> TTerm v
-findWithDefault = primitive3 _maps_findWithDefault
+findWithDefault :: AsTerm t v => t -> TTerm k -> TTerm (Map k v) -> TTerm v
+findWithDefault def = primitive3 _maps_findWithDefault (asTerm def)
 
 fromList :: TTerm [(k, v)] -> TTerm (Map k v)
 fromList = primitive1 _maps_fromList
@@ -40,11 +43,11 @@ insert = primitive3 _maps_insert
 keys :: TTerm (Map k v) -> TTerm [k]
 keys = primitive1 _maps_keys
 
-lookup :: TTerm k -> TTerm (Map k v) -> TTerm (Maybe v)
-lookup = primitive2 _maps_lookup
+lookup :: AsTerm t k => t -> TTerm (Map k v) -> TTerm (Maybe v)
+lookup k = primitive2 _maps_lookup (asTerm k)
 
-map :: TTerm (v1 -> v2) -> TTerm (Map k v1) -> TTerm (Map k v2)
-map = primitive2 _maps_map
+map :: AsTerm f (v1 -> v2) => f -> TTerm (Map k v1) -> TTerm (Map k v2)
+map f = primitive2 _maps_map (asTerm f)
 
 mapKeys :: TTerm (k1 -> k2) -> TTerm (Map k1 v) -> TTerm (Map k2 v)
 mapKeys = primitive2 _maps_mapKeys

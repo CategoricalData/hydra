@@ -1,9 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Adapt.Simple where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLiteral, adaptLiteralType,
+  adaptLiteralTypesMap, adaptLiteralValue, adaptPrimitive, adaptTerm, adaptType, adaptTypeScheme,
+  dataGraphToDefinitions, literalTypeSupported, schemaGraphToDefinitions, termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -73,33 +75,33 @@ module_ = Module (Namespace "hydra.adapt.simple") elements
     Just "Simple, one-way adapters for types and terms"
   where
     elements = [
-      el adaptFloatTypeDef,
-      el adaptDataGraphDef,
-      el adaptGraphSchemaDef,
-      el adaptIntegerTypeDef,
-      el adaptLiteralDef,
-      el adaptLiteralTypeDef,
-      el adaptLiteralTypesMapDef,
-      el adaptLiteralValueDef,
-      el adaptPrimitiveDef,
-      el adaptTermDef,
-      el adaptTypeDef,
-      el adaptTypeSchemeDef,
-      el dataGraphToDefinitionsDef,
-      el literalTypeSupportedDef,
-      el schemaGraphToDefinitionsDef,
-      el termAlternativesDef,
-      el typeAlternativesDef]
+      toBinding adaptFloatType,
+      toBinding adaptDataGraph,
+      toBinding adaptGraphSchema,
+      toBinding adaptIntegerType,
+      toBinding adaptLiteral,
+      toBinding adaptLiteralType,
+      toBinding adaptLiteralTypesMap,
+      toBinding adaptLiteralValue,
+      toBinding adaptPrimitive,
+      toBinding adaptTerm,
+      toBinding adaptType,
+      toBinding adaptTypeScheme,
+      toBinding dataGraphToDefinitions,
+      toBinding literalTypeSupported,
+      toBinding schemaGraphToDefinitions,
+      toBinding termAlternatives,
+      toBinding typeAlternatives]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-adaptFloatTypeDef :: TBinding (LanguageConstraints -> FloatType -> Maybe FloatType)
-adaptFloatTypeDef = define "adaptFloatType" $
+adaptFloatType :: TBinding (LanguageConstraints -> FloatType -> Maybe FloatType)
+adaptFloatType = define "adaptFloatType" $
   doc "Attempt to adapt a floating-point type using the given language constraints" $
   "constraints" ~> "ft" ~>
   "supported" <~ Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints") $
-  "alt" <~ (ref adaptFloatTypeDef @@ var "constraints") $
+  "alt" <~ (adaptFloatType @@ var "constraints") $
   "forUnsupported" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
 --    _FloatType_bigfloat>>: constant nothing,
@@ -110,16 +112,16 @@ adaptFloatTypeDef = define "adaptFloatType" $
     (just $ var "ft")
     (var "forUnsupported" @@ var "ft")
 
-adaptDataGraphDef :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
-adaptDataGraphDef = define "adaptDataGraph" $
+adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
+adaptDataGraph = define "adaptDataGraph" $
   doc "Adapt a graph and its schema to the given language constraints, prior to inference" $
   "constraints" ~> "doExpand" ~> "graph0" ~>
   "expand" <~ ("graph" ~> "gterm" ~>
-    "tx" <<~ ref Schemas.graphToTypeContextDef @@ var "graph" $
-    "gterm1" <<~ ref Reduction.etaExpandTypedTermDef @@ var "tx" @@ var "gterm" $
-    produce $ ref Rewriting.liftLambdaAboveLetDef
-      @@ (ref Rewriting.unshadowVariablesDef @@ (ref Rewriting.removeTypesFromTermDef @@ var "gterm1"))) $
-  "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
+    "tx" <<~ Schemas.graphToTypeContext @@ var "graph" $
+    "gterm1" <<~ Reduction.etaExpandTypedTerm @@ var "tx" @@ var "gterm" $
+    produce $ Rewriting.liftLambdaAboveLet
+      @@ (Rewriting.unshadowVariables @@ (Rewriting.removeTypesFromTerm @@ var "gterm1"))) $
+  "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
   "body0" <~ Graph.graphBody (var "graph0") $
@@ -127,25 +129,25 @@ adaptDataGraphDef = define "adaptDataGraph" $
   "schema0" <~ Graph.graphSchema (var "graph0") $
   "schema1" <<~ optCases (var "schema0")
     (produce nothing)
---    ("sg" ~> Flows.fail $ "schema graph: " ++ (ref ShowGraph.graphDef @@ var "sg")) $
+--    ("sg" ~> Flows.fail $ "schema graph: " ++ (ShowGraph.graph @@ var "sg")) $
     ( "sg" ~>
-      "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "sg" $
-      "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-      "emap" <~ ref Schemas.typesToElementsDef @@ var "tmap1" $
+      "tmap0" <<~ Schemas.graphAsTypes @@ var "sg" $
+      "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+      "emap" <~ Schemas.typesToElements @@ var "tmap1" $
       produce $ just $ Graph.graphWithElements (var "sg") (var "emap")) $
-  "gterm0" <~ ref Schemas.graphAsTermDef @@ var "graph0" $
+  "gterm0" <~ Schemas.graphAsTerm @@ var "graph0" $
   "gterm1" <<~ Logic.ifElse (var "doExpand")
     (var "expand" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
-  "gterm2" <<~ ref adaptTermDef @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
-  "els1" <~ ref Schemas.termAsGraphDef @@ var "gterm2" $
-  "prims1" <<~ Flows.mapElems (ref adaptPrimitiveDef @@ var "constraints" @@ var "litmap") (var "prims0") $
+  "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
+  "els1" <~ Schemas.termAsGraph @@ var "gterm2" $
+  "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
 
---  Flows.fail $ "adapted data graph: " ++ (ref ShowCore.termDef @@ var "gterm2")
---  Flows.fail $ "adapted elements: " ++ (Strings.intercalate "," $ Lists.map (ref ShowCore.bindingDef) (Maps.elems $ var "els1"))
+--  Flows.fail $ "adapted data graph: " ++ (ShowCore.term @@ var "gterm2")
+--  Flows.fail $ "adapted elements: " ++ (Strings.intercalate "," $ Lists.map (ShowCore.binding) (Maps.elems $ var "els1"))
 --  Flows.fail $ "schema graph: " ++ (optCases (var "schema1")
 --    ("none")
---    ("sg" ~> ref ShowGraph.graphDef @@ var "sg"))
+--    ("sg" ~> ShowGraph.graph @@ var "sg"))
 --  "gfinal" <~ Graph.graph
 --    (var "els1")
 --    (var "env0")
@@ -153,7 +155,7 @@ adaptDataGraphDef = define "adaptDataGraph" $
 --    Core.termUnit
 --    (var "prims1")
 --    (var "schema1") $
---  Flows.fail $ "final graph: " ++ (ref ShowGraph.graphDef @@ var "gfinal")
+--  Flows.fail $ "final graph: " ++ (ShowGraph.graph @@ var "gfinal")
 
   produce $ Graph.graph
     (var "els1")
@@ -163,24 +165,24 @@ adaptDataGraphDef = define "adaptDataGraph" $
     (var "prims1")
     (var "schema1")
 
-adaptGraphSchemaDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
-adaptGraphSchemaDef = define "adaptGraphSchema" $
+adaptGraphSchema :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
+adaptGraphSchema = define "adaptGraphSchema" $
   doc "Adapt a schema graph to the given language constraints" $
   "constraints" ~> "litmap" ~> "types0" ~>
   "mapPair" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $
     "typ" <~ Pairs.second (var "pair") $
-    "typ1" <<~ ref adaptTypeDef @@ var "constraints" @@ var "litmap" @@ var "typ" $
+    "typ1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
     produce $ pair (var "name") (var "typ1")) $
   "pairs" <<~ Flows.mapList (var "mapPair") (Maps.toList $ var "types0") $
   produce $ Maps.fromList (var "pairs")
 
-adaptIntegerTypeDef :: TBinding (LanguageConstraints -> IntegerType -> Maybe IntegerType)
-adaptIntegerTypeDef = define "adaptIntegerType" $
+adaptIntegerType :: TBinding (LanguageConstraints -> IntegerType -> Maybe IntegerType)
+adaptIntegerType = define "adaptIntegerType" $
   doc "Attempt to adapt an integer type using the given language constraints" $
   "constraints" ~> "it" ~>
   "supported" <~ Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints") $
-  "alt" <~ (ref adaptIntegerTypeDef @@ var "constraints") $
+  "alt" <~ (adaptIntegerType @@ var "constraints") $
   "forUnsupported" <~ ("it" ~> cases _IntegerType (var "it")
     Nothing [
     _IntegerType_bigint>>: constant nothing,
@@ -196,8 +198,8 @@ adaptIntegerTypeDef = define "adaptIntegerType" $
     (just $ var "it")
     (var "forUnsupported" @@ var "it")
 
-adaptLiteralDef :: TBinding (LiteralType -> Literal -> Literal)
-adaptLiteralDef = define "adaptLiteral" $
+adaptLiteral :: TBinding (LiteralType -> Literal -> Literal)
+adaptLiteral = define "adaptLiteral" $
   doc "Convert a literal to a different type" $
   "lt" ~> "l" ~>
   cases _Literal (var "l")
@@ -208,71 +210,71 @@ adaptLiteralDef = define "adaptLiteral" $
     _Literal_boolean>>: "b" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
-        ref Literals.bigintToIntegerValueDef @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
+        Literals.bigintToIntegerValue @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
     _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: "ft" ~> Core.literalFloat $
-        ref Literals.bigfloatToFloatValueDef @@ var "ft" @@ (ref Literals.floatValueToBigfloatDef @@ var "f")],
+        Literals.bigfloatToFloatValue @@ var "ft" @@ (Literals.floatValueToBigfloat @@ var "f")],
     _Literal_integer>>: "i" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
-        ref Literals.bigintToIntegerValueDef @@ var "it" @@ (ref Literals.integerValueToBigintDef @@ var "i")]]
+        Literals.bigintToIntegerValue @@ var "it" @@ (Literals.integerValueToBigint @@ var "i")]]
 
-adaptLiteralTypeDef :: TBinding (LanguageConstraints -> LiteralType -> Maybe LiteralType)
-adaptLiteralTypeDef = define "adaptLiteralType" $
+adaptLiteralType :: TBinding (LanguageConstraints -> LiteralType -> Maybe LiteralType)
+adaptLiteralType = define "adaptLiteralType" $
   doc "Attempt to adapt a literal type using the given language constraints" $
   "constraints" ~> "lt" ~>
   "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
     (Just nothing) [
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
     _LiteralType_boolean>>: constant $ Maybes.map (unaryFunction Core.literalTypeInteger) $
-      ref adaptIntegerTypeDef @@ var "constraints" @@ Core.integerTypeInt8,
+      adaptIntegerType @@ var "constraints" @@ Core.integerTypeInt8,
     _LiteralType_float>>: "ft" ~> Maybes.map (unaryFunction Core.literalTypeFloat) $
-      ref adaptFloatTypeDef @@ var "constraints" @@ var "ft",
+      adaptFloatType @@ var "constraints" @@ var "ft",
     _LiteralType_integer>>: "it" ~> Maybes.map (unaryFunction Core.literalTypeInteger) $
-      ref adaptIntegerTypeDef @@ var "constraints" @@ var "it"]) $
-  Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+      adaptIntegerType @@ var "constraints" @@ var "it"]) $
+  Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
     nothing
     (var "forUnsupported" @@ var "lt")
 
-adaptLiteralTypesMapDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType)
-adaptLiteralTypesMapDef = define "adaptLiteralTypesMap" $
+adaptLiteralTypesMap :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType)
+adaptLiteralTypesMap = define "adaptLiteralTypesMap" $
   doc "Derive a map of adapted literal types for the given language constraints" $
   "constraints" ~>
-  "tryType" <~ ("lt" ~> optCases (ref adaptLiteralTypeDef @@ var "constraints" @@ var "lt")
+  "tryType" <~ ("lt" ~> optCases (adaptLiteralType @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
-  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (ref Reflect.literalTypesDef)
+  Maps.fromList $ Maybes.cat $ Lists.map (var "tryType") (Reflect.literalTypes)
 
-adaptLiteralValueDef :: TBinding (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
-adaptLiteralValueDef = define "adaptLiteralValue" $
+adaptLiteralValue :: TBinding (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
+adaptLiteralValue = define "adaptLiteralValue" $
   doc "Adapt a literal value using the given language constraints" $
   "litmap" ~> "lt" ~> "l" ~> optCases (Maps.lookup (var "lt") (var "litmap"))
-    (Core.literalString $ ref ShowCore.literalDef @@ var "l")
-    ("lt2" ~> ref adaptLiteralDef @@ var "lt2" @@ var "l")
+    (Core.literalString $ ShowCore.literal @@ var "l")
+    ("lt2" ~> adaptLiteral @@ var "lt2" @@ var "l")
 
-adaptPrimitiveDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Flow s Primitive)
-adaptPrimitiveDef = define "adaptPrimitive" $
+adaptPrimitive :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Flow s Primitive)
+adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
   "ts0" <~ Graph.primitiveType (var "prim0") $
-  "ts1" <<~ ref adaptTypeSchemeDef @@ var "constraints" @@ var "litmap" @@ var "ts0" $
+  "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
   produce $ Graph.primitiveWithType (var "prim0") (var "ts1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
-adaptTermDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
-adaptTermDef = define "adaptTerm" $
+adaptTerm :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
+adaptTerm = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "litmap" ~> "term0" ~>
   "rewrite" <~ ("recurse" ~> "term0" ~> lets [
     "forSupported">: ("term" ~> cases _Term (var "term")
       (Just $ produce $ just $ var "term") [
       _Term_literal>>: "l" ~>
-        "lt" <~ ref Reflect.literalTypeDef @@ var "l" $
-        produce $ just $ Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+        "lt" <~ Reflect.literalType @@ var "l" $
+        produce $ just $ Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
           (var "term")
-          (Core.termLiteral $ ref adaptLiteralValueDef @@ var "litmap" @@ var "lt" @@ var "l")]),
+          (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "forNonNull">: ("alts" ~>
         "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
@@ -282,11 +284,11 @@ adaptTermDef = define "adaptTerm" $
       "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
         (produce nothing)
         (var "forNonNull" @@ var "alts"))] $
-      "alts" <<~ ref termAlternativesDef @@ var "term" $
+      "alts" <<~ termAlternatives @@ var "term" $
       var "tryAlts" @@ var "alts"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
-        (ref Reflect.termVariantDef @@ var "term")
+        (Reflect.termVariant @@ var "term")
         (Coders.languageConstraintsTermVariants $ var "constraints") $
       Logic.ifElse (var "supportedVariant")
         (var "forSupported" @@ var "term")
@@ -294,18 +296,18 @@ adaptTermDef = define "adaptTerm" $
     "term1" <<~ var "recurse" @@ var "term0" $
     "mterm" <<~ var "tryTerm" @@ var "term1" $
     optCases (var "mterm")
-      (Flows.fail $ "no alternatives for term: " ++ (ref ShowCore.termDef @@ var "term1"))
+      (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
       ("term2" ~> produce $ var "term2")) $
-  ref Rewriting.rewriteTermMDef @@ var "rewrite" @@ var "term0"
+  Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
-adaptTypeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
-adaptTypeDef = define "adaptType" $
+adaptType :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
+adaptType = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
   lets [
   "forSupported">: ("typ" ~> cases _Type (var "typ")
     (Just $ just $ var "typ") [
-    _Type_literal>>: "lt" ~> Logic.ifElse (ref literalTypeSupportedDef @@ var "constraints" @@ var "lt")
+    _Type_literal>>: "lt" ~> Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
       (just $ var "typ")
       (optCases (Maps.lookup (var "lt") (var "litmap"))
         (just $ Core.typeLiteral Core.literalTypeString)
@@ -316,11 +318,11 @@ adaptTypeDef = define "adaptType" $
       (optCases (var "tryType" @@ Lists.head (var "alts"))
         (var "tryAlts" @@ Lists.tail (var "alts"))
         ("t" ~> just $ var "t"))) $
-    "alts" <~ ref typeAlternativesDef @@ var "typ" $
+    "alts" <~ typeAlternatives @@ var "typ" $
     var "tryAlts" @@ var "alts"),
   "tryType">: ("typ" ~>
     "supportedVariant" <~ Sets.member
-      (ref Reflect.typeVariantDef @@ var "typ")
+      (Reflect.typeVariant @@ var "typ")
       (Coders.languageConstraintsTypeVariants $ var "constraints") $
     Logic.ifElse (var "supportedVariant")
       (var "forSupported" @@ var "typ")
@@ -328,21 +330,21 @@ adaptTypeDef = define "adaptType" $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
-      (Flows.fail $ "no alternatives for type: " ++ (ref ShowCore.typeDef @@ var "typ"))
+      (Flows.fail $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
       ("type2" ~> produce $ var "type2")) $
-  ref Rewriting.rewriteTypeMDef @@ var "rewrite" @@ var "type0"
+  Rewriting.rewriteTypeM @@ var "rewrite" @@ var "type0"
 
-adaptTypeSchemeDef :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Flow s TypeScheme)
-adaptTypeSchemeDef = define "adaptTypeScheme" $
+adaptTypeScheme :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Flow s TypeScheme)
+adaptTypeScheme = define "adaptTypeScheme" $
   doc "Adapt a type scheme to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "ts0" ~>
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
   "t0" <~ Core.typeSchemeType (var "ts0") $
-  "t1" <<~ ref adaptTypeDef @@ var "constraints" @@ var "litmap" @@ var "t0" $
+  "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   produce $ Core.typeScheme (var "vars0") (var "t1")
 
-dataGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
-dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
+dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
+dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints, perform inference,"
     <> " then return a corresponding term definition for each element name.") $
@@ -351,17 +353,17 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
   -- This extra, early inference step is necessary so that elements are annotated with correct types,
   -- as needed for eta expansion.
   "graphi" <<~ Logic.ifElse (var "doExpand")
-    (ref Inference.inferGraphTypesDef @@ var "graph")
+    (Inference.inferGraphTypes @@ var "graph")
     (produce $ var "graph") $
 --  "graphi" <~ var "graph" $
 
-  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
---  "graph1" <<~ ref adaptDataGraphDef @@ var "constraints" @@ false @@ var "graphi" $
+  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
+--  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ false @@ var "graphi" $
 
---  Flows.fail ("adapted graph: " ++ (ref ShowGraph.graphDef @@ var "graph1"))
+--  Flows.fail ("adapted graph: " ++ (ShowGraph.graph @@ var "graph1"))
 
   -- Perform inference on the adapted graph
-  "graph2" <<~ ref Inference.inferGraphTypesDef @@ var "graph1" $
+  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions
   "toDef" <~ ("el" ~>
@@ -369,7 +371,7 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
     Module.termDefinition
       (Core.bindingName $ var "el")
       (Core.bindingTerm $ var "el")
-      (ref Schemas.typeSchemeToFTypeDef @@ var "ts")) $
+      (Schemas.typeSchemeToFType @@ var "ts")) $
 
   produce $ pair
     (var "graph2")
@@ -378,8 +380,8 @@ dataGraphToDefinitionsDef = define "dataGraphToDefinitions" $
         Lists.map ("n" ~> Maybes.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graph2")) (var "names"))
       (var "nameLists"))
 
-literalTypeSupportedDef :: TBinding (LanguageConstraints -> LiteralType -> Bool)
-literalTypeSupportedDef = define "literalTypeSupported" $
+literalTypeSupported :: TBinding (LanguageConstraints -> LiteralType -> Bool)
+literalTypeSupported = define "literalTypeSupported" $
   doc "Check if a literal type is supported by the given language constraints" $
   "constraints" ~> "lt" ~>
   "forType" <~ ("lt" ~> cases _LiteralType (var "lt")
@@ -388,20 +390,20 @@ literalTypeSupportedDef = define "literalTypeSupported" $
       _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")]) $
   Logic.ifElse
     (Sets.member
-      (ref Reflect.literalTypeVariantDef @@ var "lt")
+      (Reflect.literalTypeVariant @@ var "lt")
       (Coders.languageConstraintsLiteralVariants $ var "constraints"))
     (var "forType" @@ var "lt")
     false
 
-schemaGraphToDefinitionsDef :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Flow s (M.Map Name Type, [[TypeDefinition]]))
-schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
+schemaGraphToDefinitions :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Flow s (M.Map Name Type, [[TypeDefinition]]))
+schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   doc ("Given a schema graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints,"
     <> " then return a corresponding type definition for each element name.") $
   "constraints" ~> "graph" ~> "nameLists" ~>
-  "litmap" <~ ref adaptLiteralTypesMapDef @@ var "constraints" $
-  "tmap0" <<~ ref Schemas.graphAsTypesDef @@ var "graph" $
-  "tmap1" <<~ ref adaptGraphSchemaDef @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+  "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
+  "tmap0" <<~ Schemas.graphAsTypes @@ var "graph" $
+  "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
   "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Pairs.second $ var "pair")) $
   produce $ pair
     (var "tmap1")
@@ -409,20 +411,20 @@ schemaGraphToDefinitionsDef = define "schemaGraphToDefinitions" $
       ("names" ~> Lists.map (var "toDef") $
         Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
---  Flows.fail $ "schema graph for definitions: " ++ (ref ShowGraph.graphDef @@ var "graph")
+--  Flows.fail $ "schema graph for definitions: " ++ (ShowGraph.graph @@ var "graph")
 
-termAlternativesDef :: TBinding (Term -> Flow Graph [Term])
-termAlternativesDef = define "termAlternatives" $
+termAlternatives :: TBinding (Term -> Flow Graph [Term])
+termAlternatives = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
   "term" ~> cases _Term (var "term")
-    (Just $ produce $ list []) [
+    (Just $ produce $ list ([] :: [TTerm Term])) [
     _Term_annotated>>: "at" ~>
       "term2" <~ Core.annotatedTermBody (var "at") $
       produce $ list [
         var "term2"], -- TODO: lossy
     _Term_maybe>>: "ot" ~> produce $ list [
       Core.termList $ optCases (var "ot")
-        (list [])
+        (list ([] :: [TTerm Term]))
         ("term2" ~> list [var "term2"])],
     -- Note: no type abstractions or type applications, as we are not expecting System F terms here
     _Term_union>>: "inj" ~>
@@ -435,7 +437,7 @@ termAlternativesDef = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<~ ref Schemas.requireUnionTypeDef @@ var "tname" $
+      "rt" <<~ Schemas.requireUnionType @@ var "tname" $
       produce $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
     _Term_unit>>: constant $ produce $ list [
@@ -445,11 +447,11 @@ termAlternativesDef = define "termAlternatives" $
       produce $ list [
          var "term2"]]
 
-typeAlternativesDef :: TBinding (Type -> [Type])
-typeAlternativesDef = define "typeAlternatives" $
+typeAlternatives :: TBinding (Type -> [Type])
+typeAlternatives = define "typeAlternatives" $
   doc "Find a list of alternatives for a given type, if any" $
   "type" ~> cases _Type (var "type")
-    (Just $ list []) [
+    (Just $ list ([] :: [TTerm Type])) [
     _Type_annotated>>: "at" ~>
       "type2" <~ Core.annotatedTypeBody (var "at") $
        list [var "type2"], -- TODO: lossy

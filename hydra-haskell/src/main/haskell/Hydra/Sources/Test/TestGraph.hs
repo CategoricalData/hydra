@@ -38,50 +38,50 @@ module_ = Module (Namespace "hydra.test.testGraph") elements
     Just ("A module defining the graph used in the test suite.")
   where
    elements = [
-     el testTermsDef,
-     el testTypesDef,
-     el testNamespaceDef,
-     el testSchemaNamespaceDef]
+     Phantoms.toBinding testTerms,
+     Phantoms.toBinding testTypes,
+     Phantoms.toBinding testNamespace,
+     Phantoms.toBinding testSchemaNamespace]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-testTermsDef :: TBinding (M.Map Name Term)
-testTermsDef = define "testTerms" $
+testTerms :: TBinding (M.Map Name Term)
+testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
-    Phantoms.pair (name "testDataArthur") (ref TestTerms.testDataArthurDef)]
+    Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testNamespaceDef :: TBinding Namespace
-testNamespaceDef = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
+testNamespace :: TBinding Namespace
+testNamespace = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
 
-testTypesDef :: TBinding (M.Map Name Type)
-testTypesDef = define "testTypes" $
+testTypes :: TBinding (M.Map Name Type)
+testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
-    Phantoms.pair (ref TestTypes.testTypeBuddyListANameDef) (ref TestTypes.testTypeBuddyListADef),
-    Phantoms.pair (ref TestTypes.testTypeBuddyListBNameDef) (ref TestTypes.testTypeBuddyListBDef),
-    Phantoms.pair (ref TestTypes.testTypeComparisonNameDef) (ref TestTypes.testTypeComparisonDef),
-    Phantoms.pair (ref TestTypes.testTypeEitherNameDef) (ref TestTypes.testTypeEitherDef),
-    Phantoms.pair (ref TestTypes.testTypeFlowNameDef) (ref TestTypes.testTypeFlowDef),
-    Phantoms.pair (ref TestTypes.testTypeFlowStateNameDef) (ref TestTypes.testTypeFlowStateDef),
-    Phantoms.pair (ref TestTypes.testTypeHydraLiteralTypeNameDef) (ref TestTypes.testTypeHydraLiteralTypeDef),
-    Phantoms.pair (ref TestTypes.testTypeHydraTypeNameDef) (ref TestTypes.testTypeHydraTypeDef),
-    Phantoms.pair (ref TestTypes.testTypeIntListNameDef) (ref TestTypes.testTypeIntListDef),
-    Phantoms.pair (ref TestTypes.testTypeLatLonNameDef) (ref TestTypes.testTypeLatLonDef),
-    Phantoms.pair (ref TestTypes.testTypeLatLonPolyNameDef) (ref TestTypes.testTypeLatLonPolyDef),
-    Phantoms.pair (ref TestTypes.testTypeListNameDef) (ref TestTypes.testTypeListDef),
-    Phantoms.pair (ref TestTypes.testTypeNumberNameDef) (ref TestTypes.testTypeNumberDef),
-    Phantoms.pair (ref TestTypes.testTypePersonNameDef) (ref TestTypes.testTypePersonDef),
-    Phantoms.pair (ref TestTypes.testTypePersonOrSomethingNameDef) (ref TestTypes.testTypePersonOrSomethingDef),
-    Phantoms.pair (ref TestTypes.testTypePolymorphicWrapperNameDef) (ref TestTypes.testTypePolymorphicWrapperDef),
-    Phantoms.pair (ref TestTypes.testTypeSimpleNumberNameDef) (ref TestTypes.testTypeSimpleNumberDef),
-    Phantoms.pair (ref TestTypes.testTypeStringAliasNameDef) (ref TestTypes.testTypeStringAliasDef),
-    Phantoms.pair (ref TestTypes.testTypeSymmetricTripleNameDef) (ref TestTypes.testTypeSymmetricTripleDef),
-    Phantoms.pair (ref TestTypes.testTypeTimestampNameDef) (ref TestTypes.testTypeTimestampDef),
-    Phantoms.pair (ref TestTypes.testTypeTraceNameDef) (ref TestTypes.testTypeTraceDef),
-    Phantoms.pair (ref TestTypes.testTypeTripleNameDef) (ref TestTypes.testTypeTripleDef),
-    Phantoms.pair (ref TestTypes.testTypeUnionMonomorphicNameDef) (ref TestTypes.testTypeUnionMonomorphicDef),
-    Phantoms.pair (ref TestTypes.testTypeUnionPolymorphicRecursiveNameDef) (ref TestTypes.testTypeUnionPolymorphicRecursiveDef),
-    Phantoms.pair (ref TestTypes.testTypeUnitNameDef) (ref TestTypes.testTypeUnitDef)]
+    Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,
+    Phantoms.pair TestTypes.testTypeBuddyListBName TestTypes.testTypeBuddyListB,
+    Phantoms.pair TestTypes.testTypeComparisonName TestTypes.testTypeComparison,
+    Phantoms.pair TestTypes.testTypeEitherName TestTypes.testTypeEither,
+    Phantoms.pair TestTypes.testTypeFlowName TestTypes.testTypeFlow,
+    Phantoms.pair TestTypes.testTypeFlowStateName TestTypes.testTypeFlowState,
+    Phantoms.pair TestTypes.testTypeHydraLiteralTypeName TestTypes.testTypeHydraLiteralType,
+    Phantoms.pair TestTypes.testTypeHydraTypeName TestTypes.testTypeHydraType,
+    Phantoms.pair TestTypes.testTypeIntListName TestTypes.testTypeIntList,
+    Phantoms.pair TestTypes.testTypeLatLonName TestTypes.testTypeLatLon,
+    Phantoms.pair TestTypes.testTypeLatLonPolyName TestTypes.testTypeLatLonPoly,
+    Phantoms.pair TestTypes.testTypeListName TestTypes.testTypeList,
+    Phantoms.pair TestTypes.testTypeNumberName TestTypes.testTypeNumber,
+    Phantoms.pair TestTypes.testTypePersonName TestTypes.testTypePerson,
+    Phantoms.pair TestTypes.testTypePersonOrSomethingName TestTypes.testTypePersonOrSomething,
+    Phantoms.pair TestTypes.testTypePolymorphicWrapperName TestTypes.testTypePolymorphicWrapper,
+    Phantoms.pair TestTypes.testTypeSimpleNumberName TestTypes.testTypeSimpleNumber,
+    Phantoms.pair TestTypes.testTypeStringAliasName TestTypes.testTypeStringAlias,
+    Phantoms.pair TestTypes.testTypeSymmetricTripleName TestTypes.testTypeSymmetricTriple,
+    Phantoms.pair TestTypes.testTypeTimestampName TestTypes.testTypeTimestamp,
+    Phantoms.pair TestTypes.testTypeTraceName TestTypes.testTypeTrace,
+    Phantoms.pair TestTypes.testTypeTripleName TestTypes.testTypeTriple,
+    Phantoms.pair TestTypes.testTypeUnionMonomorphicName TestTypes.testTypeUnionMonomorphic,
+    Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
+    Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
-testSchemaNamespaceDef :: TBinding Namespace
-testSchemaNamespaceDef = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"
+testSchemaNamespace :: TBinding Namespace
+testSchemaNamespace = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"

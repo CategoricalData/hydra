@@ -22,20 +22,20 @@ module_ = Module (Namespace "hydra.test.inference.kernelExamples") elements
     (Just "Inference tests for examples from the Hydra kernel")
   where
     elements = [
-      el allTestsDef,
-      el testGroupForNestedLetDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding testGroupForNestedLet]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
   Phantoms.doc "Examples from the Hydra kernel" $
   supergroup "Examples from the Hydra kernel" [
-    ref testGroupForNestedLetDef]
+    testGroupForNestedLet]
 
-testGroupForNestedLetDef :: TBinding TestGroup
-testGroupForNestedLetDef = define "testGroupForNestedLet" $
+testGroupForNestedLet :: TBinding TestGroup
+testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
       expectMono 1 [tag_disabledForMinimalInference]

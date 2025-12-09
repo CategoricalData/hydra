@@ -17,8 +17,11 @@ import qualified Data.Set as S
 
 -- | A YAML node (value)
 data Node = 
+  -- | A mapping from nodes to nodes
   NodeMapping (M.Map Node Node) |
+  -- | A scalar value
   NodeScalar Scalar |
+  -- | A sequence of nodes
   NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
 

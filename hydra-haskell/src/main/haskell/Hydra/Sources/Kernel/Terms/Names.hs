@@ -1,9 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  compactName, localNameOf, namespaceOf, namespaceToFilePath, qname, qualifyName,
+  uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -65,23 +66,23 @@ module_ = Module (Namespace "hydra.names") elements
     Just ("Functions for working with qualified names.")
   where
    elements = [
-     el compactNameDef,
-     el localNameOfDef,
-     el namespaceOfDef,
-     el namespaceToFilePathDef,
-     el qnameDef,
-     el qualifyNameDef,
-     el uniqueLabelDef,
-     el unqualifyNameDef]
+     toBinding compactName,
+     toBinding localNameOf,
+     toBinding namespaceOf,
+     toBinding namespaceToFilePath,
+     toBinding qname,
+     toBinding qualifyName,
+     toBinding uniqueLabel,
+     toBinding unqualifyName]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-compactNameDef :: TBinding (M.Map Namespace String -> Name -> String)
-compactNameDef = define "compactName" $
+compactName :: TBinding (M.Map Namespace String -> Name -> String)
+compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
-    "qualName">: ref qualifyNameDef @@ var "name",
+    "qualName">: qualifyName @@ var "name",
     "mns">: Module.qualifiedNameNamespace $ var "qualName",
     "local">: Module.qualifiedNameLocal $ var "qualName"]
     $ Maybes.maybe
@@ -92,55 +93,55 @@ compactNameDef = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
-localNameOfDef :: TBinding (Name -> String)
-localNameOfDef = define "localNameOf" $
+localNameOf :: TBinding (Name -> String)
+localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
-  unaryFunction Module.qualifiedNameLocal <.> ref qualifyNameDef
+  unaryFunction Module.qualifiedNameLocal <.> qualifyName
 
-namespaceOfDef :: TBinding (Name -> Maybe Namespace)
-namespaceOfDef = define "namespaceOf" $
+namespaceOf :: TBinding (Name -> Maybe Namespace)
+namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
-  unaryFunction Module.qualifiedNameNamespace <.> ref qualifyNameDef
+  unaryFunction Module.qualifiedNameNamespace <.> qualifyName
 
-namespaceToFilePathDef :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
-namespaceToFilePathDef = define "namespaceToFilePath" $
+namespaceToFilePath :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
+namespaceToFilePath = define "namespaceToFilePath" $
   doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
-      (ref Formatting.convertCaseDef @@ Util.caseConventionCamel @@ var "caseConv")
-      (Strings.splitOn "." (Core.unNamespace $ var "ns"))]
-    $ (Strings.intercalate "/" $ var "parts") ++ "." ++ (Module.unFileExtension $ var "ext")
+      (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
+      (Strings.splitOn (string ".") (Core.unNamespace $ var "ns"))]
+    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Module.unFileExtension $ var "ext")
 
-qnameDef :: TBinding (Namespace -> String -> Name)
-qnameDef = define "qname" $
+qname :: TBinding (Namespace -> String -> Name)
+qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     wrap _Name $
       Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
-qualifyNameDef :: TBinding (Name -> QualifiedName)
-qualifyNameDef = define "qualifyName" $
+qualifyName :: TBinding (Name -> QualifiedName)
+qualifyName = define "qualifyName" $
   doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
-    "parts">: Lists.reverse (Strings.splitOn "." (Core.unName $ var "name"))]
+    "parts">: Lists.reverse (Strings.splitOn (string ".") (Core.unName $ var "name"))]
     $ Logic.ifElse
       (Equality.equal (int32 1) (Lists.length $ var "parts"))
       (Module.qualifiedName nothing (Core.unName $ var "name"))
       (Module.qualifiedName
-        (just $ wrap _Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail $ var "parts"))))
+        (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
 
-uniqueLabelDef :: TBinding (S.Set String -> String -> String)
-uniqueLabelDef = define "uniqueLabel" $
+uniqueLabel :: TBinding (S.Set String -> String -> String)
+uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
   Logic.ifElse (Sets.member (var "l") (var "visited"))
-    (ref uniqueLabelDef @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
+    (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 
-unqualifyNameDef :: TBinding (QualifiedName -> Name)
-unqualifyNameDef = define "unqualifyName" $
+unqualifyName :: TBinding (QualifiedName -> Name)
+unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
     "prefix">: Maybes.maybe

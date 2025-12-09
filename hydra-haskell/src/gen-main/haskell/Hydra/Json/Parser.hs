@@ -49,32 +49,20 @@ digits = (Parsers.map Strings.fromList (Parsers.some digit))
 
 -- | Parse the integer part of a JSON number (optional minus, then digits)
 jsonIntegerPart :: (Parsing.Parser String)
-jsonIntegerPart = (Parsers.bind (Parsers.optional (Parsers.char 45)) (\sign -> Parsers.bind digits (\digits -> Parsers.pure (Maybes.maybe digits (\_ -> Strings.cat [
-  "-",
-  digits]) sign))))
+jsonIntegerPart = (Parsers.bind (Parsers.optional (Parsers.char 45)) (\sign -> Parsers.bind digits (\digits -> Parsers.pure (Maybes.maybe digits (\_ -> Strings.cat2 "-" digits) sign))))
 
 -- | Parse the optional fractional part of a JSON number
 jsonFractionPart :: (Parsing.Parser (Maybe String))
-jsonFractionPart = (Parsers.optional (Parsers.bind (Parsers.char 46) (\_ -> Parsers.map (\d -> Strings.cat [
-  ".",
-  d]) digits)))
+jsonFractionPart = (Parsers.optional (Parsers.bind (Parsers.char 46) (\_ -> Parsers.map (\d -> Strings.cat2 "." d) digits)))
 
 -- | Parse the optional exponent part of a JSON number
 jsonExponentPart :: (Parsing.Parser (Maybe String))
-jsonExponentPart = (Parsers.optional (Parsers.bind (Parsers.satisfy (\c -> Logic.or (Equality.equal c 101) (Equality.equal c 69))) (\_ -> Parsers.bind (Parsers.optional (Parsers.satisfy (\c -> Logic.or (Equality.equal c 43) (Equality.equal c 45)))) (\sign -> Parsers.map (\digits -> Strings.cat [
-  Strings.cat [
-    "e",
-    (Maybes.maybe "" (\arg_ -> Strings.fromList (Lists.pure arg_)) sign)],
-  digits]) digits))))
+jsonExponentPart = (Parsers.optional (Parsers.bind (Parsers.satisfy (\c -> Logic.or (Equality.equal c 101) (Equality.equal c 69))) (\_ -> Parsers.bind (Parsers.optional (Parsers.satisfy (\c -> Logic.or (Equality.equal c 43) (Equality.equal c 45)))) (\sign -> Parsers.map (\digits -> Strings.cat2 (Strings.cat2 "e" (Maybes.maybe "" (\arg_ -> Strings.fromList (Lists.pure arg_)) sign)) digits) digits))))
 
 -- | Parse a JSON number (integer, decimal, or scientific notation)
 jsonNumber :: (Parsing.Parser Json.Value)
 jsonNumber = (token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->  
-  let numStr = (Strings.cat [
-          Strings.cat [
-            intPart,
-            (Maybes.maybe "" Equality.identity fracPart)],
-          (Maybes.maybe "" Equality.identity expPart)])
+  let numStr = (Strings.cat2 (Strings.cat2 intPart (Maybes.maybe "" Equality.identity fracPart)) (Maybes.maybe "" Equality.identity expPart))
   in (Parsers.pure (Json.ValueNumber (Maybes.maybe 0.0 Equality.identity (Literals.readBigfloat numStr)))))))))
 
 -- | Parse a JSON escape sequence after the backslash

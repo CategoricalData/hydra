@@ -33,17 +33,9 @@ joinTypes left right comment =
       let joinOne = (\l -> \r -> Typing.TypeConstraint {
               Typing.typeConstraintLeft = l,
               Typing.typeConstraintRight = r,
-              Typing.typeConstraintComment = (Strings.cat [
-                "join types; ",
-                comment])})
+              Typing.typeConstraintComment = (Strings.cat2 "join types; " comment)})
       in  
-        let cannotUnify = (Flows.fail (Strings.cat [
-                Strings.cat [
-                  Strings.cat [
-                    "cannot unify ",
-                    (Core_.type_ sleft)],
-                  " with "],
-                (Core_.type_ sright)]))
+        let cannotUnify = (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright)))
         in  
           let assertEqual = (Logic.ifElse (Equality.equal sleft sright) (Flows.pure []) cannotUnify)
           in  
@@ -119,19 +111,7 @@ unifyTypeConstraints schemaTypes constraints =
                           let withResult = (\s -> Substitution.composeTypeSubst subst s)
                           in (Flows.map withResult (unifyTypeConstraints schemaTypes (Substitution.substituteInConstraints subst rest))))
                 in  
-                  let tryBinding = (\v -> \t -> Logic.ifElse (variableOccursInType v t) (Flows.fail (Strings.cat [
-                          Strings.cat [
-                            Strings.cat [
-                              Strings.cat [
-                                Strings.cat [
-                                  Strings.cat [
-                                    "Variable ",
-                                    (Core.unName v)],
-                                  " appears free in type "],
-                                (Core_.type_ t)],
-                              " ("],
-                            comment],
-                          ")"])) (bind v t))
+                  let tryBinding = (\v -> \t -> Logic.ifElse (variableOccursInType v t) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")) (bind v t))
                   in  
                     let noVars =  
                             let withConstraints = (\constraints2 -> unifyTypeConstraints schemaTypes (Lists.concat2 constraints2 rest))
@@ -142,19 +122,7 @@ unifyTypeConstraints schemaTypes constraints =
                               _ -> noVars) sright)
                       in ((\x -> case x of
                         Core.TypeVariable v1 -> ((\x -> case x of
-                          Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat [
-                            Strings.cat [
-                              Strings.cat [
-                                Strings.cat [
-                                  Strings.cat [
-                                    Strings.cat [
-                                      "Attempted to unify schema names ",
-                                      (Core.unName v1)],
-                                    " and "],
-                                  (Core.unName v2)],
-                                " ("],
-                              comment],
-                            ")"])) (bind v2 sleft)) (bind v1 sright)))
+                          Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v1)) " and ") (Core.unName v2)) " (") comment) ")")) (bind v2 sleft)) (bind v1 sright)))
                           _ -> (tryBinding v1 sright)) sright)
                         _ -> dflt) sleft))
   in (Logic.ifElse (Lists.null constraints) (Flows.pure Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))

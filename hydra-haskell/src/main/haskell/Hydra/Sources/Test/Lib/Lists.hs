@@ -20,7 +20,7 @@ module_ = Module (Namespace "hydra.test.lib.lists") elements
     (Just "Test cases for hydra.lib.lists primitives")
   where
     elements = [
-      el allTestsDef]
+      Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -43,8 +43,8 @@ optionalString (Just x) = Core.termMaybe  $ just (string x)
 stringList :: [String] -> TTerm Term
 stringList els = list (string <$> els)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
       listsApply,

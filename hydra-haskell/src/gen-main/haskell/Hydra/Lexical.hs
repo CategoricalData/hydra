@@ -31,9 +31,7 @@ import qualified Data.Set as S
 chooseUniqueName :: (S.Set Core.Name -> Core.Name -> Core.Name)
 chooseUniqueName reserved name =  
   let tryName = (\index ->  
-          let candidate = (Logic.ifElse (Equality.equal index 1) name (Core.Name (Strings.cat [
-                  Core.unName name,
-                  (Literals.showInt32 index)])))
+          let candidate = (Logic.ifElse (Equality.equal index 1) name (Core.Name (Strings.cat2 (Core.unName name) (Literals.showInt32 index))))
           in (Logic.ifElse (Sets.member candidate reserved) (tryName (Math.add index 1)) candidate))
   in (tryName 1)
 
@@ -113,11 +111,7 @@ fieldsOf t =
     _ -> []) stripped)
 
 getField :: (M.Map Core.Name t0 -> Core.Name -> (t0 -> Compute.Flow t1 t2) -> Compute.Flow t1 t2)
-getField m fname decode = (Maybes.maybe (Flows.fail (Strings.cat [
-  Strings.cat [
-    "expected field ",
-    (Core.unName fname)],
-  " not found"])) decode (Maps.lookup fname m))
+getField m fname decode = (Maybes.maybe (Flows.fail (Strings.cat2 (Strings.cat2 "expected field " (Core.unName fname)) " not found")) decode (Maps.lookup fname m))
 
 lookupElement :: (Graph.Graph -> Core.Name -> Maybe Core.Binding)
 lookupElement g name = (Maps.lookup name (Graph.graphElements g))
@@ -147,16 +141,8 @@ matchUnion tname pairs term =
                 let fname = (Core.fieldName (Core.injectionField v1))
                 in  
                   let val = (Core.fieldTerm (Core.injectionField v1))
-                  in (Maybes.maybe (Flows.fail (Strings.cat [
-                    Strings.cat [
-                      Strings.cat [
-                        "no matching case for field ",
-                        (Core.unName fname)],
-                      " in union type "],
-                    (Core.unName tname)])) (\f -> f val) (Maps.lookup fname mapping))
-        in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) exp (Monads.unexpected (Strings.cat [
-          "injection for type ",
-          (Core.unName tname)]) (Core_.term term)))
+                  in (Maybes.maybe (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field " (Core.unName fname)) " in union type ") (Core.unName tname))) (\f -> f val) (Maps.lookup fname mapping))
+        in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) exp (Monads.unexpected (Strings.cat2 "injection for type " (Core.unName tname)) (Core_.term term)))
       _ -> (Monads.unexpected (Strings.cat [
         "inject(",
         Core.unName tname,
@@ -174,33 +160,19 @@ requireElement name =
     let ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
             "..."]) strings)
     in  
-      let err = (\g -> Flows.fail (Strings.cat [
-              Strings.cat [
-                Strings.cat [
-                  Strings.cat [
-                    "no such element: ",
-                    (Core.unName name)],
-                  ". Available elements: {"],
-                (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Maps.elems (Graph.graphElements g)))))],
-              "}"]))
+      let err = (\g -> Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Maps.elems (Graph.graphElements g)))))) "}"))
       in (Flows.bind (dereferenceElement name) (\mel -> Maybes.maybe (Flows.bind Monads.getState (\g -> err g)) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
-requirePrimitive name = (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.fail (Strings.cat [
-  "no such primitive function: ",
-  (Core.unName name)])) Flows.pure (lookupPrimitive g name)))
+requirePrimitive name = (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.fail (Strings.cat2 "no such primitive function: " (Core.unName name))) Flows.pure (lookupPrimitive g name)))
 
 requirePrimitiveType :: (Typing.TypeContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
 requirePrimitiveType tx name =  
   let mts = (Maps.lookup name (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx)))
-  in (Maybes.maybe (Flows.fail (Strings.cat [
-    "no such primitive function: ",
-    (Core.unName name)])) (\ts -> Flows.pure ts) mts)
+  in (Maybes.maybe (Flows.fail (Strings.cat2 "no such primitive function: " (Core.unName name))) (\ts -> Flows.pure ts) mts)
 
 requireTerm :: (Core.Name -> Compute.Flow Graph.Graph Core.Term)
-requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Maybes.maybe (Flows.fail (Strings.cat [
-  "no such element: ",
-  (Core.unName name)])) Flows.pure mt))
+requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Maybes.maybe (Flows.fail (Strings.cat2 "no such element: " (Core.unName name))) Flows.pure mt))
 
 -- | TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Term))

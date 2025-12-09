@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.equality") elements [] [] $
     Just "Test cases for hydra.lib.equality primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Test groups for hydra.lib.equality primitives
 
@@ -82,8 +82,8 @@ equalityMin = subgroup "min" [
   where
     test name x y result = primCase name _equality_min [int32 x, int32 y] (int32 result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
       equalityEqual,

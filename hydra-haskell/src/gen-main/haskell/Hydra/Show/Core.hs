@@ -111,15 +111,9 @@ fields flds =
 -- | Show a float value as a string
 float :: (Core.FloatValue -> String)
 float fv = ((\x -> case x of
-  Core.FloatValueBigfloat v1 -> (Strings.cat [
-    Literals.showBigfloat v1,
-    ":bigfloat"])
-  Core.FloatValueFloat32 v1 -> (Strings.cat [
-    Literals.showFloat32 v1,
-    ":float32"])
-  Core.FloatValueFloat64 v1 -> (Strings.cat [
-    Literals.showFloat64 v1,
-    ":float64"])) fv)
+  Core.FloatValueBigfloat v1 -> (Strings.cat2 (Literals.showBigfloat v1) ":bigfloat")
+  Core.FloatValueFloat32 v1 -> (Strings.cat2 (Literals.showFloat32 v1) ":float32")
+  Core.FloatValueFloat64 v1 -> (Strings.cat2 (Literals.showFloat64 v1) ":float64")) fv)
 
 -- | Show a float type as a string
 floatType :: (Core.FloatType -> String)
@@ -151,33 +145,15 @@ injection inj =
 -- | Show an integer value as a string
 integer :: (Core.IntegerValue -> String)
 integer iv = ((\x -> case x of
-  Core.IntegerValueBigint v1 -> (Strings.cat [
-    Literals.showBigint v1,
-    ":bigint"])
-  Core.IntegerValueInt8 v1 -> (Strings.cat [
-    Literals.showInt8 v1,
-    ":int8"])
-  Core.IntegerValueInt16 v1 -> (Strings.cat [
-    Literals.showInt16 v1,
-    ":int16"])
-  Core.IntegerValueInt32 v1 -> (Strings.cat [
-    Literals.showInt32 v1,
-    ":int32"])
-  Core.IntegerValueInt64 v1 -> (Strings.cat [
-    Literals.showInt64 v1,
-    ":int64"])
-  Core.IntegerValueUint8 v1 -> (Strings.cat [
-    Literals.showUint8 v1,
-    ":uint8"])
-  Core.IntegerValueUint16 v1 -> (Strings.cat [
-    Literals.showUint16 v1,
-    ":uint16"])
-  Core.IntegerValueUint32 v1 -> (Strings.cat [
-    Literals.showUint32 v1,
-    ":uint32"])
-  Core.IntegerValueUint64 v1 -> (Strings.cat [
-    Literals.showUint64 v1,
-    ":uint64"])) iv)
+  Core.IntegerValueBigint v1 -> (Strings.cat2 (Literals.showBigint v1) ":bigint")
+  Core.IntegerValueInt8 v1 -> (Strings.cat2 (Literals.showInt8 v1) ":int8")
+  Core.IntegerValueInt16 v1 -> (Strings.cat2 (Literals.showInt16 v1) ":int16")
+  Core.IntegerValueInt32 v1 -> (Strings.cat2 (Literals.showInt32 v1) ":int32")
+  Core.IntegerValueInt64 v1 -> (Strings.cat2 (Literals.showInt64 v1) ":int64")
+  Core.IntegerValueUint8 v1 -> (Strings.cat2 (Literals.showUint8 v1) ":uint8")
+  Core.IntegerValueUint16 v1 -> (Strings.cat2 (Literals.showUint16 v1) ":uint16")
+  Core.IntegerValueUint32 v1 -> (Strings.cat2 (Literals.showUint32 v1) ":uint32")
+  Core.IntegerValueUint64 v1 -> (Strings.cat2 (Literals.showUint64 v1) ":uint64")) iv)
 
 -- | Show an integer type as a string
 integerType :: (Core.IntegerType -> String)

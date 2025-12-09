@@ -96,13 +96,13 @@ haskellLanguageDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.haskell.language")
-  [el haskellLanguageDef, el reservedWordsDef]
+  [toBinding haskellLanguage, toBinding reservedWords]
   []
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for Haskell"
 
-haskellLanguageDef :: TBinding Language
-haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
+haskellLanguage :: TBinding Language
+haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
     Variants.eliminationVariantRecord,
@@ -173,8 +173,8 @@ haskellLanguageDef = haskellLanguageDefinition "haskellLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-reservedWordsDef :: TBinding (S.Set String)
-reservedWordsDef = haskellLanguageDefinition "reservedWords" $
+reservedWords :: TBinding (S.Set String)
+reservedWords = haskellLanguageDefinition "reservedWords" $
   doc ("Created on 2025-02-28 using GHCi 9.6.6\n\n"
     <> "You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n"
     <> "/tmp/browse_Prelude.txt, and then running the Bash command provided with each list.\n\n"

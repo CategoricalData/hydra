@@ -36,11 +36,7 @@ jsonString s =
   let escape = (\c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Strings.fromList (Lists.pure c)))))))
   in  
     let escaped = (Strings.cat (Lists.map escape (Strings.toList s)))
-    in (Strings.cat [
-      Strings.cat [
-        "\"",
-        escaped],
-      "\""])
+    in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
 
 -- | Convert a key-value pair to an AST expression
 keyValueToExpr :: ((String, Json.Value) -> Ast.Expr)

@@ -67,9 +67,7 @@ cst :: (String -> Ast.Expr)
 cst s = (Ast.ExprConst (sym s))
 
 customIndent :: (String -> String -> String)
-customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> Strings.cat [
-  idt,
-  line]) (Strings.lines s))))
+customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> Strings.cat2 idt line) (Strings.lines s))))
 
 customIndentBlock :: (String -> [Ast.Expr] -> Ast.Expr)
 customIndentBlock idt els =  
@@ -377,12 +375,8 @@ printExpr e =
             let lns = (Strings.lines (printExpr expr))
             in  
               let ilns = ((\x -> case x of
-                      Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat [
-                        v2,
-                        line]) lns)
-                      Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat [
-                        v2,
-                        line]) (Lists.tail lns))))) style)
+                      Ast.IndentStyleAllLines v2 -> (Lists.map (\line -> Strings.cat2 v2 line) lns)
+                      Ast.IndentStyleSubsequentLines v2 -> (Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat2 v2 line) (Lists.tail lns))))) style)
               in (Strings.intercalate "\n" ilns)
       Ast.ExprOp v1 ->  
         let op = (Ast.opExprOp v1)
@@ -402,15 +396,7 @@ printExpr e =
                       let lhs = (idt padl (printExpr l))
                       in  
                         let rhs = (idt padr (printExpr r))
-                        in (Strings.cat [
-                          Strings.cat [
-                            Strings.cat [
-                              Strings.cat [
-                                lhs,
-                                (pad padl)],
-                              sym],
-                            (pad padr)],
-                          rhs])
+                        in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 lhs (pad padl)) sym) (pad padr)) rhs)
       Ast.ExprBrackets v1 ->  
         let brackets = (Ast.bracketExprBrackets v1)
         in  
@@ -435,15 +421,7 @@ printExpr e =
                             let pre = (Logic.ifElse nlBefore "\n" "")
                             in  
                               let suf = (Logic.ifElse nlAfter "\n" "")
-                              in (Strings.cat [
-                                Strings.cat [
-                                  Strings.cat [
-                                    Strings.cat [
-                                      l,
-                                      pre],
-                                    ibody],
-                                  suf],
-                                r])) e)
+                              in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 l pre) ibody) suf) r)) e)
 
 semicolonSep :: ([Ast.Expr] -> Ast.Expr)
 semicolonSep = (symbolSep ";" inlineStyle)
@@ -505,22 +483,10 @@ tabIndentSingleSpace :: ([Ast.Expr] -> Ast.Expr)
 tabIndentSingleSpace exprs = (tabIndent (newlineSep exprs))
 
 unsupportedType :: (String -> Ast.Expr)
-unsupportedType label = (cst (Strings.cat [
-  Strings.cat [
-    "[",
-    label],
-  "]"]))
+unsupportedType label = (cst (Strings.cat2 (Strings.cat2 "[" label) "]"))
 
 unsupportedVariant :: (String -> String -> Ast.Expr)
-unsupportedVariant label obj = (cst (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      Strings.cat [
-        "[unsupported ",
-        label],
-      ": "],
-    (Literals.showString obj)],
-  "]"]))
+unsupportedVariant label obj = (cst (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "[unsupported " label) ": ") (Literals.showString obj)) "]"))
 
 withComma :: (Ast.Expr -> Ast.Expr)
 withComma e = (noSep [

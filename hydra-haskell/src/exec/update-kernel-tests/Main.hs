@@ -4,8 +4,6 @@
    --package hydra
 -}
 
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main where
 
 import Hydra.Generation

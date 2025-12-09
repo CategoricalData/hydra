@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Languages where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (hydraLanguage)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -60,24 +59,24 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect as Reflect
 
 module_ :: Module
 module_ = Module (Namespace "hydra.languages")
-  [el hydraLanguageDef]
+  [toBinding hydraLanguage]
   [Reflect.module_]
   kernelTypesModules $
   Just "Language constraints for Hydra Core"
 
-hydraLanguageDef :: TBinding Language
-hydraLanguageDef = definitionInModule module_ "hydraLanguage" $
+hydraLanguage :: TBinding Language
+hydraLanguage = definitionInModule module_ "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $ lets [
-  "eliminationVariants">: Sets.fromList $ ref Reflect.eliminationVariantsDef,
-  "literalVariants">: Sets.fromList $ ref Reflect.literalVariantsDef,
-  "floatTypes">: Sets.fromList $ ref Reflect.floatTypesDef,
-  "functionVariants">: Sets.fromList $ ref Reflect.functionVariantsDef,
-  "integerTypes">: Sets.fromList $ ref Reflect.integerTypesDef,
-  "termVariants">: Sets.fromList $ ref Reflect.termVariantsDef,
-  "typeVariants">: Sets.fromList $ ref Reflect.typeVariantsDef,
+  "eliminationVariants">: Sets.fromList Reflect.eliminationVariants,
+  "literalVariants">: Sets.fromList Reflect.literalVariants,
+  "floatTypes">: Sets.fromList Reflect.floatTypes,
+  "functionVariants">: Sets.fromList Reflect.functionVariants,
+  "integerTypes">: Sets.fromList Reflect.integerTypes,
+  "termVariants">: Sets.fromList Reflect.termVariants,
+  "typeVariants">: Sets.fromList Reflect.typeVariants,
   "types">: "t" ~> cases _Type (var "t") (Just true) []] $
   Coders.language
-    (Coders.languageName "hydra.core")
+    (Coders.languageName (string "hydra.core"))
     (Coders.languageConstraints
       (var "eliminationVariants")
       (var "literalVariants")

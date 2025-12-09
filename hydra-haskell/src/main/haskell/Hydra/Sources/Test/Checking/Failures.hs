@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 -- | Type checking failure test cases
 module Hydra.Sources.Test.Checking.Failures where
@@ -25,18 +24,18 @@ module_ = Module (Namespace "hydra.test.checking.failures") elements
     (Just "Type checking failure test cases")
   where
     elements = [
-      el allTestsDef,
-      el failOnUntypedTestsDef,
-      el untypedLambdasTestsDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding failOnUntypedTests,
+      Phantoms.toBinding untypedLambdasTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
   Phantoms.doc "Type checking failure test cases" $
   supergroup "Failures" [
-    ref failOnUntypedTestsDef]
+    failOnUntypedTests]
 
 ------ Helper functions ------
 
@@ -62,15 +61,11 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Fail on untyped (pre-inference) terms ------
 
-failOnUntypedTestsDef :: TBinding TestGroup
-failOnUntypedTestsDef = define "failOnUntypedTests" $
+failOnUntypedTests :: TBinding TestGroup
+failOnUntypedTests = define "failOnUntypedTests" $
   supergroup "Fail on untyped (pre-inference) terms" [
-    ref untypedLambdasTestsDef]
+    untypedLambdasTests]
 
-untypedLambdasTestsDef :: TBinding TestGroup
-untypedLambdasTestsDef = define "untypedLambdasTests" $
-  subgroup "Untyped lambdas" [
-    -- Note: The original HSpec test for this section was a failure test (typeOfShouldFail)
-    -- which tested that typeOf fails on untyped terms. The TTerm DSL format may need
-    -- a different mechanism for representing failure tests.
-    ]
+untypedLambdasTests :: TBinding TestGroup
+untypedLambdasTests = define "untypedLambdasTests" $
+  subgroup "Untyped lambdas" ([] :: [TTerm TestCaseWithMetadata])
