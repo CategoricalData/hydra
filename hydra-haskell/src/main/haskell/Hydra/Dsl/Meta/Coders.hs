@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Coders where
 
 import Hydra.Kernel
@@ -36,8 +38,11 @@ language name constraints = record _Language [
     _Language_name>>: name,
     _Language_constraints>>: constraints]
 
-languageName :: TTerm String -> TTerm LanguageName
-languageName = wrap _LanguageName
+
+--binding :: AsTerm t Term => TTerm Name -> t -> TTerm (Maybe TypeScheme) -> TTerm Binding
+
+languageName :: AsTerm t String => t -> TTerm LanguageName
+languageName = wrap _LanguageName . asTerm
 
 unLanguageName :: TTerm LanguageName -> TTerm String
 unLanguageName n = unwrap _LanguageName @@ n

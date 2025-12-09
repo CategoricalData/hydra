@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Csharp.Language where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -98,13 +96,13 @@ csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
 csharpLanguageModule :: Module
 csharpLanguageModule = Module (Namespace "hydra.ext.csharp.language")
-  [el csharpLanguageDef, el csharpReservedWordsDef]
+  [toBinding csharpLanguage, toBinding csharpReservedWords]
   [Lexical.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for C Sharp (C#)"
 
-csharpLanguageDef :: TBinding Language
-csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
+csharpLanguage :: TBinding Language
+csharpLanguage = csharpLanguageDefinition "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
   "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
     Variants.eliminationVariantRecord,
@@ -176,8 +174,8 @@ csharpLanguageDef = csharpLanguageDefinition "csharpLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-csharpReservedWordsDef :: TBinding (S.Set String)
-csharpReservedWordsDef = csharpLanguageDefinition "csharpReservedWords" $
+csharpReservedWords :: TBinding (S.Set String)
+csharpReservedWords = csharpLanguageDefinition "csharpReservedWords" $
   doc ("A set of reserved words in C#. Both the \"keywords\" and \"contextual keywords\" are drawn from"
     <> " section 6.4.4 of the C# documentation:\n"
     <> "https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#64-tokens") $ lets [

@@ -16,7 +16,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.eithers") elements [] [] $
     Just "Test cases for hydra.lib.eithers primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Helper to create Left terms
 leftInt32 :: Int -> TTerm Term
@@ -94,8 +94,8 @@ eithersPartitionEithers = subgroup "partitionEithers" [
     test name input (lefts, rights) = primCase name _eithers_partitionEithers [list input]
       (Core.termPair $ Phantoms.pair (list $ fmap int32 lefts) (list $ fmap string rights))
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.eithers primitives" $
     supergroup "hydra.lib.eithers primitives" [
       eithersIsLeft,

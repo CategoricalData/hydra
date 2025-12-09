@@ -1,11 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Test.Formatting where
 
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Dsl.Meta.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -25,24 +24,24 @@ module_ = Module (Namespace "hydra.test.formatting") elements
     (Just "Test cases for string formatting and case conversion")
   where
     elements = [
-      el allTestsDef,
-      el caseConversionTestsDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding caseConversionTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     doc "Test cases for hydra.formatting" $
-    Testing.testGroup (string "formatting") nothing (list subgroups) (list [])
+    Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = [
-      ref caseConversionTestsDef]
+      caseConversionTests]
 
-caseConversionTestsDef :: TBinding TestGroup
-caseConversionTestsDef = define "caseConversionTests" $
+caseConversionTests :: TBinding TestGroup
+caseConversionTests = define "caseConversionTests" $
   doc "Test cases for case conversion" $
-  Testing.testGroup (string "case conversion") nothing (list []) (list cases)
+  Testing.testGroup (string "case conversion") nothing (list ([] :: [TTerm TestGroup])) (list cases)
   where
     cases = [
       -- from lower_snake_case
@@ -72,7 +71,7 @@ caseConversionTestsDef = define "caseConversionTests" $
 -- Helpers
 
 testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm TestCaseWithMetadata
-testCase i fromConvention toConvention fromString toString = Testing.testCaseWithMetadata name tcase nothing (list [])
+testCase i fromConvention toConvention fromString toString = Testing.testCaseWithMetadata name tcase nothing (list ([] :: [TTerm Tag]))
   where
     tcase = Testing.testCaseCaseConversion $ Testing.caseConversionTestCase
       (metaConv fromConvention)

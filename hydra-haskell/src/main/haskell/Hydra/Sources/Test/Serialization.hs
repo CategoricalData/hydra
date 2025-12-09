@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for AST serialization (printExpr and parenthesize)
 --
 -- Note: This module supersedes the Haskell-specific Hydra.SerializationSpec tests.
@@ -5,10 +7,11 @@ module Hydra.Sources.Test.Serialization where
 
 import Hydra.Kernel
 import Hydra.Testing
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Ast as Ast
-import Hydra.Dsl.Meta.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 import qualified Hydra.Sources.Haskell.Operators as Operators
@@ -22,13 +25,13 @@ module_ = Module (Namespace "hydra.test.serialization") elements
     KernelTypes.kernelTypesModules
     (Just "Test cases for AST serialization")
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     doc "Test cases for AST serialization" $
     supergroup "serialization" [
       associativityGroup,
@@ -38,41 +41,41 @@ allTestsDef = define "allTests" $
       precedenceGroup]
 
 -- Helper for building an infix expression: ifx op lhs rhs
-infixExpr :: TTerm Op -> TTerm Expr -> TTerm Expr -> TTerm Expr
-infixExpr opExpr lhs rhs = ref Serialization.ifxDef @@ opExpr @@ lhs @@ rhs
+infixExpr :: AsTerm t Op => t -> TTerm Expr -> TTerm Expr -> TTerm Expr
+infixExpr opExpr lhs rhs = Serialization.ifx @@ asTerm opExpr @@ lhs @@ rhs
 
 -- Helper for building a constant expression
 cstExpr :: TTerm String -> TTerm Expr
-cstExpr s = ref Serialization.cstDef @@ s
+cstExpr s = Serialization.cst @@ s
 
 -- Helper for building a numeric expression
 numExpr :: Int -> TTerm Expr
-numExpr n = ref Serialization.numDef @@ int32 n
+numExpr n = Serialization.num @@ int32 n
 
 -- Helper for building a space-separated expression
 spaceSepExpr :: [TTerm Expr] -> TTerm Expr
-spaceSepExpr exprs = ref Serialization.spaceSepDef @@ list exprs
+spaceSepExpr exprs = Serialization.spaceSep @@ list exprs
 
 -- Helper for building a newline-separated expression
 newlineSepExpr :: [TTerm Expr] -> TTerm Expr
-newlineSepExpr exprs = ref Serialization.newlineSepDef @@ list exprs
+newlineSepExpr exprs = Serialization.newlineSep @@ list exprs
 
 -- Helper for building a bracket list
-bracketListExpr :: TTerm BlockStyle -> [TTerm Expr] -> TTerm Expr
-bracketListExpr style exprs = ref Serialization.bracketListDef @@ style @@ list exprs
+bracketListExpr :: AsTerm t BlockStyle => t -> [TTerm Expr] -> TTerm Expr
+bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list exprs
 
 -- Inline style (reference to kernel)
-inlineBlockStyle :: TTerm BlockStyle
-inlineBlockStyle = ref Serialization.inlineStyleDef
+inlineBlockStyle :: TBinding BlockStyle
+inlineBlockStyle = Serialization.inlineStyle
 
 -- Reference to Haskell operators
-arrowOp, gtOp, plusOp, multOp, lambdaOp, caseOp :: TTerm Op
-arrowOp = ref Operators.arrowOpDef
-gtOp = ref Operators.gtOpDef
-plusOp = ref Operators.plusOpDef
-multOp = ref Operators.multOpDef
-lambdaOp = ref Operators.lambdaOpDef
-caseOp = ref Operators.caseOpDef
+arrowOp, gtOp, plusOp, multOp, lambdaOp, caseOp :: TBinding Op
+arrowOp = Operators.arrowOp
+gtOp = Operators.gtOp
+plusOp = Operators.plusOp
+multOp = Operators.multOp
+lambdaOp = Operators.lambdaOp
+caseOp = Operators.caseOp
 
 -- Helper for lambda expressions: \vars -> body
 -- lambdaExpr ["x", "y"] body = ifx lambdaOp (cst "\x y") body

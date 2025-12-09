@@ -31,18 +31,18 @@ module_ = Module ns elements [XmlSchema.module_] [] $
       "  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model")
   where
     elements = [
-      atlasAttributeDef,
+      atlasAttribute,
       atlasAttributeDef_Cardinality,
       atlasAttributeDef_IndexType,
-      atlasBaseTypeDef,
-      atlasConstraintDef,
-      atlasEntityDef,
-      atlasRelationshipAttributeDef,
-      atlasStructDef,
+      atlasBaseType,
+      atlasConstraint,
+      atlasEntity,
+      atlasRelationshipAttribute,
+      atlasStruct,
       typeCategory]
 
-atlasAttributeDef :: Binding
-atlasAttributeDef = define "AtlasAttributeDef" $
+atlasAttribute :: Binding
+atlasAttribute = define "AtlasAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
     "name">: T.maybe T.string,
@@ -68,8 +68,8 @@ atlasAttributeDef_Cardinality = define "AtlasAttributeDef_Cardinality" $ T.enum 
 atlasAttributeDef_IndexType :: Binding
 atlasAttributeDef_IndexType = define "AtlasAttributeDef_IndexType" $ T.enum ["default", "string"]
 
-atlasBaseTypeDef :: Binding
-atlasBaseTypeDef = define "AtlasBaseTypeDef" $
+atlasBaseType :: Binding
+atlasBaseType = define "AtlasBaseTypeDef" $
   doc "Base class that captures common-attributes for all Atlas types." $
   T.record [
     "category">: T.maybe $ atlas "TypeCategory",
@@ -85,18 +85,18 @@ atlasBaseTypeDef = define "AtlasBaseTypeDef" $
     "serviceType">: T.maybe T.string,
     "options">: T.map T.string T.string]
 
-atlasConstraintDef :: Binding
-atlasConstraintDef = define "AtlasConstraintDef" $
+atlasConstraint :: Binding
+atlasConstraint = define "AtlasConstraintDef" $
   doc "class that captures details of a constraint." $
   T.record [
     "type">: T.maybe T.string,
     "params">: T.map T.string T.string] -- Map<String, Object>
 
-atlasEntityDef :: Binding
-atlasEntityDef = define "AtlasEntityDef" $
+atlasEntity :: Binding
+atlasEntity = define "AtlasEntityDef" $
   doc "class that captures details of a entity-type." $
   T.record [
-    "asAtlasStructDef">: atlas "AtlasStructDef",
+    "asAtlasStruct">: atlas "AtlasStructDef",
 
     "superTypes">:
       T.set T.string,
@@ -113,19 +113,19 @@ atlasEntityDef = define "AtlasEntityDef" $
       doc "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in" $
       T.map T.string (T.list $ atlas "AtlasAttributeDef")]
 
-atlasRelationshipAttributeDef :: Binding
-atlasRelationshipAttributeDef = define "AtlasRelationshipAttributeDef" $
+atlasRelationshipAttribute :: Binding
+atlasRelationshipAttribute = define "AtlasRelationshipAttributeDef" $
   doc "class that captures details of a struct-attribute." $
   T.record [
-    "asAtlasAttributeDef">: atlas "AtlasAttributeDef",
+    "asAtlasAttribute">: atlas "AtlasAttributeDef",
     "relationshipTypeName">: T.maybe T.string,
     "isLegacyAttribute">: T.boolean]
 
-atlasStructDef :: Binding
-atlasStructDef = define "AtlasStructDef" $
+atlasStruct :: Binding
+atlasStruct = define "AtlasStructDef" $
   doc "class that captures details of a struct-type." $
   T.record [
-    "asAtlasBaseTypeDef">: atlas "AtlasBaseTypeDef",
+    "asAtlasBaseType">: atlas "AtlasBaseTypeDef",
 
     "attributeDefs">: T.list $ atlas "AtlasAttributeDef"]
 

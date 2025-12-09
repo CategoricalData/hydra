@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- TODO: merge with Hydra.Dsl.Tests
 module Hydra.Dsl.Meta.Testing where
 
@@ -6,7 +8,7 @@ import Hydra.Ast (Expr)
 import Hydra.Json (Value)
 import Hydra.Parsing (ParseResult)
 import Hydra.Testing as Testing
-import Hydra.Dsl.Meta.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Terms as Terms
@@ -26,11 +28,17 @@ tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
 tag_requiresInterp = Tag "requiresInterp"
 tag_usesKernelRefs = Tag "usesKernelRefs"
 
-expectFailure i tags term = infFailureTest ("#" ++ show i) tags term
+noTags :: TTerm [Tag]
+noTags = Phantoms.list ([] :: [TTerm Tag])
 
-expectMono i tags term typ = infTest ("#" ++ show i) tags term $ T.mono typ
+expectFailure :: AsTerm t Term => Int -> [Tag] -> t -> TTerm TestCaseWithMetadata
+expectFailure i tags term = infFailureTest ("#" ++ show i) tags (asTerm term)
 
-expectPoly i tags term params typ = infTest ("#" ++ show i) tags term $ T.poly params typ
+expectMono :: AsTerm t Term => Int -> [Tag] -> t -> TTerm Type -> TTerm TestCaseWithMetadata
+expectMono i tags term typ = infTest ("#" ++ show i) tags (asTerm term) $ T.mono typ
+
+expectPoly :: AsTerm t Term => Int -> [Tag] -> t -> [String] -> TTerm Type -> TTerm TestCaseWithMetadata
+expectPoly i tags term params typ = infTest ("#" ++ show i) tags (asTerm term) $ T.poly params typ
 
 groupRef = MetaTerms.varNamePhantom . bindingName
 
@@ -71,11 +79,11 @@ mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap 
 mapTermEmpty :: TTerm (M.Map k v)
 mapTermEmpty = TTerm $ TermMap M.empty
 
-subgroup :: String -> [TTerm TestCaseWithMetadata] -> TTerm TestGroup
-subgroup name = tgroup name Nothing []
+subgroup :: AsTerm t TestCaseWithMetadata => String -> [t] -> TTerm TestGroup
+subgroup name cases = tgroup name Nothing [] (asTerm <$> cases)
 
-supergroup :: String -> [TTerm TestGroup] -> TTerm TestGroup
-supergroup name subgroups = tgroup name Nothing subgroups []
+supergroup :: AsTerm t TestGroup => String -> [t] -> TTerm TestGroup
+supergroup name subgroups = tgroup name Nothing (asTerm <$> subgroups) []
 
 tag :: String -> TTerm Tag
 tag = Phantoms.wrap _Tag . Phantoms.string
@@ -212,13 +220,13 @@ typeReductionTestCase input output = Phantoms.record _TypeReductionTestCase [
 alphaCase :: String -> TTerm Term -> TTerm Name -> TTerm Name -> TTerm Term -> TTerm TestCaseWithMetadata
 alphaCase cname term oldVar newVar result = testCaseWithMetadata (Phantoms.string cname)
   (testCaseAlphaConversion $ alphaConversionTestCase term oldVar newVar result)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating type reduction test cases
 typeRedCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 typeRedCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseTypeReduction $ typeReductionTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 writerTestCase :: TTerm a -> TTerm String -> TTerm (WriterTestCase a)
 writerTestCase input output = Phantoms.record _WriterTestCase [
@@ -246,7 +254,7 @@ jsonCoderTestCase typ term json = Phantoms.record _JsonCoderTestCase [
 coderCase :: String -> TTerm Type -> TTerm Term -> TTerm Value -> TTerm TestCaseWithMetadata
 coderCase cname typ term json = testCaseWithMetadata (Phantoms.string cname)
   (testCaseJsonCoder $ jsonCoderTestCase typ term json)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 testCaseTopologicalSort :: TTerm TopologicalSortTestCase -> TTerm TestCase
 testCaseTopologicalSort = inject _TestCase _TestCase_topologicalSort
@@ -268,13 +276,13 @@ topologicalSortSCCTestCase adj expected = Phantoms.record _TopologicalSortSCCTes
 sortCase :: String -> TTerm [(Int, [Int])] -> TTerm (Either [[Int]] [Int]) -> TTerm TestCaseWithMetadata
 sortCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
   (testCaseTopologicalSort $ topologicalSortTestCase adj expected)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating topological sort SCC test cases
 sortSCCCase :: String -> TTerm [(Int, [Int])] -> TTerm [[Int]] -> TTerm TestCaseWithMetadata
 sortSCCCase cname adj expected = testCaseWithMetadata (Phantoms.string cname)
   (testCaseTopologicalSortSCC $ topologicalSortSCCTestCase adj expected)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 testCaseWithMetadata :: TTerm String -> TTerm TestCase -> TTerm (Maybe String) -> TTerm [Tag] -> TTerm TestCaseWithMetadata
 testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
@@ -317,7 +325,7 @@ serializationTestCase input output = Phantoms.record _SerializationTestCase [
 serCase :: String -> TTerm Expr -> TTerm String -> TTerm TestCaseWithMetadata
 serCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseSerialization $ serializationTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Rewriting test case helpers
@@ -358,25 +366,25 @@ simplifyTermTestCase input output = Phantoms.record _SimplifyTermTestCase [
 flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 flattenCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseFlattenLetTerms $ flattenLetTermsTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating free variables test cases
 freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
 freeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseFreeVariables $ freeVariablesTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating lift lambda above let test cases
 liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 liftLambdaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseLiftLambdaAboveLet $ liftLambdaAboveLetTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating simplify term test cases
 simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 simplifyCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseSimplifyTerm $ simplifyTermTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Deannotate test case helpers
@@ -401,13 +409,13 @@ deannotateTypeTestCase input output = Phantoms.record _DeannotateTypeTestCase [
 deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 deannotateTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseDeannotateTerm $ deannotateTermTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating deannotate type test cases
 deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 deannotateTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseDeannotateType $ deannotateTypeTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Topological sort bindings test case helpers
@@ -424,7 +432,7 @@ topologicalSortBindingsTestCase bindings expected = Phantoms.record _Topological
 sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = testCaseWithMetadata (Phantoms.string cname)
   (testCaseTopologicalSortBindings $ topologicalSortBindingsTestCase bindings expected)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Normalize type variables test case helpers
@@ -441,7 +449,7 @@ normalizeTypeVariablesTestCase input output = Phantoms.record _NormalizeTypeVari
 normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 normalizeTypeVarsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseNormalizeTypeVariables $ normalizeTypeVariablesTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Fold over term test case helpers
@@ -470,7 +478,7 @@ foldOpCollectLabels = inject _FoldOperation _FoldOperation_collectLabels $ Phant
 foldOverTermCase :: String -> TTerm Term -> TTerm TraversalOrder -> TTerm FoldOperation -> TTerm Term -> TTerm TestCaseWithMetadata
 foldOverTermCase cname input order op output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseFoldOverTerm $ foldOverTermTestCase input order op output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Rewrite term test case helpers
@@ -495,7 +503,7 @@ termRewriterReplaceInt32WithInt64 = inject _TermRewriter _TermRewriter_replaceIn
 rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 rewriteTermCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseRewriteTerm $ rewriteTermTestCase input termRewriterReplaceFooWithBar output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 ----------------------------------------
 -- Rewrite type test case helpers
@@ -517,10 +525,10 @@ typeRewriterReplaceStringWithInt32 = inject _TypeRewriter _TypeRewriter_replaceS
 rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 rewriteTypeCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseRewriteType $ rewriteTypeTestCase input typeRewriterReplaceStringWithInt32 output)
-  nothing (Phantoms.list [])
+  nothing noTags
 
 -- | Convenience function for creating eta expansion test cases
 etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 etaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseEtaExpansion $ etaExpansionTestCase input output)
-  nothing (Phantoms.list [])
+  nothing noTags

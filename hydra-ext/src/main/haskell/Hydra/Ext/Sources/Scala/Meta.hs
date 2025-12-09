@@ -125,7 +125,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       decl,
       decl_Val,
       decl_Var,
-      decl_Def,
+      decl_,
       decl_Type,
       decl_Given,
       defn,
@@ -137,7 +137,7 @@ module_ = Module ns elements [Core.module_] [Core.module_] $
       defn_RepeatedEnumCase,
       defn_GivenAlias,
       defn_ExtensionGroup,
-      defn_Def,
+      defn_,
       defn_Macro,
       defn_Type,
       defn_Class,
@@ -868,8 +868,8 @@ decl_Var = def "Decl_Var" $
     "pats">: T.list $ meta "Pat",
     "decltpe">: meta "Type"]
 
-decl_Def :: Binding
-decl_Def = def "Decl_Def" $
+decl_ :: Binding
+decl_ = def "Decl_Def" $
   T.record [
     "mods">: T.list $ meta "Mod",
     "name">: meta "Data_Name",
@@ -978,8 +978,8 @@ defn_ExtensionGroup = def "Defn_ExtensionGroup" $
     "parmss">: T.list $ T.list $ meta "Data_Param",
     "body">: meta "Stat"]
 
-defn_Def :: Binding
-defn_Def = def "Defn_Def" $
+defn_ :: Binding
+defn_ = def "Defn_Def" $
   T.record [
     "mods">: T.list $ meta "Mod",
     "name">: meta "Data_Name",

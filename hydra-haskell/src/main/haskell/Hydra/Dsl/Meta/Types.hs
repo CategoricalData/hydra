@@ -1,12 +1,15 @@
 -- | A domain-specific language for constructing term-encoded Hydra types in Haskell;
 --   these functions enable you to build terms (programs) which build types.
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Types (
   module Hydra.Dsl.Meta.Base,
   module Hydra.Dsl.Meta.Types,
 ) where
 
 import Hydra.Kernel
+import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Core as Core hiding (name, unName)
 import Hydra.Dsl.Meta.Base
@@ -159,7 +162,7 @@ map k v = typeMap $ mapType k v
 -- Example: mono int32
 mono :: TTerm Type -> TTerm TypeScheme
 mono t = Phantoms.record _TypeScheme [
-  Phantoms.field _TypeScheme_variables $ Phantoms.list [],
+  Phantoms.field _TypeScheme_variables $ Phantoms.list ([] :: [TTerm Name]),
   Phantoms.field _TypeScheme_type t]
 
 -- | Create a term-encoded maybe (optional/nullable) type
@@ -194,10 +197,11 @@ product (a:rest) = pair a (product rest)
 
 -- | Create a term-encoded record type with named fields
 -- Example: record (name "Person") ["name">: string, "age">: int32]
-record :: TTerm Name -> [(TTerm Name, TTerm Type)] -> TTerm Type
-record name pairs = typeRecord $ rowType name $ Phantoms.list (toField <$> pairs)
+-- Accepts TTerm Name or TBinding Name (via AsTerm)
+record :: AsTerm t Name => t -> [(TTerm Name, TTerm Type)] -> TTerm Type
+record n pairs = typeRecord $ rowType (asTerm n) $ Phantoms.list (toField <$> pairs)
   where
-    toField (n, t) = fieldType n t
+    toField (fn, t) = fieldType fn t
 
 -- | Create a term-encoded set type
 -- Example: set string
@@ -231,10 +235,11 @@ uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
 
 -- | Create a term-encoded union type with named variants
 -- Example: union (name "Result") ["success">: int32, "error">: string]
-union :: TTerm Name -> [(TTerm Name, TTerm Type)] -> TTerm Type
-union name pairs = typeUnion $ rowType name $ Phantoms.list (toField <$> pairs)
+-- Accepts TTerm Name or TBinding Name (via AsTerm)
+union :: AsTerm t Name => t -> [(TTerm Name, TTerm Type)] -> TTerm Type
+union n pairs = typeUnion $ rowType (asTerm n) $ Phantoms.list (toField <$> pairs)
   where
-    toField (n, t) = fieldType n t
+    toField (fn, ft) = fieldType fn ft
 
 -- | Term-encoded unit type (empty record type)
 -- Example: unit
@@ -251,12 +256,15 @@ variable = typeVariable . name
 var :: String -> TTerm Type
 var = variable
 
-wrap :: TTerm Name -> TTerm Type -> TTerm Type
-wrap name t = typeWrap $ wrappedType name t
+-- | Create a term-encoded wrapped type (newtype)
+-- Accepts TTerm Name or TBinding Name (via AsTerm)
+wrap :: AsTerm t Name => t -> TTerm Type -> TTerm Type
+wrap n t = typeWrap $ wrappedType (asTerm n) t
 
 -- | Create a term-encoded enum type with the given variant names (conventionally in camelCase)
 -- Example: enum (name "Color") ["red", "green", "blue"]
-enum :: TTerm Name -> [String] -> TTerm Type
+-- Accepts TTerm Name or TBinding Name (via AsTerm)
+enum :: AsTerm t Name => t -> [String] -> TTerm Type
 enum tname names = union tname $ (\n -> (name n, unit)) <$> names
 
 -- | Term-encoded non-negative 32-bit integer type

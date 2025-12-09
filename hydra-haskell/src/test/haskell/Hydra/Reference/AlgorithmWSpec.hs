@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-
 stack ghci hydra:lib hydra:hydra-test
 

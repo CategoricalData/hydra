@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 -- | Algebraic type checking test cases: unit, pairs, eithers, optionals
 module Hydra.Sources.Test.Checking.AlgebraicTypes where
@@ -25,40 +24,40 @@ module_ = Module (Namespace "hydra.test.checking.algebraicTypes") elements
     (Just "Algebraic type checking test cases: unit, pairs, eithers, optionals")
   where
     elements = [
-      el allTestsDef,
-      el unitTestsDef,
-      el unitTermTestsDef,
-      el unitTermInPolymorphicContextTestsDef,
-      el pairsTestsDef,
-      el basicPairsTestsDef,
-      el polymorphicPairsTestsDef,
-      el pairsInComplexContextsTestsDef,
-      el nestedPairsTestsDef,
-      el pairsWithComplexTypesTestsDef,
-      el eithersTestsDef,
-      el leftValuesTestsDef,
-      el rightValuesTestsDef,
-      el polymorphicEithersTestsDef,
-      el eithersInComplexContextsTestsDef,
-      el nestedEithersTestsDef,
-      el eithersWithComplexTypesTestsDef,
-      el optionalsTestsDef,
-      el monomorphicOptionalsTestsDef,
-      el polymorphicOptionalsTestsDef,
-      el optionalsInComplexContextsTestsDef,
-      el nestedOptionalsTestsDef,
-      el optionalsWithComplexTypesTestsDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding unitTests,
+      Phantoms.toBinding unitTermTests,
+      Phantoms.toBinding unitTermInPolymorphicContextTests,
+      Phantoms.toBinding pairsTests,
+      Phantoms.toBinding basicPairsTests,
+      Phantoms.toBinding polymorphicPairsTests,
+      Phantoms.toBinding pairsInComplexContextsTests,
+      Phantoms.toBinding nestedPairsTests,
+      Phantoms.toBinding pairsWithComplexTypesTests,
+      Phantoms.toBinding eithersTests,
+      Phantoms.toBinding leftValuesTests,
+      Phantoms.toBinding rightValuesTests,
+      Phantoms.toBinding polymorphicEithersTests,
+      Phantoms.toBinding eithersInComplexContextsTests,
+      Phantoms.toBinding nestedEithersTests,
+      Phantoms.toBinding eithersWithComplexTypesTests,
+      Phantoms.toBinding optionalsTests,
+      Phantoms.toBinding monomorphicOptionalsTests,
+      Phantoms.toBinding polymorphicOptionalsTests,
+      Phantoms.toBinding optionalsInComplexContextsTests,
+      Phantoms.toBinding nestedOptionalsTests,
+      Phantoms.toBinding optionalsWithComplexTypesTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
   supergroup "Algebraic types" [
-  ref unitTestsDef,
-  ref pairsTestsDef,
-  ref eithersTestsDef,
-  ref optionalsTestsDef]
+  unitTests,
+  pairsTests,
+  eithersTests,
+  optionalsTests]
 
 ------ Helper functions ------
 
@@ -84,21 +83,21 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Unit ------
 
-unitTestsDef :: TBinding TestGroup
-unitTestsDef = define "unitTests" $
+unitTests :: TBinding TestGroup
+unitTests = define "unitTests" $
   supergroup "Unit" [
-  ref unitTermTestsDef,
-  ref unitTermInPolymorphicContextTestsDef]
+  unitTermTests,
+  unitTermInPolymorphicContextTests]
 
-unitTermTestsDef :: TBinding TestGroup
-unitTermTestsDef = define "unitTermTests" $
+unitTermTests :: TBinding TestGroup
+unitTermTests = define "unitTermTests" $
   subgroup "Unit term" [
   noChange "unit literal"
     unit
     T.unit]
 
-unitTermInPolymorphicContextTestsDef :: TBinding TestGroup
-unitTermInPolymorphicContextTestsDef = define "unitTermInPolymorphicContextTests" $
+unitTermInPolymorphicContextTests :: TBinding TestGroup
+unitTermInPolymorphicContextTests = define "unitTermInPolymorphicContextTests" $
   subgroup "Unit term in polymorphic context" [
   checkTest "unit from lambda" []
     (lambda "x" unit)
@@ -107,17 +106,17 @@ unitTermInPolymorphicContextTestsDef = define "unitTermInPolymorphicContextTests
 
 ------ Pairs ------
 
-pairsTestsDef :: TBinding TestGroup
-pairsTestsDef = define "pairsTests" $
+pairsTests :: TBinding TestGroup
+pairsTests = define "pairsTests" $
   supergroup "Pairs" [
-  ref basicPairsTestsDef,
-  ref polymorphicPairsTestsDef,
-  ref pairsInComplexContextsTestsDef,
-  ref nestedPairsTestsDef,
-  ref pairsWithComplexTypesTestsDef]
+  basicPairsTests,
+  polymorphicPairsTests,
+  pairsInComplexContextsTests,
+  nestedPairsTests,
+  pairsWithComplexTypesTests]
 
-basicPairsTestsDef :: TBinding TestGroup
-basicPairsTestsDef = define "basicPairsTests" $
+basicPairsTests :: TBinding TestGroup
+basicPairsTests = define "basicPairsTests" $
   subgroup "Basic pairs" [
   checkTest "pair of int and string" []
     (pair (int32 42) (string "hello"))
@@ -132,8 +131,8 @@ basicPairsTestsDef = define "basicPairsTests" $
     (tyapps (pair (boolean False) (int32 100)) [T.boolean, T.int32])
     (T.pair T.boolean T.int32)]
 
-polymorphicPairsTestsDef :: TBinding TestGroup
-polymorphicPairsTestsDef = define "polymorphicPairsTests" $
+polymorphicPairsTests :: TBinding TestGroup
+polymorphicPairsTests = define "polymorphicPairsTests" $
   subgroup "Polymorphic pairs" [
   checkTest "pair from lambda (first element)" []
     (lambda "x" $ pair (var "x") (string "constant"))
@@ -152,8 +151,8 @@ polymorphicPairsTestsDef = define "polymorphicPairsTests" $
     (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ tyapps (pair (var "x") (var "x")) [T.var "t0", T.var "t0"])
     (T.forAll "t0" $ T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))]
 
-pairsInComplexContextsTestsDef :: TBinding TestGroup
-pairsInComplexContextsTestsDef = define "pairsInComplexContextsTests" $
+pairsInComplexContextsTests :: TBinding TestGroup
+pairsInComplexContextsTests = define "pairsInComplexContextsTests" $
   subgroup "Pairs in complex contexts" [
   checkTest "pair in list" []
     (list [pair (int32 1) (string "one"), pair (int32 2) (string "two")])
@@ -166,8 +165,8 @@ pairsInComplexContextsTestsDef = define "pairsInComplexContextsTests" $
       var "result")
     (T.pair T.int32 T.string)]
 
-nestedPairsTestsDef :: TBinding TestGroup
-nestedPairsTestsDef = define "nestedPairsTests" $
+nestedPairsTests :: TBinding TestGroup
+nestedPairsTests = define "nestedPairsTests" $
   subgroup "Nested pairs" [
   checkTest "pair of pairs" []
     (pair (pair (int32 1) (string "one")) (pair (boolean True) (int32 2)))
@@ -189,8 +188,8 @@ personRecord fName lName age' =
     "lastName" >: string lName,
     "age" >: int32 age']
 
-pairsWithComplexTypesTestsDef :: TBinding TestGroup
-pairsWithComplexTypesTestsDef = define "pairsWithComplexTypesTests" $
+pairsWithComplexTypesTests :: TBinding TestGroup
+pairsWithComplexTypesTests = define "pairsWithComplexTypesTests" $
   subgroup "Pairs with complex types" [
   checkTest "pair with record on first" []
     (pair (personRecord "Alice" "Smith" 30) (int32 1))
@@ -203,18 +202,18 @@ pairsWithComplexTypesTestsDef = define "pairsWithComplexTypesTests" $
 
 ------ Eithers ------
 
-eithersTestsDef :: TBinding TestGroup
-eithersTestsDef = define "eithersTests" $
+eithersTests :: TBinding TestGroup
+eithersTests = define "eithersTests" $
   supergroup "Eithers" [
-  ref leftValuesTestsDef,
-  ref rightValuesTestsDef,
-  ref polymorphicEithersTestsDef,
-  ref eithersInComplexContextsTestsDef,
-  ref nestedEithersTestsDef,
-  ref eithersWithComplexTypesTestsDef]
+  leftValuesTests,
+  rightValuesTests,
+  polymorphicEithersTests,
+  eithersInComplexContextsTests,
+  nestedEithersTests,
+  eithersWithComplexTypesTests]
 
-leftValuesTestsDef :: TBinding TestGroup
-leftValuesTestsDef = define "leftValuesTests" $
+leftValuesTests :: TBinding TestGroup
+leftValuesTests = define "leftValuesTests" $
   subgroup "Left values" [
   checkTest "left int" []
     (left $ int32 42)
@@ -229,8 +228,8 @@ leftValuesTestsDef = define "leftValuesTests" $
     (tylam "t0" $ tyapps (left $ boolean False) [T.boolean, T.var "t0"])
     (T.forAlls ["t0"] $ T.either_ T.boolean (T.var "t0"))]
 
-rightValuesTestsDef :: TBinding TestGroup
-rightValuesTestsDef = define "rightValuesTests" $
+rightValuesTests :: TBinding TestGroup
+rightValuesTests = define "rightValuesTests" $
   subgroup "Right values" [
   checkTest "right int" []
     (right $ int32 42)
@@ -245,8 +244,8 @@ rightValuesTestsDef = define "rightValuesTests" $
     (tylam "t0" $ tyapps (right $ boolean True) [T.var "t0", T.boolean])
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.boolean)]
 
-polymorphicEithersTestsDef :: TBinding TestGroup
-polymorphicEithersTestsDef = define "polymorphicEithersTests" $
+polymorphicEithersTests :: TBinding TestGroup
+polymorphicEithersTests = define "polymorphicEithersTests" $
   subgroup "Polymorphic eithers" [
   checkTest "left from lambda" []
     (lambda "x" $ left $ var "x")
@@ -267,8 +266,8 @@ polymorphicEithersTestsDef = define "polymorphicEithersTests" $
         tyapps (right $ var "x") [T.var "t0", T.var "t0"])
     (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
 
-eithersInComplexContextsTestsDef :: TBinding TestGroup
-eithersInComplexContextsTestsDef = define "eithersInComplexContextsTests" $
+eithersInComplexContextsTests :: TBinding TestGroup
+eithersInComplexContextsTests = define "eithersInComplexContextsTests" $
   subgroup "Eithers in complex contexts" [
   checkTest "either in list" []
     (list [left $ string "error", right $ int32 42])
@@ -281,8 +280,8 @@ eithersInComplexContextsTestsDef = define "eithersInComplexContextsTests" $
       tyapp (var "result") (T.var "t0"))
     (T.forAlls ["t0"] $ T.either_ (T.var "t0") T.int32)]
 
-nestedEithersTestsDef :: TBinding TestGroup
-nestedEithersTestsDef = define "nestedEithersTests" $
+nestedEithersTests :: TBinding TestGroup
+nestedEithersTests = define "nestedEithersTests" $
   subgroup "Nested eithers" [
   checkTest "either of either (left left)" []
     (left $ left $ int32 1)
@@ -305,43 +304,43 @@ nestedEithersTestsDef = define "nestedEithersTests" $
     (list [tyapps (left $ string "a") [T.string, T.int32], tyapps (right $ int32 1) [T.string, T.int32], tyapps (left $ string "b") [T.string, T.int32]])
     (T.list $ T.either_ T.string T.int32)]
 
-eithersWithComplexTypesTestsDef :: TBinding TestGroup
-eithersWithComplexTypesTestsDef = define "eithersWithComplexTypesTests" $
+eithersWithComplexTypesTests :: TBinding TestGroup
+eithersWithComplexTypesTests = define "eithersWithComplexTypesTests" $
   subgroup "Eithers with complex types" [
   checkTest "either with record on left" []
-    (left $ record (ref TestTypes.testTypePersonNameDef) [
+    (left $ record TestTypes.testTypePersonName [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
       "age">: int32 30])
-    (tylam "t0" $ tyapps (left $ record (ref TestTypes.testTypePersonNameDef) [
+    (tylam "t0" $ tyapps (left $ record TestTypes.testTypePersonName [
       "firstName">: string "Alice",
       "lastName">: string "Smith",
-      "age">: int32 30]) [Core.typeVariable $ ref TestTypes.testTypePersonNameDef, T.var "t0"])
-    (T.forAlls ["t0"] $ T.either_ (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) (T.var "t0")),
+      "age">: int32 30]) [Core.typeVariable TestTypes.testTypePersonName, T.var "t0"])
+    (T.forAlls ["t0"] $ T.either_ (Core.typeVariable TestTypes.testTypePersonName) (T.var "t0")),
   checkTest "either with record on right" []
-    (right $ record (ref TestTypes.testTypePersonNameDef) [
+    (right $ record TestTypes.testTypePersonName [
       "firstName">: string "Bob",
       "lastName">: string "Jones",
       "age">: int32 25])
-    (tylam "t0" $ tyapps (right $ record (ref TestTypes.testTypePersonNameDef) [
+    (tylam "t0" $ tyapps (right $ record TestTypes.testTypePersonName [
       "firstName">: string "Bob",
       "lastName">: string "Jones",
-      "age">: int32 25]) [T.var "t0", Core.typeVariable $ ref TestTypes.testTypePersonNameDef])
-    (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable $ ref TestTypes.testTypePersonNameDef))]
+      "age">: int32 25]) [T.var "t0", Core.typeVariable TestTypes.testTypePersonName])
+    (T.forAlls ["t0"] $ T.either_ (T.var "t0") (Core.typeVariable TestTypes.testTypePersonName))]
 
 ------ Optionals ------
 
-optionalsTestsDef :: TBinding TestGroup
-optionalsTestsDef = define "optionalsTests" $
+optionalsTests :: TBinding TestGroup
+optionalsTests = define "optionalsTests" $
   supergroup "Optionals" [
-  ref monomorphicOptionalsTestsDef,
-  ref polymorphicOptionalsTestsDef,
-  ref optionalsInComplexContextsTestsDef,
-  ref nestedOptionalsTestsDef,
-  ref optionalsWithComplexTypesTestsDef]
+  monomorphicOptionalsTests,
+  polymorphicOptionalsTests,
+  optionalsInComplexContextsTests,
+  nestedOptionalsTests,
+  optionalsWithComplexTypesTests]
 
-monomorphicOptionalsTestsDef :: TBinding TestGroup
-monomorphicOptionalsTestsDef = define "monomorphicOptionalsTests" $
+monomorphicOptionalsTests :: TBinding TestGroup
+monomorphicOptionalsTests = define "monomorphicOptionalsTests" $
   subgroup "Monomorphic optionals" [
   checkTest "nothing" []
     (optional nothing)
@@ -357,8 +356,8 @@ monomorphicOptionalsTestsDef = define "monomorphicOptionalsTests" $
     (optional $ just $ boolean True)
     (T.optional T.boolean)]
 
-polymorphicOptionalsTestsDef :: TBinding TestGroup
-polymorphicOptionalsTestsDef = define "polymorphicOptionalsTests" $
+polymorphicOptionalsTests :: TBinding TestGroup
+polymorphicOptionalsTests = define "polymorphicOptionalsTests" $
   subgroup "Polymorphic optionals" [
   checkTest "optional from lambda" []
     (lambda "x" $ optional $ just $ var "x")
@@ -379,21 +378,21 @@ polymorphicOptionalsTestsDef = define "polymorphicOptionalsTests" $
         (tyapp (optional nothing) (T.var "t0")))
     (T.forAlls ["t0"] $ T.function (T.var "t0") (T.function T.boolean (T.optional $ T.var "t0")))]
 
-optionalsInComplexContextsTestsDef :: TBinding TestGroup
-optionalsInComplexContextsTestsDef = define "optionalsInComplexContextsTests" $
+optionalsInComplexContextsTests :: TBinding TestGroup
+optionalsInComplexContextsTests = define "optionalsInComplexContextsTests" $
   subgroup "Optionals in complex contexts" [
   checkTest "optional in record" []
-    (record (ref TestTypes.testTypeBuddyListANameDef) [
+    (record TestTypes.testTypeBuddyListAName [
       "head">: string "first",
-      "tail">: optional $ just $ record (ref TestTypes.testTypeBuddyListBNameDef) [
+      "tail">: optional $ just $ record TestTypes.testTypeBuddyListBName [
         "head">: string "second",
         "tail">: optional nothing]])
-    (tyapp (record (ref TestTypes.testTypeBuddyListANameDef) [
+    (tyapp (record TestTypes.testTypeBuddyListAName [
       "head">: string "first",
-      "tail">: optional $ just $ tyapp (record (ref TestTypes.testTypeBuddyListBNameDef) [
+      "tail">: optional $ just $ tyapp (record TestTypes.testTypeBuddyListBName [
         "head">: string "second",
-        "tail">: tyapp (optional nothing) (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) T.string)]) T.string]) T.string)
-    (T.apply (Core.typeVariable $ ref TestTypes.testTypeBuddyListANameDef) T.string),
+        "tail">: tyapp (optional nothing) (T.apply (Core.typeVariable TestTypes.testTypeBuddyListAName) T.string)]) T.string]) T.string)
+    (T.apply (Core.typeVariable TestTypes.testTypeBuddyListAName) T.string),
   checkTest "optional in let binding" []
     (lets ["maybeValue" >: optional $ just $ int32 42] $
       var "maybeValue")
@@ -401,8 +400,8 @@ optionalsInComplexContextsTestsDef = define "optionalsInComplexContextsTests" $
       var "maybeValue")
     (T.optional T.int32)]
 
-nestedOptionalsTestsDef :: TBinding TestGroup
-nestedOptionalsTestsDef = define "nestedOptionalsTests" $
+nestedOptionalsTests :: TBinding TestGroup
+nestedOptionalsTests = define "nestedOptionalsTests" $
   subgroup "Nested optionals" [
   noChange "optional of optional"
     (optional $ just $ optional $ just $ string "nested")
@@ -415,8 +414,8 @@ nestedOptionalsTestsDef = define "nestedOptionalsTests" $
     (list [optional $ just $ string "a", tyapp (optional nothing) T.string, optional $ just $ string "b"])
     (T.list $ T.optional T.string)]
 
-optionalsWithComplexTypesTestsDef :: TBinding TestGroup
-optionalsWithComplexTypesTestsDef = define "optionalsWithComplexTypesTests" $
+optionalsWithComplexTypesTests :: TBinding TestGroup
+optionalsWithComplexTypesTests = define "optionalsWithComplexTypesTests" $
   subgroup "Optionals with complex types" [
   noChange "optional map"
     (optional $ just $ mapTerm [(string "key", int32 42)])

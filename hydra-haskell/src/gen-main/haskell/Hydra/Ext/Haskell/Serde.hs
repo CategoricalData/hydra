@@ -66,32 +66,28 @@ classAssertionToExpr :: (Ast_.ClassAssertion -> Ast.Expr)
 classAssertionToExpr clsAsrt =  
   let name = (Ast_.classAssertionName clsAsrt) 
       types = (Ast_.classAssertionTypes clsAsrt)
-  in (Serialization.spaceSep [
-    nameToExpr name,
-    (Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types))])
+  in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+    Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types)]))
 
 constructorToExpr :: (Ast_.Constructor -> Ast.Expr)
 constructorToExpr cons = ((\x -> case x of
   Ast_.ConstructorOrdinary v1 ->  
     let name = (Ast_.ordinaryConstructorName v1) 
         types = (Ast_.ordinaryConstructorFields v1)
-    in (Serialization.spaceSep [
-      nameToExpr name,
-      (Serialization.spaceSep (Lists.map typeToExpr types))])
+    in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+      Serialization.spaceSep (Lists.map typeToExpr types)]))
   Ast_.ConstructorRecord v1 ->  
     let name = (Ast_.recordConstructorName v1) 
         fields = (Ast_.recordConstructorFields v1)
-    in (Serialization.spaceSep [
-      nameToExpr name,
-      (Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldWithCommentsToExpr fields))])) cons)
+    in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+      Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldWithCommentsToExpr fields)]))) cons)
 
 constructorWithCommentsToExpr :: (Ast_.ConstructorWithComments -> Ast.Expr)
 constructorWithCommentsToExpr consWithComments =  
   let body = (Ast_.constructorWithCommentsBody consWithComments) 
       mc = (Ast_.constructorWithCommentsComments consWithComments)
-  in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep [
-    Serialization.cst (toHaskellComments c),
-    (constructorToExpr body)]) mc)
+  in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+    constructorToExpr body])) mc)
 
 dataOrNewtypeToExpr :: (Ast_.DataOrNewtype -> Ast.Expr)
 dataOrNewtypeToExpr kw = ((\x -> case x of
@@ -103,9 +99,8 @@ declarationHeadToExpr hd = ((\x -> case x of
   Ast_.DeclarationHeadApplication v1 ->  
     let fun = (Ast_.applicationDeclarationHeadFunction v1) 
         op = (Ast_.applicationDeclarationHeadOperand v1)
-    in (Serialization.spaceSep [
-      declarationHeadToExpr fun,
-      (variableToExpr op)])
+    in (Serialization.spaceSep (Lists.cons (declarationHeadToExpr fun) [
+      variableToExpr op]))
   Ast_.DeclarationHeadSimple v1 -> (nameToExpr v1)) hd)
 
 declarationToExpr :: (Ast_.Declaration -> Ast.Expr)
@@ -118,41 +113,33 @@ declarationToExpr decl = ((\x -> case x of
         derivCat = (Lists.concat (Lists.map Ast_.unDeriving deriv))
         constructors = (Serialization.orSep Serialization.halfBlockStyle (Lists.map constructorWithCommentsToExpr cons))
         derivingClause = (Logic.ifElse (Lists.null derivCat) [] [
-                Serialization.spaceSep [
-                  Serialization.cst "deriving",
-                  (Serialization.parenList False (Lists.map nameToExpr derivCat))]])
+                Serialization.spaceSep (Lists.cons (Serialization.cst "deriving") [
+                  Serialization.parenList False (Lists.map nameToExpr derivCat)])])
         mainParts = [
-                Serialization.spaceSep [
-                  dataOrNewtypeToExpr kw,
-                  declarationHeadToExpr hd,
-                  (Serialization.cst "=")],
+                Serialization.spaceSep (Lists.cons (dataOrNewtypeToExpr kw) (Lists.cons (declarationHeadToExpr hd) [
+                  Serialization.cst "="])),
                 constructors]
     in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
   Ast_.DeclarationType v1 ->  
     let hd = (Ast_.typeDeclarationName v1) 
         typ = (Ast_.typeDeclarationType v1)
-    in (Serialization.spaceSep [
-      Serialization.cst "type",
-      declarationHeadToExpr hd,
-      Serialization.cst "=",
-      (typeToExpr typ)])
+    in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
+      typeToExpr typ]))))
   Ast_.DeclarationValueBinding v1 -> (valueBindingToExpr v1)
   Ast_.DeclarationTypedBinding v1 ->  
     let typeSig = (Ast_.typedBindingTypeSignature v1) 
         vb = (Ast_.typedBindingValueBinding v1)
         name = (Ast_.typeSignatureName typeSig)
         htype = (Ast_.typeSignatureType typeSig)
-    in (Serialization.newlineSep [
-      Serialization.ifx Operators.typeOp (nameToExpr name) (typeToExpr htype),
-      (valueBindingToExpr vb)])) decl)
+    in (Serialization.newlineSep (Lists.cons (Serialization.ifx Operators.typeOp (nameToExpr name) (typeToExpr htype)) [
+      valueBindingToExpr vb]))) decl)
 
 declarationWithCommentsToExpr :: (Ast_.DeclarationWithComments -> Ast.Expr)
 declarationWithCommentsToExpr declWithComments =  
   let body = (Ast_.declarationWithCommentsBody declWithComments) 
       mc = (Ast_.declarationWithCommentsComments declWithComments)
-  in (Maybes.maybe (declarationToExpr body) (\c -> Serialization.newlineSep [
-    Serialization.cst (toHaskellComments c),
-    (declarationToExpr body)]) mc)
+  in (Maybes.maybe (declarationToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+    declarationToExpr body])) mc)
 
 expressionToExpr :: (Ast_.Expression -> Ast.Expr)
 expressionToExpr expr = ((\x -> case x of
@@ -167,14 +154,10 @@ expressionToExpr expr = ((\x -> case x of
     let bindings = (Ast_.letExpressionBindings v1) 
         inner = (Ast_.letExpressionInner v1)
         encodeBinding = (\binding -> Serialization.indentSubsequentLines "      " (localBindingToExpr binding))
-    in (Serialization.indentBlock [
-      Serialization.cst "",
-      Serialization.spaceSep [
-        Serialization.cst "let",
-        (Serialization.customIndentBlock "    " (Lists.map encodeBinding bindings))],
-      (Serialization.spaceSep [
-        Serialization.cst "in",
-        (expressionToExpr inner)])])
+    in (Serialization.indentBlock (Lists.cons (Serialization.cst "") (Lists.cons (Serialization.spaceSep (Lists.cons (Serialization.cst "let") [
+      Serialization.customIndentBlock "    " (Lists.map encodeBinding bindings)])) [
+      Serialization.spaceSep (Lists.cons (Serialization.cst "in") [
+        expressionToExpr inner])])))
   Ast_.ExpressionList v1 -> (Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v1))
   Ast_.ExpressionParens v1 -> (Serialization.parenthesize (expressionToExpr v1))
   Ast_.ExpressionTuple v1 -> (Serialization.parenList False (Lists.map expressionToExpr v1))
@@ -189,26 +172,22 @@ constructRecordExpressionToExpr constructRecord =
                   val = (Ast_.fieldUpdateValue update)
               in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val)))
       body = (Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates))
-  in (Serialization.spaceSep [
-    nameToExpr name,
-    (Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body)])
+  in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+    Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
 
 fieldToExpr :: (Ast_.Field -> Ast.Expr)
 fieldToExpr field =  
   let name = (Ast_.fieldName field) 
       typ = (Ast_.fieldType field)
-  in (Serialization.spaceSep [
-    nameToExpr name,
-    Serialization.cst "::",
-    (typeToExpr typ)])
+  in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
+    typeToExpr typ])))
 
 fieldWithCommentsToExpr :: (Ast_.FieldWithComments -> Ast.Expr)
 fieldWithCommentsToExpr fieldWithComments =  
   let field = (Ast_.fieldWithCommentsField fieldWithComments) 
       mc = (Ast_.fieldWithCommentsComments fieldWithComments)
-  in (Maybes.maybe (fieldToExpr field) (\c -> Serialization.newlineSep [
-    Serialization.cst (toHaskellComments c),
-    (fieldToExpr field)]) mc)
+  in (Maybes.maybe (fieldToExpr field) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+    fieldToExpr field])) mc)
 
 ifExpressionToExpr :: (Ast_.IfExpression -> Ast.Expr)
 ifExpressionToExpr ifExpr =  
@@ -222,16 +201,12 @@ ifExpressionToExpr ifExpr =
                 Ast.paddingRight = (Ast.WsBreakAndIndent "  ")},
               Ast.opPrecedence = (Ast.Precedence 0),
               Ast.opAssociativity = Ast.AssociativityNone}
-      body = (Serialization.newlineSep [
-              Serialization.spaceSep [
-                Serialization.cst "then",
-                (expressionToExpr ethen)],
-              (Serialization.spaceSep [
-                Serialization.cst "else",
-                (expressionToExpr eelse)])])
-  in (Serialization.ifx ifOp (Serialization.spaceSep [
-    Serialization.cst "if",
-    (expressionToExpr eif)]) body)
+      body = (Serialization.newlineSep (Lists.cons (Serialization.spaceSep (Lists.cons (Serialization.cst "then") [
+              expressionToExpr ethen])) [
+              Serialization.spaceSep (Lists.cons (Serialization.cst "else") [
+                expressionToExpr eelse])]))
+  in (Serialization.ifx ifOp (Serialization.spaceSep (Lists.cons (Serialization.cst "if") [
+    expressionToExpr eif])) body)
 
 importExportSpecToExpr :: (Ast_.ImportExportSpec -> Ast.Expr)
 importExportSpecToExpr spec = (nameToExpr (Ast_.importExportSpecName spec))
@@ -244,9 +219,8 @@ importToExpr import_ =
       mspec = (Ast_.importSpec import_)
       name = (Ast_.unModuleName modName)
       hidingSec = (\spec -> (\x -> case x of
-              Ast_.SpecImportHiding v1 -> (Serialization.spaceSep [
-                Serialization.cst "hiding ",
-                (Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v1)))])) spec)
+              Ast_.SpecImportHiding v1 -> (Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
+                Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v1))]))) spec)
       parts = (Maybes.cat [
               Just (Serialization.cst "import"),
               Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing,
@@ -287,14 +261,10 @@ moduleHeadToExpr moduleHead =
   let mc = (Ast_.moduleHeadComments moduleHead) 
       modName = (Ast_.moduleHeadName moduleHead)
       mname = (Ast_.unModuleName modName)
-      head = (Serialization.spaceSep [
-              Serialization.cst "module",
-              Serialization.cst mname,
-              (Serialization.cst "where")])
-  in (Maybes.maybe head (\c -> Serialization.newlineSep [
-    Serialization.cst (toHaskellComments c),
-    Serialization.cst "",
-    head]) mc)
+      head = (Serialization.spaceSep (Lists.cons (Serialization.cst "module") (Lists.cons (Serialization.cst mname) [
+              Serialization.cst "where"])))
+  in (Maybes.maybe head (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) (Lists.cons (Serialization.cst "") [
+    head]))) mc)
 
 moduleToExpr :: (Ast_.Module -> Ast.Expr)
 moduleToExpr module_ =  
@@ -343,10 +313,8 @@ typeSignatureToExpr :: (Ast_.TypeSignature -> Ast.Expr)
 typeSignatureToExpr typeSig =  
   let name = (Ast_.typeSignatureName typeSig) 
       typ = (Ast_.typeSignatureType typeSig)
-  in (Serialization.spaceSep [
-    nameToExpr name,
-    Serialization.cst "::",
-    (typeToExpr typ)])
+  in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
+    typeToExpr typ])))
 
 typeToExpr :: (Ast_.Type -> Ast.Expr)
 typeToExpr htype = ((\x -> case x of
@@ -376,9 +344,8 @@ valueBindingToExpr vb = ((\x -> case x of
         body = (Serialization.ifx Operators.defineOp (patternToExpr pat) (rightHandSideToExpr rhs))
     in (Maybes.maybe body (\localBindings ->  
       let bindings = (Ast_.unLocalBindings localBindings)
-      in (Serialization.indentBlock [
-        body,
-        (Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings)))])) local)) vb)
+      in (Serialization.indentBlock (Lists.cons body [
+        Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings))]))) local)) vb)
 
 variableToExpr :: (Ast_.Variable -> Ast.Expr)
 variableToExpr variable = (nameToExpr (Ast_.unVariable variable))

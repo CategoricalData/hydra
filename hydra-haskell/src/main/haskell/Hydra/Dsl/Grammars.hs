@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- | A DSL for building BNF grammars
 
 module Hydra.Dsl.Grammars where

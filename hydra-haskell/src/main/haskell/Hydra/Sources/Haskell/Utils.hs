@@ -110,88 +110,88 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.ext.haskell.utils"
     elements = [
-      el applicationPatternDef,
-      el elementReferenceDef,
-      el hsappDef,
-      el hslambdaDef,
-      el hslitDef,
-      el hsvarDef,
-      el namespacesForModuleDef,
-      el newtypeAccessorNameDef,
-      el rawNameDef,
-      el recordFieldReferenceDef,
-      el sanitizeHaskellNameDef,
-      el simpleNameDef,
-      el simpleValueBindingDef,
-      el toTypeApplicationDef,
-      el typeNameForRecordDef,
-      el unionFieldReferenceDef,
-      el unpackForallTypeDef]
+      toBinding applicationPattern,
+      toBinding elementReference,
+      toBinding hsapp,
+      toBinding hslambda,
+      toBinding hslit,
+      toBinding hsvar,
+      toBinding namespacesForModule,
+      toBinding newtypeAccessorName,
+      toBinding rawName,
+      toBinding recordFieldReference,
+      toBinding sanitizeHaskellName,
+      toBinding simpleName,
+      toBinding simpleValueBinding,
+      toBinding toTypeApplication,
+      toBinding typeNameForRecord,
+      toBinding unionFieldReference,
+      toBinding unpackForallType]
 
-applicationPatternDef :: TBinding (H.Name -> [H.Pattern] -> H.Pattern)
-applicationPatternDef = haskellUtilsDefinition "applicationPattern" $
+applicationPattern :: TBinding (H.Name -> [H.Pattern] -> H.Pattern)
+applicationPattern = haskellUtilsDefinition "applicationPattern" $
   lambda "name" $ lambda "args" $
     inject H._Pattern H._Pattern_application $
       record H._ApplicationPattern [
         H._ApplicationPattern_name>>: var "name",
         H._ApplicationPattern_args>>: var "args"]
 
-elementReferenceDef :: TBinding (HaskellNamespaces -> Name -> H.Name)
-elementReferenceDef = haskellUtilsDefinition "elementReference" $
+elementReference :: TBinding (HaskellNamespaces -> Name -> H.Name)
+elementReference = haskellUtilsDefinition "elementReference" $
   lambda "namespaces" $ lambda "name" $ lets [
     "namespacePair">: Module.namespacesFocus $ var "namespaces",
     "gname">: Pairs.first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
     "namespacesMap">: Module.namespacesMapping $ var "namespaces",
-    "qname">: ref Names.qualifyNameDef @@ var "name",
+    "qname">: Names.qualifyName @@ var "name",
     "local">: Module.qualifiedNameLocal $ var "qname",
-    "escLocal">: ref sanitizeHaskellNameDef @@ var "local",
+    "escLocal">: sanitizeHaskellName @@ var "local",
     "mns">: Module.qualifiedNameNamespace $ var "qname"] $
     Maybes.cases (Module.qualifiedNameNamespace $ var "qname")
-      (ref simpleNameDef @@ var "local") $
+      (simpleName @@ var "local") $
       lambda "ns" $
         Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
-          (ref simpleNameDef @@ var "local") $
+          (simpleName @@ var "local") $
           lambda "mn" $ lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $
             Logic.ifElse (Equality.equal (var "ns") (var "gname"))
-              (ref simpleNameDef @@ var "escLocal")
-              (ref rawNameDef @@ (Strings.cat $ list [
+              (simpleName @@ var "escLocal")
+              (rawName @@ (Strings.cat $ list [
                 var "aliasStr",
                 string ".",
-                ref sanitizeHaskellNameDef @@ var "local"]))
+                sanitizeHaskellName @@ var "local"]))
 
-hsappDef :: TBinding (H.Expression -> H.Expression -> H.Expression)
-hsappDef = haskellUtilsDefinition "hsapp" $
+hsapp :: TBinding (H.Expression -> H.Expression -> H.Expression)
+hsapp = haskellUtilsDefinition "hsapp" $
   lambda "l" $ lambda "r" $
     inject H._Expression H._Expression_application $
       record H._ApplicationExpression [
         H._ApplicationExpression_function>>: var "l",
         H._ApplicationExpression_argument>>: var "r"]
 
-hslambdaDef :: TBinding (H.Name -> H.Expression -> H.Expression)
-hslambdaDef = haskellUtilsDefinition "hslambda" $
+hslambda :: TBinding (H.Name -> H.Expression -> H.Expression)
+hslambda = haskellUtilsDefinition "hslambda" $
   lambda "name" $ lambda "rhs" $
     inject H._Expression H._Expression_lambda $
       record H._LambdaExpression [
         H._LambdaExpression_bindings>>: list [inject H._Pattern H._Pattern_name $ var "name"],
         H._LambdaExpression_inner>>: var "rhs"]
 
-hslitDef :: TBinding (H.Literal -> H.Expression)
-hslitDef = haskellUtilsDefinition "hslit" $
+hslit :: TBinding (H.Literal -> H.Expression)
+hslit = haskellUtilsDefinition "hslit" $
   lambda "lit" $
     inject H._Expression H._Expression_literal $ var "lit"
 
-hsvarDef :: TBinding (String -> H.Expression)
-hsvarDef = haskellUtilsDefinition "hsvar" $
+hsvar :: TBinding (String -> H.Expression)
+hsvar = haskellUtilsDefinition "hsvar" $
   lambda "s" $
-    inject H._Expression H._Expression_variable $ (ref rawNameDef @@ var "s")
+    inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
-namespacesForModuleDef :: TBinding (Module -> Flow Graph HaskellNamespaces)
-namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
+namespacesForModule :: TBinding (Module -> Flow Graph HaskellNamespaces)
+namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   lambda "mod" $
     bind "nss"
-      (ref Schemas.moduleDependencyNamespacesDef @@ true @@ true @@ true @@ true @@ var "mod") $ lets [
+      (Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod") $ lets [
     "ns">: Module.moduleNamespace $ var "mod",
     "focusPair">: var "toPair" @@ var "ns",
     "nssAsList">: Sets.toList $ var "nss",
@@ -203,7 +203,7 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
       "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
       "lastPart">: Lists.last $ var "parts",
-      "capitalized">: ref Formatting.capitalizeDef @@ var "lastPart"] $
+      "capitalized">: Formatting.capitalize @@ var "lastPart"] $
       wrap H._ModuleName $ var "capitalized",
     "toPair">: lambda "name" $
       pair (var "name") (var "toModuleName" @@ var "name"),
@@ -218,50 +218,50 @@ namespacesForModuleDef = haskellUtilsDefinition "namespacesForModule" $
         (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
     Flows.pure $ Module.namespaces (var "focusPair") (var "resultMap")
 
-newtypeAccessorNameDef :: TBinding (Name -> String)
-newtypeAccessorNameDef = haskellUtilsDefinition "newtypeAccessorName" $
+newtypeAccessorName :: TBinding (Name -> String)
+newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $
   lambda "name" $
-    Strings.cat2 (string "un") (ref Names.localNameOfDef @@ var "name")
+    Strings.cat2 (string "un") (Names.localNameOf @@ var "name")
 
-rawNameDef :: TBinding (String -> H.Name)
-rawNameDef = haskellUtilsDefinition "rawName" $
+rawName :: TBinding (String -> H.Name)
+rawName = haskellUtilsDefinition "rawName" $
   lambda "n" $
     inject H._Name H._Name_normal $
       record H._QualifiedName [
-        H._QualifiedName_qualifiers>>: list [],
+        H._QualifiedName_qualifiers>>: list ([] :: [TTerm H.NamePart]),
         H._QualifiedName_unqualified>>: wrap H._NamePart $ var "n"]
 
-recordFieldReferenceDef :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
-recordFieldReferenceDef = haskellUtilsDefinition "recordFieldReference" $
+recordFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
+recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
   lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
     "fnameStr">: unwrap _Name @@ var "fname",
-    "qname">: ref Names.qualifyNameDef @@ var "sname",
+    "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
-    "typeNameStr">: ref typeNameForRecordDef @@ var "sname",
-    "decapitalized">: ref Formatting.decapitalizeDef @@ var "typeNameStr",
-    "capitalized">: ref Formatting.capitalizeDef @@ var "fnameStr",
+    "typeNameStr">: typeNameForRecord @@ var "sname",
+    "decapitalized">: Formatting.decapitalize @@ var "typeNameStr",
+    "capitalized">: Formatting.capitalize @@ var "fnameStr",
     "nm">: Strings.cat2 (var "decapitalized") (var "capitalized"),
     "qualName">: record _QualifiedName [
       _QualifiedName_namespace>>: var "ns",
       _QualifiedName_local>>: var "nm"],
-    "unqualName">: ref Names.unqualifyNameDef @@ var "qualName"] $
-    ref elementReferenceDef @@ var "namespaces" @@ var "unqualName"
+    "unqualName">: Names.unqualifyName @@ var "qualName"] $
+    elementReference @@ var "namespaces" @@ var "unqualName"
 
-sanitizeHaskellNameDef :: TBinding (String -> String)
-sanitizeHaskellNameDef = haskellUtilsDefinition "sanitizeHaskellName" $
-  ref Formatting.sanitizeWithUnderscoresDef @@ (ref HaskellLanguage.reservedWordsDef)
+sanitizeHaskellName :: TBinding (String -> String)
+sanitizeHaskellName = haskellUtilsDefinition "sanitizeHaskellName" $
+  Formatting.sanitizeWithUnderscores @@ (HaskellLanguage.reservedWords)
 
-simpleNameDef :: TBinding (String -> H.Name)
-simpleNameDef = haskellUtilsDefinition "simpleName" $
-  compose (ref rawNameDef) (ref sanitizeHaskellNameDef)
+simpleName :: TBinding (String -> H.Name)
+simpleName = haskellUtilsDefinition "simpleName" $
+  compose (rawName) (sanitizeHaskellName)
 
-simpleValueBindingDef :: TBinding (H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding)
-simpleValueBindingDef = haskellUtilsDefinition "simpleValueBinding" $
+simpleValueBinding :: TBinding (H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding)
+simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
   lambda "hname" $ lambda "rhs" $ lambda "bindings" $ lets [
     "pat">: inject H._Pattern H._Pattern_application $
       record H._ApplicationPattern [
         H._ApplicationPattern_name>>: var "hname",
-        H._ApplicationPattern_args>>: list []],
+        H._ApplicationPattern_args>>: list ([] :: [TTerm H.Pattern])],
     "rightHandSide">: wrap H._RightHandSide $ var "rhs"] $
     inject H._ValueBinding H._ValueBinding_simple $
       record H._SimpleValueBinding [
@@ -269,8 +269,8 @@ simpleValueBindingDef = haskellUtilsDefinition "simpleValueBinding" $
         H._SimpleValueBinding_rhs>>: var "rightHandSide",
         H._SimpleValueBinding_localBindings>>: var "bindings"]
 
-toTypeApplicationDef :: TBinding ([H.Type] -> H.Type)
-toTypeApplicationDef = haskellUtilsDefinition "toTypeApplication" $
+toTypeApplication :: TBinding ([H.Type] -> H.Type)
+toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
   lambda "types" $ lets [
     "app">: lambda "l" $
       Logic.ifElse (Equality.gt (Lists.length (var "l")) (int32 1))
@@ -280,37 +280,37 @@ toTypeApplicationDef = haskellUtilsDefinition "toTypeApplication" $
         (Lists.head $ var "l")] $
     var "app" @@ (Lists.reverse $ var "types")
 
-typeNameForRecordDef :: TBinding (Name -> String)
-typeNameForRecordDef = haskellUtilsDefinition "typeNameForRecord" $
+typeNameForRecord :: TBinding (Name -> String)
+typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
   lambda "sname" $ lets [
     "snameStr">: Core.unName $ var "sname",
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
     Lists.last $ var "parts"
 
-unionFieldReferenceDef :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
-unionFieldReferenceDef = haskellUtilsDefinition "unionFieldReference" $
+unionFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
+unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
     "fnameStr">: unwrap _Name @@ var "fname",
-    "qname">: ref Names.qualifyNameDef @@ var "sname",
+    "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
-    "typeNameStr">: ref typeNameForRecordDef @@ var "sname",
-    "capitalizedTypeName">: ref Formatting.capitalizeDef @@ var "typeNameStr",
-    "capitalizedFieldName">: ref Formatting.capitalizeDef @@ var "fnameStr",
+    "typeNameStr">: typeNameForRecord @@ var "sname",
+    "capitalizedTypeName">: Formatting.capitalize @@ var "typeNameStr",
+    "capitalizedFieldName">: Formatting.capitalize @@ var "fnameStr",
     "nm">: Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),
     "qualName">: record _QualifiedName [
       _QualifiedName_namespace>>: var "ns",
       _QualifiedName_local>>: var "nm"],
-    "unqualName">: ref Names.unqualifyNameDef @@ var "qualName"] $
-    ref elementReferenceDef @@ var "namespaces" @@ var "unqualName"
+    "unqualName">: Names.unqualifyName @@ var "qualName"] $
+    elementReference @@ var "namespaces" @@ var "unqualName"
 
-unpackForallTypeDef :: TBinding (Graph -> Type -> ([Name], Type))
-unpackForallTypeDef = haskellUtilsDefinition "unpackForallType" $
-  lambdas ["cx", "t"] $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "t")
-    (Just $ pair (list []) (var "t")) [
+unpackForallType :: TBinding (Graph -> Type -> ([Name], Type))
+unpackForallType = haskellUtilsDefinition "unpackForallType" $
+  lambdas ["cx", "t"] $ cases _Type (Rewriting.deannotateType @@ var "t")
+    (Just $ pair (list ([] :: [TTerm Name])) (var "t")) [
     _Type_forall>>: lambda "fat" $ lets [
       "v">: Core.forallTypeParameter $ var "fat",
       "tbody">: Core.forallTypeBody $ var "fat",
-      "recursiveResult">: ref unpackForallTypeDef @@ var "cx" @@ var "tbody",
+      "recursiveResult">: unpackForallType @@ var "cx" @@ var "tbody",
       "vars">: Pairs.first $ var "recursiveResult",
       "finalType">: Pairs.second $ var "recursiveResult"] $
       pair (Lists.cons (var "v") (var "vars")) (var "finalType")]

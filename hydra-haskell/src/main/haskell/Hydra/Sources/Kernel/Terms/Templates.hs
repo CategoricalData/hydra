@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Templates where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (graphToSchema, instantiateTemplate)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -66,31 +65,31 @@ module_ = Module (Namespace "hydra.templates") elements
     Just "A utility which instantiates a nonrecursive type with default values"
   where
    elements = [
-     el graphToSchemaDef,
-     el instantiateTemplateDef]
+     toBinding graphToSchema,
+     toBinding instantiateTemplate]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-graphToSchemaDef :: TBinding (Graph -> Flow Graph (M.Map Name Type))
-graphToSchemaDef = define "graphToSchema" $
+graphToSchema :: TBinding (Graph -> Flow Graph (M.Map Name Type))
+graphToSchema = define "graphToSchema" $
   doc "Create a graph schema from a graph which contains nothing but encoded type definitions" $
   "g" ~>
   "toPair" <~ ("nameAndEl" ~>
     "name" <~ Pairs.first (var "nameAndEl") $
     "el" <~ Pairs.second (var "nameAndEl") $
-    Flows.bind (trace "graph to schema" $ ref DecodeCore.typeDef @@ (Core.bindingTerm (var "el"))) (
+    Flows.bind (trace (string "graph to schema") $ DecodeCore.type_ @@ (Core.bindingTerm (var "el"))) (
       "t" ~> Flows.pure (pair (var "name") (var "t")))) $
   Flows.bind (Flows.mapList (var "toPair") (Maps.toList (Graph.graphElements (var "g")))) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))
 
-instantiateTemplateDef :: TBinding (Bool -> M.Map Name Type -> Type -> Flow s Term)
-instantiateTemplateDef = define "instantiateTemplate" $
+instantiateTemplate :: TBinding (Bool -> M.Map Name Type -> Type -> Flow s Term)
+instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
     <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals") $
   "minimal" ~> "schema" ~> "t" ~>
-  "inst" <~ ref instantiateTemplateDef @@ var "minimal" @@ var "schema" $
+  "inst" <~ instantiateTemplate @@ var "minimal" @@ var "schema" $
   "noPoly" <~ Flows.fail (string "Polymorphic and function types are not currently supported") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
@@ -122,7 +121,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
     _Type_function>>: constant (var "noPoly"),
     _Type_forall>>: constant (var "noPoly"),
     _Type_list>>: "et" ~> Logic.ifElse (var "minimal")
-      (Flows.pure (Core.termList (list [])))
+      (Flows.pure (Core.termList (list ([] :: [TTerm Term]))))
       (Flows.bind (var "inst" @@ var "et") (
         "e" ~> Flows.pure (Core.termList (list [var "e"])))),
     _Type_literal>>: "lt" ~> Flows.pure (Core.termLiteral (var "forLiteral" @@ var "lt")),
@@ -153,7 +152,7 @@ instantiateTemplateDef = define "instantiateTemplate" $
         "e" ~> Flows.pure (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "tname" ~>
       Maybes.maybe
-        (Flows.fail (Strings.cat2 (string "Type variable ") (Strings.cat2 (ref ShowCore.termDef @@ (Core.termVariable (var "tname"))) (string " not found in schema"))))
+        (Flows.fail (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema"))))
         (var "inst")
         (Maps.lookup (var "tname") (var "schema")),
     _Type_wrap>>: "wt" ~>

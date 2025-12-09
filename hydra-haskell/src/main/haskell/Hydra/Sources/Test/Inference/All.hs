@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Test.Inference.All where
 
@@ -26,7 +25,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.inference.all") elements modules kernelTypesModules $
     Just "Hydra's inference test suite"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
     modules = [
       AlgebraicTypes.module_,
       AlgorithmW.module_,
@@ -35,15 +34,15 @@ module_ = Module (Namespace "hydra.test.inference.all") elements modules kernelT
       KernelExamples.module_,
       NominalTypes.module_]
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     doc "The group of all inference tests" $
-    Testing.testGroup "inference" nothing (list subgroups) (list [])
+    Testing.testGroup (string "inference") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = [
-      ref AlgebraicTypes.allTestsDef,
-      ref AlgorithmW.allTestsDef,
-      ref Failures.allTestsDef,
-      ref Fundamentals.allTestsDef,
-      ref KernelExamples.allTestsDef,
-      ref NominalTypes.allTestsDef]
+      AlgebraicTypes.allTests,
+      AlgorithmW.allTests,
+      Failures.allTests,
+      Fundamentals.allTests,
+      KernelExamples.allTests,
+      NominalTypes.allTests]

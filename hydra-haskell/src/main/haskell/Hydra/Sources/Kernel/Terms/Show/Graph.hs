@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Terms.Show.Graph where
 
 -- Standard imports for kernel terms modules
@@ -65,17 +63,17 @@ module_ = Module (Namespace "hydra.show.graph") elements
     Just "String representations of hydra.graph types"
   where
    elements = [
-     el graphDef]
+     toBinding graph]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-graphDef :: TBinding (Graph -> String)
-graphDef = define "graph" $
+graph :: TBinding (Graph -> String)
+graph = define "graph" $
   doc "Show a graph as a string" $
   lambda "graph" $ lets [
     "elements">: Maps.elems $ Graph.graphElements $ var "graph",
-    "elementStrs">: Lists.map (ref ShowCore.bindingDef) (var "elements")] $
+    "elementStrs">: Lists.map ShowCore.binding (var "elements")] $
     Strings.cat $ list [
       string "{",
       Strings.intercalate (string ", ") (var "elementStrs"),

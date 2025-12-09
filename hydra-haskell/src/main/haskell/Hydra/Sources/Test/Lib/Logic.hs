@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.logic") elements [] [] $
     Just "Test cases for hydra.lib.logic primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Test groups for hydra.lib.logic primitives
 
@@ -65,8 +65,8 @@ logicIfElse = supergroup "ifElse" [
     testStr name cond thenVal elseVal result =
       primCase name _logic_ifElse [cond, string thenVal, string elseVal] (string result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.logic primitives" $
     supergroup "hydra.lib.logic primitives" [
       logicAnd,

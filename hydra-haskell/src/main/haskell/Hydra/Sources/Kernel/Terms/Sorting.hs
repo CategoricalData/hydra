@@ -1,9 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Sorting where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  createOrderingIsomorphism, findReachableNodes, topologicalSort,
+  topologicalSortComponents, topologicalSortNodes)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -67,17 +68,17 @@ module_ = Module (Namespace "hydra.sorting") elements
     Just ("Utilities for sorting.")
   where
    elements = [
-     el createOrderingIsomorphismDef,
-     el findReachableNodesDef,
-     el topologicalSortDef,
-     el topologicalSortComponentsDef,
-     el topologicalSortNodesDef]
+     toBinding createOrderingIsomorphism,
+     toBinding findReachableNodes,
+     toBinding topologicalSort,
+     toBinding topologicalSortComponents,
+     toBinding topologicalSortNodes]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-createOrderingIsomorphismDef :: TBinding ([a] -> [a] -> Topo.OrderingIsomorphism b)
-createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
+createOrderingIsomorphism :: TBinding ([a] -> [a] -> Topo.OrderingIsomorphism b)
+createOrderingIsomorphism = define "createOrderingIsomorphism" $
   withOrd "t0" $ "sourceOrd" ~> "targetOrd" ~>
   "sourceToTargetMapping" <~ ("els" ~>
     "mp" <~ Maps.fromList (Lists.zip (var "sourceOrd") (var "els")) $
@@ -88,8 +89,8 @@ createOrderingIsomorphismDef = define "createOrderingIsomorphism" $
   Topology.orderingIsomorphism (var "sourceToTargetMapping") (var "targetToSourceMapping")
 
 -- Note: not a sorting function
-findReachableNodesDef :: TBinding ((a -> S.Set a) -> a -> S.Set a)
-findReachableNodesDef = define "findReachableNodes" $
+findReachableNodes :: TBinding ((a -> S.Set a) -> a -> S.Set a)
+findReachableNodes = define "findReachableNodes" $
   doc "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)" $
   "adj" ~> "root" ~>
   "visit" <~ ("visited" ~> "node" ~>
@@ -102,36 +103,36 @@ findReachableNodesDef = define "findReachableNodes" $
         (Sets.toList $ var "toVisit"))) $
   var "visit" @@ Sets.singleton (var "root") @@ var "root"
 
-topologicalSortDef :: TBinding ([(a, [a])] -> Either [[a]] [a])
-topologicalSortDef = define "topologicalSort" $
+topologicalSort :: TBinding ([(a, [a])] -> Either [[a]] [a])
+topologicalSort = define "topologicalSort" $
   doc ("Sort a directed acyclic graph (DAG) based on an adjacency list."
     <> " Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.") $
   withOrd "t0" $ "pairs" ~>
-  "sccs" <~ ref topologicalSortComponentsDef @@ var "pairs" $
+  "sccs" <~ topologicalSortComponents @@ var "pairs" $
   "isCycle" <~ ("scc" ~> Logic.not $ Lists.null $ Lists.tail $ var "scc") $
   "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
   Logic.ifElse (Lists.null $ var "withCycles")
     (right $ Lists.concat $ var "sccs")
     (left $ var "withCycles")
 
-topologicalSortComponentsDef :: TBinding ([(a, [a])] -> [[a]])
-topologicalSortComponentsDef = define "topologicalSortComponents" $
+topologicalSortComponents :: TBinding ([(a, [a])] -> [[a]])
+topologicalSortComponents = define "topologicalSortComponents" $
   doc ("Find the strongly connected components (including cycles and isolated vertices) of a graph,"
     <> " in (reverse) topological order, i.e. dependencies before dependents") $
   withOrd "t0" $ "pairs" ~>
-  "graphResult" <~ ref Tarjan.adjacencyListsToGraphDef @@ var "pairs" $
+  "graphResult" <~ Tarjan.adjacencyListsToGraph @@ var "pairs" $
   "g" <~ Pairs.first (var "graphResult") $
   "getKey" <~ Pairs.second (var "graphResult") $
   Lists.map ("comp" ~> Lists.map (var "getKey") (var "comp")) $
-    ref Tarjan.stronglyConnectedComponentsDef @@ var "g"
+    Tarjan.stronglyConnectedComponents @@ var "g"
 
-topologicalSortNodesDef :: TBinding ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
-topologicalSortNodesDef = define "topologicalSortNodes" $
+topologicalSortNodes :: TBinding ((x -> a) -> (x -> [a]) -> [x] -> [[x]])
+topologicalSortNodes = define "topologicalSortNodes" $
   doc ("Sort a directed acyclic graph (DAG) of nodes using two helper functions:"
     <> " one for node keys, and one for the adjacency list of connected node keys."
     <> " The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.") $
   withOrd "t1" $ "getKey" ~> "getAdj" ~> "nodes" ~>
   "nodesByKey" <~ Maps.fromList (Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "n")) (var "nodes")) $
   "pairs" <~ Lists.map ("n" ~> pair (var "getKey" @@ var "n") (var "getAdj" @@ var "n")) (var "nodes") $
-  "comps" <~ ref topologicalSortComponentsDef @@ var "pairs" $
+  "comps" <~ topologicalSortComponents @@ var "pairs" $
   Lists.map ("c" ~> Maybes.cat $ Lists.map ("k" ~> Maps.lookup (var "k") (var "nodesByKey")) (var "c")) (var "comps")

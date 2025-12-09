@@ -93,9 +93,7 @@ string str = (Parsing.Parser (\input ->
         in (Logic.ifElse (Equality.equal strCodes inputPrefix) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
           Parsing.parseSuccessValue = str,
           Parsing.parseSuccessRemainder = (Strings.fromList (Lists.drop strLen inputCodes))})) (Parsing.ParseResultFailure (Parsing.ParseError {
-          Parsing.parseErrorMessage = (Strings.cat [
-            "expected: ",
-            str]),
+          Parsing.parseErrorMessage = (Strings.cat2 "expected: " str),
           Parsing.parseErrorRemainder = input})))))
 
 -- | Parse any single character (codepoint)

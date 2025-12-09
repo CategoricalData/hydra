@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Show.Core where
 
--- Standard imports for kernel terms modules
-import Hydra.Kernel
+-- Standard imports for kernel terms modules (slightly modified for conflict avoidance)
+import Hydra.Kernel hiding (literalType)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -35,7 +34,9 @@ import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Meta.Module        as Module
-import           Hydra.Dsl.Meta.Phantoms as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms hiding (
+  binding, elimination, field, fields, fieldType, floatType, floatValue, function, injection, integerType,
+  integerValue, lambda, literal, literalType, term, type_, typeScheme)
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Meta.Testing       as Testing
@@ -63,52 +64,52 @@ module_ = Module (Namespace "hydra.show.core") elements
     Just "String representations of hydra.core types"
   where
    elements = [
-     el readTermDef, -- TODO: move this to hydra.read.core
-     el bindingDef,
-     el eliminationDef,
-     el fieldDef,
-     el fieldTypeDef,
-     el fieldsDef,
-     el floatValueDef,
-     el floatTypeDef,
-     el functionDef,
-     el injectionDef,
-     el integerValueDef,
-     el integerTypeDef,
-     el lambdaDef,
-     el listDef,
-     el literalDef,
-     el literalTypeDef,
-     el termDef,
-     el typeDef,
-     el typeSchemeDef]
+     toBinding readTerm, -- TODO: move this to hydra.read.core
+     toBinding binding,
+     toBinding elimination,
+     toBinding field,
+     toBinding fieldType,
+     toBinding fields,
+     toBinding floatValue,
+     toBinding floatType,
+     toBinding function,
+     toBinding injection,
+     toBinding integerValue,
+     toBinding integerType,
+     toBinding lambda,
+     toBinding list_,
+     toBinding literal,
+     toBinding literalType,
+     toBinding term,
+     toBinding type_,
+     toBinding typeScheme]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-readTermDef :: TBinding (String -> Maybe Term)
-readTermDef = define "readTerm" $
+readTerm :: TBinding (String -> Maybe Term)
+readTerm = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
-bindingDef :: TBinding (Binding -> String)
-bindingDef = define "binding" $
+binding :: TBinding (Binding -> String)
+binding = define "binding" $
   doc "Show a binding as a string" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
   "typeStr" <~ Maybes.maybe
     (string "")
-    ("ts" ~> Strings.concat [string ":(", ref typeSchemeDef @@ var "ts", string ")"])
+    ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"])
     (Core.bindingType $ var "el") $
   Strings.cat $ list [
     var "name",
     var "typeStr",
     string " = ",
-    ref termDef @@ var "t"]
+    term @@ var "t"]
       
-eliminationDef :: TBinding (Elimination -> String)
-eliminationDef = define "elimination" $
+elimination :: TBinding (Elimination -> String)
+elimination = define "elimination" $
   doc "Show an elimination as a string" $
   "elm" ~>
   cases _Elimination (var "elm") Nothing [
@@ -126,7 +127,7 @@ eliminationDef = define "elimination" $
       "mdef" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
       "defaultField" <~ Maybes.maybe
-        (list [])
+        (list ([] :: [TTerm Field]))
         ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
         (var "mdef") $
       "allFields" <~ Lists.concat (list [var "cases", var "defaultField"]) $
@@ -134,65 +135,65 @@ eliminationDef = define "elimination" $
         string "case(",
         var "tname",
         string ")",
-        ref fieldsDef @@ var "allFields"],
+        fields @@ var "allFields"],
     _Elimination_wrap>>: "tname" ~> Strings.cat $ list [
       string "unwrap(",
       unwrap _Name @@ var "tname",
       string ")"]]
 
-fieldDef :: TBinding (Field -> String)
-fieldDef = define "field" $
+field :: TBinding (Field -> String)
+field = define "field" $
   "field" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  Strings.cat $ list [var "fname",  "=", ref termDef @@ var "fterm"]
+  Strings.cat $ list [var "fname", string "=", term @@ var "fterm"]
 
-fieldTypeDef :: TBinding (FieldType -> String)
-fieldTypeDef = define "fieldType" $
+fieldType :: TBinding (FieldType -> String)
+fieldType = define "fieldType" $
   "ft" ~>
   "fname" <~ unwrap _Name @@ (Core.fieldTypeName $ var "ft") $
   "ftyp" <~ Core.fieldTypeType (var "ft") $
   Strings.cat $ list [
     var "fname",
     string ":",
-    ref typeDef @@ var "ftyp"]
+    type_ @@ var "ftyp"]
 
-fieldsDef :: TBinding ([Field] -> String)
-fieldsDef = define "fields" $
+fields :: TBinding ([Field] -> String)
+fields = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
-  "fieldStrs" <~ Lists.map (ref fieldDef) (var "flds") $
+  "fieldStrs" <~ Lists.map field (var "flds") $
   Strings.cat $ list [
     string "{",
     Strings.intercalate (string ", ") (var "fieldStrs"),
     string "}"]
 
-floatValueDef :: TBinding (FloatValue -> String)
-floatValueDef = define "float" $
+floatValue :: TBinding (FloatValue -> String)
+floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v") ++ ":bigfloat",
-    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ ":float32",
-    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ ":float64"]
+    _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v") ++ (string ":bigfloat"),
+    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
+    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
-floatTypeDef :: TBinding (FloatType -> String)
-floatTypeDef = define "floatType" $
+floatType :: TBinding (FloatType -> String)
+floatType = define "floatType" $
   doc "Show a float type as a string" $
   "ft" ~> cases _FloatType (var "ft") Nothing [
     _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
-functionDef :: TBinding (Function -> String)
-functionDef = define "function" $
+function :: TBinding (Function -> String)
+function = define "function" $
   doc "Show a function as a string" $
   "f" ~> cases _Function (var "f") Nothing [
-    _Function_elimination>>: ref eliminationDef,
-    _Function_lambda>>: ref lambdaDef,
+    _Function_elimination>>: elimination,
+    _Function_lambda>>: lambda,
     _Function_primitive>>: "name" ~> Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
 
-injectionDef :: TBinding (Injection -> String)
-injectionDef = define "injection" $
+injection :: TBinding (Injection -> String)
+injection = define "injection" $
   doc "Show an injection as a string" $
   "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
@@ -201,24 +202,24 @@ injectionDef = define "injection" $
     string "inject(",
     unwrap _Name @@ var "tname",
     string ")",
-    ref fieldsDef @@ (list [var "f"])]
+    fields @@ (list [var "f"])]
 
-integerValueDef :: TBinding (IntegerValue -> String)
-integerValueDef = define "integer" $
+integerValue :: TBinding (IntegerValue -> String)
+integerValue = define "integer" $
   doc "Show an integer value as a string" $
   "iv" ~> cases _IntegerValue (var "iv") Nothing [
-    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ ":bigint",
-    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ ":int8",
-    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ ":int16",
-    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ ":int32",
-    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ ":int64",
-    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ ":uint8",
-    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ ":uint16",
-    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ ":uint32",
-    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ ":uint64"]
+    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ (string ":bigint"),
+    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ (string ":int8"),
+    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ (string ":int16"),
+    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ (string ":int32"),
+    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ (string ":int64"),
+    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ (string ":uint8"),
+    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ (string ":uint16"),
+    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
+    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
 
-integerTypeDef :: TBinding (IntegerType -> String)
-integerTypeDef = define "integerType" $
+integerType :: TBinding (IntegerType -> String)
+integerType = define "integerType" $
   doc "Show an integer type as a string" $
   "it" ~> cases _IntegerType (var "it") Nothing [
     _IntegerType_bigint>>: constant $ string "bigint",
@@ -231,8 +232,8 @@ integerTypeDef = define "integerType" $
     _IntegerType_uint32>>: constant $ string "uint32",
     _IntegerType_uint64>>: constant $ string "uint64"]
 
-lambdaDef :: TBinding (Lambda -> String)
-lambdaDef = define "lambda" $
+lambda :: TBinding (Lambda -> String)
+lambda = define "lambda" $
   doc "Show a lambda as a string" $
   "l" ~>
   "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
@@ -240,17 +241,17 @@ lambdaDef = define "lambda" $
   "body" <~ Core.lambdaBody (var "l") $
   "typeStr" <~ Maybes.maybe
     (string "")
-    ("t" ~> Strings.cat2 (string ":") (ref typeDef @@ var "t"))
+    ("t" ~> Strings.cat2 (string ":") (type_ @@ var "t"))
     (var "mt") $
   Strings.cat $ list [
     string "λ",
     var "v",
     var "typeStr",
     string ".",
-    ref termDef @@ var "body"]
+    term @@ var "body"]
 
-listDef :: TBinding ((a -> String) -> [a] -> String)
-listDef = define "list" $
+list_ :: TBinding ((a -> String) -> [a] -> String)
+list_ = define "list" $
   doc "Show a list using a given function to show each element" $
   "f" ~> "xs" ~>
   "elementStrs" <~ Lists.map (var "f") (var "xs") $
@@ -259,28 +260,28 @@ listDef = define "list" $
     Strings.intercalate (string ", ") (var "elementStrs"),
     string "]"]
 
-literalDef :: TBinding (Literal -> String)
-literalDef = define "literal" $
+literal :: TBinding (Literal -> String)
+literal = define "literal" $
   doc "Show a literal as a string" $
   "l" ~> cases _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
     _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
-    _Literal_float>>: "fv" ~> ref floatValueDef @@ var "fv",
-    _Literal_integer>>: "iv" ~> ref integerValueDef @@ var "iv",
+    _Literal_float>>: "fv" ~> floatValue @@ var "fv",
+    _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.showString $ var "s"]
 
-literalTypeDef :: TBinding (LiteralType -> String)
-literalTypeDef = define "literalType" $
+literalType :: TBinding (LiteralType -> String)
+literalType = define "literalType" $
   doc "Show a literal type as a string" $
   "lt" ~> cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
     _LiteralType_boolean>>: constant $ string "boolean",
-    _LiteralType_float>>: "ft" ~> ref floatTypeDef @@ var "ft",
-    _LiteralType_integer>>: "it" ~> ref integerTypeDef @@ var "it",
+    _LiteralType_float>>: "ft" ~> floatType @@ var "ft",
+    _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
-termDef :: TBinding (Term -> String)
-termDef = define "term" $
+term :: TBinding (Term -> String)
+term = define "term" $
   doc "Show a term as a string" $
   "t" ~>
   "gatherTerms" <~ ("prev" ~> "app" ~>
@@ -290,10 +291,10 @@ termDef = define "term" $
       (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
       _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
   cases _Term (var "t") Nothing [
-    _Term_annotated>>: "at" ~> ref termDef @@ (Core.annotatedTermBody $ var "at"),
+    _Term_annotated>>: "at" ~> term @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
-      "terms" <~ var "gatherTerms" @@ (list []) @@ var "app" $
-      "termStrs" <~ Lists.map (ref termDef) (var "terms") $
+      "terms" <~ var "gatherTerms" @@ (list ([] :: [TTerm Term])) @@ var "app" $
+      "termStrs" <~ Lists.map term (var "terms") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " @ ") (var "termStrs"),
@@ -301,35 +302,35 @@ termDef = define "term" $
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> Strings.cat $ list [
         string "left(",
-        ref termDef @@ var "l",
+        term @@ var "l",
         string ")"])
       ("r" ~> Strings.cat $ list [
         string "right(",
-        ref termDef @@ var "r",
+        term @@ var "r",
         string ")"])
       (var "e"),
-    _Term_function>>: ref functionDef,
+    _Term_function>>: function,
     _Term_let>>: "l" ~>
       "bindings" <~ Core.letBindings (var "l") $
       "env" <~ Core.letBody (var "l") $
-      "bindingStrs" <~ Lists.map (ref bindingDef) (var "bindings") $
+      "bindingStrs" <~ Lists.map binding (var "bindings") $
       Strings.cat $ list [
         string "let ",
         Strings.intercalate (string ", ") (var "bindingStrs"),
         string " in ",
-        ref termDef @@ var "env"],
+        term @@ var "env"],
     _Term_list>>: "els" ~>
-      "termStrs" <~ Lists.map (ref termDef) (var "els") $
+      "termStrs" <~ Lists.map term (var "els") $
       Strings.cat $ list [
         string "[",
         Strings.intercalate (string ", ") (var "termStrs"),
         string "]"],
-    _Term_literal>>: "lit" ~> ref literalDef @@ var "lit",
+    _Term_literal>>: "lit" ~> literal @@ var "lit",
     _Term_map>>: "m" ~>
       "entry" <~ ("p" ~> Strings.cat $ list [
-        ref termDef @@ (Pairs.first $ var "p"),
+        term @@ (Pairs.first $ var "p"),
         string "=",
-        ref termDef @@ (Pairs.second $ var "p")]) $
+        term @@ (Pairs.second $ var "p")]) $
       Strings.cat $ list [
         string "{",
         Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
@@ -338,14 +339,14 @@ termDef = define "term" $
       (string "nothing")
       ("t" ~> Strings.cat $ list [
         string "just(",
-        ref termDef @@ var "t",
+        term @@ var "t",
         string ")"])
       (var "mt"),
     _Term_pair>>: "p" ~> Strings.cat $ list [
       string "(",
-      ref termDef @@ (Pairs.first $ var "p"),
+      term @@ (Pairs.first $ var "p"),
       string ", ",
-      ref termDef @@ (Pairs.second $ var "p"),
+      term @@ (Pairs.second $ var "p"),
       string ")"],
     _Term_record>>: "rec" ~>
       "tname" <~ unwrap _Name @@ (Core.recordTypeName $ var "rec") $
@@ -354,11 +355,11 @@ termDef = define "term" $
         string "record(",
         var "tname",
         string ")",
-        ref fieldsDef @@ var "flds"],
+        fields @@ var "flds"],
     _Term_set>>: "s" ~>
       Strings.cat $ list [
         string "{",
-        Strings.intercalate (string ", ") (Lists.map (ref termDef) $ Sets.toList $ var "s"),
+        Strings.intercalate (string ", ") (Lists.map term $ Sets.toList $ var "s"),
         string "}"],
     _Term_typeLambda>>: "ta" ~>
       "param" <~ unwrap _Name @@ (Core.typeLambdaParameter $ var "ta") $
@@ -367,16 +368,16 @@ termDef = define "term" $
         string "Λ",
         var "param",
         string ".",
-        ref termDef @@ var "body"],
+        term @@ var "body"],
     _Term_typeApplication>>: "tt" ~>
       "t2" <~ Core.typeApplicationTermBody (var "tt") $
       "typ" <~ Core.typeApplicationTermType (var "tt") $
       Strings.cat $ list [
-        ref termDef @@ var "t2",
+        term @@ var "t2",
         string "⟨",
-        ref typeDef @@ var "typ",
+        type_ @@ var "typ",
         string "⟩"],
-    _Term_union>>: ref injectionDef,
+    _Term_union>>: injection,
     _Term_unit>>: constant $ string "unit",
     _Term_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Term_wrap>>: "wt" ~>
@@ -386,16 +387,16 @@ termDef = define "term" $
         string "wrap(",
         var "tname",
         string "){",
-        ref termDef @@ var "term1",
+        term @@ var "term1",
         string "}"]]
 
-typeDef :: TBinding (Type -> String)
-typeDef = define "type" $
+type_ :: TBinding (Type -> String)
+type_ = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
   "showRowType" <~ ("rt" ~>
     "flds" <~ Core.rowTypeFields (var "rt") $
-    "fieldStrs" <~ Lists.map (ref fieldTypeDef) (var "flds") $
+    "fieldStrs" <~ Lists.map fieldType (var "flds") $
     Strings.cat $ list [
       string "{",
       Strings.intercalate (string ", ") (var "fieldStrs"),
@@ -414,10 +415,10 @@ typeDef = define "type" $
           "cod" <~ Core.functionTypeCodomain (var "ft") $
           var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
   cases _Type (var "typ") Nothing [
-    _Type_annotated>>: "at" ~> ref typeDef @@ (Core.annotatedTypeBody $ var "at"),
+    _Type_annotated>>: "at" ~> type_ @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
-      "types" <~ var "gatherTypes" @@ (list []) @@ var "app" $
-      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
+      "types" <~ var "gatherTypes" @@ (list ([] :: [TTerm Type])) @@ var "app" $
+      "typeStrs" <~ Lists.map type_ (var "types") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " @ ") (var "typeStrs"),
@@ -427,9 +428,9 @@ typeDef = define "type" $
       "rightTyp" <~ Core.eitherTypeRight (var "et") $
       Strings.cat $ list [
         string "either<",
-        ref typeDef @@ var "leftTyp",
+        type_ @@ var "leftTyp",
         string ", ",
-        ref typeDef @@ var "rightTyp",
+        type_ @@ var "rightTyp",
         string ">"],
     _Type_forall>>: "ft" ~>
       "var" <~ unwrap _Name @@ (Core.forallTypeParameter $ var "ft") $
@@ -438,46 +439,46 @@ typeDef = define "type" $
         string "(∀",
         var "var",
         string ".",
-        ref typeDef @@ var "body",
+        type_ @@ var "body",
         string ")"],
     _Type_function>>: "ft" ~>
-      "types" <~ var "gatherFunctionTypes" @@ (list []) @@ var "typ" $
-      "typeStrs" <~ Lists.map (ref typeDef) (var "types") $
+      "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TTerm Type])) @@ var "typ" $
+      "typeStrs" <~ Lists.map type_ (var "types") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " → ") (var "typeStrs"),
         string ")"],
     _Type_list>>: "etyp" ~> Strings.cat $ list [
       string "list<",
-      ref typeDef @@ var "etyp",
+      type_ @@ var "etyp",
       string ">"],
-    _Type_literal>>: "lt" ~> ref literalTypeDef @@ var "lt",
+    _Type_literal>>: "lt" ~> literalType @@ var "lt",
     _Type_map>>: "mt" ~>
       "keyTyp" <~ Core.mapTypeKeys (var "mt") $
       "valTyp" <~ Core.mapTypeValues (var "mt") $
       Strings.cat $ list [
         string "map<",
-        ref typeDef @@ var "keyTyp",
+        type_ @@ var "keyTyp",
         string ", ",
-        ref typeDef @@ var "valTyp",
+        type_ @@ var "valTyp",
         string ">"],
     _Type_maybe>>: "etyp" ~> Strings.cat $ list [
       string "maybe<",
-      ref typeDef @@ var "etyp",
+      type_ @@ var "etyp",
       string ">"],
     _Type_pair>>: "pt" ~>
       "firstTyp" <~ Core.pairTypeFirst (var "pt") $
       "secondTyp" <~ Core.pairTypeSecond (var "pt") $
       Strings.cat $ list [
         string "(",
-        ref typeDef @@ var "firstTyp",
+        type_ @@ var "firstTyp",
         string ", ",
-        ref typeDef @@ var "secondTyp",
-        ")"],
+        type_ @@ var "secondTyp",
+        string ")"],
     _Type_record>>: "rt" ~> Strings.cat2 (string "record") (var "showRowType" @@ var "rt"),
     _Type_set>>: "etyp" ~> Strings.cat $ list [
       string "set<",
-      ref typeDef @@ var "etyp",
+      type_ @@ var "etyp",
       string ">"],
     _Type_union>>: "rt" ~> Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
     _Type_unit>>: constant $ string "unit",
@@ -485,10 +486,10 @@ typeDef = define "type" $
     _Type_wrap>>: "wt" ~>
       "tname" <~ unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt") $
       "typ1" <~ Core.wrappedTypeBody (var "wt") $
-      Strings.cat $ list [string "wrap[", var "tname", string "](", ref typeDef @@ var "typ1", string ")"]]
+      Strings.cat $ list [string "wrap[", var "tname", string "](", type_ @@ var "typ1", string ")"]]
 
-typeSchemeDef :: TBinding (TypeScheme -> String)
-typeSchemeDef = define "typeScheme" $
+typeScheme :: TBinding (TypeScheme -> String)
+typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
@@ -503,5 +504,5 @@ typeSchemeDef = define "typeScheme" $
   Strings.cat $ list [
     string "(",
     var "fa",
-    ref typeDef @@ var "body",
+    type_ @@ var "body",
     string ")"]

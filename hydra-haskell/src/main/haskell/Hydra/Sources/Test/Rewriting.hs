@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 -- | Test cases for term rewriting operations (free variables, simplify, flatten let, lift lambda)
 module Hydra.Sources.Test.Rewriting where
@@ -24,13 +23,13 @@ module_ = Module (Namespace "hydra.test.rewriting") elements
     KernelTypes.kernelTypesModules
     (Just "Test cases for term rewriting operations")
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     doc "Test cases for term rewriting operations" $
     supergroup "rewriting" [
       freeVariablesGroup,

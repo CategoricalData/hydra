@@ -43,7 +43,7 @@ typeArity x = case x of
 
 -- | Find the arity (expected number of arguments) of a type scheme
 typeSchemeArity :: (Core.TypeScheme -> Int)
-typeSchemeArity ts = (typeArity (Core.typeSchemeType ts))
+typeSchemeArity arg_ = (typeArity (Core.typeSchemeType arg_))
 
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: (Core.Type -> [Core.Type])

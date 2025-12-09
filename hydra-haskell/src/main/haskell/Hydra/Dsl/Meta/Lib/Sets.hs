@@ -1,8 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Phantom-typed term DSL for the hydra.lib.sets library
 
 module Hydra.Dsl.Meta.Lib.Sets where
 
 import Hydra.Phantoms
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
@@ -10,8 +13,8 @@ import Hydra.Sources.Libraries
 import Data.Set
 
 
-delete :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
-delete = primitive2 _sets_delete
+delete :: AsTerm t a => t -> TTerm (Set a) -> TTerm (Set a)
+delete x = primitive2 _sets_delete (asTerm x)
 
 difference :: TTerm (Set a) -> TTerm (Set a) -> TTerm (Set a)
 difference = primitive2 _sets_difference
@@ -19,8 +22,8 @@ difference = primitive2 _sets_difference
 empty :: TTerm (Set a)
 empty = primitive _sets_empty
 
-fromList :: TTerm [a] -> TTerm (Set a)
-fromList = primitive1 _sets_fromList
+fromList :: AsTerm t [a] => t -> TTerm (Set a)
+fromList xs = primitive1 _sets_fromList (asTerm xs)
 
 insert :: TTerm a -> TTerm (Set a) -> TTerm (Set a)
 insert = primitive2 _sets_insert

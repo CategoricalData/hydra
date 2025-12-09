@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.sets") elements [] [] $
     Just "Test cases for hydra.lib.sets primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 emptyStringSet = intSet []
 intSetOrEmpty = intSet
@@ -132,8 +132,8 @@ setsMap = subgroup "map" [
       lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
       intSet s] (intSet result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.sets primitives" $
     supergroup "hydra.lib.sets primitives" [
       setsEmpty,

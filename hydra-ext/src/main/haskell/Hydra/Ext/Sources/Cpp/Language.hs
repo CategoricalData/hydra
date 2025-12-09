@@ -1,7 +1,5 @@
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Cpp.Language where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -100,13 +98,13 @@ cppLanguageDefinition = definitionInModule cppLanguageModule
 
 cppLanguageModule :: Module
 cppLanguageModule = Module (Namespace "hydra.ext.cpp.language")
-  [el cppLanguageDef, el cppReservedWordsDef]
+  [toBinding cppLanguage, toBinding cppReservedWords]
   [Lexical.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for C++"
 
-cppLanguageDef :: TBinding Language
-cppLanguageDef = cppLanguageDefinition "cppLanguage" $
+cppLanguage :: TBinding Language
+cppLanguage = cppLanguageDefinition "cppLanguage" $
   doc "Language constraints for C++" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
     Variants.eliminationVariantRecord,
@@ -174,8 +172,8 @@ cppLanguageDef = cppLanguageDefinition "cppLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-cppReservedWordsDef :: TBinding (S.Set String)
-cppReservedWordsDef = cppLanguageDefinition "cppReservedWords" $
+cppReservedWords :: TBinding (S.Set String)
+cppReservedWords = cppLanguageDefinition "cppReservedWords" $
   doc "A set of reserved words in C++" $ lets [
   "cppKeywords">:
     doc "C++ keywords, including C++11/14/17/20 additions" $

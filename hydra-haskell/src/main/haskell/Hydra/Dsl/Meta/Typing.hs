@@ -1,6 +1,9 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Typing where
 
 import Hydra.Kernel
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -42,11 +45,11 @@ inferenceContextWithDataTypes ctx dataTypes = inferenceContext
   dataTypes
   (Hydra.Dsl.Meta.Typing.inferenceContextDebug ctx)
 
-inferenceResult :: TTerm Term -> TTerm Type -> TTerm TypeSubst -> TTerm InferenceResult
+inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm InferenceResult
 inferenceResult term type_ subst = Phantoms.record _InferenceResult [
   _InferenceResult_term>>: term,
   _InferenceResult_type>>: type_,
-  _InferenceResult_subst>>: subst]
+  _InferenceResult_subst>>: asTerm subst]
 
 inferenceResultTerm :: TTerm InferenceResult -> TTerm Term
 inferenceResultTerm ir = Phantoms.project _InferenceResult _InferenceResult_term @@ ir

@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.literals") elements [] [] $
     Just "Test cases for hydra.lib.literals primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Test groups for hydra.lib.literals primitives
 -- Note: Testing a representative subset of the many literal conversion functions
@@ -52,8 +52,8 @@ literalsInt32ToBigint = subgroup "int32ToBigint" [
 --  where
 --    test name x result = primCase name _literals_binaryToString [string x] (string result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.literals primitives" $
     supergroup "hydra.lib.literals primitives" [
       literalsBigintToInt32,

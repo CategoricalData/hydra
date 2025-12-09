@@ -19,13 +19,13 @@ module_ = Module (Namespace "hydra.test.lib.strings") elements
     (Just "Test cases for hydra.lib.strings primitives")
   where
     elements = [
-        el allTestsDef]
+        Base.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     Base.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [
       stringsCat,

@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Grammars where
 
@@ -70,34 +69,34 @@ module_ = Module (Namespace "hydra.grammars") elements
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
    elements = [
-     el childNameDef,
-     el findNamesDef,
-     el grammarToModuleDef,
-     el isComplexDef,
-     el isNontrivialDef,
-     el makeElementsDef,
-     el rawNameDef,
-     el simplifyDef,
-     el toNameDef,
-     el wrapTypeDef]
+     toBinding childName,
+     toBinding findNames,
+     toBinding grammarToModule,
+     toBinding isComplex,
+     toBinding isNontrivial,
+     toBinding makeElements,
+     toBinding rawName,
+     toBinding simplify,
+     toBinding toName,
+     toBinding wrapType]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-childNameDef :: TBinding (String -> String -> String)
-childNameDef = define "childName" $
+childName :: TBinding (String -> String -> String)
+childName = define "childName" $
   doc "Generate child name" $
   "lname" ~> "n" ~>
-  Strings.cat (list [var "lname", "_", ref Formatting.capitalizeDef @@ var "n"])
+  Strings.cat (list [var "lname", string "_", Formatting.capitalize @@ var "n"])
 
-findNamesDef :: TBinding ([G.Pattern] -> [String])
-findNamesDef = define "findNames" $
+findNames :: TBinding ([G.Pattern] -> [String])
+findNames = define "findNames" $
   doc "Find unique names for patterns" $
   "pats" ~>
   "nextName" <~ ("acc" ~> "pat" ~>
     "names" <~ Pairs.first (var "acc") $
     "nameMap" <~ Pairs.second (var "acc") $
-    "rn" <~ ref rawNameDef @@ var "pat" $
+    "rn" <~ rawName @@ var "pat" $
     "nameAndIndex" <~ Maybes.maybe
       (pair (var "rn") (int32 1))
       ("i" ~> pair (Strings.cat2 (var "rn") (Literals.showInt32 (Math.add (var "i") (int32 1)))) (Math.add (var "i") (int32 1)))
@@ -107,10 +106,10 @@ findNamesDef = define "findNames" $
     pair
       (Lists.cons (var "nn") (var "names"))
       (Maps.insert (var "rn") (var "ni") (var "nameMap"))) $
-  Lists.reverse (Pairs.first (Lists.foldl (var "nextName") (pair (list []) Maps.empty) (var "pats")))
+  Lists.reverse (Pairs.first (Lists.foldl (var "nextName") (pair (list ([] :: [TTerm Name])) Maps.empty) (var "pats")))
 
-grammarToModuleDef :: TBinding (Namespace -> G.Grammar -> Maybe String -> Module)
-grammarToModuleDef = define "grammarToModule" $
+grammarToModule :: TBinding (Namespace -> G.Grammar -> Maybe String -> Module)
+grammarToModule = define "grammarToModule" $
   doc "Convert a BNF grammar to a Hydra module" $
   "ns" ~> "grammar" ~> "desc" ~>
   "prodPairs" <~ Lists.map
@@ -118,34 +117,34 @@ grammarToModuleDef = define "grammarToModule" $
       (Grammar.unSymbol (Grammar.productionSymbol (var "prod")))
       (Grammar.productionPattern (var "prod")))
     (Grammar.unGrammar (var "grammar")) $
-  "capitalizedNames" <~ Lists.map ("pair" ~> ref Formatting.capitalizeDef @@ (Pairs.first (var "pair"))) (var "prodPairs") $
+  "capitalizedNames" <~ Lists.map ("pair" ~> Formatting.capitalize @@ (Pairs.first (var "pair"))) (var "prodPairs") $
   "patterns" <~ Lists.map ("pair" ~> Pairs.second (var "pair")) (var "prodPairs") $
   "elementPairs" <~ Lists.concat (Lists.zipWith
-    (ref makeElementsDef @@ false @@ var "ns")
+    (makeElements @@ false @@ var "ns")
     (var "capitalizedNames")
     (var "patterns")) $
   "elements" <~ Lists.map
     ("pair" ~>
       "lname" <~ Pairs.first (var "pair") $
-      "typ" <~ ref wrapTypeDef @@ (Pairs.second (var "pair")) $
-      ref Annotations.typeElementDef @@ (ref toNameDef @@ var "ns" @@ var "lname") @@ var "typ")
+      "typ" <~ wrapType @@ (Pairs.second (var "pair")) $
+      Annotations.typeElement @@ (toName @@ var "ns" @@ var "lname") @@ var "typ")
     (var "elementPairs") $
-  Module.module_ (var "ns") (var "elements") (list []) (list []) (var "desc")
+  Module.module_ (var "ns") (var "elements") (list ([] :: [TTerm Module])) (list ([] :: [TTerm Module])) (var "desc")
 
-isComplexDef :: TBinding (G.Pattern -> Bool)
-isComplexDef = define "isComplex" $
+isComplex :: TBinding (G.Pattern -> Bool)
+isComplex = define "isComplex" $
   doc "Check if pattern is complex" $
   "pat" ~> match G._Pattern (Just false) [
-    _Pattern_labeled>>: "lp" ~> ref isComplexDef @@ (Grammar.labeledPatternPattern (var "lp")),
-    _Pattern_sequence>>: "pats" ~> ref isNontrivialDef @@ true @@ var "pats",
-    _Pattern_alternatives>>: "pats" ~> ref isNontrivialDef @@ false @@ var "pats"]
+    _Pattern_labeled>>: "lp" ~> isComplex @@ (Grammar.labeledPatternPattern (var "lp")),
+    _Pattern_sequence>>: "pats" ~> isNontrivial @@ true @@ var "pats",
+    _Pattern_alternatives>>: "pats" ~> isNontrivial @@ false @@ var "pats"]
   @@ var "pat"
 
-isNontrivialDef :: TBinding (Bool -> [G.Pattern] -> Bool)
-isNontrivialDef = define "isNontrivial" $
+isNontrivial :: TBinding (Bool -> [G.Pattern] -> Bool)
+isNontrivial = define "isNontrivial" $
   doc "Check if patterns are nontrivial" $
   "isRecord" ~> "pats" ~>
-  "minPats" <~ ref simplifyDef @@ var "isRecord" @@ var "pats" $
+  "minPats" <~ simplify @@ var "isRecord" @@ var "pats" $
   "isLabeled" <~ ("p" ~> cases G._Pattern (var "p")
     (Just false) [
     _Pattern_labeled>>: constant true]) $
@@ -153,16 +152,16 @@ isNontrivialDef = define "isNontrivial" $
     (var "isLabeled" @@ (Lists.head $ var "minPats"))
     true
 
-makeElementsDef :: TBinding (Bool -> Namespace -> String -> G.Pattern -> [(String, Type)])
-makeElementsDef = define "makeElements" $
+makeElements :: TBinding (Bool -> Namespace -> String -> G.Pattern -> [(String, Type)])
+makeElements = define "makeElements" $
   doc "Create elements from pattern" $
   "omitTrivial" ~> "ns" ~> "lname" ~> "pat" ~>
-  "trivial" <~ Logic.ifElse (var "omitTrivial") (list []) (list [pair (var "lname") MetaTypes.unit]) $
+  "trivial" <~ Logic.ifElse (var "omitTrivial") (list ([] :: [TTerm (String, Type)])) (list [pair (var "lname") MetaTypes.unit]) $
 
   "descend" <~ ("n" ~> "f" ~> "p" ~>
-    "cpairs" <~ ref makeElementsDef @@ false @@ var "ns" @@ (ref childNameDef @@ var "lname" @@ var "n") @@ var "p" $
-    var "f" @@ Logic.ifElse (ref isComplexDef @@ var "p")
-      (Lists.cons (pair (var "lname") (Core.typeVariable (ref toNameDef @@ var "ns" @@ (Pairs.first (Lists.head (var "cpairs")))))) (var "cpairs"))
+    "cpairs" <~ makeElements @@ false @@ var "ns" @@ (childName @@ var "lname" @@ var "n") @@ var "p" $
+    var "f" @@ Logic.ifElse (isComplex @@ var "p")
+      (Lists.cons (pair (var "lname") (Core.typeVariable (toName @@ var "ns" @@ (Pairs.first (Lists.head (var "cpairs")))))) (var "cpairs"))
       (Logic.ifElse (Lists.null (var "cpairs"))
         (list [pair (var "lname") MetaTypes.unit])
         (Lists.cons (pair (var "lname") (Pairs.second (Lists.head (var "cpairs")))) (Lists.tail (var "cpairs"))))) $
@@ -174,55 +173,55 @@ makeElementsDef = define "makeElements" $
   lets [
     "forPat">: ("pat" ~> match G._Pattern Nothing [
       _Pattern_alternatives>>: "pats" ~> var "forRecordOrUnion" @@ false @@
-        ("fields" ~> Core.typeUnion (Core.rowType (ref Constants.placeholderNameDef) (var "fields"))) @@ var "pats",
+        ("fields" ~> Core.typeUnion (Core.rowType (Constants.placeholderName) (var "fields"))) @@ var "pats",
       _Pattern_constant>>: constant (var "trivial"),
-      _Pattern_ignored>>: constant (list []),
+      _Pattern_ignored>>: constant (list ([] :: [TTerm (String, Type)])),
       _Pattern_labeled>>: "lp" ~> var "forPat" @@ Grammar.labeledPatternPattern (var "lp"),
       _Pattern_nil>>: constant (var "trivial"),
       _Pattern_nonterminal>>: "s" ~> list [pair (var "lname") (Core.typeVariable (
-        ref toNameDef @@ var "ns" @@ Grammar.unSymbol (var "s")))],
-      _Pattern_option>>: "p" ~> var "mod" @@ "Option" @@ (unaryFunction MetaTypes.optional) @@ var "p",
-      _Pattern_plus>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p",
+        toName @@ var "ns" @@ Grammar.unSymbol (var "s")))],
+      _Pattern_option>>: "p" ~> var "mod" @@ string "Option" @@ (unaryFunction MetaTypes.optional) @@ var "p",
+      _Pattern_plus>>: "p" ~> var "mod" @@ string "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p",
       _Pattern_regex>>: constant (list [pair (var "lname") MetaTypes.string]),
       _Pattern_sequence>>: "pats" ~> var "forRecordOrUnion" @@ true @@
-        ("fields" ~> Core.typeRecord (Core.rowType (ref Constants.placeholderNameDef) (var "fields"))) @@ var "pats",
-      _Pattern_star>>: "p" ~> var "mod" @@ "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p"]
+        ("fields" ~> Core.typeRecord (Core.rowType (Constants.placeholderName) (var "fields"))) @@ var "pats",
+      _Pattern_star>>: "p" ~> var "mod" @@ string "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p"]
     @@ var "pat"),
 
     "forRecordOrUnion">: ("isRecord" ~> "construct" ~> "pats" ~>
-      "minPats" <~ ref simplifyDef @@ var "isRecord" @@ var "pats" $
-      "fieldNames" <~ ref findNamesDef @@ var "minPats" $
+      "minPats" <~ simplify @@ var "isRecord" @@ var "pats" $
+      "fieldNames" <~ findNames @@ var "minPats" $
       "toField" <~ ("n" ~> "p" ~> var "descend" @@ var "n" @@
         ("pairs" ~> pair (Core.fieldType (Core.name (var "n")) (Pairs.second (Lists.head (var "pairs")))) (Lists.tail (var "pairs"))) @@
         var "p") $
       "fieldPairs" <~ Lists.zipWith (var "toField") (var "fieldNames") (var "minPats") $
       "fields" <~ Lists.map (unaryFunction Pairs.first) (var "fieldPairs") $
       "els" <~ Lists.concat (Lists.map (unaryFunction Pairs.second) (var "fieldPairs")) $
-      Logic.ifElse (ref isNontrivialDef @@ var "isRecord" @@ var "pats")
+      Logic.ifElse (isNontrivial @@ var "isRecord" @@ var "pats")
         (Lists.cons (pair (var "lname") (var "construct" @@ var "fields")) (var "els"))
         (var "forPat" @@ (Lists.head (var "minPats"))))] $
 
   var "forPat" @@ var "pat"
 
-rawNameDef :: TBinding (G.Pattern -> String)
-rawNameDef = define "rawName" $
+rawName :: TBinding (G.Pattern -> String)
+rawName = define "rawName" $
   doc "Get raw name from pattern" $
   "pat" ~> match G._Pattern Nothing [
-    _Pattern_alternatives>>: constant "alts",
-    _Pattern_constant>>: "c" ~> ref Formatting.capitalizeDef @@ (ref Formatting.withCharacterAliasesDef @@ (Grammar.unConstant (var "c"))),
-    _Pattern_ignored>>: constant "ignored",
+    _Pattern_alternatives>>: constant (string "alts"),
+    _Pattern_constant>>: "c" ~> Formatting.capitalize @@ (Formatting.withCharacterAliases @@ (Grammar.unConstant (var "c"))),
+    _Pattern_ignored>>: constant (string "ignored"),
     _Pattern_labeled>>: "lp" ~> Grammar.unLabel (Grammar.labeledPatternLabel (var "lp")),
-    _Pattern_nil>>: constant "none",
-    _Pattern_nonterminal>>: "s" ~> ref Formatting.capitalizeDef @@ (Grammar.unSymbol (var "s")),
-    _Pattern_option>>: "p" ~> ref Formatting.capitalizeDef @@ (ref rawNameDef @@ var "p"),
-    _Pattern_plus>>: "p" ~> Strings.cat2 "listOf" (ref Formatting.capitalizeDef @@ (ref rawNameDef @@ var "p")),
-    _Pattern_regex>>: constant "regex",
-    _Pattern_sequence>>: constant "sequence",
-    _Pattern_star>>: "p" ~> Strings.cat2 "listOf" (ref Formatting.capitalizeDef @@ (ref rawNameDef @@ var "p"))]
+    _Pattern_nil>>: constant (string "none"),
+    _Pattern_nonterminal>>: "s" ~> Formatting.capitalize @@ (Grammar.unSymbol (var "s")),
+    _Pattern_option>>: "p" ~> Formatting.capitalize @@ (rawName @@ var "p"),
+    _Pattern_plus>>: "p" ~> Strings.cat2 (string "listOf") (Formatting.capitalize @@ (rawName @@ var "p")),
+    _Pattern_regex>>: constant (string "regex"),
+    _Pattern_sequence>>: constant (string "sequence"),
+    _Pattern_star>>: "p" ~> Strings.cat2 (string "listOf") (Formatting.capitalize @@ (rawName @@ var "p"))]
   @@ var "pat"
 
-simplifyDef :: TBinding (Bool -> [G.Pattern] -> [G.Pattern])
-simplifyDef = define "simplify" $
+simplify :: TBinding (Bool -> [G.Pattern] -> [G.Pattern])
+simplify = define "simplify" $
   doc "Remove trivial patterns from records" $
   "isRecord" ~> "pats" ~>
   "isConstant" <~ ("p" ~> match G._Pattern (Just false) [
@@ -231,14 +230,14 @@ simplifyDef = define "simplify" $
     (Lists.filter ("p" ~> Logic.not (var "isConstant" @@ var "p")) (var "pats"))
     (var "pats")
 
-toNameDef :: TBinding (Namespace -> String -> Name)
-toNameDef = define "toName" $
+toName :: TBinding (Namespace -> String -> Name)
+toName = define "toName" $
   doc "Convert local name to qualified name" $
   "ns" ~> "local" ~>
-  ref Names.unqualifyNameDef @@ (Module.qualifiedName (just (var "ns")) (var "local"))
+  Names.unqualifyName @@ (Module.qualifiedName (just (var "ns")) (var "local"))
 
-wrapTypeDef :: TBinding (Type -> Type)
-wrapTypeDef = define "wrapType" $
+wrapType :: TBinding (Type -> Type)
+wrapType = define "wrapType" $
   doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
   "t" ~> cases _Type (var "t")
     (Just (Core.typeWrap (Core.wrappedType (Core.nameLift placeholderName) (var "t")))) [

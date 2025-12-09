@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Json.Writer where
 
@@ -73,14 +72,14 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.json.writer"
     elements = [
-      el colonOpDef,
-      el jsonStringDef,
-      el keyValueToExprDef,
-      el printJsonDef,
-      el valueToExprDef]
+      toBinding colonOp,
+      toBinding jsonString,
+      toBinding keyValueToExpr,
+      toBinding printJson,
+      toBinding valueToExpr]
 
-colonOpDef :: TBinding Op
-colonOpDef = jsonSerdeDefinition "colonOp" $
+colonOp :: TBinding Op
+colonOp = jsonSerdeDefinition "colonOp" $
   doc "The colon operator used to separate keys and values in JSON objects" $
   Ast.op
     (Ast.symbol $ string ":")
@@ -96,8 +95,8 @@ newlineCode = int32 10    -- '\n'
 returnCode = int32 13     -- '\r'
 tabCode = int32 9         -- '\t'
 
-jsonStringDef :: TBinding (String -> String)
-jsonStringDef = jsonSerdeDefinition "jsonString" $
+jsonString :: TBinding (String -> String)
+jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
   -- escape function takes a codepoint (Int) and returns a String
@@ -117,35 +116,35 @@ jsonStringDef = jsonSerdeDefinition "jsonString" $
   "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
-keyValueToExprDef :: TBinding ((String, J.Value) -> Expr)
-keyValueToExprDef = jsonSerdeDefinition "keyValueToExpr" $
+keyValueToExpr :: TBinding ((String, J.Value) -> Expr)
+keyValueToExpr = jsonSerdeDefinition "keyValueToExpr" $
   doc "Convert a key-value pair to an AST expression" $
   "pair" ~>
   "key" <~ Pairs.first (var "pair") $
   "value" <~ Pairs.second (var "pair") $
-  ref Serialization.ifxDef @@ ref colonOpDef
-    @@ (ref Serialization.cstDef @@ (ref jsonStringDef @@ var "key"))
-    @@ (ref valueToExprDef @@ var "value")
+  Serialization.ifx @@ colonOp
+    @@ (Serialization.cst @@ (jsonString @@ var "key"))
+    @@ (valueToExpr @@ var "value")
 
-valueToExprDef :: TBinding (J.Value -> Expr)
-valueToExprDef = jsonSerdeDefinition "valueToExpr" $
+valueToExpr :: TBinding (J.Value -> Expr)
+valueToExpr = jsonSerdeDefinition "valueToExpr" $
   doc "Convert a JSON value to an AST expression for serialization" $
   "value" ~>
   cases J._Value (var "value") Nothing [
     J._Value_array>>: "arr" ~>
-      ref Serialization.bracketListAdaptiveDef @@ (Lists.map (ref valueToExprDef) (var "arr")),
+      Serialization.bracketListAdaptive @@ (Lists.map (valueToExpr) (var "arr")),
     J._Value_boolean>>: "b" ~>
-      ref Serialization.cstDef @@ (Logic.ifElse (var "b") (string "true") (string "false")),
+      Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false")),
     J._Value_null>>: constant $
-      ref Serialization.cstDef @@ string "null",
+      Serialization.cst @@ string "null",
     J._Value_number>>: "n" ~>
-      ref Serialization.cstDef @@ (Literals.showBigfloat $ var "n"),
+      Serialization.cst @@ (Literals.showBigfloat $ var "n"),
     J._Value_object>>: "obj" ~>
-      ref Serialization.bracesListAdaptiveDef @@ (Lists.map (ref keyValueToExprDef) (Maps.toList $ var "obj")),
+      Serialization.bracesListAdaptive @@ (Lists.map (keyValueToExpr) (Maps.toList $ var "obj")),
     J._Value_string>>: "s" ~>
-      ref Serialization.cstDef @@ (ref jsonStringDef @@ var "s")]
+      Serialization.cst @@ (jsonString @@ var "s")]
 
-printJsonDef :: TBinding (J.Value -> String)
-printJsonDef = jsonSerdeDefinition "printJson" $
+printJson :: TBinding (J.Value -> String)
+printJson = jsonSerdeDefinition "printJson" $
   doc "Serialize a JSON value to a string" $
-  "value" ~> ref Serialization.printExprDef @@ (ref valueToExprDef @@ var "value")
+  "value" ~> Serialization.printExpr @@ (valueToExpr @@ var "value")

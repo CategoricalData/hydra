@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | A domain-specific language for constructing term-encoded Hydra terms in Haskell;
 --   these functions enable you to build terms (programs) which build terms.
 module Hydra.Dsl.Meta.Terms (
@@ -131,10 +133,10 @@ float = Core.termLiteral . Core.literalFloat
 
 -- | Create a term-encoded union injection
 -- Example: inject (name "Result") "success" (int32 42)
-inject :: TTerm Name -> String -> TTerm Term -> TTerm Term
-inject tname fname = Core.termUnion . Core.injection tname . Core.field (name fname)
+inject :: AsTerm t Name => t -> String -> TTerm Term -> TTerm Term
+inject tname fname = Core.termUnion . Core.injection (asTerm tname) . Core.field (name fname)
 
-injectUnit :: TTerm Name -> String -> TTerm Term
+injectUnit :: AsTerm t Name => t -> String -> TTerm Term
 injectUnit tname fname = inject tname fname unit
 
 -- | Create a term-encoded 8-bit signed integer literal
@@ -226,9 +228,9 @@ mapTerm1 m = inject (Core.nameLift _Term) "map" $ Core.termMap m
 
 -- | Create a term-encoded pattern match on a union
 -- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
-match :: TTerm Name -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
+match :: AsTerm t Name => t -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
 match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
-    $ Core.caseStatement tname def $ Phantoms.list $ toField pairs
+    $ Core.caseStatement (asTerm tname) def $ Phantoms.list $ toField pairs
   where
     toField = fmap (\(n, t) -> Core.field n t)
 
@@ -262,14 +264,14 @@ primitiveLift = Core.termFunction . Core.functionPrimitive
 
 -- | Create a term-encoded field projection function
 -- Example: project (name "Person") (name "firstName")
-project :: TTerm Name -> TTerm Name -> TTerm Term
+project :: (AsTerm t Name, AsTerm f Name) => t -> f -> TTerm Term
 project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
-  $ Core.projection tname fname
+  $ Core.projection (asTerm tname) (asTerm fname)
 
 -- | Create a term-encoded record with named fields
 -- Example: record (name "Person") ["name">: string "John", "age">: int32 30]
-record :: TTerm Name -> [(TTerm Name, TTerm Term)] -> TTerm Term
-record name pairs = Core.termRecord $ Core.record name $ Phantoms.list (toField <$> pairs)
+record :: AsTerm t Name => t -> [(TTerm Name, TTerm Term)] -> TTerm Term
+record name pairs = Core.termRecord $ Core.record (asTerm name) $ Phantoms.list (toField <$> pairs)
   where
     toField (n, t) = Core.field n t
 
@@ -394,8 +396,8 @@ injectUnitPhantom tname fname = injectPhantom tname fname Core.termUnit
 
 -- | Create a term-encoded unwrap function for a wrapped type
 -- Example: unwrap (name "Email")
-unwrap :: TTerm Name -> TTerm Term
-unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap
+unwrap :: AsTerm t Name => t -> TTerm Term
+unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap . asTerm
 
 -- | Create a term-encoded variable reference from a string
 -- Example: var "x"
@@ -422,8 +424,8 @@ injectPhantom tname fname term = Core.termUnion $ Core.injection (Core.nameLift 
 
 -- | Create a term-encoded wrapped term (newtype)
 -- Example: wrap (name "Email") (string "user@example.com")
-wrap :: TTerm Name -> TTerm Term -> TTerm Term
-wrap name = Core.termWrap . Core.wrappedTerm name
+wrap :: AsTerm t Name => t -> TTerm Term -> TTerm Term
+wrap n = Core.termWrap . Core.wrappedTerm (asTerm n)
 
 -- | Create a term-encoded lambda with a type annotation
 -- Example: lambdaTyped "x" T.int32 (var "x")
