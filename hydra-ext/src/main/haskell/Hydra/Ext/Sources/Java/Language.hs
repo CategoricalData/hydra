@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Java.Language where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -98,19 +96,19 @@ javaLanguageDefinition = definitionInModule javaLanguageModule
 
 javaLanguageModule :: Module
 javaLanguageModule = Module (Namespace "hydra.ext.java.language")
-  [el javaMaxTupleLengthDef, el javaLanguageDef, el reservedWordsDef]
+  [toBinding javaMaxTupleLength, toBinding javaLanguage, toBinding reservedWords]
   [Lexical.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for Java"
 
-javaMaxTupleLengthDef :: TBinding Int
-javaMaxTupleLengthDef = javaLanguageDefinition "javaMaxTupleLength" $
+javaMaxTupleLength :: TBinding Int
+javaMaxTupleLength = javaLanguageDefinition "javaMaxTupleLength" $
   doc ("The maximum supported length of a tuple in Hydra-Java. "
     <> "Note: if this constant is changed, also change Tuples.java correspondingly") $
   int32 9
 
-javaLanguageDef :: TBinding Language
-javaLanguageDef = javaLanguageDefinition "javaLanguage" $
+javaLanguage :: TBinding Language
+javaLanguage = javaLanguageDefinition "javaLanguage" $
   doc "Language constraints for Java" $ lets [
   "eliminationVariants">: Sets.fromList $ list [
     Variants.eliminationVariantRecord,
@@ -180,8 +178,8 @@ javaLanguageDef = javaLanguageDefinition "javaLanguage" $
       (var "typeVariants")
       (var "typePredicate"))
 
-reservedWordsDef :: TBinding (S.Set String)
-reservedWordsDef = javaLanguageDefinition "reservedWords" $
+reservedWords :: TBinding (S.Set String)
+reservedWords = javaLanguageDefinition "reservedWords" $
   doc "A set of reserved words in Java" $ lets [
   "specialNames">:
     doc "Special names reserved for use by Hydra" $

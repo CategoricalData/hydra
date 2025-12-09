@@ -1,6 +1,9 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Core where
 
 import Hydra.Kernel
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -86,10 +89,10 @@ pairTypeFirst pt = Phantoms.project _PairType _PairType_first @@ pt
 pairTypeSecond :: TTerm PairType -> TTerm Type
 pairTypeSecond pt = Phantoms.project _PairType _PairType_second @@ pt
 
-binding :: TTerm Name -> TTerm Term -> TTerm (Maybe TypeScheme) -> TTerm Binding
-binding name term mtype = Phantoms.record _Binding [
-  _Binding_name>>: name,
-  _Binding_term>>: term,
+binding :: AsTerm t Term => TTerm Name -> t -> TTerm (Maybe TypeScheme) -> TTerm Binding
+binding nameTerm termArg mtype = Phantoms.record _Binding [
+  _Binding_name>>: nameTerm,
+  _Binding_term>>: asTerm termArg,
   _Binding_type>>: mtype]
 
 bindingName :: TTerm Binding -> TTerm Name
@@ -199,9 +202,9 @@ functionTypeDomain ft = Phantoms.project _FunctionType _FunctionType_domain @@ f
 functionTypeCodomain :: TTerm FunctionType -> TTerm Type
 functionTypeCodomain ft = Phantoms.project _FunctionType _FunctionType_codomain @@ ft
 
-injection :: TTerm Name -> TTerm Field -> TTerm Injection
+injection :: AsTerm t Name => t -> TTerm Field -> TTerm Injection
 injection typeName field = Phantoms.record _Injection [
-  _Injection_typeName>>: typeName,
+  _Injection_typeName>>: asTerm typeName,
   _Injection_field>>: field]
 
 injectionTypeName :: TTerm Injection -> TTerm Name
@@ -365,9 +368,9 @@ recordTypeName r = Phantoms.project _Record _Record_typeName @@ r
 recordFields :: TTerm Record -> TTerm [Field]
 recordFields r = Phantoms.project _Record _Record_fields @@ r
 
-rowType :: TTerm Name -> TTerm [FieldType] -> TTerm (RowType)
+rowType :: AsTerm t Name => t -> TTerm [FieldType] -> TTerm (RowType)
 rowType typeName fields = Phantoms.record _RowType [
-  _RowType_typeName>>: typeName,
+  _RowType_typeName>>: asTerm typeName,
   _RowType_fields>>: fields]
 
 rowTypeTypeName :: TTerm RowType -> TTerm Name
@@ -494,8 +497,8 @@ typeUnion = inject _Type _Type_union
 typeUnit :: TTerm Type
 typeUnit = injectUnit _Type _Type_unit
 
-typeVariable :: TTerm Name -> TTerm Type
-typeVariable = inject _Type _Type_variable
+typeVariable :: AsTerm t Name => t -> TTerm Type
+typeVariable n = inject _Type _Type_variable (asTerm n)
 
 typeWrap :: TTerm WrappedType -> TTerm Type
 typeWrap = inject _Type _Type_wrap
@@ -528,9 +531,9 @@ wrappedTermTypeName wt = Phantoms.project _WrappedTerm _WrappedTerm_typeName @@ 
 wrappedTermBody :: TTerm WrappedTerm -> TTerm Term
 wrappedTermBody wt = Phantoms.project _WrappedTerm _WrappedTerm_body @@ wt
 
-wrappedType :: TTerm Name -> TTerm Type -> TTerm WrappedType
+wrappedType :: AsTerm t Name => t -> TTerm Type -> TTerm WrappedType
 wrappedType typeName object = Phantoms.record _WrappedType [
-  _WrappedType_typeName>>: typeName,
+  _WrappedType_typeName>>: asTerm typeName,
   _WrappedType_body>>: object]
 
 wrappedTypeTypeName :: TTerm WrappedType -> TTerm Name

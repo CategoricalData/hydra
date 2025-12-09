@@ -1,9 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Substitution where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  composeTypeSubst, composeTypeSubstList, idTypeSubst, singletonTypeSubst,
+  substituteInConstraint, substituteInConstraints, substInContext, substituteInTerm,
+  substInType, substInTypeScheme, substTypesInTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -64,66 +66,66 @@ module_ = Module (Namespace "hydra.substitution") elements
     Just ("Variable substitution in type and term expressions.")
   where
    elements = [
-     el composeTypeSubstDef,
-     el composeTypeSubstListDef,
-     el idTypeSubstDef,
-     el singletonTypeSubstDef,
-     el substituteInConstraintDef,
-     el substituteInConstraintsDef,
-     el substInContextDef,
-     el substituteInTermDef,
-     el substInTypeDef,
-     el substInTypeSchemeDef,
-     el substTypesInTermDef]
+     toBinding composeTypeSubst,
+     toBinding composeTypeSubstList,
+     toBinding idTypeSubst,
+     toBinding singletonTypeSubst,
+     toBinding substituteInConstraint,
+     toBinding substituteInConstraints,
+     toBinding substInContext,
+     toBinding substituteInTerm,
+     toBinding substInType,
+     toBinding substInTypeScheme,
+     toBinding substTypesInTerm]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-composeTypeSubstDef :: TBinding (TypeSubst -> TypeSubst -> TypeSubst)
-composeTypeSubstDef = define "composeTypeSubst" $
+composeTypeSubst :: TBinding (TypeSubst -> TypeSubst -> TypeSubst)
+composeTypeSubst = define "composeTypeSubst" $
   doc "Compose two type substitutions" $
   lambdas ["s1", "s2"] $ lets [
     "isExtra">: lambdas ["k", "v"] $ Maybes.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
-    Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (ref substInTypeDef @@ var "s2") $ Typing.unTypeSubst $ var "s1"
+    Typing.typeSubst $ Maps.union (var "withExtra") $ Maps.map (substInType @@ var "s2") $ Typing.unTypeSubst $ var "s1"
 
-composeTypeSubstListDef :: TBinding ([TypeSubst] -> TypeSubst)
-composeTypeSubstListDef = define "composeTypeSubstList" $
+composeTypeSubstList :: TBinding ([TypeSubst] -> TypeSubst)
+composeTypeSubstList = define "composeTypeSubstList" $
   doc "Compose a list of type substitutions" $
-  Phantoms.fold (ref composeTypeSubstDef) @@ ref idTypeSubstDef
+  Phantoms.fold (composeTypeSubst) @@ idTypeSubst
 
-idTypeSubstDef :: TBinding TypeSubst
-idTypeSubstDef = define "idTypeSubst" $
+idTypeSubst :: TBinding TypeSubst
+idTypeSubst = define "idTypeSubst" $
   doc "The identity type substitution" $
   Typing.typeSubst Maps.empty
 
-singletonTypeSubstDef :: TBinding (Name -> Type -> TypeSubst)
-singletonTypeSubstDef = define "singletonTypeSubst" $
+singletonTypeSubst :: TBinding (Name -> Type -> TypeSubst)
+singletonTypeSubst = define "singletonTypeSubst" $
   doc "Create a type substitution with a single variable mapping" $
   lambdas ["v", "t"] $ Typing.typeSubst $ Maps.singleton (var "v") (var "t")
 
-substituteInConstraintDef :: TBinding (TypeSubst -> TypeConstraint -> TypeConstraint)
-substituteInConstraintDef = define "substituteInConstraint" $
+substituteInConstraint :: TBinding (TypeSubst -> TypeConstraint -> TypeConstraint)
+substituteInConstraint = define "substituteInConstraint" $
   doc "Apply a type substitution to a type constraint" $
   lambdas ["subst", "c"] $ Typing.typeConstraint
-    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintLeft $ var "c"))
-    (ref substInTypeDef @@ var "subst" @@ (Typing.typeConstraintRight $ var "c"))
+    (substInType @@ var "subst" @@ (Typing.typeConstraintLeft $ var "c"))
+    (substInType @@ var "subst" @@ (Typing.typeConstraintRight $ var "c"))
     (Typing.typeConstraintComment $ var "c")
 
-substituteInConstraintsDef :: TBinding (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
-substituteInConstraintsDef = define "substituteInConstraints" $
+substituteInConstraints :: TBinding (TypeSubst -> [TypeConstraint] -> [TypeConstraint])
+substituteInConstraints = define "substituteInConstraints" $
   doc "Apply a type substitution to a list of type constraints" $
-  lambdas ["subst", "cs"] $ Lists.map (ref substituteInConstraintDef @@ var "subst") (var "cs")
+  lambdas ["subst", "cs"] $ Lists.map (substituteInConstraint @@ var "subst") (var "cs")
 
-substInContextDef :: TBinding (TypeSubst -> InferenceContext -> InferenceContext)
-substInContextDef = define "substInContext" $
+substInContext :: TBinding (TypeSubst -> InferenceContext -> InferenceContext)
+substInContext = define "substInContext" $
   doc "Apply a type substitution to an inference context" $
   lambdas ["subst", "cx"] $ Typing.inferenceContextWithDataTypes
     (var "cx")
-    (Maps.map (ref substInTypeSchemeDef @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
+    (Maps.map (substInTypeScheme @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
 
-substituteInTermDef :: TBinding (TermSubst -> Term -> Term)
-substituteInTermDef = define "substituteInTerm" $
+substituteInTerm :: TBinding (TermSubst -> Term -> Term)
+substituteInTerm = define "substituteInTerm" $
   doc "Apply a term substitution to a term" $
   "subst" ~> "term0" ~> lets [
     "s">: Typing.unTermSubst $ var "subst",
@@ -132,18 +134,18 @@ substituteInTermDef = define "substituteInTerm" $
         "v">: Core.lambdaParameter $ var "l",
         "subst2">: Typing.termSubst $ Maps.remove (var "v") (var "s")] $
         Core.termFunction $ Core.functionLambda $
-          Core.lambda (var "v") (Core.lambdaDomain $ var "l") (ref substituteInTermDef @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
+          Core.lambda (var "v") (Core.lambdaDomain $ var "l") (substituteInTerm @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
         "names">: Sets.fromList $ Lists.map (unaryFunction Core.bindingName) (var "bindings"),
         "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
-          (ref substituteInTermDef @@ var "subst2" @@ (Core.bindingTerm $ var "b"))
+          (substituteInTerm @@ var "subst2" @@ (Core.bindingTerm $ var "b"))
           (Core.bindingType $ var "b")] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (var "bindings"))
-          (ref substituteInTermDef @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
+          (substituteInTerm @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
       cases _Term (var "term")
         (Just $ var "recurse" @@ var "term") [
         _Term_function>>: lambda "fun" $ cases _Function (var "fun")
@@ -154,11 +156,11 @@ substituteInTermDef = define "substituteInTerm" $
           (var "recurse" @@ var "term")
           (lambda "sterm" $ var "sterm")
           (Maps.lookup (var "name") (var "s"))]] $
-    ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term0"
+    Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
 -- W: subst'
-substInTypeDef :: TBinding (TypeSubst -> Type -> Type)
-substInTypeDef = define "substInType" $
+substInType :: TBinding (TypeSubst -> Type -> Type)
+substInType = define "substInType" $
   doc "Apply a type substitution to a type" $
   "subst" ~> "typ0" ~> lets [
     "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
@@ -166,7 +168,7 @@ substInTypeDef = define "substInType" $
         (var "recurse" @@ var "typ")
         (lambda "styp" $ Core.typeForall $ Core.forallType
           (Core.forallTypeParameter $ var "lt")
-          (ref substInTypeDef
+          (substInType
             @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
             @@ (Core.forallTypeBody $ var "lt")))
         (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
@@ -175,17 +177,17 @@ substInTypeDef = define "substInType" $
         (lambda "styp" $ var "styp")
         (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
     "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst $ var "subst")] $
-    (ref Rewriting.rewriteTypeDef) @@ var "rewrite" @@ var "typ0"
+    (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
-substInTypeSchemeDef :: TBinding (TypeSubst -> TypeScheme -> TypeScheme)
-substInTypeSchemeDef = define "substInTypeScheme" $
+substInTypeScheme :: TBinding (TypeSubst -> TypeScheme -> TypeScheme)
+substInTypeScheme = define "substInTypeScheme" $
   doc "Apply a type substitution to a type scheme" $
   lambdas ["subst", "ts"] $ Core.typeScheme
     (Core.typeSchemeVariables $ var "ts")
-    (ref substInTypeDef @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
+    (substInType @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
 
-substTypesInTermDef :: TBinding (TypeSubst -> Term -> Term)
-substTypesInTermDef = define "substTypesInTerm" $
+substTypesInTerm :: TBinding (TypeSubst -> Term -> Term)
+substTypesInTerm = define "substTypesInTerm" $
   doc "Apply a type substitution to the type annotations within a term" $
   "subst" ~> "term0" ~> lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
@@ -196,30 +198,30 @@ substTypesInTermDef = define "substTypesInTerm" $
         _Function_lambda>>: "l" ~> var "forLambda" @@ var "l"],
       "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
-        (Maybes.map (ref substInTypeDef @@ var "subst") $ Core.lambdaDomain $ var "l")
-        (ref substTypesInTermDef @@ var "subst" @@ (Core.lambdaBody $ var "l")),
+        (Maybes.map (substInType @@ var "subst") $ Core.lambdaDomain $ var "l")
+        (substTypesInTerm @@ var "subst" @@ (Core.lambdaBody $ var "l")),
       "forLet">: lambda "l" $ lets [
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
-          (ref substTypesInTermDef @@ var "subst" @@ (Core.bindingTerm $ var "b"))
-          (Maybes.map (ref substInTypeSchemeDef @@ var "subst") (Core.bindingType $ var "b"))] $
+          (substTypesInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
+          (Maybes.map (substInTypeScheme @@ var "subst") (Core.bindingType $ var "b"))] $
         Core.termLet $ Core.let_
           (Lists.map (var "rewriteBinding") (Core.letBindings $ var "l"))
-          (ref substTypesInTermDef @@ var "subst" @@ (Core.letBody $ var "l")),
+          (substTypesInTerm @@ var "subst" @@ (Core.letBody $ var "l")),
       "forTypeApplication">: lambda "tt" $
          Core.termTypeApplication $ Core.typeApplicationTerm
-           (ref substTypesInTermDef @@ var "subst" @@ (Core.typeApplicationTermBody $ var "tt"))
-           (ref substInTypeDef @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
+           (substTypesInTerm @@ var "subst" @@ (Core.typeApplicationTermBody $ var "tt"))
+           (substInType @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
       "forTypeLambda">: lambda "ta" $ lets [
         "param">: Core.typeLambdaParameter $ var "ta",
         "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $
         Core.termTypeLambda $ Core.typeLambda
           (var "param")
-          (ref substTypesInTermDef @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
+          (substTypesInTerm @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_function>>: "f" ~> var "forFunction" @@ var "f",
         _Term_let>>: "l" ~> var "forLet" @@ var "l",
         _Term_typeApplication>>: "ta" ~> var "forTypeApplication" @@ var "ta",
         _Term_typeLambda>>: "tl" ~> var "forTypeLambda" @@ var "tl"]] $
-    ref Rewriting.rewriteTermDef @@ var "rewrite" @@ var "term0"
+    Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"

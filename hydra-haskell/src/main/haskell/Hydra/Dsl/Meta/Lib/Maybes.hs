@@ -1,8 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Phantom-typed term DSL for the hydra.lib.maybes library
 
 module Hydra.Dsl.Meta.Lib.Maybes where
 
 import Hydra.Phantoms
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
@@ -35,14 +38,14 @@ isJust = primitive1 _maybes_isJust
 isNothing :: TTerm (Maybe a) -> TTerm Bool
 isNothing = primitive1 _maybes_isNothing
 
-map :: TTerm (a -> b) -> TTerm (Maybe a) -> TTerm (Maybe b)
-map = primitive2 _maybes_map
+map :: AsTerm f (a -> b) => f -> TTerm (Maybe a) -> TTerm (Maybe b)
+map f = primitive2 _maybes_map (asTerm f)
 
 mapMaybe :: TTerm (a -> Maybe b) -> TTerm [a] -> TTerm [b]
 mapMaybe = primitive2 _maybes_mapMaybe
 
-maybe :: TTerm b -> TTerm (a -> b) -> TTerm (Maybe a) -> TTerm b
-maybe = primitive3 _maybes_maybe
+maybe :: (AsTerm t1 b, AsTerm t2 (a -> b)) => t1 -> t2 -> TTerm (Maybe a) -> TTerm b
+maybe def f = primitive3 _maybes_maybe (asTerm def) (asTerm f)
 
 pure :: TTerm a -> TTerm (Maybe a)
 pure = primitive1 _maybes_pure

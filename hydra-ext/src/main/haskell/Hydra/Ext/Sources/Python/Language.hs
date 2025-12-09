@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Python.Language where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -98,13 +96,13 @@ pythonLanguageDefinition = definitionInModule pythonLanguageModule
 
 pythonLanguageModule :: Module
 pythonLanguageModule = Module (Namespace "hydra.ext.python.language")
-  [el pythonLanguageDef, el pythonReservedWordsDef]
+  [toBinding pythonLanguage, toBinding pythonReservedWords]
   [Lexical.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints and reserved words for Python 3"
 
-pythonLanguageDef :: TBinding Language
-pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
+pythonLanguage :: TBinding Language
+pythonLanguage = pythonLanguageDefinition "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
     "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
       Variants.eliminationVariantRecord,
@@ -174,8 +172,8 @@ pythonLanguageDef = pythonLanguageDefinition "pythonLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-pythonReservedWordsDef :: TBinding (S.Set String)
-pythonReservedWordsDef = pythonLanguageDefinition "pythonReservedWords" $
+pythonReservedWords :: TBinding (S.Set String)
+pythonReservedWords = pythonLanguageDefinition "pythonReservedWords" $
   doc "A set of reserved words in Python" $
   lets [
     "pythonKeywords">:

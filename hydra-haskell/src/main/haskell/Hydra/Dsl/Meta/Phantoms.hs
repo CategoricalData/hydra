@@ -1,11 +1,15 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Term-level DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions.
 -- The phantom types provide static type checking in Haskell prior to Hydra's runtime type checking.
 module Hydra.Dsl.Meta.Phantoms (
   module Hydra.Dsl.Meta.Phantoms,
   module Hydra.Dsl.Meta.Literals,
+  module Hydra.Dsl.AsTerm,
 ) where
 
 import Hydra.Kernel
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Common
 import Hydra.Dsl.Meta.Literals
 import Hydra.Sources.Libraries
@@ -30,30 +34,37 @@ infixl 1 <~
 name <~ value = let1 name value
 
 infixl 1 <<~
-(<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
-name <<~ def = bind name def
+(<<~) :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
+name <<~ def = bind name (asTerm def)
 
 -- | Function composition operator: f <.> g creates a function that applies g then f
 -- Example: toString <.> increment
-(<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
-f <.> g = compose f g
+-- Accepts TTerm or TBinding for both operands (via AsTerm)
+(<.>) :: (AsTerm f (b -> c), AsTerm g (a -> b)) => f -> g -> TTerm (a -> c)
+f <.> g = compose (asTerm f) (asTerm g)
 
 -- | Function application operator: function @@ argument
 -- Example: add @@ int32 1
-(@@) :: TTerm (a -> b) -> TTerm a -> TTerm b
-fun @@ arg = apply fun arg
+-- Accepts TTerm or TBinding for both operands (via AsTerm)
+(@@) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+fun @@ arg = apply (asTerm fun) (asTerm arg)
+
+(++) :: (AsTerm f String, AsTerm g String) => f -> g -> TTerm String
+f ++ g = primitive2 _strings_cat2 (asTerm f) (asTerm g)
 
 -- | Field definition operator for records: name>: value
 -- Example: "name">: string "John"
+-- Accepts TTerm or TBinding (via AsTerm)
 infixr 0 >:
-(>:) :: String -> TTerm a -> Field
-name>: term = Field (Name name) (unTTerm term)
+(>:) :: AsTerm t a => String -> t -> Field
+name>: term = Field (Name name) (unTTerm $ asTerm term)
 
 -- | Field definition operator with pre-constructed name: fname>>: value
 -- Example: _Person_name>>: string "John"
+-- Accepts TTerm or TBinding (via AsTerm)
 infixr 0 >>:
-(>>:) :: Name -> TTerm a -> Field
-fname >>: d = field fname d
+(>>:) :: AsTerm t a => Name -> t -> Field
+fname >>: d = field fname (asTerm d)
 
 -- | Add an annotation to a term
 -- Example: annot (Name "deprecated") (Just (boolean True)) myFunction
@@ -65,8 +76,8 @@ annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
 apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
-bind :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
-bind v def body = primitive2 _flows_bind def $ lambda v $ body
+bind :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
+bind v def body = primitive2 _flows_bind (asTerm def) $ lambda v $ body
 
 binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
 binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
@@ -86,13 +97,15 @@ cases name arg dflt fields = TTerm $ Terms.apply (Terms.match name (unTTerm <$> 
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")
-compose :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c)
-compose (TTerm f) (TTerm g) = TTerm $ Terms.compose f g
+-- Accepts TTerm or TBinding for both operands (via AsTerm)
+compose :: (AsTerm f (b -> c), AsTerm g (a -> b)) => f -> g -> TTerm (a -> c)
+compose f g = TTerm $ Terms.compose (unTTerm $ asTerm f) (unTTerm $ asTerm g)
 
 -- | Create a constant function that always returns the same value
 -- Example: constant true
-constant :: TTerm a -> TTerm (b -> a)
-constant (TTerm term) = TTerm $ Terms.constant term
+-- Accepts TTerm or TBinding (via AsTerm)
+constant :: AsTerm t a => t -> TTerm (b -> a)
+constant t = TTerm $ Terms.constant (unTTerm $ asTerm t)
 
 -- | Create a definition in a module
 -- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
@@ -106,18 +119,24 @@ definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just 
 
 -- | Add documentation to a term
 -- Example: doc "Adds two integers" addFunction
-doc :: String -> TTerm a -> TTerm a
-doc s (TTerm term) = TTerm $ setTermDescription (Just s) term
+-- Accepts TTerm or TBinding (via AsTerm)
+doc :: AsTerm t a => String -> t -> TTerm a
+doc s t = TTerm $ setTermDescription (Just s) (unTTerm $ asTerm t)
 
 -- | Add documentation with line wrapping at the specified width
 -- Example: docWrapped 80 "This is a long documentation string that will be wrapped..." myFunction
 docWrapped :: Int -> String -> TTerm a -> TTerm a
 docWrapped len = doc . wrapLine len
 
--- | Convert a typed element to an untyped element
+-- | Convert a typed binding to an untyped Binding for use in module element lists
+-- Example: toBinding functionArity
+toBinding :: TBinding a -> Binding
+toBinding (TBinding name (TTerm term)) = Binding name term Nothing
+
+-- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
 -- Example: el (definitionInModule myModule "addInts" myFunction)
 el :: TBinding a -> Binding
-el (TBinding name (TTerm term)) = Binding name term Nothing
+el = toBinding
 
 exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
 exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
@@ -134,8 +153,8 @@ firstClassType typ = annot key_firstClassType (Just $ Terms.boolean True) typ
 
 -- | Create a fold function to process lists
 -- Example: fold (lambda "acc" (lambda "x" (add @@ var "acc" @@ var "x")))
-fold :: TTerm (b -> a -> b) -> TTerm (b -> [a] -> b)
-fold f = (primitive _lists_foldl) @@ f
+fold :: AsTerm t (b -> a -> b) => t -> TTerm (b -> [a] -> b)
+fold f = (primitive _lists_foldl) @@ asTerm f
 
 -- | Identity function that returns its argument unchanged
 -- Example: identity
@@ -154,8 +173,9 @@ injectLambda name fname = lambda "injected_" $ inject name fname $ var "injected
 
 -- | Create a 'Just' optional value
 -- Example: just (string "found")
-just :: TTerm a -> TTerm (Maybe a)
-just (TTerm term) = TTerm $ Terms.just term
+-- Accepts TTerm or TBinding (via AsTerm)
+just :: AsTerm t a => t -> TTerm (Maybe a)
+just t = TTerm $ Terms.just (unTTerm $ asTerm t)
 
 -- | Function that wraps a value in 'Just'
 -- Example: just_ @@ myValue
@@ -204,8 +224,9 @@ lets fields (TTerm env) = TTerm $ TermLet $ Let (toBinding <$> fields) env
 
 -- | Create a list of terms
 -- Example: list [int32 1, int32 2, int32 3]
-list :: [TTerm a] -> TTerm [a]
-list els = TTerm $ Terms.list (unTTerm <$> els)
+-- Accepts TTerm or TBinding elements (via AsTerm)
+list :: AsTerm t a => [t] -> TTerm [a]
+list els = TTerm $ Terms.list (unTTerm . asTerm <$> els)
 
 -- | Create a map/dictionary term
 -- Example: map (M.fromList [(string "a", int32 1), (string "b", int32 2)])
@@ -229,13 +250,14 @@ nothing = TTerm Terms.nothing
 opt :: Maybe (TTerm a) -> TTerm (Maybe a)
 opt mc = TTerm $ Terms.optional (unTTerm <$> mc)
 
-optCases :: TTerm (Maybe a) -> TTerm b -> TTerm (a -> b) -> TTerm b
-optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing ifJust arg
+optCases :: AsTerm f (a -> b) => TTerm (Maybe a) -> TTerm b -> f -> TTerm b
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.maybes.maybe") ifNothing (asTerm ifJust) arg
 
 -- | Create a pair
 -- Example: pair (string "age") (int32 32)
-pair :: (TTerm a) -> (TTerm b) -> TTerm (a, b)
-pair (TTerm l) (TTerm r) = TTerm $ Terms.pair l r
+-- Accepts TTerm or TBinding (via AsTerm)
+pair :: (AsTerm t1 a, AsTerm t2 b) => t1 -> t2 -> TTerm (a, b)
+pair l r = TTerm $ Terms.pair (unTTerm $ asTerm l) (unTTerm $ asTerm r)
 
 -- | Primitive function by name
 -- Example: primitive (Name "hydra.lib.strings.length")
@@ -257,8 +279,8 @@ primitive2 primName (TTerm a) (TTerm b) = TTerm $ Terms.primitive primName Terms
 primitive3 :: Name -> TTerm a -> TTerm b -> TTerm c -> TTerm d
 primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b Terms.@@ c
 
-produce :: TTerm a -> TTerm (Flow s a)
-produce = primitive1 _flows_pure
+produce :: AsTerm t a => t -> TTerm (Flow s a)
+produce x = primitive1 _flows_pure (asTerm x)
 
 -- | Extract a field from a record
 -- Example: project (Name "Person") (Name "name")
@@ -269,11 +291,6 @@ project name fname = TTerm $ Terms.project name fname
 -- Example: record (Name "Person") [field (Name "name") (string "John"), field (Name "age") (int32 30)]
 record :: Name -> [Field] -> TTerm a
 record name fields = TTerm $ Terms.record name fields
-
--- | Reference a defined element
--- Example: ref (definitionInModule myModule "addInts")
-ref :: TBinding a -> TTerm a
-ref (TBinding name _) = TTerm (TermVariable name)
 
 -- | Create a set of terms
 -- Example: set [string "a", string "b", string "c"]

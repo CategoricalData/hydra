@@ -1,7 +1,7 @@
 module Hydra.Sources.Haskell.Operators where
 
 -- Standard imports for term-level sources outside of the kernel
-import Hydra.Kernel
+import Hydra.Kernel hiding (orOp)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -105,51 +105,51 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.ext.haskell.operators"
     elements = [
-      el andOpDef,
-      el apOpDef,
-      el appOpDef,
-      el applyOpDef,
-      el arrowOpDef,
-      el assertOpDef,
-      el bindOpDef,
-      el caseOpDef,
-      el composeOpDef,
-      el concatOpDef,
-      el consOpDef,
-      el defineOpDef,
-      el diamondOpDef,
-      el divOpDef,
-      el divideOpDef,
-      el elemOpDef,
-      el equalOpDef,
-      el fmapOpDef,
-      el gtOpDef,
-      el gteOpDef,
-      el indexOpDef,
-      el lambdaOpDef,
-      el ltOpDef,
-      el lteOpDef,
-      el minusOpDef,
-      el modOpDef,
-      el multOpDef,
-      el neqOpDef,
-      el notElemOpDef,
-      el orOpDef,
-      el plusOpDef,
-      el quotOpDef,
-      el remOpDef,
-      el typeOpDef]
+      toBinding andOp,
+      toBinding apOp,
+      toBinding appOp,
+      toBinding applyOp,
+      toBinding arrowOp,
+      toBinding assertOp,
+      toBinding bindOp,
+      toBinding caseOp,
+      toBinding composeOp,
+      toBinding concatOp,
+      toBinding consOp,
+      toBinding defineOp,
+      toBinding diamondOp,
+      toBinding divOp,
+      toBinding divideOp,
+      toBinding elemOp,
+      toBinding equalOp,
+      toBinding fmapOp,
+      toBinding gtOp,
+      toBinding gteOp,
+      toBinding indexOp,
+      toBinding lambdaOp,
+      toBinding ltOp,
+      toBinding lteOp,
+      toBinding minusOp,
+      toBinding modOp,
+      toBinding multOp,
+      toBinding neqOp,
+      toBinding notElemOp,
+      toBinding orOp,
+      toBinding plusOp,
+      toBinding quotOp,
+      toBinding remOp,
+      toBinding typeOp]
 
-andOpDef :: TBinding Op
-andOpDef = haskellOperatorsDefinition "andOp" $
-  ref Serialization.opDef @@ string "&&" @@ int32 3 @@ Ast.associativityRight
+andOp :: TBinding Op
+andOp = haskellOperatorsDefinition "andOp" $
+  Serialization.op @@ string "&&" @@ int32 3 @@ Ast.associativityRight
 
-apOpDef :: TBinding Op
-apOpDef = haskellOperatorsDefinition "apOp" $
-  ref Serialization.opDef @@ string "<*>" @@ int32 4 @@ Ast.associativityLeft
+apOp :: TBinding Op
+apOp = haskellOperatorsDefinition "apOp" $
+  Serialization.op @@ string "<*>" @@ int32 4 @@ Ast.associativityLeft
 
-appOpDef :: TBinding Op
-appOpDef = haskellOperatorsDefinition "appOp" $
+appOp :: TBinding Op
+appOp = haskellOperatorsDefinition "appOp" $
   doc "No source" $
   Ast.op
     (Ast.symbol $ string "")
@@ -157,134 +157,134 @@ appOpDef = haskellOperatorsDefinition "appOp" $
     (Ast.precedence $ int32 0)
     Ast.associativityLeft
 
-applyOpDef :: TBinding Op
-applyOpDef = haskellOperatorsDefinition "applyOp" $
-  ref Serialization.opDef @@ string "$" @@ int32 0 @@ Ast.associativityRight
+applyOp :: TBinding Op
+applyOp = haskellOperatorsDefinition "applyOp" $
+  Serialization.op @@ string "$" @@ int32 0 @@ Ast.associativityRight
 
-arrowOpDef :: TBinding Op
-arrowOpDef = haskellOperatorsDefinition "arrowOp" $
-  ref Serialization.opDef @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
+arrowOp :: TBinding Op
+arrowOp = haskellOperatorsDefinition "arrowOp" $
+  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-assertOpDef :: TBinding Op
-assertOpDef = haskellOperatorsDefinition "assertOp" $
+assertOp :: TBinding Op
+assertOp = haskellOperatorsDefinition "assertOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "=>" @@ int32 0 @@ Ast.associativityNone
+  Serialization.op @@ string "=>" @@ int32 0 @@ Ast.associativityNone
 
-bindOpDef :: TBinding Op
-bindOpDef = haskellOperatorsDefinition "bindOp" $
-  ref Serialization.opDef @@ string ">>=" @@ int32 1 @@ Ast.associativityLeft
+bindOp :: TBinding Op
+bindOp = haskellOperatorsDefinition "bindOp" $
+  Serialization.op @@ string ">>=" @@ int32 1 @@ Ast.associativityLeft
 
-caseOpDef :: TBinding Op
-caseOpDef = haskellOperatorsDefinition "caseOp" $
+caseOp :: TBinding Op
+caseOp = haskellOperatorsDefinition "caseOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "->" @@ int32 0 @@ Ast.associativityNone
+  Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
 
-composeOpDef :: TBinding Op
-composeOpDef = haskellOperatorsDefinition "composeOp" $
-  ref Serialization.opDef @@ string "." @@ int32 9 @@ Ast.associativityLeft
+composeOp :: TBinding Op
+composeOp = haskellOperatorsDefinition "composeOp" $
+  Serialization.op @@ string "." @@ int32 9 @@ Ast.associativityLeft
 
-concatOpDef :: TBinding Op
-concatOpDef = haskellOperatorsDefinition "concatOp" $
-  ref Serialization.opDef @@ string "++" @@ int32 5 @@ Ast.associativityRight
+concatOp :: TBinding Op
+concatOp = haskellOperatorsDefinition "concatOp" $
+  Serialization.op @@ string "++" @@ int32 5 @@ Ast.associativityRight
 
-consOpDef :: TBinding Op
-consOpDef = haskellOperatorsDefinition "consOp" $
-  ref Serialization.opDef @@ string ":" @@ int32 5 @@ Ast.associativityRight
+consOp :: TBinding Op
+consOp = haskellOperatorsDefinition "consOp" $
+  Serialization.op @@ string ":" @@ int32 5 @@ Ast.associativityRight
 
-defineOpDef :: TBinding Op
-defineOpDef = haskellOperatorsDefinition "defineOp" $
+defineOp :: TBinding Op
+defineOp = haskellOperatorsDefinition "defineOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "=" @@ int32 0 @@ Ast.associativityNone
+  Serialization.op @@ string "=" @@ int32 0 @@ Ast.associativityNone
 
-diamondOpDef :: TBinding Op
-diamondOpDef = haskellOperatorsDefinition "diamondOp" $
-  ref Serialization.opDef @@ string "<>" @@ int32 6 @@ Ast.associativityRight
+diamondOp :: TBinding Op
+diamondOp = haskellOperatorsDefinition "diamondOp" $
+  Serialization.op @@ string "<>" @@ int32 6 @@ Ast.associativityRight
 
-divOpDef :: TBinding Op
-divOpDef = haskellOperatorsDefinition "divOp" $
-  ref Serialization.opDef @@ string "`div`" @@ int32 7 @@ Ast.associativityLeft
+divOp :: TBinding Op
+divOp = haskellOperatorsDefinition "divOp" $
+  Serialization.op @@ string "`div`" @@ int32 7 @@ Ast.associativityLeft
 
-divideOpDef :: TBinding Op
-divideOpDef = haskellOperatorsDefinition "divideOp" $
-  ref Serialization.opDef @@ string "/" @@ int32 7 @@ Ast.associativityLeft
+divideOp :: TBinding Op
+divideOp = haskellOperatorsDefinition "divideOp" $
+  Serialization.op @@ string "/" @@ int32 7 @@ Ast.associativityLeft
 
-elemOpDef :: TBinding Op
-elemOpDef = haskellOperatorsDefinition "elemOp" $
-  ref Serialization.opDef @@ string "`elem`" @@ int32 4 @@ Ast.associativityNone
+elemOp :: TBinding Op
+elemOp = haskellOperatorsDefinition "elemOp" $
+  Serialization.op @@ string "`elem`" @@ int32 4 @@ Ast.associativityNone
 
-equalOpDef :: TBinding Op
-equalOpDef = haskellOperatorsDefinition "equalOp" $
-  ref Serialization.opDef @@ string "==" @@ int32 4 @@ Ast.associativityNone
+equalOp :: TBinding Op
+equalOp = haskellOperatorsDefinition "equalOp" $
+  Serialization.op @@ string "==" @@ int32 4 @@ Ast.associativityNone
 
-fmapOpDef :: TBinding Op
-fmapOpDef = haskellOperatorsDefinition "fmapOp" $
-  ref Serialization.opDef @@ string "<$>" @@ int32 4 @@ Ast.associativityLeft
+fmapOp :: TBinding Op
+fmapOp = haskellOperatorsDefinition "fmapOp" $
+  Serialization.op @@ string "<$>" @@ int32 4 @@ Ast.associativityLeft
 
-gtOpDef :: TBinding Op
-gtOpDef = haskellOperatorsDefinition "gtOp" $
-  ref Serialization.opDef @@ string ">" @@ int32 4 @@ Ast.associativityNone
+gtOp :: TBinding Op
+gtOp = haskellOperatorsDefinition "gtOp" $
+  Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
 
-gteOpDef :: TBinding Op
-gteOpDef = haskellOperatorsDefinition "gteOp" $
-  ref Serialization.opDef @@ string ">=" @@ int32 4 @@ Ast.associativityNone
+gteOp :: TBinding Op
+gteOp = haskellOperatorsDefinition "gteOp" $
+  Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
-indexOpDef :: TBinding Op
-indexOpDef = haskellOperatorsDefinition "indexOp" $
-  ref Serialization.opDef @@ string "!!" @@ int32 9 @@ Ast.associativityLeft
+indexOp :: TBinding Op
+indexOp = haskellOperatorsDefinition "indexOp" $
+  Serialization.op @@ string "!!" @@ int32 9 @@ Ast.associativityLeft
 
-lambdaOpDef :: TBinding Op
-lambdaOpDef = haskellOperatorsDefinition "lambdaOp" $
+lambdaOp :: TBinding Op
+lambdaOp = haskellOperatorsDefinition "lambdaOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
+  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
-ltOpDef :: TBinding Op
-ltOpDef = haskellOperatorsDefinition "ltOp" $
-  ref Serialization.opDef @@ string "<" @@ int32 4 @@ Ast.associativityNone
+ltOp :: TBinding Op
+ltOp = haskellOperatorsDefinition "ltOp" $
+  Serialization.op @@ string "<" @@ int32 4 @@ Ast.associativityNone
 
-lteOpDef :: TBinding Op
-lteOpDef = haskellOperatorsDefinition "lteOp" $
-  ref Serialization.opDef @@ string ">=" @@ int32 4 @@ Ast.associativityNone
+lteOp :: TBinding Op
+lteOp = haskellOperatorsDefinition "lteOp" $
+  Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
-minusOpDef :: TBinding Op
-minusOpDef = haskellOperatorsDefinition "minusOp" $
+minusOp :: TBinding Op
+minusOp = haskellOperatorsDefinition "minusOp" $
   doc "Originally: associativityLeft" $
-  ref Serialization.opDef @@ string "-" @@ int32 6 @@ Ast.associativityBoth
+  Serialization.op @@ string "-" @@ int32 6 @@ Ast.associativityBoth
 
-modOpDef :: TBinding Op
-modOpDef = haskellOperatorsDefinition "modOp" $
-  ref Serialization.opDef @@ string "`mod`" @@ int32 7 @@ Ast.associativityLeft
+modOp :: TBinding Op
+modOp = haskellOperatorsDefinition "modOp" $
+  Serialization.op @@ string "`mod`" @@ int32 7 @@ Ast.associativityLeft
 
-multOpDef :: TBinding Op
-multOpDef = haskellOperatorsDefinition "multOp" $
+multOp :: TBinding Op
+multOp = haskellOperatorsDefinition "multOp" $
   doc "Originally: associativityLeft" $
-  ref Serialization.opDef @@ string "*" @@ int32 7 @@ Ast.associativityBoth
+  Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
 
-neqOpDef :: TBinding Op
-neqOpDef = haskellOperatorsDefinition "neqOp" $
-  ref Serialization.opDef @@ string "/=" @@ int32 4 @@ Ast.associativityNone
+neqOp :: TBinding Op
+neqOp = haskellOperatorsDefinition "neqOp" $
+  Serialization.op @@ string "/=" @@ int32 4 @@ Ast.associativityNone
 
-notElemOpDef :: TBinding Op
-notElemOpDef = haskellOperatorsDefinition "notElemOp" $
-  ref Serialization.opDef @@ string "`notElem`" @@ int32 4 @@ Ast.associativityNone
+notElemOp :: TBinding Op
+notElemOp = haskellOperatorsDefinition "notElemOp" $
+  Serialization.op @@ string "`notElem`" @@ int32 4 @@ Ast.associativityNone
 
-orOpDef :: TBinding Op
-orOpDef = haskellOperatorsDefinition "orOp" $
-  ref Serialization.opDef @@ string "||" @@ int32 2 @@ Ast.associativityRight
+orOp :: TBinding Op
+orOp = haskellOperatorsDefinition "orOp" $
+  Serialization.op @@ string "||" @@ int32 2 @@ Ast.associativityRight
 
-plusOpDef :: TBinding Op
-plusOpDef = haskellOperatorsDefinition "plusOp" $
+plusOp :: TBinding Op
+plusOp = haskellOperatorsDefinition "plusOp" $
   doc "Originally: associativityLeft" $
-  ref Serialization.opDef @@ string "+" @@ int32 6 @@ Ast.associativityBoth
+  Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
 
-quotOpDef :: TBinding Op
-quotOpDef = haskellOperatorsDefinition "quotOp" $
-  ref Serialization.opDef @@ string "`quot`" @@ int32 7 @@ Ast.associativityLeft
+quotOp :: TBinding Op
+quotOp = haskellOperatorsDefinition "quotOp" $
+  Serialization.op @@ string "`quot`" @@ int32 7 @@ Ast.associativityLeft
 
-remOpDef :: TBinding Op
-remOpDef = haskellOperatorsDefinition "remOp" $
-  ref Serialization.opDef @@ string "`rem`" @@ int32 7 @@ Ast.associativityLeft
+remOp :: TBinding Op
+remOp = haskellOperatorsDefinition "remOp" $
+  Serialization.op @@ string "`rem`" @@ int32 7 @@ Ast.associativityLeft
 
-typeOpDef :: TBinding Op
-typeOpDef = haskellOperatorsDefinition "typeOp" $
+typeOp :: TBinding Op
+typeOp = haskellOperatorsDefinition "typeOp" $
   doc "No source" $
-  ref Serialization.opDef @@ string "::" @@ int32 0 @@ Ast.associativityNone
+  Serialization.op @@ string "::" @@ int32 0 @@ Ast.associativityNone

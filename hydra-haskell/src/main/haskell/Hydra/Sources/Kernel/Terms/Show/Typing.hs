@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Show.Typing where
 
@@ -65,25 +64,25 @@ module_ = Module (Namespace "hydra.show.typing") elements
     Just "String representations of hydra.typing types"
   where
    elements = [
-     el typeConstraintDef,
-     el typeSubstDef]
+     toBinding typeConstraint,
+     toBinding typeSubst]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-typeConstraintDef :: TBinding (TypeConstraint -> String)
-typeConstraintDef = define "typeConstraint" $
+typeConstraint :: TBinding (TypeConstraint -> String)
+typeConstraint = define "typeConstraint" $
   doc "Show a type constraint as a string" $
   lambda "tc" $ lets [
     "ltyp">: Typing.typeConstraintLeft $ var "tc",
     "rtyp">: Typing.typeConstraintRight $ var "tc"] $
     Strings.cat $ list [
-      ref ShowCore.typeDef @@ var "ltyp",
+      ShowCore.type_ @@ var "ltyp",
       string "≡",
-      ref ShowCore.typeDef @@ var "rtyp"]
+      ShowCore.type_ @@ var "rtyp"]
 
-typeSubstDef :: TBinding (TypeSubst -> String)
-typeSubstDef = define "typeSubst" $
+typeSubst :: TBinding (TypeSubst -> String)
+typeSubst = define "typeSubst" $
   doc "Show a type substitution as a string" $
   lambda "ts" $ lets [
     "subst">: Typing.unTypeSubst $ var "ts",
@@ -94,7 +93,7 @@ typeSubstDef = define "typeSubst" $
       Strings.cat $ list [
         var "name",
         string "↦",
-        ref ShowCore.typeDef @@ var "typ"],
+        ShowCore.type_ @@ var "typ"],
     "pairStrs">: Lists.map (var "showPair") (var "pairs")] $
     Strings.cat $ list [
       string "{",

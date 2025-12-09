@@ -17,7 +17,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.maybes") elements [] [] $
     Just "Test cases for hydra.lib.maybes primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Helper to create Just terms for Int32 values
 justInt32 :: Int -> TTerm Term
@@ -87,8 +87,8 @@ maybesMap = subgroup "map" [
       lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
       x] expected
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maybes primitives" $
     supergroup "hydra.lib.maybes primitives" [
       maybesIsJust,

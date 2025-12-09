@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Parsers where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (map)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -36,7 +35,7 @@ import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Meta.Module        as Module
 import qualified Hydra.Dsl.Meta.Parsing       as Parsing
-import           Hydra.Dsl.Meta.Phantoms as Phantoms
+import           Hydra.Dsl.Meta.Phantoms as Phantoms hiding (apply, bind, char, map)
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Meta.Testing       as Testing
@@ -49,7 +48,7 @@ import qualified Hydra.Dsl.Meta.Typing        as Typing
 import qualified Hydra.Dsl.Meta.Util          as Util
 import qualified Hydra.Dsl.Meta.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
+import           Prelude hiding ((++), pure, fail, map)
 import qualified Data.Int                as I
 import qualified Data.List               as L
 import qualified Data.Map                as M
@@ -64,48 +63,48 @@ module_ = Module (Namespace "hydra.parsers") elements
     Just "General-purpose parser combinators"
   where
    elements = [
-     el pureDef,
-     el failDef,
-     el bindDef,
-     el mapDef,
-     el applyDef,
-     el altDef,
-     el eofDef,
-     el satisfyDef,
-     el charDef,
-     el stringDef,
-     el anyCharDef,
-     el manyDef,
-     el someDef,
-     el optionalDef,
-     el betweenDef,
-     el sepByDef,
-     el sepBy1Def,
-     el choiceDef,
-     el runParserDef]
+     toBinding pure,
+     toBinding fail,
+     toBinding bind,
+     toBinding map,
+     toBinding apply,
+     toBinding alt,
+     toBinding eof,
+     toBinding satisfy,
+     toBinding char,
+     toBinding string_,
+     toBinding anyChar,
+     toBinding many,
+     toBinding some,
+     toBinding optional,
+     toBinding between,
+     toBinding sepBy,
+     toBinding sepBy1,
+     toBinding choice,
+     toBinding runParser]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
 -- | A parser that always succeeds with the given value
-pureDef :: TBinding (a -> Parser a)
-pureDef = define "pure" $
+pure :: TBinding (a -> Parser a)
+pure = define "pure" $
   doc "A parser that always succeeds with the given value without consuming input" $
   "a" ~>
     Parsing.parser ("input" ~>
       Parsing.parseResultSuccess (Parsing.parseSuccess (var "a") (var "input")))
 
 -- | A parser that always fails with the given message
-failDef :: TBinding (String -> Parser a)
-failDef = define "fail" $
+fail :: TBinding (String -> Parser a)
+fail = define "fail" $
   doc "A parser that always fails with the given error message" $
   "msg" ~>
     Parsing.parser ("input" ~>
       Parsing.parseResultFailure (Parsing.parseError (var "msg") (var "input")))
 
 -- | Monadic bind for parsers
-bindDef :: TBinding (Parser a -> (a -> Parser b) -> Parser b)
-bindDef = define "bind" $
+bind :: TBinding (Parser a -> (a -> Parser b) -> Parser b)
+bind = define "bind" $
   doc "Sequence two parsers, passing the result of the first to a function that produces the second" $
   "pa" ~> "f" ~>
     Parsing.parser ("input" ~>
@@ -118,8 +117,8 @@ bindDef = define "bind" $
           Parsing.parseResultFailure (var "e")])
 
 -- | Map a function over the result of a parser
-mapDef :: TBinding ((a -> b) -> Parser a -> Parser b)
-mapDef = define "map" $
+map :: TBinding ((a -> b) -> Parser a -> Parser b)
+map = define "map" $
   doc "Apply a function to the result of a parser" $
   "f" ~> "pa" ~>
     Parsing.parser ("input" ~>
@@ -132,8 +131,8 @@ mapDef = define "map" $
           Parsing.parseResultFailure (var "e")])
 
 -- | Applicative apply for parsers
-applyDef :: TBinding (Parser (a -> b) -> Parser a -> Parser b)
-applyDef = define "apply" $
+apply :: TBinding (Parser (a -> b) -> Parser a -> Parser b)
+apply = define "apply" $
   doc "Apply a parser containing a function to a parser containing a value" $
   "pf" ~> "pa" ~>
     Parsing.parser ("input" ~>
@@ -150,8 +149,8 @@ applyDef = define "apply" $
           Parsing.parseResultFailure (var "e")])
 
 -- | Try the first parser, if it fails try the second
-altDef :: TBinding (Parser a -> Parser a -> Parser a)
-altDef = define "alt" $
+alt :: TBinding (Parser a -> Parser a -> Parser a)
+alt = define "alt" $
   doc "Try the first parser; if it fails without consuming input, try the second" $
   "p1" ~> "p2" ~>
     Parsing.parser ("input" ~>
@@ -165,8 +164,8 @@ altDef = define "alt" $
             (Parsing.parseResultFailure (var "e"))])
 
 -- | Parse end of input
-eofDef :: TBinding (Parser ())
-eofDef = define "eof" $
+eof :: TBinding (Parser ())
+eof = define "eof" $
   doc "A parser that succeeds only at the end of input" $
   Parsing.parser ("input" ~>
     Logic.ifElse (Equality.equal (var "input") (string ""))
@@ -174,8 +173,8 @@ eofDef = define "eof" $
       (Parsing.parseResultFailure (Parsing.parseError (string "expected end of input") (var "input"))))
 
 -- | Parse a character that satisfies a predicate (characters represented as codepoints)
-satisfyDef :: TBinding ((Int -> Bool) -> Parser Int)
-satisfyDef = define "satisfy" $
+satisfy :: TBinding ((Int -> Bool) -> Parser Int)
+satisfy = define "satisfy" $
   doc "Parse a character (codepoint) that satisfies the given predicate" $
   "pred" ~>
     Parsing.parser ("input" ~>
@@ -189,15 +188,15 @@ satisfyDef = define "satisfy" $
            (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input")))))
 
 -- | Parse a specific character (as codepoint)
-charDef :: TBinding (Int -> Parser Int)
-charDef = define "char" $
+char :: TBinding (Int -> Parser Int)
+char = define "char" $
   doc "Parse a specific character (codepoint)" $
   "c" ~>
-    ref satisfyDef @@ ("x" ~> Equality.equal (var "x") (var "c"))
+    satisfy @@ ("x" ~> Equality.equal (var "x") (var "c"))
 
 -- | Parse a specific string
-stringDef :: TBinding (String -> Parser String)
-stringDef = define "string" $
+string_ :: TBinding (String -> Parser String)
+string_ = define "string" $
   doc "Parse a specific string" $
   "str" ~>
     Parsing.parser ("input" ~>
@@ -214,72 +213,72 @@ stringDef = define "string" $
           (var "input"))))
 
 -- | Parse any single character (as codepoint)
-anyCharDef :: TBinding (Parser Int)
-anyCharDef = define "anyChar" $
+anyChar :: TBinding (Parser Int)
+anyChar = define "anyChar" $
   doc "Parse any single character (codepoint)" $
-  ref satisfyDef @@ (constant true)
+  satisfy @@ (constant true)
 
 -- | Parse zero or more occurrences
-manyDef :: TBinding (Parser a -> Parser [a])
-manyDef = define "many" $
+many :: TBinding (Parser a -> Parser [a])
+many = define "many" $
   doc "Parse zero or more occurrences of the given parser" $
   "p" ~>
-    ref altDef @@ (ref someDef @@ var "p") @@ (ref pureDef @@ list [])
+    alt @@ (some @@ var "p") @@ (pure @@ list ([] :: [TTerm a]))
 
 -- | Parse one or more occurrences
-someDef :: TBinding (Parser a -> Parser [a])
-someDef = define "some" $
+some :: TBinding (Parser a -> Parser [a])
+some = define "some" $
   doc "Parse one or more occurrences of the given parser" $
   "p" ~>
-    ref bindDef @@ var "p" @@ ("x" ~>
-      ref bindDef @@ (ref manyDef @@ var "p") @@ ("xs" ~>
-        ref pureDef @@ (Lists.cons (var "x") (var "xs"))))
+    bind @@ var "p" @@ ("x" ~>
+      bind @@ (many @@ var "p") @@ ("xs" ~>
+        pure @@ (Lists.cons (var "x") (var "xs"))))
 
 -- | Optionally parse something
-optionalDef :: TBinding (Parser a -> Parser (Maybe a))
-optionalDef = define "optional" $
+optional :: TBinding (Parser a -> Parser (Maybe a))
+optional = define "optional" $
   doc "Optionally parse something, returning Nothing if it fails" $
   "p" ~>
-    ref altDef
-      @@ (ref mapDef @@ (unaryFunction just) @@ var "p")
-      @@ (ref pureDef @@ nothing)
+    alt
+      @@ (map @@ (unaryFunction just) @@ var "p")
+      @@ (pure @@ nothing)
 
 -- | Parse something between two other parsers
-betweenDef :: TBinding (Parser open -> Parser close -> Parser a -> Parser a)
-betweenDef = define "between" $
+between :: TBinding (Parser open -> Parser close -> Parser a -> Parser a)
+between = define "between" $
   doc "Parse something between an opening and closing parser" $
   "open" ~> "close" ~> "p" ~>
-    ref bindDef @@ var "open" @@ (constant $
-      ref bindDef @@ var "p" @@ ("x" ~>
-        ref bindDef @@ var "close" @@ (constant $
-          ref pureDef @@ var "x")))
+    bind @@ var "open" @@ (constant $
+      bind @@ var "p" @@ ("x" ~>
+        bind @@ var "close" @@ (constant $
+          pure @@ var "x")))
 
 -- | Parse zero or more occurrences separated by a separator
-sepByDef :: TBinding (Parser a -> Parser sep -> Parser [a])
-sepByDef = define "sepBy" $
+sepBy :: TBinding (Parser a -> Parser sep -> Parser [a])
+sepBy = define "sepBy" $
   doc "Parse zero or more occurrences separated by a separator" $
   "p" ~> "sep" ~>
-    ref altDef @@ (ref sepBy1Def @@ var "p" @@ var "sep") @@ (ref pureDef @@ list [])
+    alt @@ (sepBy1 @@ var "p" @@ var "sep") @@ (pure @@ list ([] :: [TTerm a]))
 
 -- | Parse one or more occurrences separated by a separator
-sepBy1Def :: TBinding (Parser a -> Parser sep -> Parser [a])
-sepBy1Def = define "sepBy1" $
+sepBy1 :: TBinding (Parser a -> Parser sep -> Parser [a])
+sepBy1 = define "sepBy1" $
   doc "Parse one or more occurrences separated by a separator" $
   "p" ~> "sep" ~>
-    ref bindDef @@ var "p" @@ ("x" ~>
-      ref bindDef @@ (ref manyDef @@ (ref bindDef @@ var "sep" @@ (constant $ var "p"))) @@ ("xs" ~>
-        ref pureDef @@ (Lists.cons (var "x") (var "xs"))))
+    bind @@ var "p" @@ ("x" ~>
+      bind @@ (many @@ (bind @@ var "sep" @@ (constant $ var "p"))) @@ ("xs" ~>
+        pure @@ (Lists.cons (var "x") (var "xs"))))
 
 -- | Try parsers in order until one succeeds
-choiceDef :: TBinding ([Parser a] -> Parser a)
-choiceDef = define "choice" $
+choice :: TBinding ([Parser a] -> Parser a)
+choice = define "choice" $
   doc "Try each parser in the list until one succeeds" $
   "ps" ~>
-    Lists.foldl (ref altDef) (ref failDef @@ string "no choice matched") (var "ps")
+    Lists.foldl alt (fail @@ string "no choice matched") (var "ps")
 
 -- | Run a parser on input and return the result
-runParserDef :: TBinding (Parser a -> String -> ParseResult a)
-runParserDef = define "runParser" $
+runParser :: TBinding (Parser a -> String -> ParseResult a)
+runParser = define "runParser" $
   doc "Run a parser on the given input string" $
   "p" ~> "input" ~>
     Parsing.runParser (var "p") (var "input")

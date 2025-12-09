@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Extract.Util where
 
@@ -66,16 +65,16 @@ module_ = Module (Namespace "hydra.extract.util") elements
     Just ("Extraction and validation for hydra.util types")
   where
    elements = [
-     el comparisonDef]
+     toBinding comparison]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-comparisonDef :: TBinding (Term -> Flow Graph Comparison)
-comparisonDef = define "comparison" $
+comparison :: TBinding (Term -> Flow Graph Comparison)
+comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   lambda "term" $
-    Flows.bind (ref ExtractCore.unitVariantDef @@ Core.nameLift _Comparison @@ var "term") $
+    Flows.bind (ExtractCore.unitVariant @@ Core.nameLift _Comparison @@ var "term") $
       lambda "fname" $
         Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
           (Flows.pure Graph.comparisonEqualTo)
@@ -83,4 +82,4 @@ comparisonDef = define "comparison" $
             (Flows.pure Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (Flows.pure Graph.comparisonGreaterThan)
-              (ref Monads.unexpectedDef @@ string "comparison" @@ Core.unName (var "fname"))))
+              (Monads.unexpected @@ string "comparison" @@ Core.unName (var "fname"))))

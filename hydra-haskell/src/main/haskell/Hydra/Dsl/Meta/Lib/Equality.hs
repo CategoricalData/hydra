@@ -1,7 +1,10 @@
 -- | Phantom-typed term DSL for the hydra.lib.equality library
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Lib.Equality where
 
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import Hydra.Phantoms
 import Hydra.Util
@@ -11,29 +14,29 @@ import Hydra.Sources.Libraries
 import Data.Int
 
 
-compare :: TTerm a -> TTerm a -> TTerm Comparison
-compare = primitive2 _equality_compare
+compare :: AsTerm t2 a => TTerm a -> t2 -> TTerm Comparison
+compare t1 t2 = primitive2 _equality_compare t1 (asTerm t2)
 
-equal :: TTerm a -> TTerm a -> TTerm Bool
-equal = primitive2 _equality_equal
+equal :: AsTerm t2 a => TTerm a -> t2 -> TTerm Bool
+equal t1 t2 = primitive2 _equality_equal t1 (asTerm t2)
 
-gt :: TTerm a -> TTerm a -> TTerm Bool
-gt = primitive2 _equality_gt
+gt :: AsTerm t2 a => TTerm a -> t2 -> TTerm Bool
+gt t1 t2 = primitive2 _equality_gt t1 (asTerm t2)
 
-gte :: TTerm a -> TTerm a -> TTerm Bool
-gte = primitive2 _equality_gte
+gte :: AsTerm t2 a => TTerm a -> t2 -> TTerm Bool
+gte t1 t2 = primitive2 _equality_gte t1 (asTerm t2)
 
 identity :: TTerm a -> TTerm a
 identity = primitive1 _equality_identity
 
-lt :: TTerm a -> TTerm a -> TTerm Bool
-lt = primitive2 _equality_lt
+lt :: AsTerm t2 a => TTerm a -> t2 -> TTerm Bool
+lt t1 t2 = primitive2 _equality_lt t1 (asTerm t2)
 
-lte :: TTerm a -> TTerm a -> TTerm Bool
-lte = primitive2 _equality_lte
+lte :: AsTerm t2 a => TTerm a -> t2 -> TTerm Bool
+lte t1 t2 = primitive2 _equality_lte t1 (asTerm t2)
 
-max :: TTerm a -> TTerm a -> TTerm a
-max = primitive2 _equality_max
+max :: AsTerm t2 a => TTerm a -> t2 -> TTerm a
+max t1 t2 = primitive2 _equality_max t1 (asTerm t2)
 
-min :: TTerm a -> TTerm a -> TTerm a
-min = primitive2 _equality_min
+min :: AsTerm t2 a => TTerm a -> t2 -> TTerm a
+min t1 t2 = primitive2 _equality_min t1 (asTerm t2)

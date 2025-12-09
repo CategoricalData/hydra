@@ -191,9 +191,7 @@ graphAsTypes :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.T
 graphAsTypes sg =  
   let els = (Maps.elems (Graph.graphElements sg))
   in  
-    let toPair = (\el -> Flows.bind (Monads.withTrace (Strings.cat [
-            "graph as types: ",
-            (Core.unName (Core.bindingName el))]) (Core_.type_ (Core.bindingTerm el))) (\typ -> Flows.pure (Core.bindingName el, typ)))
+    let toPair = (\el -> Flows.bind (Monads.withTrace (Strings.cat2 "graph as types: " (Core.unName (Core.bindingName el))) (Core_.type_ (Core.bindingTerm el))) (\typ -> Flows.pure (Core.bindingName el, typ)))
     in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing.InferenceContext)

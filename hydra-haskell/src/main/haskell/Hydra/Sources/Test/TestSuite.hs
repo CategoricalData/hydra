@@ -1,11 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Test.TestSuite where
 
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Dsl.Meta.Phantoms as Phantoms
+import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -48,47 +47,47 @@ module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypes
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
     modules = fst <$> testPairs
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
-    Testing.testGroup "common" nothing (list subgroups) (list [])
+    Testing.testGroup (string "common") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(Module, TTerm TestGroup)]
+libPairs :: [(Module, TBinding TestGroup)]
 libPairs = [
-  (Chars.module_, ref Chars.allTestsDef),
-  (Eithers.module_, ref Eithers.allTestsDef),
-  (Equality.module_, ref Equality.allTestsDef),
-  (Flows.module_, ref Flows.allTestsDef),
-  (Lists.module_, ref Lists.allTestsDef),
-  (Literals.module_, ref Literals.allTestsDef),
-  (Logic.module_, ref Logic.allTestsDef),
-  (Maps.module_, ref Maps.allTestsDef),
-  (Math.module_, ref Math.allTestsDef),
-  (Maybes.module_, ref Maybes.allTestsDef),
-  (Pairs.module_, ref Pairs.allTestsDef),
-  (Sets.module_, ref Sets.allTestsDef),
-  (Strings.module_, ref Strings.allTestsDef)]
+  (Chars.module_, Chars.allTests),
+  (Eithers.module_, Eithers.allTests),
+  (Equality.module_, Equality.allTests),
+  (Flows.module_, Flows.allTests),
+  (Lists.module_, Lists.allTests),
+  (Literals.module_, Literals.allTests),
+  (Logic.module_, Logic.allTests),
+  (Maps.module_, Maps.allTests),
+  (Math.module_, Math.allTests),
+  (Maybes.module_, Maybes.allTests),
+  (Pairs.module_, Pairs.allTests),
+  (Sets.module_, Sets.allTests),
+  (Strings.module_, Strings.allTests)]
 
-otherPairs :: [(Module, TTerm TestGroup)]
+otherPairs :: [(Module, TBinding TestGroup)]
 otherPairs = [
-  (Annotations.module_, ref Annotations.allTestsDef),
-  (CheckingAll.module_, ref CheckingAll.allTestsDef),
-  (EtaExpansion.module_, ref EtaExpansion.allTestsDef),
-  (Formatting.module_, ref Formatting.allTestsDef),
-  (InferenceAll.module_, ref InferenceAll.allTestsDef),
-  (JsonCoder.module_, ref JsonCoder.allTestsDef),
-  (JsonParser.module_, ref JsonParser.allTestsDef),
-  (JsonWriter.module_, ref JsonWriter.allTestsDef),
-  (Monads.module_, ref Monads.allTestsDef),
-  (Reduction.module_, ref Reduction.allTestsDef),
-  (Rewriting.module_, ref Rewriting.allTestsDef),
-  (Serialization.module_, ref Serialization.allTestsDef),
-  (Sorting.module_, ref Sorting.allTestsDef)]
+  (Annotations.module_, Annotations.allTests),
+  (CheckingAll.module_, CheckingAll.allTests),
+  (EtaExpansion.module_, EtaExpansion.allTests),
+  (Formatting.module_, Formatting.allTests),
+  (InferenceAll.module_, InferenceAll.allTests),
+  (JsonCoder.module_, JsonCoder.allTests),
+  (JsonParser.module_, JsonParser.allTests),
+  (JsonWriter.module_, JsonWriter.allTests),
+  (Monads.module_, Monads.allTests),
+  (Reduction.module_, Reduction.allTests),
+  (Rewriting.module_, Rewriting.allTests),
+  (Serialization.module_, Serialization.allTests),
+  (Sorting.module_, Sorting.allTests)]
 
-testPairs :: [(Module, TTerm TestGroup)]
+testPairs :: [(Module, TBinding TestGroup)]
 testPairs = libPairs ++ otherPairs

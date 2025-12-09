@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Show.Util where
 
@@ -63,16 +62,16 @@ module_ = Module (Namespace "hydra.show.util") elements
     Just "String representations of hydra.util types"
   where
    elements = [
-     el caseConventionDef]
+     toBinding caseConvention]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-caseConventionDef :: TBinding (CaseConvention -> String)
-caseConventionDef = define "caseConvention" $
+caseConvention :: TBinding (CaseConvention -> String)
+caseConvention = define "caseConvention" $
   doc "Show a case convention as a string" $
   "c" ~> cases _CaseConvention (var "c") Nothing [
-    _CaseConvention_lowerSnake>>: constant "lower_snake_case",
-    _CaseConvention_upperSnake>>: constant "UPPER_SNAKE_CASE",
-    _CaseConvention_camel>>: constant "camelCase",
-    _CaseConvention_pascal>>: constant "PascalCase"]
+    _CaseConvention_lowerSnake>>: constant (string "lower_snake_case"),
+    _CaseConvention_upperSnake>>: constant (string "UPPER_SNAKE_CASE"),
+    _CaseConvention_camel>>: constant (string "camelCase"),
+    _CaseConvention_pascal>>: constant (string "PascalCase")]

@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 -- | Advanced type checking test cases: annotated terms and flows
 module Hydra.Sources.Test.Checking.Advanced where
@@ -25,23 +24,23 @@ module_ = Module (Namespace "hydra.test.checking.advanced") elements
     (Just "Advanced type checking test cases: annotated terms and flows")
   where
     elements = [
-      el allTestsDef,
-      el annotatedTermsTestsDef,
-      el topLevelAnnotationsTestsDef,
-      el nestedAnnotationsTestsDef,
-      el annotationsInComplexContextsTestsDef,
-      el flowsTestsDef,
-      el flowsWithFailureAcrossLetBindingsTestsDef]
+      Phantoms.toBinding allTests,
+      Phantoms.toBinding annotatedTermsTests,
+      Phantoms.toBinding topLevelAnnotationsTests,
+      Phantoms.toBinding nestedAnnotationsTests,
+      Phantoms.toBinding annotationsInComplexContextsTests,
+      Phantoms.toBinding flowsTests,
+      Phantoms.toBinding flowsWithFailureAcrossLetBindingsTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
   Phantoms.doc "Advanced type checking test cases" $
   supergroup "Advanced" [
-    ref annotatedTermsTestsDef,
-    ref flowsTestsDef]
+    annotatedTermsTests,
+    flowsTests]
 
 ------ Helper functions ------
 
@@ -67,15 +66,15 @@ typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeChecking
 
 ------ Annotated terms ------
 
-annotatedTermsTestsDef :: TBinding TestGroup
-annotatedTermsTestsDef = define "annotatedTermsTests" $
+annotatedTermsTests :: TBinding TestGroup
+annotatedTermsTests = define "annotatedTermsTests" $
   supergroup "Annotated terms" [
-    ref topLevelAnnotationsTestsDef,
-    ref nestedAnnotationsTestsDef,
-    ref annotationsInComplexContextsTestsDef]
+    topLevelAnnotationsTests,
+    nestedAnnotationsTests,
+    annotationsInComplexContextsTests]
 
-topLevelAnnotationsTestsDef :: TBinding TestGroup
-topLevelAnnotationsTestsDef = define "topLevelAnnotationsTests" $
+topLevelAnnotationsTests :: TBinding TestGroup
+topLevelAnnotationsTests = define "topLevelAnnotationsTests" $
   subgroup "Top-level annotations" [
     noChange "annotated literal"
       (annotated (int32 42) mapTermEmpty)
@@ -84,18 +83,18 @@ topLevelAnnotationsTestsDef = define "topLevelAnnotationsTests" $
       (annotated (list [string "a", string "b"]) mapTermEmpty)
       (T.list T.string),
     noChange "annotated record"
-      (annotated (record (ref TestTypes.testTypePersonNameDef) [
+      (annotated (record TestTypes.testTypePersonName [
         "firstName">: string "John",
         "lastName">: string "Doe",
         "age">: int32 25]) mapTermEmpty)
-      (Core.typeVariable $ ref TestTypes.testTypePersonNameDef),
+      (Core.typeVariable TestTypes.testTypePersonName),
     checkTest "annotated lambda" []
       (annotated (lambda "x" $ var "x") mapTermEmpty)
       (annotated (tylam "t0" $ lambdaTyped "x" (T.var "t0") $ var "x") mapTermEmpty)
       (T.forAlls ["t0"] $ T.function (T.var "t0") (T.var "t0"))]
 
-nestedAnnotationsTestsDef :: TBinding TestGroup
-nestedAnnotationsTestsDef = define "nestedAnnotationsTests" $
+nestedAnnotationsTests :: TBinding TestGroup
+nestedAnnotationsTests = define "nestedAnnotationsTests" $
   subgroup "Nested annotations" [
     noChange "annotation within annotation"
       (annotated (annotated (int32 100) mapTermEmpty) mapTermEmpty)
@@ -110,8 +109,8 @@ nestedAnnotationsTestsDef = define "nestedAnnotationsTests" $
       (annotated (lambdaTyped "x" T.int32 $ var "x") mapTermEmpty @@ annotated (int32 42) mapTermEmpty)
       T.int32]
 
-annotationsInComplexContextsTestsDef :: TBinding TestGroup
-annotationsInComplexContextsTestsDef = define "annotationsInComplexContextsTests" $
+annotationsInComplexContextsTests :: TBinding TestGroup
+annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
   subgroup "Annotations in complex contexts" [
     checkTest "annotated let binding" []
       (lets ["x">: annotated (int32 5) mapTermEmpty,
@@ -122,11 +121,11 @@ annotationsInComplexContextsTestsDef = define "annotationsInComplexContextsTests
         annotated (tyapps (pair (var "x") (var "y")) [T.int32, T.string]) mapTermEmpty)
       (T.pair T.int32 T.string),
     noChange "annotated record fields"
-      (record (ref TestTypes.testTypePersonNameDef) [
+      (record TestTypes.testTypePersonName [
         "firstName">: annotated (string "Alice") mapTermEmpty,
         "lastName">: annotated (string "Smith") mapTermEmpty,
         "age">: annotated (int32 30) mapTermEmpty])
-      (Core.typeVariable $ ref TestTypes.testTypePersonNameDef),
+      (Core.typeVariable TestTypes.testTypePersonName),
     checkTest "annotated function in application" []
       (lets ["add">: annotated (primitive _math_add) mapTermEmpty] $
         var "add" @@ annotated (int32 10) mapTermEmpty @@ annotated (int32 20) mapTermEmpty)
@@ -143,13 +142,13 @@ annotationsInComplexContextsTestsDef = define "annotationsInComplexContextsTests
 
 ------ Flows ------
 
-flowsTestsDef :: TBinding TestGroup
-flowsTestsDef = define "flowsTests" $
+flowsTests :: TBinding TestGroup
+flowsTests = define "flowsTests" $
   supergroup "Flows" [
-    ref flowsWithFailureAcrossLetBindingsTestsDef]
+    flowsWithFailureAcrossLetBindingsTests]
 
-flowsWithFailureAcrossLetBindingsTestsDef :: TBinding TestGroup
-flowsWithFailureAcrossLetBindingsTestsDef = define "flowsWithFailureAcrossLetBindingsTests" $
+flowsWithFailureAcrossLetBindingsTests :: TBinding TestGroup
+flowsWithFailureAcrossLetBindingsTests = define "flowsWithFailureAcrossLetBindingsTests" $
   subgroup "Flows with failure across let bindings" [
     checkTest "mutually referential failure functions with Flow monad" []
       (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $

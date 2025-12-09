@@ -23,13 +23,13 @@ module_ = Module (Namespace "hydra.test.json.parser") elements
     (Just "Test cases for JSON parsing")
   where
     elements = [
-        el allTestsDef]
+        Base.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     Base.doc "Test cases for JSON parsing" $
     supergroup "JSON parsing" [
       primitivesGroup,
@@ -44,7 +44,7 @@ parserCase :: String -> String -> TTerm Value -> TTerm TestCaseWithMetadata
 parserCase name input expectedValue = testCaseWithMetadata (Base.string name)
   (testCaseJsonParser $ jsonParserTestCase (Base.string input)
     (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Base.string "")))
-  Base.nothing (Base.list [] :: TTerm [Tag])
+  Base.nothing (Base.list ([] :: [TTerm Tag]))
 
 primitivesGroup :: TTerm TestGroup
 primitivesGroup = subgroup "primitives" [
@@ -88,7 +88,7 @@ stringsGroup = subgroup "strings" [
 arraysGroup :: TTerm TestGroup
 arraysGroup = subgroup "arrays" [
     -- Empty and single element
-    parserCase "empty array" "[]" (Json.valueArray $ Base.list []),
+    parserCase "empty array" "[]" (Json.valueArray $ Base.list ([] :: [TTerm Value])),
     parserCase "single element" "[1]" (Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 1.0]),
 
     -- Multiple elements

@@ -341,7 +341,7 @@ inferTypeOf cx term =
     in  
       let unifyAndSubst = (\result ->  
               let subst = (Typing_.inferenceResultSubst result)
-              in (Flows.bind (finalizeInferredTerm cx (Typing_.inferenceResultTerm result)) (\finalized -> Flows.bind (Lexical.withEmptyGraph (Core_.letTerm finalized)) (\letResult ->  
+              in (Flows.bind (finalizeInferredTerm cx (Typing_.inferenceResultTerm result)) (\finalized -> Flows.bind (Lexical.withEmptyGraph (Core_.let_ finalized)) (\letResult ->  
                 let bindings = (Core.letBindings letResult)
                 in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (forBindings bindings) (Flows.fail (Strings.cat [
                   "Expected a single binding with a type scheme, but got: ",
@@ -854,9 +854,7 @@ initialTypeContext g =
           let name = (Pairs.first pair)
           in  
             let el = (Pairs.second pair)
-            in (Maybes.maybe (Flows.fail (Strings.cat [
-              "untyped element: ",
-              (Core.unName name)])) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
+            in (Maybes.maybe (Flows.fail (Strings.cat2 "untyped element: " (Core.unName name))) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
   in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
     Typing_.typeContextVariables = Sets.empty,

@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Json.Language where
 
@@ -95,7 +94,7 @@ import qualified Data.Maybe                                 as Y
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.org.json.language")
-  [el jsonLanguageDef]
+  [toBinding jsonLanguage]
   [Rewriting.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints for JSON"
@@ -103,8 +102,8 @@ module_ = Module (Namespace "hydra.ext.org.json.language")
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-jsonLanguageDef :: TBinding Language
-jsonLanguageDef = define "jsonLanguage" $
+jsonLanguage :: TBinding Language
+jsonLanguage = define "jsonLanguage" $
   doc "Language constraints for JSON" $ lets [
   "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
@@ -129,14 +128,14 @@ jsonLanguageDef = define "jsonLanguage" $
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
     Variants.typeVariantRecord],
-  "typePredicate">: lambda "typ" $ cases _Type (ref Rewriting.deannotateTypeDef @@ var "typ")
+  "typePredicate">: lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just true) [
     _Type_maybe>>: lambda "innerType" $
       cases _Type (var "innerType")
         (Just true) [
         _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName "hydra.ext.org.json")
+    (Coders.languageName (string "hydra.ext.org.json"))
     (Coders.languageConstraints
       (var "eliminationVariants")
       (var "literalVariants")

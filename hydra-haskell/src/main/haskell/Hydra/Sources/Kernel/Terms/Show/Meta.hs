@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Show.Meta where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (termVariant, typeVariant)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -63,14 +62,14 @@ module_ = Module (Namespace "hydra.show.meta") elements
     Just "String representations of hydra.meta types"
   where
    elements = [
-     el termVariantDef,
-     el typeVariantDef]
+     toBinding termVariant,
+     toBinding typeVariant]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-termVariantDef :: TBinding (TermVariant -> String)
-termVariantDef = define "termVariant" $
+termVariant :: TBinding (TermVariant -> String)
+termVariant = define "termVariant" $
   doc "Show a term variant as a string" $
   match _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
@@ -92,8 +91,8 @@ termVariantDef = define "termVariant" $
     _TermVariant_variable>>: constant $ string "variable",
     _TermVariant_wrap>>: constant $ string "wrap"]
 
-typeVariantDef :: TBinding (TypeVariant -> String)
-typeVariantDef = define "typeVariant" $
+typeVariant :: TBinding (TypeVariant -> String)
+typeVariant = define "typeVariant" $
   doc "Show a type variant as a string" $
   match _TypeVariant Nothing [
     _TypeVariant_annotated>>: constant $ string "annotated",

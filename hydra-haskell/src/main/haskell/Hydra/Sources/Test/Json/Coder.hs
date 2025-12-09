@@ -34,13 +34,13 @@ module_ = Module (Namespace "hydra.test.json.coder") elements
     (Just "Test cases for the type-directed JSON coder (Hydra Term <-> JSON Value)")
   where
     elements = [
-        el allTestsDef]
+        Base.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     Base.doc "Test cases for the type-directed JSON coder" $
     supergroup "JSON coder" [
       literalCoderGroup,
@@ -52,7 +52,7 @@ allTestsDef = define "allTests" $
 coderTest :: String -> TTerm Type -> TTerm Term -> TTerm Value -> TTerm TestCaseWithMetadata
 coderTest name typ term json = testCaseWithMetadata (Base.string name)
   (testCaseJsonCoder $ jsonCoderTestCase typ term json)
-  Base.nothing (Base.list [] :: TTerm [Tag])
+  Base.nothing (Base.list ([] :: [TTerm Tag]))
 
 -- | Test cases for literal type encoding/decoding
 literalCoderGroup :: TTerm TestGroup
@@ -125,7 +125,7 @@ collectionCoderGroup = subgroup "collection types" [
     coderTest "empty list"
       (MetaTypes.list MetaTypes.int32)
       (MetaTerms.list [])
-      (Json.valueArray $ Base.list [])]
+      (Json.valueArray $ Base.list ([] :: [TTerm Value]))]
     -- Note: Map tests are more complex due to the map term representation
 
 -- | Test cases for optional type encoding/decoding
@@ -150,7 +150,4 @@ optionalCoderGroup = subgroup "optional types" [
 
 -- | Test cases for record type encoding/decoding
 recordCoderGroup :: TTerm TestGroup
-recordCoderGroup = subgroup "record types" [
-    -- Note: Record tests would require defining record types in TestTypes
-    -- For now, we test simple cases that don't require pre-defined types
-    ]
+recordCoderGroup = subgroup "record types" ([] :: [TTerm TestCaseWithMetadata])

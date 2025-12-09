@@ -166,14 +166,14 @@ encodeBindingAsAssignment env (Binding name term _) = do
   let pyName = encodeName False CaseConventionLowerSnake env name
   return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
 
-encodeBindingAsDef :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
-encodeBindingAsDef env (Binding name1 term1 mts) = do
+encodeBindingAs :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
+encodeBindingAs env (Binding name1 term1 mts) = do
   comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term1)
   encodeTermAssignment env name1 term1 comment
 
 -- TODO: topological sort of bindings
 encodeBindingsAsDefs :: PythonEnvironment -> [Binding] -> Flow PyGraph [Py.Statement]
-encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAsDef env) bindings
+encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAs env) bindings
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
@@ -948,7 +948,7 @@ findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
 -- moved to Hydra.Ext.Staging.CoderUtils for reuse across language coders.
 
 gatherMetadata :: Namespace -> [Definition] -> PythonModuleMetadata
-gatherMetadata focusNs defs = checkTvars $ L.foldl addDef start defs
+gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
   where
     checkTvars meta = meta {pythonModuleMetadataUsesTypeVar = not $ S.null $ pythonModuleMetadataTypeVariables meta}
     start = PythonModuleMetadata {
@@ -973,7 +973,7 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl addDef start defs
       pythonModuleMetadataUsesRight = False,
       pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
-    addDef meta def = case def of
+    add meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> extendMetaForTerm True meta2 term
         where
           meta2 = extendMetaForType True True typ meta

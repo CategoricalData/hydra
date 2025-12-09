@@ -1,6 +1,9 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Dsl.Meta.Compute where
 
 import Hydra.Kernel
+import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Meta.Core as Core
 
@@ -8,12 +11,12 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-adapter :: TTerm Bool -> TTerm t1 -> TTerm t2 -> TTerm (Coder s1 s2 v1 v2) -> TTerm (Adapter s1 s2 t1 t2 v1 v2)
-adapter isLossy source target coder = record _Adapter [
+adapter :: AsTerm c (Coder s1 s2 v1 v2) => TTerm Bool -> TTerm t1 -> TTerm t2 -> c -> TTerm (Adapter s1 s2 t1 t2 v1 v2)
+adapter isLossy source target coderArg = record _Adapter [
   _Adapter_isLossy>>: isLossy,
   _Adapter_source>>: source,
   _Adapter_target>>: target,
-  _Adapter_coder>>: coder]
+  _Adapter_coder>>: asTerm coderArg]
 
 adapterIsLossy :: TTerm (Adapter s1 s2 t1 t2 v1 v2) -> TTerm Bool
 adapterIsLossy a = project _Adapter _Adapter_isLossy @@ a
@@ -91,5 +94,5 @@ traceWithOther t other = record _Trace [
   _Trace_messages>>: Hydra.Dsl.Meta.Compute.traceMessages t,
   _Trace_other>>: other]
 
-unFlow :: TTerm (Flow s x) -> TTerm s -> TTerm Trace -> TTerm (FlowState s x)
-unFlow f s t = unwrap _Flow @@ f @@ s @@ t
+unFlow :: AsTerm t Trace => TTerm (Flow s x) -> TTerm s -> t -> TTerm (FlowState s x)
+unFlow f s t = unwrap _Flow @@ f @@ s @@ asTerm t

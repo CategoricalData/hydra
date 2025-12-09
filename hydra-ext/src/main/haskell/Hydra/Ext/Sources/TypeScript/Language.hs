@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.TypeScript.Language (typeScriptLanguageModule) where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -98,13 +96,13 @@ typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 
 typeScriptLanguageModule :: Module
 typeScriptLanguageModule = Module (Namespace "hydra.ext.typeScript.language")
-  [el typeScriptLanguageDef, el typeScriptReservedWordsDef]
+  [toBinding typeScriptLanguage, toBinding typeScriptReservedWords]
   [Rewriting.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints for TypeScript"
 
-typeScriptLanguageDef :: TBinding Language
-typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
+typeScriptLanguage :: TBinding Language
+typeScriptLanguage = typeScriptLanguageDefinition "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $ lets [
   "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
@@ -133,7 +131,7 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
     Variants.typeVariantUnion],
   "types">: match _Type
     (Just true) [
-    _Type_map>>: lambda "mt" (cases _Type ((ref Rewriting.deannotateTypeDef @@ (Core.mapTypeValues $ var "mt")))
+    _Type_map>>: lambda "mt" (cases _Type ((Rewriting.deannotateType @@ (Core.mapTypeValues $ var "mt")))
       (Just true) [
       _Type_maybe>>: constant false])]] $
   Coders.language
@@ -148,8 +146,8 @@ typeScriptLanguageDef = typeScriptLanguageDefinition "typeScriptLanguage" $
       (var "typeVariants")
       (var "types"))
 
-typeScriptReservedWordsDef :: TBinding (S.Set String)
-typeScriptReservedWordsDef = typeScriptLanguageDefinition "typeScriptReservedWords" $
+typeScriptReservedWords :: TBinding (S.Set String)
+typeScriptReservedWords = typeScriptLanguageDefinition "typeScriptReservedWords" $
   doc ("A set of reserved words in TypeScript."
     <> " Taken directly from https://github.com/microsoft/TypeScript/issues/2536") $ lets [
   "reservedWords">: list [

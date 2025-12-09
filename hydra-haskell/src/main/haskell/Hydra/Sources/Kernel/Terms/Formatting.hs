@@ -1,7 +1,11 @@
 module Hydra.Sources.Kernel.Terms.Formatting where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  capitalize, convertCase, convertCaseCamelToLowerSnake, convertCaseCamelToUpperSnake,
+  convertCasePascalToUpperSnake, decapitalize, escapeWithUnderscore, indentLines,
+  javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, sanitizeWithUnderscores,
+  showList, stripLeadingAndTrailingWhitespace, withCharacterAliases, wrapLine)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -46,7 +50,7 @@ import qualified Hydra.Dsl.Meta.Typing        as Typing
 import qualified Hydra.Dsl.Meta.Util          as Util
 import qualified Hydra.Dsl.Meta.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
+import           Prelude hiding ((++), showList)
 import qualified Data.Int                as I
 import qualified Data.List               as L
 import qualified Data.Map                as M
@@ -61,42 +65,42 @@ module_ = Module (Namespace "hydra.formatting") elements
     Just "String formatting types and functions."
   where
     elements = [
-      el capitalizeDef,
-      el convertCaseDef,
-      el convertCaseCamelToLowerSnakeDef,
-      el convertCaseCamelToUpperSnakeDef,
-      el convertCasePascalToUpperSnakeDef,
-      el decapitalizeDef,
-      el escapeWithUnderscoreDef,
-      el indentLinesDef,
-      el javaStyleCommentDef,
-      el mapFirstLetterDef,
-      el nonAlnumToUnderscoresDef,
-      el sanitizeWithUnderscoresDef,
-      el showListDef,
-      el stripLeadingAndTrailingWhitespaceDef,
-      el withCharacterAliasesDef,
-      el wrapLineDef]
+      toBinding capitalize,
+      toBinding convertCase,
+      toBinding convertCaseCamelToLowerSnake,
+      toBinding convertCaseCamelToUpperSnake,
+      toBinding convertCasePascalToUpperSnake,
+      toBinding decapitalize,
+      toBinding escapeWithUnderscore,
+      toBinding indentLines,
+      toBinding javaStyleComment,
+      toBinding mapFirstLetter,
+      toBinding nonAlnumToUnderscores,
+      toBinding sanitizeWithUnderscores,
+      toBinding showList,
+      toBinding stripLeadingAndTrailingWhitespace,
+      toBinding withCharacterAliases,
+      toBinding wrapLine]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-capitalizeDef :: TBinding (String -> String)
-capitalizeDef = define "capitalize" $
+capitalize :: TBinding (String -> String)
+capitalize = define "capitalize" $
   doc "Capitalize the first letter of a string" $
-  ref mapFirstLetterDef @@ primitive _strings_toUpper
+  mapFirstLetter @@ primitive _strings_toUpper
 
-convertCaseDef :: TBinding (CaseConvention -> CaseConvention -> String -> String)
-convertCaseDef = define "convertCase" $
+convertCase :: TBinding (CaseConvention -> CaseConvention -> String -> String)
+convertCase = define "convertCase" $
   doc "Convert a string from one case convention to another" $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
-          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list []))
+          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TTerm [Char]])))
           (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))]
         $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
-          $ Lists.reverse $ Strings.toList (ref decapitalizeDef @@ var "original"),
+          $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
       $ (match _CaseConvention Nothing [
         _CaseConvention_camel>>: constant $ var "byCaps",
@@ -104,57 +108,57 @@ convertCaseDef = define "convertCase" $
         _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
         _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
     $ (match _CaseConvention Nothing [
-      _CaseConvention_camel>>: constant $ ref decapitalizeDef @@ (Strings.cat (Lists.map (ref capitalizeDef <.> primitive _strings_toLower) $ var "parts")),
-      _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (ref capitalizeDef <.> primitive _strings_toLower) $ var "parts"),
+      _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.cat (Lists.map (capitalize <.> primitive _strings_toLower) $ var "parts")),
+      _CaseConvention_pascal>>: constant $ Strings.cat (Lists.map (capitalize <.> primitive _strings_toLower) $ var "parts"),
       _CaseConvention_lowerSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive _strings_toLower) $ var "parts"),
       _CaseConvention_upperSnake>>: constant $ Strings.intercalate (string "_") (Lists.map (primitive _strings_toUpper) $ var "parts")
       ]) @@ var "to"
   where
-    emptyParts = list [list []]
+    emptyParts = list [list ([] :: [TTerm Char])]
 
-convertCaseCamelToLowerSnakeDef :: TBinding (String -> String)
-convertCaseCamelToLowerSnakeDef = define "convertCaseCamelToLowerSnake" $
+convertCaseCamelToLowerSnake :: TBinding (String -> String)
+convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
-  ref convertCaseDef @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
+  convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
 
-convertCaseCamelToUpperSnakeDef :: TBinding (String -> String)
-convertCaseCamelToUpperSnakeDef = define "convertCaseCamelToUpperSnake" $
+convertCaseCamelToUpperSnake :: TBinding (String -> String)
+convertCaseCamelToUpperSnake = define "convertCaseCamelToUpperSnake" $
   doc "Convert a string from camel case to upper snake case" $
-  ref convertCaseDef @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake
+  convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake
 
-convertCasePascalToUpperSnakeDef :: TBinding (String -> String)
-convertCasePascalToUpperSnakeDef = define "convertCasePascalToUpperSnake" $
+convertCasePascalToUpperSnake :: TBinding (String -> String)
+convertCasePascalToUpperSnake = define "convertCasePascalToUpperSnake" $
   doc "Convert a string from pascal case to upper snake case" $
-  ref convertCaseDef @@ Util.caseConventionPascal @@ Util.caseConventionUpperSnake
+  convertCase @@ Util.caseConventionPascal @@ Util.caseConventionUpperSnake
 
-decapitalizeDef :: TBinding (String -> String)
-decapitalizeDef = define "decapitalize" $
+decapitalize :: TBinding (String -> String)
+decapitalize = define "decapitalize" $
   doc "Decapitalize the first letter of a string" $
-  ref mapFirstLetterDef @@ primitive _strings_toLower
+  mapFirstLetter @@ primitive _strings_toLower
 
-escapeWithUnderscoreDef :: TBinding (S.Set String -> String -> String)
-escapeWithUnderscoreDef = define "escapeWithUnderscore" $
+escapeWithUnderscore :: TBinding (S.Set String -> String -> String)
+escapeWithUnderscore = define "escapeWithUnderscore" $
   doc "Escape reserved words by appending an underscore" $
   lambdas ["reserved", "s"] $
     Logic.ifElse (Sets.member (var "s") (var "reserved"))
       (var "s" ++ string "_")
       (var "s")
 
-indentLinesDef :: TBinding (String -> String)
-indentLinesDef = define "indentLines" $
+indentLines :: TBinding (String -> String)
+indentLines = define "indentLines" $
   doc "Indent each line of a string with four spaces" $
   lambda "s" $ lets [
     "indent">: lambda "l" $ string "    " ++ var "l"]
     $ Strings.unlines $ Lists.map (var "indent") $ Strings.lines $ var "s"
 
-javaStyleCommentDef :: TBinding (String -> String)
-javaStyleCommentDef = define "javaStyleComment" $
+javaStyleComment :: TBinding (String -> String)
+javaStyleComment = define "javaStyleComment" $
   doc "Format a string as a Java-style block comment" $
   lambda "s" $ string "/**\n" ++ string " * " ++ var "s" ++ string "\n */"
 
 -- TODO: simplify this helper
-mapFirstLetterDef :: TBinding ((String -> String) -> String -> String)
-mapFirstLetterDef = define "mapFirstLetter" $
+mapFirstLetter :: TBinding ((String -> String) -> String -> String)
+mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   "mapping" ~> "s" ~>
   "list" <~ Strings.toList (var "s") $
@@ -164,8 +168,8 @@ mapFirstLetterDef = define "mapFirstLetter" $
     (var "s")
     (Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
 
-nonAlnumToUnderscoresDef :: TBinding (String -> String)
-nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
+nonAlnumToUnderscores :: TBinding (String -> String)
+nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
   doc "Replace sequences of non-alphanumeric characters with single underscores" $
   "input" ~>
   "isAlnum" <~ ("c" ~> Logic.or
@@ -181,30 +185,30 @@ nonAlnumToUnderscoresDef = define "nonAlnumToUnderscores" $
       (Logic.ifElse (var "b")
         (pair (var "s") (boolean True))
         (pair (Lists.cons (char '_') (var "s")) (boolean True)))) $
-  "result" <~ Lists.foldl (var "replace") (pair (list []) (boolean False)) (Strings.toList $ var "input") $
+  "result" <~ Lists.foldl (var "replace") (pair (list ([] :: [TTerm Char])) (boolean False)) (Strings.toList $ var "input") $
   Strings.fromList $ Lists.reverse $ Pairs.first $ var "result"
 
-sanitizeWithUnderscoresDef :: TBinding (S.Set String -> String -> String)
-sanitizeWithUnderscoresDef = define "sanitizeWithUnderscores" $
+sanitizeWithUnderscores :: TBinding (S.Set String -> String -> String)
+sanitizeWithUnderscores = define "sanitizeWithUnderscores" $
   doc "Sanitize a string by replacing non-alphanumeric characters and escaping reserved words" $
-  "reserved" ~> "s" ~> ref escapeWithUnderscoreDef @@ var "reserved" @@ (ref nonAlnumToUnderscoresDef @@ var "s")
+  "reserved" ~> "s" ~> escapeWithUnderscore @@ var "reserved" @@ (nonAlnumToUnderscores @@ var "s")
 
-showListDef :: TBinding ((a -> String) -> [a] -> String)
-showListDef = define "showList" $
+showList :: TBinding ((a -> String) -> [a] -> String)
+showList = define "showList" $
   doc "Format a list of elements as a bracketed, comma-separated string" $
   "f" ~> "els" ~> Strings.cat $ list [
     string "[",
     Strings.intercalate (string ", ") $ Lists.map (var "f") $ var "els",
     string "]"]
 
-stripLeadingAndTrailingWhitespaceDef :: TBinding (String -> String)
-stripLeadingAndTrailingWhitespaceDef = define "stripLeadingAndTrailingWhitespace" $
+stripLeadingAndTrailingWhitespace :: TBinding (String -> String)
+stripLeadingAndTrailingWhitespace = define "stripLeadingAndTrailingWhitespace" $
   doc "Remove leading and trailing whitespace from a string" $
   "s" ~> Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
     Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
-withCharacterAliasesDef :: TBinding (String -> String)
-withCharacterAliasesDef = define "withCharacterAliases" $
+withCharacterAliases :: TBinding (String -> String)
+withCharacterAliases = define "withCharacterAliases" $
   doc "Replace special characters with their alphanumeric aliases" $
   lambda "original" $ lets [
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
@@ -248,8 +252,8 @@ withCharacterAliasesDef = define "withCharacterAliases" $
     $ Strings.fromList $ Lists.filter (unaryFunction Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
-wrapLineDef :: TBinding (Int -> String -> String)
-wrapLineDef = define "wrapLine" $
+wrapLine :: TBinding (Int -> String -> String)
+wrapLine = define "wrapLine" $
   doc "A simple soft line wrap which is suitable for code comments" $
   lambdas ["maxlen", "input"] $ lets [
     "helper">: lambdas ["prev", "rem"] $ lets [
@@ -264,4 +268,4 @@ wrapLineDef = define "wrapLine" $
         (Logic.ifElse (Lists.null $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
           (var "helper" @@ (Lists.cons (Lists.init $ var "prefix") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem"))))))]
-    $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list []) @@ (Strings.toList $ var "input")
+    $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TTerm Char])) @@ (Strings.toList $ var "input")

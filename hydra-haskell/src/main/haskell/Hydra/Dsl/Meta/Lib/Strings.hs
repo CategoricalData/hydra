@@ -8,8 +8,8 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 
-(++) :: TTerm String -> TTerm String -> TTerm String
-l ++ r = (primitive _strings_cat) @@ (list [l, r])
+--(++) :: TTerm String -> TTerm String -> TTerm String
+--l ++ r = (primitive _strings_cat) @@ (list [l, r])
 
 cat :: TTerm [String] -> TTerm String
 cat = primitive1 _strings_cat

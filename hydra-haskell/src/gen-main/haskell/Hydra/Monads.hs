@@ -150,25 +150,13 @@ traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
   let messageLines = (Lists.nub (Compute.traceMessages t))
   in  
-    let toLine = (\pair -> Strings.cat [
-            Strings.cat [
-              Strings.cat [
-                "\t",
-                (Core.unName (Pairs.first pair))],
-              ": "],
-            (Core_.term (Pairs.second pair))])
+    let toLine = (\pair -> Strings.cat2 (Strings.cat2 (Strings.cat2 "\t" (Core.unName (Pairs.first pair))) ": ") (Core_.term (Pairs.second pair)))
     in  
       let keyvalLines = (Logic.ifElse (Maps.null (Compute.traceOther t)) [] (Lists.cons "key/value pairs: " (Lists.map toLine (Maps.toList (Compute.traceOther t)))))
       in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
 unexpected :: (String -> String -> Compute.Flow t0 t1)
-unexpected expected actual = (fail (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      "expected ",
-      expected],
-    " but found: "],
-  actual]))
+unexpected expected actual = (fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " expected) " but found: ") actual))
 
 warn :: (String -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 warn msg b = (Compute.Flow (\s0 -> \t0 ->  
@@ -176,9 +164,7 @@ warn msg b = (Compute.Flow (\s0 -> \t0 ->
   in  
     let addMessage = (\t -> Compute.Trace {
             Compute.traceStack = (Compute.traceStack t),
-            Compute.traceMessages = (Lists.cons (Strings.cat [
-              "Warning: ",
-              msg]) (Compute.traceMessages t)),
+            Compute.traceMessages = (Lists.cons (Strings.cat2 "Warning: " msg) (Compute.traceMessages t)),
             Compute.traceOther = (Compute.traceOther t)})
     in Compute.FlowState {
       Compute.flowStateValue = (Compute.flowStateValue f1),

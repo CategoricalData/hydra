@@ -16,7 +16,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.pairs") elements [] [] $
     Just "Test cases for hydra.lib.pairs primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Helper to create pair terms
 pairTerm :: Int -> String -> TTerm Term
@@ -40,8 +40,8 @@ pairsSecond = subgroup "second" [
   where
     test name fst snd result = primCase name _pairs_second [pairTerm fst snd] (MetaTerms.string result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
     supergroup "hydra.lib.pairs primitives" [
       pairsFirst,

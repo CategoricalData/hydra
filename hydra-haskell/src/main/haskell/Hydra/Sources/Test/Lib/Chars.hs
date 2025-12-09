@@ -18,7 +18,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.lib.chars") elements [] [] $
     Just "Test cases for hydra.lib.chars primitives"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- Test groups for hydra.lib.chars primitives
 
@@ -72,8 +72,8 @@ charsToUpper = subgroup "toUpper" [
   where
     test name x result = primCase name _chars_toUpper [int32 x] (int32 result)
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.chars primitives" $
     supergroup "hydra.lib.chars primitives" [
       charsIsAlphaNum,

@@ -15,7 +15,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.reduction") elements [] [] $
     Just "Test cases for term reduction/evaluation mechanics"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
 
 -- | Test cases for beta reduction (lambda application)
 betaReductionTests :: TTerm TestGroup
@@ -304,8 +304,8 @@ typeReductionTests = subgroup "type reduction" [
     (MetaTypes.forAll "a" (MetaTypes.optional (MetaTypes.var "a")) MetaTypes.@@ MetaTypes.string)
     (MetaTypes.optional MetaTypes.string)]
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for term reduction mechanics" $
     supergroup "reduction" [
       betaReductionTests,

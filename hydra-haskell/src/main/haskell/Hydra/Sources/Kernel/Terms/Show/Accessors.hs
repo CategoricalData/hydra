@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Sources.Kernel.Terms.Show.Accessors where
 
 -- Standard imports for kernel terms modules
@@ -66,14 +64,14 @@ module_ = Module (Namespace "hydra.show.accessors") elements
     Just ("Utilities for working with term accessors.")
   where
    elements = [
-     el termAccessorDef,
-     el termToAccessorGraphDef] -- TODO: move out of hydra.show.accessors
+     toBinding termAccessor,
+     toBinding termToAccessorGraph] -- TODO: move out of hydra.show.accessors
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-termAccessorDef :: TBinding (TermAccessor -> Maybe String)
-termAccessorDef = define "termAccessor" $
+termAccessor :: TBinding (TermAccessor -> Maybe String)
+termAccessor = define "termAccessor" $
   doc "Convert a term accessor to a string representation" $
   "accessor" ~>
   "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
@@ -82,19 +80,19 @@ termAccessorDef = define "termAccessor" $
   cases _TermAccessor (var "accessor")
     Nothing [
     _TermAccessor_annotatedBody>>: constant nothing,
-    _TermAccessor_applicationFunction>>: constant (just "fun"),
-    _TermAccessor_applicationArgument>>: constant (just "arg"),
-    _TermAccessor_lambdaBody>>: constant (just "body"),
-    _TermAccessor_unionCasesDefault>>: constant (just "default"),
-    _TermAccessor_unionCasesBranch>>: "name" ~> just (Strings.cat2 "." (Core.unName (var "name"))),
-    _TermAccessor_letBody>>: constant (just "in"),
-    _TermAccessor_letBinding>>: "name" ~> just (Strings.cat2 (Core.unName (var "name")) "="),
+    _TermAccessor_applicationFunction>>: constant (just (string "fun")),
+    _TermAccessor_applicationArgument>>: constant (just (string "arg")),
+    _TermAccessor_lambdaBody>>: constant (just (string "body")),
+    _TermAccessor_unionCasesDefault>>: constant (just (string "default")),
+    _TermAccessor_unionCasesBranch>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
+    _TermAccessor_letBody>>: constant (just (string "in")),
+    _TermAccessor_letBinding>>: "name" ~> just (Strings.cat2 (Core.unName (var "name")) (string "=")),
     _TermAccessor_listElement>>: "i" ~> var "idx" @@ var "i",
-    _TermAccessor_mapKey>>: "i" ~> var "idxSuff" @@ ".key" @@ var "i",
-    _TermAccessor_mapValue>>: "i" ~> var "idxSuff" @@ ".value" @@ var "i",
-    _TermAccessor_maybeTerm>>: constant (just "just"),
+    _TermAccessor_mapKey>>: "i" ~> var "idxSuff" @@ (string ".key") @@ var "i",
+    _TermAccessor_mapValue>>: "i" ~> var "idxSuff" @@ (string ".value") @@ var "i",
+    _TermAccessor_maybeTerm>>: constant (just (string "just")),
     _TermAccessor_productTerm>>: "i" ~> var "idx" @@ var "i",
-    _TermAccessor_recordField>>: "name" ~> just (Strings.cat2 "." (Core.unName (var "name"))),
+    _TermAccessor_recordField>>: "name" ~> just (Strings.cat2 (string ".") (Core.unName (var "name"))),
     _TermAccessor_setElement>>: "i" ~> var "idx" @@ var "i",
     _TermAccessor_sumTerm>>: constant nothing,
     _TermAccessor_typeLambdaBody>>: constant nothing,
@@ -102,8 +100,8 @@ termAccessorDef = define "termAccessor" $
     _TermAccessor_injectionTerm>>: constant nothing,
     _TermAccessor_wrappedTerm>>: constant nothing]
 
-termToAccessorGraphDef :: TBinding (M.Map Namespace String -> Term -> AccessorGraph)
-termToAccessorGraphDef = define "termToAccessorGraph" $
+termToAccessorGraph :: TBinding (M.Map Namespace String -> Term -> AccessorGraph)
+termToAccessorGraph = define "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [
     "dontCareAccessor">: Accessors.termAccessorAnnotatedBody,
@@ -119,7 +117,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
           Lists.foldl
             (var "helper" @@ var "ids" @@ var "mroot" @@ var "nextPath")
             (var "state")
-            (ref Rewriting.subtermsWithAccessorsDef @@ var "currentTerm")) [
+            (Rewriting.subtermsWithAccessors @@ var "currentTerm")) [
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
           "env">: Core.letBody $ var "letExpr",
@@ -130,8 +128,8 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             "currentIds">: Pairs.second $ var "nodesVisitedIds",
             "currentNodes">: Pairs.first $ var "currentNodesVisited",
             "currentVisited">: Pairs.second $ var "currentNodesVisited",
-            "rawLabel">: ref Names.compactNameDef @@ var "namespaces" @@ var "name",
-            "uniqueLabel">: ref Names.uniqueLabelDef @@ var "currentVisited" @@ var "rawLabel",
+            "rawLabel">: Names.compactName @@ var "namespaces" @@ var "name",
+            "uniqueLabel">: Names.uniqueLabel @@ var "currentVisited" @@ var "rawLabel",
             "node">: Accessors.accessorNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
@@ -139,7 +137,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             $ pair (pair (var "newNodes") (var "newVisited")) (var "newIds"),
           "nodesVisitedIds1">: Lists.foldl
             (var "addBindingName")
-            (pair (pair (list []) (var "visited")) (var "ids"))
+            (pair (pair (list ([] :: [TTerm AccessorNode])) (var "visited")) (var "ids"))
             (var "bindingNames"),
           "nodes1">: Pairs.first $ Pairs.first $ var "nodesVisitedIds1",
           "visited1">: Pairs.second $ Pairs.first $ var "nodesVisitedIds1",
@@ -149,7 +147,7 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
             "root">: Pairs.first $ var "nodeBinding",
             "binding">: Pairs.second $ var "nodeBinding",
             "term1">: Core.bindingTerm $ var "binding"]
-            $ var "helper" @@ var "ids1" @@ just (var "root") @@ list [] @@ var "currentState" @@
+            $ var "helper" @@ var "ids1" @@ just (var "root") @@ list ([] :: [TTerm TermAccessor]) @@ var "currentState" @@
               pair (var "dontCareAccessor") (var "term1"),
           "nodeBindingPairs">: Lists.zip (var "nodes1") (var "bindings"),
           "stateAfterBindings">: Lists.foldl
@@ -170,8 +168,8 @@ termToAccessorGraphDef = define "termToAccessorGraph" $
                 (Maps.lookup (var "name") (var "ids")))
             (var "mroot")]
       @@ var "currentTerm",
-    "initialState">: pair (pair (list []) (list [])) Sets.empty,
-    "result">: var "helper" @@ Maps.empty @@ nothing @@ list [] @@ var "initialState" @@
+    "initialState">: pair (pair (list ([] :: [TTerm AccessorNode])) (list ([] :: [TTerm AccessorEdge]))) Sets.empty,
+    "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TTerm TermAccessor]) @@ var "initialState" @@
       pair (var "dontCareAccessor") (var "term"),
     "finalNodesEdges">: Pairs.first $ var "result",
     "finalNodes">: Pairs.first $ var "finalNodesEdges",

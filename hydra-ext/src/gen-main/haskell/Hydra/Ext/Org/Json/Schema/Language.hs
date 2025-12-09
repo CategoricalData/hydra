@@ -29,7 +29,7 @@ jsonSchemaLanguage = Coders.Language {
     Coders.languageConstraintsTypeVariants = typeVariants,
     Coders.languageConstraintsTypes = typePredicate}} 
   where 
-    eliminationVariants = (Sets.fromList [])
+    eliminationVariants = Sets.empty
     literalVariants = (Sets.fromList [
       Variants.LiteralVariantBoolean,
       Variants.LiteralVariantFloat,
@@ -37,7 +37,7 @@ jsonSchemaLanguage = Coders.Language {
       Variants.LiteralVariantString])
     floatTypes = (Sets.fromList [
       Core.FloatTypeBigfloat])
-    functionVariants = (Sets.fromList [])
+    functionVariants = Sets.empty
     integerTypes = (Sets.fromList [
       Core.IntegerTypeBigint])
     termVariants = (Sets.fromList Reflect.termVariants)

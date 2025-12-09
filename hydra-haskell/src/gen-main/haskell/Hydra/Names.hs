@@ -44,11 +44,7 @@ namespaceOf arg_ = (Module.qualifiedNameNamespace (qualifyName arg_))
 namespaceToFilePath :: (Util.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
   let parts = (Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
-  in (Strings.cat [
-    Strings.cat [
-      Strings.intercalate "/" parts,
-      "."],
-    (Module.unFileExtension ext)])
+  in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Module.unFileExtension ext))
 
 -- | Construct a qualified (dot-separated) name
 qname :: (Module.Namespace -> String -> Core.Name)
@@ -74,9 +70,5 @@ uniqueLabel visited l = (Logic.ifElse (Sets.member l visited) (uniqueLabel visit
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
 unqualifyName qname =  
-  let prefix = (Maybes.maybe "" (\n -> Strings.cat [
-          Module.unNamespace n,
-          "."]) (Module.qualifiedNameNamespace qname))
-  in (Core.Name (Strings.cat [
-    prefix,
-    (Module.qualifiedNameLocal qname)]))
+  let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (Module.unNamespace n) ".") (Module.qualifiedNameNamespace qname))
+  in (Core.Name (Strings.cat2 prefix (Module.qualifiedNameLocal qname)))

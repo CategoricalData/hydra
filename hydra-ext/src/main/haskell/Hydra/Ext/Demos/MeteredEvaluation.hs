@@ -1,7 +1,6 @@
 -- | A small demo of "metered" Hydra evaluation. In this example, the evaluator keeps track of the number of times it
 --   calls each primitive function (as a proxy for API calls, which can consume time and resources).
 
-{-# LANGUAGE OverloadedStrings #-}
 module Hydra.Ext.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
@@ -33,7 +32,7 @@ testModule = Module testNs elements [] [] Nothing
     test local tterm = TBinding (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        el $ test "describeType" $ ref ShowCore.typeDef @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        el $ test "describeType" $ ShowCore.type_ @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do

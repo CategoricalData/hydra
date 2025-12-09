@@ -25,13 +25,13 @@ module_ = Module (Namespace "hydra.test.sorting") elements
     KernelTypes.kernelTypesModules
     (Just "Test cases for topological sorting algorithms")
   where
-    elements = [Base.el allTestsDef]
+    elements = [Base.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = Base.definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = define "allTests" $
+allTests :: TBinding TestGroup
+allTests = define "allTests" $
     Base.doc "Test cases for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,

@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Test.Checking.All where
 
@@ -26,7 +25,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTypesModules $
     Just "Hydra's type checking test suite"
   where
-    elements = [el allTestsDef]
+    elements = [Phantoms.toBinding allTests]
     modules = [
       Advanced.module_,
       AlgebraicTypes.module_,
@@ -35,15 +34,15 @@ module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTy
       Fundamentals.module_,
       NominalTypes.module_]
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     doc "The group of all type checking tests" $
-    Testing.testGroup "checking" nothing (list subgroups) (list [])
+    Testing.testGroup (string "checking") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = [
-      ref Advanced.allTestsDef,
-      ref AlgebraicTypes.allTestsDef,
-      ref Collections.allTestsDef,
-      ref Failures.allTestsDef,
-      ref Fundamentals.allTestsDef,
-      ref NominalTypes.allTestsDef]
+      Advanced.allTests,
+      AlgebraicTypes.allTests,
+      Collections.allTests,
+      Failures.allTests,
+      Fundamentals.allTests,
+      NominalTypes.allTests]

@@ -1,9 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Kernel.Terms.Unification where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (joinTypes, unifyTypeConstraints, unifyTypeLists, unifyTypes, variableOccursInType)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -68,27 +67,27 @@ module_ = Module (Namespace "hydra.unification") elements
     Just ("Utilities for type unification.")
   where
    elements = [
-     el joinTypesDef,
-     el unifyTypeConstraintsDef,
-     el unifyTypeListsDef,
-     el unifyTypesDef,
-     el variableOccursInTypeDef]
+     toBinding joinTypes,
+     toBinding unifyTypeConstraints,
+     toBinding unifyTypeLists,
+     toBinding unifyTypes,
+     toBinding variableOccursInType]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-joinTypesDef :: TBinding (Type -> Type -> String -> Flow s [TypeConstraint])
-joinTypesDef = define "joinTypes" $
+joinTypes :: TBinding (Type -> Type -> String -> Flow s [TypeConstraint])
+joinTypes = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
   "left" ~> "right" ~> "comment" ~>
-  "sleft" <~ ref Rewriting.deannotateTypeDef @@ var "left" $
-  "sright" <~ ref Rewriting.deannotateTypeDef @@ var "right" $
-  "joinOne" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") ("join types; " ++ var "comment")) $
-  "cannotUnify" <~ Flows.fail ("cannot unify " ++ (ref ShowCore.typeDef @@ var "sleft") ++ " with " ++ (ref ShowCore.typeDef @@ var "sright")) $
+  "sleft" <~ Rewriting.deannotateType @@ var "left" $
+  "sright" <~ Rewriting.deannotateType @@ var "right" $
+  "joinOne" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") ((string "join types; ") ++ var "comment")) $
+  "cannotUnify" <~ Flows.fail ((string "cannot unify ") ++ (ShowCore.type_ @@ var "sleft") ++ (string " with ") ++ (ShowCore.type_ @@ var "sright")) $
   "assertEqual" <~ Logic.ifElse
     (Equality.equal (var "sleft") (var "sright"))
-    (Flows.pure (list []))
+    (Flows.pure (list ([] :: [TTerm TypeConstraint])))
     (var "cannotUnify") $
   "joinList" <~ ("lefts" ~> "rights" ~> Logic.ifElse
     (Equality.equal (Lists.length (var "lefts")) (Lists.length (var "rights")))
@@ -140,7 +139,7 @@ joinTypesDef = define "joinTypes" $
     _Type_union>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_union>>: "r" ~> var "joinRowTypes" @@ (var "l") @@ (var "r")],
     _Type_unit>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_unit>>: constant (Flows.pure (list []))]),
+      _Type_unit>>: constant (Flows.pure (list ([] :: [TTerm TypeConstraint])))]),
     _Type_wrap>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_wrap>>: "r" ~> Logic.ifElse
         (Core.equalName_ (Core.wrappedTypeTypeName (var "l")) (Core.wrappedTypeTypeName (var "r")))
@@ -148,8 +147,8 @@ joinTypesDef = define "joinTypes" $
           var "joinOne" @@ (Core.wrappedTypeBody (var "l")) @@ (Core.wrappedTypeBody (var "r"))]))
         (var "cannotUnify")]]
 
-unifyTypeConstraintsDef :: TBinding (M.Map Name TypeScheme -> [TypeConstraint] -> Flow s TypeSubst)
-unifyTypeConstraintsDef = define "unifyTypeConstraints" $
+unifyTypeConstraints :: TBinding (M.Map Name TypeScheme -> [TypeConstraint] -> Flow s TypeSubst)
+unifyTypeConstraints = define "unifyTypeConstraints" $
   doc (""
     <> "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\n"
     <> "Specifically this is an implementation of the following rules:\n"
@@ -159,20 +158,20 @@ unifyTypeConstraintsDef = define "unifyTypeConstraints" $
     <> "  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))") $
   "schemaTypes" ~> "constraints" ~>
   "withConstraint" <~ ("c" ~> "rest" ~>
-    "sleft" <~ ref Rewriting.deannotateTypeDef @@ (Typing.typeConstraintLeft (var "c")) $
-    "sright" <~ ref Rewriting.deannotateTypeDef @@ (Typing.typeConstraintRight (var "c")) $
+    "sleft" <~ Rewriting.deannotateType @@ (Typing.typeConstraintLeft (var "c")) $
+    "sright" <~ Rewriting.deannotateType @@ (Typing.typeConstraintRight (var "c")) $
     "comment" <~ Typing.typeConstraintComment (var "c") $
     "bind" <~ ("v" ~> "t" ~>
-      "subst" <~ ref Substitution.singletonTypeSubstDef @@ var "v" @@ var "t" $
-      "withResult" <~ ("s" ~> ref Substitution.composeTypeSubstDef @@ var "subst" @@ var "s") $
-      Flows.map (var "withResult") (ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ (ref Substitution.substituteInConstraintsDef @@ var "subst" @@ var "rest"))) $
-    "tryBinding" <~ ("v" ~> "t" ~> Logic.ifElse (ref variableOccursInTypeDef @@ var "v" @@ var "t")
-      (Flows.fail ("Variable " ++ (Core.unName (var "v")) ++ " appears free in type " ++ (ref ShowCore.typeDef @@ var "t")
-        ++ " (" ++ var "comment" ++ ")"))
+      "subst" <~ Substitution.singletonTypeSubst @@ var "v" @@ var "t" $
+      "withResult" <~ ("s" ~> Substitution.composeTypeSubst @@ var "subst" @@ var "s") $
+      Flows.map (var "withResult") (unifyTypeConstraints @@ var "schemaTypes" @@ (Substitution.substituteInConstraints @@ var "subst" @@ var "rest"))) $
+    "tryBinding" <~ ("v" ~> "t" ~> Logic.ifElse (variableOccursInType @@ var "v" @@ var "t")
+      (Flows.fail ((string "Variable ") ++ (Core.unName (var "v")) ++ (string " appears free in type ") ++ (ShowCore.type_ @@ var "t")
+        ++ (string " (") ++ var "comment" ++ (string ")")))
       (var "bind" @@ var "v" @@ var "t")) $
     "noVars" <~ (
-      "withConstraints" <~ ("constraints2" ~> ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ (Lists.concat2 (var "constraints2") (var "rest"))) $
-      Flows.bind (ref joinTypesDef @@ var "sleft" @@ var "sright" @@ var "comment") (var "withConstraints")) $
+      "withConstraints" <~ ("constraints2" ~> unifyTypeConstraints @@ var "schemaTypes" @@ (Lists.concat2 (var "constraints2") (var "rest"))) $
+      Flows.bind (joinTypes @@ var "sleft" @@ var "sright" @@ var "comment") (var "withConstraints")) $
     "dflt" <~ cases _Type (var "sright")
       (Just (var "noVars")) [
       _Type_variable>>: "name" ~> var "tryBinding" @@ var "name" @@ var "sleft"] $
@@ -181,35 +180,35 @@ unifyTypeConstraintsDef = define "unifyTypeConstraints" $
       _Type_variable>>: "name" ~> cases _Type (var "sright")
         (Just (var "tryBinding" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
-          (ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ var "rest")
+          (unifyTypeConstraints @@ var "schemaTypes" @@ var "rest")
           (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (var "schemaTypes")))
             (Logic.ifElse (Maybes.isJust (Maps.lookup (var "name2") (var "schemaTypes")))
-              (Flows.fail ("Attempted to unify schema names " ++ (Core.unName (var "name")) ++ " and " ++ (Core.unName (var "name2"))
-                ++ " (" ++ var "comment" ++ ")"))
+              (Flows.fail ((string "Attempted to unify schema names ") ++ (Core.unName (var "name")) ++ (string " and ") ++ (Core.unName (var "name2"))
+                ++ (string " (") ++ var "comment" ++ (string ")")))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
   Logic.ifElse
     (Lists.null (var "constraints"))
-    (Flows.pure (ref Substitution.idTypeSubstDef))
+    (Flows.pure (Substitution.idTypeSubst))
     (var "withConstraint" @@ (Lists.head (var "constraints")) @@ (Lists.tail (var "constraints")))
 
-unifyTypeListsDef :: TBinding (M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Flow s TypeSubst)
-unifyTypeListsDef = define "unifyTypeLists" $
+unifyTypeLists :: TBinding (M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Flow s TypeSubst)
+unifyTypeLists = define "unifyTypeLists" $
   "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   "toConstraint" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") (var "comment")) $
-  ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
+  unifyTypeConstraints @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
-unifyTypesDef :: TBinding (M.Map Name TypeScheme -> Type -> Type -> String -> Flow s TypeSubst)
-unifyTypesDef = define "unifyTypes" $
+unifyTypes :: TBinding (M.Map Name TypeScheme -> Type -> Type -> String -> Flow s TypeSubst)
+unifyTypes = define "unifyTypes" $
   "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
-  ref unifyTypeConstraintsDef @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
+  unifyTypeConstraints @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
 
-variableOccursInTypeDef :: TBinding (Name -> Type -> Bool)
-variableOccursInTypeDef = define "variableOccursInType" $
+variableOccursInType :: TBinding (Name -> Type -> Bool)
+variableOccursInType = define "variableOccursInType" $
   doc ("Determine whether a type variable appears within a type expression."
     <> "No distinction is made between free and bound type variables.") $
   "var" ~> "typ0" ~>
   "tryType" <~ ("b" ~> "typ" ~> match _Type (Just (var "b")) [
     _Type_variable>>: "v" ~> Logic.or (var "b") (Core.equalName_ (var "v") (var "var"))]
     @@ var "typ") $
-  ref Rewriting.foldOverTypeDef @@ Coders.traversalOrderPre @@ var "tryType" @@ false @@ var "typ0"
+  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "tryType" @@ false @@ var "typ0"

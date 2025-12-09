@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 -- | Implementations of the Hydra standard libraries in Haskell
 module Hydra.Sources.Libraries where

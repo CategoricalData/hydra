@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Hydra.Ext.Sources.Json.Schema.Language where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -95,7 +93,7 @@ import qualified Data.Maybe                                 as Y
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.org.json.schema.language")
-  [el jsonSchemaLanguageDef]
+  [toBinding jsonSchemaLanguage]
   [Reflect.module_]
   KernelTypes.kernelTypesModules $
   Just "Language constraints for JSON Schema"
@@ -103,19 +101,19 @@ module_ = Module (Namespace "hydra.ext.org.json.schema.language")
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-jsonSchemaLanguageDef :: TBinding Language
-jsonSchemaLanguageDef = define "jsonSchemaLanguage" $
+jsonSchemaLanguage :: TBinding Language
+jsonSchemaLanguage = define "jsonSchemaLanguage" $
   doc "Language constraints for JSON Schema" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [],
+  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [Core.floatTypeBigfloat],
-  "functionVariants">: Sets.fromList $ list [],
+  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [Core.integerTypeBigint],
-  "termVariants">: Sets.fromList $ ref Reflect.termVariantsDef,
+  "termVariants">: Sets.fromList Reflect.termVariants,
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
     Variants.typeVariantEither,

@@ -63,27 +63,17 @@ decapitalize = (mapFirstLetter Strings.toLower)
 
 -- | Escape reserved words by appending an underscore
 escapeWithUnderscore :: (S.Set String -> String -> String)
-escapeWithUnderscore reserved s = (Logic.ifElse (Sets.member s reserved) (Strings.cat [
-  s,
-  "_"]) s)
+escapeWithUnderscore reserved s = (Logic.ifElse (Sets.member s reserved) (Strings.cat2 s "_") s)
 
 -- | Indent each line of a string with four spaces
 indentLines :: (String -> String)
 indentLines s =  
-  let indent = (\l -> Strings.cat [
-          "    ",
-          l])
+  let indent = (\l -> Strings.cat2 "    " l)
   in (Strings.unlines (Lists.map indent (Strings.lines s)))
 
 -- | Format a string as a Java-style block comment
 javaStyleComment :: (String -> String)
-javaStyleComment s = (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      "/**\n",
-      " * "],
-    s],
-  "\n */"])
+javaStyleComment s = (Strings.cat2 (Strings.cat2 (Strings.cat2 "/**\n" " * ") s) "\n */")
 
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: ((String -> String) -> String -> String)

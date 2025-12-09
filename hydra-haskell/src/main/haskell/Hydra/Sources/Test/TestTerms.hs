@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Sources.Test.TestTerms where
 
@@ -24,38 +23,38 @@ module_ = Module (Namespace "hydra.test.testTerms") elements
     (Just "Term definitions for the test suite")
   where
     elements = [
-      el latlonRecordDef,
-      el testDataArthurDef,
-      el testElementArthurDef,
-      el testElementFirstNameDef]
+      Phantoms.toBinding latlonRecord,
+      Phantoms.toBinding testDataArthur,
+      Phantoms.toBinding testElementArthur,
+      Phantoms.toBinding testElementFirstName]
 
 defineTerm :: String -> TTerm a -> TBinding a
 defineTerm = definitionInModule module_
 
-latlonRecordDef :: TBinding (Float -> Float -> Term)
-latlonRecordDef = defineTerm "latlonRecord" $
-  Phantoms.lambdas ["lat", "lon"] $ record (ref TestTypes.testTypeLatLonNameDef) [
+latlonRecord :: TBinding (Float -> Float -> Term)
+latlonRecord = defineTerm "latlonRecord" $
+  Phantoms.lambdas ["lat", "lon"] $ record TestTypes.testTypeLatLonName [
     "lat">: float32Lift $ varPhantom "lat",
     "lon">: float32Lift $ varPhantom "lon"]
 
-testDataArthurDef :: TBinding Term
-testDataArthurDef = defineTerm "testDataArthur" $
-  record (ref TestTypes.testTypePersonNameDef) [
+testDataArthur :: TBinding Term
+testDataArthur = defineTerm "testDataArthur" $
+  record TestTypes.testTypePersonName [
     "firstName">: string "Arthur",
     "lastName">: string "Dent",
     "age">: int32 42]
 
-testElementArthurDef :: TBinding Binding
-testElementArthurDef = defineTerm "testElementArthur" $
+testElementArthur :: TBinding Binding
+testElementArthur = defineTerm "testElementArthur" $
   Core.binding
     (name "firstName")
-    (ref testDataArthurDef)
-    (Phantoms.just $ Core.typeScheme (Phantoms.list []) (Core.typeVariable $ ref TestTypes.testTypePersonNameDef))
+    testDataArthur
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) (Core.typeVariable TestTypes.testTypePersonName))
 
-testElementFirstNameDef :: TBinding Binding
-testElementFirstNameDef = defineTerm "testElementFirstName" $
+testElementFirstName :: TBinding Binding
+testElementFirstName = defineTerm "testElementFirstName" $
   Core.binding
     (name "firstName")
-    (project (ref TestTypes.testTypePersonNameDef) (name "firstName"))
-    (Phantoms.just $ Core.typeScheme (Phantoms.list [])
-      (Core.typeFunction $ Core.functionType (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) T.string))
+    (project TestTypes.testTypePersonName (name "firstName"))
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name]))
+      (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string))
