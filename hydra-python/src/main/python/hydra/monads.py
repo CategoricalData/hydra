@@ -87,7 +87,7 @@ def trace_summary(t: hydra.compute.Trace) -> str:
     r"""Summarize a trace as a string."""
     
     message_lines = hydra.lib.lists.nub(t.messages)
-    def to_line(pair: Tuple[hydra.core.Name, hydra.core.Term]) -> str:
+    def to_line(pair: tuple[hydra.core.Name, hydra.core.Term]) -> str:
         return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("\t", hydra.lib.pairs.first(pair).value), ": "), hydra.show.core.term(hydra.lib.pairs.second(pair)))
     keyval_lines = hydra.lib.logic.if_else(hydra.lib.maps.null(t.other), (lambda : cast(frozenlist[str], ())), (lambda : hydra.lib.lists.cons("key/value pairs: ", hydra.lib.lists.map(to_line, hydra.lib.maps.to_list(t.other)))))
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.concat2(message_lines, keyval_lines))

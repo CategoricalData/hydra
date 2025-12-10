@@ -24,11 +24,11 @@ import hydra.show.core
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
     
-    def to_pair[T0](name_and_el: Tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[T0, hydra.core.Type]]:
+    def to_pair[T0](name_and_el: tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, hydra.core.Type]]:
         name = hydra.lib.pairs.first(name_and_el)
         el = hydra.lib.pairs.second(name_and_el)
-        return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el.term)), (lambda t: hydra.lib.flows.pure(cast(Tuple[T0, hydra.core.Type], (name, t)))))
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list(cast(Callable[[Tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[hydra.graph.Graph, Tuple[hydra.core.Name, hydra.core.Type]]], to_pair), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
+        return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el.term)), (lambda t: hydra.lib.flows.pure(cast(tuple[T0, hydra.core.Type], (name, t)))))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list(cast(Callable[[tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[hydra.graph.Graph, tuple[hydra.core.Name, hydra.core.Type]]], to_pair), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
 
 def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
     def inst(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
@@ -103,13 +103,13 @@ def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, 
             return inst(at.body)
         
         case hydra.core.TypeApplication():
-            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly)
+            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly())
         
         case hydra.core.TypeFunction():
-            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly)
+            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly())
         
         case hydra.core.TypeForall():
-            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly)
+            return cast(hydra.compute.Flow[T0, hydra.core.Term], no_poly())
         
         case hydra.core.TypeList(value=et):
             return hydra.lib.logic.if_else(minimal, (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ()))))), (lambda : hydra.lib.flows.bind(inst(et), (lambda e: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList((e,))))))))

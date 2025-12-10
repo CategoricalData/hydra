@@ -1,12 +1,18 @@
 """Python implementations of hydra.lib.logic (logic and control flow) primitives."""
 
+from typing import Callable, overload
+
 
 def and_(x: bool, y: bool) -> bool:
     """Compute the logical AND of two boolean values."""
     return x and y
 
 
-def if_else[A](b: bool, x: A, y: A) -> A:
+@overload
+def if_else[A](b: bool, x: Callable[[], A], y: Callable[[], A]) -> A: ...
+@overload
+def if_else[A](b: bool, x: A, y: A) -> A: ...
+def if_else[A](b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
     """Compute a conditional expression with lazy evaluation of branches.
 
     When x and y are callable (lambdas), they are called to get the actual value.
@@ -15,7 +21,7 @@ def if_else[A](b: bool, x: A, y: A) -> A:
     # If the arguments are callable (thunks), call them to get the actual values
     actual_x = x() if callable(x) else x
     actual_y = y() if callable(y) else y
-    return actual_x if b else actual_y
+    return actual_x if b else actual_y  # type: ignore[return-value]
 
 
 def not_(x: bool) -> bool:

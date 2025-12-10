@@ -94,7 +94,7 @@ def expression_length(e: hydra.ast.Expr) -> int:
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        return hydra.lib.math.add(base_len, indent_len)
+        return hydra.lib.math.add(base_len, indent_len())
     def op_length(op: hydra.ast.Op) -> int:
         sym_len = symbol_length(op.symbol)
         padding = op.padding
@@ -300,7 +300,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                     
                     case _:
                         return rhs_
-            return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2, rhs2)))
+            return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2(), rhs2())))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -354,7 +354,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
                     
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
-            return hydra.lib.strings.intercalate("\n", ilns)
+            return hydra.lib.strings.intercalate("\n", ilns())
         
         case hydra.ast.ExprOp(value=op_expr):
             op = op_expr.op
