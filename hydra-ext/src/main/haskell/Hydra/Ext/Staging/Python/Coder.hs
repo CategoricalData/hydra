@@ -46,7 +46,6 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesNode :: Bool,
   pythonModuleMetadataUsesNothing :: Bool,
   pythonModuleMetadataUsesRight :: Bool,
-  pythonModuleMetadataUsesTuple :: Bool,
   pythonModuleMetadataUsesTypeVar :: Bool}
 
 data PyGraph = PyGraph {
@@ -442,7 +441,6 @@ encodeModule mod defs0 = do
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
                   cond "Generic" $ pythonModuleMetadataUsesGeneric meta,
-                  cond "Tuple" $ pythonModuleMetadataUsesTuple meta,
                   cond "TypeVar" $ pythonModuleMetadataUsesTypeVar meta,
                   cond "cast" $ pythonModuleMetadataUsesCast meta])]
               where
@@ -710,7 +708,7 @@ encodeType env typ = case deannotateType typ of
     TypePair (PairType first second) -> do
       pyFirst <- encode first
       pySecond <- encode second
-      return $ nameAndParams (Py.Name "Tuple") [pyFirst, pySecond]
+      return $ nameAndParams (Py.Name "tuple") [pyFirst, pySecond]
     TypeRecord rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
     TypeSet et -> nameAndParams (Py.Name "frozenset") . L.singleton <$> encode et
     TypeUnion rt -> pure $ typeVariableReference env $ rowTypeTypeName rt
@@ -971,7 +969,6 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
       pythonModuleMetadataUsesNode = False,
       pythonModuleMetadataUsesNothing = False,
       pythonModuleMetadataUsesRight = False,
-      pythonModuleMetadataUsesTuple = False,
       pythonModuleMetadataUsesTypeVar = False}
     add meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> extendMetaForTerm True meta2 term
