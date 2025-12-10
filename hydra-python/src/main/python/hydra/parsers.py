@@ -15,21 +15,64 @@ import hydra.lib.strings
 import hydra.parsing
 
 def alt[T0](p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
-    return cast(hydra.parsing.Parser[T0], hydra.parsing.Parser((lambda input: "inline match expressions are unsupported")))
+    def parse(input: str) -> hydra.parsing.ParseResult[T0]:
+        match p1.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(s)))
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(e.remainder, input), (lambda : p2.value(input)), (lambda : cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.parsing.Parser[T0], hydra.parsing.Parser(parse))
 
 def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
     r"""Parse a character (codepoint) that satisfies the given predicate."""
     
-    return cast(hydra.parsing.Parser[int], hydra.parsing.Parser((lambda input: hydra.lib.logic.if_else(hydra.lib.strings.null(input), (lambda : cast(hydra.parsing.ParseResult[int], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input))))), (lambda : "let terms are not supported here")))))
+    def parse(input: str) -> hydra.parsing.ParseResult[int]:
+        codes = hydra.lib.strings.to_list(input)
+        c = hydra.lib.lists.head(codes)
+        rest = hydra.lib.strings.from_list(hydra.lib.lists.tail(codes))
+        return hydra.lib.logic.if_else(hydra.lib.strings.null(input), (lambda : cast(hydra.parsing.ParseResult[int], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input))))), (lambda : hydra.lib.logic.if_else(pred(c), (lambda : cast(hydra.parsing.ParseResult[int], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[int], hydra.parsing.ParseSuccess(c, rest)))))), (lambda : cast(hydra.parsing.ParseResult[int], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input))))))))
+    return cast(hydra.parsing.Parser[int], hydra.parsing.Parser(parse))
 
 # Parse any single character (codepoint).
 any_char = satisfy((lambda _: True))
 
 def apply[T0, T1](pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
-    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser((lambda input: "inline match expressions are unsupported")))
+    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+        match pf.value(input):
+            case hydra.parsing.ParseResultSuccess(value=sf):
+                match pa.value(sf.remainder):
+                    case hydra.parsing.ParseResultSuccess(value=sa):
+                        return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[T1], hydra.parsing.ParseSuccess(sf.value(sa.value), sa.remainder)))))
+                    
+                    case hydra.parsing.ParseResultFailure(value=e):
+                        return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+                    
+                    case _:
+                        raise AssertionError("Unreachable: all variants handled")
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def bind[T0, T1](pa: hydra.parsing.Parser[T0], f: Callable[[T0], hydra.parsing.Parser[T1]]) -> hydra.parsing.Parser[T1]:
-    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser((lambda input: "inline match expressions are unsupported")))
+    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+        match pa.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return f(s.value).value(s.remainder)
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def pure[T0](a: T0) -> hydra.parsing.Parser[T0]:
     return cast(hydra.parsing.Parser[T0], hydra.parsing.Parser((lambda input: cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[T0], hydra.parsing.ParseSuccess(a, input))))))))
@@ -58,7 +101,17 @@ def some[T0](p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]
     return bind(p, (lambda x: bind(many(p), (lambda xs: pure(hydra.lib.lists.cons(x, xs))))))
 
 def map[T0, T1](f: Callable[[T0], T1], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
-    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser((lambda input: "inline match expressions are unsupported")))
+    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+        match pa.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[T1], hydra.parsing.ParseSuccess(f(s.value), s.remainder)))))
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def optional[T0](p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[Maybe[T0]]:
     return alt(map(cast(Callable[[T0], Maybe[T0]], hydra.lib.maybes.pure), p), pure(cast(Maybe[T0], Nothing())))

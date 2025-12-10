@@ -68,7 +68,7 @@ NAMESPACE__NAME = hydra.core.Name("hydra.module.Namespace")
 class Namespaces(Generic[N]):
     r"""A mapping from namespaces to values of type n, with a focus on one namespace."""
     
-    focus: Annotated[Tuple[Namespace, N], "The namespace in focus, together with its associated value"]
+    focus: Annotated[tuple[Namespace, N], "The namespace in focus, together with its associated value"]
     mapping: Annotated[FrozenDict[Namespace, N], "A mapping of namespaces to values"]
 
 NAMESPACES__NAME = hydra.core.Name("hydra.module.Namespaces")

@@ -456,7 +456,7 @@ class TermMap(Node["FrozenDict[Term, Term]"]):
 class TermMaybe(Node["Maybe[Term]"]):
     r"""An optional value."""
 
-class TermPair(Node["Tuple[Term, Term]"]):
+class TermPair(Node["tuple[Term, Term]"]):
     r"""A pair (2-tuple)."""
 
 class TermRecord(Node["Record"]):
