@@ -52,7 +52,7 @@ def type_arity(v1: hydra.core.Type) -> int:
             return type_arity(arg_3.body)
         
         case hydra.core.TypeFunction(value=f):
-            return hydra.lib.math.add(1, type_arity(f.codomain))
+            return hydra.lib.math.add(1, (lambda arg_: type_arity(arg_.codomain))(f))
         
         case _:
             return 0
@@ -62,10 +62,10 @@ def primitive_arity(arg_: hydra.graph.Primitive) -> int:
     
     return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
 
-def type_scheme_arity(ts: hydra.core.TypeScheme) -> int:
+def type_scheme_arity(arg_: hydra.core.TypeScheme) -> int:
     r"""Find the arity (expected number of arguments) of a type scheme."""
     
-    return type_arity(ts.type)
+    return type_arity(arg_.type)
 
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     r"""Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""
@@ -81,7 +81,7 @@ def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return uncurry_type(arg_3.body)
         
         case hydra.core.TypeFunction(value=ft):
-            return hydra.lib.lists.cons(ft.domain, uncurry_type(ft.codomain))
+            return hydra.lib.lists.cons(ft.domain, (lambda arg_: uncurry_type(arg_.codomain))(ft))
         
         case _:
             return (t,)

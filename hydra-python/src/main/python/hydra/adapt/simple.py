@@ -86,7 +86,7 @@ def adapt_type[T0](constraints: hydra.coders.LanguageConstraints, litmap: Frozen
         supported_variant = hydra.lib.sets.member(hydra.reflect.type_variant(typ), constraints.type_variants)
         return hydra.lib.logic.if_else(supported_variant, (lambda : for_supported(typ)), (lambda : for_unsupported(typ)))
     def rewrite[T1](recurse: Callable[[hydra.core.Type], hydra.compute.Flow[T1, hydra.core.Type]], typ: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.core.Type]:
-        return hydra.lib.flows.bind(recurse(typ), (lambda type1: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no alternatives for type: ", hydra.show.core.type(typ)))), (lambda type2: hydra.lib.flows.pure(type2)), try_type(type1))))
+        return hydra.lib.flows.bind(recurse(typ), (lambda type1: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no alternatives for type: ", hydra.show.core.type(typ))), (lambda type2: hydra.lib.flows.pure(type2)), try_type(type1))))
     return hydra.rewriting.rewrite_type_m(cast(Callable[[
       Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]],
       hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], rewrite), type0)
@@ -289,7 +289,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
         def try_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
             supported_variant = hydra.lib.sets.member(hydra.reflect.term_variant(term), constraints.term_variants)
             return hydra.lib.logic.if_else(supported_variant, (lambda : for_supported(term)), (lambda : for_unsupported(term)))
-        return hydra.lib.flows.bind(recurse(term02), (lambda term1: hydra.lib.flows.bind(try_term(term1), (lambda mterm: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no alternatives for term: ", hydra.show.core.term(term1)))), (lambda term2: hydra.lib.flows.pure(term2)), mterm)))))
+        return hydra.lib.flows.bind(recurse(term02), (lambda term1: hydra.lib.flows.bind(try_term(term1), (lambda mterm: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no alternatives for term: ", hydra.show.core.term(term1))), (lambda term2: hydra.lib.flows.pure(term2)), mterm)))))
     return hydra.rewriting.rewrite_term_m(cast(Callable[[
       Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]],
       hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], rewrite), term0)

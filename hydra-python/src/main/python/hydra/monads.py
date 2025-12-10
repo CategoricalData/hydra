@@ -88,15 +88,15 @@ def trace_summary(t: hydra.compute.Trace) -> str:
     
     message_lines = hydra.lib.lists.nub(t.messages)
     def to_line(pair: Tuple[hydra.core.Name, hydra.core.Term]) -> str:
-        return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("\t", hydra.lib.pairs.first(pair).value)), ": ")), hydra.show.core.term(hydra.lib.pairs.second(pair))))
+        return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("\t", hydra.lib.pairs.first(pair).value), ": "), hydra.show.core.term(hydra.lib.pairs.second(pair)))
     keyval_lines = hydra.lib.logic.if_else(hydra.lib.maps.null(t.other), (lambda : cast(frozenlist[str], ())), (lambda : hydra.lib.lists.cons("key/value pairs: ", hydra.lib.lists.map(to_line, hydra.lib.maps.to_list(t.other)))))
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.concat2(message_lines, keyval_lines))
 
 def unexpected[T0, T1](expected: str, actual: str) -> hydra.compute.Flow[T0, T1]:
-    return fail(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("expected ", expected)), " but found: ")), actual)))
+    return fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", expected), " but found: "), actual))
 
 def warn[T0, T1](msg: str, b: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
-    return cast(hydra.compute.Flow[T0, T1], hydra.compute.Flow((lambda s0, t0: (f1 := b.value(s0, t0), add_message := (lambda t: hydra.compute.Trace(t.stack, hydra.lib.lists.cons(hydra.lib.strings.cat(("Warning: ", msg)), t.messages), t.other)), cast(hydra.compute.FlowState[T0, T1], hydra.compute.FlowState(f1.value, f1.state, add_message(f1.trace))))[2])))
+    return cast(hydra.compute.Flow[T0, T1], hydra.compute.Flow((lambda s0, t0: (f1 := b.value(s0, t0), add_message := (lambda t: hydra.compute.Trace(t.stack, hydra.lib.lists.cons(hydra.lib.strings.cat2("Warning: ", msg), t.messages), t.other)), cast(hydra.compute.FlowState[T0, T1], hydra.compute.FlowState(f1.value, f1.state, add_message(f1.trace))))[2])))
 
 def with_flag[T0, T1](flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     def mutate(t: hydra.compute.Trace) -> Either[str, hydra.compute.Trace]:
