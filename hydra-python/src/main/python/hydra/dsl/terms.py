@@ -11,7 +11,6 @@ from hydra.core import (
     Application,
     CaseStatement,
     Elimination,
-    EliminationProduct,
     EliminationRecord,
     EliminationUnion,
     EliminationWrap,
@@ -29,7 +28,6 @@ from hydra.core import (
     Name,
     Projection,
     Record,
-    Sum,
     Term,
     TermAnnotated,
     TermApplication,
@@ -40,16 +38,15 @@ from hydra.core import (
     TermLiteral,
     TermMap,
     TermMaybe,
-    TermProduct,
+    TermPair,
     TermRecord,
     TermSet,
-    TermSum,
     TermTypeApplication,
     TermTypeLambda,
     TermUnion,
+    TermUnit,
     TermVariable,
     TermWrap,
-    TupleProjection,
     Type,
     TypeApplicationTerm,
     TypeLambda,
@@ -165,8 +162,8 @@ def fields_to_map(fields: Sequence[Field]) -> FrozenDict[Name, Term]:
 
 
 def first() -> Term:
-    """Construct a first term."""
-    return untuple(2, 0, Nothing())
+    """First element projection function for pairs."""
+    return primitive(Name("hydra.lib.pairs.first"))
 
 
 def float32(value: float) -> Term:
@@ -328,17 +325,12 @@ def optional(term: Maybe[Term]) -> Term:
 
 def pair(a: Term, b: Term) -> Term:
     """Construct a pair term."""
-    return TermProduct((a, b))
+    return TermPair((a, b))
 
 
 def primitive(name: Name) -> Term:
     """Construct a primitive term."""
     return TermFunction(FunctionPrimitive(name))
-
-
-def product(terms: Sequence[Term]) -> Term:
-    """Construct a product term."""
-    return TermProduct(tuple(terms))
 
 
 def project(tname: Name, fname: Name) -> Term:
@@ -359,8 +351,8 @@ def right(term: Term) -> Term:
 
 
 def second() -> Term:
-    """Construct a second term."""
-    return untuple(2, 1, Nothing())
+    """Second element projection function for pairs."""
+    return primitive(Name("hydra.lib.pairs.second"))
 
 
 def set_(s: set[Term]) -> Term:
@@ -373,14 +365,9 @@ def string(value: str) -> Term:
     return literal(lt.string(value))
 
 
-def sum_(i: int, s: int, term: Term) -> Term:
-    """Construct a sum term."""
-    return TermSum(Sum(i, s, term))
-
-
 def triple(a: Term, b: Term, c: Term) -> Term:
-    """Construct a triple term."""
-    return tuple_([a, b, c])
+    """Construct a triple term using nested pairs."""
+    return pair(a, pair(b, c))
 
 
 def true() -> Term:
@@ -389,18 +376,35 @@ def true() -> Term:
 
 
 def tuple_(terms: Sequence[Term]) -> Term:
-    """Construct a tuple term."""
-    return TermProduct(tuple(terms))
+    """Construct a tuple using nested pairs."""
+    if len(terms) == 0:
+        return unit()
+    elif len(terms) == 1:
+        return terms[0]
+    elif len(terms) == 2:
+        return pair(terms[0], terms[1])
+    else:
+        return pair(terms[0], tuple_(terms[1:]))
+
+
+def tuple2(a: Term, b: Term) -> Term:
+    """Construct a 2-tuple (same as pair)."""
+    return pair(a, b)
+
+
+def tuple3(a: Term, b: Term, c: Term) -> Term:
+    """Construct a 3-tuple using nested pairs."""
+    return pair(a, pair(b, c))
 
 
 def tuple4(a: Term, b: Term, c: Term, d: Term) -> Term:
-    """Construct a 4-tuple term."""
-    return tuple_([a, b, c, d])
+    """Construct a 4-tuple using nested pairs."""
+    return pair(a, pair(b, pair(c, d)))
 
 
 def tuple5(a: Term, b: Term, c: Term, d: Term, e: Term) -> Term:
-    """Construct a 5-tuple term."""
-    return tuple_([a, b, c, d, e])
+    """Construct a 5-tuple using nested pairs."""
+    return pair(a, pair(b, pair(c, pair(d, e))))
 
 
 def type_application(term: Term, types: Sequence[Type]) -> Term:
@@ -467,7 +471,7 @@ def uint8(value: int) -> Term:
 
 def unit() -> Term:
     """Construct a unit term."""
-    return record(Name("_Unit"), [])
+    return TermUnit()
 
 
 def inject_unit(tname: Name, fname: Name) -> Term:
@@ -475,21 +479,6 @@ def inject_unit(tname: Name, fname: Name) -> Term:
     return inject(tname, fname, unit())
 
 
-def untuple(arity: int, idx: int, mtypes: Maybe[Sequence[Type]]) -> Term:
-    """Construct a tuple projection term."""
-    match mtypes:
-        case Just(types):
-            domain = Just(tuple(types))
-        case Nothing():
-            domain = Nothing()
-
-    return TermFunction(
-        FunctionElimination(
-            EliminationProduct(
-                TupleProjection(arity, idx, domain)
-            )
-        )
-    )
 
 
 def unwrap(name: Name) -> Term:

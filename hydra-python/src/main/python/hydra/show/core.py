@@ -191,13 +191,13 @@ def float(fv: hydra.core.FloatValue) -> str:
     
     match fv:
         case hydra.core.FloatValueBigfloat(value=v):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_bigfloat(v), ":bigfloat"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_bigfloat(v), ":bigfloat")
         
         case hydra.core.FloatValueFloat32(value=v2):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_float32(v2), ":float32"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_float32(v2), ":float32")
         
         case hydra.core.FloatValueFloat64(value=v3):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_float64(v3), ":float64"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_float64(v3), ":float64")
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -207,31 +207,31 @@ def integer(iv: hydra.core.IntegerValue) -> str:
     
     match iv:
         case hydra.core.IntegerValueBigint(value=v):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_bigint(v), ":bigint"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_bigint(v), ":bigint")
         
         case hydra.core.IntegerValueInt8(value=v2):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_int8(v2), ":int8"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_int8(v2), ":int8")
         
         case hydra.core.IntegerValueInt16(value=v3):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_int16(v3), ":int16"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_int16(v3), ":int16")
         
         case hydra.core.IntegerValueInt32(value=v4):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_int32(v4), ":int32"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_int32(v4), ":int32")
         
         case hydra.core.IntegerValueInt64(value=v5):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_int64(v5), ":int64"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_int64(v5), ":int64")
         
         case hydra.core.IntegerValueUint8(value=v6):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_uint8(v6), ":uint8"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_uint8(v6), ":uint8")
         
         case hydra.core.IntegerValueUint16(value=v7):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_uint16(v7), ":uint16"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_uint16(v7), ":uint16")
         
         case hydra.core.IntegerValueUint32(value=v8):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_uint32(v8), ":uint32"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_uint32(v8), ":uint32")
         
         case hydra.core.IntegerValueUint64(value=v9):
-            return hydra.lib.strings.cat((hydra.lib.literals.show_uint64(v9), ":uint64"))
+            return hydra.lib.strings.cat2(hydra.lib.literals.show_uint64(v9), ":uint64")
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

@@ -149,7 +149,7 @@ def curly_block(style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Exp
     return curly_braces_list(cast(Maybe[str], Nothing()), style, (e,))
 
 def custom_indent(idt: str, s: str) -> str:
-    return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt, line))), hydra.lib.strings.lines(s))))
+    return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), hydra.lib.strings.lines(s))))
 
 def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     h = hydra.lib.lists.head(els)
@@ -347,10 +347,10 @@ def print_expr(e: hydra.ast.Expr) -> str:
             def ilns() -> frozenlist[str]:
                 match style:
                     case hydra.ast.IndentStyleAllLines(value=idt):
-                        return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt, line))), lns)
+                        return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), lns)
                     
                     case hydra.ast.IndentStyleSubsequentLines(value=idt2):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns), 1), (lambda : lns), (lambda : hydra.lib.lists.cons(hydra.lib.lists.head(lns), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat((idt2, line))), hydra.lib.lists.tail(lns)))))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns), 1), (lambda : lns), (lambda : hydra.lib.lists.cons(hydra.lib.lists.head(lns), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), hydra.lib.lists.tail(lns)))))
                     
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
@@ -366,7 +366,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
             r = op_expr.rhs
             lhs = idt(padl, print_expr(l))
             rhs = idt(padr, print_expr(r))
-            return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((lhs, pad(padl))), sym)), pad(padr))), rhs))
+            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(lhs, pad(padl)), sym), pad(padr)), rhs)
         
         case hydra.ast.ExprBrackets(value=bracket_expr):
             brackets = bracket_expr.brackets
@@ -381,7 +381,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
             ibody = hydra.lib.maybes.maybe(body, (lambda idt: custom_indent(idt, body)), do_indent)
             pre = hydra.lib.logic.if_else(nl_before, (lambda : "\n"), (lambda : ""))
             suf = hydra.lib.logic.if_else(nl_after, (lambda : "\n"), (lambda : ""))
-            return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((l, pre)), ibody)), suf)), r))
+            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(l, pre), ibody), suf), r)
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -399,10 +399,10 @@ def tab_indent_single_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr
     return tab_indent(newline_sep(exprs))
 
 def unsupported_type(label: str) -> hydra.ast.Expr:
-    return cst(hydra.lib.strings.cat((hydra.lib.strings.cat(("[", label)), "]")))
+    return cst(hydra.lib.strings.cat2(hydra.lib.strings.cat2("[", label), "]"))
 
 def unsupported_variant(label: str, obj: str) -> hydra.ast.Expr:
-    return cst(hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("[unsupported ", label)), ": ")), hydra.lib.literals.show_string(obj))), "]")))
+    return cst(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("[unsupported ", label), ": "), hydra.lib.literals.show_string(obj)), "]"))
 
 def with_comma(e: hydra.ast.Expr) -> hydra.ast.Expr:
     return no_sep((e, cst(",")))

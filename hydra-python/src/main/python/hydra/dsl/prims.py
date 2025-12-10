@@ -375,24 +375,24 @@ def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
     )
 
 
-def either_(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Either[X, Y]]:
+def either(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Either[X, Y]]:
     """TermCoder for Either values."""
     def to_either_term(ev: Either[X, Y]) -> Flow[Graph, Term]:
         if isinstance(ev, Left):
-            # Decode left value and wrap in sum term with index 0
+            # Decode left value and wrap in left term
             return flows.bind(
                 left_coder.coder.decode(ev.value),
-                lambda left_term: flows.pure(terms.sum_(0, 2, left_term))
+                lambda left_term: flows.pure(terms.left(left_term))
             )
         else:  # Right
-            # Decode right value and wrap in sum term with index 1
+            # Decode right value and wrap in right term
             return flows.bind(
                 right_coder.coder.decode(ev.value),
-                lambda right_term: flows.pure(terms.sum_(1, 2, right_term))
+                lambda right_term: flows.pure(terms.right(right_term))
             )
 
     return TermCoder(
-        type=types.sum_([left_coder.type, right_coder.type]),
+        type=types.either(left_coder.type, right_coder.type),
         coder=Coder(
             encode=lambda term: extract.either_term(left_coder.coder.encode, right_coder.coder.encode, term),
             decode=to_either_term,
@@ -400,17 +400,17 @@ def either_(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Ei
     )
 
 
-def pair(k_coder: TermCoder[X], v_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]:
+def pair(first_coder: TermCoder[X], second_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]:
     """TermCoder for pairs."""
     return TermCoder(
-        type=types.product([k_coder.type, v_coder.type]),
+        type=types.pair(first_coder.type, second_coder.type),
         coder=Coder(
-            encode=lambda term: extract.tuple2(k_coder.coder.encode, v_coder.coder.encode, term),
-            decode=lambda kv: flows.bind(
-                k_coder.coder.decode(kv[0]),
-                lambda k_term: flows.bind(
-                    v_coder.coder.decode(kv[1]),
-                    lambda v_term: flows.pure(terms.tuple_([k_term, v_term]))
+            encode=lambda term: extract.pair(first_coder.coder.encode, second_coder.coder.encode, term),
+            decode=lambda p: flows.bind(
+                first_coder.coder.decode(p[0]),
+                lambda first_term: flows.bind(
+                    second_coder.coder.decode(p[1]),
+                    lambda second_term: flows.pure(terms.pair(first_term, second_term))
                 )
             )
         ),

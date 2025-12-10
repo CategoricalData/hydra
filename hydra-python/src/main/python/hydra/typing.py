@@ -10,7 +10,7 @@ import hydra.core
 
 @dataclass(frozen=True)
 class InferenceContext:
-    r"""The context provided to type inference, including various typing enviroments."""
+    r"""The context provided to type inference, including various typing environments."""
     
     schema_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the schema of the graph."]
     primitive_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the set of primitives in the graph."]
