@@ -146,9 +146,9 @@ protobufLanguage = protobufLanguageDefinition "protobufLanguage" $
     Variants.typeVariantUnit,
     Variants.typeVariantVariable,
     Variants.typeVariantWrap],
-  "typePredicate">: lambda "typ" $ cases _Type (var "typ")
+  "typePredicate">: "typ" ~> cases _Type (var "typ")
     (Just true) [
-    _Type_map>>: lambda "mt" $ lets [
+    _Type_map>>: "mt" ~> lets [
       "valuesType">: Core.mapTypeValues $ var "mt",
       "stripped">: Rewriting.deannotateType @@ var "valuesType"] $
       cases _Type (var "stripped")

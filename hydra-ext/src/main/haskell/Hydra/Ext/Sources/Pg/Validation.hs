@@ -130,7 +130,7 @@ validateEdge :: TBinding (
   -> PG.Edge v
   -> Y.Maybe String)
 validateEdge = validationDefinition "validateEdge" $
-  lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
+  "checkValue" ~> "showValue" ~> "labelForVertexId" ~> "typ" ~> "el" ~>
     lets [
       "failWith">: edgeError @@ var "showValue" @@ var "el",
       "checkLabel">: lets [
@@ -152,9 +152,9 @@ validateEdge = validationDefinition "validateEdge" $
           @@ (project _Edge _Edge_properties @@ var "el")),
       "checkOut">: Maybes.maybe
         nothing
-        (lambda "f" $ Maybes.maybe
+        ("f" ~> Maybes.maybe
           (just (var "failWith" @@ (prepend @@ (string "Out-vertex does not exist") @@ (var "showValue" @@ (project _Edge _Edge_out @@ var "el")))))
-          (lambda "label" $ verify
+          ("label" ~> verify
             @@ (Equality.equal
               (unwrap _VertexLabel @@ var "label")
               (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_out @@ var "typ")))
@@ -163,9 +163,9 @@ validateEdge = validationDefinition "validateEdge" $
           (var "labelForVertexId"),
       "checkIn">: Maybes.maybe
         nothing
-        (lambda "f" $ Maybes.maybe
+        ("f" ~> Maybes.maybe
           (just (var "failWith" @@ (prepend @@ (string "In-vertex does not exist") @@ (var "showValue" @@ (project _Edge _Edge_in @@ var "el")))))
-          (lambda "label" $ verify
+          ("label" ~> verify
             @@ (Equality.equal
               (unwrap _VertexLabel @@ var "label")
               (unwrap _VertexLabel @@ (project _EdgeType _EdgeType_in @@ var "typ")))
@@ -182,19 +182,19 @@ validateElement :: TBinding (
   -> PG.Element v
   -> Y.Maybe String)
 validateElement = validationDefinition "validateElement" $
-  lambda "checkValue" $ lambda "showValue" $ lambda "labelForVertexId" $ lambda "typ" $ lambda "el" $
+  "checkValue" ~> "showValue" ~> "labelForVertexId" ~> "typ" ~> "el" ~>
     (match _ElementType Nothing [
-        _ElementType_vertex>>: lambda "vt" $ (match _Element Nothing [
-            _Element_edge>>: lambda "e" $ just (prepend @@ (string "Edge instead of vertex") @@ (var "showValue" @@ (project _Edge _Edge_id @@ var "e"))),
-            _Element_vertex>>: lambda "vertex" $ validateVertex
+        _ElementType_vertex>>: "vt" ~> (match _Element Nothing [
+            _Element_edge>>: "e" ~> just (prepend @@ (string "Edge instead of vertex") @@ (var "showValue" @@ (project _Edge _Edge_id @@ var "e"))),
+            _Element_vertex>>: "vertex" ~> validateVertex
               @@ var "checkValue"
               @@ var "showValue"
               @@ var "vt"
               @@ var "vertex"]) @@ var "el",
 --        _ElementType_edge>>: constant nothing]) @@ var "typ"
-        _ElementType_edge>>: lambda "et" $ (match _Element Nothing [
-            _Element_vertex>>: lambda "v" $ just (prepend @@ (string "Vertex instead of edge") @@ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v"))),
-            _Element_edge>>: lambda "edge" $ validateEdge
+        _ElementType_edge>>: "et" ~> (match _Element Nothing [
+            _Element_vertex>>: "v" ~> just (prepend @@ (string "Vertex instead of edge") @@ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v"))),
+            _Element_edge>>: "edge" ~> validateEdge
               @@ var "checkValue"
               @@ var "showValue"
               @@ var "labelForVertexId"
@@ -209,12 +209,12 @@ validateGraph :: TBinding (
   -> Y.Maybe String)
 validateGraph = validationDefinition "validateGraph" $
   withOrds ["t0", "t1"] $
-  lambda "checkValue" $ lambda "showValue" $ lambda "schema" $ lambda "graph" $ lets [
+  "checkValue" ~> "showValue" ~> "schema" ~> "graph" ~> lets [
     "checkVertices">: lets [
-      "checkVertex">: lambda "el" $ Maybes.maybe
+      "checkVertex">: "el" ~> Maybes.maybe
         (just (vertexError @@ var "showValue" @@ var "el"
           @@ (prepend @@ (string "Unexpected label") @@ (unwrap _VertexLabel @@ (project _Vertex _Vertex_label @@ var "el")))))
-        (lambda "t" $ validateVertex
+        ("t" ~> validateVertex
           @@ var "checkValue"
           @@ var "showValue"
           @@ var "t"
@@ -225,10 +225,10 @@ validateGraph = validationDefinition "validateGraph" $
       $ checkAll
           @@ (Lists.map (var "checkVertex") $ Maps.elems $ project _Graph _Graph_vertices @@ var "graph"),
     "checkEdges">: lets [
-        "checkEdge">: lambda "el" $ Maybes.maybe
+        "checkEdge">: "el" ~> Maybes.maybe
           (just (edgeError @@ var "showValue" @@ var "el"
             @@ (prepend @@ (string "Unexpected label") @@ (unwrap _EdgeLabel @@ (project _Edge _Edge_label @@ var "el")))))
-          (lambda "t" $ validateEdge
+          ("t" ~> validateEdge
             @@ var "checkValue"
             @@ var "showValue"
             @@ var "labelForVertexId"
@@ -237,7 +237,7 @@ validateGraph = validationDefinition "validateGraph" $
           (Maps.lookup
             (project _Edge _Edge_label @@ var "el")
             (project _GraphSchema _GraphSchema_edges @@ var "schema")),
-        "labelForVertexId">: just $ lambda "i" $
+        "labelForVertexId">: just $ "i" ~>
           Maybes.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph"))]
       $ checkAll
           @@ (Lists.map (var "checkEdge") $ Maps.elems $ project _Graph _Graph_edges @@ var "graph")]
@@ -249,10 +249,10 @@ validateProperties :: TBinding (
   -> M.Map PG.PropertyKey v
   -> Y.Maybe String)
 validateProperties = validationDefinition "validateProperties" $
-  lambda "checkValue" $ lambda "types" $ lambda "props" $ lets [
+  "checkValue" ~> "types" ~> "props" ~> lets [
     "checkTypes">: checkAll @@ (Lists.map (var "checkType") (var "types")),
     "checkType">:
-      lambda "t" $ Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
+      "t" ~> Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
         (Maybes.maybe
           (just (prepend @@ (string "Missing value for ") @@ (unwrap _PropertyKey @@ (project _PropertyType _PropertyType_key @@ var "t"))))
           (constant nothing)
@@ -260,16 +260,16 @@ validateProperties = validationDefinition "validateProperties" $
         nothing,
     "checkValues">: lets [
       "m">: Maps.fromList (Lists.map
-          (lambda "p" $ pair
+          ("p" ~> pair
             (project _PropertyType _PropertyType_key @@ var "p")
             (project _PropertyType _PropertyType_value @@ var "p"))
           (var "types")),
-      "checkPair">: lambda "pair" $ lets [
+      "checkPair">: "pair" ~> lets [
         "key">: Pairs.first $ var "pair",
         "val">: Pairs.second $ var "pair"]
         $ Maybes.maybe
           (just (prepend @@ (string "Unexpected key") @@ (unwrap _PropertyKey @@ var "key")))
-          (lambda "typ" $ Maybes.map
+          ("typ" ~> Maybes.map
             (prepend @@ (string "Invalid value"))
             (var "checkValue" @@ var "typ" @@ var "val"))
           (Maps.lookup (var "key") (var "m"))]
@@ -283,7 +283,7 @@ validateVertex :: TBinding (
   -> PG.Vertex v
   -> Y.Maybe String)
 validateVertex = validationDefinition "validateVertex" $
-  lambda "checkValue" $ lambda "showValue" $ lambda "typ" $ lambda "el" $ lets [
+  "checkValue" ~> "showValue" ~> "typ" ~> "el" ~> lets [
     "failWith">: vertexError @@ var "showValue" @@ var "el",
     "checkLabel">: lets [
       "expected">: project _VertexType _VertexType_label @@ var "typ",
@@ -308,40 +308,40 @@ validateVertex = validationDefinition "validateVertex" $
 
 checkAll :: TBinding ([Y.Maybe a] -> Y.Maybe a)
 checkAll = validationDefinition "checkAll" $
-  lambda "checks" $ lets [
+  "checks" ~> lets [
     "errors">: Maybes.cat $ var "checks"]
     $ Lists.safeHead $ var "errors"
 
 edgeError :: TBinding ((v -> String) -> PG.Edge v -> String -> String)
 edgeError = validationDefinition "edgeError" $
-  lambda "showValue" $ lambda "e" $
+  "showValue" ~> "e" ~>
     prepend @@ (string "Invalid edge with id " ++ (var "showValue" @@ (project _Edge _Edge_id @@ var "e")))
 
 edgeLabelMismatch :: TBinding (PG.EdgeLabel -> PG.EdgeLabel -> String)
 edgeLabelMismatch = validationDefinition "edgeLabelMismatch" $
-  lambda "expected" $ lambda "actual" $
+  "expected" ~> "actual" ~>
     string "expected " ++ (unwrap _EdgeLabel @@ var "expected") ++ string ", found " ++ (unwrap _EdgeLabel @@ var "actual")
 
 prepend :: TBinding (String -> String -> String)
 prepend = validationDefinition "prepend" $
-  lambda "prefix" $ lambda "msg" $
+  "prefix" ~> "msg" ~>
     (var "prefix") ++ string ": " ++ (var "msg")
 
 verify :: TBinding (Bool -> String -> Maybe String)
 verify = validationDefinition "verify" $
-  lambda "b" $ lambda "err" $
+  "b" ~> "err" ~>
     Logic.ifElse (var "b")
       nothing
       (just $ var "err")
 
 vertexError :: TBinding ((v -> String) -> PG.Vertex v -> String -> String)
 vertexError = validationDefinition "vertexError" $
-  lambda "showValue" $ lambda "v" $
+  "showValue" ~> "v" ~>
     prepend @@ (string "Invalid vertex with id " ++ (var "showValue" @@ (project _Vertex _Vertex_id @@ var "v")))
 
 vertexLabelMismatch :: TBinding (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatch = validationDefinition "vertexLabelMismatch" $
-  lambda "expected" $ lambda "actual" $ Strings.cat $ list [
+  "expected" ~> "actual" ~> Strings.cat $ list [
     string "expected ", unwrap _VertexLabel @@ var "expected", string ", found ", unwrap _VertexLabel @@ var "actual"]
 
 -- TODO: this is a hack

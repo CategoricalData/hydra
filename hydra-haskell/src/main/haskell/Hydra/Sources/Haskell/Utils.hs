@@ -130,15 +130,15 @@ module_ = Module ns elements
 
 applicationPattern :: TBinding (H.Name -> [H.Pattern] -> H.Pattern)
 applicationPattern = haskellUtilsDefinition "applicationPattern" $
-  lambda "name" $ lambda "args" $
-    inject H._Pattern H._Pattern_application $
-      record H._ApplicationPattern [
-        H._ApplicationPattern_name>>: var "name",
-        H._ApplicationPattern_args>>: var "args"]
+  "name" ~> "args" ~>
+  inject H._Pattern H._Pattern_application $
+    record H._ApplicationPattern [
+      H._ApplicationPattern_name>>: var "name",
+      H._ApplicationPattern_args>>: var "args"]
 
 elementReference :: TBinding (HaskellNamespaces -> Name -> H.Name)
 elementReference = haskellUtilsDefinition "elementReference" $
-  lambda "namespaces" $ lambda "name" $ lets [
+  "namespaces" ~> "name" ~> lets [
     "namespacePair">: Module.namespacesFocus $ var "namespaces",
     "gname">: Pairs.first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
@@ -149,10 +149,10 @@ elementReference = haskellUtilsDefinition "elementReference" $
     "mns">: Module.qualifiedNameNamespace $ var "qname"] $
     Maybes.cases (Module.qualifiedNameNamespace $ var "qname")
       (simpleName @@ var "local") $
-      lambda "ns" $
+      "ns" ~>
         Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
           (simpleName @@ var "local") $
-          lambda "mn" $ lets [
+          "mn" ~> lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $
             Logic.ifElse (Equality.equal (var "ns") (var "gname"))
               (simpleName @@ var "escLocal")
@@ -163,7 +163,7 @@ elementReference = haskellUtilsDefinition "elementReference" $
 
 hsapp :: TBinding (H.Expression -> H.Expression -> H.Expression)
 hsapp = haskellUtilsDefinition "hsapp" $
-  lambda "l" $ lambda "r" $
+  "l" ~> "r" ~>
     inject H._Expression H._Expression_application $
       record H._ApplicationExpression [
         H._ApplicationExpression_function>>: var "l",
@@ -171,7 +171,7 @@ hsapp = haskellUtilsDefinition "hsapp" $
 
 hslambda :: TBinding (H.Name -> H.Expression -> H.Expression)
 hslambda = haskellUtilsDefinition "hslambda" $
-  lambda "name" $ lambda "rhs" $
+  "name" ~> "rhs" ~>
     inject H._Expression H._Expression_lambda $
       record H._LambdaExpression [
         H._LambdaExpression_bindings>>: list [inject H._Pattern H._Pattern_name $ var "name"],
@@ -179,19 +179,18 @@ hslambda = haskellUtilsDefinition "hslambda" $
 
 hslit :: TBinding (H.Literal -> H.Expression)
 hslit = haskellUtilsDefinition "hslit" $
-  lambda "lit" $
+  "lit" ~>
     inject H._Expression H._Expression_literal $ var "lit"
 
 hsvar :: TBinding (String -> H.Expression)
 hsvar = haskellUtilsDefinition "hsvar" $
-  lambda "s" $
+  "s" ~>
     inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
 namespacesForModule :: TBinding (Module -> Flow Graph HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
-  lambda "mod" $
-    bind "nss"
-      (Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod") $ lets [
+  "mod" ~>
+    "nss" <<~ Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod" $ lets [
     "ns">: Module.moduleNamespace $ var "mod",
     "focusPair">: var "toPair" @@ var "ns",
     "nssAsList">: Sets.toList $ var "nss",
@@ -199,15 +198,15 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "emptyState">: pair Maps.empty Sets.empty,
     "finalState">: Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs"),
     "resultMap">: Pairs.first $ var "finalState",
-    "toModuleName">: lambda "namespace" $ lets [
+    "toModuleName">: "namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
       "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
       "lastPart">: Lists.last $ var "parts",
       "capitalized">: Formatting.capitalize @@ var "lastPart"] $
       wrap H._ModuleName $ var "capitalized",
-    "toPair">: lambda "name" $
+    "toPair">: "name" ~>
       pair (var "name") (var "toModuleName" @@ var "name"),
-    "addPair">: lambda "state" $ lambda "namePair" $ lets [
+    "addPair">: "state" ~> "namePair" ~> lets [
       "currentMap">: Pairs.first $ var "state",
       "currentSet">: Pairs.second $ var "state",
       "name">: Pairs.first $ var "namePair",
@@ -220,12 +219,12 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
 
 newtypeAccessorName :: TBinding (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $
-  lambda "name" $
+  "name" ~>
     Strings.cat2 (string "un") (Names.localNameOf @@ var "name")
 
 rawName :: TBinding (String -> H.Name)
 rawName = haskellUtilsDefinition "rawName" $
-  lambda "n" $
+  "n" ~>
     inject H._Name H._Name_normal $
       record H._QualifiedName [
         H._QualifiedName_qualifiers>>: list ([] :: [TTerm H.NamePart]),
@@ -233,7 +232,7 @@ rawName = haskellUtilsDefinition "rawName" $
 
 recordFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
 recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
-  lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
+  "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
@@ -257,7 +256,7 @@ simpleName = haskellUtilsDefinition "simpleName" $
 
 simpleValueBinding :: TBinding (H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding)
 simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
-  lambda "hname" $ lambda "rhs" $ lambda "bindings" $ lets [
+  "hname" ~> "rhs" ~> "bindings" ~> lets [
     "pat">: inject H._Pattern H._Pattern_application $
       record H._ApplicationPattern [
         H._ApplicationPattern_name>>: var "hname",
@@ -271,8 +270,8 @@ simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
 
 toTypeApplication :: TBinding ([H.Type] -> H.Type)
 toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
-  lambda "types" $ lets [
-    "app">: lambda "l" $
+  "types" ~> lets [
+    "app">: "l" ~>
       Logic.ifElse (Equality.gt (Lists.length (var "l")) (int32 1))
         (inject H._Type H._Type_application $ record H._ApplicationType [
           H._ApplicationType_context>>: var "app" @@ (Lists.tail (var "l")),
@@ -282,14 +281,14 @@ toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
 
 typeNameForRecord :: TBinding (Name -> String)
 typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
-  lambda "sname" $ lets [
+  "sname" ~> lets [
     "snameStr">: Core.unName $ var "sname",
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
     Lists.last $ var "parts"
 
 unionFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
-  lambda "namespaces" $ lambda "sname" $ lambda "fname" $ lets [
+  "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
@@ -305,9 +304,9 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
 
 unpackForallType :: TBinding (Graph -> Type -> ([Name], Type))
 unpackForallType = haskellUtilsDefinition "unpackForallType" $
-  lambdas ["cx", "t"] $ cases _Type (Rewriting.deannotateType @@ var "t")
+  "cx" ~> "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
     (Just $ pair (list ([] :: [TTerm Name])) (var "t")) [
-    _Type_forall>>: lambda "fat" $ lets [
+    _Type_forall>>: "fat" ~> lets [
       "v">: Core.forallTypeParameter $ var "fat",
       "tbody">: Core.forallTypeBody $ var "fat",
       "recursiveResult">: unpackForallType @@ var "cx" @@ var "tbody",
