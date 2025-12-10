@@ -45,7 +45,7 @@ def namespace_to_file_path(case_conv: hydra.util.CaseConvention, ext: hydra.modu
     r"""Convert a namespace to a file path with the given case convention and file extension."""
     
     parts = hydra.lib.lists.map((lambda v1: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, case_conv, v1)), hydra.lib.strings.split_on(".", ns.value))
-    return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", parts), ".")), ext.value))
+    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("/", parts), "."), ext.value)
 
 def qname(ns: hydra.module.Namespace, name: str) -> hydra.core.Name:
     r"""Construct a qualified (dot-separated) name."""
@@ -60,5 +60,5 @@ def unique_label(visited: frozenset[str], l: str) -> str:
 def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
     r"""Convert a qualified name to a dot-separated name."""
     
-    prefix = hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat((n.value, "."))), qname.namespace)
-    return hydra.core.Name(hydra.lib.strings.cat((prefix, qname.local)))
+    prefix = hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(n.value, ".")), qname.namespace)
+    return hydra.core.Name(hydra.lib.strings.cat2(prefix, qname.local))

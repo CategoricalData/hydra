@@ -104,31 +104,31 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     # For now we register the simpler functions
     primitives[qname(namespace, "fromLeft")] = prims.prim2(
         qname(namespace, "fromLeft"), eithers.from_left, ["x", "y"],
-        x, prims.either_(x, y), x
+        x, prims.either(x, y), x
     )
     primitives[qname(namespace, "fromRight")] = prims.prim2(
         qname(namespace, "fromRight"), eithers.from_right, ["x", "y"],
-        y, prims.either_(x, y), y
+        y, prims.either(x, y), y
     )
     primitives[qname(namespace, "isLeft")] = prims.prim1(
         qname(namespace, "isLeft"), eithers.is_left, ["x", "y"],
-        prims.either_(x, y), prims.boolean()
+        prims.either(x, y), prims.boolean()
     )
     primitives[qname(namespace, "isRight")] = prims.prim1(
         qname(namespace, "isRight"), eithers.is_right, ["x", "y"],
-        prims.either_(x, y), prims.boolean()
+        prims.either(x, y), prims.boolean()
     )
     primitives[qname(namespace, "lefts")] = prims.prim1(
         qname(namespace, "lefts"), eithers.lefts, ["x", "y"],
-        prims.list_(prims.either_(x, y)), prims.list_(x)
+        prims.list_(prims.either(x, y)), prims.list_(x)
     )
     primitives[qname(namespace, "partitionEithers")] = prims.prim1(
         qname(namespace, "partitionEithers"), eithers.partition_eithers, ["x", "y"],
-        prims.list_(prims.either_(x, y)), prims.pair(prims.list_(x), prims.list_(y))
+        prims.list_(prims.either(x, y)), prims.pair(prims.list_(x), prims.list_(y))
     )
     primitives[qname(namespace, "rights")] = prims.prim1(
         qname(namespace, "rights"), eithers.rights, ["x", "y"],
-        prims.list_(prims.either_(x, y)), prims.list_(y)
+        prims.list_(prims.either(x, y)), prims.list_(y)
     )
 
     return primitives
@@ -756,37 +756,6 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
-def register_tuples_primitives() -> dict[Name, Primitive]:
-    """Register all tuples primitive functions."""
-    from hydra.lib import tuples
-
-    namespace = "hydra.lib.tuples"
-    primitives: dict[Name, Primitive] = {}
-
-    a = prims.variable("a")
-    b = prims.variable("b")
-    c = prims.variable("c")
-
-    primitives[qname(namespace, "curry")] = prims.prim1(
-        qname(namespace, "curry"), tuples.curry, ["a", "b", "c"],
-        prims.function(prims.pair(a, b), c), prims.function(a, prims.function(b, c))
-    )
-    primitives[qname(namespace, "fst")] = prims.prim1(
-        qname(namespace, "fst"), tuples.fst, ["a", "b"],
-        prims.pair(a, b), a
-    )
-    primitives[qname(namespace, "snd")] = prims.prim1(
-        qname(namespace, "snd"), tuples.snd, ["a", "b"],
-        prims.pair(a, b), b
-    )
-    primitives[qname(namespace, "uncurry")] = prims.prim1(
-        qname(namespace, "uncurry"), tuples.uncurry, ["a", "b", "c"],
-        prims.function(a, prims.function(b, c)), prims.function(prims.pair(a, b), c)
-    )
-
-    return primitives
-
-
 def register_pairs_primitives() -> dict[Name, Primitive]:
     """Register all pairs primitive functions."""
     from hydra.lib import pairs
@@ -825,5 +794,4 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_pairs_primitives())
     primitives.update(register_sets_primitives())
     primitives.update(register_strings_primitives())
-    primitives.update(register_tuples_primitives())
     return primitives

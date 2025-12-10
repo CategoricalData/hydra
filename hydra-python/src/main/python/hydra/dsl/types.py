@@ -8,6 +8,7 @@ import hydra.dsl.literal_types as lt
 from hydra.core import (
     AnnotatedType,
     ApplicationType,
+    EitherType,
     FieldType,
     FloatType,
     ForallType,
@@ -16,22 +17,23 @@ from hydra.core import (
     LiteralType,
     MapType,
     Name,
+    PairType,
     RowType,
     Term,
     Type,
     TypeAnnotated,
     TypeApplication,
+    TypeEither,
     TypeForall,
     TypeFunction,
     TypeList,
     TypeLiteral,
     TypeMap,
     TypeMaybe,
-    TypeProduct,
+    TypePair,
     TypeRecord,
     TypeScheme,
     TypeSet,
-    TypeSum,
     TypeUnion,
     TypeUnit,
     TypeVariable,
@@ -70,6 +72,11 @@ def apply_many(ts: Sequence[Type]) -> Type:
 
 
 def var(name: str) -> Type:
+    """Create a type variable with the given name (alias for 'variable')."""
+    return variable(name)
+
+
+def variable(name: str) -> Type:
     """Create a type variable with the given name."""
     return TypeVariable(Name(name))
 
@@ -210,9 +217,14 @@ def map_(k: Type, v: Type) -> Type:
     return TypeMap(MapType(k, v))
 
 
-def optional(t: Type) -> Type:
-    """Optional (nullable) type."""
+def maybe(t: Type) -> Type:
+    """Maybe (optional/nullable) type."""
     return TypeMaybe(t)
+
+
+def optional(t: Type) -> Type:
+    """Optional (nullable) type (alias for 'maybe')."""
+    return maybe(t)
 
 
 def set_(t: Type) -> Type:
@@ -261,15 +273,22 @@ def wrap_with_name(name: Name, t: Type) -> Type:
 
 
 def pair(a: Type, b: Type) -> Type:
-    """Create a pair (2-tuple) type."""
-    return TypeProduct((a, b))
+    """Create a pair type."""
+    return TypePair(PairType(a, b))
+
+
+def either(left: Type, right: Type) -> Type:
+    """Create an either type (a choice between two types)."""
+    return TypeEither(EitherType(left, right))
 
 
 def product(ts: Sequence[Type]) -> Type:
-    """Create a product type (tuple) with multiple components."""
-    return TypeProduct(tuple(ts))
-
-
-def sum_(ts: Sequence[Type]) -> Type:
-    """Create a sum type (disjoint union) with multiple variants."""
-    return TypeSum(tuple(ts))
+    """Create a product type using nested pairs."""
+    if len(ts) == 0:
+        return unit()
+    elif len(ts) == 1:
+        return ts[0]
+    elif len(ts) == 2:
+        return pair(ts[0], ts[1])
+    else:
+        return pair(ts[0], product(ts[1:]))

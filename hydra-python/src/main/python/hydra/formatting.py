@@ -93,19 +93,19 @@ def convert_case_pascal_to_upper_snake(v1: str) -> str:
 def escape_with_underscore(reserved: frozenset[str], s: str) -> str:
     r"""Escape reserved words by appending an underscore."""
     
-    return hydra.lib.logic.if_else(hydra.lib.sets.member(s, reserved), (lambda : hydra.lib.strings.cat((s, "_"))), (lambda : s))
+    return hydra.lib.logic.if_else(hydra.lib.sets.member(s, reserved), (lambda : hydra.lib.strings.cat2(s, "_")), (lambda : s))
 
 def indent_lines(s: str) -> str:
     r"""Indent each line of a string with four spaces."""
     
     def indent(l: str) -> str:
-        return hydra.lib.strings.cat(("    ", l))
+        return hydra.lib.strings.cat2("    ", l)
     return hydra.lib.strings.unlines(hydra.lib.lists.map(indent, hydra.lib.strings.lines(s)))
 
 def java_style_comment(s: str) -> str:
     r"""Format a string as a Java-style block comment."""
     
-    return hydra.lib.strings.cat((hydra.lib.strings.cat((hydra.lib.strings.cat(("/**\n", " * ")), s)), "\n */"))
+    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("/**\n", " * "), s), "\n */")
 
 def non_alnum_to_underscores(input: str) -> str:
     r"""Replace sequences of non-alphanumeric characters with single underscores."""

@@ -193,7 +193,7 @@ def graph_as_types(sg: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Grap
     
     els = hydra.lib.maps.elems(sg.elements)
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Tuple[hydra.core.Name, hydra.core.Type]]:
-        return hydra.lib.flows.bind(hydra.monads.with_trace(hydra.lib.strings.cat(("graph as types: ", el.name.value)), hydra.decode.core.type(el.term)), (lambda typ: hydra.lib.flows.pure(cast(Tuple[hydra.core.Name, hydra.core.Type], (el.name, typ)))))
+        return hydra.lib.flows.bind(hydra.monads.with_trace(hydra.lib.strings.cat2("graph as types: ", el.name.value), hydra.decode.core.type(el.term)), (lambda typ: hydra.lib.flows.pure(cast(Tuple[hydra.core.Name, hydra.core.Type], (el.name, typ)))))
     return hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, els), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
 
 def schema_graph_to_typing_environment[T0](g: hydra.graph.Graph) -> hydra.compute.Flow[T0, FrozenDict[hydra.core.Name, hydra.core.TypeScheme]]:

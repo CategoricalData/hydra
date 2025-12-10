@@ -392,14 +392,14 @@ def infer_type_of[T0](cx: hydra.typing.InferenceContext, term: hydra.core.Term) 
         return hydra.lib.maybes.maybe(hydra.lib.flows.fail("Expected a type scheme"), (lambda ts: hydra.lib.flows.pure(cast(Tuple[hydra.core.Term, hydra.core.TypeScheme], (term1, ts)))), mts)
     def unify_and_subst[T1](result: hydra.typing.InferenceResult) -> hydra.compute.Flow[T1, Tuple[hydra.core.Term, hydra.core.TypeScheme]]:
         subst = result.subst
-        return hydra.lib.flows.bind(finalize_inferred_term(cx, result.term), (lambda finalized: hydra.lib.flows.bind(hydra.lexical.with_empty_graph(hydra.extract.core.let_term(finalized)), (lambda let_result: (bindings := let_result.bindings, hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : for_bindings(bindings)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings"))))))[1]))))
+        return hydra.lib.flows.bind(finalize_inferred_term(cx, result.term), (lambda finalized: hydra.lib.flows.bind(hydra.lexical.with_empty_graph(hydra.extract.core.let(finalized)), (lambda let_result: (bindings := let_result.bindings, hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : for_bindings(bindings)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings"))))))[1]))))
     return hydra.lib.flows.bind(infer_type_of_term(cx, let_term, "infer type of term"), (lambda result: unify_and_subst(result)))
 
 def initial_type_context[T0](g: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.TypeContext]:
     def to_pair[T1](pair: Tuple[hydra.core.Name, hydra.core.Binding]) -> hydra.compute.Flow[T1, Tuple[hydra.core.Name, hydra.core.Type]]:
         name = hydra.lib.pairs.first(pair)
         el = hydra.lib.pairs.second(pair)
-        return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("untyped element: ", name.value))), (lambda ts: hydra.lib.flows.pure(cast(Tuple[hydra.core.Name, hydra.core.Type], (name, hydra.schemas.type_scheme_to_f_type(ts))))), el.type)
+        return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("untyped element: ", name.value)), (lambda ts: hydra.lib.flows.pure(cast(Tuple[hydra.core.Name, hydra.core.Type], (name, hydra.schemas.type_scheme_to_f_type(ts))))), el.type)
     return hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: hydra.lib.flows.bind(hydra.lib.flows.map(cast(Callable[[frozenlist[Tuple[hydra.core.Name, hydra.core.Type]]], FrozenDict[hydra.core.Name, hydra.core.Type]], hydra.lib.maps.from_list), hydra.lib.flows.map_list(cast(Callable[[Tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[T0, Tuple[hydra.core.Name, hydra.core.Type]]], to_pair), hydra.lib.maps.to_list(g.elements))), (lambda types: hydra.lib.flows.pure(hydra.typing.TypeContext(types, cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), ix))))))
 
 def show_inference_result(result: hydra.typing.InferenceResult) -> str:
