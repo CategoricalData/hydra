@@ -131,7 +131,7 @@ typeScriptLanguage = typeScriptLanguageDefinition "typeScriptLanguage" $
     Variants.typeVariantUnion],
   "types">: match _Type
     (Just true) [
-    _Type_map>>: lambda "mt" (cases _Type ((Rewriting.deannotateType @@ (Core.mapTypeValues $ var "mt")))
+    _Type_map>>: "mt" ~> (cases _Type ((Rewriting.deannotateType @@ (Core.mapTypeValues $ var "mt")))
       (Just true) [
       _Type_maybe>>: constant false])]] $
   Coders.language
