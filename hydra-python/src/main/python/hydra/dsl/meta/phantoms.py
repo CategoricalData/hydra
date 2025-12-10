@@ -212,7 +212,7 @@ def field_op(name: str, term: TTerm[A]) -> Field:
 
 def first(pair: TTerm[tuple[A, B]]) -> TTerm[A]:
     """First element projection function for pairs."""
-    return apply(TTerm[A](terms.untuple(2, 0, Nothing())), pair)
+    return apply(TTerm[A](terms.first()), pair)
 
 
 def first_class_type(typ: TTerm[Type]) -> TTerm[Type]:
@@ -422,7 +422,7 @@ def ref(binding: TBinding[A]) -> TTerm[A]:
 
 def second(pair: TTerm[tuple[A, B]]) -> TTerm[B]:
     """Second element projection function for pairs."""
-    return apply(TTerm[B](terms.untuple(2, 1, Nothing())), pair)
+    return apply(TTerm[B](terms.second()), pair)
 
 
 def set_(els: Sequence[TTerm[A]]) -> TTerm[set[A]]:
@@ -491,11 +491,6 @@ def unqualify_name(qname: QualifiedName) -> Name:
             return Name(f"{ns.value}.{qname.local}")
         case Nothing():
             return Name(qname.local)
-
-
-def untuple(arity: int, idx: int) -> TTerm[A]:
-    """Create a tuple projection function."""
-    return TTerm[A](terms.untuple(arity, idx, Nothing()))
 
 
 def unwrap(name: Name) -> TTerm[A]:

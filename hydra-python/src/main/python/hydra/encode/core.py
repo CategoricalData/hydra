@@ -384,7 +384,7 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(term, v9)))))))
         
         case hydra.core.TermPair(value=v10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair(cast(Tuple[hydra.core.Term, hydra.core.Term], (term(hydra.lib.pairs.first(v10)), term(hydra.lib.pairs.second(v10))))))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair(cast(tuple[hydra.core.Term, hydra.core.Term], (term(hydra.lib.pairs.first(v10)), term(hydra.lib.pairs.second(v10))))))))))
         
         case hydra.core.TermRecord(value=v11):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), record(v11)))))

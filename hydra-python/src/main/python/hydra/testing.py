@@ -488,8 +488,8 @@ TYPE_CHECKING_FAILURE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 class TopologicalSortBindingsTestCase:
     r"""A test case which performs topological sort on a map of bindings (name -> term) and compares the result with expected groups of bindings in topological order."""
     
-    bindings: Annotated[frozenlist[Tuple[hydra.core.Name, hydra.core.Term]], "The bindings as a list of (name, term) pairs"]
-    expected: Annotated[frozenlist[frozenlist[Tuple[hydra.core.Name, hydra.core.Term]]], "The expected groups of bindings in topological order"]
+    bindings: Annotated[frozenlist[tuple[hydra.core.Name, hydra.core.Term]], "The bindings as a list of (name, term) pairs"]
+    expected: Annotated[frozenlist[frozenlist[tuple[hydra.core.Name, hydra.core.Term]]], "The expected groups of bindings in topological order"]
 
 TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase")
 TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__BINDINGS__NAME = hydra.core.Name("bindings")
@@ -499,7 +499,7 @@ TOPOLOGICAL_SORT_BINDINGS_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected"
 class TopologicalSortTestCase:
     r"""A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles."""
     
-    adjacency_list: Annotated[frozenlist[Tuple[int, frozenlist[int]]], "The directed graph as an adjacency list (node to list of dependencies)"]
+    adjacency_list: Annotated[frozenlist[tuple[int, frozenlist[int]]], "The directed graph as an adjacency list (node to list of dependencies)"]
     expected: Annotated[Either[frozenlist[frozenlist[int]], frozenlist[int]], "The expected result: Left for cycles, Right for sorted nodes"]
 
 TOPOLOGICAL_SORT_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortTestCase")
@@ -510,7 +510,7 @@ TOPOLOGICAL_SORT_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
 class TopologicalSortSCCTestCase:
     r"""A test case which performs topological sort with strongly connected component detection and compares the result with expected components."""
     
-    adjacency_list: Annotated[frozenlist[Tuple[int, frozenlist[int]]], "The directed graph as an adjacency list"]
+    adjacency_list: Annotated[frozenlist[tuple[int, frozenlist[int]]], "The directed graph as an adjacency list"]
     expected: Annotated[frozenlist[frozenlist[int]], "The expected strongly connected components in topological order"]
 
 TOPOLOGICAL_SORT_S_C_C_TEST_CASE__NAME = hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase")

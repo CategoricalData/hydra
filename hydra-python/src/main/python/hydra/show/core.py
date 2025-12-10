@@ -382,7 +382,7 @@ def term(t: hydra.core.Term) -> str:
             return literal(lit)
         
         case hydra.core.TermMap(value=m):
-            def entry(p: Tuple[hydra.core.Term, hydra.core.Term]) -> str:
+            def entry(p: tuple[hydra.core.Term, hydra.core.Term]) -> str:
                 return hydra.lib.strings.cat((term(hydra.lib.pairs.first(p)), "=", term(hydra.lib.pairs.second(p))))
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(entry, hydra.lib.maps.to_list(m))), "}"))
         
