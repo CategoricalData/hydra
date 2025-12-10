@@ -138,25 +138,22 @@ gatherArgs term args = case deannotateTerm term of
   TermTypeApplication (TypeApplicationTerm t _) -> gatherArgs t args
   _ -> (term, args)
 
--- | Determines whether a binding represents a function call or case statement.
+-- | Determines whether a binding represents a function call that needs to be invoked.
 -- This heuristic is used to decide whether to use function call syntax in the target language.
 --
 -- A binding is considered a function call if:
--- - Its body is a let expression, OR
--- - Its body is a case statement (union elimination)
+-- - It has arity 0 (no parameters), AND
+-- - It was NOT encoded as a simple assignment (i.e., it became a def/function)
 --
--- Note: This also checks if the type has arity > 0, but that check is currently commented out.
+-- This ensures that bindings encoded as `def x(): ...` are called as `x()` when referenced,
+-- while bindings encoded as `x = expr` are referenced as just `x`.
 isFunctionCall :: Binding -> Bool
-isFunctionCall (Binding name term (Just ts)) =
-  let term1 = deannotateAndDetypeTerm term
-      -- Only apply these checks for arity-0 functions
-      isArityZero = typeSchemeArity ts == 0
-      -- Check if it's a wrapped term (e.g., Flow monad) - these are thunks that need to be called
-      isWrapped = case term1 of
-        TermWrap _ -> True
-        _ -> False
-      result = isArityZero && isWrapped
-  in result
+isFunctionCall (Binding _ term (Just ts)) =
+  let isArityZero = typeSchemeArity ts == 0
+      -- A binding needs to be called if it wasn't a simple assignment
+      -- (i.e., it was encoded as a function definition)
+      notSimple = not (isSimpleAssignment term)
+  in isArityZero && notSimple
 isFunctionCall _ = False
 
 -- | Determines whether a term can be encoded as a simple assignment (without type annotation).
