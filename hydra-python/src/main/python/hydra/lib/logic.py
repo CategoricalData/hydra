@@ -15,13 +15,14 @@ def if_else[A](b: bool, x: A, y: A) -> A: ...
 def if_else[A](b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
     """Compute a conditional expression with lazy evaluation of branches.
 
-    When x and y are callable (lambdas), they are called to get the actual value.
-    This enables lazy evaluation for expensive computations or side-effecting operations.
+    When x and y are callable (lambdas), only the chosen branch is called.
+    This enables lazy evaluation for expensive computations or side-effecting operations,
+    which is critical for correct Flow/state monad semantics.
     """
-    # If the arguments are callable (thunks), call them to get the actual values
-    actual_x = x() if callable(x) else x
-    actual_y = y() if callable(y) else y
-    return actual_x if b else actual_y  # type: ignore[return-value]
+    if b:
+        return x() if callable(x) else x  # type: ignore[return-value]
+    else:
+        return y() if callable(y) else y  # type: ignore[return-value]
 
 
 def not_(x: bool) -> bool:
