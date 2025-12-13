@@ -218,6 +218,15 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "concat"), lists.concat, ["a"],
         prims.list_(prims.list_(a)), prims.list_(a)
     )
+    primitives[qname(namespace, "cons")] = prims.prim2(
+        qname(namespace, "cons"), lists.cons, ["a"],
+        a, prims.list_(a), prims.list_(a)
+    )
+    # foldl: (b -> a -> b) -> b -> [a] -> b
+    primitives[qname(namespace, "foldl")] = prims.prim3(
+        qname(namespace, "foldl"), lists.foldl, ["a", "b"],
+        prims.function(b, prims.function(a, b)), b, prims.list_(a), b
+    )
     primitives[qname(namespace, "head")] = prims.prim1(
         qname(namespace, "head"), lists.head, ["a"], prims.list_(a), a
     )
@@ -235,8 +244,23 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "length")] = prims.prim1(
         qname(namespace, "length"), lists.length, ["a"], prims.list_(a), prims.int32()
     )
+    primitives[qname(namespace, "map")] = prims.prim2(
+        qname(namespace, "map"), lists.map, ["a", "b"],
+        prims.function(a, b), prims.list_(a), prims.list_(b)
+    )
+    primitives[qname(namespace, "null")] = prims.prim1(
+        qname(namespace, "null"), lists.null, ["a"],
+        prims.list_(a), prims.boolean()
+    )
+    primitives[qname(namespace, "pure")] = prims.prim1(
+        qname(namespace, "pure"), lists.pure, ["a"],
+        a, prims.list_(a)
+    )
     primitives[qname(namespace, "reverse")] = prims.prim1(
         qname(namespace, "reverse"), lists.reverse, ["a"], prims.list_(a), prims.list_(a)
+    )
+    primitives[qname(namespace, "tail")] = prims.prim1(
+        qname(namespace, "tail"), lists.tail, ["a"], prims.list_(a), prims.list_(a)
     )
 
     return primitives
@@ -249,8 +273,14 @@ def register_logic_primitives() -> dict[Name, Primitive]:
     namespace = "hydra.lib.logic"
     primitives: dict[Name, Primitive] = {}
 
+    a = prims.variable("a")
+
     primitives[qname(namespace, "and")] = prims.prim2(
         qname(namespace, "and"), logic.and_, [], prims.boolean(), prims.boolean(), prims.boolean()
+    )
+    primitives[qname(namespace, "ifElse")] = prims.prim3(
+        qname(namespace, "ifElse"), logic.if_else, ["a"],
+        prims.boolean(), a, a, a
     )
     primitives[qname(namespace, "not")] = prims.prim1(
         qname(namespace, "not"), logic.not_, [], prims.boolean(), prims.boolean()
@@ -424,7 +454,12 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
+    b = prims.variable("b")
 
+    primitives[qname(namespace, "fromMaybe")] = prims.prim2(
+        qname(namespace, "fromMaybe"), maybes.from_maybe, ["a"],
+        a, prims.optional(a), a
+    )
     primitives[qname(namespace, "isJust")] = prims.prim1(
         qname(namespace, "isJust"), maybes.is_just, ["a"],
         prims.optional(a), prims.boolean()
@@ -432,6 +467,15 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "isNothing")] = prims.prim1(
         qname(namespace, "isNothing"), maybes.is_nothing, ["a"],
         prims.optional(a), prims.boolean()
+    )
+    # maybe: b -> (a -> b) -> Maybe a -> b
+    primitives[qname(namespace, "maybe")] = prims.prim3(
+        qname(namespace, "maybe"), maybes.maybe, ["a", "b"],
+        b, prims.function(a, b), prims.optional(a), b
+    )
+    primitives[qname(namespace, "pure")] = prims.prim1(
+        qname(namespace, "pure"), maybes.pure, ["a"],
+        a, prims.optional(a)
     )
 
     return primitives
