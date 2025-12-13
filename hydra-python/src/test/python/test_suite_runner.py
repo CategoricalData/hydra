@@ -815,7 +815,7 @@ def run_rewrite_type_test(test_case: hydra.testing.RewriteTypeTestCase) -> None:
                 match typ:
                     case hydra.core.TypeLiteral(value=hydra.core.LiteralTypeString()):
                         return hydra.core.TypeLiteral(
-                            hydra.core.LiteralTypeInteger(hydra.core.IntegerTypeInt32())
+                            hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32)
                         )
                     case _:
                         return recurse(typ)
