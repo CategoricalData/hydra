@@ -13,7 +13,7 @@ def alter[K, V](
     new_value = f(current_value)
     match new_value:
         case Nothing():
-            return remove(key, mapping)
+            return delete(key, mapping)
         case Just(v):
             return insert(key, v, mapping)
 
@@ -22,6 +22,11 @@ def bimap[K1, K2, V1, V2](
     f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]) -> FrozenDict[K2, V2]:
     """Map a function over the keys and values of a map."""
     return FrozenDict({f(k): g(v) for k, v in mapping.items()})
+
+
+def delete[K, V](key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+    """Remove a key from a map."""
+    return FrozenDict({k: v for k, v in mapping.items() if k != key})
 
 
 def elems[V](mapping: Mapping[Any, V]) -> frozenlist[V]:
@@ -92,11 +97,6 @@ def member[K](key: K, mapping: Mapping[K, Any]) -> bool:
 def null(mapping: Mapping[Any, Any]) -> bool:
     """Check if a map is empty."""
     return len(mapping) == 0
-
-
-def remove[K, V](key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
-    """Remove a key from a map."""
-    return FrozenDict({k: v for k, v in mapping.items() if k != key})
 
 
 def singleton[K, V](key: K, value: V) -> FrozenDict[K, V]:

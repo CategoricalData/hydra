@@ -63,7 +63,7 @@ def beta_reduce_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Gra
         return hydra.lib.flows.bind(recurse(t), (lambda r: find_app(r)))
     return hydra.rewriting.rewrite_type_m(cast(Callable[[
       Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]],
-      hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], map_expr), typ)
+      hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], (lambda x1, x2: map_expr(x1, x2))), typ)
 
 def contract_term(term: hydra.core.Term) -> hydra.core.Term:
     r"""Apply the special rules:
@@ -94,7 +94,7 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
             
             case _:
                 return rec
-    return hydra.rewriting.rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], rewrite), term)
+    return hydra.rewriting.rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], (lambda x1, x2: rewrite(x1, x2))), term)
 
 count_primitive_invocations = True
 
@@ -138,11 +138,13 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
     r"""Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references."""
     
     def expand(args: frozenlist[hydra.core.Term], arity: int, t: hydra.core.Term) -> hydra.core.Term:
-        apps = hydra.lib.lists.foldl((lambda lhs, arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, arg)))), t, args)
-        is_ = hydra.lib.logic.if_else(hydra.lib.equality.lte(arity, hydra.lib.lists.length(args)), (lambda : cast(frozenlist[int], ())), (lambda : hydra.lib.math.range_(1, hydra.lib.math.sub(arity, hydra.lib.lists.length(args)))))
+        def apps() -> hydra.core.Term:
+            return hydra.lib.lists.foldl((lambda lhs, arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, arg)))), t, args)
+        def is_() -> frozenlist[int]:
+            return hydra.lib.logic.if_else(hydra.lib.equality.lte(arity, hydra.lib.lists.length(args)), (lambda : cast(frozenlist[int], ())), (lambda : hydra.lib.math.range_(1, hydra.lib.math.sub(arity, hydra.lib.lists.length(args)))))
         def pad(indices: frozenlist[int], t2: hydra.core.Term) -> hydra.core.Term:
             return hydra.lib.logic.if_else(hydra.lib.lists.null(indices), (lambda : t2), (lambda : cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))), cast(Maybe[hydra.core.Type], Nothing()), pad(hydra.lib.lists.tail(indices), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t2, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))))))))))))))))
-        return pad(is_, apps)
+        return pad(is_(), apps())
     def rewrite(args: frozenlist[hydra.core.Term], recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
         def after_recursion(term2: hydra.core.Term) -> hydra.core.Term:
             return expand(args, eta_expansion_arity(graph, term2), term2)
@@ -151,8 +153,9 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
             case hydra.core.TermApplication(value=app):
                 lhs = app.function
                 rhs = app.argument
-                erhs = rewrite(cast(frozenlist[hydra.core.Term], ()), recurse, rhs)
-                return rewrite(hydra.lib.lists.cons(erhs, args), recurse, lhs)
+                def erhs() -> hydra.core.Term:
+                    return rewrite(cast(frozenlist[hydra.core.Term], ()), recurse, rhs)
+                return rewrite(hydra.lib.lists.cons(erhs(), args), recurse, lhs)
             
             case _:
                 return after_recursion(recurse(t2))
@@ -166,8 +169,9 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                     return hydra.lib.flows.bind(rewrite_spine(at.body), (lambda body: (ann := at.annotation, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(body, ann)))))[1]))
                 
                 case hydra.core.TermApplication(value=a):
-                    l = hydra.lib.logic.if_else(False, (lambda : (cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))),)), (lambda : cast(frozenlist[hydra.core.Type], ())))
-                    return hydra.lib.flows.bind(rewrite_spine(a.function), (lambda lhs: hydra.lib.flows.bind(rewrite(True, False, l, recurse, tx, a.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
+                    def l() -> frozenlist[hydra.core.Type]:
+                        return hydra.lib.logic.if_else(False, (lambda : (cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))),)), (lambda : cast(frozenlist[hydra.core.Type], ())))
+                    return hydra.lib.flows.bind(rewrite_spine(a.function), (lambda lhs: hydra.lib.flows.bind(rewrite(True, False, l(), recurse, tx, a.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
                 
                 case hydra.core.TermTypeApplication(value=tat):
                     return hydra.lib.flows.bind(rewrite_spine(tat.body), (lambda body: (typ := tat.type, hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(body, typ)))))[1]))
@@ -183,8 +187,8 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                         return hydra.lib.flows.pure(1)
                     
                     case hydra.core.FunctionLambda(value=l):
-                        tx2 = hydra.schemas.extend_type_context_for_lambda(tx3, l)
-                        return arity_of(tx2, l.body)
+                        txl = hydra.schemas.extend_type_context_for_lambda(tx3, l)
+                        return arity_of(txl, l.body)
                     
                     case hydra.core.FunctionPrimitive(value=name):
                         return hydra.lib.flows.map(hydra.arity.type_scheme_arity, hydra.lexical.require_primitive_type(tx3, name))
@@ -199,15 +203,16 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                     return for_function(tx2, f)
                 
                 case hydra.core.TermLet(value=l):
-                    tx2 = hydra.schemas.extend_type_context_for_let(tx2, l)
-                    return arity_of(tx2, l.body)
+                    def txl() -> hydra.typing.TypeContext:
+                        return hydra.schemas.extend_type_context_for_let((lambda _, _2: cast(Maybe[hydra.core.Term], Nothing())), tx2, l)
+                    return arity_of(txl(), l.body)
                 
                 case hydra.core.TermTypeApplication(value=tat):
                     return arity_of(tx2, tat.body)
                 
                 case hydra.core.TermTypeLambda(value=tl):
-                    tx2 = hydra.schemas.extend_type_context_for_type_lambda(tx2, tl)
-                    return arity_of(tx2, tl.body)
+                    txt = hydra.schemas.extend_type_context_for_type_lambda(tx2, tl)
+                    return arity_of(txt, tl.body)
                 
                 case hydra.core.TermVariable(value=name):
                     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound variable: ", name.value))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maps.lookup(name, tx2.types))
@@ -254,22 +259,23 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                         return for_elimination(elm)
                     
                     case hydra.core.FunctionLambda(value=l):
-                        tx2 = hydra.schemas.extend_type_context_for_lambda(tx, l)
-                        return hydra.lib.flows.map(unwind, recurse(tx2, term))
+                        txl = hydra.schemas.extend_type_context_for_lambda(tx, l)
+                        return hydra.lib.flows.map(unwind, recurse(txl, term))
                     
                     case _:
                         return recurse_or_force(term)
             
             case hydra.core.TermLet(value=l):
-                tx2 = hydra.schemas.extend_type_context_for_let(tx, l)
-                return recurse(tx2, term)
+                def txlt() -> hydra.typing.TypeContext:
+                    return hydra.schemas.extend_type_context_for_let((lambda _, _2: cast(Maybe[hydra.core.Term], Nothing())), tx, l)
+                return recurse(txlt(), term)
             
             case hydra.core.TermTypeApplication(value=tat):
                 return rewrite(top_level, forced, hydra.lib.lists.cons(tat.type, type_args), recurse, tx, tat.body)
             
             case hydra.core.TermTypeLambda(value=tl):
-                tx2 = hydra.schemas.extend_type_context_for_type_lambda(tx, tl)
-                return recurse(tx2, term)
+                txt = hydra.schemas.extend_type_context_for_type_lambda(tx, tl)
+                return recurse(txt, term)
             
             case _:
                 return recurse_or_force(term)
@@ -345,10 +351,10 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
     def apply_elimination(elm: hydra.core.Elimination, reduced_arg: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
         match elm:
             case hydra.core.EliminationRecord(value=proj):
-                return hydra.lib.flows.bind(hydra.extract.core.record(proj.type_name, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record")))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_fields).term))))[1]))
+                return hydra.lib.flows.bind(hydra.extract.core.record(proj.type_name, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := (lambda : hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields)), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record")))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_fields()).term))))[1]))
             
             case hydra.core.EliminationUnion(value=cs):
-                return hydra.lib.flows.bind(hydra.extract.core.injection(cs.type_name, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], hydra.lib.flows.pure), cs.default)), (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
+                return hydra.lib.flows.bind(hydra.extract.core.injection(cs.type_name, reduced_arg), (lambda field: (matching_fields := (lambda : hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases)), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], (lambda x1: hydra.lib.flows.pure(x1))), cs.default)), (lambda : hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields()).term, field.term)))))))[1]))
             
             case hydra.core.EliminationWrap(value=name):
                 return hydra.extract.core.wrap(name, reduced_arg)
@@ -358,19 +364,25 @@ def reduce_term(eager: bool, term: hydra.core.Term) -> hydra.compute.Flow[hydra.
     def apply_if_nullary(eager2: bool, original: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
         stripped = hydra.rewriting.deannotate_term(original)
         def for_elimination(elm: hydra.core.Elimination, args2: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-            arg = hydra.lib.lists.head(args2)
-            remaining_args = hydra.lib.lists.tail(args2)
-            return hydra.lib.flows.bind(reduce_arg(eager2, hydra.rewriting.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.flows.bind(hydra.lib.flows.bind(apply_elimination(elm, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args)))))
+            def arg() -> hydra.core.Term:
+                return hydra.lib.lists.head(args2)
+            def remaining_args() -> frozenlist[hydra.core.Term]:
+                return hydra.lib.lists.tail(args2)
+            return hydra.lib.flows.bind(reduce_arg(eager2, hydra.rewriting.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.flows.bind(hydra.lib.flows.bind(apply_elimination(elm, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
         def for_lambda(l: hydra.core.Lambda, args2: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
             param = l.parameter
             body = l.body
-            arg = hydra.lib.lists.head(args2)
-            remaining_args = hydra.lib.lists.tail(args2)
-            return hydra.lib.flows.bind(reduce(eager2, hydra.rewriting.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.flows.bind(reduce(eager2, hydra.rewriting.replace_free_term_variable(param, reduced_arg, body)), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args)))))
+            def arg() -> hydra.core.Term:
+                return hydra.lib.lists.head(args2)
+            def remaining_args() -> frozenlist[hydra.core.Term]:
+                return hydra.lib.lists.tail(args2)
+            return hydra.lib.flows.bind(reduce(eager2, hydra.rewriting.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.flows.bind(reduce(eager2, hydra.rewriting.replace_free_term_variable(param, reduced_arg, body)), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
         def for_primitive(prim: hydra.graph.Primitive, arity: int, args2: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-            arg_list = hydra.lib.lists.take(arity, args2)
-            remaining_args = hydra.lib.lists.drop(arity, args2)
-            return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: reduce_arg(eager2, v1)), arg_list), (lambda reduced_args: hydra.lib.flows.bind(hydra.lib.flows.bind(prim.implementation(reduced_args), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args)))))
+            def arg_list() -> frozenlist[hydra.core.Term]:
+                return hydra.lib.lists.take(arity, args2)
+            def remaining_args() -> frozenlist[hydra.core.Term]:
+                return hydra.lib.lists.drop(arity, args2)
+            return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: reduce_arg(eager2, v1)), arg_list()), (lambda reduced_args: hydra.lib.flows.bind(hydra.lib.flows.bind(prim.implementation(reduced_args), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
         match stripped:
             case hydra.core.TermApplication(value=app):
                 return apply_if_nullary(eager2, app.function, hydra.lib.lists.cons(app.argument, args))
@@ -416,7 +428,7 @@ def rewrite_term_with_type_context(f: Callable[[
                             return fallback
                 
                 case hydra.core.TermLet(value=l):
-                    return recurse(hydra.schemas.extend_type_context_for_let(cx2, l), term2)
+                    return recurse(hydra.schemas.extend_type_context_for_let((lambda _, _2: cast(Maybe[hydra.core.Term], Nothing())), cx2, l), term2)
                 
                 case hydra.core.TermTypeLambda(value=tl):
                     return recurse(hydra.schemas.extend_type_context_for_type_lambda(cx2, tl), term2)
@@ -427,7 +439,7 @@ def rewrite_term_with_type_context(f: Callable[[
     return hydra.rewriting.rewrite_term_with_context(cast(Callable[[
       Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term],
       hydra.typing.TypeContext,
-      hydra.core.Term], hydra.core.Term], f2), cx0, term0)
+      hydra.core.Term], hydra.core.Term], (lambda x1, x2, x3: f2(x1, x2, x3))), cx0, term0)
 
 def term_is_closed(term: hydra.core.Term) -> bool:
     r"""Whether a term is closed, i.e. represents a complete program."""

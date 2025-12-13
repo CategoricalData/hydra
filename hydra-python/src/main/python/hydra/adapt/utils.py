@@ -29,10 +29,10 @@ def bidirectional[T0, T1](f: Callable[[hydra.coders.CoderDirection, T0], hydra.c
     return cast(hydra.compute.Coder[T1, T1, T0, T0], hydra.compute.Coder((lambda v1: f(hydra.coders.CoderDirection.ENCODE, v1)), (lambda v1: f(hydra.coders.CoderDirection.DECODE, v1))))
 
 def id_coder[T0, T1, T2]() -> hydra.compute.Coder[T0, T1, T2, T2]:
-    return cast(hydra.compute.Coder[T0, T1, T2, T2], hydra.compute.Coder(cast(Callable[[T2], hydra.compute.Flow[T0, T2]], hydra.lib.flows.pure), cast(Callable[[T2], hydra.compute.Flow[T1, T2]], hydra.lib.flows.pure)))
+    return cast(hydra.compute.Coder[T0, T1, T2, T2], hydra.compute.Coder(cast(Callable[[T2], hydra.compute.Flow[T0, T2]], (lambda x1: hydra.lib.flows.pure(x1))), cast(Callable[[T2], hydra.compute.Flow[T1, T2]], (lambda x1: hydra.lib.flows.pure(x1)))))
 
 def choose_adapter[T0, T1, T2, T3, T4](alts: Callable[[T0], hydra.compute.Flow[T1, frozenlist[hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]]], supported: Callable[[T0], bool], show: Callable[[T0], str], describe: Callable[[T0], str], typ: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]:
-    return hydra.lib.logic.if_else(supported(typ), (lambda : hydra.lib.flows.pure(cast(hydra.compute.Adapter[T2, T3, T0, T0, T4, T4], hydra.compute.Adapter(False, typ, typ, cast(hydra.compute.Coder[T2, T3, T4, T4], id_coder()))))), (lambda : hydra.lib.flows.bind(alts(typ), (lambda raw: (candidates := hydra.lib.lists.filter((lambda adapter: supported(adapter.target)), raw), hydra.lib.logic.if_else(hydra.lib.lists.null(candidates), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no adapters found for ", describe(typ), hydra.lib.logic.if_else(hydra.lib.lists.null(raw), (lambda : ""), (lambda : hydra.lib.strings.cat((" (discarded ", hydra.lib.literals.show_int32(hydra.lib.lists.length(raw)), " unsupported candidate types: ", hydra.show.core.list(show, hydra.lib.lists.map((lambda v1: v1.target), raw)), ")")))), ". Original type: ", show(typ))))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(candidates)))))[1]))))
+    return hydra.lib.logic.if_else(supported(typ), (lambda : hydra.lib.flows.pure(cast(hydra.compute.Adapter[T2, T3, T0, T0, T4, T4], hydra.compute.Adapter(False, typ, typ, cast(hydra.compute.Coder[T2, T3, T4, T4], id_coder()))))), (lambda : hydra.lib.flows.bind(alts(typ), (lambda raw: (candidates := (lambda : hydra.lib.lists.filter((lambda adapter: supported(adapter.target)), raw)), hydra.lib.logic.if_else(hydra.lib.lists.null(candidates()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no adapters found for ", describe(typ), hydra.lib.logic.if_else(hydra.lib.lists.null(raw), (lambda : ""), (lambda : hydra.lib.strings.cat((" (discarded ", hydra.lib.literals.show_int32(hydra.lib.lists.length(raw)), " unsupported candidate types: ", hydra.show.core.list(show, hydra.lib.lists.map((lambda v1: v1.target), raw)), ")")))), ". Original type: ", show(typ))))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(candidates())))))[1]))))
 
 def compose_coders[T0, T1, T2, T3, T4](c1: hydra.compute.Coder[T0, T1, T2, T3], c2: hydra.compute.Coder[T0, T1, T3, T4]) -> hydra.compute.Coder[T0, T1, T2, T4]:
     return cast(hydra.compute.Coder[T0, T1, T2, T4], hydra.compute.Coder((lambda a: hydra.lib.flows.bind(c1.encode(a), (lambda b1: c2.encode(b1)))), (lambda c: hydra.lib.flows.bind(c2.decode(c), (lambda b2: c1.decode(b2))))))
@@ -84,9 +84,10 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
     local = qual_name.local
     def ns_to_file_path(ns: hydra.module.Namespace) -> str:
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns.value)))
-    prefix = hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
+    def prefix() -> str:
+        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
     suffix = hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
-    return hydra.lib.strings.cat((prefix, suffix, ".", ext.value))
+    return hydra.lib.strings.cat((prefix(), suffix, ".", ext.value))
 
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:
     r"""Check if type is supported by language constraints."""
