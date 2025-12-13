@@ -133,39 +133,50 @@ jsonCoder = define "jsonCoder" $
 literalJsonCoder :: TBinding (LiteralType -> Flow Graph (Coder Graph Graph Literal Value))
 literalJsonCoder = define "literalJsonCoder" $
   doc "Create a JSON coder for literal types" $
-  "lt" ~> produce $ cases _LiteralType (var "lt") Nothing [
+  "lt" ~>
+  -- Define decoder functions that contain match expressions
+  "decodeBool" <~ ("s" ~>
+    cases _Value (var "s")
+      (Just $ Monads.unexpected @@ string "boolean" @@ (showValue @@ var "s")) [
+      _Value_boolean>>: "b" ~> produce $ Core.literalBoolean $ var "b"]) $
+  "decodeFloat" <~ ("s" ~>
+    cases _Value (var "s")
+      (Just $ Monads.unexpected @@ string "number" @@ (showValue @@ var "s")) [
+      _Value_number>>: "f" ~> produce $ Core.literalFloat $ Core.floatValueBigfloat $ var "f"]) $
+  "decodeInteger" <~ ("s" ~>
+    cases _Value (var "s")
+      (Just $ Monads.unexpected @@ string "number" @@ (showValue @@ var "s")) [
+      _Value_number>>: "f" ~>
+        "bi" <~ (Literals.bigfloatToBigint $ var "f") $
+        produce $ Core.literalInteger $ Core.integerValueBigint $ var "bi"]) $
+  "decodeString" <~ ("s" ~>
+    cases _Value (var "s")
+      (Just $ Monads.unexpected @@ string "string" @@ (showValue @@ var "s")) [
+      _Value_string>>: "s'" ~> produce $ Core.literalString $ var "s'"]) $
+  "encoded" <~ (cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant $ Compute.coder
       ("lit" ~>
         "b" <<~ ExtractCore.booleanLiteral @@ var "lit" $
         produce $ Json.valueBoolean $ var "b")
-      ("s" ~> cases _Value (var "s")
-        (Just $ Monads.unexpected @@ string "boolean" @@ (showValue @@ var "s")) [
-        _Value_boolean>>: "b" ~> produce $ Core.literalBoolean $ var "b"]),
+      (var "decodeBool"),
     _LiteralType_float>>: constant $ Compute.coder
       ("lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
         "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
         produce $ Json.valueNumber $ var "bf")
-      ("s" ~> cases _Value (var "s")
-        (Just $ Monads.unexpected @@ string "number" @@ (showValue @@ var "s")) [
-        _Value_number>>: "f" ~> produce $ Core.literalFloat $ Core.floatValueBigfloat $ var "f"]),
+      (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Compute.coder
       ("lit" ~>
         "i" <<~ ExtractCore.integerLiteral @@ var "lit" $
         "bi" <<~ ExtractCore.bigintValue @@ var "i" $
         produce $ Json.valueNumber $ Literals.bigintToBigfloat $ var "bi")
-      ("s" ~> cases _Value (var "s")
-        (Just $ Monads.unexpected @@ string "number" @@ (showValue @@ var "s")) [
-        _Value_number>>: "f" ~>
-          "bi" <~ (Literals.bigfloatToBigint $ var "f") $
-          produce $ Core.literalInteger $ Core.integerValueBigint $ var "bi"]),
+      (var "decodeInteger"),
     _LiteralType_string>>: constant $ Compute.coder
       ("lit" ~>
         "s" <<~ ExtractCore.stringLiteral @@ var "lit" $
         produce $ Json.valueString $ var "s")
-      ("s" ~> cases _Value (var "s")
-        (Just $ Monads.unexpected @@ string "string" @@ (showValue @@ var "s")) [
-        _Value_string>>: "s'" ~> produce $ Core.literalString $ var "s'"])]
+      (var "decodeString")]) $
+  produce $ var "encoded"
 
 recordCoder :: TBinding (RowType -> Flow Graph (Coder Graph Graph Term Value))
 recordCoder = define "recordCoder" $
@@ -183,8 +194,19 @@ encodeRecord = define "encodeRecord" $
   doc "Encode a record term to JSON" $
   "coders" ~> "term" ~>
   "stripped" <~ (Rewriting.deannotateTerm @@ var "term") $
-  "record" <<~ ExtractCore.termRecord @@ var "stripped" $
-  "fields" <~ (Core.recordFields $ var "record") $
+  -- Lift case expressions out of the encodeField lambda
+  "matchMaybeTerm" <~ ("fvalue" ~> "coder'" ~> "fname" ~> "dflt" ~>
+    cases _Term (var "fvalue")
+      (Just $ var "dflt") [
+      _Term_maybe>>: "opt" ~> optCases (var "opt")
+        (produce nothing)
+        ("v" ~>
+          "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "v" $
+          produce $ just $ pair (Core.unName $ var "fname") (var "encoded"))]) $
+  "matchTypeForMaybe" <~ ("ft" ~> "forMaybe" ~> "dflt" ~>
+    cases _Type (Core.fieldTypeType $ var "ft")
+      (Just $ var "dflt") [
+      _Type_maybe>>: "ot" ~> var "forMaybe" @@ var "ot"]) $
   "encodeField" <~ ("coderAndField" ~>
     "coder" <~ (Pairs.first $ var "coderAndField") $
     "field" <~ (Pairs.second $ var "coderAndField") $
@@ -196,70 +218,110 @@ encodeRecord = define "encodeRecord" $
       "dflt" <~ (
         "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "fvalue" $
         produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) $
-      cases _Term (var "fvalue")
-        (Just $ var "dflt") [
-        _Term_maybe>>: "opt" ~> optCases (var "opt")
-          (produce nothing)
-          ("v" ~>
-            "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "v" $
-            produce $ just $ pair (Core.unName $ var "fname") (var "encoded"))]) $
+      var "matchMaybeTerm" @@ var "fvalue" @@ var "coder'" @@ var "fname" @@ var "dflt") $
     "dflt" <~ (
       "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "fvalue" $
       produce $ just $ pair (Core.unName $ var "fname") (var "encoded")) $
-    cases _Type (Core.fieldTypeType $ var "ft")
-      (Just $ var "dflt") [
-      _Type_maybe>>: "ot" ~> var "forMaybe" @@ var "ot"]) $
+    var "matchTypeForMaybe" @@ var "ft" @@ var "forMaybe" @@ var "dflt") $
+  "record" <<~ ExtractCore.termRecord @@ var "stripped" $
+  "fields" <~ (Core.recordFields $ var "record") $
   "maybeFields" <<~ Flows.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   produce $ Json.valueObject $ Maps.fromList $ Maybes.cat $ var "maybeFields"
 
 decodeRecord :: TBinding (RowType -> [(FieldType, Coder Graph Graph Term Value)] -> Value -> Flow Graph Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a JSON value to a record term" $
-  "rt" ~> "coders" ~> "n" ~> cases _Value (var "n")
+  "rt" ~> "coders" ~> "n" ~>
+  -- Lift the object decoder body into a separate function to avoid lambdas with let-bindings inside cases
+  "decodeObjectBody" <~ ("m" ~>
+    "decodeField" <~ ("coder" ~>
+      "ft" <~ (Pairs.first $ var "coder") $
+      "coder'" <~ (Pairs.second $ var "coder") $
+      "fname" <~ (Core.fieldTypeName $ var "ft") $
+      "defaultValue" <~ Json.valueNull $
+      "jsonValue" <~ (Maybes.fromMaybe (var "defaultValue") $ Maps.lookup (Core.unName $ var "fname") (var "m")) $
+      "v" <<~ Compute.coderDecode (var "coder'") @@ var "jsonValue" $
+      produce $ Core.field (var "fname") (var "v")) $
+    "fields" <<~ Flows.mapList (var "decodeField") (var "coders") $
+    produce $ Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields")) $
+  "result" <~ (cases _Value (var "n")
     (Just $ Monads.unexpected @@ string "object" @@ (showValue @@ var "n")) [
-    _Value_object>>: "m" ~>
-      "decodeField" <~ ("coder" ~>
-        "ft" <~ (Pairs.first $ var "coder") $
-        "coder'" <~ (Pairs.second $ var "coder") $
-        "fname" <~ (Core.fieldTypeName $ var "ft") $
-        "defaultValue" <~ Json.valueNull $
-        "jsonValue" <~ (Maybes.fromMaybe (var "defaultValue") $ Maps.lookup (Core.unName $ var "fname") (var "m")) $
-        "v" <<~ Compute.coderDecode (var "coder'") @@ var "jsonValue" $
-        produce $ Core.field (var "fname") (var "v")) $
-      "fields" <<~ Flows.mapList (var "decodeField") (var "coders") $
-      produce $ Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields")]
+    _Value_object>>: var "decodeObjectBody"]) $
+  var "result"
 
 termCoder :: TBinding (Type -> Flow Graph (Coder Graph Graph Term Value))
 termCoder = define "termCoder" $
   doc "Create a JSON coder for term types" $
   "typ" ~>
   "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
-  cases _Type (var "stripped")
+  -- Lift encoder/decoder functions that contain match expressions
+  "encodeLiteral" <~ ("ac" ~> "term" ~>
+    cases _Term (var "term")
+      (Just $ Monads.unexpected @@ string "literal term" @@ (ShowCore.term @@ var "term")) [
+      _Term_literal>>: "av" ~> Compute.coderEncode (var "ac") @@ var "av"]) $
+  "encodeList" <~ ("lc" ~> "term" ~>
+    cases _Term (var "term")
+      (Just $ Monads.unexpected @@ string "list term" @@ (ShowCore.term @@ var "term")) [
+      _Term_list>>: "els" ~>
+        "encodedEls" <<~ Flows.mapList (Compute.coderEncode $ var "lc") (var "els") $
+        produce $ Json.valueArray $ var "encodedEls"]) $
+  "decodeList" <~ ("lc" ~> "n" ~>
+    cases _Value (var "n")
+      (Just $ Monads.unexpected @@ string "sequence" @@ (showValue @@ var "n")) [
+      _Value_array>>: "nodes" ~>
+        "decodedNodes" <<~ Flows.mapList (Compute.coderDecode $ var "lc") (var "nodes") $
+        produce $ Core.termList $ var "decodedNodes"]) $
+  "matchLiteralString" <~ ("v" ~> "lit" ~>
+    cases _Literal (var "lit")
+      (Just $ ShowCore.term @@ var "v") [
+      _Literal_string>>: "s" ~> var "s"]) $
+  "matchTermLiteral" <~ ("v" ~>
+    cases _Term (Rewriting.deannotateTerm @@ var "v")
+      (Just $ ShowCore.term @@ var "v") [
+      _Term_literal>>: "lit" ~> var "matchLiteralString" @@ var "v" @@ var "lit"]) $
+  "encodeMap" <~ ("encodeEntry" ~> "term" ~>
+    cases _Term (var "term")
+      (Just $ Monads.unexpected @@ string "map term" @@ (ShowCore.term @@ var "term")) [
+      _Term_map>>: "m" ~>
+        "entries" <<~ Flows.mapList (var "encodeEntry") (Maps.toList $ var "m") $
+        produce $ Json.valueObject $ Maps.fromList $ var "entries"]) $
+  "decodeMap" <~ ("decodeEntry" ~> "n" ~>
+    cases _Value (var "n")
+      (Just $ Monads.unexpected @@ string "mapping" @@ (showValue @@ var "n")) [
+      _Value_object>>: "m" ~>
+        "entries" <<~ Flows.mapList (var "decodeEntry") (Maps.toList $ var "m") $
+        produce $ Core.termMap $ Maps.fromList $ var "entries"]) $
+  "encodeMaybe" <~ ("maybeElementCoder" ~> "maybeTerm" ~>
+    "strippedMaybeTerm" <~ (Rewriting.deannotateTerm @@ var "maybeTerm") $
+    cases _Term (var "strippedMaybeTerm")
+      (Just $ Monads.unexpected @@ string "optional term" @@ (ShowCore.term @@ var "maybeTerm")) [
+      _Term_maybe>>: "maybeContents" ~>
+        Logic.ifElse (Maybes.isNothing $ var "maybeContents")
+          (produce Json.valueNull)
+          ("encodedInner" <<~ Compute.coderEncode (var "maybeElementCoder") @@ (Maybes.fromJust $ var "maybeContents") $
+            produce $ var "encodedInner")]) $
+  "decodeMaybe" <~ ("maybeElementCoder" ~> "jsonVal" ~>
+    cases _Value (var "jsonVal")
+      (Just $
+        "decodedInner" <<~ Compute.coderDecode (var "maybeElementCoder") @@ var "jsonVal" $
+        produce $ Core.termMaybe $ just $ var "decodedInner") [
+      _Value_null>>: constant $ produce $ Core.termMaybe nothing]) $
+  "result" <~ (cases _Type (var "stripped")
     (Just $ Flows.fail $ Strings.cat $ list [
       string "unsupported type in JSON: ",
       ShowCore.type_ @@ var "typ"]) [
     _Type_literal>>: "at" ~>
       "ac" <<~ literalJsonCoder @@ var "at" $
       produce $ Compute.coder
-        ("term" ~> cases _Term (var "term")
-          (Just $ Monads.unexpected @@ string "literal term" @@ (ShowCore.term @@ var "term")) [
-          _Term_literal>>: "av" ~> Compute.coderEncode (var "ac") @@ var "av"])
+        (var "encodeLiteral" @@ var "ac")
         ("n" ~>
           "lit" <<~ Compute.coderDecode (var "ac") @@ var "n" $
           produce $ Core.termLiteral $ var "lit"),
     _Type_list>>: "lt" ~>
       "lc" <<~ termCoder @@ var "lt" $
       produce $ Compute.coder
-        ("term" ~> cases _Term (var "term")
-          (Just $ Monads.unexpected @@ string "list term" @@ (ShowCore.term @@ var "term")) [
-          _Term_list>>: "els" ~>
-            "encodedEls" <<~ Flows.mapList (Compute.coderEncode $ var "lc") (var "els") $
-            produce $ Json.valueArray $ var "encodedEls"])
-        ("n" ~> cases _Value (var "n")
-          (Just $ Monads.unexpected @@ string "sequence" @@ (showValue @@ var "n")) [
-          _Value_array>>: "nodes" ~>
-            "decodedNodes" <<~ Flows.mapList (Compute.coderDecode $ var "lc") (var "nodes") $
-            produce $ Core.termList $ var "decodedNodes"]),
+        (var "encodeList" @@ var "lc")
+        (var "decodeList" @@ var "lc"),
     _Type_map>>: "mt" ~>
       "kt" <~ (Core.mapTypeKeys $ var "mt") $
       "vt" <~ (Core.mapTypeValues $ var "mt") $
@@ -267,13 +329,10 @@ termCoder = define "termCoder" $
       "vc" <<~ termCoder @@ var "vt" $
       "cx" <<~ Monads.getState $
       "isStringKey" <~ Equality.equal (Rewriting.deannotateType @@ var "kt") (Core.typeLiteral Core.literalTypeString) $
-      "toString" <~ ("v" ~> Logic.ifElse (var "isStringKey")
-        (cases _Term (Rewriting.deannotateTerm @@ var "v")
-          (Just $ ShowCore.term @@ var "v") [
-          _Term_literal>>: "lit" ~> cases _Literal (var "lit")
-            (Just $ ShowCore.term @@ var "v") [
-            _Literal_string>>: "s" ~> var "s"]])
-        (ShowCore.term @@ var "v")) $
+      "toString" <~ ("v" ~>
+        Logic.ifElse (var "isStringKey")
+          (var "matchTermLiteral" @@ var "v")
+          (ShowCore.term @@ var "v")) $
       "fromString" <~ ("s" ~> Logic.ifElse (var "isStringKey")
         (Core.termLiteral $ Core.literalString $ var "s")
         (readStringStub @@ var "s")) $
@@ -288,33 +347,13 @@ termCoder = define "termCoder" $
         "decodedV" <<~ Compute.coderDecode (var "vc") @@ var "v" $
         produce $ pair (var "fromString" @@ var "k") (var "decodedV")) $
       produce $ Compute.coder
-        ("term" ~> cases _Term (var "term")
-          (Just $ Monads.unexpected @@ string "map term" @@ (ShowCore.term @@ var "term")) [
-          _Term_map>>: "m" ~>
-            "entries" <<~ Flows.mapList (var "encodeEntry") (Maps.toList $ var "m") $
-            produce $ Json.valueObject $ Maps.fromList $ var "entries"])
-        ("n" ~> cases _Value (var "n")
-          (Just $ Monads.unexpected @@ string "mapping" @@ (showValue @@ var "n")) [
-          _Value_object>>: "m" ~>
-            "entries" <<~ Flows.mapList (var "decodeEntry") (Maps.toList $ var "m") $
-            produce $ Core.termMap $ Maps.fromList $ var "entries"]),
+        (var "encodeMap" @@ var "encodeEntry")
+        (var "decodeMap" @@ var "decodeEntry"),
     _Type_maybe>>: "maybeElementType" ~>
       "maybeElementCoder" <<~ termCoder @@ var "maybeElementType" $
       produce $ Compute.coder
-        ("maybeTerm" ~>
-          "strippedMaybeTerm" <~ (Rewriting.deannotateTerm @@ var "maybeTerm") $
-          cases _Term (var "strippedMaybeTerm")
-            (Just $ Monads.unexpected @@ string "optional term" @@ (ShowCore.term @@ var "maybeTerm")) [
-            _Term_maybe>>: "maybeContents" ~>
-              Logic.ifElse (Maybes.isNothing $ var "maybeContents")
-                (produce Json.valueNull)
-                ("encodedInner" <<~ Compute.coderEncode (var "maybeElementCoder") @@ (Maybes.fromJust $ var "maybeContents") $
-                  produce $ var "encodedInner")])
-        ("jsonVal" ~> cases _Value (var "jsonVal")
-          (Just $
-            "decodedInner" <<~ Compute.coderDecode (var "maybeElementCoder") @@ var "jsonVal" $
-            produce $ Core.termMaybe $ just $ var "decodedInner") [
-          _Value_null>>: constant $ produce $ Core.termMaybe nothing]),
+        (var "encodeMaybe" @@ var "maybeElementCoder")
+        (var "decodeMaybe" @@ var "maybeElementCoder"),
     _Type_record>>: "rt" ~> recordCoder @@ var "rt",
     _Type_unit>>: constant $ produce $ unitCoder,
     _Type_variable>>: "name" ~> produce $ Compute.coder
@@ -326,18 +365,22 @@ termCoder = define "termCoder" $
       ("term" ~> Flows.fail $ Strings.cat $ list [
         string "type variable ",
         Core.unName $ var "name",
-        string " does not support decoding"])]
+        string " does not support decoding"])]) $
+  var "result"
 
 unitCoder :: TBinding (Coder Graph Graph Term Value)
 unitCoder = define "unitCoder" $
   doc "JSON coder for unit values" $
-  Compute.coder
-    ("term" ~> cases _Term (Rewriting.deannotateTerm @@ var "term")
+  -- Lift encoder/decoder functions that contain match expressions
+  "encodeUnit" <~ ("term" ~>
+    cases _Term (Rewriting.deannotateTerm @@ var "term")
       (Just $ Monads.unexpected @@ string "unit" @@ (ShowCore.term @@ var "term")) [
-      _Term_unit>>: constant $ produce Json.valueNull])
-    ("n" ~> cases _Value (var "n")
+      _Term_unit>>: constant $ produce Json.valueNull]) $
+  "decodeUnit" <~ ("n" ~>
+    cases _Value (var "n")
       (Just $ Monads.unexpected @@ string "null" @@ (showValue @@ var "n")) [
-      _Value_null>>: constant $ produce Core.termUnit])
+      _Value_null>>: constant $ produce Core.termUnit]) $
+  Compute.coder (var "encodeUnit") (var "decodeUnit")
 
 untypedTermToJson :: TBinding (Term -> Flow s Value)
 untypedTermToJson = define "untypedTermToJson" $
@@ -347,18 +390,48 @@ untypedTermToJson = define "untypedTermToJson" $
   "asRecord" <~ ("fields" ~> untypedTermToJson @@ (Core.termRecord $ Core.record (Core.name $ string "") (var "fields"))) $
   "asVariant" <~ ("name" ~> "term" ~> untypedTermToJson @@
     (Core.termUnion $ Core.injection (Core.name $ string "") $ Core.field (Core.name $ var "name") (var "term"))) $
-  "fieldToKeyval" <~ ("f" ~>
-    "forTerm" <~ ("t" ~> cases _Term (var "t")
+  -- Lift case expressions out of nested lambdas
+  "matchTermMaybe" <~ ("forTerm" ~> "t" ~>
+    cases _Term (var "t")
       (Just $ Flows.map (unaryFunction just) $ untypedTermToJson @@ var "t") [
       _Term_maybe>>: "mt" ~> Maybes.maybe
         (produce nothing)
         (var "forTerm")
         (var "mt")]) $
+  "matchElimination" <~ ("unexp" ~> "asVariant" ~> "elm" ~>
+    cases _Elimination (var "elm")
+      (Just $ var "unexp" @@ (Strings.cat $ list [
+        string "unexpected elimination variant: ",
+        ShowCore.elimination @@ var "elm"])) [
+      _Elimination_record>>: "proj" ~> var "asVariant" @@ string "project" @@
+        (Core.termVariable $ Core.projectionField $ var "proj")]) $
+  "matchFunction" <~ ("unexp" ~> "asRecord" ~> "asVariant" ~> "f" ~>
+    cases _Function (var "f") Nothing [
+      _Function_elimination>>: "elm" ~>
+        var "matchElimination" @@ var "unexp" @@ var "asVariant" @@ var "elm",
+      _Function_lambda>>: "l" ~> var "asRecord" @@ list [
+        Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.lambdaParameter $ var "l"),
+        Core.field (Core.name $ string "domain") (Core.termMaybe $
+          Maybes.map (EncodeCore.type_) (Core.lambdaDomain $ var "l")),
+        Core.field (Core.name $ string "body") (Core.lambdaBody $ var "l")],
+      _Function_primitive>>: "name" ~> produce $ Json.valueString $ Core.unName $ var "name"]) $
+  "matchLiteral" <~ ("lit" ~>
+    cases _Literal (var "lit") Nothing [
+      _Literal_binary>>: "b" ~> Json.valueString $ Literals.binaryToString $ var "b",
+      _Literal_boolean>>: "b" ~> Json.valueBoolean $ var "b",
+      _Literal_float>>: "f" ~> Json.valueNumber $ HydraLiterals.floatValueToBigfloat @@ var "f",
+      _Literal_integer>>: "i" ~>
+        "bf" <~ (HydraLiterals.integerValueToBigint @@ var "i") $
+        "f" <~ (Literals.bigintToBigfloat $ var "bf") $
+        Json.valueNumber $ var "f",
+      _Literal_string>>: "s" ~> Json.valueString $ var "s"]) $
+  "fieldToKeyval" <~ ("f" ~>
+    "forTerm" <~ ("t" ~> var "matchTermMaybe" @@ var "forTerm" @@ var "t") $
     "mjson" <<~ var "forTerm" @@ (Core.fieldTerm $ var "f") $
     produce $ Maybes.map
       ("j" ~> pair (Core.unName $ Core.fieldName $ var "f") (var "j"))
       (var "mjson")) $
-  cases _Term (var "term")
+  "result" <~ (cases _Term (var "term")
     (Just $ var "unexp" @@ (Strings.cat $ list [
       string "unsupported term variant: ",
       ShowCore.term @@ var "term"])) [
@@ -378,19 +451,8 @@ untypedTermToJson = define "untypedTermToJson" $
     _Term_application>>: "app" ~> var "asRecord" @@ list [
       Core.field (Core.name $ string "function") (Core.applicationFunction $ var "app"),
       Core.field (Core.name $ string "argument") (Core.applicationArgument $ var "app")],
-    _Term_function>>: "f" ~> cases _Function (var "f") Nothing [
-      _Function_elimination>>: "elm" ~> cases _Elimination (var "elm")
-        (Just $ var "unexp" @@ (Strings.cat $ list [
-          string "unexpected elimination variant: ",
-          ShowCore.elimination @@ var "elm"])) [
-        _Elimination_record>>: "proj" ~> var "asVariant" @@ string "project" @@
-          (Core.termVariable $ Core.projectionField $ var "proj")],
-      _Function_lambda>>: "l" ~> var "asRecord" @@ list [
-        Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.lambdaParameter $ var "l"),
-        Core.field (Core.name $ string "domain") (Core.termMaybe $
-          Maybes.map (EncodeCore.type_) (Core.lambdaDomain $ var "l")),
-        Core.field (Core.name $ string "body") (Core.lambdaBody $ var "l")],
-      _Function_primitive>>: "name" ~> produce $ Json.valueString $ Core.unName $ var "name"],
+    _Term_function>>: "f" ~>
+      var "matchFunction" @@ var "unexp" @@ var "asRecord" @@ var "asVariant" @@ var "f",
     _Term_let>>: "lt" ~>
       "bindings" <~ (Core.letBindings $ var "lt") $
       "env" <~ (Core.letBody $ var "lt") $
@@ -405,15 +467,8 @@ untypedTermToJson = define "untypedTermToJson" $
     _Term_list>>: "terms" ~>
       "jsonTerms" <<~ Flows.mapList (untypedTermToJson) (var "terms") $
       produce $ Json.valueArray $ var "jsonTerms",
-    _Term_literal>>: "lit" ~> produce $ cases _Literal (var "lit") Nothing [
-      _Literal_binary>>: "b" ~> Json.valueString $ Literals.binaryToString $ var "b",
-      _Literal_boolean>>: "b" ~> Json.valueBoolean $ var "b",
-      _Literal_float>>: "f" ~> Json.valueNumber $ HydraLiterals.floatValueToBigfloat @@ var "f",
-      _Literal_integer>>: "i" ~>
-        "bf" <~ (HydraLiterals.integerValueToBigint @@ var "i") $
-        "f" <~ (Literals.bigintToBigfloat $ var "bf") $
-        Json.valueNumber $ var "f",
-      _Literal_string>>: "s" ~> Json.valueString $ var "s"],
+    _Term_literal>>: "lit" ~>
+      produce $ var "matchLiteral" @@ var "lit",
     _Term_maybe>>: "mt" ~> Maybes.maybe
       (produce Json.valueNull)
       untypedTermToJson
@@ -439,7 +494,8 @@ untypedTermToJson = define "untypedTermToJson" $
             ("keyval" ~> list [var "keyval"])
             (var "mkeyval")),
     _Term_variable>>: "v" ~> produce $ Json.valueString $ Core.unName $ var "v",
-    _Term_wrap>>: "wt" ~> untypedTermToJson @@ (Core.wrappedTermBody $ var "wt")]
+    _Term_wrap>>: "wt" ~> untypedTermToJson @@ (Core.wrappedTermBody $ var "wt")]) $
+  var "result"
 
 readStringStub :: TBinding (String -> Term)
 readStringStub = define "readStringStub" $
