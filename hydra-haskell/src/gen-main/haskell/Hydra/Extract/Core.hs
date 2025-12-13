@@ -392,11 +392,7 @@ unit term = ((\x -> case x of
 
 -- | Extract a unit variant (a variant with an empty record value) from a union term
 unitVariant :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Name)
-unitVariant tname term = (Flows.bind (variant tname term) (\field -> Flows.bind (unit (Core.fieldTerm field)) (\ignored -> Flows.pure (Core.fieldName field))))
-
--- | Extract a field from a union term (alias for injection)
-variant :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
-variant = injection
+unitVariant tname term = (Flows.bind (injection tname term) (\field -> Flows.bind (unit (Core.fieldTerm field)) (\ignored -> Flows.pure (Core.fieldName field))))
 
 -- | Extract the wrapped value from a wrapped term
 wrap :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Term)

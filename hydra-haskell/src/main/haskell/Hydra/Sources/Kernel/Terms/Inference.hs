@@ -1081,7 +1081,7 @@ initialTypeContext = define "initialTypeContext" $
   "types" <<~ Flows.map
     (unaryFunction Maps.fromList)
     (Flows.mapList (var "toPair") (Maps.toList $ Graph.graphElements $ var "g")) $
-  produce $ Typing.typeContext (var "types") Sets.empty (var "ix")
+  produce $ Typing.typeContext (var "types") Maps.empty Sets.empty Sets.empty (var "ix")
 
 isUnbound :: TBinding (InferenceContext -> Name -> Bool)
 isUnbound = define "isUnbound" $

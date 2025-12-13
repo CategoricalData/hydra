@@ -122,8 +122,7 @@ topologicalSortComponents = define "topologicalSortComponents" $
   withOrd "t0" $ "pairs" ~>
   "graphResult" <~ Tarjan.adjacencyListsToGraph @@ var "pairs" $
   "g" <~ Pairs.first (var "graphResult") $
-  "getKey" <~ Pairs.second (var "graphResult") $
-  Lists.map ("comp" ~> Lists.map (var "getKey") (var "comp")) $
+  Lists.map ("comp" ~> Lists.map (Pairs.second $ var "graphResult") (var "comp")) $
     Tarjan.stronglyConnectedComponents @@ var "g"
 
 topologicalSortNodes :: TBinding ((x -> a) -> (x -> [a]) -> [x] -> [[x]])

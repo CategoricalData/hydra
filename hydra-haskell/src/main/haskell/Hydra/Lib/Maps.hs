@@ -11,6 +11,9 @@ alter = M.alter
 bimap :: (Ord k1, Ord k2) => (k1 -> k2) -> (v1 -> v2) -> M.Map k1 v1 -> M.Map k2 v2
 bimap f g = M.fromList . fmap (\(k, v) -> (f k, g v)) . M.toList
 
+delete :: Ord k => k -> M.Map k v -> M.Map k v
+delete = M.delete
+
 elems :: M.Map k v -> [v]
 elems = M.elems
 
@@ -49,9 +52,6 @@ member = M.member
 
 null :: M.Map k v -> Bool
 null = M.null
-
-remove :: Ord k => k -> M.Map k v -> M.Map k v
-remove = M.delete
 
 singleton :: k -> v -> M.Map k v
 singleton = M.singleton

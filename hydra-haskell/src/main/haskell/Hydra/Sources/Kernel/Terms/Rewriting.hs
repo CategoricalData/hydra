@@ -839,16 +839,16 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
     "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
       (Just $ pair (var "val") (var "fun")) [
       _Function_elimination>>: "elm" ~>
-         "r" <~ var "forElimination" @@ var "val" @@ var "elm" $
-         pair (Pairs.first $ var "r") (Core.functionElimination (Pairs.second $ var "r")),
+         "re" <~ var "forElimination" @@ var "val" @@ var "elm" $
+         pair (Pairs.first $ var "re") (Core.functionElimination (Pairs.second $ var "re")),
       _Function_lambda>>: "l" ~>
-        "r" <~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
+        "rl" <~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
         pair
-          (Pairs.first $ var "r")
+          (Pairs.first $ var "rl")
           (Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (Core.lambdaDomain $ var "l")
-            (Pairs.second $ var "r"))]) $
+            (Pairs.second $ var "rl"))]) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [

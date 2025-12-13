@@ -86,8 +86,14 @@ typeContext = define "TypeContext" $
     "types">:
       doc "A mapping of lambda- and let-bound variables to their types" $
       T.map Core.name Core.type_,
-    "variables">:
+    "metadata">:
+      doc "Any additional metadata about lambda- and let-bound variables" $
+      T.map Core.name Core.term,
+    "typeVariables">:
       doc "The set of type variables introduced by enclosing type lambdas" $
+      T.set Core.name,
+    "lambdaVariables">:
+      doc "The set of term variables introduced by lambdas, as opposed to let bindings" $
       T.set Core.name,
     "inferenceContext">:
       doc "The schema types, primitive types, and data types of the graph"

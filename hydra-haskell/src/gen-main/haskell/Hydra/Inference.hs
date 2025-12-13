@@ -857,7 +857,9 @@ initialTypeContext g =
             in (Maybes.maybe (Flows.fail (Strings.cat2 "untyped element: " (Core.unName name))) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
   in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
-    Typing_.typeContextVariables = Sets.empty,
+    Typing_.typeContextMetadata = Maps.empty,
+    Typing_.typeContextTypeVariables = Sets.empty,
+    Typing_.typeContextLambdaVariables = Sets.empty,
     Typing_.typeContextInferenceContext = ix}))))
 
 -- | Check if a variable is unbound in context

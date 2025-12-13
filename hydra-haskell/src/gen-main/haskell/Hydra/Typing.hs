@@ -85,8 +85,12 @@ data TypeContext =
   TypeContext {
     -- | A mapping of lambda- and let-bound variables to their types
     typeContextTypes :: (M.Map Core.Name Core.Type),
+    -- | Any additional metadata about lambda- and let-bound variables
+    typeContextMetadata :: (M.Map Core.Name Core.Term),
     -- | The set of type variables introduced by enclosing type lambdas
-    typeContextVariables :: (S.Set Core.Name),
+    typeContextTypeVariables :: (S.Set Core.Name),
+    -- | The set of term variables introduced by lambdas, as opposed to let bindings
+    typeContextLambdaVariables :: (S.Set Core.Name),
     -- | The schema types, primitive types, and data types of the graph
     typeContextInferenceContext :: InferenceContext}
   deriving (Eq, Ord, Read, Show)
@@ -95,7 +99,11 @@ _TypeContext = (Core.Name "hydra.typing.TypeContext")
 
 _TypeContext_types = (Core.Name "types")
 
-_TypeContext_variables = (Core.Name "variables")
+_TypeContext_metadata = (Core.Name "metadata")
+
+_TypeContext_typeVariables = (Core.Name "typeVariables")
+
+_TypeContext_lambdaVariables = (Core.Name "lambdaVariables")
 
 _TypeContext_inferenceContext = (Core.Name "inferenceContext")
 

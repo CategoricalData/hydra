@@ -111,7 +111,7 @@ checkType :: (Typing.TypeContext -> Core.Term -> Core.Type -> Compute.Flow t0 ()
 checkType tx term typ =  
   let cx = (Typing.typeContextInferenceContext tx)
   in  
-    let vars = (Typing.typeContextVariables tx)
+    let vars = (Typing.typeContextTypeVariables tx)
     in (Logic.ifElse Constants.debugInference (Flows.bind (typeOf tx [] term) (\t0 -> Logic.ifElse (typesEffectivelyEqual tx t0 typ) (Flows.pure ()) (Flows.fail (Strings.cat [
       "type checking failed: expected ",
       Core__.type_ typ,
@@ -143,14 +143,16 @@ checkTypeVariables :: (Typing.TypeContext -> Core.Type -> Compute.Flow t0 ())
 checkTypeVariables tx typ =  
   let cx = (Typing.typeContextInferenceContext tx)
   in  
-    let vars = (Typing.typeContextVariables tx)
+    let vars = (Typing.typeContextTypeVariables tx)
     in  
       let dflt = (Flows.bind (Flows.mapList (checkTypeVariables tx) (Rewriting.subtypes typ)) (\_ -> Flows.pure ()))
       in  
         let check = ((\x -> case x of
                 Core.TypeForall v1 -> (checkTypeVariables (Typing.TypeContext {
                   Typing.typeContextTypes = (Typing.typeContextTypes tx),
-                  Typing.typeContextVariables = (Sets.insert (Core.forallTypeParameter v1) vars),
+                  Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
+                  Typing.typeContextTypeVariables = (Sets.insert (Core.forallTypeParameter v1) vars),
+                  Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
                   Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}) (Core.forallTypeBody v1))
                 Core.TypeVariable v1 -> (Logic.ifElse (Sets.member v1 vars) (Flows.pure ()) (Logic.ifElse (Maps.member v1 (Typing.inferenceContextSchemaTypes cx)) (Flows.pure ()) (Flows.fail (Strings.cat [
                   "unbound type variable \"",
@@ -293,7 +295,9 @@ typeOfLambda tx typeArgs l =
         let types2 = (Maps.insert v dom (Typing.typeContextTypes tx))
         in (Flows.bind (typeOf (Typing.TypeContext {
           Typing.typeContextTypes = types2,
-          Typing.typeContextVariables = (Typing.typeContextVariables tx),
+          Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
+          Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tx),
+          Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
           Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}) [] body) (\cod -> Flows.bind (checkTypeVariables tx cod) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = dom,
           Core.functionTypeCodomain = cod}))))))) mdom) (\tbody -> applyTypeArgumentsToType tx typeArgs tbody))
@@ -314,7 +318,9 @@ typeOfLet tx typeArgs letTerm =
           in (Flows.bind (Flows.mapList bindingType bs) (\btypes ->  
             let tx2 = Typing.TypeContext {
                     Typing.typeContextTypes = (Maps.union (Maps.fromList (Lists.zip bnames btypes)) (Typing.typeContextTypes tx)),
-                    Typing.typeContextVariables = (Typing.typeContextVariables tx),
+                    Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
+                    Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tx),
+                    Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
             in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables tx) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables tx) typeofs) (\_ -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
               "binding types disagree: ",
@@ -412,11 +418,13 @@ typeOfTypeLambda tx typeArgs tl =
   in  
     let body = (Core.typeLambdaBody tl)
     in  
-      let vars = (Typing.typeContextVariables tx)
+      let vars = (Typing.typeContextTypeVariables tx)
       in  
         let tx2 = Typing.TypeContext {
                 Typing.typeContextTypes = (Typing.typeContextTypes tx),
-                Typing.typeContextVariables = (Sets.insert v vars),
+                Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
+                Typing.typeContextTypeVariables = (Sets.insert v vars),
+                Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
                 Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
         in (Flows.bind (typeOf tx2 [] body) (\t1 -> Flows.bind (checkTypeVariables tx2 t1) (\_ -> applyTypeArgumentsToType tx typeArgs (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = v,
@@ -456,7 +464,7 @@ typeOfWrappedTerm tx typeArgs wt =
 -- | Check if a type contains any type variable from the current scope
 containsInScopeTypeVars :: (Typing.TypeContext -> Core.Type -> Bool)
 containsInScopeTypeVars tx t =  
-  let vars = (Typing.typeContextVariables tx)
+  let vars = (Typing.typeContextTypeVariables tx)
   in  
     let freeVars = (Rewriting.freeVariablesInTypeSimple t)
     in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
