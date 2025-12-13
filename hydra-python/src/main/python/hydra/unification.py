@@ -182,7 +182,7 @@ def unify_type_constraints[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0]
             
             case _:
                 return dflt()
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : hydra.lib.flows.pure(hydra.substitution.id_type_subst)), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : hydra.lib.flows.pure(hydra.substitution.id_type_subst())), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))
 
 def unify_type_lists[T0, T1](schema_types: FrozenDict[hydra.core.Name, T0], l: frozenlist[hydra.core.Type], r: frozenlist[hydra.core.Type], comment: str) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
     def to_constraint(l2: hydra.core.Type, r2: hydra.core.Type) -> hydra.typing.TypeConstraint:

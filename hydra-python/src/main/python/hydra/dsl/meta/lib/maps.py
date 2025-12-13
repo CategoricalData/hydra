@@ -14,6 +14,11 @@ def bimap(f: TTerm, g: TTerm, mapping: TTerm) -> TTerm:
     return primitive3(f, g, mapping)
 
 
+def delete(key: TTerm, mapping: TTerm) -> TTerm:
+    """Remove a key from a map."""
+    return primitive2(key, mapping)
+
+
 def elems(mapping: TTerm) -> TTerm:
     """Get the values of a map."""
     return primitive1(mapping)
@@ -77,11 +82,6 @@ def member(key: TTerm, mapping: TTerm) -> TTerm:
 def null(mapping: TTerm) -> TTerm:
     """Check if a map is empty."""
     return primitive1(mapping)
-
-
-def remove(key: TTerm, mapping: TTerm) -> TTerm:
-    """Remove a key from a map."""
-    return primitive2(key, mapping)
 
 
 def singleton(key: TTerm, value: TTerm) -> TTerm:
