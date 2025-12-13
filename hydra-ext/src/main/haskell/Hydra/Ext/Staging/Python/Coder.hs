@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Formatting
 import Hydra.Sources.Libraries
 
@@ -160,15 +161,18 @@ encodeApplicationType env at = do
       _ -> (t, ps)
 
 encodeBindingAsAssignment :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
-encodeBindingAsAssignment env (Binding name term _) = do
-  pterm <- encodeTermInline env False term
+encodeBindingAsAssignment env (Binding name term (Just ts)) = do
   let pyName = encodeName False CaseConventionLowerSnake env name
+  pbody <- encodeTermInline env False term
+  let pterm = if isComplexVariable (pythonEnvironmentTypeContext env) name && typeSchemeArity ts == 0
+        then makeThunk pbody
+        else pbody
   return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
 
 encodeBindingAs :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
-encodeBindingAs env (Binding name1 term1 mts) = do
+encodeBindingAs env (Binding name1 term1 (Just ts)) = do
   comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term1)
-  encodeTermAssignment env name1 term1 comment
+  encodeTermAssignment env name1 term1 ts comment
 
 -- TODO: topological sort of bindings
 encodeBindingsAsDefs :: PythonEnvironment -> [Binding] -> Flow PyGraph [Py.Statement]
@@ -176,16 +180,15 @@ encodeBindingsAsDefs env bindings = CM.mapM (encodeBindingAs env) bindings
 
 encodeDefinition :: PythonEnvironment -> Definition -> Flow PyGraph [[Py.Statement]]
 encodeDefinition env def = case def of
-  DefinitionTerm (TermDefinition name term _) ->
+  DefinitionTerm (TermDefinition name term typ) ->
     withTrace ("data element " ++ unName name) $ do
+--      if name == Name "hydra.adapt.utils.encodeDecode"
+--      then fail $ "term: " ++ ShowCore.term term
+--      else return ()
 
---    if name == Name "hydra.adapt.utils.encodeDecode"
---    then fail $ "term: " ++ ShowCore.term term
---    else return ()
-
-    comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
-    stmt <- encodeTermAssignment env name term comment
-    return [[stmt]]
+      comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
+      stmt <- encodeTermAssignment env name term (fTypeToTypeScheme typ) comment
+      return [[stmt]]
 
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
     comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription typ)
@@ -364,30 +367,32 @@ encodeModule mod defs0 = do
       let namespaces0 = pythonModuleMetadataNamespaces meta0
       let mc = tripleQuotedString . normalizeComment <$> moduleDescription mod
       tcontext <- initialTypeContext g
-      let env = PythonEnvironment {
+      let env0 = PythonEnvironment {
                   pythonEnvironmentNamespaces = namespaces0,
                   pythonEnvironmentBoundTypeVariables = ([], M.empty),
-                  pythonEnvironmentTypeContext = tcontext}
-      defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
-      PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
-      let meta = if not isTypeModule && useInlineTypeParams
-                 then meta1 {pythonModuleMetadataUsesTypeVar = False}
-                 else meta1
-      let namespaces = pythonModuleMetadataNamespaces meta1
+                  pythonEnvironmentTypeContext = tcontext,
+                  pythonEnvironmentNUllaryBindings = S.empty}
+      withDefinitions env0 defs $ \env -> do
+        defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
+        PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
+        let meta = if not isTypeModule && useInlineTypeParams
+                   then meta1 {pythonModuleMetadataUsesTypeVar = False}
+                   else meta1
+        let namespaces = pythonModuleMetadataNamespaces meta1
 
---      fail $ "isTypeModule: " ++ show isTypeModule ++ ", meta0.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta0)
---           ++ ", meta.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta)
+  --      fail $ "isTypeModule: " ++ show isTypeModule ++ ", meta0.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta0)
+  --           ++ ", meta.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta)
 
-      let commentStmts = case normalizeComment <$> moduleDescription mod of
-                         Nothing -> []
-                         Just c -> [commentStatement c]
-      let importStmts = imports namespaces meta
-      let tvars = if isTypeModule || not useInlineTypeParams
-                  then pythonModuleMetadataTypeVariables meta
-                  else S.empty
-      let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
-      let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
-      return $ Py.Module body
+        let commentStmts = case normalizeComment <$> moduleDescription mod of
+                           Nothing -> []
+                           Just c -> [commentStatement c]
+        let importStmts = imports namespaces meta
+        let tvars = if isTypeModule || not useInlineTypeParams
+                    then pythonModuleMetadataTypeVariables meta
+                    else S.empty
+        let tvarStmts = tvarStmt . encodeTypeVariable <$> S.toList tvars
+        let body = L.filter (not . L.null) $ [commentStmts, importStmts, tvarStmts] ++ defStmts
+        return $ Py.Module body
   where
     isTypeModule = not $ L.null $ L.filter (\d -> case d of
       DefinitionType _ -> True
@@ -482,8 +487,8 @@ encodeRecordType env name (RowType _ tfields) comment = do
           Py.PrimaryRhsCall $ Py.Args [] [Py.KwargOrStarredKwarg frozenKwarg] []
         frozenKwarg = Py.Kwarg (Py.Name "frozen") (pyAtomToPyExpression Py.AtomTrue)
 
-encodeTermAssignment :: PythonEnvironment -> Name -> Term -> Maybe String -> Flow PyGraph Py.Statement
-encodeTermAssignment env name term comment = do
+encodeTermAssignment :: PythonEnvironment -> Name -> Term -> TypeScheme -> Maybe String -> Flow PyGraph Py.Statement
+encodeTermAssignment env name term ts comment = do
 
 --  if name == Name "initialState"
 --  then fail $ "term: " ++ ShowCore.term term
@@ -501,12 +506,9 @@ encodeTermAssignment env name term comment = do
 
   -- If there are no arguments or let bindings, and if we are not dealing with a case statement,
   -- we can use a simple a = b assignment.
-  if isSimpleAssignment term then do
-    bodyExpr <- encodeTermInline env2 False body
-    return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
   -- Otherwise, only a function definition will work.
-  else do
-
+--  if isComplexVariable (pythonEnvironmentTypeContext env2) name then do -- TODO: restore this check; it is simpler and more efficient
+  if isComplexBinding (pythonEnvironmentTypeContext env2) (Binding name term $ Just ts) then do
 --    if name == Name "hydra.annotations.aggregateAnnotations"
 --    then fail $ "term: " ++ ShowCore.term term
 --      ++ "\nterm (raw): " ++ show term
@@ -517,10 +519,13 @@ encodeTermAssignment env name term comment = do
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
 --      ++ "\ncod: " ++ ShowCore.type_ cod
 --    else return ()
-
     withBindings bindings $ do
       bindingStmts <- encodeBindingsAsDefs env2 bindings
       encodeFunctionDefinition env2 name tparams params body doms cod comment bindingStmts
+  else do
+    bodyExpr <- encodeTermInline env2 False body
+    return $ annotatedStatement comment $ assignmentStatement (encodeName False CaseConventionLowerSnake env2 name) bodyExpr
+
 
 -- | Encode a term to an inline Python expression
 encodeTermInline :: PythonEnvironment -> Bool -> Term -> Flow PyGraph Py.Expression
@@ -633,11 +638,8 @@ encodeTermMultiline env term = if L.length args == 1
       if (L.null bindings) then do
         expr <- encodeTermInline env False term
         return [returnSingle expr]
-      else do
-        -- TODO: consider putting this inside of the updated environment, along with the body
-        bindingStmts <- encodeBindingsAsDefs env2 bindings
-
-        withBindings bindings $ do
+      else withBindings bindings $ do
+          bindingStmts <- encodeBindingsAsDefs env2 bindings
           stmts <- encodeTermMultiline env2 body
           return $ bindingStmts ++ stmts
     withArg body arg = case deannotateAndDetypeTerm body of
@@ -795,27 +797,45 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
                 namePrim = pyNameToPyPrimary $ variantName False env name fname
         fieldParams ftype = encodeTypeVariable <$> findTypeParams env ftype
 
+-- | Encode a variable -- possibly with arguments to be applied -- into a Python expression
 encodeVariable :: PythonEnvironment -> Name -> [Py.Expression] -> Flow PyGraph Py.Expression
 encodeVariable env name args = do
   PyGraph g _ <- getState
-  return $ if L.null args
-    then case lookupElement g name of
-      -- Lambda-bound variables, as well as primitive functions
-      Nothing -> case (lookupPrimitive g name) of
-        Nothing -> asVariable
-        Just prim -> if primitiveArity prim == 0
-          then asFunctionCall
-          else asVariable
-      -- Let-bound variables (elements)
-      -- Call if it's a wrapped term (monadic thunk)
-      Just el@(Binding _ _term (Just _ts)) -> if isFunctionCall el
-        then asFunctionCall
-        else asVariable
-      Just _ -> asVariable
-    else asFunctionCall
+  if not (L.null args)
+    then return $ asFunctionCallTmp "one"
+    -- Try let- and lambda variables before primitives; the former can shadow the latter.
+    else case M.lookup name (typeContextTypes $ pythonEnvironmentTypeContext env) of
+      Just typ -> if S.member name (typeContextLambdaVariables tc)
+        then return asVariable
+        else case M.lookup name (graphElements g) of
+          -- This branch is a hack which accounts for the fact that bindings outside of the current module have not been processed.
+          -- In the future, it might be best to construct the initial TypeContext such that it does have metadata for those bindings.
+          Just el -> return $ if isNullary typ && isComplexBinding (pythonEnvironmentTypeContext env) el
+            then asFunctionCallTmp "two"
+            else asFunctionReference (fTypeToTypeScheme typ)
+          -- Local let binding
+          Nothing -> return $ if isNullary typ && isComplexVariable (pythonEnvironmentTypeContext env) name
+            then asFunctionCallTmp "three"
+            else asFunctionReference (fTypeToTypeScheme typ)
+      Nothing -> case lookupPrimitive g name of
+        Just prim -> return $ if primitiveArity prim == L.length args
+          then asFunctionCallTmp "four"
+          else asFunctionReference (primitiveType prim)
+        Nothing -> fail $ "Unknown variable: " ++ unName name
   where
+    tc = pythonEnvironmentTypeContext env
     asVariable = termVariableReference env name
     asFunctionCall = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) args
+    asFunctionReference ts = if isPolymorphic ts
+        then makeSimpleLambda arity asVariable
+        else asVariable
+      where
+        arity = typeArity $ typeSchemeType ts
+    isNullary t = typeArity t == 0
+    isPolymorphic ts = not $ L.null $ typeSchemeVariables ts
+
+    asFunctionCallTmp ignored = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) args
+--    asFunctionCallTmp l = functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env $ Name $ unName name ++ "_" ++ l) args
 
 encodeWrappedType :: PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyGraph Py.Statement
 encodeWrappedType env name typ comment = do
@@ -854,7 +874,7 @@ extendMetaForTerm topLevel meta0 t = foldOverTerm TraversalOrderPre step meta0 t
         _ -> meta
       TermLet (Let bindings _) -> L.foldl forBinding meta bindings
         where
-          forBinding m (Binding _ term1 (Just ts)) = if isSimpleAssignment term1
+          forBinding m el@(Binding _ term1 (Just ts)) = if isSimpleAssignment term1 -- TODO: vestigal call to isSimpleAssignment because we do not have a TypeContext. Consider extending metadata inline.
             then m
             else extendMetaForType True True (typeSchemeType ts) m
           forBinding m _ = m
@@ -942,9 +962,6 @@ findTypeParams env typ = L.filter isBound $ S.toList $ freeVariablesInType typ
   where
     isBound v = Y.isJust $ M.lookup v $ snd $ pythonEnvironmentBoundTypeVariables env
 
--- Note: gatherBindingsAndParams, gatherArgs, isFunctionCall, and isSimpleAssignment have been
--- moved to Hydra.Ext.Staging.CoderUtils for reuse across language coders.
-
 gatherMetadata :: Namespace -> [Definition] -> PythonModuleMetadata
 gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
   where
@@ -984,6 +1001,19 @@ genericArg tparamList = if L.null tparamList
   else Just $ pyPrimaryToPyExpression $ primaryWithExpressionSlices (pyNameToPyPrimary $ Py.Name "Generic")
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
+-- | Wrap a bare reference to a polymorphic function in a lambda, avoiding pyright errors due to confusion about type parameters
+makeSimpleLambda :: Int -> Py.Expression -> Py.Expression
+makeSimpleLambda arity lhs = if arity == 0
+  then lhs
+  else Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing params [] Nothing) pbody
+  where
+    args = fmap (\i -> Py.Name $ "x" ++ show i) [1..arity]
+    params = fmap Py.LambdaParamNoDefault args
+    pbody = functionCall (pyExpressionToPyPrimary lhs) (fmap pyNameToPyExpression args)
+
+makeThunk :: Py.Expression -> Py.Expression
+makeThunk pbody =  Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] Nothing) pbody
+
 moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
 moduleToPython mod defs = do
   file <- encodeModule mod defs
@@ -1003,11 +1033,22 @@ variantArgs ptype tparams = pyExpressionsToPyArgs $ Y.catMaybes [
 withBindings :: [Binding] -> Flow PyGraph a -> Flow PyGraph a
 withBindings = withGraphBindings pyGraphGraph PyGraph pyGraphMetadata
 
+-- TODO: this is not known to be working
+withDefinitions :: PythonEnvironment -> [Definition] -> (PythonEnvironment -> Flow s a) -> Flow s a
+withDefinitions env defs = withLet env lt
+  where
+    lt = Let bindings $ Terms.string "dummy let for definitions"
+    bindings = Y.catMaybes $ fmap toBinding defs
+    toBinding def = case def of
+      DefinitionTerm (TermDefinition name term typ) ->
+        Just $ Binding name term (Just $ fTypeToTypeScheme typ)
+      DefinitionType _ -> Nothing
+
 withLambda :: PythonEnvironment -> Lambda -> (PythonEnvironment -> Flow s a) -> Flow s a
 withLambda = withLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })
 
 withLet :: PythonEnvironment -> Let -> (PythonEnvironment -> Flow s a) -> Flow s a
-withLet = withLetContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })
+withLet = withLetContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) bindingMetadata
 
 withTypeLambda :: PythonEnvironment -> TypeLambda -> (PythonEnvironment -> Flow s a) -> Flow s a
 withTypeLambda = withTypeLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })

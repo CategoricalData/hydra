@@ -807,7 +807,7 @@ bindingsToStatements env bindings = if L.null bindings
         flattenBindings bs = L.concatMap flattenOne bs
 
     -- Extend TypeContext with flattened bindings so they can reference each other
-    tcExtended = extendTypeContextForLet tc (Let flattenedBindings (TermVariable $ Name "dummy"))
+    tcExtended = extendTypeContextForLet bindingMetadata tc (Let flattenedBindings (TermVariable $ Name "dummy"))
 
     bindingVars = S.fromList (bindingName <$> flattenedBindings)
 

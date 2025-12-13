@@ -1,30 +1,14 @@
 -- | Common utilities for language coders, providing shared patterns for term decomposition,
 -- environment management, and other cross-language concerns.
 
-module Hydra.Ext.Staging.CoderUtils (
-  -- * Function structure
-  FunctionStructure(..),
-  analyzeFunctionTerm,
-
-  -- * Term decomposition
-  gatherApplications,
-  gatherArgs,
-
-  -- * Term classification
-  isFunctionCall,
-  isSimpleAssignment,
-
-  -- * State management
-  updateCoderMetadata,
-  withGraphBindings,
-  withUpdatedCoderGraph,
-  inCoderGraphContext,
-) where
+module Hydra.Ext.Staging.CoderUtils where
 
 import Hydra.Kernel
 import Hydra.Typing
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
+import qualified Data.Map as M
 
 
 -- | A structured representation of a function term's components, replacing ad-hoc tuples.
@@ -79,7 +63,7 @@ analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
         -- Let: accumulate bindings, extend environment
         TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
           where
-            env2 = setTC (extendTypeContextForLet (getTC env) lt) env
+            env2 = setTC (extendTypeContextForLet bindingMetadata (getTC env) lt) env
 
         -- Type application: accumulate type arguments
         TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
@@ -93,19 +77,24 @@ analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
         t -> finish t
       where
         finish t = do
-            -- Reapply type applications to the body
-            let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
-            -- Infer the return type
-            typ <- withTrace ("inferring type for body") $ typeOf (getTC env) [] t2
-            return $ FunctionStructure {
-              functionStructureTypeParams = L.reverse tparams,
-              functionStructureParams = L.reverse args,
-              functionStructureBindings = bindings,
-              functionStructureBody = t2,
-              functionStructureDomains = L.reverse doms,
-              functionStructureCodomain = typ,
-              functionStructureEnvironment = env
-            }
+          -- Reapply type applications to the body
+          let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
+          -- Infer the return type
+          typ <- withTrace ("inferring type for body") $ typeOf (getTC env) [] t2
+          return $ FunctionStructure {
+            functionStructureTypeParams = L.reverse tparams,
+            functionStructureParams = L.reverse args,
+            functionStructureBindings = bindings,
+            functionStructureBody = t2,
+            functionStructureDomains = L.reverse doms,
+            functionStructureCodomain = typ,
+            functionStructureEnvironment = env}
+
+-- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
+bindingMetadata :: TypeContext -> Binding -> Maybe Term
+bindingMetadata tc b = if isComplexBinding tc b
+  then Just Terms.true
+  else Nothing
 
 -- | Recursively gather applications from a term, returning the list of arguments
 -- and the base term. Applications are traversed left-to-right, with arguments
@@ -138,6 +127,34 @@ gatherArgs term args = case deannotateTerm term of
   TermTypeApplication (TypeApplicationTerm t _) -> gatherArgs t args
   _ -> (term, args)
 
+isComplexBinding :: TypeContext -> Binding -> Bool
+isComplexBinding tc b@(Binding _ term (Just ts)) = isPolymorphic || isNonNullary || isComplexTerm tc (bindingTerm b)
+  where
+    isPolymorphic = not $ L.null $ typeSchemeVariables ts
+    isNonNullary = typeArity (typeSchemeType ts) > 0
+
+-- | Determine whether a given term requires needs to be treated as a (possibly nullary) function,
+--   rather than a simple value. The term might be an actual function, or it may have type parameters
+--   or internal let bindings, or it may reference complex variables.
+--   Treating the term as a function enables lazy evaluation as well as encapsulation of complex expressions.
+isComplexTerm :: TypeContext -> Term -> Bool
+isComplexTerm tc t = case t of
+--  TermFunction _ -> True
+  TermLet _ -> True
+  TermTypeApplication _ -> True
+  TermTypeLambda _ -> True
+  TermVariable name -> isComplexVariable tc name
+  _ -> L.foldl (\b t -> b || isComplexTerm tc t) False $ subterms t
+
+-- | Look up a variable to see if it is bound to a complex term
+isComplexVariable :: TypeContext -> Name -> Bool
+isComplexVariable tc name = case M.lookup name (typeContextMetadata tc) of
+  Just _ -> True
+  -- If a variable is not defined in the type context, assume mutual recursion, therefore complex
+  _ -> case M.lookup name (typeContextTypes tc) of
+    Nothing -> True
+    _ -> False
+
 -- | Determines whether a binding represents a function call that needs to be invoked.
 -- This heuristic is used to decide whether to use function call syntax in the target language.
 --
@@ -147,13 +164,19 @@ gatherArgs term args = case deannotateTerm term of
 --
 -- This ensures that bindings encoded as `def x(): ...` are called as `x()` when referenced,
 -- while bindings encoded as `x = expr` are referenced as just `x`.
+--
+-- Note: A binding becomes a function (requiring call syntax) if either:
+-- 1. It's not a "simple assignment" (has lambdas, lets, case expressions, etc.), OR
+-- 2. It's a non-trivial term (has side effects or could fail at runtime)
 isFunctionCall :: Binding -> Bool
 isFunctionCall (Binding _ term (Just ts)) =
   let isArityZero = typeSchemeArity ts == 0
       -- A binding needs to be called if it wasn't a simple assignment
       -- (i.e., it was encoded as a function definition)
       notSimple = not (isSimpleAssignment term)
-  in isArityZero && notSimple
+      -- Or if it's not trivial (function applications that could fail)
+      notTrivial = not (isTrivialTerm term)
+  in isArityZero && (notSimple || notTrivial)
 isFunctionCall _ = False
 
 -- | Determines whether a term can be encoded as a simple assignment (without type annotation).
@@ -178,6 +201,59 @@ isSimpleAssignment term = case term of
   t -> case (fst (gatherArgs t [])) of
     TermFunction (FunctionElimination (EliminationUnion _)) -> False
     _ -> True
+
+-- | Determines whether a term is "trivial" and safe to evaluate eagerly in a let binding.
+-- Trivial terms cannot fail at runtime and have no side effects that depend on evaluation order.
+--
+-- A term is considered trivial if it's:
+-- - A literal (int, float, string, bool)
+-- - A variable reference
+-- - A unit value
+-- - A field projection (record.field)
+-- - An optional value (Just/Nothing) containing trivial terms
+-- - A list literal containing trivial terms
+-- - A record literal containing trivial terms
+-- - An annotated term wrapping a trivial term
+--
+-- Non-trivial terms (function applications like head/tail, case expressions) must be wrapped
+-- in thunks to preserve lazy evaluation semantics when generating Python code.
+isTrivialTerm :: Term -> Bool
+isTrivialTerm term = case deannotateTerm term of
+  -- Literals are always safe
+  TermLiteral _ -> True
+  -- Variable references are safe (just name lookups)
+  TermVariable _ -> True
+  -- Unit is safe
+  TermUnit -> True
+  -- Wrapped terms (newtypes) - check inner term
+  TermWrap (WrappedTerm _ inner) -> isTrivialTerm inner
+  -- Optional values - check inner term if present
+  TermMaybe Nothing -> True
+  TermMaybe (Just inner) -> isTrivialTerm inner
+  -- Either values - check inner term
+  TermEither (Left inner) -> isTrivialTerm inner
+  TermEither (Right inner) -> isTrivialTerm inner
+  -- List literals - check all elements
+  TermList terms -> all isTrivialTerm terms
+  -- Record literals - check all field values
+  TermRecord (Record _ fields) -> all (isTrivialTerm . fieldTerm) fields
+  -- Injection (union constructor) - check inner term
+  TermUnion (Injection _ (Field _ inner)) -> isTrivialTerm inner
+  -- Field projection is safe (just accessing a property)
+  TermApplication (Application (TermFunction (FunctionElimination (EliminationRecord (Projection _ _)))) arg) ->
+    isTrivialTerm arg
+  -- All other applications (function calls) are NOT trivial - they could fail
+  TermApplication _ -> False
+  -- Functions themselves are safe (not evaluated until called)
+  TermFunction _ -> True
+  -- Let expressions need their own handling
+  TermLet _ -> False
+  -- Type applications - check inner term
+  TermTypeApplication (TypeApplicationTerm inner _) -> isTrivialTerm inner
+  -- Type lambdas - check inner term
+  TermTypeLambda (TypeLambda _ inner) -> isTrivialTerm inner
+  -- Everything else is considered non-trivial to be safe
+  _ -> False
 
 -- | Update the metadata portion of a coder state.
 -- This is useful for tracking language-specific metadata during code generation.
