@@ -213,54 +213,156 @@ def register_lists_primitives() -> dict[Name, Primitive]:
 
     a = prims.variable("a")
     b = prims.variable("b")
+    c = prims.variable("c")
 
+    # prim2: apply :: [a -> b] -> [a] -> [b]
+    primitives[qname(namespace, "apply")] = prims.prim2(
+        qname(namespace, "apply"), lists.apply, ["a", "b"],
+        prims.list_(prims.function(a, b)), prims.list_(a), prims.list_(b)
+    )
+    # prim2: at :: Int32 -> [a] -> a
+    primitives[qname(namespace, "at")] = prims.prim2(
+        qname(namespace, "at"), lists.at, ["a"],
+        prims.int32(), prims.list_(a), a
+    )
+    # prim2: bind :: [a] -> (a -> [b]) -> [b]
+    primitives[qname(namespace, "bind")] = prims.prim2(
+        qname(namespace, "bind"), lists.bind, ["a", "b"],
+        prims.list_(a), prims.function(a, prims.list_(b)), prims.list_(b)
+    )
+    # prim1: concat :: [[a]] -> [a]
     primitives[qname(namespace, "concat")] = prims.prim1(
         qname(namespace, "concat"), lists.concat, ["a"],
         prims.list_(prims.list_(a)), prims.list_(a)
     )
+    # prim2: concat2 :: [a] -> [a] -> [a]
+    primitives[qname(namespace, "concat2")] = prims.prim2(
+        qname(namespace, "concat2"), lists.concat2, ["a"],
+        prims.list_(a), prims.list_(a), prims.list_(a)
+    )
+    # prim2: cons :: a -> [a] -> [a]
     primitives[qname(namespace, "cons")] = prims.prim2(
         qname(namespace, "cons"), lists.cons, ["a"],
         a, prims.list_(a), prims.list_(a)
     )
-    # foldl: (b -> a -> b) -> b -> [a] -> b
+    # prim2: drop :: Int32 -> [a] -> [a]
+    primitives[qname(namespace, "drop")] = prims.prim2(
+        qname(namespace, "drop"), lists.drop, ["a"],
+        prims.int32(), prims.list_(a), prims.list_(a)
+    )
+    # prim2: elem :: a -> [a] -> Bool
+    primitives[qname(namespace, "elem")] = prims.prim2(
+        qname(namespace, "elem"), lists.elem, ["a"],
+        a, prims.list_(a), prims.boolean()
+    )
+    # prim2: filter :: (a -> Bool) -> [a] -> [a]
+    primitives[qname(namespace, "filter")] = prims.prim2(
+        qname(namespace, "filter"), lists.filter, ["a"],
+        prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
+    )
+    # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
     primitives[qname(namespace, "foldl")] = prims.prim3(
-        qname(namespace, "foldl"), lists.foldl, ["a", "b"],
+        qname(namespace, "foldl"), lists.foldl, ["b", "a"],
         prims.function(b, prims.function(a, b)), b, prims.list_(a), b
     )
+    # prim1: group :: [a] -> [[a]]
+    primitives[qname(namespace, "group")] = prims.prim1(
+        qname(namespace, "group"), lists.group, ["a"],
+        prims.list_(a), prims.list_(prims.list_(a))
+    )
+    # prim1: head :: [a] -> a
     primitives[qname(namespace, "head")] = prims.prim1(
         qname(namespace, "head"), lists.head, ["a"], prims.list_(a), a
     )
+    # prim1: init :: [a] -> [a]
+    primitives[qname(namespace, "init")] = prims.prim1(
+        qname(namespace, "init"), lists.init, ["a"], prims.list_(a), prims.list_(a)
+    )
+    # prim2: intercalate :: [a] -> [[a]] -> [a]
     primitives[qname(namespace, "intercalate")] = prims.prim2(
         qname(namespace, "intercalate"), lists.intercalate, ["a"],
         prims.list_(a), prims.list_(prims.list_(a)), prims.list_(a)
     )
+    # prim2: intersperse :: a -> [a] -> [a]
     primitives[qname(namespace, "intersperse")] = prims.prim2(
         qname(namespace, "intersperse"), lists.intersperse, ["a"],
         a, prims.list_(a), prims.list_(a)
     )
+    # prim1: last :: [a] -> a
     primitives[qname(namespace, "last")] = prims.prim1(
         qname(namespace, "last"), lists.last, ["a"], prims.list_(a), a
     )
+    # prim1: length :: [a] -> Int32
     primitives[qname(namespace, "length")] = prims.prim1(
         qname(namespace, "length"), lists.length, ["a"], prims.list_(a), prims.int32()
     )
+    # prim2: map :: (a -> b) -> [a] -> [b]
     primitives[qname(namespace, "map")] = prims.prim2(
         qname(namespace, "map"), lists.map, ["a", "b"],
         prims.function(a, b), prims.list_(a), prims.list_(b)
     )
+    # prim1: nub :: [a] -> [a]
+    primitives[qname(namespace, "nub")] = prims.prim1(
+        qname(namespace, "nub"), lists.nub, ["a"],
+        prims.list_(a), prims.list_(a)
+    )
+    # prim1: null :: [a] -> Bool
     primitives[qname(namespace, "null")] = prims.prim1(
         qname(namespace, "null"), lists.null, ["a"],
         prims.list_(a), prims.boolean()
     )
+    # prim1: pure :: a -> [a]
     primitives[qname(namespace, "pure")] = prims.prim1(
         qname(namespace, "pure"), lists.pure, ["a"],
         a, prims.list_(a)
     )
+    # prim2: replicate :: Int32 -> a -> [a]
+    primitives[qname(namespace, "replicate")] = prims.prim2(
+        qname(namespace, "replicate"), lists.replicate, ["a"],
+        prims.int32(), a, prims.list_(a)
+    )
+    # prim1: reverse :: [a] -> [a]
     primitives[qname(namespace, "reverse")] = prims.prim1(
         qname(namespace, "reverse"), lists.reverse, ["a"], prims.list_(a), prims.list_(a)
     )
+    # prim1: safeHead :: [a] -> Maybe a
+    primitives[qname(namespace, "safeHead")] = prims.prim1(
+        qname(namespace, "safeHead"), lists.safe_head, ["a"],
+        prims.list_(a), prims.optional(a)
+    )
+    # prim1: singleton :: a -> [a]
+    primitives[qname(namespace, "singleton")] = prims.prim1(
+        qname(namespace, "singleton"), lists.singleton, ["a"],
+        a, prims.list_(a)
+    )
+    # prim1: sort :: [a] -> [a]
+    primitives[qname(namespace, "sort")] = prims.prim1(
+        qname(namespace, "sort"), lists.sort, ["a"],
+        prims.list_(a), prims.list_(a)
+    )
+    # prim1: tail :: [a] -> [a]
     primitives[qname(namespace, "tail")] = prims.prim1(
         qname(namespace, "tail"), lists.tail, ["a"], prims.list_(a), prims.list_(a)
+    )
+    # prim2: take :: Int32 -> [a] -> [a]
+    primitives[qname(namespace, "take")] = prims.prim2(
+        qname(namespace, "take"), lists.take, ["a"],
+        prims.int32(), prims.list_(a), prims.list_(a)
+    )
+    # prim1: transpose :: [[a]] -> [[a]]
+    primitives[qname(namespace, "transpose")] = prims.prim1(
+        qname(namespace, "transpose"), lists.transpose, ["a"],
+        prims.list_(prims.list_(a)), prims.list_(prims.list_(a))
+    )
+    # prim2: zip :: [a] -> [b] -> [(a, b)]
+    primitives[qname(namespace, "zip")] = prims.prim2(
+        qname(namespace, "zip"), lists.zip, ["a", "b"],
+        prims.list_(a), prims.list_(b), prims.list_(prims.pair(a, b))
+    )
+    # prim3: zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+    primitives[qname(namespace, "zipWith")] = prims.prim3(
+        qname(namespace, "zipWith"), lists.zip_with, ["a", "b", "c"],
+        prims.function(a, prims.function(b, c)), prims.list_(a), prims.list_(b), prims.list_(c)
     )
 
     return primitives
@@ -300,19 +402,112 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     primitives: dict[Name, Primitive] = {}
 
     k = prims.variable("k")
+    k1 = prims.variable("k1")
+    k2 = prims.variable("k2")
     v = prims.variable("v")
+    v1 = prims.variable("v1")
+    v2 = prims.variable("v2")
+    map_kv = prims.map_(k, v)
 
-    primitives[qname(namespace, "null")] = prims.prim1(
-        qname(namespace, "null"), maps.null, ["k", "v"],
-        prims.map_(k, v), prims.boolean()
+    # prim3: alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
+    primitives[qname(namespace, "alter")] = prims.prim3(
+        qname(namespace, "alter"), maps.alter, ["v", "k"],
+        prims.function(prims.optional(v), prims.optional(v)), k, map_kv, map_kv
     )
+    # prim3: bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
+    primitives[qname(namespace, "bimap")] = prims.prim3(
+        qname(namespace, "bimap"), maps.bimap, ["k1", "k2", "v1", "v2"],
+        prims.function(k1, k2), prims.function(v1, v2), prims.map_(k1, v1), prims.map_(k2, v2)
+    )
+    # prim2: delete :: k -> Map k v -> Map k v
+    primitives[qname(namespace, "delete")] = prims.prim2(
+        qname(namespace, "delete"), maps.delete, ["k", "v"],
+        k, map_kv, map_kv
+    )
+    # prim1: elems :: Map k v -> [v]
+    primitives[qname(namespace, "elems")] = prims.prim1(
+        qname(namespace, "elems"), maps.elems, ["k", "v"],
+        map_kv, prims.list_(v)
+    )
+    # prim0: empty :: Map k v
+    primitives[qname(namespace, "empty")] = prims.prim0(
+        qname(namespace, "empty"), maps.empty(), ["k", "v"],
+        map_kv
+    )
+    # prim2: filter :: (v -> Bool) -> Map k v -> Map k v
+    primitives[qname(namespace, "filter")] = prims.prim2(
+        qname(namespace, "filter"), maps.filter, ["v", "k"],
+        prims.function(v, prims.boolean()), map_kv, map_kv
+    )
+    # prim2: filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v
+    primitives[qname(namespace, "filterWithKey")] = prims.prim2(
+        qname(namespace, "filterWithKey"), maps.filter_with_key, ["k", "v"],
+        prims.function(k, prims.function(v, prims.boolean())), map_kv, map_kv
+    )
+    # prim3: findWithDefault :: v -> k -> Map k v -> v
+    primitives[qname(namespace, "findWithDefault")] = prims.prim3(
+        qname(namespace, "findWithDefault"), maps.find_with_default, ["v", "k"],
+        v, k, map_kv, v
+    )
+    # prim1: fromList :: [(k, v)] -> Map k v
+    primitives[qname(namespace, "fromList")] = prims.prim1(
+        qname(namespace, "fromList"), maps.from_list, ["k", "v"],
+        prims.list_(prims.pair(k, v)), map_kv
+    )
+    # prim3: insert :: k -> v -> Map k v -> Map k v
+    primitives[qname(namespace, "insert")] = prims.prim3(
+        qname(namespace, "insert"), maps.insert, ["k", "v"],
+        k, v, map_kv, map_kv
+    )
+    # prim1: keys :: Map k v -> [k]
     primitives[qname(namespace, "keys")] = prims.prim1(
         qname(namespace, "keys"), maps.keys, ["k", "v"],
-        prims.map_(k, v), prims.list_(k)
+        map_kv, prims.list_(k)
     )
+    # prim2: lookup :: k -> Map k v -> Maybe v
+    primitives[qname(namespace, "lookup")] = prims.prim2(
+        qname(namespace, "lookup"), maps.lookup, ["k", "v"],
+        k, map_kv, prims.optional(v)
+    )
+    # prim2: map :: (v1 -> v2) -> Map k v1 -> Map k v2
+    primitives[qname(namespace, "map")] = prims.prim2(
+        qname(namespace, "map"), maps.map, ["v1", "v2", "k"],
+        prims.function(v1, v2), prims.map_(k, v1), prims.map_(k, v2)
+    )
+    # prim2: mapKeys :: (k1 -> k2) -> Map k1 v -> Map k2 v
+    primitives[qname(namespace, "mapKeys")] = prims.prim2(
+        qname(namespace, "mapKeys"), maps.map_keys, ["k1", "k2", "v"],
+        prims.function(k1, k2), prims.map_(k1, v), prims.map_(k2, v)
+    )
+    # prim2: member :: k -> Map k v -> Bool
+    primitives[qname(namespace, "member")] = prims.prim2(
+        qname(namespace, "member"), maps.member, ["k", "v"],
+        k, map_kv, prims.boolean()
+    )
+    # prim1: null :: Map k v -> Bool
+    primitives[qname(namespace, "null")] = prims.prim1(
+        qname(namespace, "null"), maps.null, ["k", "v"],
+        map_kv, prims.boolean()
+    )
+    # prim2: singleton :: k -> v -> Map k v
+    primitives[qname(namespace, "singleton")] = prims.prim2(
+        qname(namespace, "singleton"), maps.singleton, ["k", "v"],
+        k, v, map_kv
+    )
+    # prim1: size :: Map k v -> Int32
     primitives[qname(namespace, "size")] = prims.prim1(
         qname(namespace, "size"), maps.size, ["k", "v"],
-        prims.map_(k, v), prims.int32()
+        map_kv, prims.int32()
+    )
+    # prim1: toList :: Map k v -> [(k, v)]
+    primitives[qname(namespace, "toList")] = prims.prim1(
+        qname(namespace, "toList"), maps.to_list, ["k", "v"],
+        map_kv, prims.list_(prims.pair(k, v))
+    )
+    # prim2: union :: Map k v -> Map k v -> Map k v
+    primitives[qname(namespace, "union")] = prims.prim2(
+        qname(namespace, "union"), maps.union, ["k", "v"],
+        map_kv, map_kv, map_kv
     )
 
     return primitives
@@ -498,13 +693,11 @@ def register_sets_primitives() -> dict[Name, Primitive]:
         qname(namespace, "difference"), sets.difference, ["a"],
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
-    # Note: empty() is a function that takes no arguments and returns an empty set
-    # But prims.prim0 expects a constant value, not a function
-    # This needs special handling
-    # primitives[qname(namespace, "empty")] = prims.prim0(
-    #     qname(namespace, "empty"), sets.empty, ["a"],
-    #     prims.set_(a)
-    # )
+    # prim0: empty :: Set a
+    primitives[qname(namespace, "empty")] = prims.prim0(
+        qname(namespace, "empty"), sets.empty(), ["a"],
+        prims.set_(a)
+    )
     primitives[qname(namespace, "fromList")] = prims.prim1(
         qname(namespace, "fromList"), sets.from_list, ["a"],
         prims.list_(a), prims.set_(a)

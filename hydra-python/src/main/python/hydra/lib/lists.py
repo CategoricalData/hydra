@@ -4,7 +4,7 @@ from collections.abc import Callable, Sequence
 from functools import reduce
 from typing import Any, TypeVar
 
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import frozenlist, Maybe, Just, Nothing
 
 A = TypeVar('A')
 
@@ -153,9 +153,9 @@ def reverse[A](values: Sequence[A]) -> frozenlist[A]:
     return tuple(values[::-1])
 
 
-def safe_head[A](values: Sequence[A]) -> A | None:
-    """Get the first element of a list, returning None if the list is empty."""
-    return values[0] if len(values) > 0 else None
+def safe_head[A](values: Sequence[A]) -> Maybe[A]:
+    """Get the first element of a list, returning Nothing if the list is empty."""
+    return Just(values[0]) if len(values) > 0 else Nothing()
 
 
 def singleton[A](value: A) -> frozenlist[A]:
