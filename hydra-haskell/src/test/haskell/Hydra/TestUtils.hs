@@ -189,7 +189,7 @@ expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
 expectTypeCheckingResult desc input outputTerm outputType = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
     cx <- graphToInferenceContext testGraph
-    let tx = TypeContext M.empty S.empty cx
+    let tx = TypeContext M.empty M.empty S.empty S.empty cx
 
     -- typeOf is always called on System F terms
     (iterm, ts) <- inferTypeOf cx input
