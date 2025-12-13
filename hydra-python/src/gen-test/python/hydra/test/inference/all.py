@@ -14,5 +14,7 @@ import hydra.test.inference.kernel_examples
 import hydra.test.inference.nominal_types
 import hydra.testing
 
-# The group of all inference tests.
-all_tests = hydra.testing.TestGroup("inference", cast(Maybe[str], Nothing()), (hydra.test.inference.algebraic_types.all_tests, hydra.test.inference.algorithm_w.all_tests, hydra.test.inference.failures.all_tests, hydra.test.inference.fundamentals.all_tests, hydra.test.inference.kernel_examples.all_tests, hydra.test.inference.nominal_types.all_tests), cast(frozenlist[hydra.testing.TestCaseWithMetadata], ()))
+def all_tests() -> hydra.testing.TestGroup:
+    r"""The group of all inference tests."""
+    
+    return hydra.testing.TestGroup("inference", cast(Maybe[str], Nothing()), (hydra.test.inference.algebraic_types.all_tests(), hydra.test.inference.algorithm_w.all_tests(), hydra.test.inference.failures.all_tests(), hydra.test.inference.fundamentals.all_tests(), hydra.test.inference.kernel_examples.all_tests(), hydra.test.inference.nominal_types.all_tests()), cast(frozenlist[hydra.testing.TestCaseWithMetadata], ()))
