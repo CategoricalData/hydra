@@ -26,6 +26,10 @@ class Nothing:
     __slots__ = ()
     def __repr__(self) -> str:
         return "Nothing"
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Nothing)
+    def __hash__(self) -> int:
+        return hash("Nothing")
 
 # Note: unused
 NOTHING = Nothing()
