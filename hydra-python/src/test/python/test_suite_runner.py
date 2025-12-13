@@ -78,28 +78,66 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
     """
     Create an inference context from the test graph.
 
+    This mirrors the Haskell testGraph setup which includes:
+    - Test types (LatLon, Person, etc.) in a schema graph
+    - Test terms (testDataArthur, etc.) as elements
+
     Returns:
         Flow[None, InferenceContext]: A flow that produces an inference context
     """
-    from hydra.dsl.python import FrozenDict, Nothing
+    from hydra.dsl.python import FrozenDict, Nothing, Just
+    import hydra.encode.core
 
-    # Build a minimal graph from test elements
-    # Collect all test_element_* variables from test_graph module
-    elements = {}
-    for name in dir(test_graph):
-        if name.startswith("test_element_"):
-            binding = getattr(test_graph, name)
-            if isinstance(binding, hydra.core.Binding):
-                elements[binding.name] = binding
+    # Get the test types from test_graph (e.g., LatLon, Person, etc.)
+    test_types_dict = test_graph.test_types()
 
-    # Create a minimal graph with these elements
-    graph = hydra.graph.Graph(
-        elements=FrozenDict(elements),
+    # Build type bindings for the schema graph
+    # Each type becomes a Binding with the type encoded as a term
+    type_bindings = {}
+    for name, typ in test_types_dict.items():
+        # Encode the type as a term (like Haskell's EncodeCore.type_)
+        type_term = hydra.encode.core.type(typ)
+        # Create a binding with type scheme for Type
+        type_scheme = hydra.core.TypeScheme(
+            variables=(),
+            type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))
+        )
+        type_bindings[name] = hydra.core.Binding(
+            name=name,
+            term=type_term,
+            type=Just(type_scheme)
+        )
+
+    # Create the schema graph with test types
+    schema_graph = hydra.graph.Graph(
+        elements=FrozenDict(type_bindings),
         environment=FrozenDict({}),
         types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("dummy")),
+        body=hydra.core.TermLiteral(hydra.core.LiteralString("schema")),
         primitives=FrozenDict({}),
         schema=Nothing()
+    )
+
+    # Get test terms from test_graph
+    test_terms_dict = test_graph.test_terms()
+
+    # Build term bindings for the main graph
+    term_bindings = {}
+    for name, term in test_terms_dict.items():
+        term_bindings[name] = hydra.core.Binding(
+            name=name,
+            term=term,
+            type=Nothing()
+        )
+
+    # Create the main test graph with schema
+    graph = hydra.graph.Graph(
+        elements=FrozenDict(term_bindings),
+        environment=FrozenDict({}),
+        types=FrozenDict({}),
+        body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
+        primitives=FrozenDict({}),
+        schema=Just(schema_graph)
     )
     return hydra.schemas.graph_to_inference_context(graph)
 
@@ -178,7 +216,7 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
 
     # Create inference context
     cx_flow = graph_to_inference_context()
-    cx_state = cx_flow.value(None, hydra.monads.empty_trace)
+    cx_state = cx_flow.value(None, hydra.monads.empty_trace())
 
     match cx_state.value:
         case Nothing():
@@ -191,7 +229,7 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
 
     # Infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
-    result_state = result_flow.value(None, hydra.monads.empty_trace)
+    result_state = result_flow.value(None, hydra.monads.empty_trace())
 
     match result_state.value:
         case Nothing():
@@ -243,7 +281,7 @@ def run_inference_failure_test(desc: str, test_case: hydra.testing.InferenceFail
 
     # Create inference context
     cx_flow = graph_to_inference_context()
-    cx_state = cx_flow.value(None, hydra.monads.empty_trace)
+    cx_state = cx_flow.value(None, hydra.monads.empty_trace())
 
     match cx_state.value:
         case Nothing():
@@ -256,7 +294,7 @@ def run_inference_failure_test(desc: str, test_case: hydra.testing.InferenceFail
 
     # Try to infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
-    result_state = result_flow.value(None, hydra.monads.empty_trace)
+    result_state = result_flow.value(None, hydra.monads.empty_trace())
 
     match result_state.value:
         case Nothing():
@@ -366,7 +404,7 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
 
 
 # Generate all test functions from the test suite
-_all_tests = generate_pytest_tests(test_suite.all_tests, default_test_runner)
+_all_tests = generate_pytest_tests(test_suite.all_tests(), default_test_runner)
 
 # Dynamically add test functions to module namespace for pytest discovery
 for test_name, test_fn in _all_tests:
