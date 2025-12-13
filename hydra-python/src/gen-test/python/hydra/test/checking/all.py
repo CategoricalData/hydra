@@ -14,5 +14,7 @@ import hydra.test.checking.fundamentals
 import hydra.test.checking.nominal_types
 import hydra.testing
 
-# The group of all type checking tests.
-all_tests = hydra.testing.TestGroup("checking", cast(Maybe[str], Nothing()), (hydra.test.checking.advanced.all_tests, hydra.test.checking.algebraic_types.all_tests, hydra.test.checking.collections.all_tests, hydra.test.checking.failures.all_tests, hydra.test.checking.fundamentals.all_tests, hydra.test.checking.nominal_types.all_tests), cast(frozenlist[hydra.testing.TestCaseWithMetadata], ()))
+def all_tests() -> hydra.testing.TestGroup:
+    r"""The group of all type checking tests."""
+    
+    return hydra.testing.TestGroup("checking", cast(Maybe[str], Nothing()), (hydra.test.checking.advanced.all_tests(), hydra.test.checking.algebraic_types.all_tests(), hydra.test.checking.collections.all_tests(), hydra.test.checking.failures.all_tests(), hydra.test.checking.fundamentals.all_tests(), hydra.test.checking.nominal_types.all_tests()), cast(frozenlist[hydra.testing.TestCaseWithMetadata], ()))
