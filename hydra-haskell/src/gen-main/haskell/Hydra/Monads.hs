@@ -181,7 +181,7 @@ withFlag flag f =
     let restore = (\ignored -> \t1 -> Compute.Trace {
             Compute.traceStack = (Compute.traceStack t1),
             Compute.traceMessages = (Compute.traceMessages t1),
-            Compute.traceOther = (Maps.remove flag (Compute.traceOther t1))})
+            Compute.traceOther = (Maps.delete flag (Compute.traceOther t1))})
     in (mutateTrace mutate restore f)
 
 withState :: (t0 -> Compute.Flow t0 t1 -> Compute.Flow t2 t1)

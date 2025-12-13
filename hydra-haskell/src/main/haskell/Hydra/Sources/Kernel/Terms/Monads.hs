@@ -287,7 +287,7 @@ withFlag = define "withFlag" $
   "restore" <~ ("ignored" ~> "t1" ~> Compute.trace
     (Compute.traceStack (var "t1"))
     (Compute.traceMessages (var "t1"))
-    (Maps.remove (var "flag") (Compute.traceOther (var "t1")))) $
+    (Maps.delete (var "flag") (Compute.traceOther (var "t1")))) $
   mutateTrace @@ var "mutate" @@ var "restore" @@ var "f"
 
 withState :: TBinding (s1 -> Flow s1 a -> Flow s2 a)

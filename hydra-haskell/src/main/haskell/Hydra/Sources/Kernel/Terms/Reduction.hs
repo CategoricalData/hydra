@@ -268,8 +268,8 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         Nothing [
         _Function_elimination>>: constant $ produce $ int32 1,
         _Function_lambda>>: "l" ~>
-          "tx2" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
-          var "arityOf" @@ var "tx2" @@ Core.lambdaBody (var "l"),
+          "txl" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
+          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
         _Function_primitive>>: "name" ~> Flows.map
           (Arity.typeSchemeArity)
           (Lexical.requirePrimitiveType @@ var "tx" @@ var "name")]) $
@@ -280,12 +280,12 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
 --        _Term_application>>: ...
         _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
         _Term_let>>: "l" ~>
-          "tx2" <~ Schemas.extendTypeContextForLet @@ var "tx" @@ var "l" $
-          var "arityOf" @@ var "tx2" @@ Core.letBody (var "l"),
+          "txl" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+          var "arityOf" @@ var "txl" @@ Core.letBody (var "l"),
         _Term_typeApplication>>: "tat" ~> var "arityOf" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
         _Term_typeLambda>>: "tl" ~>
-          "tx2" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
-          var "arityOf" @@ var "tx2" @@ Core.typeLambdaBody (var "tl"),
+          "txt" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+          var "arityOf" @@ var "txt" @@ Core.typeLambdaBody (var "tl"),
         _Term_variable>>: "name" ~> optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
           (Flows.fail $ Strings.cat $ list [
             string "unbound variable: ",
@@ -360,18 +360,18 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         (Just $ var "recurseOrForce" @@ var "term") [
         _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
         _Function_lambda>>: "l" ~>
-          "tx2" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
-           Flows.map (var "unwind") (var "recurse" @@ var "tx2" @@ var "term")],
+          "txl" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
+           Flows.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
       _Term_let>>: "l" ~>
-        "tx2" <~ Schemas.extendTypeContextForLet @@ var "tx" @@ var "l" $
-        var "recurse" @@ var "tx2" @@ var "term",
+        "txlt" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+        var "recurse" @@ var "txlt" @@ var "term",
       _Term_typeApplication>>: "tat" ~> var "rewrite" @@ var "topLevel" @@ var "forced"
         @@ (Lists.cons (Core.typeApplicationTermType $ var "tat") (var "typeArgs"))
         @@ var "recurse" @@ var "tx"
         @@ Core.typeApplicationTermBody (var "tat"),
       _Term_typeLambda>>: "tl" ~>
-        "tx2" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
-        var "recurse" @@ var "tx2" @@ var "term"]) $
+        "txt" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+        var "recurse" @@ var "txt" @@ var "term"]) $
 --  trace ("term0: " ++ (ShowCore.term @@ var "term0")) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
 
@@ -554,7 +554,7 @@ reduceTerm = define "reduceTerm" $
 --    <> " which is unsupported by certain targets such as Java."
 --    <> " Note: not tolerant of variable shadowing; use hydra.rewriting.unshadowVariables first.") $
 --  "cx0" ~> "let0" ~>
---  "cx1" <~ Schemas.extendTypeContextForLet @@ var "cx0" @@ var "let0" $
+--  "cx1" <~ Schemas.extendTypeContextForLet @@ constant nothing @@ var "cx0" @@ var "let0" $
 --  "originalNames" <~ Sets.fromList (Lists.map (unaryFunction Core.bindingName) $ Core.letBindings $ var "let0") $
 --  "processBinding" <~ ("p" ~> "b" ~>
 --    "bindings" <~ Pairs.first (var "p") $
@@ -583,7 +583,7 @@ rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
       cases _Term (var "term") (Just $ var "fallback") [
         _Term_function>>: "fun" ~> cases _Function (var "fun") (Just $ var "fallback") [
           _Function_lambda>>: "l" ~> var "recurse" @@ (Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l") @@ var "term"],
-        _Term_let>>: "l" ~> var "recurse" @@ (Schemas.extendTypeContextForLet @@ var "cx" @@ var "l") @@ var "term",
+        _Term_let>>: "l" ~> var "recurse" @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l") @@ var "term",
         _Term_typeLambda>>: "tl" ~> var "recurse" @@ (Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl") @@ var "term"]) $
     var "f" @@ var "recurse1" @@ var "term") $
   Rewriting.rewriteTermWithContext @@ var "f2" @@ var "cx0" @@ var "term0"

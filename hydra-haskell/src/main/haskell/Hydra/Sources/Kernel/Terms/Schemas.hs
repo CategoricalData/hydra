@@ -260,17 +260,19 @@ extendTypeContextForLambda = define "extendTypeContextForLambda" $
   "tcontext" ~> "lam" ~>
   "var" <~ Core.lambdaParameter (var "lam") $
   "dom" <~ Maybes.fromJust (Core.lambdaDomain (var "lam")) $
-  Typing.typeContextWithTypes
-    (var "tcontext")
+  Typing.typeContext
     (Maps.insert (var "var") (var "dom") (Typing.typeContextTypes (var "tcontext")))
+    (Maps.delete (var "var") (Typing.typeContextMetadata $ var "tcontext"))
+    (Typing.typeContextTypeVariables $ var "tcontext")
+    (Sets.insert (var "var") $ Typing.typeContextLambdaVariables $ var "tcontext")
+    (Typing.typeContextInferenceContext $ var "tcontext")
 
-extendTypeContextForLet :: TBinding (TypeContext -> Let -> TypeContext)
+extendTypeContextForLet :: TBinding ((TypeContext -> Binding -> Maybe Term) -> TypeContext -> Let -> TypeContext)
 extendTypeContextForLet = define "extendTypeContextForLet" $
   doc "Extend a type context by descending into a let body" $
-  "tcontext" ~> "letrec" ~>
+  "forBinding" ~> "tcontext" ~> "letrec" ~>
   "bindings" <~ Core.letBindings (var "letrec") $
-  Typing.typeContextWithTypes
-    (var "tcontext")
+  Typing.typeContext
     (Maps.union
       (Typing.typeContextTypes (var "tcontext"))
       (Maps.fromList $ Lists.map
@@ -278,15 +280,27 @@ extendTypeContextForLet = define "extendTypeContextForLet" $
           (Core.bindingName $ var "b")
           (typeSchemeToFType @@ (Maybes.fromJust $ Core.bindingType $ var "b")))
         (var "bindings")))
+    (Lists.foldl
+      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "tcontext" @@ var "b")
+        (Maps.delete (Core.bindingName $ var "b") (var "m"))
+        ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m")))
+      (Typing.typeContextMetadata $ var "tcontext")
+      (var "bindings"))
+    (Typing.typeContextTypeVariables $ var "tcontext")
+    (Lists.foldl
+      ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
+      (Typing.typeContextLambdaVariables $ var "tcontext")
+      (var "bindings"))
+    (Typing.typeContextInferenceContext $ var "tcontext")
 
 extendTypeContextForTypeLambda :: TBinding (TypeContext -> TypeLambda -> TypeContext)
 extendTypeContextForTypeLambda = define "extendTypeContextForTypeLambda" $
   doc "Extend a type context by descending into a System F type lambda body" $
   "tcontext" ~> "tlam" ~>
   "name" <~ Core.typeLambdaParameter (var "tlam") $
-  Typing.typeContextWithVariables
+  Typing.typeContextWithTypeVariables
     (var "tcontext")
-    (Sets.insert (var "name") (Typing.typeContextVariables (var "tcontext")))
+    (Sets.insert (var "name") (Typing.typeContextTypeVariables (var "tcontext")))
 
 fieldMap :: TBinding ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
@@ -404,7 +418,7 @@ graphToTypeContext = define "graphToTypeContext" $
   doc "Convert a graph to a top-level type context (outside of the bindings of the graph)" $
   "graph" ~>
   "ix" <<~ graphToInferenceContext @@ var "graph" $
-  produce $ Typing.typeContext Maps.empty Sets.empty (var "ix")
+  produce $ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty (var "ix")
 
 instantiateType :: TBinding (Type -> Flow s Type)
 instantiateType = define "instantiateType" $
@@ -729,11 +743,11 @@ withLambdaContext = define "withLambdaContext" $
   "newContext" <~ extendTypeContextForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withLetContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> Let -> (e -> Flow s a) -> Flow s a)
+withLetContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> (TypeContext -> Binding -> Maybe Term) -> e -> Let -> (e -> Flow s a) -> Flow s a)
 withLetContext = define "withLetContext" $
   doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
-  "getContext" ~> "setContext" ~> "env" ~> "letrec" ~> "body" ~>
-  "newContext" <~ extendTypeContextForLet @@ (var "getContext" @@ var "env") @@ var "letrec" $
+  "getContext" ~> "setContext" ~> "forBinding" ~> "env" ~> "letrec" ~> "body" ~>
+  "newContext" <~ extendTypeContextForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
 withTypeLambdaContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> TypeLambda -> (e -> Flow s a) -> Flow s a)

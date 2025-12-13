@@ -52,9 +52,7 @@ topologicalSortComponents pairs =
   let graphResult = (Tarjan.adjacencyListsToGraph pairs)
   in  
     let g = (Pairs.first graphResult)
-    in  
-      let getKey = (Pairs.second graphResult)
-      in (Lists.map (\comp -> Lists.map getKey comp) (Tarjan.stronglyConnectedComponents g))
+    in (Lists.map (\comp -> Lists.map (Pairs.second graphResult) comp) (Tarjan.stronglyConnectedComponents g))
 
 topologicalSortNodes :: (Ord t1) => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])
 topologicalSortNodes getKey getAdj nodes =  
