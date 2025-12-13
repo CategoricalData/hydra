@@ -210,7 +210,7 @@ public class Libraries {
                 new hydra.lib.maps.MapKeys(),
                 new hydra.lib.maps.Member(),
                 new hydra.lib.maps.Null(),
-                new hydra.lib.maps.Remove(),
+                new hydra.lib.maps.Delete(),
                 new hydra.lib.maps.Singleton(),
                 new hydra.lib.maps.Size(),
                 new hydra.lib.maps.ToList(),

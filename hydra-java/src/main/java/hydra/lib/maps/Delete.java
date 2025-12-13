@@ -23,13 +23,13 @@ import static hydra.dsl.Types.scheme;
 /**
  * Removes a key from the map.
  */
-public class Remove extends PrimitiveFunction {
+public class Delete extends PrimitiveFunction {
     /**
      * Get the name of this primitive function.
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.remove");
+        return new Name("hydra.lib.maps.delete");
     }
 
     /**

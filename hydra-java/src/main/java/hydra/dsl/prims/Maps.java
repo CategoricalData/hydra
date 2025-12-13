@@ -16,7 +16,7 @@ import hydra.lib.maps.Lookup;
 import hydra.lib.maps.Map;
 import hydra.lib.maps.MapKeys;
 import hydra.lib.maps.Member;
-import hydra.lib.maps.Remove;
+import hydra.lib.maps.Delete;
 import hydra.lib.maps.Singleton;
 import hydra.lib.maps.Size;
 import hydra.lib.maps.ToList;
@@ -42,6 +42,15 @@ public interface Maps {
      */
     static Term bimap() {
         return new Bimap().term();
+    }
+
+    /**
+     * Returns a term representing the remove primitive operation for maps.
+     *
+     * @return a term for removing a key-value pair from a map
+     */
+    static Term delete() {
+        return new Delete().term();
     }
 
     /**
@@ -159,15 +168,6 @@ public interface Maps {
      */
     static Term member() {
         return new Member().term();
-    }
-
-    /**
-     * Returns a term representing the remove primitive operation for maps.
-     *
-     * @return a term for removing a key-value pair from a map
-     */
-    static Term remove() {
-        return new Remove().term();
     }
 
     /**
