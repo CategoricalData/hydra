@@ -89,7 +89,7 @@ mapsRemove = subgroup "remove" [
   test "remove non-existing" 4 [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
   test "remove from empty" 1 [] []]
   where
-    test name k m result = primCase name _maps_remove [int32 k, intStringMap m] (intStringMap result)
+    test name k m result = primCase name _maps_delete [int32 k, intStringMap m] (intStringMap result)
 
 mapsLookup :: TTerm TestGroup
 mapsLookup = subgroup "lookup" [

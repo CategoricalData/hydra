@@ -33,8 +33,9 @@ import qualified Hydra.Dsl.Meta.Base     as MetaBase
 import qualified Hydra.Dsl.Meta.Terms    as MetaTerms
 import qualified Hydra.Dsl.Meta.Types    as MetaTypes
 import qualified Hydra.Dsl.Meta.Module        as Module
-import           Hydra.Dsl.Meta.Phantoms hiding
-  (bigfloat, bigint, binary, boolean, cases, field, float32, float64, floatValue, injection, int8, int16, int32, int64, integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
+import           Hydra.Dsl.Meta.Phantoms hiding (
+  bigfloat, bigint, binary, boolean, cases, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
+  integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
@@ -133,7 +134,6 @@ module_ = Module (Namespace "hydra.extract.core") elements
      toBinding unionType,
      toBinding unit,
      toBinding unitVariant,
-     toBinding variant,
      toBinding wrap,
      toBinding wrappedType]
 
@@ -817,14 +817,9 @@ unitVariant :: TBinding (Name -> Term -> Flow Graph Name)
 unitVariant = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
   "tname" ~> "term" ~>
-  "field" <<~ variant @@ var "tname" @@ var "term" $
+  "field" <<~ injection @@ var "tname" @@ var "term" $
   "ignored" <<~ unit @@ (Core.fieldTerm (var "field")) $
   produce (Core.fieldName (var "field"))
-
-variant :: TBinding (Name -> Term -> Flow Graph Field)
-variant = define "variant" $
-  doc "Extract a field from a union term (alias for injection)" $
-  injection
 
 -- TODO: nonstandard; move me
 wrap :: TBinding (Name -> Term -> Flow Graph Term)

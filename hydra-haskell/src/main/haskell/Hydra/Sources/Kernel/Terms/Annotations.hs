@@ -138,7 +138,7 @@ debugIf = define "debugIf" $
     (Equality.equal (var "desc") (just $ string "debugId"))
     (Flows.fail (var "message"))
     (produce unit)) $
-  Flows.bind (getDebugId) (var "checkAndFail")
+  Flows.bind getDebugId (var "checkAndFail")
 
 failOnFlag :: TBinding (Name -> String -> Flow s ())
 failOnFlag = define "failOnFlag" $

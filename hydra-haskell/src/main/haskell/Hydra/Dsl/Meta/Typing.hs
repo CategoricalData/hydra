@@ -78,17 +78,25 @@ typeConstraintRight tc = Phantoms.project _TypeConstraint _TypeConstraint_right 
 typeConstraintComment :: TTerm TypeConstraint -> TTerm String
 typeConstraintComment tc = Phantoms.project _TypeConstraint _TypeConstraint_comment @@ tc
 
-typeContext :: TTerm (M.Map Name Type) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
-typeContext types variables inferenceContext = Phantoms.record _TypeContext [
+typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
+typeContext types metadata typeVariables lambdaVariables inferenceContext = Phantoms.record _TypeContext [
   _TypeContext_types>>: types,
-  _TypeContext_variables>>: variables,
+  _TypeContext_metadata>>: metadata,
+  _TypeContext_typeVariables>>: typeVariables,
+  _TypeContext_lambdaVariables>>: lambdaVariables,
   _TypeContext_inferenceContext>>: inferenceContext]
 
 typeContextTypes :: TTerm TypeContext -> TTerm (M.Map Name Type)
 typeContextTypes tc = Phantoms.project _TypeContext _TypeContext_types @@ tc
 
-typeContextVariables :: TTerm TypeContext -> TTerm (S.Set Name)
-typeContextVariables tc = Phantoms.project _TypeContext _TypeContext_variables @@ tc
+typeContextMetadata :: TTerm TypeContext -> TTerm (M.Map Name Term)
+typeContextMetadata tc = Phantoms.project _TypeContext _TypeContext_metadata @@ tc
+
+typeContextTypeVariables :: TTerm TypeContext -> TTerm (S.Set Name)
+typeContextTypeVariables tc = Phantoms.project _TypeContext _TypeContext_typeVariables @@ tc
+
+typeContextLambdaVariables :: TTerm TypeContext -> TTerm (S.Set Name)
+typeContextLambdaVariables tc = Phantoms.project _TypeContext _TypeContext_lambdaVariables @@ tc
 
 typeContextInferenceContext :: TTerm TypeContext -> TTerm InferenceContext
 typeContextInferenceContext tc = Phantoms.project _TypeContext _TypeContext_inferenceContext @@ tc
@@ -96,13 +104,33 @@ typeContextInferenceContext tc = Phantoms.project _TypeContext _TypeContext_infe
 typeContextWithTypes :: TTerm TypeContext -> TTerm (M.Map Name Type) -> TTerm TypeContext
 typeContextWithTypes ctx types = typeContext
   types
-  (Hydra.Dsl.Meta.Typing.typeContextVariables ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
   (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
 
-typeContextWithVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
-typeContextWithVariables ctx variables = typeContext
+typeContextWithMetadata :: TTerm TypeContext -> TTerm (M.Map Name Term) -> TTerm TypeContext
+typeContextWithMetadata ctx metadata = typeContext
   (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  variables
+  metadata
+  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
+
+typeContextWithTypeVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
+typeContextWithTypeVariables ctx typeVariables = typeContext
+  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
+  typeVariables
+  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
+
+typeContextWithLambdaVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
+typeContextWithLambdaVariables ctx lambdaVariables = typeContext
+  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
+  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
+  lambdaVariables
   (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
 
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst

@@ -63,7 +63,7 @@ substituteInTerm subst term0 =
       rewrite = (\recurse -> \term ->  
               let withLambda = (\l ->  
                       let v = (Core.lambdaParameter l) 
-                          subst2 = (Typing.TermSubst (Maps.remove v s))
+                          subst2 = (Typing.TermSubst (Maps.delete v s))
                       in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                         Core.lambdaParameter = v,
                         Core.lambdaDomain = (Core.lambdaDomain l),
@@ -97,7 +97,7 @@ substInType subst typ0 =
             Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))})) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
           Core.TypeVariable v1 -> (Maybes.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
           _ -> (recurse typ)) typ) 
-      removeVar = (\v -> Typing.TypeSubst (Maps.remove v (Typing.unTypeSubst subst)))
+      removeVar = (\v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst)))
   in (Rewriting.rewriteType rewrite typ0)
 
 -- | Apply a type substitution to a type scheme
@@ -132,7 +132,7 @@ substTypesInTerm subst term0 =
                       Core.typeApplicationTermType = (substInType subst (Core.typeApplicationTermType tt))}))
               forTypeLambda = (\ta ->  
                       let param = (Core.typeLambdaParameter ta) 
-                          subst2 = (Typing.TypeSubst (Maps.remove param (Typing.unTypeSubst subst)))
+                          subst2 = (Typing.TypeSubst (Maps.delete param (Typing.unTypeSubst subst)))
                       in (Core.TermTypeLambda (Core.TypeLambda {
                         Core.typeLambdaParameter = param,
                         Core.typeLambdaBody = (substTypesInTerm subst2 (Core.typeLambdaBody ta))})))

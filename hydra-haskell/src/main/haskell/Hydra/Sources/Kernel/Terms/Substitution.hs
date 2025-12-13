@@ -132,7 +132,7 @@ substituteInTerm = define "substituteInTerm" $
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "withLambda">: lambda "l" $ lets [
         "v">: Core.lambdaParameter $ var "l",
-        "subst2">: Typing.termSubst $ Maps.remove (var "v") (var "s")] $
+        "subst2">: Typing.termSubst $ Maps.delete (var "v") (var "s")] $
         Core.termFunction $ Core.functionLambda $
           Core.lambda (var "v") (Core.lambdaDomain $ var "l") (substituteInTerm @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
@@ -176,7 +176,7 @@ substInType = define "substInType" $
         (var "typ")
         (lambda "styp" $ var "styp")
         (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
-    "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.remove (var "v") (Typing.unTypeSubst $ var "subst")] $
+    "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
     (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
 substInTypeScheme :: TBinding (TypeSubst -> TypeScheme -> TypeScheme)
@@ -214,7 +214,7 @@ substTypesInTerm = define "substTypesInTerm" $
            (substInType @@ var "subst" @@ (Core.typeApplicationTermType $ var "tt")),
       "forTypeLambda">: lambda "ta" $ lets [
         "param">: Core.typeLambdaParameter $ var "ta",
-        "subst2">: Typing.typeSubst $ Maps.remove (var "param") (Typing.unTypeSubst $ var "subst")] $
+        "subst2">: Typing.typeSubst $ Maps.delete (var "param") (Typing.unTypeSubst $ var "subst")] $
         Core.termTypeLambda $ Core.typeLambda
           (var "param")
           (substTypesInTerm @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $

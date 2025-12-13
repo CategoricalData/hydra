@@ -253,7 +253,7 @@ checkType = define "checkType" $
   doc "Check that a term has the expected type" $
   "tx" ~> "term" ~> "typ" ~>
   "cx" <~ Typing.typeContextInferenceContext (var "tx") $
-  "vars" <~ Typing.typeContextVariables (var "tx") $
+  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
   Logic.ifElse (Constants.debugInference)
     ("t0" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term" $
       Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
@@ -295,14 +295,14 @@ checkTypeVariables = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound" $
   "tx" ~> "typ" ~>
   "cx" <~ Typing.typeContextInferenceContext (var "tx") $
-  "vars" <~ Typing.typeContextVariables (var "tx") $
+  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
   "dflt" <~ (
     exec (Flows.mapList (checkTypeVariables @@ var "tx") (Rewriting.subtypes @@ var "typ")) $
     produce unit) $
   "check" <~ (cases _Type (var "typ")
     (Just $ var "dflt") [
     _Type_forall>>: "ft" ~> checkTypeVariables
-      @@ (Typing.typeContextWithVariables (var "tx") (Sets.insert (Core.forallTypeParameter $ var "ft") (var "vars")))
+      @@ (Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (Core.forallTypeParameter $ var "ft") (var "vars")))
       @@ (Core.forallTypeBody $ var "ft"),
     _Type_variable>>: "v" ~> Logic.ifElse (Sets.member (var "v") (var "vars"))
       (Flows.pure unit)
@@ -703,8 +703,8 @@ typeOfTypeLambda = define "typeOfTypeLambda" $
   "tx" ~> "typeArgs" ~> "tl" ~>
   "v" <~ Core.typeLambdaParameter (var "tl") $
   "body" <~ Core.typeLambdaBody (var "tl") $
-  "vars" <~ Typing.typeContextVariables (var "tx") $
-  "tx2" <~ Typing.typeContextWithVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
+  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
+  "tx2" <~ Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
   "t1" <<~ typeOf @@ var "tx2" @@ list ([] :: [TTerm Type]) @@ var "body" $
   exec (checkTypeVariables @@ var "tx2" @@ var "t1") $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs"
@@ -764,12 +764,12 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
   "types" <~ Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext $ var "tx") $
   allEqual @@ (Lists.map (Rewriting.replaceTypedefs @@ var "types") (var "tlist"))
 
--- | Check if a type contains any type variable that's in scope (from typeContextVariables)
+-- | Check if a type contains any type variable that's in scope (from typeContextTypeVariables)
 containsInScopeTypeVars :: TBinding (TypeContext -> Type -> Bool)
 containsInScopeTypeVars = define "containsInScopeTypeVars" $
   doc "Check if a type contains any type variable from the current scope" $
   "tx" ~> "t" ~>
-  "vars" <~ Typing.typeContextVariables (var "tx") $
+  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
   "freeVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
   Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
 

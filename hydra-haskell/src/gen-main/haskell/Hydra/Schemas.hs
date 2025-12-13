@@ -100,16 +100,20 @@ extendTypeContextForLambda tcontext lam =
     let dom = (Maybes.fromJust (Core.lambdaDomain lam))
     in Typing.TypeContext {
       Typing.typeContextTypes = (Maps.insert var dom (Typing.typeContextTypes tcontext)),
-      Typing.typeContextVariables = (Typing.typeContextVariables tcontext),
+      Typing.typeContextMetadata = (Maps.delete var (Typing.typeContextMetadata tcontext)),
+      Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
+      Typing.typeContextLambdaVariables = (Sets.insert var (Typing.typeContextLambdaVariables tcontext)),
       Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 -- | Extend a type context by descending into a let body
-extendTypeContextForLet :: (Typing.TypeContext -> Core.Let -> Typing.TypeContext)
-extendTypeContextForLet tcontext letrec =  
+extendTypeContextForLet :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> Typing.TypeContext -> Core.Let -> Typing.TypeContext)
+extendTypeContextForLet forBinding tcontext letrec =  
   let bindings = (Core.letBindings letrec)
   in Typing.TypeContext {
     Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (typeSchemeToFType (Maybes.fromJust (Core.bindingType b))))) bindings))),
-    Typing.typeContextVariables = (Typing.typeContextVariables tcontext),
+    Typing.typeContextMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding tcontext b)) (Typing.typeContextMetadata tcontext) bindings),
+    Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
+    Typing.typeContextLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Typing.typeContextLambdaVariables tcontext) bindings),
     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 -- | Extend a type context by descending into a System F type lambda body
@@ -118,7 +122,9 @@ extendTypeContextForTypeLambda tcontext tlam =
   let name = (Core.typeLambdaParameter tlam)
   in Typing.TypeContext {
     Typing.typeContextTypes = (Typing.typeContextTypes tcontext),
-    Typing.typeContextVariables = (Sets.insert name (Typing.typeContextVariables tcontext)),
+    Typing.typeContextMetadata = (Typing.typeContextMetadata tcontext),
+    Typing.typeContextTypeVariables = (Sets.insert name (Typing.typeContextTypeVariables tcontext)),
+    Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tcontext),
     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 fieldMap :: ([Core.Field] -> M.Map Core.Name Core.Term)
@@ -210,7 +216,9 @@ graphToInferenceContext graph =
 graphToTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing.TypeContext)
 graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix -> Flows.pure (Typing.TypeContext {
   Typing.typeContextTypes = Maps.empty,
-  Typing.typeContextVariables = Sets.empty,
+  Typing.typeContextMetadata = Maps.empty,
+  Typing.typeContextTypeVariables = Sets.empty,
+  Typing.typeContextLambdaVariables = Sets.empty,
   Typing.typeContextInferenceContext = ix})))
 
 instantiateType :: (Core.Type -> Compute.Flow t0 Core.Type)
@@ -443,9 +451,9 @@ withLambdaContext getContext setContext env lam body =
   let newContext = (extendTypeContextForLambda (getContext env) lam)
   in (body (setContext newContext env))
 
-withLetContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.Let -> (t1 -> t2) -> t2)
-withLetContext getContext setContext env letrec body =  
-  let newContext = (extendTypeContextForLet (getContext env) letrec)
+withLetContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> (Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> t0 -> Core.Let -> (t1 -> t2) -> t2)
+withLetContext getContext setContext forBinding env letrec body =  
+  let newContext = (extendTypeContextForLet forBinding (getContext env) letrec)
   in (body (setContext newContext env))
 
 withTypeLambdaContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.TypeLambda -> (t1 -> t2) -> t2)

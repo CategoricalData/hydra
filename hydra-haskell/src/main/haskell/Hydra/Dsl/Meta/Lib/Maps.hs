@@ -19,6 +19,9 @@ alter = primitive3 _maps_alter
 bimap :: TTerm (k1 -> k2) -> TTerm (v1 -> v2) -> TTerm (Map k1 v1) -> TTerm (Map k2 v2)
 bimap = primitive3 _maps_bimap
 
+delete :: TTerm k -> TTerm (Map k v) -> TTerm (Map k v)
+delete = primitive2 _maps_delete
+
 elems :: TTerm (Map k v) -> TTerm [v]
 elems = primitive1 _maps_elems
 
@@ -57,9 +60,6 @@ member = primitive2 _maps_member
 
 null :: TTerm (Map k v) -> TTerm Bool
 null = primitive1 _maps_null
-
-remove :: TTerm k -> TTerm (Map k v) -> TTerm (Map k v)
-remove = primitive2 _maps_remove
 
 singleton :: TTerm k -> TTerm v -> TTerm (Map k v)
 singleton = primitive2 _maps_singleton

@@ -204,19 +204,19 @@ etaExpandTypedTerm tx0 term0 =
                       let forFunction = (\tx -> \f -> (\x -> case x of
                               Core.FunctionElimination _ -> (Flows.pure 1)
                               Core.FunctionLambda v1 ->  
-                                let tx2 = (Schemas.extendTypeContextForLambda tx v1)
-                                in (arityOf tx2 (Core.lambdaBody v1))
+                                let txl = (Schemas.extendTypeContextForLambda tx v1)
+                                in (arityOf txl (Core.lambdaBody v1))
                               Core.FunctionPrimitive v1 -> (Flows.map Arity.typeSchemeArity (Lexical.requirePrimitiveType tx v1))) f)
                       in ((\x -> case x of
                         Core.TermAnnotated v1 -> (arityOf tx (Core.annotatedTermBody v1))
                         Core.TermFunction v1 -> (forFunction tx v1)
                         Core.TermLet v1 ->  
-                          let tx2 = (Schemas.extendTypeContextForLet tx v1)
-                          in (arityOf tx2 (Core.letBody v1))
+                          let txl = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                          in (arityOf txl (Core.letBody v1))
                         Core.TermTypeApplication v1 -> (arityOf tx (Core.typeApplicationTermBody v1))
                         Core.TermTypeLambda v1 ->  
-                          let tx2 = (Schemas.extendTypeContextForTypeLambda tx v1)
-                          in (arityOf tx2 (Core.typeLambdaBody v1))
+                          let txt = (Schemas.extendTypeContextForTypeLambda tx v1)
+                          in (arityOf txt (Core.typeLambdaBody v1))
                         Core.TermVariable v1 -> (Maybes.maybe (Flows.fail (Strings.cat [
                           "unbound variable: ",
                           (Core.unName v1)])) (\t -> Flows.pure (Arity.typeArity t)) (Maps.lookup v1 (Typing.typeContextTypes tx)))
@@ -276,16 +276,16 @@ etaExpandTypedTerm tx0 term0 =
                                 Core.TermFunction v1 -> ((\x -> case x of
                                   Core.FunctionElimination v2 -> (forElimination v2)
                                   Core.FunctionLambda v2 ->  
-                                    let tx2 = (Schemas.extendTypeContextForLambda tx v2)
-                                    in (Flows.map unwind (recurse tx2 term))
+                                    let txl = (Schemas.extendTypeContextForLambda tx v2)
+                                    in (Flows.map unwind (recurse txl term))
                                   _ -> (recurseOrForce term)) v1)
                                 Core.TermLet v1 ->  
-                                  let tx2 = (Schemas.extendTypeContextForLet tx v1)
-                                  in (recurse tx2 term)
+                                  let txlt = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                                  in (recurse txlt term)
                                 Core.TermTypeApplication v1 -> (rewrite topLevel forced (Lists.cons (Core.typeApplicationTermType v1) typeArgs) recurse tx (Core.typeApplicationTermBody v1))
                                 Core.TermTypeLambda v1 ->  
-                                  let tx2 = (Schemas.extendTypeContextForTypeLambda tx v1)
-                                  in (recurse tx2 term)
+                                  let txt = (Schemas.extendTypeContextForTypeLambda tx v1)
+                                  in (recurse txt term)
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
@@ -379,7 +379,7 @@ rewriteTermWithTypeContext f cx0 term0 =
                     Core.TermFunction v1 -> ((\x -> case x of
                       Core.FunctionLambda v2 -> (recurse (Schemas.extendTypeContextForLambda cx v2) term)
                       _ -> fallback) v1)
-                    Core.TermLet v1 -> (recurse (Schemas.extendTypeContextForLet cx v1) term)
+                    Core.TermLet v1 -> (recurse (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1) term)
                     Core.TermTypeLambda v1 -> (recurse (Schemas.extendTypeContextForTypeLambda cx v1) term)
                     _ -> fallback) term))
           in (f recurse1 term))

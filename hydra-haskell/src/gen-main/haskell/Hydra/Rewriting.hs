@@ -573,14 +573,14 @@ rewriteAndFoldTerm f term0 =
                       in  
                         let forFunction = (\val -> \fun -> (\x -> case x of
                                 Core.FunctionElimination v1 ->  
-                                  let r = (forElimination val v1)
-                                  in (Pairs.first r, (Core.FunctionElimination (Pairs.second r)))
+                                  let re = (forElimination val v1)
+                                  in (Pairs.first re, (Core.FunctionElimination (Pairs.second re)))
                                 Core.FunctionLambda v1 ->  
-                                  let r = (recurse val (Core.lambdaBody v1))
-                                  in (Pairs.first r, (Core.FunctionLambda (Core.Lambda {
+                                  let rl = (recurse val (Core.lambdaBody v1))
+                                  in (Pairs.first rl, (Core.FunctionLambda (Core.Lambda {
                                     Core.lambdaParameter = (Core.lambdaParameter v1),
                                     Core.lambdaDomain = (Core.lambdaDomain v1),
-                                    Core.lambdaBody = (Pairs.second r)})))
+                                    Core.lambdaBody = (Pairs.second rl)})))
                                 _ -> (val, fun)) fun)
                         in  
                           let dflt = (val0, term0)

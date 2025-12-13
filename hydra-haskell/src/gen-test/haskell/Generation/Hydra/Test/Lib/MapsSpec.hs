@@ -76,7 +76,7 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (1, "x")])
   H.describe "remove" $ do
     H.it "remove existing" $ H.shouldBe
-      (Maps.remove 2 (M.fromList [
+      (Maps.delete 2 (M.fromList [
           (1, "a"),
           (2, "b"),
           (3, "c")]))
@@ -84,14 +84,14 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (1, "a"),
           (3, "c")])
     H.it "remove non-existing" $ H.shouldBe
-      (Maps.remove 4 (M.fromList [
+      (Maps.delete 4 (M.fromList [
           (1, "a"),
           (2, "b")]))
       (M.fromList [
           (1, "a"),
           (2, "b")])
     H.it "remove from empty" $ H.shouldBe
-      (Maps.remove 1 M.empty)
+      (Maps.delete 1 M.empty)
       (M.empty :: M.Map Int Int)
   H.describe "lookup" $ do
     H.it "find existing key" $ H.shouldBe
