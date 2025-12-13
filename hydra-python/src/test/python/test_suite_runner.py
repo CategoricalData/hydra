@@ -38,6 +38,7 @@ import hydra.monads
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
+import hydra.sources.libraries
 import hydra.testing
 import hydra.typing
 from hydra.dsl.python import Just, Left, Nothing, Right
@@ -81,6 +82,7 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
     This mirrors the Haskell testGraph setup which includes:
     - Test types (LatLon, Person, etc.) in a schema graph
     - Test terms (testDataArthur, etc.) as elements
+    - Standard library primitives (hydra.lib.*)
 
     Returns:
         Flow[None, InferenceContext]: A flow that produces an inference context
@@ -130,13 +132,17 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
             type=Nothing()
         )
 
-    # Create the main test graph with schema
+    # Get standard library primitives (hydra.lib.*)
+    # This mirrors how Haskell includes kernelTermsModules in testGraph
+    primitives = hydra.sources.libraries.standard_library()
+
+    # Create the main test graph with schema and primitives
     graph = hydra.graph.Graph(
         elements=FrozenDict(term_bindings),
         environment=FrozenDict({}),
         types=FrozenDict({}),
         body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
-        primitives=FrozenDict({}),
+        primitives=FrozenDict(primitives),
         schema=Just(schema_graph)
     )
     return hydra.schemas.graph_to_inference_context(graph)

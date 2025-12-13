@@ -360,9 +360,11 @@ LITERAL__FLOAT__NAME = Name("float")
 LITERAL__INTEGER__NAME = Name("integer")
 LITERAL__STRING__NAME = Name("string")
 
+@dataclass(frozen=True)
 class LiteralTypeBinary:
     r"""The type of a binary (byte string) value."""
 
+@dataclass(frozen=True)
 class LiteralTypeBoolean:
     r"""The type of a boolean (true/false) value."""
 
@@ -372,6 +374,7 @@ class LiteralTypeFloat(Node["FloatType"]):
 class LiteralTypeInteger(Node["IntegerType"]):
     r"""The type of an integer value."""
 
+@dataclass(frozen=True)
 class LiteralTypeString:
     r"""The type of a string value."""
 
@@ -474,6 +477,7 @@ class TermTypeLambda(Node["TypeLambda"]):
 class TermUnion(Node["Injection"]):
     r"""An injection; an instance of a union type."""
 
+@dataclass(frozen=True)
 class TermUnit:
     r"""A unit value; a term with no value."""
 
@@ -545,6 +549,7 @@ class TypeSet(Node["Type"]):
 class TypeUnion(Node["RowType"]):
     r"""A union type with field names."""
 
+@dataclass(frozen=True)
 class TypeUnit:
     r"""The unit type."""
 
