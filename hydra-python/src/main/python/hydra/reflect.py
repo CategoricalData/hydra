@@ -233,8 +233,10 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVa
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-# All literal types, in a canonical order.
-literal_types = hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
+def literal_types() -> frozenlist[hydra.core.LiteralType]:
+    r"""All literal types, in a canonical order."""
+    
+    return hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
     r"""Find the literal inject (constructor) for a given literal value."""
