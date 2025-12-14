@@ -5,7 +5,7 @@ r"""Phantom types for use with Hydra DSLs."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
 
 A = TypeVar("A")

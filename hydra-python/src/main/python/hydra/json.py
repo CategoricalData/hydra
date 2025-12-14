@@ -5,6 +5,7 @@ r"""A JSON syntax model. See the BNF at https://www.json.org."""
 from __future__ import annotations
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Node, frozenlist
+from typing import TypeAlias
 import hydra.core
 
 class ValueArray(Node["frozenlist[Value]"]):
@@ -26,7 +27,7 @@ class ValueString(Node[str]):
     r"""A string value."""
 
 # A JSON value.
-type Value = ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString
+Value: TypeAlias = "ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString"
 
 VALUE__NAME = hydra.core.Name("hydra.json.Value")
 VALUE__ARRAY__NAME = hydra.core.Name("array")

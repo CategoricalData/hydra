@@ -1,5 +1,6 @@
 """Python implementations of hydra.lib.eithers primitives."""
 
+from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeVar
 from hydra.dsl.python import Either, Left, Right, frozenlist
@@ -9,7 +10,7 @@ B = TypeVar("B")
 C = TypeVar("C")
 
 
-def either[A, B, C](f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:
+def either(f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:
     """Eliminate an Either value by applying one of two functions."""
     match e:
         case Left(val):
@@ -28,7 +29,7 @@ def is_right(e: Either[A, B]) -> bool:
     return isinstance(e, Right)
 
 
-def map_left[A, B, C](f: Callable[[A], C], e: Either[A, B]) -> Either[C, B]:
+def map_left(f: Callable[[A], C], e: Either[A, B]) -> Either[C, B]:
     """Map a function over the Left side of an Either."""
     match e:
         case Left(val):
@@ -37,7 +38,7 @@ def map_left[A, B, C](f: Callable[[A], C], e: Either[A, B]) -> Either[C, B]:
             return Right(val)
 
 
-def map_right[A, B, C](f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
+def map_right(f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
     """Map a function over the Right side of an Either."""
     match e:
         case Left(val):
@@ -46,7 +47,7 @@ def map_right[A, B, C](f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
             return Right(f(val))
 
 
-def from_left[A, B](default: A, e: Either[A, B]) -> A:
+def from_left(default: A, e: Either[A, B]) -> A:
     """Extract the Left value, or return a default."""
     match e:
         case Left(val):
@@ -55,7 +56,7 @@ def from_left[A, B](default: A, e: Either[A, B]) -> A:
             return default
 
 
-def from_right[A, B](default: B, e: Either[A, B]) -> B:
+def from_right(default: B, e: Either[A, B]) -> B:
     """Extract the Right value, or return a default."""
     match e:
         case Left(_):
@@ -64,7 +65,7 @@ def from_right[A, B](default: B, e: Either[A, B]) -> B:
             return val
 
 
-def lefts[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
+def lefts(eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
     """Extract all Left values from a list of Eithers."""
     result: list[A] = []
     for e in eithers:
@@ -76,7 +77,7 @@ def lefts[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
     return tuple(result)
 
 
-def rights[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:
+def rights(eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:
     """Extract all Right values from a list of Eithers."""
     result: list[B] = []
     for e in eithers:
@@ -88,7 +89,7 @@ def rights[A, B](eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:
     return tuple(result)
 
 
-def partition_eithers[A, B](eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
+def partition_eithers(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
     """Partition a list of Eithers into lefts and rights."""
     left_vals: list[A] = []
     right_vals: list[B] = []

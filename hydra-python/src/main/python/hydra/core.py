@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
 from hydra.dsl.python import Either, FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated
+from typing import Annotated, TypeAlias
 
 class Name(Node[str]):
     r"""A unique identifier in some context; a string-valued key."""
@@ -116,7 +116,7 @@ class EliminationWrap(Node["Name"]):
     r"""Unwrap a wrapped term."""
 
 # A corresponding elimination for an introduction term.
-type Elimination = EliminationRecord | EliminationUnion | EliminationWrap
+Elimination: TypeAlias = "EliminationRecord | EliminationUnion | EliminationWrap"
 
 ELIMINATION__NAME = Name("hydra.core.Elimination")
 ELIMINATION__RECORD__NAME = Name("record")
@@ -172,7 +172,7 @@ class FloatValueFloat64(Node[float]):
     r"""A 64-bit floating-point value."""
 
 # A floating-point literal value.
-type FloatValue = FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64
+FloatValue: TypeAlias = "FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64"
 
 FLOAT_VALUE__NAME = Name("hydra.core.FloatValue")
 FLOAT_VALUE__BIGFLOAT__NAME = Name("bigfloat")
@@ -200,7 +200,7 @@ class FunctionPrimitive(Node["Name"]):
     r"""A reference to a built-in (primitive) function."""
 
 # A function.
-type Function = FunctionElimination | FunctionLambda | FunctionPrimitive
+Function: TypeAlias = "FunctionElimination | FunctionLambda | FunctionPrimitive"
 
 FUNCTION__NAME = Name("hydra.core.Function")
 FUNCTION__ELIMINATION__NAME = Name("elimination")
@@ -298,7 +298,7 @@ class IntegerValueUint64(Node[int]):
     r"""A 64-bit unsigned integer value (unsigned long)."""
 
 # An integer literal value.
-type IntegerValue = IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64
+IntegerValue: TypeAlias = "IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64"
 
 INTEGER_VALUE__NAME = Name("hydra.core.IntegerValue")
 INTEGER_VALUE__BIGINT__NAME = Name("bigint")
@@ -351,7 +351,7 @@ class LiteralString(Node[str]):
     r"""A string literal."""
 
 # A term constant; an instance of a literal type.
-type Literal = LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString
+Literal: TypeAlias = "LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString"
 
 LITERAL__NAME = Name("hydra.core.Literal")
 LITERAL__BINARY__NAME = Name("binary")
@@ -360,11 +360,9 @@ LITERAL__FLOAT__NAME = Name("float")
 LITERAL__INTEGER__NAME = Name("integer")
 LITERAL__STRING__NAME = Name("string")
 
-@dataclass(frozen=True)
 class LiteralTypeBinary:
     r"""The type of a binary (byte string) value."""
 
-@dataclass(frozen=True)
 class LiteralTypeBoolean:
     r"""The type of a boolean (true/false) value."""
 
@@ -374,12 +372,11 @@ class LiteralTypeFloat(Node["FloatType"]):
 class LiteralTypeInteger(Node["IntegerType"]):
     r"""The type of an integer value."""
 
-@dataclass(frozen=True)
 class LiteralTypeString:
     r"""The type of a string value."""
 
 # Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants.
-type LiteralType = LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString
+LiteralType: TypeAlias = "LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"
 
 LITERAL_TYPE__NAME = Name("hydra.core.LiteralType")
 LITERAL_TYPE__BINARY__NAME = Name("binary")
@@ -477,7 +474,6 @@ class TermTypeLambda(Node["TypeLambda"]):
 class TermUnion(Node["Injection"]):
     r"""An injection; an instance of a union type."""
 
-@dataclass(frozen=True)
 class TermUnit:
     r"""A unit value; a term with no value."""
 
@@ -488,7 +484,7 @@ class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
 # A data term.
-type Term = TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap
+Term: TypeAlias = "TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap"
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -549,7 +545,6 @@ class TypeSet(Node["Type"]):
 class TypeUnion(Node["RowType"]):
     r"""A union type with field names."""
 
-@dataclass(frozen=True)
 class TypeUnit:
     r"""The unit type."""
 
@@ -560,7 +555,7 @@ class TypeWrap(Node["WrappedType"]):
     r"""A wrapped type (newtype)."""
 
 # A data type.
-type Type = TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap
+Type: TypeAlias = "TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap"
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")

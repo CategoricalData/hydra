@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Maybe, Node
-from typing import Annotated
+from typing import Annotated, TypeAlias
 import hydra.core
 
 class Associativity(Enum):
@@ -76,7 +76,7 @@ class ExprBrackets(Node["BracketExpr"]):
     r"""A bracketed expression."""
 
 # An abstract expression.
-type Expr = ExprConst | ExprIndent | ExprOp | ExprBrackets
+Expr: TypeAlias = "ExprConst | ExprIndent | ExprOp | ExprBrackets"
 
 EXPR__NAME = hydra.core.Name("hydra.ast.Expr")
 EXPR__CONST__NAME = hydra.core.Name("const")
@@ -102,7 +102,7 @@ class IndentStyleSubsequentLines(Node[str]):
     r"""Indent only lines after the first with the given string."""
 
 # Any of several indentation styles.
-type IndentStyle = IndentStyleAllLines | IndentStyleSubsequentLines
+IndentStyle: TypeAlias = "IndentStyleAllLines | IndentStyleSubsequentLines"
 
 INDENT_STYLE__NAME = hydra.core.Name("hydra.ast.IndentStyle")
 INDENT_STYLE__ALL_LINES__NAME = hydra.core.Name("allLines")
@@ -173,7 +173,7 @@ class WsDoubleBreak:
     r"""Two line breaks."""
 
 # One of several classes of whitespace.
-type Ws = WsNone | WsSpace | WsBreak | WsBreakAndIndent | WsDoubleBreak
+Ws: TypeAlias = "WsNone | WsSpace | WsBreak | WsBreakAndIndent | WsDoubleBreak"
 
 WS__NAME = hydra.core.Name("hydra.ast.Ws")
 WS__NONE__NAME = hydra.core.Name("none")

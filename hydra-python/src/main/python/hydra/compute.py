@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
 
 S = TypeVar("S")

@@ -5,7 +5,7 @@ r"""String formatting types and functions."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -17,6 +17,8 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.util
+
+T0 = TypeVar("T0")
 
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     r"""A helper which maps the first letter of a string to another string."""
@@ -128,7 +130,7 @@ def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
     
     return escape_with_underscore(reserved, non_alnum_to_underscores(s))
 
-def show_list[T0](f: Callable[[T0], str], els: frozenlist[T0]) -> str:
+def show_list(f: Callable[[T0], str], els: frozenlist[T0]) -> str:
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(f, els)), "]"))
 
 def strip_leading_and_trailing_whitespace(s: str) -> str:

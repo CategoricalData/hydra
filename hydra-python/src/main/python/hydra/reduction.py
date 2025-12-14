@@ -5,7 +5,7 @@ r"""Functions for reducing terms and types, i.e. performing computations."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.arity
 import hydra.checking
 import hydra.compute
@@ -28,6 +28,8 @@ import hydra.lib.strings
 import hydra.rewriting
 import hydra.schemas
 import hydra.typing
+
+T0 = TypeVar("T0")
 
 def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Term:
     r"""Alpha convert a variable in a term."""
@@ -52,7 +54,7 @@ def beta_reduce_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Gra
             
             case _:
                 raise TypeError("Unsupported Type")
-    def map_expr[T0](recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], t: T0) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
+    def map_expr(recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], t: T0) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
         def find_app(r: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
             match r:
                 case hydra.core.TypeApplication(value=a):
@@ -72,7 +74,7 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
          ((\x.e1) e2) = e1[x/e2]
     These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it."""
     
-    def rewrite[T0](recurse: Callable[[T0], hydra.core.Term], t: T0) -> hydra.core.Term:
+    def rewrite(recurse: Callable[[T0], hydra.core.Term], t: T0) -> hydra.core.Term:
         rec = recurse(t)
         match rec:
             case hydra.core.TermApplication(value=app):
@@ -161,8 +163,8 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
                 return after_recursion(recurse(t2))
     return contract_term(hydra.rewriting.rewrite_term((lambda v1, v2: rewrite(cast(frozenlist[hydra.core.Term], ()), v1, v2)), term))
 
-def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-    def rewrite[T1](top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], tx: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
+def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], tx: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
         def rewrite_spine(term2: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
             match term2:
                 case hydra.core.TermAnnotated(value=at):
@@ -178,8 +180,8 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
                 
                 case _:
                     return rewrite(False, False, cast(frozenlist[hydra.core.Type], ()), recurse, tx, term2)
-        def arity_of[T2](tx2: hydra.typing.TypeContext, term2: hydra.core.Term) -> hydra.compute.Flow[T2, int]:
-            def dflt[T3]() -> hydra.compute.Flow[T3, int]:
+        def arity_of(tx2: hydra.typing.TypeContext, term2: hydra.core.Term) -> hydra.compute.Flow[T2, int]:
+            def dflt() -> hydra.compute.Flow[T3, int]:
                 return hydra.lib.flows.map(hydra.arity.type_arity, hydra.checking.type_of(tx2, cast(frozenlist[hydra.core.Type], ()), term2))
             def for_function(tx3: hydra.typing.TypeContext, f: hydra.core.Function) -> hydra.compute.Flow[T2, int]:
                 match f:
@@ -227,7 +229,7 @@ def eta_expand_typed_term[T0](tx0: hydra.typing.TypeContext, term0: hydra.core.T
             return pad(extra_variables(n), body)
         def unwind(term2: hydra.core.Term) -> hydra.core.Term:
             return hydra.lib.lists.foldl((lambda e, t: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(e, t)))), term2, type_args)
-        def force_expansion[T2](t: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.core.Term]:
+        def force_expansion(t: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.core.Term]:
             return hydra.lib.flows.bind(hydra.checking.type_of(tx, cast(frozenlist[hydra.core.Type], ()), t), (lambda typ: (arity := hydra.arity.type_arity(typ), hydra.lib.flows.pure(padn(arity, unwind(t))))[1]))
         def recurse_or_force(term2: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
             return hydra.lib.logic.if_else(forced, (lambda : force_expansion(term2)), (lambda : recurse(tx, unwind(term2))))
@@ -415,7 +417,7 @@ def rewrite_term_with_type_context(f: Callable[[
   hydra.core.Term], hydra.core.Term], cx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Rewrite a term with the help of a type context which is updated as we descend into subterms."""
     
-    def f2[T0](recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term], cx: T0, term: hydra.core.Term) -> hydra.core.Term:
+    def f2(recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term], cx: T0, term: hydra.core.Term) -> hydra.core.Term:
         def recurse1(cx2: hydra.typing.TypeContext, term2: hydra.core.Term) -> hydra.core.Term:
             fallback = recurse(cx2, term2)
             match term2:
@@ -446,7 +448,7 @@ def term_is_closed(term: hydra.core.Term) -> bool:
     
     return hydra.lib.sets.null(hydra.rewriting.free_variables_in_term(term))
 
-def term_is_value[T0](g: T0, term: hydra.core.Term) -> bool:
+def term_is_value(g: T0, term: hydra.core.Term) -> bool:
     def for_list(els: frozenlist[hydra.core.Term]) -> bool:
         return hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, term_is_value(g, t))), True, els)
     def check_field(f: hydra.core.Field) -> bool:

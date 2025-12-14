@@ -3,6 +3,7 @@ module Hydra.Ext.Staging.Python.Utils where
 import Hydra.Kernel
 import Hydra.Formatting
 import qualified Hydra.Ext.Python.Syntax as Py
+import qualified Hydra.Ext.Staging.Python.Serde as PySer
 
 import qualified Data.List as L
 
@@ -229,6 +230,21 @@ stringToPyExpression style s = pyAtomToPyExpression $ Py.AtomString $ Py.String_
 tripleQuotedString :: String -> Py.Expression
 tripleQuotedString = stringToPyExpression Py.QuoteStyleTriple
 
+-- | Generate a type alias statement using PEP 695 syntax (Python 3.12+):
+--   type Name[T] = TypeExpression
 typeAliasStatement :: Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement
 typeAliasStatement name tparams mcomment tyexpr = annotatedStatement mcomment $
  pySimpleStatementToPyStatement $ Py.SimpleStatementTypeAlias $ Py.TypeAlias name tparams tyexpr
+
+-- | Generate a type alias statement using Python 3.10-compatible syntax:
+--   Name: TypeAlias = "TypeExpression"
+--   Note: Type parameters are lost in this representation.
+--   The type expression is quoted to handle forward references (types defined later in the file).
+typeAliasStatement310 :: Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement
+typeAliasStatement310 name _tparams mcomment tyexpr = annotatedStatement mcomment $
+  pyAssignmentToPyStatement $ Py.AssignmentTyped $ Py.TypedAssignment
+    (Py.SingleTargetName name)
+    (pyNameToPyExpression $ Py.Name "TypeAlias")
+    (Just $ pyExpressionToPyAnnotatedRhs quotedExpr)
+  where
+    quotedExpr = doubleQuotedString $ printExpr $ PySer.encodeExpression tyexpr

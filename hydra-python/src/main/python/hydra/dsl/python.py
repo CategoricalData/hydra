@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
-from typing import Any, Generic, TypeVar, cast, final
+from typing import Any, Generic, TypeVar, cast, final, TypeAlias
 
 
 K = TypeVar("K")
@@ -13,7 +13,16 @@ T = TypeVar("T")
 V = TypeVar("V")
 
 
-type frozenlist[T] = tuple[T, ...]
+# Note: frozenlist is just a tuple at runtime, but we need a subscriptable alias
+# for runtime use in cast() calls under Python 3.10/PyPy
+class _FrozenListMeta(type):
+    """Metaclass that makes frozenlist subscriptable at runtime."""
+    def __getitem__(cls, item: Any) -> Any:
+        return tuple
+
+class frozenlist(metaclass=_FrozenListMeta):
+    """A type alias for immutable lists (tuples). Subscriptable at runtime for cast() compatibility."""
+    pass
 
 
 @final
@@ -34,7 +43,16 @@ class Nothing:
 # Note: unused
 NOTHING = Nothing()
 
-type Maybe[T] = Just[T] | Nothing
+# Maybe needs to be subscriptable at runtime for cast() compatibility in Python 3.10/PyPy
+class _MaybeMeta(type):
+    """Metaclass that makes Maybe subscriptable at runtime."""
+    def __getitem__(cls, item: Any) -> Any:
+        # Return a runtime-usable type for cast() - this is just for type checking
+        return object
+
+class Maybe(metaclass=_MaybeMeta):
+    """A type alias for optional values (Just[T] | Nothing). Subscriptable at runtime for cast() compatibility."""
+    pass
 
 
 @final
@@ -47,7 +65,16 @@ class Left(Generic[L]):
 class Right(Generic[R]):
     value: R
 
-type Either[L, R] = Left[L] | Right[R]
+# Either needs to be subscriptable at runtime for cast() compatibility in Python 3.10/PyPy
+class _EitherMeta(type):
+    """Metaclass that makes Either subscriptable at runtime."""
+    def __getitem__(cls, item: Any) -> Any:
+        # Return a runtime-usable type for cast() - this is just for type checking
+        return object
+
+class Either(metaclass=_EitherMeta):
+    """A type alias for sum types (Left[L] | Right[R]). Subscriptable at runtime for cast() compatibility."""
+    pass
 
 
 @dataclass(frozen=True, unsafe_hash=True, eq=True, order=True)

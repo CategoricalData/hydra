@@ -5,6 +5,7 @@ r"""General-purpose utility types used across Hydra."""
 from __future__ import annotations
 from enum import Enum
 from hydra.dsl.python import Node
+from typing import TypeAlias
 import hydra.core
 
 class CaseConvention(Enum):
@@ -45,7 +46,7 @@ class PrecisionBits(Node[int]):
     r"""Precision to a specified number of bits."""
 
 # Numeric precision: arbitrary precision, or precision to a specified number of bits.
-type Precision = PrecisionArbitrary | PrecisionBits
+Precision: TypeAlias = "PrecisionArbitrary | PrecisionBits"
 
 PRECISION__NAME = hydra.core.Name("hydra.util.Precision")
 PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")

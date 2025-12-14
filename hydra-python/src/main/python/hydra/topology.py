@@ -6,13 +6,13 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
 
 A = TypeVar("A")
 
 # A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors.
-type Graph = FrozenDict[Vertex, frozenlist[Vertex]]
+Graph: TypeAlias = "FrozenDict[Vertex, frozenlist[Vertex]]"
 
 GRAPH__NAME = hydra.core.Name("hydra.topology.Graph")
 
@@ -43,6 +43,6 @@ TARJAN_STATE__ON_STACK__NAME = hydra.core.Name("onStack")
 TARJAN_STATE__SCCS__NAME = hydra.core.Name("sccs")
 
 # A graph vertex, represented as a 32-bit integer identifier.
-type Vertex = int
+Vertex: TypeAlias = "int"
 
 VERTEX__NAME = hydra.core.Name("hydra.topology.Vertex")
