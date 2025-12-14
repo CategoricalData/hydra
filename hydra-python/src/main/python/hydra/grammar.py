@@ -5,7 +5,7 @@ r"""A common API for BNF-based grammars, specifying context-free languages."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated
+from typing import Annotated, TypeAlias
 import hydra.core
 
 class Constant(Node[str]):
@@ -68,7 +68,7 @@ class PatternStar(Node["Pattern"]):
     r"""Zero or more occurrences of a pattern."""
 
 # A pattern which matches valid expressions in the language.
-type Pattern = PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar
+Pattern: TypeAlias = "PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar"
 
 PATTERN__NAME = hydra.core.Name("hydra.grammar.Pattern")
 PATTERN__ALTERNATIVES__NAME = hydra.core.Name("alternatives")

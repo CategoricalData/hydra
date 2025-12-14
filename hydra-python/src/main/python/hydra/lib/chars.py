@@ -1,5 +1,7 @@
 """Python implementations of hydra.lib.chars primitives."""
 
+from __future__ import annotations
+
 
 def is_alpha_num(value: int) -> bool:
     """Check if a character (as int) is alphanumeric."""

@@ -5,7 +5,7 @@ r"""Utilities for reading and writing type and term annotations."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.classes
 import hydra.compute
 import hydra.constants
@@ -28,32 +28,37 @@ import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 
-def aggregate_annotations[T0, T1, T2, T3](get_value: Callable[[T0], Maybe[T1]], get_x: Callable[[T1], T0], get_anns: Callable[[T1], FrozenDict[T2, T3]], t: T0) -> FrozenDict[T2, T3]:
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
+
+def aggregate_annotations(get_value: Callable[[T0], Maybe[T1]], get_x: Callable[[T1], T0], get_anns: Callable[[T1], FrozenDict[T2, T3]], t: T0) -> FrozenDict[T2, T3]:
     def to_pairs(rest: frozenlist[frozenlist[tuple[T2, T3]]], t2: T0) -> frozenlist[frozenlist[tuple[T2, T3]]]:
         return hydra.lib.maybes.maybe(rest, (lambda yy: to_pairs(hydra.lib.lists.cons(hydra.lib.maps.to_list(get_anns(yy)), rest), get_x(yy))), get_value(t2))
     return cast(FrozenDict[T2, T3], hydra.lib.maps.from_list(hydra.lib.lists.concat(to_pairs(cast(frozenlist[frozenlist[tuple[T2, T3]]], ()), t))))
 
-def get_attr[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, Maybe[hydra.core.Term]]:
+def get_attr(key: hydra.core.Name) -> hydra.compute.Flow[T0, Maybe[hydra.core.Term]]:
     return cast(hydra.compute.Flow[T0, Maybe[hydra.core.Term]], hydra.compute.Flow((lambda s0, t0: cast(hydra.compute.FlowState[T0, Maybe[hydra.core.Term]], hydra.compute.FlowState(cast(Maybe[Maybe[hydra.core.Term]], Just(hydra.lib.maps.lookup(key, t0.other))), s0, t0)))))
 
-def get_debug_id[T0]() -> hydra.compute.Flow[T0, Maybe[str]]:
+def get_debug_id() -> hydra.compute.Flow[T0, Maybe[str]]:
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr(hydra.constants.key_debug_id), (lambda desc: hydra.lib.flows.map_maybe(hydra.extract.core.string, desc))))
 
-def debug_if[T0, T1](debug_id: T0, message: str) -> hydra.compute.Flow[T1, None]:
-    def check_and_fail[T2](desc: Maybe[str]) -> hydra.compute.Flow[T2, None]:
+def debug_if(debug_id: T0, message: str) -> hydra.compute.Flow[T1, None]:
+    def check_and_fail(desc: Maybe[str]) -> hydra.compute.Flow[T2, None]:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(desc, cast(Maybe[str], Just("debugId"))), (lambda : hydra.lib.flows.fail(message)), (lambda : hydra.lib.flows.pure(None)))
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[T1, Maybe[str]], get_debug_id()), cast(Callable[[Maybe[str]], hydra.compute.Flow[T1, None]], (lambda x1: check_and_fail(x1))))
 
-def get_attr_with_default[T0](key: hydra.core.Name, def_: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+def get_attr_with_default(key: hydra.core.Name, def_: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     return hydra.lib.flows.map((lambda mval: hydra.lib.maybes.from_maybe(def_, mval)), get_attr(key))
 
-def has_flag[T0](flag: hydra.core.Name) -> hydra.compute.Flow[T0, bool]:
+def has_flag(flag: hydra.core.Name) -> hydra.compute.Flow[T0, bool]:
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr_with_default(flag, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False))))), (lambda term: hydra.extract.core.boolean(term))))
 
-def fail_on_flag[T0](flag: hydra.core.Name, msg: str) -> hydra.compute.Flow[T0, None]:
+def fail_on_flag(flag: hydra.core.Name, msg: str) -> hydra.compute.Flow[T0, None]:
     return hydra.lib.flows.bind(has_flag(flag), (lambda val: hydra.lib.logic.if_else(val, (lambda : hydra.lib.flows.fail(msg)), (lambda : hydra.lib.flows.pure(None)))))
 
-def get_count[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
+def get_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr_with_default(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0))))))), hydra.extract.core.int32))
 
 def get_description(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
@@ -119,7 +124,7 @@ def get_type_description(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph
     
     return get_description(type_annotation_internal(typ))
 
-def has_description[T0](anns: FrozenDict[hydra.core.Name, T0]) -> bool:
+def has_description(anns: FrozenDict[hydra.core.Name, T0]) -> bool:
     return hydra.lib.maybes.is_just(hydra.lib.maps.lookup(hydra.constants.key_description, anns))
 
 def has_type_description(typ: hydra.core.Type) -> bool:
@@ -134,13 +139,13 @@ def is_native_type(el: hydra.core.Binding) -> bool:
         return hydra.lib.maybes.from_maybe(False, hydra.lib.maybes.map((lambda _: True), get_term_annotation(hydra.constants.key_first_class_type, el.term)))
     return hydra.lib.maybes.maybe(False, (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))))), hydra.lib.logic.not_(is_flagged_as_first_class_type()))), el.type)
 
-def put_attr[T0](key: hydra.core.Name, val: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
+def put_attr(key: hydra.core.Name, val: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
     return cast(hydra.compute.Flow[T0, None], hydra.compute.Flow((lambda s0, t0: cast(hydra.compute.FlowState[T0, None], hydra.compute.FlowState(cast(Maybe[None], Just(None)), s0, hydra.compute.Trace(t0.stack, t0.messages, hydra.lib.maps.insert(key, val, t0.other)))))))
 
-def put_count[T0](key: hydra.core.Name, count: int) -> hydra.compute.Flow[T0, None]:
+def put_count(key: hydra.core.Name, count: int) -> hydra.compute.Flow[T0, None]:
     return put_attr(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(count)))))))
 
-def next_count[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
+def next_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
     return hydra.lib.flows.bind(get_count(key), (lambda count: hydra.lib.flows.map((lambda _: count), put_count(key, hydra.lib.math.add(count, 1)))))
 
 def normalize_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
@@ -159,10 +164,10 @@ def normalize_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
     stripped = hydra.rewriting.deannotate_type(typ)
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns()), (lambda : stripped), (lambda : cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(stripped, anns())))))
 
-def reset_count[T0](key: hydra.core.Name) -> hydra.compute.Flow[T0, None]:
+def reset_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, None]:
     return put_attr(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))))
 
-def set_annotation[T0, T1](key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict[T0, T1]:
+def set_annotation(key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict[T0, T1]:
     return hydra.lib.maps.alter((lambda _: val), key, m)
 
 def set_description(d: Maybe[str], v1: FrozenDict[hydra.core.Name, hydra.core.Term]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
@@ -232,8 +237,8 @@ def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Bind
         return normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), cast(FrozenDict[hydra.core.Name, hydra.core.Term], hydra.lib.maps.from_list((cast(tuple[hydra.core.Name, hydra.core.Term], (hydra.constants.key_type, schema_term)),)))))))
     return hydra.core.Binding(name, data_term(), cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")))))))
 
-def when_flag[T0, T1](flag: hydra.core.Name, fthen: hydra.compute.Flow[T0, T1], felse: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+def when_flag(flag: hydra.core.Name, fthen: hydra.compute.Flow[T0, T1], felse: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     return hydra.lib.flows.bind(has_flag(flag), (lambda b: hydra.lib.logic.if_else(b, (lambda : fthen), (lambda : felse))))
 
-def with_depth[T0, T1](key: hydra.core.Name, f: Callable[[int], hydra.compute.Flow[T0, T1]]) -> hydra.compute.Flow[T0, T1]:
+def with_depth(key: hydra.core.Name, f: Callable[[int], hydra.compute.Flow[T0, T1]]) -> hydra.compute.Flow[T0, T1]:
     return hydra.lib.flows.bind(get_count(key), (lambda count: (inc := hydra.lib.math.add(count, 1), hydra.lib.flows.bind(put_count(key, inc), (lambda _: hydra.lib.flows.bind(f(inc), (lambda r: hydra.lib.flows.bind(put_count(key, count), (lambda _2: hydra.lib.flows.pure(r))))))))[1]))

@@ -1,6 +1,9 @@
 """Python implementations of hydra.lib.logic (logic and control flow) primitives."""
 
-from typing import Callable, overload
+from __future__ import annotations
+from typing import Callable, overload, TypeVar
+
+A = TypeVar('A')
 
 
 def and_(x: bool, y: bool) -> bool:
@@ -9,10 +12,10 @@ def and_(x: bool, y: bool) -> bool:
 
 
 @overload
-def if_else[A](b: bool, x: Callable[[], A], y: Callable[[], A]) -> A: ...
+def if_else(b: bool, x: Callable[[], A], y: Callable[[], A]) -> A: ...
 @overload
-def if_else[A](b: bool, x: A, y: A) -> A: ...
-def if_else[A](b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
+def if_else(b: bool, x: A, y: A) -> A: ...
+def if_else(b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
     """Compute a conditional expression with lazy evaluation of branches.
 
     When x and y are callable (lambdas), only the chosen branch is called.

@@ -33,6 +33,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesAnnotated :: Bool,
   pythonModuleMetadataUsesCallable :: Bool,
   pythonModuleMetadataUsesCast :: Bool,
+  pythonModuleMetadataUsesTypeAlias :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
   pythonModuleMetadataUsesDecimal :: Bool,
   pythonModuleMetadataUsesEither :: Bool,
@@ -53,9 +54,23 @@ data PyGraph = PyGraph {
   pyGraphGraph :: Graph,
   pyGraphMetadata :: PythonModuleMetadata}
 
--- Supported as of Python 3.12
+-- | Version-aware inline type parameters.
+--   Python 3.12+ supports `def foo[T]()` syntax.
+--   Python 3.10 requires `T = TypeVar("T"); def foo()` at module level.
+useInlineTypeParamsFor :: PythonVersion -> Bool
+useInlineTypeParamsFor Python312 = True
+useInlineTypeParamsFor Python310 = False
+
+-- Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code
 useInlineTypeParams :: Bool
-useInlineTypeParams = True
+useInlineTypeParams = useInlineTypeParamsFor targetPythonVersion
+
+-- | Version-aware type alias statement generation.
+--   Uses PEP 695 syntax for Python 3.12+, or TypeAlias syntax for Python 3.10+.
+typeAliasStatementFor :: PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement
+typeAliasStatementFor env = case pythonEnvironmentVersion env of
+  Python312 -> typeAliasStatement
+  Python310 -> typeAliasStatement310
 
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
@@ -371,13 +386,18 @@ encodeModule mod defs0 = do
                   pythonEnvironmentNamespaces = namespaces0,
                   pythonEnvironmentBoundTypeVariables = ([], M.empty),
                   pythonEnvironmentTypeContext = tcontext,
-                  pythonEnvironmentNUllaryBindings = S.empty}
+                  pythonEnvironmentNUllaryBindings = S.empty,
+                  pythonEnvironmentVersion = targetPythonVersion}
       withDefinitions env0 defs $ \env -> do
         defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
         PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
-        let meta = if not isTypeModule && useInlineTypeParams
+        let meta2 = if not isTypeModule && useInlineTypeParams
                    then meta1 {pythonModuleMetadataUsesTypeVar = False}
                    else meta1
+        -- In Python 3.10 mode, enable TypeAlias import for type modules
+        let meta = if isTypeModule && targetPythonVersion == Python310
+                   then meta2 {pythonModuleMetadataUsesTypeAlias = True}
+                   else meta2
         let namespaces = pythonModuleMetadataNamespaces meta1
 
   --      fail $ "isTypeModule: " ++ show isTypeModule ++ ", meta0.usesCallable: " ++ show (pythonModuleMetadataUsesCallable meta0)
@@ -446,6 +466,7 @@ encodeModule mod defs0 = do
                 ("typing", [
                   cond "Annotated" $ pythonModuleMetadataUsesAnnotated meta,
                   cond "Generic" $ pythonModuleMetadataUsesGeneric meta,
+                  cond "TypeAlias" $ pythonModuleMetadataUsesTypeAlias meta,
                   cond "TypeVar" $ pythonModuleMetadataUsesTypeVar meta,
                   cond "cast" $ pythonModuleMetadataUsesCast meta])]
               where
@@ -738,7 +759,7 @@ encodeTypeAssignment env name typ comment = do
       TypeWrap (WrappedType _ t) -> single <$> encodeWrappedType env name t comment
       t -> singleTypedef env <$> encodeType env t
     single st = [st]
-    singleTypedef env e = single $ typeAliasStatement (encodeName False CaseConventionPascal env name) tparams comment e
+    singleTypedef env e = single $ typeAliasStatementFor env (encodeName False CaseConventionPascal env name) tparams comment e
       where
         tparams = environmentTypeParameters env
 
@@ -782,7 +803,7 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
                 (pyNameToPyTypeParameter <$> fieldParams ftype)
                 margs
                 body
-        unionStmt = typeAliasStatement
+        unionStmt = typeAliasStatementFor env
             (encodeName False CaseConventionPascal env name)
             tparams
             comment
@@ -972,6 +993,7 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
       pythonModuleMetadataUsesAnnotated = False,
       pythonModuleMetadataUsesCallable = False,
       pythonModuleMetadataUsesCast = False,
+      pythonModuleMetadataUsesTypeAlias = False,
       pythonModuleMetadataUsesDataclass = False,
       pythonModuleMetadataUsesDecimal = False,
       pythonModuleMetadataUsesEither = False,

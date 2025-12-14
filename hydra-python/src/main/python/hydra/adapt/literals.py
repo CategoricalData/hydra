@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.adapt.utils
 import hydra.coders
 import hydra.compute
@@ -25,6 +25,9 @@ import hydra.reflect
 import hydra.show.core
 import hydra.util
 import hydra.variants
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.util.Comparison:
     r"""Compare two precision values."""
@@ -158,11 +161,11 @@ def disclaimer(lossy: bool, source: str, target: str) -> str:
     
     return hydra.lib.strings.cat(("replace ", source, " with ", target, hydra.lib.logic.if_else(lossy, (lambda : " (lossy)"), (lambda : ""))))
 
-def float_adapter[T0, T1](ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
-    def make_adapter[T2, T3, T4](source: hydra.core.FloatType, target: hydra.core.FloatType) -> hydra.compute.Flow[T2, hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
+def float_adapter(ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
+    def make_adapter(source: hydra.core.FloatType, target: hydra.core.FloatType) -> hydra.compute.Flow[T2, hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
         def lossy() -> bool:
             return hydra.lib.equality.equal(compare_precision(hydra.reflect.float_type_precision(source), hydra.reflect.float_type_precision(target)), hydra.util.Comparison.GREATER_THAN)
-        def step[T5, T6]() -> hydra.compute.Coder[T5, T6, hydra.core.FloatValue, hydra.core.FloatValue]:
+        def step() -> hydra.compute.Coder[T5, T6, hydra.core.FloatValue, hydra.core.FloatValue]:
             return cast(hydra.compute.Coder[T5, T6, hydra.core.FloatValue, hydra.core.FloatValue], hydra.compute.Coder((lambda fv: hydra.lib.flows.pure(convert_float_value(target, fv))), (lambda fv: hydra.lib.flows.pure(convert_float_value(source, fv)))))
         def msg() -> str:
             return disclaimer(lossy(), hydra.show.core.float_type(source), hydra.show.core.float_type(target))
@@ -180,12 +183,12 @@ def float_adapter[T0, T1](ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def alts[T2, T3, T4](t: hydra.core.FloatType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]]:
+    def alts(t: hydra.core.FloatType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]]:
         return hydra.lib.flows.map_list((lambda v1: make_adapter(t, v1)), alt_types(t))
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.float_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter(cast(Callable[[hydra.core.FloatType], hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T0, T1, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]]], (lambda x1: alts(x1))), supported, hydra.show.core.float_type, hydra.show.core.float_type, ft))[1]))
 
-def integer_adapter[T0, T1](it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
-    def interleave[T2](xs: frozenlist[T2], ys: frozenlist[T2]) -> frozenlist[T2]:
+def integer_adapter(it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
+    def interleave(xs: frozenlist[T2], ys: frozenlist[T2]) -> frozenlist[T2]:
         return hydra.lib.lists.concat(hydra.lib.lists.transpose((xs, ys)))
     def signed_ordered() -> frozenlist[hydra.core.IntegerType]:
         return hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(hydra.reflect.integer_type_is_signed(v), hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.reflect.integer_type_precision(v), cast(hydra.util.Precision, hydra.util.PrecisionArbitrary()))))), hydra.reflect.integer_types)
@@ -203,10 +206,10 @@ def integer_adapter[T0, T1](it: hydra.core.IntegerType) -> hydra.compute.Flow[hy
         return hydra.lib.lists.concat((hydra.lib.lists.drop(hydra.lib.math.mul(i, 2), signed_pref()), (hydra.core.IntegerType.BIGINT,), hydra.lib.lists.drop(hydra.lib.math.add(hydra.lib.math.sub(8, hydra.lib.math.mul(i, 2)), 1), signed_non_pref())))
     def unsigned(i: int) -> frozenlist[hydra.core.IntegerType]:
         return hydra.lib.lists.concat((hydra.lib.lists.drop(hydra.lib.math.mul(i, 2), unsigned_pref()), (hydra.core.IntegerType.BIGINT,), hydra.lib.lists.drop(hydra.lib.math.add(hydra.lib.math.sub(8, hydra.lib.math.mul(i, 2)), 1), unsigned_non_pref())))
-    def make_adapter[T2, T3, T4](source: hydra.core.IntegerType, target: hydra.core.IntegerType) -> hydra.compute.Flow[T2, hydra.compute.Adapter[T3, T4, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
+    def make_adapter(source: hydra.core.IntegerType, target: hydra.core.IntegerType) -> hydra.compute.Flow[T2, hydra.compute.Adapter[T3, T4, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
         def lossy() -> bool:
             return hydra.lib.logic.not_(hydra.lib.equality.equal(compare_precision(hydra.reflect.integer_type_precision(source), hydra.reflect.integer_type_precision(target)), hydra.util.Comparison.LESS_THAN))
-        def step[T5, T6]() -> hydra.compute.Coder[T5, T6, hydra.core.IntegerValue, hydra.core.IntegerValue]:
+        def step() -> hydra.compute.Coder[T5, T6, hydra.core.IntegerValue, hydra.core.IntegerValue]:
             return cast(hydra.compute.Coder[T5, T6, hydra.core.IntegerValue, hydra.core.IntegerValue], hydra.compute.Coder((lambda iv: hydra.lib.flows.pure(convert_integer_value(target, iv))), (lambda iv: hydra.lib.flows.pure(convert_integer_value(source, iv)))))
         def msg() -> str:
             return disclaimer(lossy(), hydra.show.core.integer_type(source), hydra.show.core.integer_type(target))
@@ -242,38 +245,38 @@ def integer_adapter[T0, T1](it: hydra.core.IntegerType) -> hydra.compute.Flow[hy
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def alts[T2, T3, T4](t: hydra.core.IntegerType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]]:
+    def alts(t: hydra.core.IntegerType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]]:
         return hydra.lib.flows.map_list((lambda v1: make_adapter(t, v1)), alt_types(t))
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.integer_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter(cast(Callable[[hydra.core.IntegerType], hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]]], (lambda x1: alts(x1))), supported, hydra.show.core.integer_type, hydra.show.core.integer_type, it))[1]))
 
-def literal_adapter[T0](lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]:
-    def for_binary[T1, T2, T3, T4](t: T1) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-        def match_binary[T5](lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
+def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]:
+    def for_binary(t: T1) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+        def match_binary(lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
             match lit:
                 case hydra.core.LiteralBinary(value=b):
                     return hydra.lib.flows.pure(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.binary_to_string(b))))
                 
                 case _:
                     raise TypeError("Unsupported Literal")
-        def match_string[T5](lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
+        def match_string(lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
             match lit:
                 case hydra.core.LiteralString(value=s):
                     return hydra.lib.flows.pure(cast(hydra.core.Literal, hydra.core.LiteralBinary(hydra.lib.literals.string_to_binary(s))))
                 
                 case _:
                     raise TypeError("Unsupported Literal")
-        def step[T5, T6]() -> hydra.compute.Coder[T5, T6, hydra.core.Literal, hydra.core.Literal]:
+        def step() -> hydra.compute.Coder[T5, T6, hydra.core.Literal, hydra.core.Literal]:
             return cast(hydra.compute.Coder[T5, T6, hydra.core.Literal, hydra.core.Literal], hydra.compute.Coder(cast(Callable[[hydra.core.Literal], hydra.compute.Flow[T5, hydra.core.Literal]], (lambda x1: match_binary(x1))), cast(Callable[[hydra.core.Literal], hydra.compute.Flow[T6, hydra.core.Literal]], (lambda x1: match_string(x1)))))
         return hydra.lib.flows.pure((cast(hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal], hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), cast(hydra.compute.Coder[T3, T4, hydra.core.Literal, hydra.core.Literal], step()))),))
-    def for_boolean[T1, T2, T3](t: T1) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-        def match_boolean[T4, T5](step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
+    def for_boolean(t: T1) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+        def match_boolean(step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
             match lit:
                 case hydra.core.LiteralBoolean(value=bv):
                     return hydra.lib.flows.bind(step_.encode(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint8(hydra.lib.logic.if_else(bv, (lambda : 1), (lambda : 0))))), (lambda iv: hydra.lib.flows.pure(cast(hydra.core.Literal, hydra.core.LiteralInteger(iv)))))
                 
                 case _:
                     raise TypeError("Unsupported Literal")
-        def match_integer[T4, T5](step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
+        def match_integer(step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
             def for_value(val: hydra.core.IntegerValue) -> hydra.core.Literal:
                 match val:
                     case hydra.core.IntegerValueUint8(value=v):
@@ -288,9 +291,9 @@ def literal_adapter[T0](lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.
                 case _:
                     raise TypeError("Unsupported Literal")
         return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: (constraints := cx.language.constraints, has_integers := (lambda : hydra.lib.logic.not_(hydra.lib.sets.null(constraints.integer_types))), has_strings := (lambda : hydra.lib.sets.member(hydra.variants.LiteralVariant.STRING, constraints.literal_variants)), with_integers := (lambda : "let terms are not supported here"), with_strings := (lambda : "let terms are not supported here"), hydra.lib.logic.if_else(has_integers(), (lambda : cast(hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]], with_integers())), (lambda : hydra.lib.logic.if_else(has_strings(), (lambda : hydra.lib.flows.pure(cast(frozenlist[hydra.compute.Adapter[T2, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]], with_strings()))), (lambda : hydra.lib.flows.fail("no alternatives available for boolean encoding"))))))[5]))
-    def for_float[T1, T2](t: T1, ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-        def with_floats[T3]() -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-            def adapt[T4, T5, T6](adapter: hydra.compute.Adapter[T4, T4, T5, T6, hydra.core.FloatValue, hydra.core.FloatValue], dir: hydra.coders.CoderDirection, l: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
+    def for_float(t: T1, ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+        def with_floats() -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+            def adapt(adapter: hydra.compute.Adapter[T4, T4, T5, T6, hydra.core.FloatValue, hydra.core.FloatValue], dir: hydra.coders.CoderDirection, l: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
                 match l:
                     case hydra.core.LiteralFloat(value=fv):
                         return hydra.lib.flows.map((lambda x: cast(hydra.core.Literal, hydra.core.LiteralFloat(x))), hydra.adapt.utils.encode_decode(dir, adapter.coder, fv))
@@ -299,9 +302,9 @@ def literal_adapter[T0](lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.
                         return hydra.monads.unexpected("floating-point literal", hydra.show.core.literal(l))
             return hydra.lib.flows.bind(float_adapter(ft), (lambda adapter: (step := (lambda : hydra.adapt.utils.bidirectional((lambda v1, v2: adapt(adapter, v1, v2)))), hydra.lib.flows.pure((cast(hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal], hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(adapter.target)), step())),)))[1]))
         return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: (constraints := cx.language.constraints, has_floats := (lambda : hydra.lib.logic.not_(hydra.lib.sets.null(constraints.float_types))), hydra.lib.logic.if_else(has_floats(), (lambda : cast(hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]], with_floats())), (lambda : hydra.lib.flows.fail("no float types available"))))[2]))
-    def for_integer[T1, T2](t: T1, it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-        def with_integers[T3]() -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-            def adapt[T4, T5, T6](adapter: hydra.compute.Adapter[T4, T4, T5, T6, hydra.core.IntegerValue, hydra.core.IntegerValue], dir: hydra.coders.CoderDirection, lit: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
+    def for_integer(t: T1, it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+        def with_integers() -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+            def adapt(adapter: hydra.compute.Adapter[T4, T4, T5, T6, hydra.core.IntegerValue, hydra.core.IntegerValue], dir: hydra.coders.CoderDirection, lit: hydra.core.Literal) -> hydra.compute.Flow[T4, hydra.core.Literal]:
                 match lit:
                     case hydra.core.LiteralInteger(value=iv):
                         return hydra.lib.flows.map((lambda x: cast(hydra.core.Literal, hydra.core.LiteralInteger(x))), hydra.adapt.utils.encode_decode(dir, adapter.coder, iv))
@@ -310,7 +313,7 @@ def literal_adapter[T0](lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.
                         return hydra.monads.unexpected("integer literal", hydra.show.core.literal(lit))
             return hydra.lib.flows.bind(integer_adapter(it), (lambda adapter: (step := (lambda : hydra.adapt.utils.bidirectional((lambda v1, v2: adapt(adapter, v1, v2)))), hydra.lib.flows.pure((cast(hydra.compute.Adapter[T3, T3, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal], hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(adapter.target)), step())),)))[1]))
         return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: (constraints := cx.language.constraints, has_integers := (lambda : hydra.lib.logic.not_(hydra.lib.sets.null(constraints.integer_types))), hydra.lib.logic.if_else(has_integers(), (lambda : cast(hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T2, T2, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]], with_integers())), (lambda : hydra.lib.flows.fail("no integer types available"))))[2]))
-    def alts[T1](t: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T1, T1, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
+    def alts(t: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, frozenlist[hydra.compute.Adapter[T1, T1, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         match t:
             case hydra.core.LiteralTypeBinary():
                 return for_binary(t)

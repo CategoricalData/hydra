@@ -1,12 +1,20 @@
 """Python implementations of hydra.lib.maps primitives."""
 
+from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
+from typing import Any, TypeVar
 
 from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Just, Nothing, NOTHING
 
+K = TypeVar('K')
+K1 = TypeVar('K1')
+K2 = TypeVar('K2')
+V = TypeVar('V')
+V1 = TypeVar('V1')
+V2 = TypeVar('V2')
 
-def alter[K, V](
+
+def alter(
     f: Callable[[Maybe[V]], Maybe[V]], key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Alter a value at a key using a function."""
     current_value = lookup(key, mapping)
@@ -18,18 +26,18 @@ def alter[K, V](
             return insert(key, v, mapping)
 
 
-def bimap[K1, K2, V1, V2](
+def bimap(
     f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]) -> FrozenDict[K2, V2]:
     """Map a function over the keys and values of a map."""
     return FrozenDict({f(k): g(v) for k, v in mapping.items()})
 
 
-def delete[K, V](key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+def delete(key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Remove a key from a map."""
     return FrozenDict({k: v for k, v in mapping.items() if k != key})
 
 
-def elems[V](mapping: Mapping[Any, V]) -> frozenlist[V]:
+def elems(mapping: Mapping[Any, V]) -> frozenlist[V]:
     """Get the values of a map."""
     return tuple(mapping.values())
 
@@ -39,38 +47,38 @@ def empty() -> FrozenDict[Any, Any]:
     return FrozenDict()
 
 
-def filter[K, V](predicate: Callable[[V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+def filter(predicate: Callable[[V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Filter a map based on values."""
     return FrozenDict({k: v for k, v in mapping.items() if predicate(v)})
 
 
-def filter_with_key[K, V](
+def filter_with_key(
     predicate: Callable[[K, V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Filter a map based on key-value pairs."""
     return FrozenDict({k: v for k, v in mapping.items() if predicate(k, v)})
 
 
-def find_with_default[K, V](default: V, key: K, mapping: Mapping[K, V]) -> V:
+def find_with_default(default: V, key: K, mapping: Mapping[K, V]) -> V:
     """Lookup a value with a default."""
     return mapping.get(key, default)
 
 
-def from_list[K, V](pairs: Sequence[tuple[K, V]]) -> FrozenDict[K, V]:
+def from_list(pairs: Sequence[tuple[K, V]]) -> FrozenDict[K, V]:
     """Create a map from a list of key-value pairs."""
     return FrozenDict(dict(pairs))
 
 
-def insert[K, V](key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+def insert(key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Insert a key-value pair into a map."""
     return FrozenDict({**mapping, key: value})
 
 
-def keys[K](mapping: Mapping[K, Any]) -> frozenlist[K]:
+def keys(mapping: Mapping[K, Any]) -> frozenlist[K]:
     """Get the keys of a map."""
     return tuple(mapping.keys())
 
 
-def lookup[K, V](key: K, mapping: Mapping[K, V]) -> Maybe[V]:
+def lookup(key: K, mapping: Mapping[K, V]) -> Maybe[V]:
     """Lookup a value in a map."""
     if key in mapping:
         return Just(mapping[key])
@@ -78,18 +86,18 @@ def lookup[K, V](key: K, mapping: Mapping[K, V]) -> Maybe[V]:
         return NOTHING
 
 
-def map[K, V1, V2](f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
+def map(f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
     """Map a function over a map."""
     return FrozenDict[K, V2]({k: f(v) for k, v in mapping.items()})
 
 
-def map_keys[K1, K2, V](
+def map_keys(
     f: Callable[[K1], K2], mapping: Mapping[K1, V]) -> FrozenDict[K2, V]:
     """Map a function over the keys of a map."""
     return FrozenDict({f(k): v for k, v in mapping.items()})
 
 
-def member[K](key: K, mapping: Mapping[K, Any]) -> bool:
+def member(key: K, mapping: Mapping[K, Any]) -> bool:
     """Check if a key is present in a map."""
     return key in mapping
 
@@ -99,7 +107,7 @@ def null(mapping: Mapping[Any, Any]) -> bool:
     return len(mapping) == 0
 
 
-def singleton[K, V](key: K, value: V) -> FrozenDict[K, V]:
+def singleton(key: K, value: V) -> FrozenDict[K, V]:
     """Create a map with a single key-value pair."""
     return FrozenDict({key: value})
 
@@ -109,11 +117,11 @@ def size(mapping: Mapping[Any, Any]) -> int:
     return len(mapping)
 
 
-def to_list[K, V](mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
+def to_list(mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
     """Convert a map to a list of key-value pairs."""
     return tuple(mapping.items())
 
 
-def union[K, V](map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
+def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
     """Union two maps, with the first taking precedence."""
     return FrozenDict({**map2, **map1})

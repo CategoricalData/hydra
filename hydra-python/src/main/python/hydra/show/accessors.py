@@ -20,9 +20,9 @@ import hydra.rewriting
 def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
     r"""Convert a term accessor to a string representation."""
     
-    def idx[T0, T1](i: T0) -> Maybe[T1]:
+    def idx(i: T0) -> Maybe[T1]:
         return cast(Maybe[T1], Nothing())
-    def idx_suff[T0](suffix: str, i: T0) -> Maybe[str]:
+    def idx_suff(suffix: str, i: T0) -> Maybe[str]:
         return hydra.lib.maybes.map((lambda s: hydra.lib.strings.cat2(s, suffix)), idx(i))
     match accessor:
         case hydra.accessors.TermAccessorAnnotatedBody():
@@ -161,7 +161,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
             
             case _:
                 return hydra.lib.lists.foldl((lambda v1, v2: helper(ids, mroot, next_path(), v1, v2)), state, hydra.rewriting.subterms_with_accessors(current_term()))
-    def initial_state[T0, T1, T2]() -> tuple[tuple[frozenlist[T0], frozenlist[T1]], frozenset[T2]]:
+    def initial_state() -> tuple[tuple[frozenlist[T0], frozenlist[T1]], frozenset[T2]]:
         return cast(tuple[tuple[frozenlist[T0], frozenlist[T1]], frozenset[T2]], (cast(tuple[frozenlist[T0], frozenlist[T1]], (cast(frozenlist[T0], ()), cast(frozenlist[T1], ()))), cast(frozenset[T2], hydra.lib.sets.empty())))
     def result() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
         return helper(cast(FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], hydra.lib.maps.empty()), cast(Maybe[hydra.accessors.AccessorNode], Nothing()), cast(frozenlist[hydra.accessors.TermAccessor], ()), cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], initial_state()), cast(tuple[hydra.accessors.TermAccessor, hydra.core.Term], (dont_care_accessor, term)))

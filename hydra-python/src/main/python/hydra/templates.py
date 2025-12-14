@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.decode.core
@@ -21,10 +21,12 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.show.core
 
+T0 = TypeVar("T0")
+
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
     
-    def to_pair[T0](name_and_el: tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, hydra.core.Type]]:
+    def to_pair(name_and_el: tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, hydra.core.Type]]:
         def name() -> T0:
             return hydra.lib.pairs.first(name_and_el)
         def el() -> hydra.core.Binding:
@@ -32,10 +34,10 @@ def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Grap
         return hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.decode.core.type(el().term)), (lambda t: hydra.lib.flows.pure(cast(tuple[T0, hydra.core.Type], (name(), t)))))
     return hydra.lib.flows.bind(hydra.lib.flows.map_list(cast(Callable[[tuple[hydra.core.Name, hydra.core.Binding]], hydra.compute.Flow[hydra.graph.Graph, tuple[hydra.core.Name, hydra.core.Type]]], (lambda x1: to_pair(x1))), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(pairs)))))
 
-def instantiate_template[T0](minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
+def instantiate_template(minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
     def inst(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
         return instantiate_template(minimal, schema, v1)
-    def no_poly[T1, T2]() -> hydra.compute.Flow[T1, T2]:
+    def no_poly() -> hydra.compute.Flow[T1, T2]:
         return hydra.lib.flows.fail("Polymorphic and function types are not currently supported")
     def for_float(ft: hydra.core.FloatType) -> hydra.core.FloatValue:
         match ft:

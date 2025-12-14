@@ -1,5 +1,6 @@
 """Python implementations of hydra.lib.math primitives."""
 
+from __future__ import annotations
 import math
 
 from hydra.dsl.python import frozenlist
