@@ -7,7 +7,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from hydra.dsl.python import Either, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.ast
 import hydra.coders
 import hydra.compute
@@ -254,7 +254,7 @@ JSON_CODER_TEST_CASE__TERM__NAME = hydra.core.Name("term")
 JSON_CODER_TEST_CASE__JSON__NAME = hydra.core.Name("json")
 
 # A test case which parses a JSON string and compares the result with an expected JSON value.
-type JsonParserTestCase = ParserTestCase[hydra.json.Value]
+JsonParserTestCase: TypeAlias = "ParserTestCase[hydra.json.Value]"
 
 JSON_PARSER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonParserTestCase")
 
@@ -270,7 +270,7 @@ LIFT_LAMBDA_ABOVE_LET_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 LIFT_LAMBDA_ABOVE_LET_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 # A test case which serializes a JSON value to a string and compares it to the expected string.
-type JsonWriterTestCase = WriterTestCase[hydra.json.Value]
+JsonWriterTestCase: TypeAlias = "WriterTestCase[hydra.json.Value]"
 
 JSON_WRITER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonWriterTestCase")
 
@@ -401,7 +401,7 @@ class TestCaseRewriteType(Node["RewriteTypeTestCase"]):
     r"""A rewrite type test."""
 
 # A simple test case with an input and an expected output.
-type TestCase = TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType
+TestCase: TypeAlias = "TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType"
 
 TEST_CASE__NAME = hydra.core.Name("hydra.testing.TestCase")
 TEST_CASE__ALPHA_CONVERSION__NAME = hydra.core.Name("alphaConversion")

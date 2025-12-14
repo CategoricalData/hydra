@@ -15,11 +15,24 @@ import qualified Data.Maybe as Y
 -- Temporary macros for Python code generation
 _useFutureAnnotations_ = True
 
+-- | Target Python version for code generation.
+--   Python310 generates code compatible with Python 3.10+ (e.g., for PyPy).
+--   Python312 uses PEP 695 type alias syntax (type X = ...).
+data PythonVersion = Python310 | Python312
+  deriving (Eq, Show)
+
+-- | Current target Python version. Change this to Python310 for PyPy compatibility.
+--   Python312 generates the original PEP 695 syntax that passed most tests.
+--   Python310 generates backward-compatible syntax for PyPy.
+targetPythonVersion :: PythonVersion
+targetPythonVersion = Python310
+
 data PythonEnvironment = PythonEnvironment {
   pythonEnvironmentNamespaces :: Namespaces Py.DottedName,
   pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name),
   pythonEnvironmentTypeContext :: TypeContext,
-  pythonEnvironmentNUllaryBindings :: S.Set Name}
+  pythonEnvironmentNUllaryBindings :: S.Set Name,
+  pythonEnvironmentVersion :: PythonVersion}
 
 encodeConstantForFieldName :: PythonEnvironment -> Name -> Name -> Py.Name
 encodeConstantForFieldName _ tname fname = Py.Name $

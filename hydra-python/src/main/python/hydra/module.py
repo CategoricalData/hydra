@@ -5,7 +5,7 @@ r"""A model for Hydra namespaces and modules."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
 import hydra.graph
 
@@ -18,7 +18,7 @@ class DefinitionType(Node["TypeDefinition"]):
     r"""A type definition."""
 
 # A definition, which may be either a term or type definition.
-type Definition = DefinitionTerm | DefinitionType
+Definition: TypeAlias = "DefinitionTerm | DefinitionType"
 
 DEFINITION__NAME = hydra.core.Name("hydra.module.Definition")
 DEFINITION__TERM__NAME = hydra.core.Name("term")

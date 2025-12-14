@@ -5,7 +5,7 @@ r"""Simple, one-way adapters for types and terms."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -28,6 +28,9 @@ import hydra.reflect
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def literal_type_supported(constraints: hydra.coders.LanguageConstraints, lt: hydra.core.LiteralType) -> bool:
     r"""Check if a literal type is supported by the given language constraints."""
@@ -70,7 +73,7 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         case _:
             return cast(frozenlist[hydra.core.Type], ())
 
-def adapt_type[T0](constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], type0: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], type0: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
     def for_supported(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
         match typ:
             case hydra.core.TypeLiteral(value=lt):
@@ -88,14 +91,14 @@ def adapt_type[T0](constraints: hydra.coders.LanguageConstraints, litmap: Frozen
         def supported_variant() -> bool:
             return hydra.lib.sets.member(hydra.reflect.type_variant(typ), constraints.type_variants)
         return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(typ)), (lambda : for_unsupported(typ)))
-    def rewrite[T1](recurse: Callable[[hydra.core.Type], hydra.compute.Flow[T1, hydra.core.Type]], typ: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.core.Type]:
+    def rewrite(recurse: Callable[[hydra.core.Type], hydra.compute.Flow[T1, hydra.core.Type]], typ: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.core.Type]:
         return hydra.lib.flows.bind(recurse(typ), (lambda type1: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no alternatives for type: ", hydra.show.core.type(typ))), (lambda type2: hydra.lib.flows.pure(type2)), try_type(type1))))
     return hydra.rewriting.rewrite_type_m(cast(Callable[[
       Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]],
       hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], (lambda x1, x2: rewrite(x1, x2))), type0)
 
-def adapt_graph_schema[T0, T1](constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], types0: FrozenDict[T0, hydra.core.Type]) -> hydra.compute.Flow[T1, FrozenDict[T0, hydra.core.Type]]:
-    def map_pair[T2, T3](pair: tuple[T2, hydra.core.Type]) -> hydra.compute.Flow[T3, tuple[T2, hydra.core.Type]]:
+def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], types0: FrozenDict[T0, hydra.core.Type]) -> hydra.compute.Flow[T1, FrozenDict[T0, hydra.core.Type]]:
+    def map_pair(pair: tuple[T2, hydra.core.Type]) -> hydra.compute.Flow[T3, tuple[T2, hydra.core.Type]]:
         def name() -> T2:
             return hydra.lib.pairs.first(pair)
         def typ() -> hydra.core.Type:
@@ -193,12 +196,12 @@ def adapt_literal_types_map(constraints: hydra.coders.LanguageConstraints) -> Fr
         return hydra.lib.maybes.maybe(cast(Maybe[tuple[hydra.core.LiteralType, hydra.core.LiteralType]], Nothing()), (lambda lt2: cast(Maybe[tuple[hydra.core.LiteralType, hydra.core.LiteralType]], Just(cast(tuple[hydra.core.LiteralType, hydra.core.LiteralType], (lt, lt2))))), adapt_literal_type(constraints, lt))
     return cast(FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map(try_type, hydra.reflect.literal_types()))))
 
-def adapt_type_scheme[T0](constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], ts0: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
+def adapt_type_scheme(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], ts0: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     vars0 = ts0.variables
     t0 = ts0.type
     return hydra.lib.flows.bind(adapt_type(constraints, litmap, t0), (lambda t1: hydra.lib.flows.pure(hydra.core.TypeScheme(vars0, t1))))
 
-def adapt_primitive[T0](constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], prim0: hydra.graph.Primitive) -> hydra.compute.Flow[T0, hydra.graph.Primitive]:
+def adapt_primitive(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], prim0: hydra.graph.Primitive) -> hydra.compute.Flow[T0, hydra.graph.Primitive]:
     ts0 = prim0.type
     return hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts0), (lambda ts1: hydra.lib.flows.pure(hydra.graph.Primitive(prim0.name, ts1, prim0.implementation))))
 
@@ -241,7 +244,7 @@ def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal) -> hydra.co
         case _:
             raise TypeError("Unsupported Literal")
 
-def adapt_literal_value[T0](litmap: FrozenDict[T0, hydra.core.LiteralType], lt: T0, l: hydra.core.Literal) -> hydra.core.Literal:
+def adapt_literal_value(litmap: FrozenDict[T0, hydra.core.LiteralType], lt: T0, l: hydra.core.Literal) -> hydra.core.Literal:
     return hydra.lib.maybes.maybe(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.literal(l))), (lambda lt2: adapt_literal(lt2, l)), hydra.lib.maps.lookup(lt, litmap))
 
 def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Term]]:
@@ -278,8 +281,8 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
 def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Adapt a term using the given language constraints."""
     
-    def rewrite[T0](recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], term02: T0) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-        def for_supported[T1](term: hydra.core.Term) -> hydra.compute.Flow[T1, Maybe[hydra.core.Term]]:
+    def rewrite(recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], term02: T0) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+        def for_supported(term: hydra.core.Term) -> hydra.compute.Flow[T1, Maybe[hydra.core.Term]]:
             match term:
                 case hydra.core.TermLiteral(value=l):
                     lt = hydra.reflect.literal_type(l)
@@ -305,7 +308,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
 def adapt_data_graph(constraints: hydra.coders.LanguageConstraints, do_expand: bool, graph0: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph]:
     r"""Adapt a graph and its schema to the given language constraints, prior to inference."""
     
-    def expand[T0](graph: hydra.graph.Graph, gterm: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    def expand(graph: hydra.graph.Graph, gterm: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         return hydra.lib.flows.bind(hydra.schemas.graph_to_type_context(graph), (lambda tx: hydra.lib.flows.bind(hydra.reduction.eta_expand_typed_term(tx, gterm), (lambda gterm1: hydra.lib.flows.pure(hydra.rewriting.lift_lambda_above_let(hydra.rewriting.unshadow_variables(hydra.rewriting.remove_types_from_term(gterm1))))))))
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)

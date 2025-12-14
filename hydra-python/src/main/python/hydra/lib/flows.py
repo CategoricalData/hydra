@@ -1,13 +1,26 @@
 """Python implementations of hydra.lib.flows primitives."""
 
+from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
+from typing import Any, TypeVar
 
 from hydra.compute import Flow, FlowState, Trace
 from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Just, Nothing, NOTHING
 
+A = TypeVar("A")
+B = TypeVar("B")
+K = TypeVar("K")
+K1 = TypeVar("K1")
+K2 = TypeVar("K2")
+S = TypeVar("S")
+V = TypeVar("V")
+V1 = TypeVar("V1")
+V2 = TypeVar("V2")
+X = TypeVar("X")
+Y = TypeVar("Y")
 
-def apply[S, X, Y](f: Flow[S, Callable[[X], Y]], x: Flow[S, X]) -> Flow[S, Y]:
+
+def apply(f: Flow[S, Callable[[X], Y]], x: Flow[S, X]) -> Flow[S, Y]:
     """Apply a function in a Flow to a value in a Flow (applicative)."""
     def run(state: S, trace: Trace) -> FlowState[S, Y]:
         f_state = f.value(state, trace)
@@ -28,7 +41,7 @@ def apply[S, X, Y](f: Flow[S, Callable[[X], Y]], x: Flow[S, X]) -> Flow[S, Y]:
     return Flow(run)
 
 
-def bind[S, X, Y](mx: Flow[S, X], f: Callable[[X], Flow[S, Y]]) -> Flow[S, Y]:
+def bind(mx: Flow[S, X], f: Callable[[X], Flow[S, Y]]) -> Flow[S, Y]:
     """Monadic bind for Flow."""
     def run(state: S, trace: Trace) -> FlowState[S, Y]:
         x_state = mx.value(state, trace)
@@ -57,7 +70,7 @@ def fail(message: str) -> Flow[Any, Any]:
     return Flow(run)
 
 
-def foldl[S, A, B](f: Callable[[A, B], Flow[S, A]], initial: A, values: Sequence[B]) -> Flow[S, A]:
+def foldl(f: Callable[[A, B], Flow[S, A]], initial: A, values: Sequence[B]) -> Flow[S, A]:
     """Fold over a list with a monadic function."""
     def run(state: S, trace: Trace) -> FlowState[S, A]:
         current_state = state
@@ -81,7 +94,7 @@ def foldl[S, A, B](f: Callable[[A, B], Flow[S, A]], initial: A, values: Sequence
     return Flow(run)
 
 
-def map[S, X, Y](f: Callable[[X], Y], mx: Flow[S, X]) -> Flow[S, Y]:
+def map(f: Callable[[X], Y], mx: Flow[S, X]) -> Flow[S, Y]:
     """Map a function over a Flow (functor)."""
     def run(state: S, trace: Trace) -> FlowState[S, Y]:
         x_state = mx.value(state, trace)
@@ -96,7 +109,7 @@ def map[S, X, Y](f: Callable[[X], Y], mx: Flow[S, X]) -> Flow[S, Y]:
     return Flow(run)
 
 
-def map_elems[S, K, V1, V2](f: Callable[[V1], Flow[S, V2]], m: Mapping[K, V1]) -> Flow[S, FrozenDict[K, V2]]:
+def map_elems(f: Callable[[V1], Flow[S, V2]], m: Mapping[K, V1]) -> Flow[S, FrozenDict[K, V2]]:
     """Map a monadic function over the values of a map."""
     def run(state: S, trace: Trace) -> FlowState[S, FrozenDict[K, V2]]:
         current_state = state
@@ -120,7 +133,7 @@ def map_elems[S, K, V1, V2](f: Callable[[V1], Flow[S, V2]], m: Mapping[K, V1]) -
     return Flow(run)
 
 
-def map_keys[S, K1, K2, V](f: Callable[[K1], Flow[S, K2]], m: Mapping[K1, V]) -> Flow[S, FrozenDict[K2, V]]:
+def map_keys(f: Callable[[K1], Flow[S, K2]], m: Mapping[K1, V]) -> Flow[S, FrozenDict[K2, V]]:
     """Map a monadic function over the keys of a map."""
     def run(state: S, trace: Trace) -> FlowState[S, FrozenDict[K2, V]]:
         current_state = state
@@ -144,7 +157,7 @@ def map_keys[S, K1, K2, V](f: Callable[[K1], Flow[S, K2]], m: Mapping[K1, V]) ->
     return Flow(run)
 
 
-def map_list[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, frozenlist[Y]]:
+def map_list(f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, frozenlist[Y]]:
     """Map a monadic function over a list."""
     def run(state: S, trace: Trace) -> FlowState[S, frozenlist[Y]]:
         current_state = state
@@ -168,7 +181,7 @@ def map_list[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, 
     return Flow(run)
 
 
-def map_maybe[S, X, Y](f: Callable[[X], Flow[S, Y]], mx: Maybe[X]) -> Flow[S, Maybe[Y]]:
+def map_maybe(f: Callable[[X], Flow[S, Y]], mx: Maybe[X]) -> Flow[S, Maybe[Y]]:
     """Map a monadic function over an optional value."""
     def run(state: S, trace: Trace) -> FlowState[S, Maybe[Y]]:
         match mx:
@@ -192,7 +205,7 @@ def map_maybe[S, X, Y](f: Callable[[X], Flow[S, Y]], mx: Maybe[X]) -> Flow[S, Ma
     return Flow(run)
 
 
-def map_set[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: frozenset[X]) -> Flow[S, frozenset[Y]]:
+def map_set(f: Callable[[X], Flow[S, Y]], xs: frozenset[X]) -> Flow[S, frozenset[Y]]:
     """Map a monadic function over a set."""
     def run(state: S, trace: Trace) -> FlowState[S, frozenset[Y]]:
         current_state = state
@@ -216,7 +229,7 @@ def map_set[S, X, Y](f: Callable[[X], Flow[S, Y]], xs: frozenset[X]) -> Flow[S, 
     return Flow(run)
 
 
-def pure[X](x: X) -> Flow[Any, X]:
+def pure(x: X) -> Flow[Any, X]:
     """Lift a value into a Flow."""
     def run(state: Any, trace: Trace) -> FlowState[Any, X]:
         return FlowState(value=Just(x), state=state, trace=trace)
@@ -224,7 +237,7 @@ def pure[X](x: X) -> Flow[Any, X]:
     return Flow(run)
 
 
-def sequence[S, X](flows: Sequence[Flow[S, X]]) -> Flow[S, frozenlist[X]]:
+def sequence(flows: Sequence[Flow[S, X]]) -> Flow[S, frozenlist[X]]:
     """Sequence a list of Flows into a Flow of a list."""
     def run(state: S, trace: Trace) -> FlowState[S, frozenlist[X]]:
         current_state = state

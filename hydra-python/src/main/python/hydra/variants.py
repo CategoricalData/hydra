@@ -4,6 +4,7 @@ r"""Variant types which describe the structure of Hydra core types and terms."""
 
 from __future__ import annotations
 from enum import Enum
+from typing import TypeAlias
 import hydra.core
 
 class EliminationVariant(Enum):

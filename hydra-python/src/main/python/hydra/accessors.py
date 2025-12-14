@@ -5,7 +5,7 @@ r"""A model for term access patterns."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated
+from typing import Annotated, TypeAlias
 import hydra.core
 
 @dataclass(frozen=True)
@@ -111,7 +111,7 @@ class TermAccessorWrappedTerm:
     r"""Access the term inside a wrapped term."""
 
 # A function which maps from a term to a particular immediate subterm.
-type TermAccessor = TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm
+TermAccessor: TypeAlias = "TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm"
 
 TERM_ACCESSOR__NAME = hydra.core.Name("hydra.accessors.TermAccessor")
 TERM_ACCESSOR__ANNOTATED_BODY__NAME = hydra.core.Name("annotatedBody")

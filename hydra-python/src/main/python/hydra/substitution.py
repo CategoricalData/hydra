@@ -35,7 +35,7 @@ def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra
 def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
     r"""Compose two type substitutions."""
     
-    def is_extra[T0](k: hydra.core.Name, v: T0) -> bool:
+    def is_extra(k: hydra.core.Name, v: T0) -> bool:
         return hydra.lib.maybes.is_nothing(hydra.lib.maps.lookup(k, s1.value))
     def with_extra() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return hydra.lib.maps.filter_with_key(cast(Callable[[hydra.core.Name, hydra.core.Type], bool], (lambda x1, x2: is_extra(x1, x2))), s2.value)

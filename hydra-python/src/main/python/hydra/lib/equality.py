@@ -1,5 +1,6 @@
 """Python implementations of hydra.lib.equality primitives."""
 
+from __future__ import annotations
 from typing import Any, TypeVar
 import hydra.util
 

@@ -5,7 +5,7 @@ r"""Types supporting type inference and type reconstruction."""
 from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import FrozenDict, Node
-from typing import Annotated
+from typing import Annotated, TypeAlias
 import hydra.core
 
 @dataclass(frozen=True)

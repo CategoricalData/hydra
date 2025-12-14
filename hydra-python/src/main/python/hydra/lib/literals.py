@@ -1,5 +1,6 @@
 """Python implementations of hydra.lib.literals primitives."""
 
+from __future__ import annotations
 from decimal import Decimal
 from hydra.dsl.python import Maybe, Just, NOTHING
 

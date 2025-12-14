@@ -139,7 +139,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
     
     def trivial() -> frozenlist[tuple[str, hydra.core.Type]]:
         return hydra.lib.logic.if_else(omit_trivial, (lambda : cast(frozenlist[tuple[str, hydra.core.Type]], ())), (lambda : (cast(tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeUnit()))),)))
-    def descend[T0](n: str, f: Callable[[frozenlist[tuple[str, hydra.core.Type]]], T0], p: hydra.grammar.Pattern) -> T0:
+    def descend(n: str, f: Callable[[frozenlist[tuple[str, hydra.core.Type]]], T0], p: hydra.grammar.Pattern) -> T0:
         def cpairs() -> frozenlist[tuple[str, hydra.core.Type]]:
             return make_elements(False, ns, child_name(lname, n), p)
         return f(hydra.lib.logic.if_else(is_complex(p), (lambda : hydra.lib.lists.cons(cast(tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, hydra.lib.pairs.first(hydra.lib.lists.head(cpairs()))))))), cpairs())), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(cpairs()), (lambda : (cast(tuple[str, hydra.core.Type], (lname, cast(hydra.core.Type, hydra.core.TypeUnit()))),)), (lambda : hydra.lib.lists.cons(cast(tuple[str, hydra.core.Type], (lname, hydra.lib.pairs.second(hydra.lib.lists.head(cpairs())))), hydra.lib.lists.tail(cpairs())))))))

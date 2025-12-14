@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Just, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.eithers
 import hydra.lib.lists
@@ -17,6 +17,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
+
+T0 = TypeVar("T0")
 
 def float_type(ft: hydra.core.FloatType) -> str:
     r"""Show a float type as a string."""
@@ -443,7 +445,7 @@ def term(t: hydra.core.Term) -> str:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def list[T0](f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
+def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     def element_strs() -> frozenlist[str]:
         return hydra.lib.lists.map(f, xs)
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", element_strs()), "]"))

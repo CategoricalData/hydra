@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -49,7 +49,7 @@ class SchemaSpecProvided:
     r"""A schema which will be provided within the workflow."""
 
 # The specification of a schema at the source end of a workflow.
-type SchemaSpec = SchemaSpecHydra | SchemaSpecFile | SchemaSpecProvided
+SchemaSpec: TypeAlias = "SchemaSpecHydra | SchemaSpecFile | SchemaSpecProvided"
 
 SCHEMA_SPEC__NAME = hydra.core.Name("hydra.workflow.SchemaSpec")
 SCHEMA_SPEC__HYDRA__NAME = hydra.core.Name("hydra")
