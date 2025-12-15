@@ -5,8 +5,11 @@ import Hydra.Testing
 import Hydra.Generation
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
 import Hydra.Staging.Testing.Generation.Transform
+import qualified Hydra.Inference as Inference
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified System.Directory as SD
@@ -14,6 +17,8 @@ import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.Map as M
 import Data.Char (isAlphaNum, isUpper, toLower, toUpper)
+import Debug.Trace (trace)
+import System.IO.Unsafe (unsafePerformIO)
 
 
 -- | Language-agnostic test generator abstraction
@@ -26,7 +31,11 @@ data TestGenerator a = TestGenerator {
   testGenCreateCodec :: Namespaces a -> TestCodec,
 
   -- | Generate a complete test file for a module and test group
-  testGenGenerateTestFile :: Module -> TestGroup -> Flow Graph (FilePath, String)
+  testGenGenerateTestFile :: Module -> TestGroup -> Flow Graph (FilePath, String),
+
+  -- | Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python)
+  -- Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed
+  testGenAggregatorFile :: Maybe (FilePath -> [Module] -> (FilePath, String))
 }
 
 
@@ -136,21 +145,21 @@ generateGenerationTestSuite testGen outDir testSuiteModule lookupTestGroup = do
 
 --      putStrLn $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (M.elems $ graphElements graph)) ++ "}"
 
-      -- Generate using the provided test generator
-      result <- runFlowWithGraph graph $ generateAllModuleTests testGen outDir moduleTestPairs
+      -- Generate using the provided test generator, writing files incrementally
+      result <- runFlowWithGraph graph $ generateAllModuleTestsIncremental testGen outDir moduleTestPairs writeFilePair
 
       case result of
         Left trace -> putStrLn $ "✗ Generation failed: " ++ traceSummary trace
-        Right files -> do
-          -- Write all generated files
-          mapM_ writeFilePair files
-          putStrLn $ "✓ Successfully generated " ++ show (length files) ++ " test file(s)"
+        Right count -> do
+          putStrLn $ "✓ Successfully generated " ++ show count ++ " test file(s)"
   where
     writeFilePair (fullPath, content) = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath content
       putStrLn $ "  Generated: " ++ fullPath
-    extraModules = [Formatting.module_]
+    -- Core.module_ is required for schema types like Either, Maybe, etc.
+    -- Monads.module_ is required for primitives like hydra.monads.pure
+    extraModules = [Formatting.module_, Monads.module_, Core.module_]
 
 -- | Collect all modules from a module hierarchy (including the root and all submodules)
 collectModules :: Module -> [Module]
@@ -169,10 +178,62 @@ runFlowWithGraph s f = do
 -- Returns a list of (FilePath, content) pairs
 generateAllModuleTests :: TestGenerator a -> FilePath -> [(Module, TestGroup)] -> Flow Graph [(FilePath, String)]
 generateAllModuleTests testGen baseDir modulePairs = do
-  files <- mapM (generateModuleTest testGen baseDir) modulePairs
-  -- Also generate an aggregator spec file
-  let aggregatorFile = generateAggregatorSpec baseDir (map fst modulePairs)
-  return (aggregatorFile : files)
+  -- Perform type inference ONCE upfront for the entire graph
+  -- This is critical for performance: inferGraphTypes is expensive and should not be called per-module
+  g0 <- getState
+  trace ("Starting type inference...") $ return ()
+  g <- Inference.inferGraphTypes g0
+  trace ("Type inference complete. Generating " ++ show (length modulePairs) ++ " module(s)...") $ return ()
+  putState g
+
+  files <- mapM (generateModuleTestWithProgress testGen baseDir) (zip [1..] modulePairs)
+  -- Generate an aggregator file if the generator provides one
+  case testGenAggregatorFile testGen of
+    Just genAggregator -> return (genAggregator baseDir (map fst modulePairs) : files)
+    Nothing -> return files
+
+-- | Generate all test files incrementally, writing each file immediately after generation
+-- This reduces peak memory usage by not accumulating all file contents in memory
+-- Uses unsafePerformIO to write files from within Flow - this is safe because:
+-- 1. The IO is idempotent (writing the same file twice produces the same result)
+-- 2. The ordering doesn't affect the final result
+-- Returns the count of files generated
+generateAllModuleTestsIncremental :: TestGenerator a -> FilePath -> [(Module, TestGroup)] -> ((FilePath, String) -> IO ()) -> Flow Graph Int
+generateAllModuleTestsIncremental testGen baseDir modulePairs writeFile = do
+  -- Perform type inference ONCE upfront for the entire graph
+  g0 <- getState
+  trace ("Starting type inference...") $ return ()
+  g <- Inference.inferGraphTypes g0
+  trace ("Type inference complete. Generating " ++ show (length modulePairs) ++ " module(s)...") $ return ()
+  putState g
+
+  -- Generate files one at a time, writing each immediately
+  mapM_ (generateAndWriteModule testGen baseDir writeFile) (zip [1..] modulePairs)
+
+  -- Generate an aggregator file if the generator provides one
+  case testGenAggregatorFile testGen of
+    Just genAggregator -> do
+      let aggregator = genAggregator baseDir (map fst modulePairs)
+      unsafePerformIO (writeFile aggregator) `seq` return (length modulePairs + 1)
+    Nothing -> return (length modulePairs)
+
+-- | Generate a single module test and write it immediately
+generateAndWriteModule :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> (Int, (Module, TestGroup)) -> Flow Graph ()
+generateAndWriteModule testGen baseDir writeFile (idx, pair) = do
+  let (sourceModule, _) = pair
+      ns = moduleNamespace sourceModule
+  trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
+  result <- generateModuleTest testGen baseDir pair
+  -- Use unsafePerformIO to write the file immediately, then discard the result
+  -- This allows GC to reclaim the generated content
+  unsafePerformIO (writeFile result) `seq` return ()
+
+-- | Generate a single test file for a module and its test group (with progress)
+generateModuleTestWithProgress :: TestGenerator a -> FilePath -> (Int, (Module, TestGroup)) -> Flow Graph (FilePath, String)
+generateModuleTestWithProgress testGen baseDir (idx, pair) = do
+  let (sourceModule, _) = pair
+  trace ("  Generating module " ++ show idx ++ ": " ++ show (moduleNamespace sourceModule)) $ return ()
+  generateModuleTest testGen baseDir pair
 
 -- | Generate a single test file for a module and its test group
 generateModuleTest :: TestGenerator a -> FilePath -> (Module, TestGroup) -> Flow Graph (FilePath, String)
