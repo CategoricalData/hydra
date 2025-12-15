@@ -30,6 +30,8 @@ import hydra.schemas
 import hydra.typing
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Term:
     r"""Alpha convert a variable in a term."""

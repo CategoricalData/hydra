@@ -18,6 +18,7 @@ import hydra.topology
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
     def source_to_target_mapping(els: frozenlist[T2]) -> frozenlist[T2]:
