@@ -45,8 +45,15 @@ class PrecisionArbitrary:
 class PrecisionBits(Node[int]):
     r"""Precision to a specified number of bits."""
 
+class _PrecisionMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # Numeric precision: arbitrary precision, or precision to a specified number of bits.
-Precision: TypeAlias = "PrecisionArbitrary | PrecisionBits"
+class Precision(metaclass=_PrecisionMeta):
+    r"""PrecisionArbitrary | PrecisionBits"""
+    
+    pass
 
 PRECISION__NAME = hydra.core.Name("hydra.util.Precision")
 PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")

@@ -28,8 +28,15 @@ class ParseResultSuccess(Node["ParseSuccess[A]"]):
 class ParseResultFailure(Node["ParseError"]):
     r"""A failed parse, with an error message and the remaining input."""
 
+class _ParseResultMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # The result of a parse operation.
-ParseResult: TypeAlias = "ParseResultSuccess[A] | ParseResultFailure"
+class ParseResult(metaclass=_ParseResultMeta):
+    r"""ParseResultSuccess[A] | ParseResultFailure"""
+    
+    pass
 
 PARSE_RESULT__NAME = hydra.core.Name("hydra.parsing.ParseResult")
 PARSE_RESULT__SUCCESS__NAME = hydra.core.Name("success")
