@@ -116,7 +116,7 @@ def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.com
         return hydra.lib.logic.if_else(False, (lambda : cast(Either[str, hydra.compute.Trace], Left("never happens"))), (lambda : cast(Either[str, hydra.compute.Trace], Right(hydra.compute.Trace(t.stack, t.messages, hydra.lib.maps.insert(flag, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), t.other))))))
     def restore(ignored: T2, t1: hydra.compute.Trace) -> hydra.compute.Trace:
         return hydra.compute.Trace(t1.stack, t1.messages, hydra.lib.maps.delete(flag, t1.other))
-    return mutate_trace(mutate, cast(Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], (lambda x1, x2: restore(x1, x2))), f)
+    return mutate_trace(mutate, cast(Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], (lambda x1: (lambda x2: restore(x1, x2)))), f)
 
 def with_state(cx0: T0, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T2, T1]:
     return cast(hydra.compute.Flow[T2, T1], hydra.compute.Flow((lambda cx1, t1: (f1 := (lambda : f.value(cx0, t1)), cast(hydra.compute.FlowState[T2, T1], hydra.compute.FlowState(f1().value, cx1, f1().trace)))[1])))

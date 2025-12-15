@@ -31,7 +31,6 @@ import hydra.show.core
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
 
 def literal_type_supported(constraints: hydra.coders.LanguageConstraints, lt: hydra.core.LiteralType) -> bool:
     r"""Check if a literal type is supported by the given language constraints."""
@@ -96,7 +95,7 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
         return hydra.lib.flows.bind(recurse(typ), (lambda type1: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no alternatives for type: ", hydra.show.core.type(typ))), (lambda type2: hydra.lib.flows.pure(type2)), try_type(type1))))
     return hydra.rewriting.rewrite_type_m(cast(Callable[[
       Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]],
-      hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], (lambda x1, x2: rewrite(x1, x2))), type0)
+      hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], (lambda x1: (lambda x2: rewrite(x1, x2)))), type0)
 
 def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], types0: FrozenDict[T0, hydra.core.Type]) -> hydra.compute.Flow[T1, FrozenDict[T0, hydra.core.Type]]:
     def map_pair(pair: tuple[T2, hydra.core.Type]) -> hydra.compute.Flow[T3, tuple[T2, hydra.core.Type]]:
@@ -304,7 +303,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
         return hydra.lib.flows.bind(recurse(term02), (lambda term1: hydra.lib.flows.bind(try_term(term1), (lambda mterm: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no alternatives for term: ", hydra.show.core.term(term1))), (lambda term2: hydra.lib.flows.pure(term2)), mterm)))))
     return hydra.rewriting.rewrite_term_m(cast(Callable[[
       Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]],
-      hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], (lambda x1, x2: rewrite(x1, x2))), term0)
+      hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], (lambda x1: (lambda x2: rewrite(x1, x2)))), term0)
 
 def adapt_data_graph(constraints: hydra.coders.LanguageConstraints, do_expand: bool, graph0: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph]:
     r"""Adapt a graph and its schema to the given language constraints, prior to inference."""

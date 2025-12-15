@@ -22,8 +22,6 @@ import hydra.monads
 import hydra.show.core
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-T2 = TypeVar("T2")
 
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""

@@ -108,7 +108,7 @@ def infer_type_of_unwrap(cx: hydra.typing.InferenceContext, tname: hydra.core.Na
 def free_variables_in_context(cx: hydra.typing.InferenceContext) -> frozenset[hydra.core.Name]:
     r"""Get all free variables in an inference context."""
     
-    return hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], (lambda x1, x2: hydra.lib.sets.union(x1, x2))), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map(hydra.rewriting.free_variables_in_type_scheme_simple, hydra.lib.maps.elems(cx.data_types)))
+    return hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], (lambda x1: (lambda x2: hydra.lib.sets.union(x1, x2)))), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map(hydra.rewriting.free_variables_in_type_scheme_simple, hydra.lib.maps.elems(cx.data_types)))
 
 def infer_type_of_primitive(cx: hydra.typing.InferenceContext, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("No such primitive: ", name.value)), (lambda scheme: hydra.lib.flows.bind(hydra.schemas.instantiate_type_scheme(scheme), (lambda ts: yield_checked(build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))))), ts.type, hydra.substitution.id_type_subst())))), hydra.lib.maps.lookup(name, cx.primitive_types))
