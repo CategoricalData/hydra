@@ -80,6 +80,15 @@ typeAliasStatementFor env = case pythonEnvironmentVersion env of
   Python312 -> typeAliasStatement
   Python310 -> typeAliasStatement310
 
+-- | Version-aware union type statement generation.
+--   Uses PEP 695 type alias syntax for Python 3.12+.
+--   For Python 3.10, generates a metaclass-based class that is subscriptable at runtime
+--   (needed for cast() compatibility).
+unionTypeStatementsFor :: PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement]
+unionTypeStatementsFor env name tparams mcomment tyexpr = case pythonEnvironmentVersion env of
+  Python312 -> [typeAliasStatement name tparams mcomment tyexpr]
+  Python310 -> unionTypeClassStatements310 name mcomment tyexpr
+
 -- | Rewrite case statements in which the top-level lambda variables are re-used, e.g.
 --   cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...].
 --   Such case statements are legal in Hydra, but may lead to variable name collision in languages like Python.
@@ -853,11 +862,11 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
             pyExpressionToPyStatement . tripleQuotedString <$> fcomment]
     asUnion = do
       fieldStmts <- CM.mapM toFieldStmt tfields
-      return $ fieldStmts ++ [unionStmt]
+      return $ fieldStmts ++ unionStmts
       where
         toFieldStmt (FieldType fname ftype) = do
-            comment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription ftype)
-            let body = indentedBlock comment []
+            fcomment <- fmap normalizeComment <$> (inGraphContext $ getTypeDescription ftype)
+            let body = indentedBlock fcomment []
             margs <- if deannotateType ftype == TypeUnit
                   then pure Nothing
                   else do
@@ -870,7 +879,8 @@ encodeUnionType env name rt@(RowType _ tfields) comment = if isEnumRowType rt th
                 (pyNameToPyTypeParameter <$> fieldParams ftype)
                 margs
                 body
-        unionStmt = typeAliasStatementFor env
+        -- Use unionTypeStatementsFor which generates a subscriptable class for Python 3.10
+        unionStmts = unionTypeStatementsFor env
             (encodeName False CaseConventionPascal env name)
             tparams
             comment
