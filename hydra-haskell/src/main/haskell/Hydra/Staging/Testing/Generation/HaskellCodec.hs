@@ -3,7 +3,7 @@ module Hydra.Staging.Testing.Generation.HaskellCodec where
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
-import Hydra.Staging.Testing.Generation.Transform (collectTestCases)
+import Hydra.Staging.Testing.Generation.Transform (collectTestCases, addGenerationPrefix)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import qualified Hydra.Ext.Haskell.Coder as HaskellCoder
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
@@ -25,6 +25,8 @@ import qualified Hydra.Inference as Inference
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import Debug.Trace
+import Data.Char (toUpper)
+import qualified System.FilePath as FP
 
 
 termToHaskell :: Namespaces H.ModuleName -> Term -> Flow Graph String
@@ -116,11 +118,9 @@ generateTestGroupHierarchy infContext namespaces codec depth testGroup = do
 -- | Generic test file generation using a TestCodec
 generateTestFileWithCodec :: TestCodec -> Module -> TestGroup -> Namespaces H.ModuleName -> Flow Graph (FilePath, String)
 generateTestFileWithCodec codec testModule testGroup namespaces = do
-  -- Perform inference so that we have a meaningful TypeContext later on
-  g0 <- getState
-  g <- inferGraphTypes g0
---  fail $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (M.elems $ graphElements g)) ++ "}"
-
+  -- Note: Type inference is now performed ONCE upfront in generateAllModuleTests (Generate.hs)
+  -- This is critical for performance: inferGraphTypes is expensive and should not be called per-module
+  g <- getState
   infContext <- graphToInferenceContext g
 
   -- Generate test hierarchy preserving the structure
@@ -303,5 +303,34 @@ haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
   testGenNamespacesForModule = namespacesForModule,
   testGenCreateCodec = haskellTestCodec,
-  testGenGenerateTestFile = generateHaskellTestFile
+  testGenGenerateTestFile = generateHaskellTestFile,
+  testGenAggregatorFile = Just generateHaskellAggregatorSpec
 }
+
+-- | Generate an aggregator spec file that imports all generated test modules (Haskell/HSpec style)
+generateHaskellAggregatorSpec :: FilePath -> [Module] -> (FilePath, String)
+generateHaskellAggregatorSpec baseDir modules =
+  let addSpecSuffix (Namespace ns) = Namespace (ns ++ "Spec")
+      modulePaths = map (namespaceToModuleName . addSpecSuffix . addGenerationPrefix . moduleNamespace) modules
+      imports = L.intercalate "\n" $ map (\m -> "import qualified " ++ m ++ " as " ++ sanitizeModuleName m) modulePaths
+      specs = L.intercalate "\n    " $ map (\m -> sanitizeModuleName m ++ ".spec") modulePaths
+      content = unlines [
+        "-- Note: this is an automatically generated file. Do not edit.",
+        "",
+        "module Generation.Spec (spec) where",
+        "",
+        "import qualified Test.Hspec as H",
+        imports,
+        "",
+        "spec :: H.Spec",
+        "spec = do",
+        "    " ++ specs
+        ]
+      filePath = FP.combine baseDir "Generation/Spec.hs"
+  in (filePath, content)
+  where
+    sanitizeModuleName = map (\c -> if c == '.' then '_' else c)
+    namespaceToModuleName (Namespace ns) =
+      L.intercalate "." $ L.map capitalize (L.filter (not . null) $ Strings.splitOn "." ns)
+    capitalize [] = []
+    capitalize (x:xs) = toUpper x : xs
