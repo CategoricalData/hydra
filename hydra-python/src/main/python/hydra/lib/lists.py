@@ -43,7 +43,12 @@ def cons(value: A, values: Sequence[A]) -> frozenlist[A]:
 
 
 def drop(n: int, values: Sequence[A]) -> frozenlist[A]:
-    """Drop the first n elements from a list."""
+    """Drop the first n elements from a list.
+
+    If n <= 0, returns the full list (Haskell semantics).
+    """
+    if n <= 0:
+        return tuple(values)
     return tuple(values[n:])
 
 
@@ -102,7 +107,12 @@ def head(values: Sequence[A]) -> A:
 def intercalate(
     separator: Sequence[A], values: Sequence[Sequence[A]]
 ) -> frozenlist[A]:
-    """Intercalate a list of lists."""
+    """Intercalate a list of lists with a separator list between each.
+
+    Returns empty list if values is empty (Haskell semantics).
+    """
+    if not values:
+        return ()
     return tuple(x for xs in values[:-1] for x in concat2(xs, separator)) + tuple(
         values[-1]
     )
@@ -191,7 +201,12 @@ def tail(values: Sequence[A]) -> frozenlist[A]:
 
 
 def take(n: int, values: Sequence[A]) -> frozenlist[A]:
-    """Take the first n elements from a list."""
+    """Take the first n elements from a list.
+
+    If n <= 0, returns an empty list (Haskell semantics).
+    """
+    if n <= 0:
+        return ()
     return tuple(values[:n])
 
 

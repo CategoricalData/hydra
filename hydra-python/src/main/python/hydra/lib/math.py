@@ -6,9 +6,14 @@ import math
 from hydra.dsl.python import frozenlist
 
 
+import builtins as _builtins
+
 def abs_(x: int) -> int:
     """Return the absolute value of an integer."""
-    return abs(x)
+    return _builtins.abs(x)
+
+# Alias for Hydra compatibility (abs is a Python builtin)
+abs = abs_
 
 
 def add(x: int, y: int) -> int:
@@ -57,8 +62,15 @@ def range_(start: int, end: int) -> frozenlist[int]:
 
 
 def rem(a: int, b: int) -> int:
-    """Integer remainder with result having same sign as dividend."""
-    return a - (a // b) * b
+    """Integer remainder with result having same sign as dividend (Haskell semantics).
+
+    This uses truncated division, not floored division like Python's %.
+    For example: rem(-10, 3) = -1, rem(10, -3) = 1
+    """
+    # Use int() to truncate toward zero (Haskell behavior)
+    # Python's // floors toward negative infinity
+    q = int(a / b)  # Truncate toward zero
+    return a - q * b
 
 
 def signum(x: int) -> int:

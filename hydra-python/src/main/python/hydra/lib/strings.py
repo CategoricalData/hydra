@@ -53,7 +53,17 @@ def null(s: str) -> bool:
 
 
 def split_on(delimiter: str, x: str) -> frozenlist[str]:
-    """Split a string on a delimiter."""
+    """Split a string on a delimiter.
+
+    With empty delimiter, splits into individual characters with leading empty string
+    (Haskell semantics: splitOn "" "abc" == ["", "a", "b", "c"]).
+    """
+    if not delimiter:
+        # Haskell: splitOn "" "abc" == ["", "a", "b", "c"]
+        # splitOn "" "" == [""]
+        if not x:
+            return ("",)
+        return ("",) + tuple(x)
     return tuple(x.split(delimiter))
 
 
@@ -73,8 +83,13 @@ def to_upper(s: str) -> str:
 
 
 def unlines(xs: Sequence[str]) -> str:
-    """Join strings with newlines."""
-    return '\n'.join(xs)
+    """Join strings with newlines, adding trailing newline.
+
+    Haskell semantics: unlines ["a", "b"] == "a\nb\n"
+    """
+    if not xs:
+        return ""
+    return '\n'.join(xs) + '\n'
 
 
 def words(s: str) -> frozenlist[str]:
