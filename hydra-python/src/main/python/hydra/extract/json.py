@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.json
@@ -15,6 +15,10 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.monads
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def show_value[T0](value: T0) -> str:
     return "TODO: implement showValue"

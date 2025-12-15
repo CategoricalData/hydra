@@ -33,6 +33,8 @@ import hydra.substitution
 import hydra.typing
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def all_equal(els: frozenlist[T0]) -> bool:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : True), (lambda : hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, hydra.lib.equality.equal(t, hydra.lib.lists.head(els)))), True, hydra.lib.lists.tail(els))))
