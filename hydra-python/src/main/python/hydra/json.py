@@ -26,8 +26,15 @@ class ValueObject(Node["FrozenDict[str, Value]"]):
 class ValueString(Node[str]):
     r"""A string value."""
 
+class _ValueMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A JSON value.
-Value: TypeAlias = "ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString"
+class Value(metaclass=_ValueMeta):
+    r"""ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString"""
+    
+    pass
 
 VALUE__NAME = hydra.core.Name("hydra.json.Value")
 VALUE__ARRAY__NAME = hydra.core.Name("array")

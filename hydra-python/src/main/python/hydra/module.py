@@ -17,8 +17,15 @@ class DefinitionTerm(Node["TermDefinition"]):
 class DefinitionType(Node["TypeDefinition"]):
     r"""A type definition."""
 
+class _DefinitionMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A definition, which may be either a term or type definition.
-Definition: TypeAlias = "DefinitionTerm | DefinitionType"
+class Definition(metaclass=_DefinitionMeta):
+    r"""DefinitionTerm | DefinitionType"""
+    
+    pass
 
 DEFINITION__NAME = hydra.core.Name("hydra.module.Definition")
 DEFINITION__TERM__NAME = hydra.core.Name("term")

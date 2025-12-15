@@ -65,8 +65,15 @@ class NodeVariable(Node["Variable"]):
 class NodeWildcard:
     r"""An anonymous variable which we do not care to join across patterns."""
 
+class _Node_Meta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A node in a query expression; it may be a term, a variable, or a wildcard.
-Node_: TypeAlias = "NodeTerm | NodeVariable | NodeWildcard"
+class Node_(metaclass=_Node_Meta):
+    r"""NodeTerm | NodeVariable | NodeWildcard"""
+    
+    pass
 
 NODE__NAME = hydra.core.Name("hydra.query.Node")
 NODE__TERM__NAME = hydra.core.Name("term")
@@ -82,8 +89,15 @@ class PathRegex(Node["RegexSequence"]):
 class PathInverse(Node["Path"]):
     r"""A path given by the inverse of another path."""
 
+class _PathMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A query path.
-Path: TypeAlias = "PathStep | PathRegex | PathInverse"
+class Path(metaclass=_PathMeta):
+    r"""PathStep | PathRegex | PathInverse"""
+    
+    pass
 
 PATH__NAME = hydra.core.Name("hydra.query.Path")
 PATH__STEP__NAME = hydra.core.Name("step")
@@ -105,8 +119,15 @@ class PatternDisjunction(Node["frozenlist[Pattern]"]):
 class PatternGraph(Node["GraphPattern"]):
     r"""A pattern which matches within a named subgraph."""
 
+class _PatternMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A query pattern.
-Pattern: TypeAlias = "PatternTriple | PatternNegation | PatternConjunction | PatternDisjunction | PatternGraph"
+class Pattern(metaclass=_PatternMeta):
+    r"""PatternTriple | PatternNegation | PatternConjunction | PatternDisjunction | PatternGraph"""
+    
+    pass
 
 PATTERN__NAME = hydra.core.Name("hydra.query.Pattern")
 PATTERN__TRIPLE__NAME = hydra.core.Name("triple")
@@ -158,8 +179,15 @@ class RegexQuantifierAtLeast(Node[int]):
 class RegexQuantifierRange(Node["Range"]):
     r"""The {n, m} quantifier; matches between n and m (inclusive) occurrences."""
 
+class _RegexQuantifierMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A regular expression quantifier.
-RegexQuantifier: TypeAlias = "RegexQuantifierOne | RegexQuantifierZeroOrOne | RegexQuantifierZeroOrMore | RegexQuantifierOneOrMore | RegexQuantifierExactly | RegexQuantifierAtLeast | RegexQuantifierRange"
+class RegexQuantifier(metaclass=_RegexQuantifierMeta):
+    r"""RegexQuantifierOne | RegexQuantifierZeroOrOne | RegexQuantifierZeroOrMore | RegexQuantifierOneOrMore | RegexQuantifierExactly | RegexQuantifierAtLeast | RegexQuantifierRange"""
+    
+    pass
 
 REGEX_QUANTIFIER__NAME = hydra.core.Name("hydra.query.RegexQuantifier")
 REGEX_QUANTIFIER__ONE__NAME = hydra.core.Name("one")
@@ -190,8 +218,15 @@ class StepProject(Node["hydra.core.Projection"]):
 class StepCompare(Node["ComparisonConstraint"]):
     r"""A comparison of two terms."""
 
+class _StepMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # An atomic function as part of a query. When applied to a graph, steps are typed by function types.
-Step: TypeAlias = "StepEdge | StepProject | StepCompare"
+class Step(metaclass=_StepMeta):
+    r"""StepEdge | StepProject | StepCompare"""
+    
+    pass
 
 STEP__NAME = hydra.core.Name("hydra.query.Step")
 STEP__EDGE__NAME = hydra.core.Name("edge")

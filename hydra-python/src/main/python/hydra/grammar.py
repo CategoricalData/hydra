@@ -67,8 +67,15 @@ class PatternSequence(Node["frozenlist[Pattern]"]):
 class PatternStar(Node["Pattern"]):
     r"""Zero or more occurrences of a pattern."""
 
+class _PatternMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A pattern which matches valid expressions in the language.
-Pattern: TypeAlias = "PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar"
+class Pattern(metaclass=_PatternMeta):
+    r"""PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar"""
+    
+    pass
 
 PATTERN__NAME = hydra.core.Name("hydra.grammar.Pattern")
 PATTERN__ALTERNATIVES__NAME = hydra.core.Name("alternatives")
