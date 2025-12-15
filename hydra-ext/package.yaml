@@ -57,3 +57,13 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
+
+  update-python-generation-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-python-generation-tests
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec
