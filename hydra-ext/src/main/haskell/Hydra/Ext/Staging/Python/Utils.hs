@@ -248,3 +248,68 @@ typeAliasStatement310 name _tparams mcomment tyexpr = annotatedStatement mcommen
     (Just $ pyExpressionToPyAnnotatedRhs quotedExpr)
   where
     quotedExpr = doubleQuotedString $ printExpr $ PySer.encodeExpression tyexpr
+
+-- | Generate a subscriptable union class for Python 3.10.
+--   This creates a class with a metaclass that allows subscripting at runtime,
+--   which is needed for cast() compatibility.
+--   Generates:
+--     class _NameMeta(type):
+--         def __getitem__(cls, item):
+--             return object
+--     class Name(metaclass=_NameMeta):
+--         """TypeExpression"""
+--         pass
+unionTypeClassStatements310 :: Py.Name -> Maybe String -> Py.Expression -> [Py.Statement]
+unionTypeClassStatements310 (Py.Name nameStr) mcomment tyexpr = [metaClass, unionClass]
+  where
+    metaName = Py.Name ("_" ++ nameStr ++ "Meta")
+    docString = printExpr $ PySer.encodeExpression tyexpr
+
+    -- class _NameMeta(type):
+    --     def __getitem__(cls, item):
+    --         return object
+    metaClass = pyClassDefinitionToPyStatement $ Py.ClassDefinition
+      Nothing  -- no decorators
+      metaName
+      []       -- no type parameters
+      (Just $ pyExpressionsToPyArgs [pyNameToPyExpression $ Py.Name "type"])
+      (indentedBlock Nothing [[getItemMethod]])
+
+    -- def __getitem__(cls, item):
+    --     return object
+    getItemMethod = Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition
+      Nothing  -- no decorators
+      (Py.FunctionDefRaw
+        False  -- not async
+        (Py.Name "__getitem__")
+        []  -- no type params
+        (Just getItemParams)
+        Nothing  -- no return type
+        Nothing  -- no type comment
+        (indentedBlock Nothing [[returnObject]]))
+
+    getItemParams = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters
+      [Py.ParamNoDefault (Py.Param (Py.Name "cls") Nothing) Nothing,
+       Py.ParamNoDefault (Py.Param (Py.Name "item") Nothing) Nothing]
+      []
+      Nothing
+
+    returnObject = pySimpleStatementToPyStatement $ Py.SimpleStatementReturn $
+      Py.ReturnStatement [Py.StarExpressionSimple $ pyNameToPyExpression $ Py.Name "object"]
+
+    -- class Name(metaclass=_NameMeta):
+    --     """docString"""
+    --     pass
+    unionClass = annotatedStatement mcomment $
+      pyClassDefinitionToPyStatement $ Py.ClassDefinition
+        Nothing  -- no decorators
+        (Py.Name nameStr)
+        []       -- no type parameters
+        (Just $ Py.Args [] [Py.KwargOrStarredKwarg metaclassArg] [])
+        (indentedBlock Nothing [[docStmt], [passStmt]])
+
+    metaclassArg = Py.Kwarg (Py.Name "metaclass") (pyNameToPyExpression metaName)
+
+    passStmt = pySimpleStatementToPyStatement Py.SimpleStatementPass
+
+    docStmt = pyExpressionToPyStatement $ tripleQuotedString docString
