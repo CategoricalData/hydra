@@ -48,8 +48,15 @@ class SchemaSpecFile(Node[str]):
 class SchemaSpecProvided:
     r"""A schema which will be provided within the workflow."""
 
+class _SchemaSpecMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # The specification of a schema at the source end of a workflow.
-SchemaSpec: TypeAlias = "SchemaSpecHydra | SchemaSpecFile | SchemaSpecProvided"
+class SchemaSpec(metaclass=_SchemaSpecMeta):
+    r"""SchemaSpecHydra | SchemaSpecFile | SchemaSpecProvided"""
+    
+    pass
 
 SCHEMA_SPEC__NAME = hydra.core.Name("hydra.workflow.SchemaSpec")
 SCHEMA_SPEC__HYDRA__NAME = hydra.core.Name("hydra")

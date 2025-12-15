@@ -75,8 +75,15 @@ class ExprOp(Node["OpExpr"]):
 class ExprBrackets(Node["BracketExpr"]):
     r"""A bracketed expression."""
 
+class _ExprMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # An abstract expression.
-Expr: TypeAlias = "ExprConst | ExprIndent | ExprOp | ExprBrackets"
+class Expr(metaclass=_ExprMeta):
+    r"""ExprConst | ExprIndent | ExprOp | ExprBrackets"""
+    
+    pass
 
 EXPR__NAME = hydra.core.Name("hydra.ast.Expr")
 EXPR__CONST__NAME = hydra.core.Name("const")
@@ -101,8 +108,15 @@ class IndentStyleAllLines(Node[str]):
 class IndentStyleSubsequentLines(Node[str]):
     r"""Indent only lines after the first with the given string."""
 
+class _IndentStyleMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # Any of several indentation styles.
-IndentStyle: TypeAlias = "IndentStyleAllLines | IndentStyleSubsequentLines"
+class IndentStyle(metaclass=_IndentStyleMeta):
+    r"""IndentStyleAllLines | IndentStyleSubsequentLines"""
+    
+    pass
 
 INDENT_STYLE__NAME = hydra.core.Name("hydra.ast.IndentStyle")
 INDENT_STYLE__ALL_LINES__NAME = hydra.core.Name("allLines")
@@ -172,8 +186,15 @@ class WsBreakAndIndent(Node[str]):
 class WsDoubleBreak:
     r"""Two line breaks."""
 
+class _WsMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # One of several classes of whitespace.
-Ws: TypeAlias = "WsNone | WsSpace | WsBreak | WsBreakAndIndent | WsDoubleBreak"
+class Ws(metaclass=_WsMeta):
+    r"""WsNone | WsSpace | WsBreak | WsBreakAndIndent | WsDoubleBreak"""
+    
+    pass
 
 WS__NAME = hydra.core.Name("hydra.ast.Ws")
 WS__NONE__NAME = hydra.core.Name("none")

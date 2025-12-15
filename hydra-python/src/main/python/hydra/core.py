@@ -115,8 +115,15 @@ class EliminationUnion(Node["CaseStatement"]):
 class EliminationWrap(Node["Name"]):
     r"""Unwrap a wrapped term."""
 
+class _EliminationMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A corresponding elimination for an introduction term.
-Elimination: TypeAlias = "EliminationRecord | EliminationUnion | EliminationWrap"
+class Elimination(metaclass=_EliminationMeta):
+    r"""EliminationRecord | EliminationUnion | EliminationWrap"""
+    
+    pass
 
 ELIMINATION__NAME = Name("hydra.core.Elimination")
 ELIMINATION__RECORD__NAME = Name("record")
@@ -171,8 +178,15 @@ class FloatValueFloat32(Node[float]):
 class FloatValueFloat64(Node[float]):
     r"""A 64-bit floating-point value."""
 
+class _FloatValueMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A floating-point literal value.
-FloatValue: TypeAlias = "FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64"
+class FloatValue(metaclass=_FloatValueMeta):
+    r"""FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64"""
+    
+    pass
 
 FLOAT_VALUE__NAME = Name("hydra.core.FloatValue")
 FLOAT_VALUE__BIGFLOAT__NAME = Name("bigfloat")
@@ -199,8 +213,15 @@ class FunctionLambda(Node["Lambda"]):
 class FunctionPrimitive(Node["Name"]):
     r"""A reference to a built-in (primitive) function."""
 
+class _FunctionMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A function.
-Function: TypeAlias = "FunctionElimination | FunctionLambda | FunctionPrimitive"
+class Function(metaclass=_FunctionMeta):
+    r"""FunctionElimination | FunctionLambda | FunctionPrimitive"""
+    
+    pass
 
 FUNCTION__NAME = Name("hydra.core.Function")
 FUNCTION__ELIMINATION__NAME = Name("elimination")
@@ -297,8 +318,15 @@ class IntegerValueUint32(Node[int]):
 class IntegerValueUint64(Node[int]):
     r"""A 64-bit unsigned integer value (unsigned long)."""
 
+class _IntegerValueMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # An integer literal value.
-IntegerValue: TypeAlias = "IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64"
+class IntegerValue(metaclass=_IntegerValueMeta):
+    r"""IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64"""
+    
+    pass
 
 INTEGER_VALUE__NAME = Name("hydra.core.IntegerValue")
 INTEGER_VALUE__BIGINT__NAME = Name("bigint")
@@ -350,8 +378,15 @@ class LiteralInteger(Node["IntegerValue"]):
 class LiteralString(Node[str]):
     r"""A string literal."""
 
+class _LiteralMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A term constant; an instance of a literal type.
-Literal: TypeAlias = "LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString"
+class Literal(metaclass=_LiteralMeta):
+    r"""LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString"""
+    
+    pass
 
 LITERAL__NAME = Name("hydra.core.Literal")
 LITERAL__BINARY__NAME = Name("binary")
@@ -375,8 +410,15 @@ class LiteralTypeInteger(Node["IntegerType"]):
 class LiteralTypeString:
     r"""The type of a string value."""
 
+class _LiteralTypeMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants.
-LiteralType: TypeAlias = "LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"
+class LiteralType(metaclass=_LiteralTypeMeta):
+    r"""LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"""
+    
+    pass
 
 LITERAL_TYPE__NAME = Name("hydra.core.LiteralType")
 LITERAL_TYPE__BINARY__NAME = Name("binary")
@@ -483,8 +525,15 @@ class TermVariable(Node["Name"]):
 class TermWrap(Node["WrappedTerm"]):
     r"""A wrapped term; an instance of a wrapper type (newtype)."""
 
+class _TermMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A data term.
-Term: TypeAlias = "TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap"
+class Term(metaclass=_TermMeta):
+    r"""TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap"""
+    
+    pass
 
 TERM__NAME = Name("hydra.core.Term")
 TERM__ANNOTATED__NAME = Name("annotated")
@@ -554,8 +603,15 @@ class TypeVariable(Node["Name"]):
 class TypeWrap(Node["WrappedType"]):
     r"""A wrapped type (newtype)."""
 
+class _TypeMeta(type):
+    def __getitem__(cls, item):
+        return object
+
 # A data type.
-Type: TypeAlias = "TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap"
+class Type(metaclass=_TypeMeta):
+    r"""TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap"""
+    
+    pass
 
 TYPE__NAME = Name("hydra.core.Type")
 TYPE__ANNOTATED__NAME = Name("annotated")
