@@ -24,7 +24,7 @@ from hydra.dsl.python import Just, Nothing
 # Shared test fixtures
 @pytest.fixture
 def empty_trace():
-    return hydra.monads.empty_trace
+    return hydra.monads.empty_trace()
 
 
 @pytest.fixture
