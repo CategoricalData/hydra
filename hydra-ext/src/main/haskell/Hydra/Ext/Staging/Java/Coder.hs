@@ -887,8 +887,10 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
         bindings = functionStructureBindings fs
         body = functionStructureBody fs
         doms = functionStructureDomains fs
-        cod = functionStructureCodomain fs
         env2 = functionStructureEnvironment fs
+    cod <- case functionStructureCodomain fs of
+      Just c -> return c
+      Nothing -> fail "Java requires a return type annotation, but type inference failed for this term"
     let jparams = fmap toParam tparams
         aliases2 = javaEnvironmentAliases env2
 

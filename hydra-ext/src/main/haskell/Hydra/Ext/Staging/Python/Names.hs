@@ -32,7 +32,11 @@ data PythonEnvironment = PythonEnvironment {
   pythonEnvironmentBoundTypeVariables :: ([Name], M.Map Name Py.Name),
   pythonEnvironmentTypeContext :: TypeContext,
   pythonEnvironmentNUllaryBindings :: S.Set Name,
-  pythonEnvironmentVersion :: PythonVersion}
+  pythonEnvironmentVersion :: PythonVersion,
+  -- | When True, skip generating cast() calls. This significantly reduces memory usage
+  -- during code generation at the cost of less precise type annotations in the output.
+  -- Useful for test generation where runtime behavior matters more than static typing.
+  pythonEnvironmentSkipCasts :: Bool}
 
 encodeConstantForFieldName :: PythonEnvironment -> Name -> Name -> Py.Name
 encodeConstantForFieldName _ tname fname = Py.Name $
