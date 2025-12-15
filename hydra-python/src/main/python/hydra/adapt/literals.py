@@ -28,7 +28,6 @@ import hydra.variants
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
 
 def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.util.Comparison:
     r"""Compare two precision values."""

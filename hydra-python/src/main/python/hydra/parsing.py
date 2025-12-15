@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from hydra.dsl.python import Node
-from typing import Annotated, Any, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
 
 A = TypeVar("A")
@@ -28,15 +28,8 @@ class ParseResultSuccess(Node["ParseSuccess[A]"]):
 class ParseResultFailure(Node["ParseError"]):
     r"""A failed parse, with an error message and the remaining input."""
 
-# ParseResult needs to be subscriptable at runtime for cast() compatibility in Python 3.10/PyPy
-class _ParseResultMeta(type):
-    """Metaclass that makes ParseResult subscriptable at runtime."""
-    def __getitem__(cls, item: Any) -> Any:
-        return object
-
-class ParseResult(metaclass=_ParseResultMeta):
-    """A type alias for parse results (ParseResultSuccess[A] | ParseResultFailure). Subscriptable at runtime for cast() compatibility."""
-    pass
+# The result of a parse operation.
+ParseResult: TypeAlias = "ParseResultSuccess[A] | ParseResultFailure"
 
 PARSE_RESULT__NAME = hydra.core.Name("hydra.parsing.ParseResult")
 PARSE_RESULT__SUCCESS__NAME = hydra.core.Name("success")
