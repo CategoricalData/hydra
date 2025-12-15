@@ -27,6 +27,7 @@ import hydra.sorting
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
     r"""Strip type annotations from the top levels of a term."""

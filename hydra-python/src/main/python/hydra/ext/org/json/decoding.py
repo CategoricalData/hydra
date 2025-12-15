@@ -5,7 +5,7 @@ r"""Decoding functions for JSON data."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.json
@@ -13,6 +13,10 @@ import hydra.lib.flows
 import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.strings
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def decode_array[T0, T1](decode_elem: Callable[[hydra.json.Value], hydra.compute.Flow[T0, T1]], v1: hydra.json.Value) -> hydra.compute.Flow[T0, frozenlist[T1]]:
     match v1:

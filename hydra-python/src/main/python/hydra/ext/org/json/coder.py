@@ -31,6 +31,10 @@ import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+
 def show_value[T0](value: T0) -> str:
     return "TODO: implement showValue"
 
