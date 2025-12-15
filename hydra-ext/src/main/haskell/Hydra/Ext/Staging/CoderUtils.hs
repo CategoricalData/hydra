@@ -25,8 +25,8 @@ data FunctionStructure env = FunctionStructure {
   functionStructureBody :: Term,
   -- | Domain types of the value parameters
   functionStructureDomains :: [Type],
-  -- | The return type of the function
-  functionStructureCodomain :: Type,
+  -- | The return type of the function (if type inference succeeded)
+  functionStructureCodomain :: Maybe Type,
   -- | Updated environment after processing all bindings
   functionStructureEnvironment :: env
 }
@@ -53,9 +53,17 @@ analyzeFunctionTerm :: (env -> TypeContext) -> (TypeContext -> env -> env) -> en
 analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
   where
     gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
-        -- Lambda: collect parameter and domain, extend environment
+        -- Lambda with typed domain: collect parameter and domain, extend environment
         TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> if argMode
             then gather argMode env2 tparams (var:args) bindings (dom:doms) tapps body
+            else finish term
+          where
+            env2 = setTC (extendTypeContextForLambda (getTC env) lam) env
+
+        -- Lambda with untyped domain: collect parameter but use unit type as placeholder
+        -- This is critical for Python test generation where lambdas may lack type annotations
+        TermFunction (FunctionLambda lam@(Lambda var Nothing body)) -> if argMode
+            then gather argMode env2 tparams (var:args) bindings (TypeVariable (Name "_"):doms) tapps body
             else finish term
           where
             env2 = setTC (extendTypeContextForLambda (getTC env) lam) env
@@ -79,16 +87,66 @@ analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
         finish t = do
           -- Reapply type applications to the body
           let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
-          -- Infer the return type
-          typ <- withTrace ("inferring type for body") $ typeOf (getTC env) [] t2
+          -- Try to infer the return type; if it fails, continue without it
+          -- This allows encoding of untyped lambdas in dynamically-typed target languages like Python
+          mtyp <- tryTypeOf (getTC env) t2
           return $ FunctionStructure {
             functionStructureTypeParams = L.reverse tparams,
             functionStructureParams = L.reverse args,
             functionStructureBindings = bindings,
             functionStructureBody = t2,
             functionStructureDomains = L.reverse doms,
-            functionStructureCodomain = typ,
+            functionStructureCodomain = mtyp,
             functionStructureEnvironment = env}
+
+-- | Analyze a function term without inferring the return type.
+-- This is a performance optimization for dynamically-typed target languages (like Python)
+-- where the codomain type is not needed and type inference is expensive.
+-- Use this variant when generating test code or when types are not required.
+analyzeFunctionTermNoInfer :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
+analyzeFunctionTermNoInfer getTC setTC env term = gather True env [] [] [] [] [] term
+  where
+    gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
+        -- Lambda with typed domain
+        TermFunction (FunctionLambda lam@(Lambda var (Just dom) body)) -> if argMode
+            then gather argMode env2 tparams (var:args) bindings (dom:doms) tapps body
+            else finish term
+          where
+            env2 = setTC (extendTypeContextForLambda (getTC env) lam) env
+        -- Lambda with untyped domain (critical for Python test generation)
+        TermFunction (FunctionLambda lam@(Lambda var Nothing body)) -> if argMode
+            then gather argMode env2 tparams (var:args) bindings (TypeVariable (Name "_"):doms) tapps body
+            else finish term
+          where
+            env2 = setTC (extendTypeContextForLambda (getTC env) lam) env
+        TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
+          where
+            env2 = setTC (extendTypeContextForLet bindingMetadata (getTC env) lt) env
+        TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
+        TermTypeLambda tlam@(TypeLambda tvar body) -> gather argMode env2 (tvar:tparams) args bindings doms tapps body
+          where
+            env2 = setTC (extendTypeContextForTypeLambda (getTC env) tlam) env
+        t -> finish t
+      where
+        finish t = do
+          let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
+          -- Skip type inference - return Nothing for codomain
+          return $ FunctionStructure {
+            functionStructureTypeParams = L.reverse tparams,
+            functionStructureParams = L.reverse args,
+            functionStructureBindings = bindings,
+            functionStructureBody = t2,
+            functionStructureDomains = L.reverse doms,
+            functionStructureCodomain = Nothing,
+            functionStructureEnvironment = env}
+
+-- | Try to infer the type of a term, returning Nothing if type inference fails.
+-- This is useful for generating code in dynamically-typed languages where
+-- type information is optional (e.g., Python).
+tryTypeOf :: TypeContext -> Term -> Flow s (Maybe Type)
+tryTypeOf tc term = Flow $ \s t ->
+  let FlowState mResult s' t' = unFlow (typeOf tc [] term) s t
+  in FlowState (Just mResult) s' t'
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
 bindingMetadata :: TypeContext -> Binding -> Maybe Term

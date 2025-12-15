@@ -1,4 +1,11 @@
-module Hydra.Ext.Staging.Python.Coder (moduleToPython) where
+module Hydra.Ext.Staging.Python.Coder (
+  moduleToPython,
+  -- Exported for test generation
+  encodeTermInline,
+  encodeType,
+  PyGraph(..),
+  PythonModuleMetadata(..),
+) where
 
 import Hydra.Kernel
 import Hydra.Ext.Python.Language
@@ -17,6 +24,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Formatting
 import Hydra.Sources.Libraries
+import qualified Hydra.Arity as Arity
 
 import qualified Control.Monad as CM
 import qualified Data.List  as L
@@ -108,23 +116,42 @@ wrapLazyArguments name args
       [args !! 0, wrapInNullaryLambda (args !! 1), wrapInNullaryLambda (args !! 2)]
   | otherwise = args
 
+-- | Try a Flow computation and return a fallback value if it fails.
+-- This is useful when we want to continue even if type checking fails
+-- (e.g., for types like Either that require type arguments).
+tryFlowWithFallback :: a -> Flow PyGraph a -> Flow PyGraph a
+tryFlowWithFallback fallback flow = Flow $ \s t ->
+  let FlowState mResult s' t' = unFlow flow s t
+  in case mResult of
+    Just result -> FlowState (Just result) s' t'
+    Nothing -> FlowState (Just fallback) s t  -- Use original state and trace on failure
+
 encodeApplication :: PythonEnvironment -> Application -> Flow PyGraph Py.Expression
 encodeApplication env app = do
     PyGraph g _ <- getState
-    arity <- typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
+    -- Try to get arity from type; fall back to term-based arity if typeOf fails
+    -- (typeOf can fail for types like Either that require type arguments)
+    -- When skipCasts is enabled, skip the expensive typeOf call entirely
+    arity <- if pythonEnvironmentSkipCasts env
+      then pure $ Arity.termArity fun
+      else tryFlowWithFallback (Arity.termArity fun) $ typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
     let term = TermApplication app
-    typ <- typeOf (pythonEnvironmentTypeContext env) [] term
+    -- Try to get the term's type; if it fails, we'll skip casting
+    -- When skipCasts is enabled, skip the expensive typeOf call entirely
+    mtyp <- if pythonEnvironmentSkipCasts env
+      then pure Nothing
+      else tryFlowWithFallback Nothing $ Just <$> typeOf (pythonEnvironmentTypeContext env) [] term
     pargs <- CM.mapM (encodeTermInline env False) args
     let hargs = L.take arity pargs
     let rargs = L.drop arity pargs
-    lhs <- applyArgs hargs
-    let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs rargs
-    if needsCast (applicationFunction app) typ then do
-      updateMeta $ \m -> extendMetaForType True True typ $ m { pythonModuleMetadataUsesCast = True }
-      pytyp <- encodeType env typ
-      return $ castTo pytyp pyapp
-    else
-      return pyapp
+    (lhs, remainingRargs) <- applyArgs hargs rargs
+    let pyapp = L.foldl (\t a -> functionCall (pyExpressionToPyPrimary t) [a]) lhs remainingRargs
+    case mtyp of
+      Just typ | needsCast (applicationFunction app) typ -> do
+        updateMeta $ \m -> extendMetaForType True True typ $ m { pythonModuleMetadataUsesCast = True }
+        pytyp <- encodeType env typ
+        return $ castTo pytyp pyapp
+      _ -> return pyapp
   where
     -- Note: this extreme special case is to be expanded as needed. This cast is necessary *in addition to*
     -- the casts for type application terms.
@@ -136,27 +163,60 @@ encodeApplication env app = do
             f = fst $ gatherArgs t []
       _ -> False
     (fun, args) = gatherArgs (TermApplication app) []
-    applyArgs hargs = case fun of
+    -- Returns (expression, remaining rargs that weren't consumed)
+    applyArgs hargs rargs = case fun of
         TermFunction f -> case f of
             FunctionElimination elm -> case elm of
               EliminationRecord (Projection _ fname) -> do
-                return $ withRest $
-                  projectFromExpression firstArg $ encodeFieldName env fname
+                return (withRest $
+                  projectFromExpression firstArg $ encodeFieldName env fname, rargs)
               EliminationUnion (CaseStatement tname mdef cases) -> do
-                return $ stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported"
+                return (stringToPyExpression Py.QuoteStyleDouble "inline match expressions are unsupported", rargs)
               EliminationWrap _ -> do
-                -- Note: additional arguments here would be an error
-                return $ withRest $
-                  projectFromExpression firstArg $ Py.Name "value"
-            FunctionPrimitive name -> encodeVariable env name (wrapLazyArguments name hargs)
-            _ -> def
+                -- For wrapped types like Flow, the inner value is a callable
+                -- that takes all remaining arguments at once (not curried)
+                -- Consume all rargs here and return empty list
+                let valueExpr = projectFromExpression firstArg $ Py.Name "value"
+                let allArgs = restArgs ++ rargs
+                return $ if L.null allArgs
+                  then (valueExpr, [])
+                  else (functionCall (pyExpressionToPyPrimary valueExpr) allArgs, [])
+            FunctionPrimitive name -> do
+              expr <- encodeVariable env name (wrapLazyArguments name hargs)
+              return (expr, rargs)
+            _ -> do
+              expr <- def
+              return (expr, rargs)
           where
             withRest e = if L.null restArgs
               then e
               else functionCall (pyExpressionToPyPrimary e) restArgs
         -- Special-casing variables prevents quoting; forward references are allowed for function calls
-        TermVariable name -> encodeVariable env name hargs
-        _ -> def
+        -- For graph elements with known arity, consume args up to that arity
+        TermVariable name -> do
+          PyGraph g _ <- getState
+          let allArgs = hargs ++ rargs
+          case M.lookup name (graphElements g) of
+            Just el -> case bindingType el of
+              Just ts -> do
+                let elArity = typeSchemeArity ts
+                    consumeCount = min elArity (L.length allArgs)
+                    consumedArgs = L.take consumeCount allArgs
+                    remainingArgs = L.drop consumeCount allArgs
+                if L.null consumedArgs
+                  then do
+                    expr <- encodeVariable env name []
+                    return (expr, rargs)
+                  else return (functionCall (pyNameToPyPrimary $ encodeName True CaseConventionLowerSnake env name) consumedArgs, remainingArgs)
+              Nothing -> do
+                expr <- encodeVariable env name hargs
+                return (expr, rargs)
+            Nothing -> do
+              expr <- encodeVariable env name hargs
+              return (expr, rargs)
+        _ -> do
+          expr <- def
+          return (expr, rargs)
       where
         firstArg = L.head hargs
         restArgs = L.tail hargs
@@ -281,30 +341,32 @@ encodeFunction env f = case f of
   FunctionPrimitive name -> encodeVariable env name []
   _ -> fail $ "unexpected function variant: " ++ show (functionVariant f)
 
-encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
-encodeFunctionDefinition env name tparams args body doms cod comment prefixes = do
+encodeFunctionDefinition :: PythonEnvironment -> Name -> [Name] -> [Name] -> Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement] -> Flow PyGraph Py.Statement
+encodeFunctionDefinition env name tparams args body doms mcod comment prefixes = do
     pyArgs <- CM.zipWithM toParam args doms
     let pyParams = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters pyArgs [] Nothing
     stmts <- encodeTermMultiline env body
     let block = indentedBlock comment [prefixes ++ stmts]
-    returnType <- getType cod
+    mreturnType <- case mcod of
+      Just cod -> Just <$> getType cod
+      Nothing -> return Nothing
     let pyTparams = if useInlineTypeParams
                     then fmap (pyNameToPyTypeParameter . encodeTypeVariable) tparams
                     else []
 
-    updateMeta $ extendMetaForTypes (cod:doms)
+    updateMeta $ extendMetaForTypes (Y.maybeToList mcod ++ doms)
 
 --    if name == Name "toType"
 --    then fail $ "body: " ++ ShowCore.term body
 --      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
 --      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
 --      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
---      ++ "\ncod: " ++ ShowCore.type_ cod
+--      ++ "\ncod: " ++ fmap ShowCore.type_ mcod
 --      -- ++ "\npyParams: " ++ show pyParams
 --    else return ()
 
     return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
-      Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just pyParams) (Just returnType) Nothing block
+      Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just pyParams) mreturnType Nothing block
   where
     toParam name typ = do
       pyTyp <- encodeType env typ
@@ -387,7 +449,8 @@ encodeModule mod defs0 = do
                   pythonEnvironmentBoundTypeVariables = ([], M.empty),
                   pythonEnvironmentTypeContext = tcontext,
                   pythonEnvironmentNUllaryBindings = S.empty,
-                  pythonEnvironmentVersion = targetPythonVersion}
+                  pythonEnvironmentVersion = targetPythonVersion,
+                  pythonEnvironmentSkipCasts = False}
       withDefinitions env0 defs $ \env -> do
         defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
         PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
@@ -625,11 +688,15 @@ encodeTermInline env noCast term = case deannotateTerm term of
       return $ functionCall (pyNameToPyPrimary $ encodeNameQualified env tname) [parg]
     t -> fail $ "unsupported term variant: " ++ show (termVariant t) ++ " in " ++ show term
   where
-    withCast pyexp = if noCast then pure pyexp else do
-      typ <- typeOf (pythonEnvironmentTypeContext env) [] term
-      pytyp <- encodeType env typ
-      updateMeta $ \m -> extendMetaForType True False typ $ m { pythonModuleMetadataUsesCast = True }
-      return $ castTo pytyp pyexp
+    withCast pyexp = if noCast || pythonEnvironmentSkipCasts env then pure pyexp else do
+      -- Try to get the type; if it fails (e.g., for Either without type arguments), skip casting
+      mtyp <- tryFlowWithFallback Nothing $ Just <$> typeOf (pythonEnvironmentTypeContext env) [] term
+      case mtyp of
+        Just typ -> do
+          pytyp <- encodeType env typ
+          updateMeta $ \m -> extendMetaForType True False typ $ m { pythonModuleMetadataUsesCast = True }
+          return $ castTo pytyp pyexp
+        Nothing -> pure pyexp  -- Skip casting when type is unknown
     deannotateAndDeTypeApplyTerm term = case term of
       TermAnnotated at -> deannotateAndDeTypeApplyTerm (annotatedTermBody at)
       TermTypeApplication tat -> deannotateAndDeTypeApplyTerm (typeApplicationTermBody tat)
@@ -842,7 +909,12 @@ encodeVariable env name args = do
         Just prim -> return $ if primitiveArity prim == L.length args
           then asFunctionCallTmp "four"
           else asFunctionReference (primitiveType prim)
-        Nothing -> fail $ "Unknown variable: " ++ unName name
+        -- Check if the variable is a graph element (external binding)
+        Nothing -> case M.lookup name (graphElements g) of
+          Just el -> case bindingType el of
+            Just ts -> return $ asFunctionReference ts
+            Nothing -> return asVariable
+          Nothing -> fail $ "Unknown variable: " ++ unName name
   where
     tc = pythonEnvironmentTypeContext env
     asVariable = termVariableReference env name
@@ -875,8 +947,15 @@ encodeWrappedType env name typ comment = do
 -- | Analyze a function term with Python-specific TypeContext management.
 -- This is a thin wrapper around 'analyzeFunctionTerm' that provides the Python-specific
 -- TypeContext getter and setter functions, reducing boilerplate at call sites.
+-- | Analyze Python function term. When skipCasts is enabled, uses the faster variant
+-- that skips type inference (useful for test generation).
 analyzePythonFunction :: PythonEnvironment -> Term -> Flow PyGraph (FunctionStructure PythonEnvironment)
-analyzePythonFunction env = analyzeFunctionTerm pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) env
+analyzePythonFunction env = if pythonEnvironmentSkipCasts env
+  then analyzeFunctionTermNoInfer getTC setTC env
+  else analyzeFunctionTerm getTC setTC env
+  where
+    getTC = pythonEnvironmentTypeContext
+    setTC tc e = e { pythonEnvironmentTypeContext = tc }
 
 environmentTypeParameters :: PythonEnvironment -> [Py.TypeParameter]
 environmentTypeParameters env = pyNameToPyTypeParameter . encodeTypeVariable <$> (fst $ pythonEnvironmentBoundTypeVariables env)
@@ -1024,14 +1103,20 @@ genericArg tparamList = if L.null tparamList
     (pyNameToPyExpression . encodeTypeVariable <$> tparamList)
 
 -- | Wrap a bare reference to a polymorphic function in a lambda, avoiding pyright errors due to confusion about type parameters
+-- | Create a curried lambda: lambda x1: lambda x2: ... f(x1, x2, ...)
+-- This is needed for Python to support curried function calls like f(x)(y)
 makeSimpleLambda :: Int -> Py.Expression -> Py.Expression
 makeSimpleLambda arity lhs = if arity == 0
   then lhs
-  else Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing params [] Nothing) pbody
+  else makeCurriedLambda 1 arity
   where
     args = fmap (\i -> Py.Name $ "x" ++ show i) [1..arity]
-    params = fmap Py.LambdaParamNoDefault args
-    pbody = functionCall (pyExpressionToPyPrimary lhs) (fmap pyNameToPyExpression args)
+    -- Create a curried chain: lambda x1: lambda x2: ... f(x1, x2, ...)
+    makeCurriedLambda i n
+      | i > n = functionCall (pyExpressionToPyPrimary lhs) (fmap pyNameToPyExpression args)
+      | otherwise = Py.ExpressionLambda $ Py.Lambda
+          (Py.LambdaParameters Nothing [Py.LambdaParamNoDefault (args !! (i - 1))] [] Nothing)
+          (makeCurriedLambda (i + 1) n)
 
 makeThunk :: Py.Expression -> Py.Expression
 makeThunk pbody =  Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] Nothing) pbody
