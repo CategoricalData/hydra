@@ -95,9 +95,9 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     return is_disabled(tcase) or is_requires_interp(tcase)
 
 
-def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.InferenceContext]:
+def build_test_graph() -> hydra.graph.Graph:
     """
-    Create an inference context from the test graph.
+    Build the test graph with schema and primitives.
 
     This mirrors the Haskell testGraph setup which includes:
     - Test types (LatLon, Person, etc.) in a schema graph
@@ -105,7 +105,7 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
     - Standard library primitives (hydra.lib.*)
 
     Returns:
-        Flow[None, InferenceContext]: A flow that produces an inference context
+        Graph: The test graph
     """
     from hydra.dsl.python import FrozenDict, Nothing, Just
     import hydra.encode.core
@@ -157,7 +157,7 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
     primitives = hydra.sources.libraries.standard_library()
 
     # Create the main test graph with schema and primitives
-    graph = hydra.graph.Graph(
+    return hydra.graph.Graph(
         elements=FrozenDict(term_bindings),
         environment=FrozenDict({}),
         types=FrozenDict({}),
@@ -165,7 +165,47 @@ def graph_to_inference_context() -> hydra.compute.Flow[None, hydra.typing.Infere
         primitives=FrozenDict(primitives),
         schema=Just(schema_graph)
     )
-    return hydra.schemas.graph_to_inference_context(graph)
+
+
+# Cache the test graph and inference context at module level.
+# This mirrors the Haskell approach where cx is computed once and reused,
+# avoiding the ~19 second overhead per test of rebuilding the inference context.
+_test_graph: Optional[hydra.graph.Graph] = None
+_inference_context: Optional[hydra.typing.InferenceContext] = None
+
+
+def get_test_graph() -> hydra.graph.Graph:
+    """Get the cached test graph, building it if necessary."""
+    global _test_graph
+    if _test_graph is None:
+        _test_graph = build_test_graph()
+    return _test_graph
+
+
+def get_inference_context() -> hydra.typing.InferenceContext:
+    """
+    Get the cached inference context, building it if necessary.
+
+    This is the key performance optimization: in Haskell, the inference context
+    is computed once at module level (line 135 of TestSuiteSpec.hs):
+        cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
+
+    Without caching, each test was rebuilding the inference context from scratch,
+    which involves processing the entire schema graph - taking ~19 seconds per test.
+    """
+    global _inference_context
+    if _inference_context is None:
+        graph = get_test_graph()
+        cx_flow = hydra.schemas.graph_to_inference_context(graph)
+        cx_state = cx_flow.value(None, hydra.monads.empty_trace())
+
+        match cx_state.value:
+            case Nothing():
+                errors = "\n".join(cx_state.trace.messages)
+                raise RuntimeError(f"Failed to create inference context:\n{errors}")
+            case Just(value=cx):
+                _inference_context = cx
+    return _inference_context
 
 
 def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
@@ -313,18 +353,8 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
     input_term = test_case.input
     expected_scheme = test_case.output
 
-    # Create inference context
-    cx_flow = graph_to_inference_context()
-    cx_state = cx_flow.value(None, hydra.monads.empty_trace())
-
-    match cx_state.value:
-        case Nothing():
-            # Extract error messages from trace
-            errors = "\n".join(cx_state.trace.messages)
-            pytest.fail(f"Failed to create inference context:\n{errors}")
-            return
-        case Just(value=cx):
-            pass
+    # Get cached inference context (this is the key optimization)
+    cx = get_inference_context()
 
     # Infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
@@ -378,18 +408,8 @@ def run_inference_failure_test(desc: str, test_case: hydra.testing.InferenceFail
     """
     input_term = test_case.input
 
-    # Create inference context
-    cx_flow = graph_to_inference_context()
-    cx_state = cx_flow.value(None, hydra.monads.empty_trace())
-
-    match cx_state.value:
-        case Nothing():
-            # Extract error messages from trace
-            errors = "\n".join(cx_state.trace.messages)
-            pytest.fail(f"Failed to create inference context:\n{errors}")
-            return
-        case Just(value=cx):
-            pass
+    # Get cached inference context (this is the key optimization)
+    cx = get_inference_context()
 
     # Try to infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
@@ -443,28 +463,8 @@ def run_deannotate_type_test(test_case: hydra.testing.DeannotateTypeTestCase) ->
 
 def run_eta_expansion_test(desc: str, test_case: hydra.testing.EtaExpansionTestCase) -> None:
     """Execute an eta expansion test."""
-    # Get test graph for eta expansion
-    from hydra.dsl.python import FrozenDict
-    test_types_dict = test_graph.test_types()
-    test_terms_dict = test_graph.test_terms()
-    primitives = hydra.sources.libraries.standard_library()
-
-    term_bindings = {}
-    for name, term in test_terms_dict.items():
-        term_bindings[name] = hydra.core.Binding(
-            name=name,
-            term=term,
-            type=Nothing()
-        )
-
-    graph = hydra.graph.Graph(
-        elements=FrozenDict(term_bindings),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
-        primitives=FrozenDict(primitives),
-        schema=Nothing()
-    )
+    # Use cached test graph
+    graph = get_test_graph()
 
     result = hydra.reduction.eta_expand_term(graph, test_case.input)
     assert result == test_case.output, (
@@ -496,27 +496,8 @@ def run_free_variables_test(test_case: hydra.testing.FreeVariablesTestCase) -> N
 
 def run_evaluation_test(desc: str, test_case: hydra.testing.EvaluationTestCase) -> None:
     """Execute a term evaluation test."""
-    # Get test graph for evaluation
-    test_types_dict = test_graph.test_types()
-    test_terms_dict = test_graph.test_terms()
-    primitives = hydra.sources.libraries.standard_library()
-
-    term_bindings = {}
-    for name, term in test_terms_dict.items():
-        term_bindings[name] = hydra.core.Binding(
-            name=name,
-            term=term,
-            type=Nothing()
-        )
-
-    graph = hydra.graph.Graph(
-        elements=FrozenDict(term_bindings),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
-        primitives=FrozenDict(primitives),
-        schema=Nothing()
-    )
+    # Use cached test graph
+    graph = get_test_graph()
 
     # Determine if eager or lazy evaluation
     eager = test_case.evaluation_style == hydra.testing.EvaluationStyle.EAGER
@@ -614,17 +595,8 @@ def run_topological_sort_scc_test(test_case: hydra.testing.TopologicalSortSCCTes
 
 def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestCase) -> None:
     """Execute a type checking test."""
-    # Create inference context
-    cx_flow = graph_to_inference_context()
-    cx_state = cx_flow.value(None, hydra.monads.empty_trace())
-
-    match cx_state.value:
-        case Nothing():
-            errors = "\n".join(cx_state.trace.messages)
-            pytest.fail(f"Failed to create inference context:\n{errors}")
-            return
-        case Just(value=cx):
-            pass
+    # Get cached inference context (this is the key optimization)
+    cx = get_inference_context()
 
     # Infer the type
     result_flow = hydra.inference.infer_type_of(cx, test_case.input)
@@ -665,33 +637,10 @@ def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestC
 
 def run_type_reduction_test(desc: str, test_case: hydra.testing.TypeReductionTestCase) -> None:
     """Execute a type reduction test."""
-    # Get test graph for type reduction
-    test_types_dict = test_graph.test_types()
-    test_terms_dict = test_graph.test_terms()
-    primitives = hydra.sources.libraries.standard_library()
-
-    # Build schema graph
-    type_bindings = {}
-    for name, typ in test_types_dict.items():
-        type_term = hydra.encode.core.type(typ)
-        type_scheme = hydra.core.TypeScheme(
-            variables=(),
-            type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))
-        )
-        type_bindings[name] = hydra.core.Binding(
-            name=name,
-            term=type_term,
-            type=Just(type_scheme)
-        )
-
-    schema_graph = hydra.graph.Graph(
-        elements=FrozenDict(type_bindings),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("schema")),
-        primitives=FrozenDict({}),
-        schema=Nothing()
-    )
+    # Use cached test graph - type reduction needs the schema graph
+    graph = get_test_graph()
+    # Type reduction runs with the schema graph as context
+    schema_graph = graph.schema.value if isinstance(graph.schema, Just) else graph
 
     result_flow = hydra.reduction.beta_reduce_type(test_case.input)
     result_state = result_flow.value(schema_graph, hydra.monads.empty_trace())
