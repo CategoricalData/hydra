@@ -3,7 +3,6 @@
 module Hydra.Sources.Libraries where
 
 import Hydra.Kernel
-import qualified Hydra.Extract.Core as ExtractCore
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -22,6 +21,10 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Lib.Tuples as Tuples
+
+import qualified Hydra.Eval.Lib.Eithers as EvalEithers
+import qualified Hydra.Eval.Lib.Lists as EvalLists
+import qualified Hydra.Eval.Lib.Maybes as EvalMaybes
 
 import qualified Data.List as L
 
@@ -89,7 +92,7 @@ _eithers_rights           = qname _hydra_lib_eithers "rights" :: Name
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim3Interp _eithers_either           (Just eitherInterp)      ["x", "y", "z"] (function x z) (function y z) (Prims.either_ x y) z,
+    prim3Interp _eithers_either           (Just EvalEithers.either) ["x", "y", "z"] (function x z) (function y z) (Prims.either_ x y) z,
     prim2       _eithers_fromLeft         Eithers.fromLeft         ["x", "y"]      x (Prims.either_ x y) x,
     prim2       _eithers_fromRight        Eithers.fromRight        ["x", "y"]      y (Prims.either_ x y) y,
     prim1       _eithers_isLeft           Eithers.isLeft           ["x", "y"]      (Prims.either_ x y) boolean,
@@ -130,14 +133,6 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_min      Equality.min      ["x"] x x x]
   where
     x = variable "x"
-
--- | Interpreted implementation of hydra.lib.eithers.either
-eitherInterp :: Term -> Term -> Term -> Flow Graph Term
-eitherInterp leftFun rightFun eitherVal = case eitherVal of
-    TermEither e -> return $ case e of
-      Left val -> Terms.apply leftFun val
-      Right val -> Terms.apply rightFun val
-    _ -> fail $ "expected either value, got: " ++ show eitherVal
 
 -- * hydra.lib.flows primitives
 
@@ -224,9 +219,9 @@ _lists_zipWith     = qname _hydra_lib_lists "zipWith" :: Name
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
-    prim2Interp _lists_apply       (Just applyInterp) ["x", "y"] (list $ function x y) (list x) (list y),
-    prim2       _lists_at          Lists.at           ["x"] int32 (list x) x,
-    prim2Interp _lists_bind        (Just bindInterp)  ["x", "y"] (list x) (function x (list y)) (list y),
+    prim2Interp _lists_apply       (Just EvalLists.apply) ["x", "y"] (list $ function x y) (list x) (list y),
+    prim2       _lists_at          Lists.at               ["x"] int32 (list x) x,
+    prim2Interp _lists_bind        (Just EvalLists.bind)  ["x", "y"] (list x) (function x (list y)) (list y),
     prim1       _lists_concat      Lists.concat       ["x"] (list (list x)) (list x),
     prim2       _lists_concat2     Lists.concat2      ["x"] (list x) (list x) (list x),
     prim2       _lists_cons        Lists.cons         ["x"] x (list x) (list x),
@@ -242,7 +237,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2       _lists_intersperse Lists.intersperse  ["x"] x (list x) (list x),
     prim1       _lists_last        Lists.last         ["x"] (list x) x,
     prim1       _lists_length      Lists.length       ["x"] (list x) int32,
-    prim2Interp _lists_map         (Just mapInterp)   ["x", "y"] (function x y) (list x) (list y),
+    prim2Interp _lists_map         (Just EvalLists.map) ["x", "y"] (function x y) (list x) (list y),
     prim1       _lists_nub         Lists.nub          ["x"] (list x) (list x),
     prim1       _lists_null        Lists.null         ["x"] (list x) boolean,
     prim1       _lists_pure        Lists.pure         ["x"] x (list x),
@@ -262,27 +257,6 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     x = variable "x"
     y = variable "y"
     z = variable "z"
-
--- | Interpreted implementation of hydra.lib.lists.apply
-applyInterp :: Term -> Term -> Flow Graph Term
-applyInterp funs' args' = do
-    funs <- ExtractCore.list funs'
-    args <- ExtractCore.list args'
-    return $ Terms.list $ L.concat (helper args <$> funs)
-  where
-    helper args f = Terms.apply f <$> args
-
--- | Interpreted implementation of hydra.lib.lists.bind
-bindInterp :: Term -> Term -> Flow Graph Term
-bindInterp args' fun = do
-    args <- ExtractCore.list args'
-    return $ Terms.apply (Terms.primitive _lists_concat) (Terms.list $ Terms.apply fun <$> args)
-
--- | Interpreted implementation of hydra.lib.lists.map
-mapInterp :: Term -> Term -> Flow Graph Term
-mapInterp fun args' = do
-    args <- ExtractCore.list args'
-    return $ Terms.list (Terms.apply fun <$> args)
 
 -- * hydra.lib.literals primitives
 
@@ -572,40 +546,21 @@ hydraLibMaybes :: Library
 hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim2       _maybes_apply     Maybes.apply           ["x", "y"]      (optional $ function x y) (optional x) (optional y),
     prim2       _maybes_bind      Maybes.bind            ["x", "y"]      (optional x) (function x (optional y)) (optional y),
-    prim3Interp _maybes_cases     (Just casesInterp)     ["x", "y"]      (optional x) y (function x y) y,
-    prim1       _maybes_cat       Maybes.cat             ["x"]           (list $ optional x) (list x),
-    prim2       _maybes_compose   Maybes.compose         ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
-    prim1       _maybes_fromJust  Maybes.fromJust        ["x"]           (optional x) x,
-    prim2       _maybes_fromMaybe Maybes.fromMaybe       ["x"]           x (optional x) x,
-    prim1       _maybes_isJust    Maybes.isJust          ["x"]           (optional x) boolean,
-    prim1       _maybes_isNothing Maybes.isNothing       ["x"]           (optional x) boolean,
-    prim2Interp _maybes_map       (Just maybesMapInterp) ["x", "y"]      (function x y) (optional x) (optional y),
-    prim2Interp _maybes_mapMaybe  Nothing                ["x", "y"]      (function x $ optional y) (list x) (list y),
-    prim3Interp _maybes_maybe     (Just maybeInterp)     ["y", "x"]      y (function x y) (optional x) y,
+    prim3Interp _maybes_cases     (Just EvalMaybes.cases) ["x", "y"]      (optional x) y (function x y) y,
+    prim1       _maybes_cat       Maybes.cat              ["x"]           (list $ optional x) (list x),
+    prim2       _maybes_compose   Maybes.compose          ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim1       _maybes_fromJust  Maybes.fromJust         ["x"]           (optional x) x,
+    prim2       _maybes_fromMaybe Maybes.fromMaybe        ["x"]           x (optional x) x,
+    prim1       _maybes_isJust    Maybes.isJust           ["x"]           (optional x) boolean,
+    prim1       _maybes_isNothing Maybes.isNothing        ["x"]           (optional x) boolean,
+    prim2Interp _maybes_map       (Just EvalMaybes.map)   ["x", "y"]      (function x y) (optional x) (optional y),
+    prim2Interp _maybes_mapMaybe  Nothing                 ["x", "y"]      (function x $ optional y) (list x) (list y),
+    prim3Interp _maybes_maybe     (Just EvalMaybes.maybe) ["y", "x"]      y (function x y) (optional x) y,
     prim1       _maybes_pure      Maybes.pure            ["x"]           x (optional x)]
   where
     x = variable "x"
     y = variable "y"
     z = variable "z"
-
--- | Interpreted implementation of hydra.lib.maybes.cases
-casesInterp :: Term -> Term -> Term -> Flow Graph Term
-casesInterp opt def fun = maybeInterp def fun opt
-
--- | Interpreted implementation of hydra.lib.maybes.maybe
-maybeInterp :: Term -> Term -> Term -> Flow Graph Term
-maybeInterp def fun opt = do
-    mval <- ExtractCore.maybeTerm Prelude.pure opt
-    return $ case mval of
-      Nothing -> def
-      Just val -> Terms.apply fun val
-
-maybesMapInterp :: Term -> Term -> Flow Graph Term
-maybesMapInterp fun opt = do
-    mval <- ExtractCore.maybeTerm Prelude.pure opt
-    return $ case mval of
-      Nothing -> Terms.nothing
-      Just val -> Terms.just $ Terms.apply fun val
 
 -- * hydra.lib.sets primitives
 
