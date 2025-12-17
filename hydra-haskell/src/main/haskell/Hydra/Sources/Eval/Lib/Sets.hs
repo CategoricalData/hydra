@@ -1,8 +1,8 @@
 
-module Hydra.Sources.Eval.Lib.All where
+module Hydra.Sources.Eval.Lib.Sets where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel
+import Hydra.Kernel hiding (map)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -47,39 +47,43 @@ import qualified Hydra.Dsl.Meta.Typing        as Typing
 import qualified Hydra.Dsl.Meta.Util          as Util
 import qualified Hydra.Dsl.Meta.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
+import           Prelude hiding ((++), map)
 import qualified Data.Int                as I
 import qualified Data.List               as L
 import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
-import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
-import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
-import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
-import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib"
+ns = Namespace "hydra.eval.lib.sets"
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInNamespace ns
 
--- | All eval library modules
-evalLibModules :: [Module]
-evalLibModules = [
-  EvalEithers.module_,
-  EvalLists.module_,
-  EvalMaps.module_,
-  EvalMaybes.module_,
-  EvalSets.module_]
-
 module_ :: Module
 module_ = Module ns elements
-    evalLibModules
+    [ExtractCore.module_, Monads.module_, ShowCore.module_]
     kernelTypesModules $
-    Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")
+    Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
   where
-    elements = []
+    elements = [
+      toBinding map_]
+
+-- | Interpreter-friendly map for Set terms.
+-- Applies fun to each element.
+map_ :: TBinding (Term -> Term -> Flow s Term)
+map_ = define "map" $
+  doc "Interpreter-friendly map for Set terms." $
+  "fun" ~> "setTerm" ~>
+  "elements" <<~ ExtractCore.set @@ var "setTerm" $
+  -- Build: fromList (map fun (toList elements))
+  produce $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.sets.fromList")
+    (Core.termList $ Lists.map
+      ("el" ~> Core.termApplication $ Core.application (var "fun") (var "el"))
+      (Sets.toList $ var "elements"))
