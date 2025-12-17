@@ -23,10 +23,12 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Lib.Tuples as Tuples
 
 import qualified Hydra.Eval.Lib.Eithers as EvalEithers
+import qualified Hydra.Eval.Lib.Flows as EvalFlows
 import qualified Hydra.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Eval.Lib.Maybes as EvalMaybes
 import qualified Hydra.Eval.Lib.Sets as EvalSets
+import qualified Hydra.Eval.Lib.Tuples as EvalTuples
 
 import qualified Data.List as L
 
@@ -156,18 +158,18 @@ _flows_sequence    = qname _hydra_lib_flows "sequence" :: Name
 
 hydraLibFlows :: Library
 hydraLibFlows = standardLibrary _hydra_lib_flows [
-    prim2 _flows_apply       Flows.apply       ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
-    prim2 _flows_bind        Flows.bind        ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
-    prim1 _flows_fail        Flows.fail        ["s", "x"]             string (flow s x),
-    prim3 _flows_foldl       Flows.foldl       ["y", "x", "s"]        (function y (function x (flow s y))) y (list x) (flow s y),
-    prim2 _flows_map         Flows.map         ["x", "y", "s"]        (function x y) (flow s x) (flow s y),
-    prim2 _flows_mapElems    Flows.mapElems    ["v1", "s", "v2", "k"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
-    prim2 _flows_mapKeys     Flows.mapKeys     ["k1", "s", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
-    prim2 _flows_mapList     Flows.mapList     ["x", "s", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
-    prim2 _flows_mapMaybe Flows.mapMaybe ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
-    prim2 _flows_mapSet      Flows.mapSet      ["x", "s", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
-    prim1 _flows_pure        Flows.pure        ["x", "s"]             x (flow s x),
-    prim1 _flows_sequence    Flows.sequence    ["s", "x"]             (list (flow s x)) (flow s (list x))]
+    prim2Interp _flows_apply    (Just EvalFlows.apply)    ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
+    prim2Interp _flows_bind     (Just EvalFlows.bind)     ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
+    prim1       _flows_fail     Flows.fail                ["s", "x"]             string (flow s x),
+    prim3Interp _flows_foldl    (Just EvalFlows.foldl)    ["y", "x", "s"]        (function y (function x (flow s y))) y (list x) (flow s y),
+    prim2Interp _flows_map      (Just EvalFlows.map)      ["x", "y", "s"]        (function x y) (flow s x) (flow s y),
+    prim2Interp _flows_mapElems (Just EvalFlows.mapElems) ["v1", "s", "v2", "k"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
+    prim2Interp _flows_mapKeys  (Just EvalFlows.mapKeys)  ["k1", "s", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
+    prim2Interp _flows_mapList  (Just EvalFlows.mapList)  ["x", "s", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
+    prim2Interp _flows_mapMaybe (Just EvalFlows.mapMaybe) ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
+    prim2Interp _flows_mapSet   (Just EvalFlows.mapSet)   ["x", "s", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
+    prim1       _flows_pure     Flows.pure                ["x", "s"]             x (flow s x),
+    prim1       _flows_sequence Flows.sequence            ["s", "x"]             (list (flow s x)) (flow s (list x))]
   where
     s = variable "s"
     k = variable "k"
@@ -228,7 +230,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2       _lists_concat2     Lists.concat2      ["x"] (list x) (list x) (list x),
     prim2       _lists_cons        Lists.cons         ["x"] x (list x) (list x),
     prim2       _lists_drop        Lists.drop         ["x"] int32 (list x) (list x),
-    prim2Interp _lists_dropWhile   Nothing ["x"] (function x boolean) (list x) (list x),
+    prim2Interp _lists_dropWhile   (Just EvalLists.dropWhile) ["x"] (function x boolean) (list x) (list x),
     prim2       _lists_elem        Lists.elem         ["x"] x (list x) boolean,
     prim2Interp _lists_filter      (Just EvalLists.filter) ["x"] (function x boolean) (list x) (list x),
     prim3Interp _lists_foldl       (Just EvalLists.foldl)  ["y", "x"] (function y (function x y)) y (list x) y,
@@ -247,8 +249,8 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1       _lists_reverse     Lists.reverse      ["x"] (list x) (list x),
     prim1       _lists_safeHead    Lists.safeHead     ["x"] (list x) (optional x),
     prim1       _lists_singleton   Lists.singleton    ["x"] x (list x),
-    prim2Interp _lists_sortOn      Nothing            ["x", "y"] (function x y) (list x) (list x),
-    prim2Interp _lists_span        Nothing            ["x"] (function x boolean) (list x) (pair (list x) (list x)),
+    prim2Interp _lists_sortOn      (Just EvalLists.sortOn) ["x", "y"] (function x y) (list x) (list x),
+    prim2Interp _lists_span        (Just EvalLists.span)   ["x"] (function x boolean) (list x) (pair (list x) (list x)),
     prim1       _lists_sort        Lists.sort         ["x"] (list x) (list x),
     prim1       _lists_tail        Lists.tail         ["x"] (list x) (list x),
     prim2       _lists_take        Lists.take         ["x"] int32 (list x) (list x),
@@ -406,7 +408,7 @@ _maps_union           = qname _hydra_lib_maps "union" :: Name
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
-    prim3Interp _maps_alter           Nothing                          ["v", "k"]               (function (optional v) (optional v)) k mapKv mapKv,
+    prim3Interp _maps_alter           (Just EvalMaps.alter)            ["v", "k"]               (function (optional v) (optional v)) k mapKv mapKv,
     prim3Interp _maps_bimap           (Just EvalMaps.bimap)            ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
     prim1       _maps_elems           Maps.elems                       ["k", "v"]               mapKv (list v),
     prim2       _maps_delete          Maps.delete                      ["k", "v"]               k mapKv mapKv,
@@ -556,7 +558,7 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim1       _maybes_isJust    Maybes.isJust           ["x"]           (optional x) boolean,
     prim1       _maybes_isNothing Maybes.isNothing        ["x"]           (optional x) boolean,
     prim2Interp _maybes_map       (Just EvalMaybes.map)   ["x", "y"]      (function x y) (optional x) (optional y),
-    prim2Interp _maybes_mapMaybe  Nothing ["x", "y"] (function x $ optional y) (list x) (list y),
+    prim2Interp _maybes_mapMaybe  (Just EvalMaybes.mapMaybe) ["x", "y"] (function x $ optional y) (list x) (list y),
     prim3Interp _maybes_maybe     (Just EvalMaybes.maybe) ["y", "x"]      y (function x y) (optional x) y,
     prim1       _maybes_pure      Maybes.pure            ["x"]           x (optional x)]
   where
@@ -649,10 +651,10 @@ _tuples_uncurry = qname _hydra_lib_tuples "uncurry" :: Name
 
 hydraLibTuples :: Library
 hydraLibTuples = standardLibrary _hydra_lib_tuples [
-    prim1 _tuples_curry   Tuples.curry   ["a", "b", "c"] (function (pair a b) c) (function a (function b c)),
+    prim1Interp _tuples_curry   (Just EvalTuples.curry)   ["a", "b", "c"] (function (pair a b) c) (function a (function b c)),
     prim1 _tuples_fst     Tuples.fst     ["a", "b"]      (pair a b) a,
     prim1 _tuples_snd     Tuples.snd     ["a", "b"]      (pair a b) b,
-    prim1 _tuples_uncurry Tuples.uncurry ["a", "b", "c"] (function a (function b c)) (function (pair a b) c)]
+    prim1Interp _tuples_uncurry (Just EvalTuples.uncurry) ["a", "b", "c"] (function a (function b c)) (function (pair a b) c)]
   where
     a = variable "a"
     b = variable "b"
