@@ -74,7 +74,11 @@ module_ = Module ns elements
     elements = [
       toBinding apply_,
       toBinding bind_,
-      toBinding map_]
+      toBinding dropWhile_,
+      toBinding filter_,
+      toBinding foldl_,
+      toBinding map_,
+      toBinding zipWith_]
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.
@@ -102,6 +106,56 @@ bind_ = define "bind" $
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
 
+-- | Interpreter-friendly dropWhile for List terms.
+-- Drops elements from the front while predTerm returns true.
+dropWhile_ :: TBinding (Term -> Term -> Flow s Term)
+dropWhile_ = define "dropWhile" $
+  doc "Interpreter-friendly dropWhile for List terms." $
+  "predTerm" ~> "listTerm" ~>
+  -- Build: snd (span predTerm listTerm) - delegate to span primitive
+  produce $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.span")
+        (var "predTerm"))
+      (var "listTerm"))
+
+-- | Interpreter-friendly filter for List terms.
+-- Keeps elements where predTerm returns true.
+filter_ :: TBinding (Term -> Term -> Flow s Term)
+filter_ = define "filter" $
+  doc "Interpreter-friendly filter for List terms." $
+  "predTerm" ~> "listTerm" ~>
+  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  -- Build: concat (map (\el -> ifElse (pred el) [el] []) elements)
+  produce $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+    (Core.termList $ Lists.map
+      ("el" ~> Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.logic.ifElse")
+            (Core.termApplication $ Core.application (var "predTerm") (var "el")))
+          (Core.termList $ Lists.pure (var "el")))
+        (Core.termList $ Lists.tail $ Lists.pure (var "el")))
+      (var "elements"))
+
+-- | Interpreter-friendly left fold for List terms.
+-- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
+foldl_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+foldl_ = define "foldl" $
+  doc "Interpreter-friendly left fold for List terms." $
+  "funTerm" ~> "initTerm" ~> "listTerm" ~>
+  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  -- Build nested applications: f (f (f init e1) e2) e3
+  produce $ Lists.foldl
+    ("acc" ~> "el" ~> Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application (var "funTerm") (var "acc"))
+      (var "el"))
+    (var "initTerm")
+    (var "elements")
+
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 map_ :: TBinding (Term -> Term -> Flow s Term)
@@ -112,3 +166,21 @@ map_ = define "map" $
   produce $ Core.termList $ Lists.map
     ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
     (var "elements")
+
+-- | Interpreter-friendly zipWith for List terms.
+-- Applies funTerm to corresponding pairs of elements.
+zipWith_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+zipWith_ = define "zipWith" $
+  doc "Interpreter-friendly zipWith for List terms." $
+  "funTerm" ~> "listTerm1" ~> "listTerm2" ~>
+  "elements1" <<~ ExtractCore.list @@ var "listTerm1" $
+  "elements2" <<~ ExtractCore.list @@ var "listTerm2" $
+  -- Build: [f a1 b1, f a2 b2, ...]
+  produce $ Core.termList $ Lists.map
+    ("p" ~>
+      "a" <~ Pairs.first (var "p") $
+      "b" <~ Pairs.second (var "p") $
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application (var "funTerm") (var "a"))
+        (var "b"))
+    (Lists.zip (var "elements1") (var "elements2"))
