@@ -163,7 +163,7 @@ filter_ = define "filter" $
                     (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.logic.ifElse")
                     (Core.termApplication $ Core.application (var "valPred") (var "v")))
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (Pairs.first $ var "p") (var "v")))
-                (Core.termList $ Lists.tail $ Lists.pure $ Core.termPair $ pair (Pairs.first $ var "p") (var "v")))
+                (Core.termList $ list ([] :: [TTerm Term])))
             (var "pairs")))]
 
 -- | Interpreter-friendly filterWithKey for Map terms.
@@ -193,7 +193,7 @@ filterWithKey_ = define "filterWithKey" $
                       (Core.termApplication $ Core.application (var "pred") (var "k"))
                       (var "v")))
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (var "k") (var "v")))
-                (Core.termList $ Lists.tail $ Lists.pure $ Core.termPair $ pair (var "k") (var "v")))
+                (Core.termList $ list ([] :: [TTerm Term])))
             (var "pairs")))]
 
 -- | Interpreter-friendly map for Map terms.
