@@ -54,6 +54,7 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
@@ -66,14 +67,50 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Monads.module_, ShowCore.module_]
+    [ExtractCore.module_, Monads.module_, ShowCore.module_]
     kernelTypesModules $
     Just ("Evaluation-level implementations of Maybe functions for the Hydra interpreter.")
   where
     elements = [
+      toBinding apply_,
+      toBinding bind_,
       toBinding cases_,
+      toBinding compose_,
       toBinding map_,
+      toBinding mapMaybe_,
       toBinding maybe_]
+
+-- | Interpreter-friendly applicative apply for Maybe terms.
+-- apply (Just f) (Just x) = Just (f x); otherwise Nothing
+apply_ :: TBinding (Term -> Term -> Flow s Term)
+apply_ = define "apply" $
+  doc "Interpreter-friendly applicative apply for Maybe terms." $
+  "funOptTerm" ~> "argOptTerm" ~>
+  cases _Term (var "funOptTerm")
+    (Just (Monads.unexpected @@ string "optional function" @@ (ShowCore.term @@ var "funOptTerm"))) [
+    _Term_maybe>>: "mf" ~>
+      cases _Term (var "argOptTerm")
+        (Just (Monads.unexpected @@ string "optional value" @@ (ShowCore.term @@ var "argOptTerm"))) [
+        _Term_maybe>>: "mx" ~>
+          produce $ Core.termMaybe $ Maybes.apply
+            (Maybes.map
+              ("f" ~> "x" ~> Core.termApplication $ Core.application (var "f") (var "x"))
+              (var "mf"))
+            (var "mx")]]
+
+-- | Interpreter-friendly monadic bind for Maybe terms.
+-- bind (Just x) f = f x; bind Nothing f = Nothing
+bind_ :: TBinding (Term -> Term -> Flow s Term)
+bind_ = define "bind" $
+  doc "Interpreter-friendly monadic bind for Maybe terms." $
+  "optTerm" ~> "funTerm" ~>
+  cases _Term (var "optTerm")
+    (Just (Monads.unexpected @@ string "optional value" @@ (ShowCore.term @@ var "optTerm"))) [
+    _Term_maybe>>: "m" ~>
+      produce $ Maybes.maybe
+        (Core.termMaybe nothing)
+        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "m")]
 
 -- | Interpreter-friendly case analysis for Maybe terms (cases variant).
 -- Takes optTerm, defaultTerm, funTerm - returns defaultTerm if Nothing,
@@ -90,6 +127,21 @@ cases_ = define "cases" $
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
         (var "m")]
 
+-- | Interpreter-friendly Kleisli composition for Maybe.
+-- compose f g = \x -> bind (f x) g
+compose_ :: TBinding (Term -> Term -> Flow s Term)
+compose_ = define "compose" $
+  doc "Interpreter-friendly Kleisli composition for Maybe." $
+  "funF" ~> "funG" ~>
+  -- Return a lambda that: \x -> bind (f x) g
+  produce $ Core.termFunction $ Core.functionLambda $
+    Core.lambda (wrap _Name $ string "x") nothing $
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.bind")
+          (Core.termApplication $ Core.application (var "funF") (Core.termVariable $ wrap _Name $ string "x")))
+        (var "funG")
+
 -- | Interpreter-friendly map for Maybe terms.
 -- Returns Nothing if Nothing, or Just (fun val) if Just val.
 map_ :: TBinding (Term -> Term -> Flow s Term)
@@ -102,6 +154,20 @@ map_ = define "map" $
       produce $ Core.termMaybe $ Maybes.map
         ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
         (var "m")]
+
+-- | Interpreter-friendly mapMaybe for List terms.
+-- Applies funTerm to each element, keeping only Just results.
+mapMaybe_ :: TBinding (Term -> Term -> Flow s Term)
+mapMaybe_ = define "mapMaybe" $
+  doc "Interpreter-friendly mapMaybe for List terms." $
+  "funTerm" ~> "listTerm" ~>
+  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  -- Build: cat (map funTerm elements) - cat filters out Nothings and unwraps Justs
+  produce $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.cat")
+    (Core.termList $ Lists.map
+      ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
+      (var "elements"))
 
 -- | Interpreter-friendly case analysis for Maybe terms.
 -- Takes defaultTerm, funTerm, optTerm - returns defaultTerm if Nothing,
