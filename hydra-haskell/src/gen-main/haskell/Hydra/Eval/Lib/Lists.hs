@@ -54,7 +54,7 @@ filter predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
           Core.applicationFunction = predTerm,
           Core.applicationArgument = el}))})),
       Core.applicationArgument = (Core.TermList (Lists.pure el))})),
-    Core.applicationArgument = (Core.TermList (Lists.tail (Lists.pure el)))})) elements))}))))
+    Core.applicationArgument = (Core.TermList [])})) elements))}))))
 
 -- | Interpreter-friendly left fold for List terms.
 foldl :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
@@ -69,6 +69,95 @@ map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 map funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
   Core.applicationFunction = funTerm,
   Core.applicationArgument = el})) elements))))
+
+-- | Interpreter-friendly sortOn for List terms.
+sortOn :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
+sortOn projTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\sorted -> \x ->  
+  let splitResult = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.span"))),
+            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "y"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.ordering.lt"))),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = projTerm,
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = projTerm,
+                  Core.applicationArgument = x}))}))})))})),
+          Core.applicationArgument = sorted}))
+  in  
+    let before = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+            Core.applicationArgument = splitResult}))
+    in  
+      let after = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+              Core.applicationArgument = splitResult}))
+      in (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+          Core.applicationArgument = before})),
+        Core.applicationArgument = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+            Core.applicationArgument = x})),
+          Core.applicationArgument = after}))}))) (Core.TermList []) elements)))
+
+-- | Interpreter-friendly span for List terms.
+span :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
+span predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->  
+  let initialState = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermList [])), (Core.TermList [])))
+  in  
+    let finalState = (Lists.foldl (\acc -> \el ->  
+            let takingLeft = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                    Core.applicationArgument = acc}))
+            in  
+              let right = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                      Core.applicationArgument = acc}))
+              in  
+                let taking = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                        Core.applicationArgument = takingLeft}))
+                in  
+                  let left = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                          Core.applicationArgument = takingLeft}))
+                  in (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.and"))),
+                            Core.applicationArgument = taking})),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = predTerm,
+                            Core.applicationArgument = el}))}))})),
+                      Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                          Core.applicationArgument = left})),
+                        Core.applicationArgument = (Core.TermList [
+                          el])}))), right))})),
+                    Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean False), left), (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                        Core.applicationArgument = right})),
+                      Core.applicationArgument = (Core.TermList [
+                        el])}))))}))) initialState elements)
+    in (Flows.pure (Core.TermPair (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+      Core.applicationArgument = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+        Core.applicationArgument = finalState}))}), (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+      Core.applicationArgument = finalState})))))))
 
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)

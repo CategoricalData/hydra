@@ -81,7 +81,7 @@ filter valPred mapTerm = ((\x -> case x of
                   Core.applicationFunction = valPred,
                   Core.applicationArgument = v}))})),
               Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (Pairs.first p, v))))})),
-            Core.applicationArgument = (Core.TermList (Lists.tail (Lists.pure (Core.TermPair (Pairs.first p, v)))))}))) pairs))}))})))
+            Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
 filterWithKey :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
@@ -106,7 +106,7 @@ filterWithKey pred mapTerm = ((\x -> case x of
                       Core.applicationArgument = k})),
                     Core.applicationArgument = v}))})),
                 Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (k, v))))})),
-              Core.applicationArgument = (Core.TermList (Lists.tail (Lists.pure (Core.TermPair (k, v)))))}))) pairs))}))})))
+              Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)

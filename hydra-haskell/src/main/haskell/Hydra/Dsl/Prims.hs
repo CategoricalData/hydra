@@ -223,6 +223,17 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
+prim1Interp :: Name -> Maybe (Term -> Flow Graph Term) -> [String] -> TermCoder x -> TermCoder y -> Primitive
+prim1Interp name mcompute vars input1 output = Primitive name typ impl
+  where
+    compute = Y.fromMaybe (\a -> noInterpretedForm name) mcompute
+    typ = Types.poly vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType output]
+    impl args = do
+      ExtractCore.nArgs name 1 args
+      compute (args !! 0)
+
 prim2Interp :: Name -> Maybe (Term -> Term -> Flow Graph Term) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2Interp name mcompute vars input1 input2 output = Primitive name typ impl
   where
