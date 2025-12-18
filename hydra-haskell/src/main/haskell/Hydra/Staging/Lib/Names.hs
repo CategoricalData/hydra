@@ -236,6 +236,12 @@ _maybes_mapMaybe  = qname _hydra_lib_maybes "mapMaybe" :: Name
 _maybes_maybe     = qname _hydra_lib_maybes "maybe" :: Name
 _maybes_pure      = qname _hydra_lib_maybes "pure" :: Name
 
+_hydra_lib_pairs :: Namespace
+_hydra_lib_pairs = Namespace "hydra.lib.pairs"
+
+_pairs_first  = qname _hydra_lib_pairs "first"  :: Name
+_pairs_second = qname _hydra_lib_pairs "second" :: Name
+
 _hydra_lib_sets :: Namespace
 _hydra_lib_sets = Namespace "hydra.lib.sets"
 
@@ -270,17 +276,3 @@ _strings_toList      = qname _hydra_lib_strings "toList" :: Name
 _strings_toLower     = qname _hydra_lib_strings "toLower" :: Name
 _strings_toUpper     = qname _hydra_lib_strings "toUpper" :: Name
 _strings_unlines     = qname _hydra_lib_strings "unlines" :: Name
-
-_hydra_lib_tuples :: Namespace
-_hydra_lib_tuples = Namespace "hydra.lib.tuples"
-
-_tuples_curry   = qname _hydra_lib_tuples "curry"  :: Name
-_tuples_fst     = qname _hydra_lib_tuples "fst"    :: Name
-_tuples_snd     = qname _hydra_lib_tuples "snd"    :: Name
-_tuples_uncurry = qname _hydra_lib_tuples "uncurry" :: Name
-
-_hydra_lib_pairs :: Namespace
-_hydra_lib_pairs = Namespace "hydra.lib.pairs"
-
-_pairs_first  = qname _hydra_lib_pairs "first"  :: Name
-_pairs_second = qname _hydra_lib_pairs "second" :: Name
