@@ -102,8 +102,8 @@ uncurry_ = define "uncurry" $
       (Core.termApplication $ Core.application
         (var "funTerm")
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.first")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
           (Core.termVariable $ wrap _Name $ string "p")))
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
         (Core.termVariable $ wrap _Name $ string "p"))

@@ -128,10 +128,87 @@ doc s t = TTerm $ setTermDescription (Just s) (unTTerm $ asTerm t)
 docWrapped :: Int -> String -> TTerm a -> TTerm a
 docWrapped len = doc . wrapLine len
 
--- | Convert a typed binding to an untyped Binding for use in module element lists
--- Example: toBinding functionArity
-toBinding :: TBinding a -> Binding
-toBinding (TBinding name (TTerm term)) = Binding name term Nothing
+encodedBinary :: TTerm String -> TTerm Term
+encodedBinary = encodedLiteral . inject _Literal _Literal_binary
+
+encodedBoolean :: TTerm Bool -> TTerm Term
+encodedBoolean = encodedLiteral . inject _Literal _Literal_boolean
+
+encodedCase :: AsTerm t (a -> Term) => Name -> Name -> t -> Field
+encodedCase tname fname enc = field fname $ "v" ~> encodedVariant tname fname (enc @@ var "v")
+
+encodedEither :: TTerm (Prelude.Either a b) -> TTerm Term
+encodedEither = inject _Term _Term_either
+
+encodedField :: Name -> TTerm Term -> TTerm Term
+encodedField fname term = encodedFieldRaw (encodedName fname) term
+
+encodedFieldRaw :: TTerm Name -> TTerm Term -> TTerm Term
+encodedFieldRaw (TTerm fname) (TTerm term) = TTerm $ Terms.record _Field [
+  Field _Field_name fname,
+  Field _Field_term term]
+
+encodedFloatValue :: TTerm FloatValue -> TTerm Term
+encodedFloatValue = encodedLiteral . inject _Literal _Literal_float
+
+encodedInjection :: Name -> Name -> TTerm Term -> TTerm Term
+encodedInjection tname fname term = TTerm $ Terms.record _Injection [
+  field _Injection_typeName $ encodedName tname,
+  field _Injection_field $ encodedField fname term]
+
+encodedInt32 :: TTerm Int -> TTerm Term
+encodedInt32 v = encodedIntegerValue $ inject _IntegerValue _IntegerValue_int32 v
+
+encodedIntegerValue :: TTerm IntegerValue -> TTerm Term
+encodedIntegerValue = encodedLiteral . inject _Literal _Literal_integer
+
+encodedList :: TTerm [a] -> TTerm Term
+encodedList = inject _Term _Term_list
+
+encodedLiteral :: TTerm Literal -> TTerm Term
+encodedLiteral = inject _Term _Term_literal
+
+encodedMap :: TTerm (M.Map k v) -> TTerm Term
+encodedMap = inject _Term _Term_map
+
+encodedName :: Name -> TTerm Name
+encodedName = wrap _Name . string . unName
+
+encodedUnit :: TTerm Term
+encodedUnit = injectUnit _Term _Term_unit
+
+encodedWrappedTerm :: Name -> TTerm Term -> TTerm Term
+encodedWrappedTerm name = encodedWrappedTermRaw (encodedName name)
+
+encodedWrappedTermRaw :: TTerm Name -> TTerm Term -> TTerm Term
+encodedWrappedTermRaw (TTerm name) (TTerm term) = TTerm $ Terms.inject _Term _Term_wrap $ Terms.record _WrappedTerm [
+  Field _WrappedTerm_typeName name,
+  Field _WrappedTerm_body term]
+
+encodedOptional :: TTerm (Maybe a) -> TTerm Term
+encodedOptional = inject _Term _Term_maybe
+
+encodedPair :: TTerm (a, b) -> TTerm Term
+encodedPair = inject _Term _Term_pair
+
+encodedRecord :: Name -> [Field] -> TTerm Term
+encodedRecord tname fields = TTerm $ Terms.inject _Term _Term_record $ Terms.record _Record [
+    field _Record_typeName $ encodedName tname,
+    field _Record_fields $ list (encField <$> fields)]
+  where
+    encField (Field fname term) = encodedField fname $ TTerm term
+
+encodedSet :: TTerm (S.Set a) -> TTerm Term
+encodedSet = inject _Term _Term_set
+
+encodedString :: TTerm String -> TTerm Term
+encodedString = encodedLiteral . inject _Literal _Literal_string
+
+encodedUnion :: TTerm Term -> TTerm Term
+encodedUnion = inject _Term _Term_union
+
+encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
+encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
 
 -- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
 -- Example: el (definitionInModule myModule "addInts" myFunction)
@@ -296,6 +373,11 @@ record name fields = TTerm $ Terms.record name fields
 -- Example: set [string "a", string "b", string "c"]
 set :: [TTerm a] -> TTerm (S.Set a)
 set = TTerm . Terms.set . S.fromList . fmap unTTerm
+
+-- | Convert a typed binding to an untyped Binding for use in module element lists
+-- Example: toBinding functionArity
+toBinding :: TBinding a -> Binding
+toBinding (TBinding name (TTerm term)) = Binding name term Nothing
 
 trace :: TTerm String -> TTerm (Flow s a) -> TTerm (Flow s a)
 trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow

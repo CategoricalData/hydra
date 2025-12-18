@@ -52,8 +52,8 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isUsesKern
     TestCaseEtaExpansion (EtaExpansionTestCase input output) -> expectEtaExpansionResult desc input output
     TestCaseEvaluation (EvaluationTestCase _ input output) ->
       H.it "evaluation" $ shouldSucceedWith
-        (eval input)
-        output
+        (ShowCore.term <$> eval input)
+        (ShowCore.term output)
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) ->
       H.it "inference failure" $ expectInferenceFailure desc input

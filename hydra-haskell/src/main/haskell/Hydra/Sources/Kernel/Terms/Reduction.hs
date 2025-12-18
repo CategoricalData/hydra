@@ -426,7 +426,9 @@ reduceTerm = define "reduceTerm" $
       _Function_lambda>>: constant false]) $
     "isNonLambdaTerm" <~ cases _Term (var "term")
       (Just true) [
-      _Term_function>>: "f" ~> var "isNonLambda" @@ var "f"] $
+      _Term_function>>: "f" ~> var "isNonLambda" @@ var "f",
+      -- Don't recurse into let; handle in applyIfNullary
+      _Term_let>>: constant false] $
     Logic.and (var "eager") (var "isNonLambdaTerm")) $
   "reduceArg" <~ ("eager" ~> "arg" ~>
     Logic.ifElse (var "eager")
@@ -494,8 +496,10 @@ reduceTerm = define "reduceTerm" $
       "argList" <~ Lists.take (var "arity") (var "args") $
       "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
       "reducedArgs" <<~ Flows.mapList (var "reduceArg" @@ var "eager") (var "argList") $
+      -- Strip annotations from reduced args so primitives can extract values properly
+      "strippedArgs" <~ Lists.map Rewriting.deannotateTerm (var "reducedArgs") $
       "reducedResult" <<~ Flows.bind
-        (Graph.primitiveImplementation (var "prim") @@ var "reducedArgs")
+        (Graph.primitiveImplementation (var "prim") @@ var "strippedArgs")
         (var "reduce" @@ var "eager") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     cases _Term (var "stripped")
@@ -526,7 +530,38 @@ reduceTerm = define "reduceTerm" $
           (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
           -- Found: reduce the element's term with the accumulated args
           ("binding" ~> var "applyIfNullary" @@ var "eager" @@ (Core.bindingTerm $ var "binding") @@ var "args")
-          (var "mBinding")]) $
+          (var "mBinding"),
+      _Term_let>>: "lt" ~>
+        -- For recursive let bindings, wrap self-references with `let f = <value> in f`
+        -- This allows recursive functions to be properly evaluated
+        "bindings" <~ Core.letBindings (var "lt") $
+        "body" <~ Core.letBody (var "lt") $
+        -- Create a let expression that wraps a binding: let b = <value> in b
+        "letExpr" <~ ("b" ~>
+          Core.termLet $ Core.let_
+            (list [var "b"])
+            (Core.termVariable (Core.bindingName $ var "b"))) $
+        -- Expand a binding by replacing self-references with the let wrapper
+        "expandBinding" <~ ("b" ~>
+          Core.binding
+            (Core.bindingName $ var "b")
+            (Rewriting.replaceFreeTermVariable
+              @@ (Core.bindingName $ var "b")
+              @@ (var "letExpr" @@ var "b")
+              @@ (Core.bindingTerm $ var "b"))
+            (Core.bindingType $ var "b")) $
+        "expandedBindings" <~ Lists.map (var "expandBinding") (var "bindings") $
+        -- Substitute each binding into the term (foldl takes acc -> elem -> acc)
+        "substituteBinding" <~ ("term" ~> "b" ~>
+          Rewriting.replaceFreeTermVariable
+            @@ (Core.bindingName $ var "b")
+            @@ (Core.bindingTerm $ var "b")
+            @@ var "term") $
+        "substituteAll" <~ ("bs" ~> "term" ~>
+          Lists.foldl (var "substituteBinding") (var "term") (var "bs")) $
+        "expandedBody" <~ var "substituteAll" @@ var "expandedBindings" @@ var "body" $
+        "reducedBody" <<~ var "reduce" @@ var "eager" @@ var "expandedBody" $
+        var "applyIfNullary" @@ var "eager" @@ var "reducedBody" @@ var "args"]) $
   "mapping" <~ ("recurse" ~> "mid" ~>
     "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
       (var "recurse" @@ var "mid")

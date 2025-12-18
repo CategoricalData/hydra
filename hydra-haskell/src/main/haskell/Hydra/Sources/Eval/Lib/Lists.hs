@@ -104,7 +104,7 @@ bind_ = define "bind" $
   "listTerm" ~> "funTerm" ~>
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
   produce $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
@@ -117,10 +117,10 @@ dropWhile_ = define "dropWhile" $
   "predTerm" ~> "listTerm" ~>
   -- Build: snd (span predTerm listTerm) - delegate to span primitive
   produce $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.span")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_span)
         (var "predTerm"))
       (var "listTerm"))
 
@@ -133,12 +133,12 @@ filter_ = define "filter" $
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
   -- Build: concat (map (\el -> ifElse (pred el) [el] []) elements)
   produce $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.logic.ifElse")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
             (Core.termApplication $ Core.application (var "predTerm") (var "el")))
           (Core.termList $ Lists.pure (var "el")))
         (Core.termList $ list ([] :: [TTerm Term])))
@@ -161,13 +161,19 @@ foldl_ = define "foldl" $
 
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
+-- Note: builds result directly using foldl to avoid recursive primitive calls.
 map_ :: TBinding (Term -> Term -> Flow s Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
   "funTerm" ~> "listTerm" ~>
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
-  produce $ Core.termList $ Lists.map
-    ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
+  -- Build the mapped list by folding over elements and accumulating applications
+  -- This avoids calling lists.map recursively
+  produce $ Core.termList $ Lists.reverse $ Lists.foldl
+    ("acc" ~> "el" ~> Lists.cons
+      (Core.termApplication $ Core.application (var "funTerm") (var "el"))
+      (var "acc"))
+    (list ([] :: [TTerm Term]))
     (var "elements")
 
 -- | Interpreter-friendly sortOn for List terms.
@@ -179,19 +185,19 @@ sortOn_ = define "sortOn" $
   "projTerm" ~> "listTerm" ~>
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
   -- Build: foldl (\sorted x -> insert x sorted) [] elements
-  -- where insert x sorted = let (before, after) = span (\y -> lt (proj y) (proj x)) sorted
+  -- where insert x sorted = let (before, after) = span (\y -> lte (proj y) (proj x)) sorted
   --                         in concat [before, [x], after]
   produce $ Lists.foldl
     ("sorted" ~> "x" ~>
-      -- Build the split using span with predicate: \y -> lt (proj y) (proj x)
+      -- Build the split using span with predicate: \y -> lte (proj y) (proj x)
       "splitResult" <~ (Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.span")
-          -- predicate lambda: \y -> lt (proj y) (proj x)
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_span)
+          -- predicate lambda: \y -> lte (proj y) (proj x) -- use lte for stable sort
           (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.ordering.lt")
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_lte)
                 (Core.termApplication $ Core.application
                   (var "projTerm")
                   (Core.termVariable $ wrap _Name $ string "y")))
@@ -199,18 +205,18 @@ sortOn_ = define "sortOn" $
         (var "sorted")) $
       -- Build: concat [before, [x], after]
       "before" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.first")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
         (var "splitResult")) $
       "after" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
         (var "splitResult")) $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
           (var "before"))
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.cons")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_cons)
             (var "x"))
           (var "after")))
     (Core.termList $ list ([] :: [TTerm Term]))
@@ -239,26 +245,26 @@ span_ = define "span" $
     ("acc" ~> "el" ~>
       -- Extract state components using term-level pairs
       "takingLeft" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.first")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
         (var "acc")) $
       "right" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
         (var "acc")) $
       "taking" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.first")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
         (var "takingLeft")) $
       "left" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
         (var "takingLeft")) $
       -- Build ifElse (and taking (pred el)) trueCase falseCase
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.logic.ifElse")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
             -- condition: and taking (pred el)
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.logic.and")
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_and)
                 (var "taking"))
               (Core.termApplication $ Core.application (var "predTerm") (var "el"))))
           -- true branch: ((true, append left [el]), right)
@@ -267,7 +273,7 @@ span_ = define "span" $
               (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
                   (var "left"))
                 (Core.termList $ list [var "el"])))
             (var "right")))
@@ -278,7 +284,7 @@ span_ = define "span" $
             (var "left"))
           (Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.lists.concat")
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
               (var "right"))
             (Core.termList $ list [var "el"]))))
     (var "initialState")
@@ -286,12 +292,12 @@ span_ = define "span" $
   -- Extract result: (snd (fst finalState), snd finalState)
   produce $ Core.termPair $ pair
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.first")
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
         (var "finalState")))
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.pairs.second")
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
       (var "finalState"))
 
 -- | Interpreter-friendly zipWith for List terms.

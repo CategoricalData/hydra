@@ -301,6 +301,7 @@ reduceTerm eager term =
             in  
               let isNonLambdaTerm = ((\x -> case x of
                       Core.TermFunction v1 -> (isNonLambda v1)
+                      Core.TermLet _ -> False
                       _ -> True) term)
               in (Logic.and eager isNonLambdaTerm))
     in  
@@ -354,7 +355,9 @@ reduceTerm eager term =
                                   let argList = (Lists.take arity args)
                                   in  
                                     let remainingArgs = (Lists.drop arity args)
-                                    in (Flows.bind (Flows.mapList (reduceArg eager) argList) (\reducedArgs -> Flows.bind (Flows.bind (Graph.primitiveImplementation prim reducedArgs) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs))))
+                                    in (Flows.bind (Flows.mapList (reduceArg eager) argList) (\reducedArgs ->  
+                                      let strippedArgs = (Lists.map Rewriting.deannotateTerm reducedArgs)
+                                      in (Flows.bind (Flows.bind (Graph.primitiveImplementation prim strippedArgs) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                           in ((\x -> case x of
                             Core.TermApplication v1 -> (applyIfNullary eager (Core.applicationFunction v1) (Lists.cons (Core.applicationArgument v1) args))
                             Core.TermFunction v1 -> ((\x -> case x of
@@ -364,6 +367,29 @@ reduceTerm eager term =
                                 let arity = (Arity.primitiveArity prim)
                                 in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Flows.pure (applyToArguments original args)) (forPrimitive prim arity args))))) v1)
                             Core.TermVariable v1 -> (Flows.bind (Lexical.dereferenceElement v1) (\mBinding -> Maybes.maybe (Flows.pure (applyToArguments original args)) (\binding -> applyIfNullary eager (Core.bindingTerm binding) args) mBinding))
+                            Core.TermLet v1 ->  
+                              let bindings = (Core.letBindings v1)
+                              in  
+                                let body = (Core.letBody v1)
+                                in  
+                                  let letExpr = (\b -> Core.TermLet (Core.Let {
+                                          Core.letBindings = [
+                                            b],
+                                          Core.letBody = (Core.TermVariable (Core.bindingName b))}))
+                                  in  
+                                    let expandBinding = (\b -> Core.Binding {
+                                            Core.bindingName = (Core.bindingName b),
+                                            Core.bindingTerm = (Rewriting.replaceFreeTermVariable (Core.bindingName b) (letExpr b) (Core.bindingTerm b)),
+                                            Core.bindingType = (Core.bindingType b)})
+                                    in  
+                                      let expandedBindings = (Lists.map expandBinding bindings)
+                                      in  
+                                        let substituteBinding = (\term -> \b -> Rewriting.replaceFreeTermVariable (Core.bindingName b) (Core.bindingTerm b) term)
+                                        in  
+                                          let substituteAll = (\bs -> \term -> Lists.foldl substituteBinding term bs)
+                                          in  
+                                            let expandedBody = (substituteAll expandedBindings body)
+                                            in (Flows.bind (reduce eager expandedBody) (\reducedBody -> applyIfNullary eager reducedBody args))
                             _ -> (Flows.pure (applyToArguments original args))) stripped))
             in  
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))

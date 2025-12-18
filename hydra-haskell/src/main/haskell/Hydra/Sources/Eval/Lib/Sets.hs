@@ -83,7 +83,7 @@ map_ = define "map" $
   "elements" <<~ ExtractCore.set @@ var "setTerm" $
   -- Build: fromList (map fun (toList elements))
   produce $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.sets.fromList")
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_fromList)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "fun") (var "el"))
       (Sets.toList $ var "elements"))
