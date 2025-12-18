@@ -78,21 +78,13 @@ def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     disabled_tag = hydra.testing.Tag("disabled")
     return disabled_tag in tcase.tags
 
-
-def is_requires_interp(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    """Check if a test case requires interpreter primitives."""
-    requires_interp_tag = hydra.testing.Tag("requiresInterp")
-    return requires_interp_tag in tcase.tags
-
-
 def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case should be skipped.
 
     Only skip tests that are:
     - disabled: explicitly marked as not working
-    - requiresInterp: requires interpreter primitives not available in Python
     """
-    return is_disabled(tcase) or is_requires_interp(tcase)
+    return is_disabled(tcase)
 
 
 def build_test_graph() -> hydra.graph.Graph:
