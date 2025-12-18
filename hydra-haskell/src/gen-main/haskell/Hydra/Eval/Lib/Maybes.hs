@@ -42,17 +42,14 @@ cases optTerm defaultTerm funTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1))
   _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
 
-compose :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-compose funF funG = (Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-  Core.lambdaParameter = (Core.Name "x"),
-  Core.lambdaDomain = Nothing,
-  Core.lambdaBody = (Core.TermApplication (Core.Application {
-    Core.applicationFunction = (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.bind"))),
-      Core.applicationArgument = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = funF,
-        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
-    Core.applicationArgument = funG}))}))))
+compose :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
+compose funF funG xTerm = (Flows.pure (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.bind"))),
+    Core.applicationArgument = (Core.TermApplication (Core.Application {
+      Core.applicationFunction = funF,
+      Core.applicationArgument = xTerm}))})),
+  Core.applicationArgument = funG})))
 
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map funTerm optTerm = ((\x -> case x of

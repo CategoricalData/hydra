@@ -145,10 +145,199 @@ mathSucc = subgroup "succ" [
   where
     test name x result = primCase name _math_succ [int32 x] (int32 result)
 
+-- Float64 tests
+
+mathE :: TTerm TestGroup
+mathE = subgroup "e" [
+  test "Euler's number"]
+  where
+    test name = primCase name _math_e [] (float64 (exp 1))
+
+mathPi :: TTerm TestGroup
+mathPi = subgroup "pi" [
+  test "pi constant"]
+  where
+    test name = primCase name _math_pi [] (float64 pi)
+
+mathSin :: TTerm TestGroup
+mathSin = subgroup "sin" [
+  test "sin 0" 0.0 0.0,
+  test "sin pi/2" (pi / 2) 1.0,
+  test "sin pi" pi (sin pi)]  -- Use actual computed value for precision
+  where
+    test name x result = primCase name _math_sin [float64 x] (float64 result)
+
+mathCos :: TTerm TestGroup
+mathCos = subgroup "cos" [
+  test "cos 0" 0.0 1.0,
+  test "cos pi/2" (pi / 2) (cos (pi / 2)),  -- Use actual computed value for precision
+  test "cos pi" pi (-1.0)]
+  where
+    test name x result = primCase name _math_cos [float64 x] (float64 result)
+
+mathTan :: TTerm TestGroup
+mathTan = subgroup "tan" [
+  test "tan 0" 0.0 0.0,
+  test "tan pi/4" (pi / 4) (tan (pi / 4))]  -- Use actual computed value for precision
+  where
+    test name x result = primCase name _math_tan [float64 x] (float64 result)
+
+mathAsin :: TTerm TestGroup
+mathAsin = subgroup "asin" [
+  test "asin 0" 0.0 0.0,
+  test "asin 1" 1.0 (pi / 2),
+  test "asin -1" (-1.0) (-(pi / 2))]
+  where
+    test name x result = primCase name _math_asin [float64 x] (float64 result)
+
+mathAcos :: TTerm TestGroup
+mathAcos = subgroup "acos" [
+  test "acos 1" 1.0 0.0,
+  test "acos 0" 0.0 (pi / 2),
+  test "acos -1" (-1.0) pi]
+  where
+    test name x result = primCase name _math_acos [float64 x] (float64 result)
+
+mathAtan :: TTerm TestGroup
+mathAtan = subgroup "atan" [
+  test "atan 0" 0.0 0.0,
+  test "atan 1" 1.0 (pi / 4)]
+  where
+    test name x result = primCase name _math_atan [float64 x] (float64 result)
+
+mathAtan2 :: TTerm TestGroup
+mathAtan2 = subgroup "atan2" [
+  test "atan2 1 1" 1.0 1.0 (pi / 4),
+  test "atan2 1 0" 1.0 0.0 (pi / 2),
+  test "atan2 0 1" 0.0 1.0 0.0]
+  where
+    test name y x result = primCase name _math_atan2 [float64 y, float64 x] (float64 result)
+
+mathSinh :: TTerm TestGroup
+mathSinh = subgroup "sinh" [
+  test "sinh 0" 0.0 0.0,
+  test "sinh 1" 1.0 (sinh 1.0)]
+  where
+    test name x result = primCase name _math_sinh [float64 x] (float64 result)
+
+mathCosh :: TTerm TestGroup
+mathCosh = subgroup "cosh" [
+  test "cosh 0" 0.0 1.0,
+  test "cosh 1" 1.0 (cosh 1.0)]
+  where
+    test name x result = primCase name _math_cosh [float64 x] (float64 result)
+
+mathTanh :: TTerm TestGroup
+mathTanh = subgroup "tanh" [
+  test "tanh 0" 0.0 0.0,
+  test "tanh 1" 1.0 (tanh 1.0)]
+  where
+    test name x result = primCase name _math_tanh [float64 x] (float64 result)
+
+mathAsinh :: TTerm TestGroup
+mathAsinh = subgroup "asinh" [
+  test "asinh 0" 0.0 0.0,
+  test "asinh 1" 1.0 (asinh 1.0)]
+  where
+    test name x result = primCase name _math_asinh [float64 x] (float64 result)
+
+mathAcosh :: TTerm TestGroup
+mathAcosh = subgroup "acosh" [
+  test "acosh 1" 1.0 0.0,
+  test "acosh 2" 2.0 (acosh 2.0)]
+  where
+    test name x result = primCase name _math_acosh [float64 x] (float64 result)
+
+mathAtanh :: TTerm TestGroup
+mathAtanh = subgroup "atanh" [
+  test "atanh 0" 0.0 0.0,
+  test "atanh 0.5" 0.5 (atanh 0.5)]
+  where
+    test name x result = primCase name _math_atanh [float64 x] (float64 result)
+
+mathExp :: TTerm TestGroup
+mathExp = subgroup "exp" [
+  test "exp 0" 0.0 1.0,
+  test "exp 1" 1.0 (exp 1.0),
+  test "exp -1" (-1.0) (exp (-1.0))]
+  where
+    test name x result = primCase name _math_exp [float64 x] (float64 result)
+
+mathLog :: TTerm TestGroup
+mathLog = subgroup "log" [
+  test "log 1" 1.0 0.0,
+  test "log e" (exp 1.0) 1.0]
+  where
+    test name x result = primCase name _math_log [float64 x] (float64 result)
+
+mathLogBase :: TTerm TestGroup
+mathLogBase = subgroup "logBase" [
+  test "log10 1" 10.0 1.0 0.0,
+  test "log10 10" 10.0 10.0 1.0,
+  test "log10 100" 10.0 100.0 2.0,
+  test "log2 8" 2.0 8.0 3.0]
+  where
+    test name base x result = primCase name _math_logBase [float64 base, float64 x] (float64 result)
+
+mathPow :: TTerm TestGroup
+mathPow = subgroup "pow" [
+  test "2^3" 2.0 3.0 8.0,
+  test "10^0" 10.0 0.0 1.0,
+  test "2^-1" 2.0 (-1.0) 0.5]
+  where
+    test name base exp result = primCase name _math_pow [float64 base, float64 exp] (float64 result)
+
+mathSqrt :: TTerm TestGroup
+mathSqrt = subgroup "sqrt" [
+  test "sqrt 4" 4.0 2.0,
+  test "sqrt 9" 9.0 3.0,
+  test "sqrt 2" 2.0 (sqrt 2.0),
+  test "sqrt 0" 0.0 0.0]
+  where
+    test name x result = primCase name _math_sqrt [float64 x] (float64 result)
+
+mathCeiling :: TTerm TestGroup
+mathCeiling = subgroup "ceiling" [
+  test "ceiling 3.2" 3.2 4,
+  test "ceiling 3.0" 3.0 3,
+  test "ceiling -3.2" (-3.2) (-3),
+  test "ceiling -3.0" (-3.0) (-3)]
+  where
+    test name x result = primCase name _math_ceiling [float64 x] (bigint result)
+
+mathFloor :: TTerm TestGroup
+mathFloor = subgroup "floor" [
+  test "floor 3.8" 3.8 3,
+  test "floor 3.0" 3.0 3,
+  test "floor -3.2" (-3.2) (-4),
+  test "floor -3.0" (-3.0) (-3)]
+  where
+    test name x result = primCase name _math_floor [float64 x] (bigint result)
+
+mathRound :: TTerm TestGroup
+mathRound = subgroup "round" [
+  test "round 3.4" 3.4 3,
+  test "round 3.5" 3.5 4,
+  test "round 3.6" 3.6 4,
+  test "round -3.4" (-3.4) (-3),
+  test "round -3.5" (-3.5) (-4)]
+  where
+    test name x result = primCase name _math_round [float64 x] (bigint result)
+
+mathTruncate :: TTerm TestGroup
+mathTruncate = subgroup "truncate" [
+  test "truncate 3.8" 3.8 3,
+  test "truncate 3.2" 3.2 3,
+  test "truncate -3.8" (-3.8) (-3),
+  test "truncate -3.2" (-3.2) (-3)]
+  where
+    test name x result = primCase name _math_truncate [float64 x] (bigint result)
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.math primitives" $
     supergroup "hydra.lib.math primitives" [
+      -- Int32 primitives
       mathAbs,
       mathAdd,
       mathDiv,
@@ -162,4 +351,29 @@ allTests = definitionInModule module_ "allTests" $
       mathRem,
       mathSignum,
       mathSub,
-      mathSucc]
+      mathSucc,
+      -- Float64 primitives
+      mathE,
+      mathPi,
+      mathSin,
+      mathCos,
+      mathTan,
+      mathAsin,
+      mathAcos,
+      mathAtan,
+      mathAtan2,
+      mathSinh,
+      mathCosh,
+      mathTanh,
+      mathAsinh,
+      mathAcosh,
+      mathAtanh,
+      mathExp,
+      mathLog,
+      mathLogBase,
+      mathPow,
+      mathSqrt,
+      mathCeiling,
+      mathFloor,
+      mathRound,
+      mathTruncate]

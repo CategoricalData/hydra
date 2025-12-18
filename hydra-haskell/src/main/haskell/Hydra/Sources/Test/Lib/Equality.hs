@@ -21,6 +21,14 @@ module_ = Module (Namespace "hydra.test.lib.equality") elements [] [] $
 
 -- Test groups for hydra.lib.equality primitives
 
+equalityCompare :: TTerm TestGroup
+equalityCompare = subgroup "compare" [
+  test "less than" 3 5 "lessThan",
+  test "equal" 5 5 "equalTo",
+  test "greater than" 5 3 "greaterThan"]
+  where
+    test testName x y resultField = primCase testName _equality_compare [int32 x, int32 y] (injectUnit (name "hydra.util.Comparison") resultField)
+
 equalityEqual :: TTerm TestGroup
 equalityEqual = subgroup "equal" [
   test "equal integers" 5 5 true,
@@ -86,6 +94,7 @@ allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
+      equalityCompare,
       equalityEqual,
       equalityGt,
       equalityGte,

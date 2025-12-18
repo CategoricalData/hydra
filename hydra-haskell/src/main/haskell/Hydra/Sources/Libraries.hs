@@ -301,7 +301,7 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim2Eval _maybes_bind      EvalMaybes.bind     ["x", "y"]      (optional x) (function x (optional y)) (optional y),
     prim3Eval _maybes_cases     EvalMaybes.cases    ["x", "y"]      (optional x) y (function x y) y,
     prim1     _maybes_cat       Maybes.cat          ["x"]           (list $ optional x) (list x),
-    prim2Eval _maybes_compose   EvalMaybes.compose  ["x", "y", "z"] (function x $ optional y) (function y $ optional z) (function x $ optional z),
+    prim3Eval _maybes_compose   EvalMaybes.compose  ["x", "y", "z"] (function x $ optional y) (function y $ optional z) x (optional z),
     prim1     _maybes_fromJust  Maybes.fromJust     ["x"]           (optional x) x,
     prim2     _maybes_fromMaybe Maybes.fromMaybe    ["x"]           x (optional x) x,
     prim1     _maybes_isJust    Maybes.isJust       ["x"]           (optional x) boolean,

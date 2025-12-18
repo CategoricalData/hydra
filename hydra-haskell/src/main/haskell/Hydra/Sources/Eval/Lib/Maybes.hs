@@ -128,19 +128,18 @@ cases_ = define "cases" $
         (var "m")]
 
 -- | Interpreter-friendly Kleisli composition for Maybe.
--- compose f g = \x -> bind (f x) g
-compose_ :: TBinding (Term -> Term -> Flow s Term)
+-- compose f g x = bind (f x) g
+compose_ :: TBinding (Term -> Term -> Term -> Flow s Term)
 compose_ = define "compose" $
   doc "Interpreter-friendly Kleisli composition for Maybe." $
-  "funF" ~> "funG" ~>
-  -- Return a lambda that: \x -> bind (f x) g
-  produce $ Core.termFunction $ Core.functionLambda $
-    Core.lambda (wrap _Name $ string "x") nothing $
-      Core.termApplication $ Core.application
-        (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.bind")
-          (Core.termApplication $ Core.application (var "funF") (Core.termVariable $ wrap _Name $ string "x")))
-        (var "funG")
+  "funF" ~> "funG" ~> "xTerm" ~>
+  -- Compute: bind (f x) g
+  -- This builds the term: bind @ (funF @ xTerm) @ funG
+  produce $ Core.termApplication $ Core.application
+    (Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.bind")
+      (Core.termApplication $ Core.application (var "funF") (var "xTerm")))
+    (var "funG")
 
 -- | Interpreter-friendly map for Maybe terms.
 -- Returns Nothing if Nothing, or Just (fun val) if Just val.

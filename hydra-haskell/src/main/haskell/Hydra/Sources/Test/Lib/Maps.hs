@@ -153,21 +153,94 @@ mapsFindWithDefault = subgroup "findWithDefault" [
     test name def k m result = primCase name _maps_findWithDefault [
       MetaTerms.string def, int32 k, intStringMap m] (MetaTerms.string result)
 
+mapsUnion :: TTerm TestGroup
+mapsUnion = subgroup "union" [
+  test "union two maps" [(1, "a"), (2, "b")] [(2, "x"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")],
+  test "union with empty" [(1, "a")] [] [(1, "a")],
+  test "empty with map" [] [(1, "a")] [(1, "a")]]
+  where
+    test name m1 m2 result = primCase name _maps_union [intStringMap m1, intStringMap m2] (intStringMap result)
+
+mapsMapKeys :: TTerm TestGroup
+mapsMapKeys = subgroup "mapKeys" [
+  test "double keys" [(1, "a"), (2, "b")] [(2, "a"), (4, "b")],
+  test "empty map" [] []]
+  where
+    test name m result = primCase name _maps_mapKeys [
+      lambda "k" (primitive _math_mul @@ var "k" @@ int32 2),
+      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+
+mapsFilter :: TTerm TestGroup
+mapsFilter = subgroup "filter" [
+  test "filter values starting with a" [(1, "a"), (2, "b"), (3, "ab")] [(1, "a"), (3, "ab")],
+  test "filter all" [(1, "b"), (2, "c")] [],
+  test "empty map" [] []]
+  where
+    test name m result = primCase name _maps_filter [
+      lambda "v" (primitive _equality_equal @@ (primitive _strings_charAt @@ int32 0 @@ var "v") @@ int32 97),  -- 'a' = 97
+      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+
+mapsFilterWithKey :: TTerm TestGroup
+mapsFilterWithKey = subgroup "filterWithKey" [
+  test "filter by key > 1" [(1, "a"), (2, "b"), (3, "c")] [(2, "b"), (3, "c")],
+  test "filter all" [(1, "a")] [],
+  test "empty map" [] []]
+  where
+    test name m result = primCase name _maps_filterWithKey [
+      lambda "k" (lambda "v" (primitive _equality_gt @@ var "k" @@ int32 1)),
+      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+
+mapsBimap :: TTerm TestGroup
+mapsBimap = subgroup "bimap" [
+  test "transform both" [(1, "a"), (2, "b")] [(2, "A"), (4, "B")],
+  test "empty map" [] []]
+  where
+    test name m result = primCase name _maps_bimap [
+      lambda "k" (primitive _math_mul @@ var "k" @@ int32 2),
+      lambda "v" (primitive _strings_toUpper @@ var "v"),
+      intStringMapOrEmpty m] (intStringMapOrEmpty result)
+
+mapsAlter :: TTerm TestGroup
+mapsAlter = subgroup "alter" [
+  test "insert new key" 3 [(1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "new")],
+  test "update existing key" 2 [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
+  test "delete key" 2 [(1, "a"), (2, "b")] [(1, "a")]]
+  where
+    -- The alter function tests use different functions:
+    -- insert: always return Just "new"
+    test "insert new key" k m result = primCase "insert new key" _maps_alter [
+      lambda "opt" (Core.termMaybe $ just (MetaTerms.string "new")),
+      int32 k, intStringMap m] (intStringMap result)
+    -- update: return Just "updated" if exists
+    test "update existing key" k m result = primCase "update existing key" _maps_alter [
+      lambda "opt" (Core.termMaybe $ just (MetaTerms.string "updated")),
+      int32 k, intStringMap m] (intStringMap result)
+    -- delete: always return Nothing
+    test "delete key" k m result = primCase "delete key" _maps_alter [
+      lambda "opt" (Core.termMaybe nothing),
+      int32 k, intStringMap m] (intStringMap result)
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maps primitives" $
     supergroup "hydra.lib.maps primitives" [
-      mapsEmpty,
-      mapsSingleton,
-      mapsFromList,
-      mapsToList,
-      mapsInsert,
-      mapsRemove,
-      mapsLookup,
-      mapsMember,
-      mapsSize,
-      mapsNull,
-      mapsKeys,
+      mapsAlter,
+      mapsBimap,
       mapsElems,
+      mapsEmpty,
+      mapsFilter,
+      mapsFilterWithKey,
+      mapsFindWithDefault,
+      mapsFromList,
+      mapsInsert,
+      mapsKeys,
+      mapsLookup,
       mapsMap,
-      mapsFindWithDefault]
+      mapsMapKeys,
+      mapsMember,
+      mapsNull,
+      mapsRemove,
+      mapsSingleton,
+      mapsSize,
+      mapsToList,
+      mapsUnion]
