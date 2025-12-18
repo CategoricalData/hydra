@@ -403,6 +403,80 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
+      Testing.testGroupName = "unions",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "union of multiple sets",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.unions"))),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
+                Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
+                (Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "union with empty sets",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.unions"))),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
+                Core.TermSet S.empty,
+                (Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))]))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "empty list of sets",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.unions"))),
+              Core.applicationArgument = (Core.TermList [])})),
+            Testing.evaluationTestCaseOutput = (Core.TermSet S.empty)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "single set",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.unions"))),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermSet (S.fromList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])])})),
+            Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
       Testing.testGroupName = "intersection",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],

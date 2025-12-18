@@ -123,6 +123,15 @@ setsDifference = subgroup "difference" [
   where
     test name s1 s2 result = primCase name _sets_difference [intSet s1, intSet s2] (intSet result)
 
+setsUnions :: TTerm TestGroup
+setsUnions = subgroup "unions" [
+  test "union of multiple sets" [[1, 2], [2, 3], [3, 4]] [1, 2, 3, 4],
+  test "union with empty sets" [[1, 2], [], [3]] [1, 2, 3],
+  test "empty list of sets" [] [],
+  test "single set" [[1, 2, 3]] [1, 2, 3]]
+  where
+    test name sets result = primCase name _sets_unions [list $ Prelude.map intSet sets] (intSet result)
+
 setsMap :: TTerm TestGroup
 setsMap = subgroup "map" [
   test "map function" [1, 2, 3] [2, 4, 6],
@@ -146,6 +155,7 @@ allTests = definitionInModule module_ "allTests" $
       setsSize,
       setsNull,
       setsUnion,
+      setsUnions,
       setsIntersection,
       setsDifference,
       setsMap]
