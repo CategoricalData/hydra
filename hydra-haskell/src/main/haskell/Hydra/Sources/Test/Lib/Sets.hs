@@ -128,7 +128,7 @@ setsMap = subgroup "map" [
   test "map function" [1, 2, 3] [2, 4, 6],
   test "map on empty" [] []]
   where
-    test name s result = primCaseWithTags name [tag_requiresInterp] _sets_map [
+    test name s result = primCase name _sets_map [
       lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
       intSet s] (intSet result)
 

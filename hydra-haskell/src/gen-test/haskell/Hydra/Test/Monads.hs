@@ -178,8 +178,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map absolute",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -232,8 +231,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "bind",
       Testing.testGroupDescription = Nothing,
@@ -300,8 +298,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "bind multiply",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -363,8 +360,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "error traces",
       Testing.testGroupDescription = Nothing,
@@ -427,6 +423,5 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]}],
+          Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

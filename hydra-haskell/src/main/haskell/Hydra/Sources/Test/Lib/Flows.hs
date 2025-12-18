@@ -30,7 +30,7 @@ flowsBind = subgroup "bind" [
   test "bind add" (primitive _math_add) (int32 5) (int32 5) (int32 10),
   test "bind multiply" (primitive _math_mul) (int32 3) (int32 4) (int32 12)]
   where
-    test testName op x y result = evalCaseWithTags testName [tag_requiresInterp]
+    test testName op x y result = evalCase testName
       (unFlowTerm @@ (metaref Monads.bind
         @@ (metaref Monads.pure @@ x)
         @@ (lambda "n" (metaref Monads.pure @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
@@ -41,7 +41,7 @@ flowsFail :: TTerm TestGroup
 flowsFail = subgroup "fail" [
   test "fail with message"]
   where
-    test testName = evalCaseWithTags testName []
+    test testName = evalCase testName
       (unFlowTerm @@ (metaref Monads.fail @@ MetaTerms.string "test error message") @@ unit @@ testTrace)
       (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: test error message ()"]))
 
@@ -58,7 +58,7 @@ flowsMap = subgroup "map" [
   test "map negate" (primitive _math_negate) (int32 5) (int32 (-5)),
   test "map abs" (primitive _math_abs) (int32 (-3)) (int32 3)]
   where
-    test testName fn inVal outVal = evalCaseWithTags testName [tag_requiresInterp]
+    test testName fn inVal outVal = evalCase testName
       (unFlowTerm @@ (metaref Monads.map @@ fn @@ (metaref Monads.pure @@ inVal)) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just outVal) unit testTrace)
 
@@ -70,7 +70,7 @@ flowsPure = subgroup "pure" [
   test "pure negative" (int32 (-5)),
   test "pure string" (string "hello")]
   where
-    test testName val = evalCaseWithTags testName []
+    test testName val = evalCase testName
       (unFlowTerm @@ (metaref Monads.pure @@ val) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just val) unit testTrace)
 

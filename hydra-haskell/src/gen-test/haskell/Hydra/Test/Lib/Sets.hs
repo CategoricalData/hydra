@@ -544,8 +544,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map on empty",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -564,6 +563,5 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermSet S.empty)})),
             Testing.evaluationTestCaseOutput = (Core.TermSet S.empty)})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]}],
+          Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}
