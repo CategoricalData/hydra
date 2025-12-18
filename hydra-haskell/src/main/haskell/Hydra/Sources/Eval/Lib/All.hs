@@ -60,7 +60,6 @@ import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
 import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
-import qualified Hydra.Sources.Eval.Lib.Tuples as EvalTuples
 
 
 ns :: Namespace
@@ -77,8 +76,7 @@ evalLibModules = [
   EvalLists.module_,
   EvalMaps.module_,
   EvalMaybes.module_,
-  EvalSets.module_,
-  EvalTuples.module_]
+  EvalSets.module_]
 
 module_ :: Module
 module_ = Module ns elements
