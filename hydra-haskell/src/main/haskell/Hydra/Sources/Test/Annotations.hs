@@ -5,6 +5,7 @@ import Hydra.Kernel
 import Hydra.Testing
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
+--import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Core as Core
@@ -131,13 +132,13 @@ descriptionTests = subgroup "descriptions" [
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
   evalCaseWithTags "set description #1" [tag_requiresInterp]
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "my description") @@ stringTerm "foo")
-    (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (metaref Constants.key_description) (stringTerm "my description")),
+    (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "my description")),
   evalCaseWithTags "set description #2" [tag_requiresInterp]
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ int32Term 42)
-    (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (metaref Constants.key_description) (stringTerm "")),
+    (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "")),
   evalCaseWithTags "set description #3" [tag_requiresInterp]
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "A longer description with spaces") @@ booleanTerm True)
-    (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.singleton (metaref Constants.key_description) (stringTerm "A longer description with spaces")),
+    (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
 
   -- Get existing description (returns Flow Graph (Maybe String))
   -- Note: These tests require the interpreter because getTermDescription uses Flow and pattern matching
@@ -175,11 +176,11 @@ descriptionTests = subgroup "descriptions" [
   evalCaseWithTags "outer description overrides inner #1" [tag_requiresInterp]
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "outer")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "inner") @@ stringTerm "bar"))
-    (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (metaref Constants.key_description) (stringTerm "outer")),
+    (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "outer")),
   evalCaseWithTags "outer description overrides inner #2" [tag_requiresInterp]
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "new")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "old") @@ int32Term 99))
-    (annotatedTerm (int32Term 99) $ MetaTerms.map $ Maps.singleton (metaref Constants.key_description) (stringTerm "new")),
+    (annotatedTerm (int32Term 99) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "new")),
 
   -- Unset a description (multiple cases)
   evalCaseWithTags "unset description #1" [tag_requiresInterp]

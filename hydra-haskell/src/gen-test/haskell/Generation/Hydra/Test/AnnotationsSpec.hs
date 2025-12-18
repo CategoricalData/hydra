@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.annotations"},ModuleName {unModuleName = "Annotations"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.annotations"},ModuleName {unModuleName = "Annotations"}),(Namespace {unNamespace = "hydra.constants"},ModuleName {unModuleName = "Constants"}),(Namespace {unNamespace = "hydra.core"},ModuleName {unModuleName = "Core"})]
+-- [(Namespace {unNamespace = "hydra.annotations"},ModuleName {unModuleName = "Annotations"}),(Namespace {unNamespace = "hydra.core"},ModuleName {unModuleName = "Core"})]
 
 module Generation.Hydra.Test.AnnotationsSpec where
 
@@ -13,7 +13,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 
 spec :: H.Spec
@@ -93,31 +92,31 @@ spec = H.describe "annotations" $ do
       (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
           Core.annotatedTermAnnotation = (M.fromList [
-            (Constants.key_description, (Core.TermLiteral (Core.LiteralString "my description")))])}))
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "my description")))])}))
     H.it "set description #2" $ H.shouldBe
       (Annotations.setTermDescription (Just "") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))
       (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
           Core.annotatedTermAnnotation = (M.fromList [
-            (Constants.key_description, (Core.TermLiteral (Core.LiteralString "")))])}))
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "")))])}))
     H.it "set description #3" $ H.shouldBe
       (Annotations.setTermDescription (Just "A longer description with spaces") (Core.TermLiteral (Core.LiteralBoolean True)))
       (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralBoolean True)),
           Core.annotatedTermAnnotation = (M.fromList [
-            (Constants.key_description, (Core.TermLiteral (Core.LiteralString "A longer description with spaces")))])}))
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A longer description with spaces")))])}))
     H.it "outer description overrides inner #1" $ H.shouldBe
       (Annotations.setTermDescription (Just "outer") (Annotations.setTermDescription (Just "inner") (Core.TermLiteral (Core.LiteralString "bar"))))
       (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
           Core.annotatedTermAnnotation = (M.fromList [
-            (Constants.key_description, (Core.TermLiteral (Core.LiteralString "outer")))])}))
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "outer")))])}))
     H.it "outer description overrides inner #2" $ H.shouldBe
       (Annotations.setTermDescription (Just "new") (Annotations.setTermDescription (Just "old") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))))
       (Core.TermAnnotated (Core.AnnotatedTerm {
           Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99))),
           Core.annotatedTermAnnotation = (M.fromList [
-            (Constants.key_description, (Core.TermLiteral (Core.LiteralString "new")))])}))
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "new")))])}))
     H.it "unset description #1" $ H.shouldBe
       (Annotations.setTermDescription Nothing (Annotations.setTermDescription (Just "desc") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 137)))))
       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 137)))

@@ -1308,7 +1308,9 @@ allTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}}))}}))},
                     Core.Field {
                       Core.fieldName = (Core.Name "annotation"),
-                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermVariable (Core.Name "hydra.constants.key_description")) (Core.TermUnion (Core.Injection {
+                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))})) (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "literal"),
@@ -1365,7 +1367,9 @@ allTests = Testing.TestGroup {
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}}))}}))}}))},
                     Core.Field {
                       Core.fieldName = (Core.Name "annotation"),
-                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermVariable (Core.Name "hydra.constants.key_description")) (Core.TermUnion (Core.Injection {
+                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))})) (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "literal"),
@@ -1414,7 +1418,9 @@ allTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}}))}}))},
                     Core.Field {
                       Core.fieldName = (Core.Name "annotation"),
-                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermVariable (Core.Name "hydra.constants.key_description")) (Core.TermUnion (Core.Injection {
+                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))})) (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "literal"),
@@ -1707,7 +1713,9 @@ allTests = Testing.TestGroup {
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}}))}}))},
                     Core.Field {
                       Core.fieldName = (Core.Name "annotation"),
-                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermVariable (Core.Name "hydra.constants.key_description")) (Core.TermUnion (Core.Injection {
+                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))})) (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "literal"),
@@ -1768,7 +1776,9 @@ allTests = Testing.TestGroup {
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))}}))}}))}}))},
                     Core.Field {
                       Core.fieldName = (Core.Name "annotation"),
-                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermVariable (Core.Name "hydra.constants.key_description")) (Core.TermUnion (Core.Injection {
+                      Core.fieldTerm = (Core.TermMap (Maps.singleton (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))})) (Core.TermUnion (Core.Injection {
                         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "literal"),
