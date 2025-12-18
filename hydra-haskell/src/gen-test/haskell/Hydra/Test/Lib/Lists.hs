@@ -688,8 +688,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "drop all elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -711,8 +710,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "drop no elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -737,8 +735,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -757,8 +754,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "elem",
       Testing.testGroupDescription = Nothing,
@@ -908,8 +904,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "filter all elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -934,8 +929,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "filter no elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -957,8 +951,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -977,8 +970,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "foldl",
       Testing.testGroupDescription = Nothing,
@@ -1001,8 +993,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "product with multiplication",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1019,8 +1010,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 24)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1034,8 +1024,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single element",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1050,8 +1039,7 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "subtraction fold",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1068,8 +1056,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "group",
       Testing.testGroupDescription = Nothing,
@@ -2299,8 +2286,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralString "hello"),
               (Core.TermLiteral (Core.LiteralString "world"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty string list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2312,8 +2298,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "single string element",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2327,8 +2312,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "test")])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "sort by negation",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2346,8 +2330,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "sort by absolute value",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2365,8 +2348,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3))))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "span",
       Testing.testGroupDescription = Nothing,
@@ -2400,8 +2382,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "span all elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2426,8 +2407,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))], (Core.TermList [])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "span no elements",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2452,8 +2432,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2472,8 +2451,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "tail",
       Testing.testGroupDescription = Nothing,
@@ -2876,8 +2854,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 9)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "first list shorter",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2898,8 +2875,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "second list shorter",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2920,8 +2896,7 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty first list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2938,8 +2913,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty second list",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2956,8 +2930,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "string concatenation",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2977,6 +2950,5 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralString "a1"),
               (Core.TermLiteral (Core.LiteralString "b2"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]}],
+          Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

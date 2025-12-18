@@ -84,8 +84,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "bind multiply",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -147,8 +146,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "fail",
       Testing.testGroupDescription = Nothing,
@@ -261,8 +259,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map abs",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -315,8 +312,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "pure",
       Testing.testGroupDescription = Nothing,

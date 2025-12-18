@@ -39,7 +39,7 @@ mapTests = subgroup "map" [
   test "map negate" (primitive _math_negate) (int32 5) (int32 (-5)),
   test "map absolute" (primitive _math_abs) (int32 (-3)) (int32 3)]
   where
-    test testName fn inVal outVal = evalCaseWithTags testName [tag_requiresInterp]
+    test testName fn inVal outVal = evalCase testName
       (unFlowTerm @@ (metaref Monads.map @@ fn @@ (metaref Monads.pure @@ inVal)) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just outVal) unit testTrace)
 
@@ -49,7 +49,7 @@ bindTests = subgroup "bind" [
   test "bind add" (primitive _math_add) (int32 10) (int32 5) (int32 15),
   test "bind multiply" (primitive _math_mul) (int32 3) (int32 4) (int32 12)]
   where
-    test testName op x y result = evalCaseWithTags testName [tag_requiresInterp]
+    test testName op x y result = evalCase testName
       (unFlowTerm @@ (metaref Monads.bind @@ (metaref Monads.pure @@ x) @@ (lambda "n" (metaref Monads.pure @@ (op @@ var "n" @@ y)))) @@ unit @@ testTrace)
       (flowStateTerm (optional $ just result) unit testTrace)
 
@@ -64,7 +64,7 @@ traceWithMessages msgs = traceTerm
 -- Tests that withTrace annotations are properly recorded and errors include the trace context
 errorTraceTests :: TTerm TestGroup
 errorTraceTests = subgroup "error traces" [
-  evalCaseWithTags "Error traces are in the right order" [tag_requiresInterp]
+  evalCase "Error traces are in the right order"
     -- Input: withTrace "one" $ withTrace "two" $ fail "oops"
     (unFlowTerm
       @@ (metaref Monads.withTrace @@ string "one"

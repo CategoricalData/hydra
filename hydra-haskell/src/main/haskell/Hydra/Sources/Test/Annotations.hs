@@ -38,13 +38,13 @@ arbitraryAnnotationTests :: TTerm TestGroup
 arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   -- Set a single key/value pair (multiple cases for property test coverage)
   -- Note: These tests require interpretation because setTermAnnotation uses maps.alter which has no interpreter impl
-  evalCaseWithTags "set single annotation #1" [tag_requiresInterp]
+  evalCase "set single annotation #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ int32Term 42) @@ stringTerm "foo")
     (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (nameTerm "k1") (int32Term 42)),
-  evalCaseWithTags "set single annotation #2" [tag_requiresInterp]
+  evalCase "set single annotation #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "myKey" @@ (optional $ just $ int32Term (-17)) @@ stringTerm "bar")
     (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "myKey") (int32Term (-17))),
-  evalCaseWithTags "set single annotation #3" [tag_requiresInterp]
+  evalCase "set single annotation #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "hello") @@ int32Term 0)
     (annotatedTerm (int32Term 0) $ MetaTerms.map $ Maps.singleton (nameTerm "x") (stringTerm "hello")),
 
@@ -76,13 +76,13 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
     (optional nothing),
 
   -- Set multiple values (multiple cases)
-  evalCaseWithTags "set multiple annotations #1" [tag_requiresInterp]
+  evalCase "set multiple annotations #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ booleanTerm True))
     (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.fromList $ Phantoms.list [
       Phantoms.pair (nameTerm "k1") (stringTerm "first"),
       Phantoms.pair (nameTerm "k2") (int32Term 200)]),
-  evalCaseWithTags "set multiple annotations #2" [tag_requiresInterp]
+  evalCase "set multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 0)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term (-5)) @@ stringTerm "test"))
     (annotatedTerm (stringTerm "test") $ MetaTerms.map $ Maps.fromList $ Phantoms.list [
@@ -90,36 +90,36 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
       Phantoms.pair (nameTerm "b") (int32Term 0)]),
 
   -- An outer annotation overrides an inner one (multiple cases)
-  evalCaseWithTags "outer annotation overrides inner #1" [tag_requiresInterp]
+  evalCase "outer annotation overrides inner #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "outer")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "inner") @@ stringTerm "bar"))
     (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "k1") (stringTerm "outer")),
-  evalCaseWithTags "outer annotation overrides inner #2" [tag_requiresInterp]
+  evalCase "outer annotation overrides inner #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "new")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "old") @@ int32Term 42))
     (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "x") (stringTerm "new")),
-  evalCaseWithTags "outer annotation overrides inner #3" [tag_requiresInterp]
+  evalCase "outer annotation overrides inner #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 999)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 1) @@ booleanTerm False))
     (annotatedTerm (booleanTerm False) $ MetaTerms.map $ Maps.singleton (nameTerm "key") (int32Term 999)),
 
   -- Unset a single annotation (multiple cases)
-  evalCaseWithTags "unset single annotation #1" [tag_requiresInterp]
+  evalCase "unset single annotation #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "foo") @@ int64Term 137))
     (int64Term 137),
-  evalCaseWithTags "unset single annotation #2" [tag_requiresInterp]
+  evalCase "unset single annotation #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ int32Term 42) @@ stringTerm "test"))
     (stringTerm "test"),
 
   -- Unset one of multiple annotations (multiple cases)
-  evalCaseWithTags "unset one of multiple annotations #1" [tag_requiresInterp]
+  evalCase "unset one of multiple annotations #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ int64Term 137)))
     (annotatedTerm (int64Term 137) $ MetaTerms.map $ Maps.singleton (nameTerm "k2") (int32Term 200)),
-  evalCaseWithTags "unset one of multiple annotations #2" [tag_requiresInterp]
+  evalCase "unset one of multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 2)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term 1) @@ stringTerm "x")))
@@ -130,13 +130,13 @@ descriptionTests :: TTerm TestGroup
 descriptionTests = subgroup "descriptions" [
   -- Set a single description (multiple cases)
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
-  evalCaseWithTags "set description #1" [tag_requiresInterp]
+  evalCase "set description #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "my description") @@ stringTerm "foo")
     (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "my description")),
-  evalCaseWithTags "set description #2" [tag_requiresInterp]
+  evalCase "set description #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ int32Term 42)
     (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "")),
-  evalCaseWithTags "set description #3" [tag_requiresInterp]
+  evalCase "set description #3"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "A longer description with spaces") @@ booleanTerm True)
     (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
 
@@ -173,21 +173,21 @@ descriptionTests = subgroup "descriptions" [
     (flowStateTerm (optional $ just $ (optional nothing)) testState testTrace),
 
   -- An outer description overrides an inner one (multiple cases)
-  evalCaseWithTags "outer description overrides inner #1" [tag_requiresInterp]
+  evalCase "outer description overrides inner #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "outer")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "inner") @@ stringTerm "bar"))
     (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "outer")),
-  evalCaseWithTags "outer description overrides inner #2" [tag_requiresInterp]
+  evalCase "outer description overrides inner #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "new")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "old") @@ int32Term 99))
     (annotatedTerm (int32Term 99) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "new")),
 
   -- Unset a description (multiple cases)
-  evalCaseWithTags "unset description #1" [tag_requiresInterp]
+  evalCase "unset description #1"
     (metaref Annotations.setTermDescription @@ (optional nothing)
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "desc") @@ int64Term 137))
     (int64Term 137),
-  evalCaseWithTags "unset description #2" [tag_requiresInterp]
+  evalCase "unset description #2"
     (metaref Annotations.setTermDescription @@ (optional nothing)
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "to be removed") @@ stringTerm "test"))
     (stringTerm "test")]

@@ -7,9 +7,6 @@ import qualified Data.Maybe as Y
 import qualified Data.Map as M
 import qualified Data.List as L
 
--- | Tag for tests that require the interpreter and cannot be compiled
-tag_requiresInterp :: Tag
-tag_requiresInterp = Tag "requiresInterp"
 
 -- | Tag for tests that use references to kernel definitions
 tag_usesKernelRefs :: Tag
@@ -30,7 +27,6 @@ transformToCompiledTests (TestGroup name desc subgroups cases) =
 transformTestCase :: TestCaseWithMetadata -> Maybe TestCaseWithMetadata
 transformTestCase tcase@(TestCaseWithMetadata name tc desc tags)
   -- Filter out tests that use references to kernel definitions (these can't be compiled)
-  -- Note: tag_requiresInterp tests ARE included here; they can be compiled but not interpreted
   | tag_usesKernelRefs `L.elem` tags = Nothing
   | otherwise = case tc of
     -- Case conversion: create delegated evaluation with convertCase call

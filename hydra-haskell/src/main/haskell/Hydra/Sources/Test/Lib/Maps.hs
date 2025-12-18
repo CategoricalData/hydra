@@ -141,7 +141,7 @@ mapsMap = subgroup "map" [
   test "map over values" [(1, "a"), (2, "b")] [(1, "A"), (2, "B")],
   test "map empty" [] []]
   where
-    test name m result = primCaseWithTags name [tag_requiresInterp] _maps_map [
+    test name m result = primCase name _maps_map [
       lambda "s" (primitive _strings_toUpper @@ var "s"),
       intStringMapOrEmpty m] (intStringMapOrEmpty result)
 

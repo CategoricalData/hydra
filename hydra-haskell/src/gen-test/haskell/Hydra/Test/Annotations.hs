@@ -93,8 +93,7 @@ allTests = Testing.TestGroup {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}}))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set single annotation #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -164,8 +163,7 @@ allTests = Testing.TestGroup {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-17))))}}))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set single annotation #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -235,8 +233,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "hello"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing annotation #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -588,8 +585,7 @@ allTests = Testing.TestGroup {
                                     Core.fieldName = (Core.Name "int32"),
                                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 200)))}}))}}))}})))]))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set multiple annotations #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -695,8 +691,7 @@ allTests = Testing.TestGroup {
                                     Core.fieldName = (Core.Name "int32"),
                                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}}))}}))}})))]))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer annotation overrides inner #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -774,8 +769,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "outer"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer annotation overrides inner #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -861,8 +855,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "new"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer annotation overrides inner #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -952,8 +945,7 @@ allTests = Testing.TestGroup {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 999)))}}))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset single annotation #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1009,8 +1001,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "int64"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 137)))}}))}}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset single annotation #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1062,8 +1053,7 @@ allTests = Testing.TestGroup {
                     Core.fieldName = (Core.Name "string"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))}}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset one of multiple annotations #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1165,8 +1155,7 @@ allTests = Testing.TestGroup {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 200)))}}))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset one of multiple annotations #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1264,8 +1253,7 @@ allTests = Testing.TestGroup {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}}))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "descriptions",
       Testing.testGroupDescription = Nothing,
@@ -1320,8 +1308,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "my description"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set description #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1379,8 +1366,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString ""))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set description #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1430,8 +1416,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "A longer description with spaces"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing description #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1725,8 +1710,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "outer"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer description overrides inner #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1788,8 +1772,7 @@ allTests = Testing.TestGroup {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "new"))}}))}}))))}]}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset description #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1829,8 +1812,7 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "int64"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 137)))}}))}}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "unset description #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1862,8 +1844,7 @@ allTests = Testing.TestGroup {
                     Core.fieldName = (Core.Name "string"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))}}))}}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "layered annotations",
       Testing.testGroupDescription = Nothing,
