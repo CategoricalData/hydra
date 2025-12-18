@@ -24,7 +24,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Lib.Tuples as Tuples
 
 import qualified Hydra.Eval.Lib.Eithers as EvalEithers
 import qualified Hydra.Eval.Lib.Flows as EvalFlows
@@ -36,14 +35,6 @@ import qualified Hydra.Eval.Lib.Tuples as EvalTuples
 
 import qualified Data.List as L
 
-
--- * Hydra standard library
-
-standardLibrary :: Namespace -> [Primitive] -> Library
-standardLibrary ns prims = Library {
-  libraryNamespace = ns,
-  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
-  libraryPrimitives = prims}
 
 standardLibraries :: [Library]
 standardLibraries = [
@@ -60,8 +51,13 @@ standardLibraries = [
   hydraLibMaybes,
   hydraLibPairs,
   hydraLibSets,
-  hydraLibStrings,
-  hydraLibTuples]
+  hydraLibStrings]
+
+standardLibrary :: Namespace -> [Primitive] -> Library
+standardLibrary ns prims = Library {
+  libraryNamespace = ns,
+  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
+  libraryPrimitives = prims}
 
 hydraLibChars :: Library
 hydraLibChars = standardLibrary _hydra_lib_chars [
@@ -320,6 +316,14 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     y = variable "y"
     z = variable "z"
 
+hydraLibPairs :: Library
+hydraLibPairs = standardLibrary _hydra_lib_pairs [
+    prim1 _pairs_first  Pairs.first  ["a", "b"] (pair a b) a,
+    prim1 _pairs_second Pairs.second ["a", "b"] (pair a b) b]
+  where
+    a = variable "a"
+    b = variable "b"
+
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
     prim2     _sets_delete       Sets.delete       ["x"]      x (set x) (set x),
@@ -355,22 +359,3 @@ hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_toLower     Strings.toLower     [] string string,
   prim1 _strings_toUpper     Strings.toUpper     [] string string,
   prim1 _strings_unlines     Strings.unlines     [] (list string) string]
-
-hydraLibTuples :: Library
-hydraLibTuples = standardLibrary _hydra_lib_tuples [
-    prim1Eval _tuples_curry   EvalTuples.curry   ["a", "b", "c"] (function (pair a b) c) (function a (function b c)),
-    prim1     _tuples_fst     Tuples.fst         ["a", "b"]      (pair a b) a,
-    prim1     _tuples_snd     Tuples.snd         ["a", "b"]      (pair a b) b,
-    prim1Eval _tuples_uncurry EvalTuples.uncurry ["a", "b", "c"] (function a (function b c)) (function (pair a b) c)]
-  where
-    a = variable "a"
-    b = variable "b"
-    c = variable "c"
-
-hydraLibPairs :: Library
-hydraLibPairs = standardLibrary _hydra_lib_pairs [
-    prim1 _pairs_first  Pairs.first  ["a", "b"] (pair a b) a,
-    prim1 _pairs_second Pairs.second ["a", "b"] (pair a b) b]
-  where
-    a = variable "a"
-    b = variable "b"
