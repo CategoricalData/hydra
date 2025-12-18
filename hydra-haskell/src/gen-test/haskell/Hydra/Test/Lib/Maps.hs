@@ -467,8 +467,7 @@ allTests = Testing.TestGroup {
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "A"))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "B")))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map empty",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -485,8 +484,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermMap M.empty)})),
             Testing.evaluationTestCaseOutput = (Core.TermMap M.empty)})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "requiresInterp"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "findWithDefault",
       Testing.testGroupDescription = Nothing,

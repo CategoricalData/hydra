@@ -31,7 +31,6 @@ import qualified Hydra.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Eval.Lib.Maybes as EvalMaybes
 import qualified Hydra.Eval.Lib.Sets as EvalSets
-import qualified Hydra.Eval.Lib.Tuples as EvalTuples
 
 import qualified Data.List as L
 

@@ -25,7 +25,6 @@ type Int32 = I.Int32
 
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
-tag_requiresInterp = Tag "requiresInterp"
 tag_usesKernelRefs = Tag "usesKernelRefs"
 
 noTags :: TTerm [Tag]
@@ -70,7 +69,6 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
-isRequiresInterp tcase = tag_requiresInterp `L.elem` Testing.testCaseWithMetadataTags tcase
 isUsesKernelRefs tcase = tag_usesKernelRefs `L.elem` Testing.testCaseWithMetadataTags tcase
 
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
