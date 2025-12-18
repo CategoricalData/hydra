@@ -66,9 +66,9 @@ foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -
 
 -- | Interpreter-friendly map for List terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-map funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
+map funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
   Core.applicationFunction = funTerm,
-  Core.applicationArgument = el})) elements))))
+  Core.applicationArgument = el})) acc) [] elements)))))
 
 -- | Interpreter-friendly sortOn for List terms.
 sortOn :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
@@ -81,7 +81,7 @@ sortOn projTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.ordering.lt"))),
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lte"))),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = projTerm,
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
@@ -99,7 +99,7 @@ sortOn projTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
               Core.applicationArgument = splitResult}))
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
           Core.applicationArgument = before})),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -141,13 +141,13 @@ span predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->
                             Core.applicationArgument = el}))}))})),
                       Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
                           Core.applicationArgument = left})),
                         Core.applicationArgument = (Core.TermList [
                           el])}))), right))})),
                     Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean False), left), (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
                         Core.applicationArgument = right})),
                       Core.applicationArgument = (Core.TermList [
                         el])}))))}))) initialState elements)

@@ -91,16 +91,16 @@ apply_ = define "apply" $
   -- Build: flowFun >>= \f -> flowArg >>= \x -> pure (f x)
   produce $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_bind)
       (var "flowFun"))
     (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "f") nothing $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_bind)
           (var "flowArg"))
         (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
           Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_pure)
             (Core.termApplication $ Core.application
               (Core.termVariable $ wrap _Name $ string "f")
               (Core.termVariable $ wrap _Name $ string "x"))))
@@ -128,7 +128,7 @@ bind_ = define "bind" $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.maybe")
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_maybe)
                   -- default (Nothing): return FlowState with Nothing
                   (Core.termRecord $ Core.record (wrap _Name $ string "hydra.compute.FlowState") $
                     list [
@@ -175,14 +175,14 @@ foldl_ = define "foldl" $
     ("acc" ~> "el" ~>
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_bind)
           (var "acc"))
         (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accVal") nothing $
           Core.termApplication $ Core.application
             (Core.termApplication $ Core.application (var "funTerm") (Core.termVariable $ wrap _Name $ string "accVal"))
             (var "el")))
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_pure)
       (var "initTerm"))
     (var "elements")
 
@@ -192,15 +192,43 @@ map_ :: TBinding (Term -> Term -> Flow s Term)
 map_ = define "map" $
   doc "Interpreter-friendly functor map for Flow." $
   "funTerm" ~> "flowTerm" ~>
-  -- Build: bind flowTerm (\x -> pure (funTerm x))
-  produce $ Core.termApplication $ Core.application
-    (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
-      (var "flowTerm"))
-    (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
-      Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
-        (Core.termApplication $ Core.application (var "funTerm") (Core.termVariable $ wrap _Name $ string "x")))
+  -- Pattern match on flowTerm to see if it's a TermWrap (Flow)
+  cases _Term (var "flowTerm")
+    (Just (Monads.unexpected @@ string "flow term" @@ (ShowCore.term @@ var "flowTerm"))) [
+    _Term_wrap>>: "wrappedTerm" ~>
+      "innerFun" <~ Core.wrappedTermBody (var "wrappedTerm") $
+      produce $ Core.termWrap $ Core.wrappedTerm
+        (wrap _Name $ string "hydra.compute.Flow")
+        (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "s") nothing $
+          Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "t") nothing $
+            -- Build: let fs = innerFun s t
+            --        in FlowState (map (\v -> funTerm v) fs.value) fs.state fs.trace
+            Core.termRecord $ Core.record (wrap _Name $ string "hydra.compute.FlowState") $
+              list [
+                Core.field (wrap _Name $ string "value")
+                  (Core.termApplication $ Core.application
+                    (Core.termApplication $ Core.application
+                      (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_map)
+                      (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "v") nothing $
+                        Core.termApplication $ Core.application (var "funTerm") (Core.termVariable $ wrap _Name $ string "v")))
+                    (projectFsMap (string "value"))),
+                Core.field (wrap _Name $ string "state") (projectFsMap (string "state")),
+                Core.field (wrap _Name $ string "trace") (projectFsMap (string "trace"))])]
+  where
+    -- Run the inner function to get FlowState: innerFun s t
+    runFlowMap :: TTerm Term
+    runFlowMap = Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (var "innerFun")
+        (Core.termVariable $ wrap _Name $ string "s"))
+      (Core.termVariable $ wrap _Name $ string "t")
+    -- Project a field from the FlowState
+    projectFsMap :: TTerm String -> TTerm Term
+    projectFsMap fieldName = Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $ Core.projection
+        (wrap _Name $ string "hydra.compute.FlowState")
+        (wrap _Name fieldName))
+      runFlowMap
 
 -- | Interpreter-friendly mapElems for Map with Flow.
 -- mapElems funTerm mapTerm: applies funTerm to each value in the map.
@@ -215,25 +243,25 @@ mapElems_ = define "mapElems" $
       -- Build: sequence (map (\(k,v) -> map (\v' -> (k, v')) (funTerm v)) pairs) >>= fromList
       produce $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_bind)
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.sequence")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_sequence)
             (Core.termList $ Lists.map
               ("p" ~>
                 "k" <~ Pairs.first (var "p") $
                 "v" <~ Pairs.second (var "p") $
                 Core.termApplication $ Core.application
                   (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.map")
+                    (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_map)
                     (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "v'") nothing $
                       Core.termPair $ pair (var "k") (Core.termVariable $ wrap _Name $ string "v'")))
                   (Core.termApplication $ Core.application (var "funTerm") (var "v")))
               (var "pairs"))))
         (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "newPairs") nothing $
           Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_pure)
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maps.fromList")
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
               (Core.termVariable $ wrap _Name $ string "newPairs")))]
 
 -- | Interpreter-friendly mapKeys for Map with Flow.
@@ -249,25 +277,25 @@ mapKeys_ = define "mapKeys" $
       -- Build: sequence (map (\(k,v) -> map (\k' -> (k', v)) (funTerm k)) pairs) >>= fromList
       produce $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.bind")
+          (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_bind)
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.sequence")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_sequence)
             (Core.termList $ Lists.map
               ("p" ~>
                 "k" <~ Pairs.first (var "p") $
                 "v" <~ Pairs.second (var "p") $
                 Core.termApplication $ Core.application
                   (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.map")
+                    (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_map)
                     (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "k'") nothing $
                       Core.termPair $ pair (Core.termVariable $ wrap _Name $ string "k'") (var "v")))
                   (Core.termApplication $ Core.application (var "funTerm") (var "k")))
               (var "pairs"))))
         (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "newPairs") nothing $
           Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_pure)
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maps.fromList")
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
               (Core.termVariable $ wrap _Name $ string "newPairs")))]
 
 -- | Interpreter-friendly mapList for List with Flow (traverse).
@@ -279,7 +307,7 @@ mapList_ = define "mapList" $
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
   -- Build: sequence (map funTerm elements)
   produce $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.sequence")
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_sequence)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
@@ -293,20 +321,34 @@ mapMaybe_ = define "mapMaybe" $
   cases _Term (var "maybeTerm")
     (Just (Monads.unexpected @@ string "optional value" @@ (ShowCore.term @@ var "maybeTerm"))) [
     _Term_maybe>>: "m" ~>
-      produce $ Maybes.maybe
-        -- Nothing case: pure Nothing
+      -- Use ifElse with term-level lambdas to delay evaluation (same pattern as Maybes)
+      produce $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.pure")
-          (Core.termMaybe nothing))
-        -- Just case: map Just (funTerm val)
-        ("val" ~>
-          Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.map")
-              (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
-                Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "x"))
-            (Core.termApplication $ Core.application (var "funTerm") (var "val")))
-        (var "m")]
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+              -- isNothing m
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_isNothing)
+                (Core.termMaybe $ var "m")))
+            -- Lambda returning pure Nothing (delayed)
+            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+              Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_pure)
+                (Core.termMaybe nothing)))
+          -- Lambda returning map Just (funTerm (fromJust m)) (delayed)
+          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_map)
+                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
+                  Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "x"))
+              (Core.termApplication $ Core.application
+                (var "funTerm")
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_fromJust)
+                  (Core.termMaybe $ var "m")))))
+        Core.termUnit]
 
 -- | Interpreter-friendly mapSet for Set with Flow (traverse).
 -- mapSet funTerm setTerm: applies funTerm to each element, collecting results.
@@ -318,10 +360,10 @@ mapSet_ = define "mapSet" $
   -- Build: map fromList (sequence (map funTerm (toList elements)))
   produce $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.map")
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.sets.fromList"))
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_map)
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_fromList))
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.flows.sequence")
+      (Core.termFunction $ Core.functionPrimitive $ encodedName _flows_sequence)
       (Core.termList $ Lists.map
         ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
         (Sets.toList $ var "elements")))
