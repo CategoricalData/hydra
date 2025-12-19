@@ -59,6 +59,7 @@ import qualified Hydra.Sources.Eval.Lib.Flows as EvalFlows
 import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
+import qualified Hydra.Sources.Eval.Lib.Pairs as EvalPairs
 import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
 
 
@@ -76,6 +77,7 @@ evalLibModules = [
   EvalLists.module_,
   EvalMaps.module_,
   EvalMaybes.module_,
+  EvalPairs.module_,
   EvalSets.module_]
 
 module_ :: Module

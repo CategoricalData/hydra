@@ -476,6 +476,19 @@ public interface Types {
     }
 
     /**
+     * Create a type scheme with three type variables.
+     * @param var1 the first type variable name
+     * @param var2 the second type variable name
+     * @param var3 the third type variable name
+     * @param var4 the fourth type variable name
+     * @param body the body type
+     * @return the type scheme
+     */
+    static TypeScheme scheme(String var1, String var2, String var3, String var4, Type body) {
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body);
+    }
+
+    /**
      * Create a type scheme with no type variables.
      * @param body the body type
      * @return the type scheme

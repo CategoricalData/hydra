@@ -1,8 +1,8 @@
 
-module Hydra.Sources.Eval.Lib.Eithers where
+module Hydra.Sources.Eval.Lib.Pairs where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (either)
+import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -47,7 +47,7 @@ import qualified Hydra.Dsl.Meta.Typing        as Typing
 import qualified Hydra.Dsl.Meta.Util          as Util
 import qualified Hydra.Dsl.Meta.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), either)
+import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
 import qualified Data.Map                as M
@@ -59,7 +59,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
 ns :: Namespace
-ns = Namespace "hydra.eval.lib.eithers"
+ns = Namespace "hydra.eval.lib.pairs"
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInNamespace ns
@@ -68,38 +68,22 @@ module_ :: Module
 module_ = Module ns elements
     [Monads.module_, ShowCore.module_]
     kernelTypesModules $
-    Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
+    Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding bimap_,
-      toBinding either_]
+      toBinding bimap_]
 
--- | Interpreter-friendly bimap for Either terms.
--- Takes two function terms (for left and right) and an Either term, applies
--- the appropriate function to the contained value and re-wraps the result.
+-- | Interpreter-friendly bimap for Pair terms.
+-- Applies firstFun to the first element and secondFun to the second element.
 bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
 bimap_ = define "bimap" $
-  doc "Interpreter-friendly bimap for Either terms." $
-  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      produce $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
-        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
-
--- | Interpreter-friendly case analysis for Either terms.
--- Takes two function terms and an Either term, applies the appropriate function
--- to the contained value.
-either_ :: TBinding (Term -> Term -> Term -> Flow s Term)
-either_ = define "either" $
-  doc "Interpreter-friendly case analysis for Either terms." $
-  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
-  cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
-    _Term_either>>: "e" ~>
-      produce $ Eithers.either_
-        ("val" ~> Core.termApplication $ Core.application (var "leftFun") (var "val"))
-        ("val" ~> Core.termApplication $ Core.application (var "rightFun") (var "val"))
-        (var "e")]
+  doc "Interpreter-friendly bimap for Pair terms." $
+  "firstFun" ~> "secondFun" ~> "pairTerm" ~>
+  cases _Term (var "pairTerm")
+    (Just (Monads.unexpected @@ string "pair value" @@ (ShowCore.term @@ var "pairTerm"))) [
+    _Term_pair>>: "p" ~>
+      "fst" <~ Pairs.first (var "p") $
+      "snd" <~ Pairs.second (var "p") $
+      produce $ Core.termPair $ pair
+        (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
+        (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]

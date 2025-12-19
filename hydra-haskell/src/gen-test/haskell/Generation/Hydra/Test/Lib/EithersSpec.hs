@@ -18,6 +18,13 @@ import qualified Hydra.Lib.Strings as Strings
 
 spec :: H.Spec
 spec = H.describe "hydra.lib.eithers primitives" $ do
+  H.describe "bimap" $ do
+    H.it "map left value" $ H.shouldBe
+      (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Left 5))
+      (Left 10)
+    H.it "map right value" $ H.shouldBe
+      (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Right "ab"))
+      (Right 2)
   H.describe "isLeft" $ do
     H.it "left value" $ H.shouldBe
       (Eithers.isLeft (Left 42))

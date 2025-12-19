@@ -30,6 +30,7 @@ import qualified Hydra.Eval.Lib.Flows as EvalFlows
 import qualified Hydra.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Eval.Lib.Maybes as EvalMaybes
+import qualified Hydra.Eval.Lib.Pairs as EvalPairs
 import qualified Hydra.Eval.Lib.Sets as EvalSets
 
 import qualified Data.List as L
@@ -69,18 +70,20 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim3Eval   _eithers_either           EvalEithers.either       ["x", "y", "z"] (function x z) (function y z) (Prims.either_ x y) z,
-    prim2       _eithers_fromLeft         Eithers.fromLeft         ["x", "y"]      x (Prims.either_ x y) x,
-    prim2       _eithers_fromRight        Eithers.fromRight        ["x", "y"]      y (Prims.either_ x y) y,
-    prim1       _eithers_isLeft           Eithers.isLeft           ["x", "y"]      (Prims.either_ x y) boolean,
-    prim1       _eithers_isRight          Eithers.isRight          ["x", "y"]      (Prims.either_ x y) boolean,
-    prim1       _eithers_lefts            Eithers.lefts            ["x", "y"]      (list $ Prims.either_ x y) (list x),
-    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]      (list $ Prims.either_ x y) (pair (list x) (list y)),
-    prim1       _eithers_rights           Eithers.rights           ["x", "y"]      (list $ Prims.either_ x y) (list y)]
+    prim3Eval   _eithers_bimap            EvalEithers.bimap        ["x", "y", "z", "w"] (function x z) (function y w) (Prims.either_ x y) (Prims.either_ z w),
+    prim3Eval   _eithers_either           EvalEithers.either       ["x", "y", "z"]      (function x z) (function y z) (Prims.either_ x y) z,
+    prim2       _eithers_fromLeft         Eithers.fromLeft         ["x", "y"]           x (Prims.either_ x y) x,
+    prim2       _eithers_fromRight        Eithers.fromRight        ["x", "y"]           y (Prims.either_ x y) y,
+    prim1       _eithers_isLeft           Eithers.isLeft           ["x", "y"]           (Prims.either_ x y) boolean,
+    prim1       _eithers_isRight          Eithers.isRight          ["x", "y"]           (Prims.either_ x y) boolean,
+    prim1       _eithers_lefts            Eithers.lefts            ["x", "y"]           (list $ Prims.either_ x y) (list x),
+    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]           (list $ Prims.either_ x y) (pair (list x) (list y)),
+    prim1       _eithers_rights           Eithers.rights           ["x", "y"]           (list $ Prims.either_ x y) (list y)]
   where
     x = variable "x"
     y = variable "y"
     z = variable "z"
+    w = variable "w"
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
@@ -317,11 +320,14 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
 
 hydraLibPairs :: Library
 hydraLibPairs = standardLibrary _hydra_lib_pairs [
-    prim1 _pairs_first  Pairs.first  ["a", "b"] (pair a b) a,
-    prim1 _pairs_second Pairs.second ["a", "b"] (pair a b) b]
+    prim3Eval _pairs_bimap  EvalPairs.bimap  ["a", "b", "c", "d"] (function a c) (function b d) (pair a b) (pair c d),
+    prim1     _pairs_first  Pairs.first      ["a", "b"]           (pair a b) a,
+    prim1     _pairs_second Pairs.second     ["a", "b"]           (pair a b) b]
   where
     a = variable "a"
     b = variable "b"
+    c = variable "c"
+    d = variable "d"
 
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
