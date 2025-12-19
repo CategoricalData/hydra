@@ -19,6 +19,7 @@ _chars_toUpper    = qname _hydra_lib_chars "toUpper" :: Name
 _hydra_lib_eithers :: Namespace
 _hydra_lib_eithers = Namespace "hydra.lib.eithers"
 
+_eithers_bimap            = qname _hydra_lib_eithers "bimap" :: Name
 _eithers_either           = qname _hydra_lib_eithers "either" :: Name
 _eithers_fromLeft         = qname _hydra_lib_eithers "fromLeft" :: Name
 _eithers_fromRight        = qname _hydra_lib_eithers "fromRight" :: Name
@@ -239,6 +240,7 @@ _maybes_pure      = qname _hydra_lib_maybes "pure" :: Name
 _hydra_lib_pairs :: Namespace
 _hydra_lib_pairs = Namespace "hydra.lib.pairs"
 
+_pairs_bimap  = qname _hydra_lib_pairs "bimap"  :: Name
 _pairs_first  = qname _hydra_lib_pairs "first"  :: Name
 _pairs_second = qname _hydra_lib_pairs "second" :: Name
 
