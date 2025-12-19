@@ -91,6 +91,85 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 - The third parameter (`[]`) is for type parameters - leave empty for monomorphic functions
 - Specify input and output types using DSL type constructors
 
+### Higher-order primitives and eval elements
+
+Higher-order primitives (functions that take other functions as arguments) require additional "eval elements" to work with Hydra's interpreter. These eval elements define how the primitive operates on unevaluated Hydra terms.
+
+**When are eval elements needed?**
+- Any primitive that accepts function arguments (e.g., `map`, `filter`, `bimap`, `either`)
+- The eval element applies the function arguments to values and returns unevaluated application terms
+
+**Adding an eval element:**
+
+1. Create or update the Sources module in `/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/<Library>.hs`:
+
+```haskell
+module Hydra.Sources.Eval.Lib.Eithers where
+
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+-- ... other imports
+
+ns :: Namespace
+ns = Namespace "hydra.eval.lib.eithers"
+
+define :: String -> TTerm a -> TBinding a
+define = definitionInNamespace ns
+
+module_ :: Module
+module_ = Module ns elements
+    [Monads.module_, ShowCore.module_]
+    kernelTypesModules $
+    Just "Evaluation-level implementations of Either functions."
+  where
+    elements = [toBinding bimap_]
+
+-- | Interpreter-friendly bimap for Either terms.
+bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+bimap_ = define "bimap" $
+  doc "Interpreter-friendly bimap for Either terms." $
+  "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      produce $ Eithers.either_
+        ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
+        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
+        (var "e")]
+```
+
+2. Add the module to `/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/All.hs`:
+
+```haskell
+import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
+
+evalLibModules :: [Module]
+evalLibModules = [
+  EvalEithers.module_,
+  -- ... other modules
+  ]
+```
+
+3. Generate the Haskell runtime code. The generated module goes in `/hydra-haskell/src/gen-main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+
+4. Update the primitive registration in `Libraries.hs` to use `prim3Eval` instead of `prim3`:
+
+```haskell
+import qualified Hydra.Eval.Lib.Eithers as EvalEithers
+
+hydraLibEithers :: Library
+hydraLibEithers = standardLibrary _hydra_lib_eithers [
+    prim3Eval _eithers_bimap EvalEithers.bimap ["x", "y", "z", "w"] ...,
+    -- Use prim3Eval for higher-order, prim3 for first-order
+    ]
+```
+
+**Key differences between `primN` and `primNEval`:**
+- `prim3` uses the native Haskell implementation directly
+- `prim3Eval` uses the eval element, which returns unevaluated application terms suitable for the interpreter
+
 ### 3. Create DSL wrapper
 
 Add typed wrapper in `/hydra-haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs`:
@@ -282,6 +361,9 @@ When adding a new primitive function:
   - [ ] Name constant in `Hydra.Sources.Libraries`
   - [ ] Registration in `hydraLib<Library>` list
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
+  - [ ] **(If higher-order)** Eval element in `Hydra.Sources.Eval.Lib.<Library>`
+  - [ ] **(If higher-order)** Generated runtime in `Hydra.Eval.Lib.<Library>`
+  - [ ] **(If higher-order)** Use `primNEval` instead of `primN` in registration
 - [ ] **Java**
   - [ ] PrimitiveFunction class in `hydra.lib.<library>`
   - [ ] Import and registration in `Libraries.java`
