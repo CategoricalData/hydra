@@ -14,6 +14,7 @@ import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
+import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
@@ -56,6 +57,7 @@ kernelTermsModules = [
   Constants.module_,
   DecodeCore.module_,
   EncodeCore.module_,
+  Encoding.module_,
   ExtractCore.module_,
   ExtractUtil.module_,
   Formatting.module_,
