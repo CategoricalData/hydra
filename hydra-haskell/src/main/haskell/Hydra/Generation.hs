@@ -12,9 +12,11 @@ import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.All as Sources
+import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -203,3 +205,26 @@ writeLexicon path = do
 -- | Generate the lexicon to the standard location
 writeLexiconToStandardPath :: IO ()
 writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
+
+-- | Generate encoder modules for a list of type modules
+-- For each type module, generates an encoder module with functions to encode values to Terms
+generateEncoderModules :: [Module] -> Flow Graph [Module]
+generateEncoderModules mods = do
+  results <- CM.mapM Encoding.encodeModule mods
+  return $ Y.catMaybes results
+
+-- | Write encoder modules as Haskell to the given path
+writeEncoderHaskell :: FilePath -> [Module] -> IO ()
+writeEncoderHaskell basePath typeMods = do
+  let graph = modulesToGraph typeMods
+  mresult <- runFlow graph (generateEncoderModules typeMods)
+  case mresult of
+    Nothing -> fail "Failed to generate encoder modules"
+    Just encoderMods -> do
+      -- Add core types module to each encoder module's type dependencies
+      -- since the encoders reference hydra.core.Term, hydra.core.Injection, etc.
+      let coreModule = CoreTypes.module_
+          withCoreDeps = fmap (addTypeDep coreModule) encoderMods
+      writeHaskell basePath withCoreDeps
+  where
+    addTypeDep dep mod = mod { moduleTypeDependencies = dep : moduleTypeDependencies mod }

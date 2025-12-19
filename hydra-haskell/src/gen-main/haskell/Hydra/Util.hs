@@ -44,6 +44,14 @@ _Comparison_equalTo = (Core.Name "equalTo")
 
 _Comparison_greaterThan = (Core.Name "greaterThan")
 
+-- | An error that occurred during decoding of a term
+newtype DecodingError = 
+  DecodingError {
+    unDecodingError :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_DecodingError = (Core.Name "hydra.util.DecodingError")
+
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision = 
   -- | Arbitrary precision
