@@ -8,6 +8,16 @@ from hydra.dsl.python import Either, Left, Right, frozenlist
 A = TypeVar("A")
 B = TypeVar("B")
 C = TypeVar("C")
+D = TypeVar("D")
+
+
+def bimap(f: Callable[[A], C], g: Callable[[B], D], e: Either[A, B]) -> Either[C, D]:
+    """Map over both sides of an Either value."""
+    match e:
+        case Left(val):
+            return Left(f(val))
+        case Right(val):
+            return Right(g(val))
 
 
 def either(f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:

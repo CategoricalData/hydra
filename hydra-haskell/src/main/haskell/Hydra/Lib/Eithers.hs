@@ -2,8 +2,12 @@
 
 module Hydra.Lib.Eithers where
 
+import qualified Data.Bifunctor as BF
 import qualified Data.Either as E
 
+
+bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
+bimap = BF.bimap
 
 either :: (a -> c) -> (b -> c) -> Either a b -> c
 either = E.either

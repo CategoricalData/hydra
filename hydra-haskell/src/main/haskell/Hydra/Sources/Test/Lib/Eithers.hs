@@ -28,6 +28,16 @@ rightString s = right (string s)
 
 -- Test groups for hydra.lib.eithers primitives
 
+eithersBimap :: TTerm TestGroup
+eithersBimap = subgroup "bimap" [
+  test "map left value" (leftInt32 5) (leftInt32 10),
+  test "map right value" (rightString "ab") (right (int32 2))]
+  where
+    test name input expected = primCase name _eithers_bimap [
+      lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
+      lambda "s" (primitive _strings_length @@ var "s"),
+      input] expected
+
 eithersIsLeft :: TTerm TestGroup
 eithersIsLeft = subgroup "isLeft" [
   test "left value" (leftInt32 42) true,
@@ -98,6 +108,7 @@ allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.eithers primitives" $
     supergroup "hydra.lib.eithers primitives" [
+      eithersBimap,
       eithersIsLeft,
       eithersIsRight,
       eithersFromLeft,
