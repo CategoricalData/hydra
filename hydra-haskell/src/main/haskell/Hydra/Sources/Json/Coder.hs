@@ -58,7 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
+import qualified Hydra.Sources.Encode.Core                as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
@@ -105,7 +105,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptModules.ns, AdaptTerms.ns, AdaptUtils.ns, EncodeCore.ns,
+    [AdaptModules.ns, AdaptTerms.ns, AdaptUtils.ns, moduleNamespace EncodeCore.module_,
      ExtractCore.ns, HydraLiterals.ns, JsonLanguage.ns, Monads.ns, Rewriting.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "JSON encoding and decoding for Hydra terms"
@@ -412,7 +412,7 @@ untypedTermToJson = define "untypedTermToJson" $
       _Function_lambda>>: "l" ~> var "asRecord" @@ list [
         Core.field (Core.name $ string "parameter") (Core.termVariable $ Core.lambdaParameter $ var "l"),
         Core.field (Core.name $ string "domain") (Core.termMaybe $
-          Maybes.map (EncodeCore.type_) (Core.lambdaDomain $ var "l")),
+          Maybes.map (encoderFor _Type) (Core.lambdaDomain $ var "l")),
         Core.field (Core.name $ string "body") (Core.lambdaBody $ var "l")],
       _Function_primitive>>: "name" ~> produce $ Json.valueString $ Core.unName $ var "name"]) $
   "matchLiteral" <~ ("lit" ~>
@@ -483,7 +483,7 @@ untypedTermToJson = define "untypedTermToJson" $
       Core.field (Core.name $ string "body") (Core.typeLambdaBody $ var "ta")],
     _Term_typeApplication>>: "tt" ~> var "asRecord" @@ list [
       Core.field (Core.name $ string "term") (Core.typeApplicationTermBody $ var "tt"),
-      Core.field (Core.name $ string "type") (EncodeCore.type_ @@ (Core.typeApplicationTermType $ var "tt"))],
+      Core.field (Core.name $ string "type") (encoderFor _Type @@ (Core.typeApplicationTermType $ var "tt"))],
     _Term_union>>: "i" ~>
       "field" <~ (Core.injectionField $ var "i") $
       Logic.ifElse (Equality.equal (Core.fieldTerm $ var "field") Core.termUnit)

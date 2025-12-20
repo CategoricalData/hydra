@@ -9,6 +9,7 @@ import Hydra.Ext.Staging.Cpp.Names
 import Hydra.Ext.Staging.Cpp.Utils
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
@@ -268,7 +269,7 @@ encodeType env typ = case deannotateType typ of
     _ -> fail $ "Unsupported type: " ++ show (deannotateType typ)
   where
     encode = encodeType env
-    typeref t name = pure $ if EncodeCore.isUnitType t
+    typeref t name = pure $ if Schemas.isUnitType t
       then createTemplateType "std::tuple" []
       else createTypeReference (isStructType t) env name
 
@@ -498,7 +499,7 @@ createVariantClass env tname parentClass (FieldType fname variantType) = do
       [baseClass]
       (Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ valueField ++ [constructor]))
   where
-    hasValue = not (EncodeCore.isUnitType variantType)
+    hasValue = not (Schemas.isUnitType variantType)
 
 createVisitorInterface :: CppEnvironment -> Name -> [FieldType] -> Cpp.Declaration
 createVisitorInterface env tname variants = Cpp.DeclarationTemplate $

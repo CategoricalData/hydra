@@ -16,6 +16,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Show.Core as ShowCore
+import Hydra.Encoding (encodeBindingName)
 
 import Prelude hiding ((++))
 import qualified Data.List as L
@@ -209,6 +210,10 @@ encodedUnion = inject _Term _Term_union
 
 encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
+
+-- | Get a reference to an encoder function in hydra.encode.core for a given type name
+encoderFor :: Name -> TTerm (a -> Term)
+encoderFor typeName = var $ unName $ encodeBindingName typeName
 
 -- | Convert a typed element to an untyped element (legacy name, prefer 'toBinding')
 -- Example: el (definitionInModule myModule "addInts" myFunction)

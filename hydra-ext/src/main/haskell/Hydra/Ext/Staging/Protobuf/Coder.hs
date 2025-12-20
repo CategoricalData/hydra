@@ -6,6 +6,7 @@ import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Schemas as Schemas
 import Hydra.Ext.Staging.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
@@ -167,7 +168,7 @@ constructModule mod@(Module ns _ _ _ desc) typeDefs = do
             TypeLiteral _ -> True
             _ -> False
           _ -> False
-    emptyImport types = if checkFields checkType EncodeCore.isUnitType types
+    emptyImport types = if checkFields checkType Schemas.isUnitType types
         then [P3.FileReference "google/protobuf/empty.proto"]
         else []
       where
@@ -348,7 +349,7 @@ findOptions typ = do
 isEnumFields :: [FieldType] -> Bool
 isEnumFields fields = L.foldl (&&) True $ fmap isEnumField fields
   where
-    isEnumField = EncodeCore.isUnitType . simplifyType . fieldTypeType
+    isEnumField = Schemas.isUnitType . simplifyType . fieldTypeType
 
 isEnumDefinition :: Type -> Bool
 isEnumDefinition typ = case simplifyType typ of

@@ -241,8 +241,8 @@ matchUnion = define "matchUnion" $
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
         Maybes.maybe
-          (Flows.fail ((string "no matching case for field ") ++ (Core.unName (var "fname"))
-            ++ (string " in union type ") ++ (Core.unName (var "tname"))))
+          (Flows.fail ((string "no matching case for field \"") ++ (Core.unName (var "fname"))
+            ++ (string "\" in union type ") ++ (Core.unName (var "tname"))))
           ("f" ~> var "f" @@ var "val")
           (Maps.lookup (var "fname") (var "mapping"))) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))

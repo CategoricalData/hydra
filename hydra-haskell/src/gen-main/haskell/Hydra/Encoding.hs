@@ -35,7 +35,7 @@ encodeBinding b = (Flows.bind (Core_.type_ (Core.bindingTerm b)) (\typ -> Flows.
 encodeBindingName :: (Core.Name -> Core.Name)
 encodeBindingName n = (Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.splitOn "." (Core.unName n))))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
   "hydra",
-  "encodeNew"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
+  "encode"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
   Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
 
 -- | Generate the encoder for a field's value
@@ -276,7 +276,7 @@ encodeName n = (Core.TermWrap (Core.WrappedTerm {
 -- | Generate an encoder module namespace from a source module namespace
 encodeNamespace :: (Module.Namespace -> Module.Namespace)
 encodeNamespace ns = (Module.Namespace (Strings.cat [
-  "hydra.encodeNew.",
+  "hydra.encode.",
   (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))]))
 
 -- | Generate an encoder for a record type

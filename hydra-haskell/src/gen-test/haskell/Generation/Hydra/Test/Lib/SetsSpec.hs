@@ -171,6 +171,48 @@ spec = H.describe "hydra.lib.sets primitives" $ do
       (S.fromList [
           1,
           2])
+  H.describe "unions" $ do
+    H.it "union of multiple sets" $ H.shouldBe
+      (Sets.unions [
+          S.fromList [
+            1,
+            2],
+          S.fromList [
+            2,
+            3],
+          (S.fromList [
+            3,
+            4])])
+      (S.fromList [
+          1,
+          2,
+          3,
+          4])
+    H.it "union with empty sets" $ H.shouldBe
+      (Sets.unions [
+          S.fromList [
+            1,
+            2],
+          S.empty,
+          (S.fromList [
+            3])])
+      (S.fromList [
+          1,
+          2,
+          3])
+    H.it "empty list of sets" $ H.shouldBe
+      (Sets.unions [])
+      (S.empty :: S.Set Int)
+    H.it "single set" $ H.shouldBe
+      (Sets.unions [
+          S.fromList [
+            1,
+            2,
+            3]])
+      (S.fromList [
+          1,
+          2,
+          3])
   H.describe "intersection" $ do
     H.it "common elements" $ H.shouldBe
       (Sets.intersection (S.fromList [

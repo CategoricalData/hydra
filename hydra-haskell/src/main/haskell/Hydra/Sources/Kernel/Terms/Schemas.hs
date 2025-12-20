@@ -26,11 +26,15 @@ import Hydra.Kernel hiding (
   graphToTypeContext,
   instantiateType,
   instantiateTypeScheme,
+  isEncodedType,
   isEnumRowType,
   isEnumType,
   isSerializable,
   isSerializableByName,
   isSerializableType,
+  isUnitTerm,
+  isUnitType,
+  isType,
   moduleDependencyNamespaces,
   namespacesForDefinitions,
   nominalApplication,
@@ -106,7 +110,6 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core  as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names        as Names
@@ -115,6 +118,8 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
+
+import qualified Hydra.Sources.Encode.Core  as EncodeCore
 
 
 ns :: Namespace
@@ -125,7 +130,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Constants.ns, DecodeCore.ns, EncodeCore.ns, Lexical.ns, Monads.ns,
+    [Annotations.ns, Constants.ns, DecodeCore.ns, moduleNamespace EncodeCore.module_, Lexical.ns, Monads.ns,
       Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns, Sorting.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Various functions for dereferencing and decoding schema types.")
@@ -154,11 +159,15 @@ module_ = Module ns elements
       toBinding graphToTypeContext,
       toBinding instantiateType,
       toBinding instantiateTypeScheme,
+      toBinding isEncodedType,
       toBinding isEnumRowType,
       toBinding isEnumType,
       toBinding isSerializable,
       toBinding isSerializableType,
       toBinding isSerializableByName,
+      toBinding isType,
+      toBinding isUnitTerm,
+      toBinding isUnitType,
       toBinding moduleDependencyNamespaces,
       toBinding namespacesForDefinitions,
       toBinding nominalApplication,
@@ -217,7 +226,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
         ("ts" ~> Rewriting.typeDependencyNames @@ true @@ Core.typeSchemeType (var "ts"))
         (Core.bindingType (var "el")))
       Sets.empty $
-    Logic.ifElse (EncodeCore.isEncodedType @@ (Rewriting.deannotateTerm @@ var "term"))
+    Logic.ifElse (isEncodedType @@ (Rewriting.deannotateTerm @@ var "term"))
       (Flows.bind (trace (string "dependency namespace") $ DecodeCore.type_ @@ var "term") (
         "typ" ~> Flows.pure (Sets.unions (list [
           var "dataNames", var "schemaNames",
@@ -441,8 +450,17 @@ isEnumRowType :: TBinding (RowType -> Bool)
 isEnumRowType = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   "rt" ~> Lists.foldl (binaryFunction Logic.and) true $
-    Lists.map ("f" ~> EncodeCore.isUnitType @@ (Rewriting.deannotateType @@ (Core.fieldTypeType (var "f")))) $
+    Lists.map ("f" ~> isUnitType @@ (Rewriting.deannotateType @@ (Core.fieldTypeType (var "f")))) $
       Core.rowTypeFields $ var "rt"
+
+isEncodedType :: TBinding (Term -> Bool)
+isEncodedType = define "isEncodedType" $
+  doc "Determines whether a given term is an encoded type" $
+  "t" ~> cases _Term (Rewriting.deannotateTerm @@ var "t") (Just false) [
+    _Term_application>>: "a" ~>
+      isEncodedType @@ (Core.applicationFunction (var "a")),
+    _Term_union>>: "i" ~>
+      Equality.equal (string (unName _Type)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEnumType :: TBinding (Type -> Bool)
 isEnumType = define "isEnumType" $
@@ -486,6 +504,28 @@ isSerializableByName = define "isSerializableByName" $
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
     (typeDependencies @@ false @@ (unaryFunction Equality.identity) @@ var "name")
+
+isType :: TBinding (Type -> Bool)
+isType = define "isType" $
+  doc "Check whether a type is a type (always true for non-encoded types)" $
+  "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just false) [
+    _Type_application>>: "a" ~>
+      isType @@ (Core.applicationTypeFunction (var "a")),
+    _Type_forall>>: "l" ~>
+      isType @@ (Core.forallTypeBody (var "l")),
+    _Type_union>>: "rt" ~>
+      Equality.equal (string (unName _Type)) (Core.unName (Core.rowTypeTypeName (var "rt"))),
+    _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
+
+isUnitTerm :: TBinding (Term -> Bool)
+isUnitTerm = define "isUnitTerm" $
+  doc "Check whether a term is the unit term" $
+  match _Term (Just false) [_Term_unit>>: constant true]
+
+isUnitType :: TBinding (Type -> Bool)
+isUnitType = define "isUnitType" $
+  doc "Check whether a type is the unit type" $
+  match _Type (Just false) [_Type_unit>>: constant true]
 
 moduleDependencyNamespaces :: TBinding (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
@@ -732,7 +772,7 @@ typesToElements = define "typesToElements" $
       (var "name")
       (Core.binding
         (var "name")
-        (EncodeCore.type_ @@ (Pairs.second $ var "pair"))
+        (encoderFor _Type @@ (Pairs.second $ var "pair"))
         nothing)) $
   Maps.fromList $ Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
 

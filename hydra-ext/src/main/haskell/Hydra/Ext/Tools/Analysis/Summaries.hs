@@ -21,6 +21,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Pg.Model as PG
 
@@ -40,7 +41,7 @@ elementSummary withTypes el = do
     findTypeInfo = if withTypes
       then case bindingType el of
         Nothing -> return Nothing
-        Just ts -> Just <$> if EncodeCore.isType (deannotateType $ typeSchemeType ts)
+        Just ts -> Just <$> if Schemas.isType (deannotateType $ typeSchemeType ts)
           then do
             typ <- deannotateType <$> (DecodeCore.type_ $ bindingTerm el)
             return $ " = " ++ ShowCore.type_ typ
