@@ -24,10 +24,10 @@ owl :: String -> Type
 owl = typeref ns
 
 rdf :: String -> Type
-rdf = typeref $ moduleNamespace RdfSyntax.module_
+rdf = typeref $ RdfSyntax.ns
 
 xsd :: String -> Type
-xsd = typeref $ moduleNamespace XmlSchema.module_
+xsd = typeref $ XmlSchema.ns
 
 key_iri :: Name
 key_iri = Name "iri"
@@ -54,7 +54,7 @@ withAnns fields = T.record $
   ("annotations">: T.list (owl "Annotation")):fields
 
 module_ :: Module
-module_ = Module ns elements [Core.module_, RdfSyntax.module_, XmlSchema.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns, RdfSyntax.ns, XmlSchema.ns] [Core.ns] $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
     elements = generalDefinitions ++ owl2Definitions

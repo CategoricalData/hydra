@@ -96,10 +96,13 @@ import Hydra.Json
 import qualified Hydra.Sources.Kernel.Types.Json as Json
 
 
+ns :: Namespace
+ns = Namespace "hydra.ext.org.json.decoding"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.ext.org.json.decoding") elements
+module_ = Module ns elements
     []
-    KernelTypes.kernelTypesModules $
+    KernelTypes.kernelTypesNamespaces $
     Just "Decoding functions for JSON data"
   where
    elements = [

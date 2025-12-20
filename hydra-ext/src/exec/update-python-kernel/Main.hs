@@ -18,7 +18,9 @@ main = do
   putStrLn "Generating kernel modules to ../hydra-python/src/main/python..."
   putStrLn ""
 
-  writePython "../hydra-python/src/main/python" kernelModules
+  -- Universe provides all modules for dependency resolution
+  -- modulesToGenerate specifies which modules to actually generate
+  writePython "../hydra-python/src/main/python" kernelModules kernelModules
 
   putStrLn ""
   putStrLn "=== Done! ==="

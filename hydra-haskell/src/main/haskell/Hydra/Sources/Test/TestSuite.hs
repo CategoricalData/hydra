@@ -30,9 +30,21 @@ import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
 import qualified Hydra.Sources.Test.Checking.All as CheckingAll
+import qualified Hydra.Sources.Test.Checking.Advanced as CheckingAdvanced
+import qualified Hydra.Sources.Test.Checking.AlgebraicTypes as CheckingAlgebraicTypes
+import qualified Hydra.Sources.Test.Checking.Collections as CheckingCollections
+import qualified Hydra.Sources.Test.Checking.Failures as CheckingFailures
+import qualified Hydra.Sources.Test.Checking.Fundamentals as CheckingFundamentals
+import qualified Hydra.Sources.Test.Checking.NominalTypes as CheckingNominalTypes
 import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Sources.Test.Formatting as Formatting
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
+import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as InferenceAlgebraicTypes
+import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
+import qualified Hydra.Sources.Test.Inference.Failures as InferenceFailures
+import qualified Hydra.Sources.Test.Inference.Fundamentals as InferenceFundamentals
+import qualified Hydra.Sources.Test.Inference.KernelExamples as InferenceKernelExamples
+import qualified Hydra.Sources.Test.Inference.NominalTypes as InferenceNominalTypes
 import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
@@ -42,13 +54,16 @@ import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.testSuite"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypesModules $
+module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
     elements = [Phantoms.toBinding allTests]
-    modules = fst <$> testPairs
+    namespaces = fst <$> testPairs
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
@@ -57,37 +72,57 @@ allTests = definitionInModule module_ "allTests" $
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(Module, TBinding TestGroup)]
+libPairs :: [(Namespace, TBinding TestGroup)]
 libPairs = [
-  (Chars.module_, Chars.allTests),
-  (Eithers.module_, Eithers.allTests),
-  (Equality.module_, Equality.allTests),
-  (Flows.module_, Flows.allTests),
-  (Lists.module_, Lists.allTests),
-  (Literals.module_, Literals.allTests),
-  (Logic.module_, Logic.allTests),
-  (Maps.module_, Maps.allTests),
-  (Math.module_, Math.allTests),
-  (Maybes.module_, Maybes.allTests),
-  (Pairs.module_, Pairs.allTests),
-  (Sets.module_, Sets.allTests),
-  (Strings.module_, Strings.allTests)]
+  (Chars.ns, Chars.allTests),
+  (Eithers.ns, Eithers.allTests),
+  (Equality.ns, Equality.allTests),
+  (Flows.ns, Flows.allTests),
+  (Lists.ns, Lists.allTests),
+  (Literals.ns, Literals.allTests),
+  (Logic.ns, Logic.allTests),
+  (Maps.ns, Maps.allTests),
+  (Math.ns, Math.allTests),
+  (Maybes.ns, Maybes.allTests),
+  (Pairs.ns, Pairs.allTests),
+  (Sets.ns, Sets.allTests),
+  (Strings.ns, Strings.allTests)]
 
-otherPairs :: [(Module, TBinding TestGroup)]
+otherPairs :: [(Namespace, TBinding TestGroup)]
 otherPairs = [
-  (Annotations.module_, Annotations.allTests),
-  (CheckingAll.module_, CheckingAll.allTests),
-  (EtaExpansion.module_, EtaExpansion.allTests),
-  (Formatting.module_, Formatting.allTests),
-  (InferenceAll.module_, InferenceAll.allTests),
-  (JsonCoder.module_, JsonCoder.allTests),
-  (JsonParser.module_, JsonParser.allTests),
-  (JsonWriter.module_, JsonWriter.allTests),
-  (Monads.module_, Monads.allTests),
-  (Reduction.module_, Reduction.allTests),
-  (Rewriting.module_, Rewriting.allTests),
-  (Serialization.module_, Serialization.allTests),
-  (Sorting.module_, Sorting.allTests)]
+  (Annotations.ns, Annotations.allTests),
+  (CheckingAll.ns, CheckingAll.allTests),
+  (EtaExpansion.ns, EtaExpansion.allTests),
+  (Formatting.ns, Formatting.allTests),
+  (InferenceAll.ns, InferenceAll.allTests),
+  (JsonCoder.ns, JsonCoder.allTests),
+  (JsonParser.ns, JsonParser.allTests),
+  (JsonWriter.ns, JsonWriter.allTests),
+  (Monads.ns, Monads.allTests),
+  (Reduction.ns, Reduction.allTests),
+  (Rewriting.ns, Rewriting.allTests),
+  (Serialization.ns, Serialization.allTests),
+  (Sorting.ns, Sorting.allTests)]
 
-testPairs :: [(Module, TBinding TestGroup)]
+testPairs :: [(Namespace, TBinding TestGroup)]
 testPairs = libPairs ++ otherPairs
+
+-- | All test suite modules (the actual Module values)
+testSuiteModules :: [Module]
+testSuiteModules =
+  -- Lib tests
+  [Chars.module_, Eithers.module_, Equality.module_, Flows.module_,
+   Lists.module_, Literals.module_, Logic.module_, Maps.module_,
+   Math.module_, Maybes.module_, Pairs.module_, Sets.module_, Strings.module_,
+   -- Other tests
+   Annotations.module_, EtaExpansion.module_, Formatting.module_,
+   JsonCoder.module_, JsonParser.module_, JsonWriter.module_,
+   Monads.module_, Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   -- Checking tests (including sub-modules)
+   CheckingAll.module_,
+   CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
+   CheckingFailures.module_, CheckingFundamentals.module_, CheckingNominalTypes.module_,
+   -- Inference tests (including sub-modules)
+   InferenceAll.module_,
+   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceFailures.module_,
+   InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_]

@@ -20,10 +20,10 @@ avro :: String -> Type
 avro = typeref ns
 
 json :: String -> Type
-json = typeref $ moduleNamespace Json.module_
+json = typeref $ Json.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.module_] [Core.module_] $
+module_ = Module ns elements [Json.ns] [Core.ns] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")
   where

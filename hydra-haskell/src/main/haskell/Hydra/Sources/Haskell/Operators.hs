@@ -97,13 +97,15 @@ import Hydra.Ast
 haskellOperatorsDefinition :: String -> TTerm a -> TBinding a
 haskellOperatorsDefinition = definitionInModule module_
 
+ns :: Namespace
+ns = Namespace "hydra.ext.haskell.operators"
+
 module_ :: Module
 module_ = Module ns elements
-    [Serialization.module_]
-    KernelTypes.kernelTypesModules $
+    [Serialization.ns]
+    KernelTypes.kernelTypesNamespaces $
     Just "AST operators for Haskell"
   where
-    ns = Namespace "hydra.ext.haskell.operators"
     elements = [
       toBinding andOp,
       toBinding apOp,

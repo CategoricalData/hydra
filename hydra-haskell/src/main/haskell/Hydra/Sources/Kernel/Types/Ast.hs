@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [] [Core.module_] $
+module_ = Module ns elements [] [Core.ns] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
     elements = [

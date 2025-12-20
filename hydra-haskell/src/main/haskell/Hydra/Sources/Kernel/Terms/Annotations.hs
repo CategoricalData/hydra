@@ -70,11 +70,14 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.annotations"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.annotations") elements
-    [Constants.module_, DecodeCore.module_, EncodeCore.module_, ExtractCore.module_, Lexical.module_, Monads.module_,
-      Rewriting.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Constants.ns, DecodeCore.ns, EncodeCore.ns, ExtractCore.ns, Lexical.ns, Monads.ns,
+      Rewriting.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
   where
    elements = [

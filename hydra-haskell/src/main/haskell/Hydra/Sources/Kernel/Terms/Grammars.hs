@@ -62,10 +62,13 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import Hydra.Grammar as G
 
 
+ns :: Namespace
+ns = Namespace "hydra.grammars"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.grammars") elements
-    [Annotations.module_, Formatting.module_, Names.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Annotations.ns, Formatting.ns, Names.ns]
+    kernelTypesNamespaces $
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
    elements = [
@@ -129,7 +132,7 @@ grammarToModule = define "grammarToModule" $
       "typ" <~ wrapType @@ (Pairs.second (var "pair")) $
       Annotations.typeElement @@ (toName @@ var "ns" @@ var "lname") @@ var "typ")
     (var "elementPairs") $
-  Module.module_ (var "ns") (var "elements") (list ([] :: [TTerm Module])) (list ([] :: [TTerm Module])) (var "desc")
+  Module.module_ (var "ns") (var "elements") (list ([] :: [TTerm Namespace])) (list ([] :: [TTerm Namespace])) (var "desc")
 
 isComplex :: TBinding (G.Pattern -> Bool)
 isComplex = define "isComplex" $

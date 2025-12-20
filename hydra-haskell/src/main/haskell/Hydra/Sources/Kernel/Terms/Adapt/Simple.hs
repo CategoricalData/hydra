@@ -67,11 +67,14 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 
+ns :: Namespace
+ns = Namespace "hydra.adapt.simple"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.adapt.simple") elements
-    [Inference.module_, Literals.module_, Reduction.module_, Reflect.module_, Rewriting.module_, Schemas.module_,
-      ShowCore.module_, ShowGraph.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Inference.ns, Literals.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
+      ShowCore.ns, ShowGraph.ns]
+    kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"
   where
     elements = [

@@ -6,6 +6,7 @@ import Hydra.Generation
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
 import Hydra.Staging.Testing.Generation.Transform
 import qualified Hydra.Inference as Inference
+import Hydra.Sources.All
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
@@ -62,16 +63,16 @@ buildNamespacesForTestGroup testGen testModule testGroup = do
 -- | Build a mapping from module namespaces to test groups by matching on derived keys.
 -- This handles the case where submodules and subgroups may be in different orders
 -- (e.g., due to code generation reordering).
-buildTestGroupMap :: Module -> TestGroup -> M.Map Namespace TestGroup
-buildTestGroupMap rootModule rootTestGroup =
-  let subModules = moduleTermDependencies rootModule
-      subGroups = testGroupSubgroups rootTestGroup
+-- Note: subModules must be provided explicitly as namespaces since Module dependencies are now just Namespaces.
+buildTestGroupMap :: [Namespace] -> TestGroup -> M.Map Namespace TestGroup
+buildTestGroupMap subModuleNamespaces rootTestGroup =
+  let subGroups = testGroupSubgroups rootTestGroup
       -- Build a map from test group name to test group for lookup
       groupByName = M.fromList [(testGroupName g, g) | g <- subGroups]
-      -- Match each module to its test group by deriving the expected test group name
-      pairs = [(moduleNamespace mod, group) |
-               mod <- subModules,
-               let expectedName = deriveTestGroupName (moduleNamespace mod),
+      -- Match each module namespace to its test group by deriving the expected test group name
+      pairs = [(ns, group) |
+               ns <- subModuleNamespaces,
+               let expectedName = deriveTestGroupName ns,
                Just group <- [M.lookup expectedName groupByName]]
   in M.fromList pairs
   where
@@ -110,28 +111,25 @@ buildTestGroupMap rootModule rootTestGroup =
 
 -- | Create a lookup function from a test group hierarchy
 -- This walks the test group and module hierarchies to build the mapping
-createTestGroupLookup :: Module -> TestGroup -> (Namespace -> Maybe TestGroup)
-createTestGroupLookup rootModule rootTestGroup =
-  let testGroupMap = buildTestGroupMap rootModule rootTestGroup
+-- Note: subModuleNamespaces must be provided explicitly since Module dependencies are now Namespaces
+createTestGroupLookup :: [Namespace] -> TestGroup -> (Namespace -> Maybe TestGroup)
+createTestGroupLookup subModuleNamespaces rootTestGroup =
+  let testGroupMap = buildTestGroupMap subModuleNamespaces rootTestGroup
   in \ns -> M.lookup ns testGroupMap
 
 -- | Main entry point: generate generation test suite from test modules
--- Takes a test generator, output directory, root test suite module and a lookup function for test groups
--- Automatically extracts all submodules and generates tests for each
-generateGenerationTestSuite :: TestGenerator a -> FilePath -> Module -> (Namespace -> Maybe TestGroup) -> IO ()
-generateGenerationTestSuite testGen outDir testSuiteModule lookupTestGroup = do
-  putStrLn "Extracting test modules..."
+-- Takes a test generator, output directory, test modules, and a lookup function for test groups
+-- Note: testModules must be provided explicitly since Module dependencies are now Namespaces
+generateGenerationTestSuite :: TestGenerator a -> FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO ()
+generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
+  putStrLn "Processing test modules..."
 
-  -- Extract all test modules from the module hierarchy (excluding the root)
-  -- The root module is just a container and doesn't have test cases of its own
-  let testModules = concatMap collectModules (moduleTermDependencies testSuiteModule)
-
-  putStrLn $ "Found " ++ show (length testModules) ++ " test module(s)"
+  putStrLn $ "Found " ++ show (length modules) ++ " test module(s)"
   putStrLn "Transforming test suite to generation tests..."
 
   -- Match modules with their test groups and transform
   let moduleTestPairs = [(mod, transformed) |
-        mod <- testModules,
+        mod <- modules,
         Just testGroup <- [lookupTestGroup (moduleNamespace mod)],
         Just transformed <- [transformToCompiledTests testGroup]]
 
@@ -140,7 +138,7 @@ generateGenerationTestSuite testGen outDir testSuiteModule lookupTestGroup = do
     else do
       putStrLn $ "Found " ++ show (length moduleTestPairs) ++ " module(s) with generation tests, generating to " ++ outDir
 
-      let graph = modulesToGraph $ testModules ++ extraModules
+      let graph = modulesToGraph (mainModules ++ testModules) $ modules ++ extraModules
 --      let graph = bootstrapGraph
 
 --      putStrLn $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (M.elems $ graphElements graph)) ++ "}"
@@ -161,9 +159,8 @@ generateGenerationTestSuite testGen outDir testSuiteModule lookupTestGroup = do
     -- Monads.module_ is required for primitives like hydra.monads.pure
     extraModules = [Formatting.module_, Monads.module_, Core.module_]
 
--- | Collect all modules from a module hierarchy (including the root and all submodules)
-collectModules :: Module -> [Module]
-collectModules mod = mod : concatMap collectModules (moduleTermDependencies mod)
+-- Note: collectModules removed since Module dependencies are now Namespaces.
+-- Callers should provide explicit module lists instead of relying on traversal.
 
 -- | Run a Flow action with the given graph, returning Maybe
 runFlowWithGraph :: s -> Flow s a -> IO (Either Trace a)

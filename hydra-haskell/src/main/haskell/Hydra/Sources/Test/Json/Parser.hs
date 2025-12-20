@@ -16,10 +16,13 @@ import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Data.Map as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.json.parser"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.json.parser") elements
+module_ = Module ns elements
     []
-    KernelTypes.kernelTypesModules
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for JSON parsing")
   where
     elements = [

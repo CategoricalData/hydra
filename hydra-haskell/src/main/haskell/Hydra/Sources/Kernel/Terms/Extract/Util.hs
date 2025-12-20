@@ -58,10 +58,13 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 
+ns :: Namespace
+ns = Namespace "hydra.extract.util"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.extract.util") elements
-    [ExtractCore.module_, Monads.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [ExtractCore.ns, Monads.ns]
+    kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.util types")
   where
    elements = [

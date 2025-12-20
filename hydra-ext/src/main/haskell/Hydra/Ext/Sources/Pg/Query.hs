@@ -19,13 +19,13 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 pg :: String -> Type
-pg = typeref $ moduleNamespace PgModel.module_
+pg = typeref $ PgModel.ns
 
 q :: String -> Type
 q = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [PgModel.module_] [Core.module_] $
+module_ = Module ns elements [PgModel.ns] [Core.ns] $
     Just ("A common model for pattern-matching queries over property graphs")
   where
     elements = [

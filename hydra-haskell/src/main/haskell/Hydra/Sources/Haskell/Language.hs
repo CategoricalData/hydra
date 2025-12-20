@@ -94,11 +94,14 @@ import qualified Data.Maybe                                 as Y
 haskellLanguageDefinition :: String -> TTerm a -> TBinding a
 haskellLanguageDefinition = definitionInModule module_
 
+ns :: Namespace
+ns = Namespace "hydra.ext.haskell.language"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.ext.haskell.language")
+module_ = Module ns
   [toBinding haskellLanguage, toBinding reservedWords]
   []
-  KernelTypes.kernelTypesModules $
+  KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Haskell"
 
 haskellLanguage :: TBinding Language

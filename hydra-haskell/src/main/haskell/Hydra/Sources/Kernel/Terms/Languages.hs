@@ -57,11 +57,14 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Reflect as Reflect
 
 
+ns :: Namespace
+ns = Namespace "hydra.languages"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.languages")
+module_ = Module ns
   [toBinding hydraLanguage]
-  [Reflect.module_]
-  kernelTypesModules $
+  [Reflect.ns]
+  kernelTypesNamespaces $
   Just "Language constraints for Hydra Core"
 
 hydraLanguage :: TBinding Language

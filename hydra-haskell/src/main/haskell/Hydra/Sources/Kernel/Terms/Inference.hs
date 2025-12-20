@@ -79,12 +79,15 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Unification  as Unification
 
 
+ns :: Namespace
+ns = Namespace "hydra.inference"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.inference") elements
-    [Annotations.module_, Checking.module_, ExtractCore.module_, Lexical.module_, Monads.module_, Reflect.module_,
-      Rewriting.module_, Schemas.module_, ShowCore.module_, ShowTyping.module_, Sorting.module_, Substitution.module_,
-      Unification.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Monads.ns, Reflect.ns,
+      Rewriting.ns, Schemas.ns, ShowCore.ns, ShowTyping.ns, Sorting.ns, Substitution.ns,
+      Unification.ns]
+    kernelTypesNamespaces $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
     elements = [

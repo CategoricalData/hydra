@@ -96,10 +96,13 @@ import Hydra.Json
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 
+ns :: Namespace
+ns = Namespace "hydra.extract.json"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.extract.json") elements
-    [Monads.module_]
-    KernelTypes.kernelTypesModules $
+module_ = Module ns elements
+    [Monads.ns]
+    KernelTypes.kernelTypesNamespaces $
     Just "Utilities for extracting values from JSON objects"
   where
     elements = [

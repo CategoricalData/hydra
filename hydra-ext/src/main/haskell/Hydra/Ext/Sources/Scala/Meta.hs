@@ -19,7 +19,7 @@ meta :: String -> Type
 meta = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
     elements = [

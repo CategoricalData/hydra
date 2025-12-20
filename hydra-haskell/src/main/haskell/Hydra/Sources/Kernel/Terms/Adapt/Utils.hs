@@ -64,10 +64,13 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting  as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.adapt.utils"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.adapt.utils") elements
-    [Formatting.module_, Names.module_, Reflect.module_, Rewriting.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Formatting.ns, Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("Additional adapter utilities, above and beyond the generated ones.")
   where
    elements = [

@@ -81,11 +81,14 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Meta    as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
+ns :: Namespace
+ns = Namespace "hydra.checking"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.checking") elements
-    [Constants.module_, ExtractCore.module_, Formatting.module_, Lexical.module_, Reflect.module_, Rewriting.module_,
-      Schemas.module_, ShowCore.module_, ShowMeta.module_, Substitution.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
+      Schemas.ns, ShowCore.ns, ShowMeta.ns, Substitution.ns]
+    kernelTypesNamespaces $
     Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"
   where
     elements = [

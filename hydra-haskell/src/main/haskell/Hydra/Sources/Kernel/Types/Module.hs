@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Graph.module_] [Core.module_] $
+module_ = Module ns elements [Graph.ns] [Core.ns] $
     Just "A model for Hydra namespaces and modules"
   where
     elements = [
@@ -73,10 +73,10 @@ module' = define "Module" $
       T.list Core.binding,
     "termDependencies">:
       doc "Any modules which the term expressions of this module directly depend upon" $
-      T.list module',
+      T.list namespace,
     "typeDependencies">:
       doc "Any modules which the type expressions of this module directly depend upon" $
-      T.list module',
+      T.list namespace,
     "description">:
       doc "An optional human-readable description of the module" $
       T.maybe T.string]

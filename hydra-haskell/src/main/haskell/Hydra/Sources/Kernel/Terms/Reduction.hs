@@ -71,10 +71,10 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Arity.module_, Checking.module_, ExtractCore.module_, Lexical.module_,
-      Rewriting.module_,
-      Schemas.module_, ShowCore.module_]
-    kernelTypesModules $
+    [Arity.ns, Checking.ns, ExtractCore.ns, Lexical.ns,
+      Rewriting.ns,
+      Schemas.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Functions for reducing terms and types, i.e. performing computations."
   where
    elements = [

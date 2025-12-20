@@ -17,7 +17,7 @@ hydraCoreGraph :: Graph
 hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements module_)
 
 module_ :: Module
-module_ = Module ns elements [] [module_] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
+module_ = Module ns elements [] [ns] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
     Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."
   where
     elements = [

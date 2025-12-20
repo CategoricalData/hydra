@@ -97,8 +97,8 @@ typeScriptLanguageDefinition = definitionInModule typeScriptLanguageModule
 typeScriptLanguageModule :: Module
 typeScriptLanguageModule = Module (Namespace "hydra.ext.typeScript.language")
   [toBinding typeScriptLanguage, toBinding typeScriptReservedWords]
-  [Rewriting.module_]
-  KernelTypes.kernelTypesModules $
+  [Rewriting.ns]
+  KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for TypeScript"
 
 typeScriptLanguage :: TBinding Language

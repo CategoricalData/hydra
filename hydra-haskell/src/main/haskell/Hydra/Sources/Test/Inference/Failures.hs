@@ -15,10 +15,13 @@ import qualified Data.List as L
 import qualified Data.Map  as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.inference.failures"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.inference.failures") elements
-    [TestGraph.module_]
-    kernelTypesModules
+module_ = Module ns elements
+    [TestGraph.ns]
+    kernelTypesNamespaces
     (Just "Inference tests for expected failures")
   where
     elements = [

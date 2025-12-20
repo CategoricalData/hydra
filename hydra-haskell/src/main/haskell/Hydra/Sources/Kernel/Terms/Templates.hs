@@ -58,10 +58,13 @@ import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.templates"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.templates") elements
-    [DecodeCore.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [DecodeCore.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
    elements = [

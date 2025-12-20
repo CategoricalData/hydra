@@ -121,8 +121,15 @@ cd ../hydra-ext && stack ghci
 And then running the following commands in the GHC REPL.
 
 ```haskell
-writePython "../hydra-python/src/main/python" kernelModules
-writePython "../hydra-python/src/gen-test/python" testModules
+-- Generate the kernel
+-- First arg: output directory
+-- Second arg: universe modules (for dependency resolution)
+-- Third arg: modules to generate
+writePython "../hydra-python/src/main/python" kernelModules kernelModules
+
+-- Generate the test suite
+let allModules = mainModules ++ testModules
+writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
 ```
 
 This will generate the entire Hydra kernel, as well as the common test suite.

@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Model as Model
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -44,7 +45,7 @@ validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
     Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
     Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
-validateGraph :: (Ord t0, Ord t1) => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
+validateGraph :: Ord t0 => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> Maybes.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))
@@ -64,8 +65,8 @@ validateProperties checkValue types props =
       checkValues =  
               let m = (Maps.fromList (Lists.map (\p -> (Model.propertyTypeKey p, (Model.propertyTypeValue p))) types)) 
                   checkPair = (\pair ->  
-                          let key = (fst pair) 
-                              val = (snd pair)
+                          let key = (Pairs.first pair) 
+                              val = (Pairs.second pair)
                           in (Maybes.maybe (Just (prepend "Unexpected key" (Model.unPropertyKey key))) (\typ -> Maybes.map (prepend "Invalid value") (checkValue typ val)) (Maps.lookup key m)))
               in (checkAll (Lists.map checkPair (Maps.toList props)))
   in (checkAll [
@@ -92,39 +93,23 @@ checkAll checks =
   in (Lists.safeHead errors)
 
 edgeError :: ((t0 -> String) -> Model.Edge t0 -> String -> String)
-edgeError showValue e = (prepend (Strings.cat [
-  "Invalid edge with id ",
-  (showValue (Model.edgeId e))]))
+edgeError showValue e = (prepend (Strings.cat2 "Invalid edge with id " (showValue (Model.edgeId e))))
 
 edgeLabelMismatch :: (Model.EdgeLabel -> Model.EdgeLabel -> String)
-edgeLabelMismatch expected actual = (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      "expected ",
-      (Model.unEdgeLabel expected)],
-    ", found "],
-  (Model.unEdgeLabel actual)])
+edgeLabelMismatch expected actual = (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Model.unEdgeLabel expected)) ", found ") (Model.unEdgeLabel actual))
 
 prepend :: (String -> String -> String)
-prepend prefix msg = (Strings.cat [
-  Strings.cat [
-    prefix,
-    ": "],
-  msg])
+prepend prefix msg = (Strings.cat2 (Strings.cat2 prefix ": ") msg)
 
 verify :: (Bool -> t0 -> Maybe t0)
 verify b err = (Logic.ifElse b Nothing (Just err))
 
 vertexError :: ((t0 -> String) -> Model.Vertex t0 -> String -> String)
-vertexError showValue v = (prepend (Strings.cat [
-  "Invalid vertex with id ",
-  (showValue (Model.vertexId v))]))
+vertexError showValue v = (prepend (Strings.cat2 "Invalid vertex with id " (showValue (Model.vertexId v))))
 
 vertexLabelMismatch :: (Model.VertexLabel -> Model.VertexLabel -> String)
 vertexLabelMismatch expected actual = (Strings.cat [
-  Strings.cat [
-    Strings.cat [
-      "expected ",
-      (Model.unVertexLabel expected)],
-    ", found "],
+  "expected ",
+  Model.unVertexLabel expected,
+  ", found ",
   (Model.unVertexLabel actual)])

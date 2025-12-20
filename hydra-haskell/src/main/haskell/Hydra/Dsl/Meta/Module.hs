@@ -12,7 +12,7 @@ definitionTerm = inject _Definition _Definition_term
 definitionType :: TTerm TypeDefinition -> TTerm Definition
 definitionType = inject _Definition _Definition_type
 
-module_ :: TTerm Namespace -> TTerm [Binding] -> TTerm [Module] -> TTerm [Module] -> TTerm (Maybe String) -> TTerm Module
+module_ :: TTerm Namespace -> TTerm [Binding] -> TTerm [Namespace] -> TTerm [Namespace] -> TTerm (Maybe String) -> TTerm Module
 module_ ns elems termDeps typeDeps desc = record _Module [
   _Module_namespace>>: ns,
   _Module_elements>>: elems,
@@ -26,10 +26,10 @@ moduleNamespace m = project _Module _Module_namespace @@ m
 moduleElements :: TTerm Module -> TTerm [Binding]
 moduleElements m = project _Module _Module_elements @@ m
 
-moduleTermDependencies :: TTerm Module -> TTerm [Module]
+moduleTermDependencies :: TTerm Module -> TTerm [Namespace]
 moduleTermDependencies m = project _Module _Module_termDependencies @@ m
 
-moduleTypeDependencies :: TTerm Module -> TTerm [Module]
+moduleTypeDependencies :: TTerm Module -> TTerm [Namespace]
 moduleTypeDependencies m = project _Module _Module_typeDependencies @@ m
 
 moduleDescription :: TTerm Module -> TTerm (Maybe String)

@@ -105,9 +105,9 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptModules.module_, AdaptTerms.module_, AdaptUtils.module_, EncodeCore.module_,
-     ExtractCore.module_, HydraLiterals.module_, JsonLanguage.module_, Monads.module_, Rewriting.module_]
-    KernelTypes.kernelTypesModules $
+    [AdaptModules.ns, AdaptTerms.ns, AdaptUtils.ns, EncodeCore.ns,
+     ExtractCore.ns, HydraLiterals.ns, JsonLanguage.ns, Monads.ns, Rewriting.ns]
+    KernelTypes.kernelTypesNamespaces $
     Just "JSON encoding and decoding for Hydra terms"
   where
     elements = [

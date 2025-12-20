@@ -65,8 +65,8 @@ jsonParserDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module ns elements
-    [Parsers.module_]
-    KernelTypes.kernelTypesModules $
+    [Parsers.ns]
+    KernelTypes.kernelTypesNamespaces $
     Just "JSON parser using Hydra parser combinators"
   where
     ns = Namespace "hydra.json.parser"

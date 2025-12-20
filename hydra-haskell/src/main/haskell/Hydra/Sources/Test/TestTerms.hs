@@ -16,9 +16,12 @@ import           Hydra.Dsl.Meta.Terms as MetaTerms
 -- Type alias to avoid confusion with DSL Module
 type HydraModule = Module
 
+ns :: Namespace
+ns = Namespace "hydra.test.testTerms"
+
 module_ :: HydraModule
-module_ = Module (Namespace "hydra.test.testTerms") elements
-    [TestTypes.module_]
+module_ = Module ns elements
+    [TestTypes.ns]
     []
     (Just "Term definitions for the test suite")
   where

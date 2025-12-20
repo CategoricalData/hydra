@@ -66,8 +66,8 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Monads.module_, ShowCore.module_]
-    kernelTypesModules $
+    [Monads.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
   where
     elements = [

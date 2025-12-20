@@ -66,10 +66,13 @@ import qualified Data.Maybe              as Y
 import Hydra.Ast
 
 
+ns :: Namespace
+ns = Namespace "hydra.serialization"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.serialization") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")
   where
    elements = [
