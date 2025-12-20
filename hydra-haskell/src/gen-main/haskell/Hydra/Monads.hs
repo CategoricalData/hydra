@@ -33,6 +33,9 @@ bind l r =
             Compute.flowStateTrace = (Compute.flowStateTrace fs1)}) (\v -> Compute.unFlow (r v) (Compute.flowStateState fs1) (Compute.flowStateTrace fs1)) (Compute.flowStateValue fs1)))
   in (Compute.Flow q)
 
+eitherToFlow :: ((t0 -> String) -> Either t0 t1 -> Compute.Flow t2 t1)
+eitherToFlow formatError e = (Eithers.either (\l -> fail (formatError l)) (\r -> pure r) e)
+
 -- | An empty trace with no stack, messages, or other attributes
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
