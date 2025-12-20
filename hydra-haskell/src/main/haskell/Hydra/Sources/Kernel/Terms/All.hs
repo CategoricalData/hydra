@@ -13,7 +13,6 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
@@ -43,9 +42,15 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 
+-- Secondary, generated encoding modules
+import qualified Hydra.Sources.Encode.Core     as EncodeCore
+
 
 kernelTermsModules :: [Module]
-kernelTermsModules = [
+kernelTermsModules = kernelPrimaryTermsModules ++ kernelEncodingModules
+
+kernelPrimaryTermsModules :: [Module]
+kernelPrimaryTermsModules = [
   AdaptLiterals.module_,
   AdaptModules.module_,
   AdaptSimple.module_,
@@ -56,7 +61,6 @@ kernelTermsModules = [
   Checking.module_,
   Constants.module_,
   DecodeCore.module_,
-  EncodeCore.module_,
   Encoding.module_,
   ExtractCore.module_,
   ExtractUtil.module_,
@@ -85,3 +89,7 @@ kernelTermsModules = [
   Tarjan.module_,
   Templates.module_,
   Unification.module_]
+
+kernelEncodingModules :: [Module]
+kernelEncodingModules = [
+  EncodeCore.module_]

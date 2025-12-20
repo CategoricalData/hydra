@@ -67,7 +67,7 @@ dependencyNamespaces binds withPrims withNoms withSchema els =
             let dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
             in  
               let schemaNames = (Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Core.bindingType el)) Sets.empty)
-              in (Logic.ifElse (Core__.isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Monads.withTrace "dependency namespace" (Core_.type_ term)) (\typ -> Flows.pure (Sets.unions [
+              in (Logic.ifElse (isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Monads.withTrace "dependency namespace" (Core_.type_ term)) (\typ -> Flows.pure (Sets.unions [
                 dataNames,
                 schemaNames,
                 (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
@@ -233,9 +233,16 @@ instantiateTypeScheme scheme =
       Core.typeSchemeVariables = newVars,
       Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme))}))))
 
+-- | Determines whether a given term is an encoded type
+isEncodedType :: (Core.Term -> Bool)
+isEncodedType t = ((\x -> case x of
+  Core.TermApplication v1 -> (isEncodedType (Core.applicationFunction v1))
+  Core.TermUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v1)))
+  _ -> False) (Rewriting.deannotateTerm t))
+
 -- | Check if a row type represents an enum (all fields are unit-typed)
 isEnumRowType :: (Core.RowType -> Bool)
-isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> Core__.isUnitType (Rewriting.deannotateType (Core.fieldTypeType f))) (Core.rowTypeFields rt)))
+isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> isUnitType (Rewriting.deannotateType (Core.fieldTypeType f))) (Core.rowTypeFields rt)))
 
 -- | Check if a type is an enum type
 isEnumType :: (Core.Type -> Bool)
@@ -264,6 +271,27 @@ isSerializableByName name =
   in (Flows.map (\deps ->  
     let allVariants = (Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps))))
     in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies False Equality.identity name))
+
+-- | Check whether a type is a type (always true for non-encoded types)
+isType :: (Core.Type -> Bool)
+isType t = ((\x -> case x of
+  Core.TypeApplication v1 -> (isType (Core.applicationTypeFunction v1))
+  Core.TypeForall v1 -> (isType (Core.forallTypeBody v1))
+  Core.TypeUnion v1 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v1)))
+  Core.TypeVariable v1 -> (Equality.equal v1 (Core.Name "hydra.core.Type"))
+  _ -> False) (Rewriting.deannotateType t))
+
+-- | Check whether a term is the unit term
+isUnitTerm :: (Core.Term -> Bool)
+isUnitTerm x = case x of
+  Core.TermUnit -> True
+  _ -> False
+
+-- | Check whether a type is the unit type
+isUnitType :: (Core.Type -> Bool)
+isUnitType x = case x of
+  Core.TypeUnit -> True
+  _ -> False
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))

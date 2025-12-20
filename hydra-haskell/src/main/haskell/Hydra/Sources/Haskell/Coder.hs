@@ -58,7 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core     as EncodeCore
+import qualified Hydra.Sources.Encode.Core                as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
@@ -975,7 +975,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
       Names.qname @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
     "typeNameLocal">: "name'" ~>
       Strings.cat $ list [string "_", Names.localNameOf @@ var "name'", string "_type_"],
-    "rawTerm">: EncodeCore.type_ @@ var "typ",
+    "rawTerm">: encoderFor _Type @@ var "typ",
     "rewrite">: "recurse" ~> "term" ~> lets [
       "variantResult">: cases _Term (Rewriting.deannotateTerm @@ var "term")
         (Just nothing) [

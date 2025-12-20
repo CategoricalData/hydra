@@ -15,6 +15,7 @@ import Hydra.Ext.Staging.Python.Names
 import Hydra.Ext.Staging.Python.Utils
 import Hydra.Ext.Staging.CoderUtils
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
 import qualified Hydra.Dsl.Types as Types
@@ -678,7 +679,7 @@ encodeTermInline env noCast term = case deannotateTerm term of
           $ encodeEnumValue env $ fieldName field
         else do
           -- Omit argument for unit-valued variants (resolves #206)
-          args <- if EncodeCore.isUnitTerm (fieldTerm field)
+          args <- if Schemas.isUnitTerm (fieldTerm field)
             then return []
             else do
               parg <- encode $ fieldTerm field
@@ -769,7 +770,7 @@ encodeTermMultiline env term = if L.length args == 1
                       then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
                         encodeName True CaseConventionPascal env tname,
                         encodeEnumValue env2 fname]
-                      else if (isFreeVariableInTerm v body || EncodeCore.isUnitTerm body)
+                      else if (isFreeVariableInTerm v body || Schemas.isUnitTerm body)
                       then Py.ClosedPatternClass $
                         Py.ClassPattern pyVarName Nothing Nothing
                       else Py.ClosedPatternClass $
@@ -1054,8 +1055,8 @@ extendMetaForType topLevel isTermAnnot typ meta = extendFor meta3 typ
             else meta {
               pythonModuleMetadataUsesNode = pythonModuleMetadataUsesNode meta || (not $ L.null fields)}
           where
-            checkForLiteral b (FieldType _ ft) = b || EncodeCore.isUnitType (deannotateType ft)
-            checkForNewType b (FieldType _ ft) = b || not (EncodeCore.isUnitType (deannotateType ft))
+            checkForLiteral b (FieldType _ ft) = b || Schemas.isUnitType (deannotateType ft)
+            checkForNewType b (FieldType _ ft) = b || not (Schemas.isUnitType (deannotateType ft))
         _ -> meta
       where
         meta = L.foldl (\m t -> extendMetaForType False isTermAnnot t m) meta0 $ subtypes t

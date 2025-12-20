@@ -1312,55 +1312,5 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})),
             Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []}]},
-    Testing.TestGroup {
-      Testing.testGroupName = "stringToBinary",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [],
-      Testing.testGroupCases = [
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "simple string",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.stringToBinary"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBinary "hello"))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "empty string",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.stringToBinary"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBinary ""))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []}]},
-    Testing.TestGroup {
-      Testing.testGroupName = "binaryToString",
-      Testing.testGroupDescription = Nothing,
-      Testing.testGroupSubgroups = [],
-      Testing.testGroupCases = [
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "simple string",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.binaryToString"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary "hello"))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "hello"))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "empty string",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.binaryToString"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary ""))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString ""))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

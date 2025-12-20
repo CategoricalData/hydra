@@ -18,7 +18,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Module as ModuleTypes
-import qualified Hydra.EncodeNew.Module as EncodeModule
+import qualified Hydra.Encode.Module as EncodeModule
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -51,7 +51,7 @@ generateSources printDefinitions lang doExpand basePath universeModules modulesT
     -- Data modules: transitive closure of moduleTermDependencies from modules to generate
     -- Plus the modules to generate themselves (they contain the terms we want to generate)
     dataMods = moduleTermDependenciesTransitive namespaceMap modulesToGenerate
-    dataElements = L.filter (not . isNativeType) $ L.concat (moduleElements <$> dataMods)
+    dataElements = L.concat (moduleElements <$> dataMods)
 
     -- Build the schema graph (types only)
     schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
@@ -333,7 +333,7 @@ writeEncoderHaskell basePath universeModules typeModules = do
 
 -- | Convert a generated Module into a Source module.
 -- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
--- The namespace transforms e.g. "hydra.encodeNew.util" to "hydra.sources.encodeNew.util"
+-- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
 moduleToSourceModule :: Module -> Module
 moduleToSourceModule m = Module {
     moduleNamespace = sourceNamespace,
@@ -343,7 +343,7 @@ moduleToSourceModule m = Module {
     moduleDescription = Just $ "Source module for " ++ unNamespace (moduleNamespace m)
   }
   where
-    -- Transform namespace: hydra.encodeNew.util -> hydra.sources.encodeNew.util
+    -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
     sourceNamespace = Namespace $ "hydra.sources." ++
       L.intercalate "." (drop 1 $ LS.splitOn "." $ unNamespace $ moduleNamespace m)
 
@@ -362,7 +362,7 @@ generateEncoderSourceModules universeModules typeModules = do
     return $ fmap moduleToSourceModule encoderMods
 
 -- | Write encoder Source modules as Haskell to the given path.
--- These go to src/gen-main/haskell/Hydra/Sources/EncodeNew/
+-- These go to src/gen-main/haskell/Hydra/Sources/Encode/
 writeEncoderSourceHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeEncoderSourceHaskell basePath universeModules typeModules = do
     sourceMods <- generateEncoderSourceModules universeModules typeModules

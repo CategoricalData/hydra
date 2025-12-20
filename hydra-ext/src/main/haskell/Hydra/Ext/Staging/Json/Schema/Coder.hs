@@ -18,6 +18,7 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Ext.Staging.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json as J
 import qualified Hydra.Reflect as Reflect
@@ -166,7 +167,7 @@ encodeType optional typ = case typ of
           JS.RestrictionMultiple $ JS.MultipleRestrictionEnum (J.ValueString . Core.unName <$> names)]
         asRecord rt = encodeRecordOrUnion True $ AdaptTerms.unionTypeToRecordType rt
         (simpleFields, nonsimpleFields) = L.partition isSimple $ Core.rowTypeFields rt
-        isSimple (Core.FieldType _ ft) = EncodeCore.isUnitType $ Rewriting.deannotateType ft
+        isSimple (Core.FieldType _ ft) = Schemas.isUnitType $ Rewriting.deannotateType ft
     Core.TypeSet st -> do
       elSchema <- JS.Schema <$> encodeType False st
       let arrayRes = [JS.RestrictionArray $ JS.ArrayRestrictionItems $ JS.ItemsSameItems elSchema]
