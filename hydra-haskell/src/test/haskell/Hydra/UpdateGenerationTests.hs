@@ -1,5 +1,6 @@
 module Hydra.UpdateGenerationTests where
 
+import Hydra.Kernel
 import Hydra.Staging.Testing.Generation.Generate
 import Hydra.Staging.Testing.Generation.HaskellCodec (haskellTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
@@ -11,8 +12,14 @@ updateGenerationTestsHaskell = do
   putStrLn "=== Generate Hydra generation tests ==="
   putStrLn ""
 
-  -- Automatically build the lookup function from module and test group hierarchies
-  let lookupFn = createTestGroupLookup TestSuite.module_ GenTests.allTests
+  -- Get the namespaces from TestSuite's term dependencies
+  let testNamespaces = moduleTermDependencies TestSuite.module_
+
+  -- Build the lookup function from namespaces and test group hierarchy
+  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
+
+  -- Get the list of test modules explicitly
+  let testModules = TestSuite.testSuiteModules
 
   -- Generate generation tests to src/gen-test/haskell
   let outputDir = "src/gen-test/haskell"
@@ -20,7 +27,7 @@ updateGenerationTestsHaskell = do
   putStrLn $ "Generating tests into: " ++ outputDir
   putStrLn ""
 
-  generateGenerationTestSuite haskellTestGenerator outputDir TestSuite.module_ lookupFn
+  generateGenerationTestSuite haskellTestGenerator outputDir testModules lookupFn
 
   putStrLn ""
   putStrLn "=== Done! ==="

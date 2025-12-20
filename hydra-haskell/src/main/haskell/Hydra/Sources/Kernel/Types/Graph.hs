@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.module_] [Core.module_] $
+module_ = Module ns elements [Compute.ns] [Core.ns] $
     Just "The extension to graphs of Hydra's core type system (hydra.core)"
   where
     elements = [

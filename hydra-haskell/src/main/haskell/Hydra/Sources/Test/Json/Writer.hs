@@ -15,10 +15,13 @@ import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Data.Map as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.json.writer"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.json.writer") elements
+module_ = Module ns elements
     []
-    KernelTypes.kernelTypesModules
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for JSON serialization")
   where
     elements = [

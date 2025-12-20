@@ -31,26 +31,58 @@ import Hydra.Ext.Staging.Scala.Coder
 import qualified System.FilePath as FP
 
 
-writeCpp :: FP.FilePath -> [Module] -> IO ()
+-- | Generate C++ source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeCpp = generateSources moduleToCpp cppLanguage False
 
-writeGraphql :: FP.FilePath -> [Module] -> IO ()
+-- | Generate GraphQL source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeGraphql = generateSources moduleToGraphql graphqlLanguage False
 
-writeJava :: FP.FilePath -> [Module] -> IO ()
+-- | Generate Java source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeJava :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeJava = generateSources moduleToJava javaLanguage True
 
-writeJsonSchema :: FP.FilePath -> [Module] -> IO ()
+-- | Generate JSON Schema files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False
 
-writePdl :: FP.FilePath -> [Module] -> IO ()
+-- | Generate PDL (Pegasus) source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writePdl :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writePdl = generateSources moduleToPdl pdlLanguage False
 
-writeProtobuf :: FP.FilePath -> [Module] -> IO ()
+-- | Generate Protocol Buffers source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeProtobuf = generateSources moduleToProtobuf protobufLanguage False
 
-writePython :: FP.FilePath -> [Module] -> IO ()
+-- | Generate Python source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writePython = generateSources moduleToPython pythonLanguage True
 
-writeScala :: FP.FilePath -> [Module] -> IO ()
+-- | Generate Scala source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeScala :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writeScala = generateSources moduleToScala scalaLanguage True

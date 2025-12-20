@@ -14,8 +14,11 @@ import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Data.Map as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.monads"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.monads") elements [Monads.module_] [] $
+module_ = Module ns elements [Monads.ns] [] $
     Just "Test cases for hydra.monads functions"
   where
     elements = [Phantoms.toBinding allTests]

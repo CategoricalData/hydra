@@ -92,7 +92,7 @@ data Trace =
   Trace {
     -- | A stack of context labels
     traceStack :: [String],
-    -- | A log of informational messages
+    -- | A log of warnings and/or info messages
     traceMessages :: [String],
     -- | A map of string keys to arbitrary terms as values, for application-specific use
     traceOther :: (M.Map Core.Name Core.Term)}

@@ -99,8 +99,8 @@ cppLanguageDefinition = definitionInModule cppLanguageModule
 cppLanguageModule :: Module
 cppLanguageModule = Module (Namespace "hydra.ext.cpp.language")
   [toBinding cppLanguage, toBinding cppReservedWords]
-  [Lexical.module_]
-  KernelTypes.kernelTypesModules $
+  [Lexical.ns]
+  KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for C++"
 
 cppLanguage :: TBinding Language

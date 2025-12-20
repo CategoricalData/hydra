@@ -19,10 +19,13 @@ import qualified Data.Int as I
 -- Note: We use Int for input types in helpers because Base.int32 expects Int
 -- and produces TTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
 
+ns :: Namespace
+ns = Namespace "hydra.test.sorting"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.sorting") elements
-    [SortingModule.module_]
-    KernelTypes.kernelTypesModules
+module_ = Module ns elements
+    [SortingModule.ns]
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for topological sorting algorithms")
   where
     elements = [Base.toBinding allTests]

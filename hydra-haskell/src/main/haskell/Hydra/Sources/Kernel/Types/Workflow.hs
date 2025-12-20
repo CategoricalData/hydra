@@ -19,7 +19,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.module_, Graph.module_, Module.module_] [Core.module_] $
+module_ = Module ns elements [Compute.ns, Graph.ns, Module.ns] [Core.ns] $
     Just "A model for Hydra transformation workflows"
   where
     elements = [

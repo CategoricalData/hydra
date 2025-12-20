@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 core :: String -> Type
-core = typeref $ moduleNamespace Core.module_
+core = typeref $ Core.ns
 
 features :: String -> Type
 features = typeref ns
@@ -25,7 +25,7 @@ supports :: String -> String -> FieldType
 supports name comment = ("supports" ++ capitalize name)>: doc comment T.boolean
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
       "  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n" ++
       "\n" ++

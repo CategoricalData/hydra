@@ -16,10 +16,13 @@ import qualified Data.Map  as M
 import Prelude hiding (foldl)
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.etaExpansion"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.etaExpansion") elements
-    [TestGraph.module_]
-    kernelTypesModules
+module_ = Module ns elements
+    [TestGraph.ns]
+    kernelTypesNamespaces
     (Just "Test cases for eta expansion of terms")
   where
     elements = [

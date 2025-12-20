@@ -103,25 +103,30 @@ import Hydra.Generation
 Generate all main modules provided in Hydra-Haskell:
 
 ```haskell
-writeHaskell "src/gen-main/haskell" mainModules
+-- First arg: output directory
+-- Second arg: universe modules (for dependency resolution)
+-- Third arg: modules to generate
+writeHaskell "src/gen-main/haskell" mainModules mainModules
 ```
 
 Generate only the Hydra kernel (excluding other Hydra-Haskell artifacts like the Haskell coder, the JSON coder, etc.):
 
 ```haskell
-writeHaskell "src/gen-main/haskell" kernelModules
+writeHaskell "src/gen-main/haskell" kernelModules kernelModules
 ```
 
 Generate specific main modules:
 
 ```haskell
-writeHaskell "src/gen-main/haskell" [haskellLanguageModule, haskellCoderModule]
+-- For specific modules, include dependencies in the universe
+writeHaskell "src/gen-main/haskell" mainModules [haskellLanguageModule, haskellCoderModule]
 ```
 
 Generate kernel test modules:
 
 ```haskell
-writeHaskell "src/gen-test/haskell" testModules
+let allModules = mainModules ++ testModules
+writeHaskell "src/gen-test/haskell" allModules baseTestModules
 ```
 
 Or use the convenience script:
@@ -159,10 +164,12 @@ Then in GHCi:
 import Hydra.Ext.Generation
 
 -- Generate Python kernel
-writePython "../hydra-python/src/gen-main/python" kernelModules
+-- Second arg: universe modules (for dependency resolution)
+-- Third arg: modules to generate
+writePython "../hydra-python/src/main/python" kernelModules kernelModules
 
 -- Generate Java kernel
-writeJava "../hydra-java/src/gen-main/java" kernelModules
+writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
 ```
 
 And similar for test artifacts. See the Hydra-Ext README for more details.
@@ -303,8 +310,9 @@ Complete self-hosting cycle:
 ```bash
 # Generate all kernel code
 stack ghci
+import Hydra.Sources.All
 import Hydra.Generation
-writeHaskell "src/gen-main/haskell" mainModules
+writeHaskell "src/gen-main/haskell" mainModules mainModules
 :q
 
 # Generate kernel tests
@@ -321,9 +329,11 @@ Alternatively, use GHCi for all generation steps:
 
 ```bash
 stack ghci
+import Hydra.Sources.All
 import Hydra.Generation
-writeHaskell "src/gen-main/haskell" mainModules
-writeHaskell "src/gen-test/haskell" testModules
+writeHaskell "src/gen-main/haskell" mainModules mainModules
+let allModules = mainModules ++ testModules
+writeHaskell "src/gen-test/haskell" allModules baseTestModules
 :q
 stack test
 ```

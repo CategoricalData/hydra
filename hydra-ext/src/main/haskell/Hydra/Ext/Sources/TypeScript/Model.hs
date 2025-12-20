@@ -19,7 +19,7 @@ ts :: String -> Type
 ts = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation"
   where
     elements = [

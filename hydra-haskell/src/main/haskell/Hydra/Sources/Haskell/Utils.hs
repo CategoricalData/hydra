@@ -102,13 +102,15 @@ type HaskellNamespaces = Namespaces H.ModuleName
 haskellUtilsDefinition :: String -> TTerm a -> TBinding a
 haskellUtilsDefinition = definitionInModule module_
 
+ns :: Namespace
+ns = Namespace "hydra.ext.haskell.utils"
+
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.module_, HaskellLanguage.module_, Schemas.module_, Names.module_]
-    (HaskellAst.module_:KernelTypes.kernelTypesModules) $
+    [Formatting.ns, HaskellLanguage.ns, Schemas.ns, Names.ns]
+    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utilities for working with Haskell syntax trees"
   where
-    ns = Namespace "hydra.ext.haskell.utils"
     elements = [
       toBinding applicationPattern,
       toBinding elementReference,

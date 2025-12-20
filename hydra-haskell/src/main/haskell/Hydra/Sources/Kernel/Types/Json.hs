@@ -18,7 +18,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [] [Core.module_] $
+module_ = Module ns elements [] [Core.ns] $
     Just "A JSON syntax model. See the BNF at https://www.json.org"
   where
     elements = [

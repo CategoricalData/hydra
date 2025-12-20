@@ -89,7 +89,7 @@ Add them to [Sources/All.hs](https://github.com/CategoricalData/hydra/blob/main/
 ```haskell
 -- In hydra-haskell REPL
 import Hydra.Generation
-writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule]
+writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule] Nothing
 ```
 
 ### For extended languages
@@ -103,7 +103,7 @@ Add them to the appropriate registry in hydra-ext, then generate:
 ```haskell
 -- In hydra-ext REPL or script
 import Hydra.Ext.Generation
-writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule]
+writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule] Nothing
 ```
 
 After generation, you will be able to import the generated code:

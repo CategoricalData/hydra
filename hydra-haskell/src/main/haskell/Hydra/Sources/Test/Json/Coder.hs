@@ -27,10 +27,13 @@ import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.json.coder"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.json.coder") elements
+module_ = Module ns elements
     []
-    KernelTypes.kernelTypesModules
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for the type-directed JSON coder (Hydra Term <-> JSON Value)")
   where
     elements = [

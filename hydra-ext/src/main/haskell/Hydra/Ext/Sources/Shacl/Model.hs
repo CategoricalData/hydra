@@ -22,10 +22,10 @@ shacl :: String -> Type
 shacl = typeref ns
 
 rdf :: String -> Type
-rdf = typeref $ moduleNamespace RdfSyntax.module_
+rdf = typeref $ RdfSyntax.ns
 
 module_ :: Module
-module_ = Module ns elements [RdfSyntax.module_] [Core.module_] $
+module_ = Module ns elements [RdfSyntax.ns] [Core.ns] $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
     elements = [

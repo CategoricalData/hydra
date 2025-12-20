@@ -31,10 +31,13 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.testGraph"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testGraph") elements
-    [TestTerms.module_, TestTypes.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [TestTerms.ns, TestTypes.ns]
+    kernelTypesNamespaces $
     Just ("A module defining the graph used in the test suite.")
   where
    elements = [

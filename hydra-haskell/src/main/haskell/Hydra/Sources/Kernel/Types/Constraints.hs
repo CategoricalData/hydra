@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Query.module_] [Core.module_] $
+module_ = Module ns elements [Query.ns] [Core.ns] $
     Just "A model for path- and pattern-based graph constraints, which may be considered as part of the schema of a graph"
   where
     elements = [

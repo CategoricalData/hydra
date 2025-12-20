@@ -57,10 +57,13 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 
+ns :: Namespace
+ns = Namespace "hydra.show.accessors"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.show.accessors") elements
-    [Names.module_, Rewriting.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Names.ns, Rewriting.ns]
+    kernelTypesNamespaces $
     Just ("Utilities for working with term accessors.")
   where
    elements = [

@@ -20,7 +20,7 @@ gql = typeref ns
 
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_]
+module_ = Module ns elements [Core.ns] [Core.ns]
   $ Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"
     ++ " https://github.com/opengql/grammar/blob/main/GQL.g4")
   where

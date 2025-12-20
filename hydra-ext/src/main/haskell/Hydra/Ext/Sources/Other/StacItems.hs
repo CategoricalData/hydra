@@ -20,16 +20,16 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 geoj :: String -> Type
-geoj = typeref $ moduleNamespace GeoJson.module_
+geoj = typeref $ GeoJson.ns
 
 ianarel :: String -> Type
-ianarel = typeref $ moduleNamespace IanaRelations.module_
+ianarel = typeref $ IanaRelations.ns
 
 stac :: String -> Type
 stac = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [GeoJson.module_, IanaRelations.module_] [Core.module_] $
+module_ = Module ns elements [GeoJson.ns, IanaRelations.ns] [Core.ns] $
     Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
           "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")
   where

@@ -97,8 +97,8 @@ protobufLanguageDefinition = definitionInModule protobufLanguageModule
 protobufLanguageModule :: Module
 protobufLanguageModule = Module (Namespace "hydra.ext.protobuf.language")
   [toBinding protobufLanguage, toBinding protobufReservedWords]
-  [Lexical.module_, Rewriting.module_]
-  KernelTypes.kernelTypesModules $
+  [Lexical.ns, Rewriting.ns]
+  KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for Protobuf v3"
 
 protobufLanguage :: TBinding Language

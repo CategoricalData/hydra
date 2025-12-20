@@ -260,14 +260,9 @@ encodeModule :: (Module.Module -> Compute.Flow Graph.Graph (Maybe Module.Module)
 encodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Flows.pure Nothing) (Flows.bind (Flows.mapList encodeBinding typeBindings) (\encodedBindings -> Flows.pure (Just (Module.Module {
   Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
   Module.moduleElements = encodedBindings,
-  Module.moduleTermDependencies = (Lists.map (\depMod -> Module.Module {
-    Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace depMod)),
-    Module.moduleElements = [],
-    Module.moduleTermDependencies = [],
-    Module.moduleTypeDependencies = [],
-    Module.moduleDescription = Nothing}) (Module.moduleTypeDependencies mod)),
+  Module.moduleTermDependencies = (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)),
   Module.moduleTypeDependencies = [
-    mod],
+    Module.moduleNamespace mod],
   Module.moduleDescription = (Just (Strings.cat [
     "Term encoders for ",
     (Module.unNamespace (Module.moduleNamespace mod))]))}))))))

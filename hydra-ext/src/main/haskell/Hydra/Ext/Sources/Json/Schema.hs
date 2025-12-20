@@ -35,13 +35,13 @@ import qualified Data.Maybe                             as Y
 
 
 module_ :: Module
-module_ = Module ns elements [Json.module_] [Core.module_] $
+module_ = Module ns elements [Json.ns] [Core.ns] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"
     def = datatype ns
     js = typeref ns
-    json = typeref $ moduleNamespace Json.module_
+    json = typeref $ Json.ns
 
     keywordSchemaMap = T.map (js "Keyword") (js "Schema")
     keywordSchemaOrArrayMap = T.map (js "Keyword") (js "SchemaOrArray")

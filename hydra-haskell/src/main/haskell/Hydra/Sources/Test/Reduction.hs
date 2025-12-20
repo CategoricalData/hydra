@@ -11,8 +11,11 @@ import qualified Hydra.Dsl.Meta.Types as MetaTypes
 import Hydra.Dsl.Meta.Base (name)
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.reduction"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.reduction") elements [] [] $
+module_ = Module ns elements [] [] $
     Just "Test cases for term reduction/evaluation mechanics"
   where
     elements = [Phantoms.toBinding allTests]

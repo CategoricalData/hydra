@@ -6,30 +6,16 @@ import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Hydra.Lib.Strings as Strings
-
-import qualified Data.List as L
-import qualified Data.Map as M
 
 
+-- | All test modules (including test suite modules that TestSuite depends on)
 testModules :: [Module]
-testModules = [
+testModules = baseTestModules ++ TestSuite.testSuiteModules
+
+-- | Base test modules (TestGraph, TestTerms, TestTypes, TestSuite)
+baseTestModules :: [Module]
+baseTestModules = [
   TestGraph.module_,
   TestTerms.module_,
   TestTypes.module_,
-  TestSuite.module_]  -- Include TestSuite itself, not just its dependencies
-  ++ testModuleAndDependencies TestSuite.module_
-
-moduleAndDependencies :: Module -> [Module]
-moduleAndDependencies modl = M.elems $ add M.empty modl
-  where
-    add m md = M.insert (moduleNamespace md) md m `M.union` M.unions (fmap (add m) (moduleTermDependencies md))
-
-testModuleAndDependencies :: Module -> [Module]
-testModuleAndDependencies modl = L.filter isTestModule $ M.elems (getAllDeps modl)
-  where
-     isTestModule md = L.take 11 (unNamespace $ moduleNamespace md) == "hydra.test."
-     getAllDeps md = L.foldl addDeps M.empty (moduleTermDependencies md)
-     addDeps acc m
-       | isTestModule m = M.insert (moduleNamespace m) m acc `M.union` getAllDeps m
-       | otherwise = acc
+  TestSuite.module_]

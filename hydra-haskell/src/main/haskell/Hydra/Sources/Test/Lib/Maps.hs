@@ -16,8 +16,11 @@ import qualified Data.Map as M
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.lib.maps"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.maps") elements [] [] $
+module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.maps primitives"
   where
     elements = [Phantoms.toBinding allTests]

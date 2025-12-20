@@ -19,7 +19,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Graph.module_, Compute.module_, Variants.module_] [Core.module_] $
+module_ = Module ns elements [Graph.ns, Compute.ns, Variants.ns] [Core.ns] $
     Just "Abstractions for paired transformations between languages"
   where
     elements = [

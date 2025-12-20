@@ -118,8 +118,8 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Names.module_, Sorting.module_]
-    kernelTypesModules $
+    [Names.ns, Sorting.ns]
+    kernelTypesNamespaces $
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [

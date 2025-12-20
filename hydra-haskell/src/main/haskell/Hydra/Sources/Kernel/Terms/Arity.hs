@@ -63,7 +63,7 @@ define = definitionInNamespace ns
 module_ :: Module
 module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just "Functions dealing with arguments and arity."
   where
     elements = [

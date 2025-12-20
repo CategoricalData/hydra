@@ -61,10 +61,13 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.adapt.literals"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.adapt.literals") elements
-    [AdaptUtils.module_, ExtractCore.module_, Monads.module_, Reflect.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [AdaptUtils.ns, ExtractCore.ns, Monads.ns, Reflect.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Adapter framework for literal types and terms"
   where
    elements = [

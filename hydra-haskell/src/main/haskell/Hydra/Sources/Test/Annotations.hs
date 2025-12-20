@@ -26,8 +26,11 @@ testState :: TTerm Term
 testState = unit
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.annotations"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.annotations") elements [Annotations.module_] [] $
+module_ = Module ns elements [Annotations.ns] [] $
     Just "Test cases for hydra.annotations functions"
   where
     elements = [Phantoms.toBinding allTests]

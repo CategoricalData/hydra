@@ -17,10 +17,13 @@ import qualified Data.List as L
 import qualified Data.Map  as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.checking.nominalTypes"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.checking.nominalTypes") elements
-    [TestGraph.module_]
-    kernelTypesModules
+module_ = Module ns elements
+    [TestGraph.ns]
+    kernelTypesNamespaces
     (Just "Nominal type checking test cases: records, unions, field access, injection, projection")
   where
     elements = [

@@ -11,8 +11,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
 import qualified Hydra.Ext.Haskell.Serde as Serde
@@ -37,7 +36,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core___
+import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
@@ -205,7 +204,7 @@ encodeLiteral l = ((\x -> case x of
     Core.IntegerValueUint32 v2 -> (Flows.pure (Utils.hslit (Ast.LiteralInteger (Literals.uint32ToBigint v2))))
     Core.IntegerValueUint64 v2 -> (Flows.pure (Utils.hslit (Ast.LiteralInteger (Literals.uint64ToBigint v2))))) v1)
   Core.LiteralString v1 -> (Flows.pure (Utils.hslit (Ast.LiteralString v1)))
-  _ -> (Flows.fail (Strings.cat2 "literal value " (Core___.literal l)))) l)
+  _ -> (Flows.fail (Strings.cat2 "literal value " (Core__.literal l)))) l)
 
 encodeTerm :: (Module.Namespaces Ast.ModuleName -> Core.Term -> Compute.Flow Graph.Graph Ast.Expression)
 encodeTerm namespaces term =  
@@ -289,7 +288,7 @@ encodeTerm namespaces term =
               term_ = (Core.wrappedTermBody v1)
               lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
           in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
-        _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core___.term term)))) (Rewriting.deannotateTerm term))
+        _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core__.term term)))) (Rewriting.deannotateTerm term))
 
 encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow t0 Ast.Type)
 encodeType namespaces typ =  
@@ -333,9 +332,9 @@ encodeType namespaces typ =
         Core.IntegerTypeInt16 -> (Flows.pure (Ast.TypeVariable (Utils.rawName "I.Int16")))
         Core.IntegerTypeInt32 -> (Flows.pure (Ast.TypeVariable (Utils.rawName "Int")))
         Core.IntegerTypeInt64 -> (Flows.pure (Ast.TypeVariable (Utils.rawName "I.Int64")))
-        _ -> (Flows.fail (Strings.cat2 "unexpected integer type: " (Core___.integerType v2)))) v2)
+        _ -> (Flows.fail (Strings.cat2 "unexpected integer type: " (Core__.integerType v2)))) v2)
       Core.LiteralTypeString -> (Flows.pure (Ast.TypeVariable (Utils.rawName "String")))
-      _ -> (Flows.fail (Strings.cat2 "unexpected literal type: " (Core___.literalType v1)))) v1)
+      _ -> (Flows.fail (Strings.cat2 "unexpected literal type: " (Core__.literalType v1)))) v1)
     Core.TypeMap v1 ->  
       let kt = (Core.mapTypeKeys v1) 
           vt = (Core.mapTypeValues v1)
@@ -361,7 +360,7 @@ encodeType namespaces typ =
     Core.TypeWrap v1 ->  
       let name = (Core.wrappedTypeTypeName v1)
       in (ref name)
-    _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core___.type_ typ)))) (Rewriting.deannotateType typ)))
+    _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core__.type_ typ)))) (Rewriting.deannotateType typ)))
 
 encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
@@ -497,115 +496,6 @@ toDataDeclaration namespaces def =
                     Ast.declarationWithCommentsComments = comments})))))))) (Rewriting.deannotateTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term Nothing))
 
-toTypeDeclarations :: (Module.Namespaces Ast.ModuleName -> Core.Binding -> Core.Term -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
-toTypeDeclarations namespaces el term =  
-  let elementName = (Core.bindingName el) 
-      lname = (Names.localNameOf elementName)
-      hname = (Utils.simpleName lname)
-      declHead = (\name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Ast.DeclarationHeadSimple name) ( 
-              let h = (Lists.head vars_) 
-                  rest = (Lists.tail vars_)
-                  hvar = (Ast.Variable (Utils.simpleName (Core.unName h)))
-              in (Ast.DeclarationHeadApplication (Ast.ApplicationDeclarationHead {
-                Ast.applicationDeclarationHeadFunction = (declHead name rest),
-                Ast.applicationDeclarationHeadOperand = hvar}))))
-      newtypeCons = (\el_ -> \typ_ ->  
-              let hname = (Utils.simpleName (Utils.newtypeAccessorName (Core.bindingName el_)))
-              in (Flows.bind (adaptTypeToHaskellAndEncode namespaces typ_) (\htype ->  
-                let hfield = Ast.FieldWithComments {
-                        Ast.fieldWithCommentsField = Ast.Field {
-                          Ast.fieldName = hname,
-                          Ast.fieldType = htype},
-                        Ast.fieldWithCommentsComments = Nothing} 
-                    constructorName = (Utils.simpleName (Names.localNameOf (Core.bindingName el_)))
-                in (Flows.pure (Ast.ConstructorWithComments {
-                  Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
-                    Ast.recordConstructorName = constructorName,
-                    Ast.recordConstructorFields = [
-                      hfield]})),
-                  Ast.constructorWithCommentsComments = Nothing})))))
-      recordCons = (\lname_ -> \fields ->  
-              let toField = (\fieldType ->  
-                      let fname = (Core.fieldTypeName fieldType) 
-                          ftype = (Core.fieldTypeType fieldType)
-                          hname_ = (Utils.simpleName (Strings.cat2 (Formatting.decapitalize lname_) (Formatting.capitalize (Core.unName fname))))
-                      in (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.bind (Annotations.getTypeDescription ftype) (\comments -> Flows.pure (Ast.FieldWithComments {
-                        Ast.fieldWithCommentsField = Ast.Field {
-                          Ast.fieldName = hname_,
-                          Ast.fieldType = htype},
-                        Ast.fieldWithCommentsComments = comments})))))
-              in (Flows.bind (Flows.mapList toField fields) (\hFields -> Flows.pure (Ast.ConstructorWithComments {
-                Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
-                  Ast.recordConstructorName = (Utils.simpleName lname_),
-                  Ast.recordConstructorFields = hFields})),
-                Ast.constructorWithCommentsComments = Nothing}))))
-      unionCons = (\g_ -> \lname_ -> \fieldType ->  
-              let fname = (Core.fieldTypeName fieldType) 
-                  ftype = (Core.fieldTypeType fieldType)
-                  deconflict = (\name ->  
-                          let tname = (Names.unqualifyName (Module.QualifiedName {
-                                  Module.qualifiedNameNamespace = (Just (Pairs.first (Module.namespacesFocus namespaces))),
-                                  Module.qualifiedNameLocal = name}))
-                          in (Logic.ifElse (Maybes.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
-              in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
-                let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
-                in (Flows.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
-                  htype]))) (\typeList -> Flows.pure (Ast.ConstructorWithComments {
-                  Ast.constructorWithCommentsBody = (Ast.ConstructorOrdinary (Ast.OrdinaryConstructor {
-                    Ast.ordinaryConstructorName = (Utils.simpleName nm),
-                    Ast.ordinaryConstructorFields = typeList})),
-                  Ast.constructorWithCommentsComments = comments}))))))
-  in (Monads.withTrace (Strings.cat2 "type element " (Core.unName elementName)) (Flows.bind Monads.getState (\g -> Flows.bind (Monads.withTrace "to type declarations" (Core_.type_ term)) (\t -> Flows.bind (Schemas.isSerializable el) (\isSer ->  
-    let deriv = (Ast.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
-            "Eq",
-            "Ord",
-            "Read",
-            "Show"]) [])) 
-        unpackResult = (Utils.unpackForallType g t)
-        vars = (Pairs.first unpackResult)
-        t_ = (Pairs.second unpackResult)
-        hd = (declHead hname (Lists.reverse vars))
-    in (Flows.bind ((\x -> case x of
-      Core.TypeRecord v1 -> (Flows.bind (recordCons lname (Core.rowTypeFields v1)) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
-        Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
-        Ast.dataDeclarationContext = [],
-        Ast.dataDeclarationHead = hd,
-        Ast.dataDeclarationConstructors = [
-          cons],
-        Ast.dataDeclarationDeriving = [
-          deriv]}))))
-      Core.TypeUnion v1 -> (Flows.bind (Flows.mapList (unionCons g lname) (Core.rowTypeFields v1)) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
-        Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
-        Ast.dataDeclarationContext = [],
-        Ast.dataDeclarationHead = hd,
-        Ast.dataDeclarationConstructors = cons,
-        Ast.dataDeclarationDeriving = [
-          deriv]}))))
-      Core.TypeWrap v1 ->  
-        let tname = (Core.wrappedTypeTypeName v1) 
-            wt = (Core.wrappedTypeBody v1)
-        in (Flows.bind (newtypeCons el wt) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
-          Ast.dataDeclarationKeyword = Ast.DataOrNewtypeNewtype,
-          Ast.dataDeclarationContext = [],
-          Ast.dataDeclarationHead = hd,
-          Ast.dataDeclarationConstructors = [
-            cons],
-          Ast.dataDeclarationDeriving = [
-            deriv]}))))
-      _ -> (Flows.bind (adaptTypeToHaskellAndEncode namespaces t) (\htype -> Flows.pure (Ast.DeclarationType (Ast.TypeDeclaration {
-        Ast.typeDeclarationName = hd,
-        Ast.typeDeclarationType = htype}))))) (Rewriting.deannotateType t_)) (\decl -> Flows.bind (Annotations.getTermDescription term) (\comments -> Flows.bind (Logic.ifElse includeTypeDefinitions (Flows.bind (typeDecl namespaces elementName t) (\decl_ -> Flows.pure [
-      decl_])) (Flows.pure [])) (\tdecls ->  
-      let mainDecl = Ast.DeclarationWithComments {
-              Ast.declarationWithCommentsBody = decl,
-              Ast.declarationWithCommentsComments = comments} 
-          nameDecls_ = (nameDecls g namespaces elementName t)
-      in (Flows.pure (Lists.concat [
-        [
-          mainDecl],
-        nameDecls_,
-        tdecls])))))))))))
-
 toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
 toTypeDeclarationsFrom namespaces elementName typ =  
   let lname = (Names.localNameOf elementName) 
@@ -720,7 +610,7 @@ typeDecl namespaces name typ =
               "_",
               Names.localNameOf name_,
               "_type_"])
-      rawTerm = (Core__.type_ typ)
+      rawTerm = (Core_.type_ typ)
       rewrite = (\recurse -> \term ->  
               let variantResult = ((\x -> case x of
                       Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.injectionTypeName v1) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v1)) Nothing)

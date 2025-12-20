@@ -66,8 +66,8 @@ jsonSerdeDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module ns elements
-    [Serialization.module_]
-    KernelTypes.kernelTypesModules $
+    [Serialization.ns]
+    KernelTypes.kernelTypesNamespaces $
     Just "JSON serialization functions using the Hydra AST"
   where
     ns = Namespace "hydra.json.writer"

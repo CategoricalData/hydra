@@ -13,8 +13,11 @@ import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.lib.maybes"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.maybes") elements [] [] $
+module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.maybes primitives"
   where
     elements = [Phantoms.toBinding allTests]

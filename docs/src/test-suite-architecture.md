@@ -51,7 +51,7 @@ Tests are organized as proper Hydra modules with:
 3. **Module Dependencies** - References to other test modules
 4. **Schema Dependencies** - Type schemas needed for test construction
 
-When you run `writeHaskell "src/gen-test/haskell" testModules`, each module generates a separate file based on its namespace:
+When you run `writeHaskell "src/gen-test/haskell" allModules baseTestModules` (where `allModules = mainModules ++ testModules`), each module generates a separate file based on its namespace:
 - `hydra.test.checking.fundamentals` → `Hydra/Test/Checking/Fundamentals.hs`
 - `hydra.test.inference.algebraicTypes` → `Hydra/Test/Inference/AlgebraicTypes.hs`
 - `hydra.test.etaExpansion` → `Hydra/Test/EtaExpansion.hs`
@@ -321,10 +321,15 @@ TestSuite (common)
 
 ```haskell
 -- In GHCi:
+import Hydra.Sources.All
 import Hydra.Generation
 
 -- Generate all test modules
-writeHaskell "src/gen-test/haskell" testModules
+-- First arg: output directory
+-- Second arg: universe modules (for dependency resolution)
+-- Third arg: modules to generate
+let allModules = mainModules ++ testModules
+writeHaskell "src/gen-test/haskell" allModules baseTestModules
 ```
 
 This generates separate files for each test module based on their namespaces:
@@ -354,13 +359,17 @@ The same test modules can be generated for other languages:
 
 ```haskell
 -- From hydra-ext package
+import Hydra.Sources.All
 import Hydra.Ext.Generation
 
+-- Set up the universe
+let allModules = mainModules ++ testModules
+
 -- Generate Python tests
-writePython "../hydra-python/src/gen-test/python" testModules
+writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
 
 -- Generate Java tests
-writeJava "../hydra-java/src/gen-test/java" testModules
+writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
 ```
 
 ## Best Practices
@@ -447,8 +456,10 @@ To add a new test module:
 5. **Generate and verify**:
    ```bash
    stack ghci
+   import Hydra.Sources.All
    import Hydra.Generation
-   writeHaskell "src/gen-test/haskell" testModules
+   let allModules = mainModules ++ testModules
+   writeHaskell "src/gen-test/haskell" allModules baseTestModules
    :q
    stack test
    ```
