@@ -13,10 +13,13 @@ import           Hydra.Dsl.Meta.Phantoms (toBinding, definitionInModule, firstCl
 import           Hydra.Dsl.Meta.Base (name, (>:))
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.testTypes"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testTypes") elements
+module_ = Module ns elements
     []
-    kernelTypesModules
+    kernelTypesNamespaces
     (Just "Type definitions for the test suite")
   where
     elements = [

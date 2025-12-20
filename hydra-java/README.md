@@ -26,7 +26,7 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code o
 
 - **`src/gen-test/java/`** - Generated test suite
   - Common tests ensuring parity with Haskell and Python
-  - Generated using `writeJava "../hydra-java/src/gen-test/java" testModules`
+  - Generated using `writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules`
 
 To regenerate the Java code, see the [Hydra-Ext README](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/README.md#code-generation).
 

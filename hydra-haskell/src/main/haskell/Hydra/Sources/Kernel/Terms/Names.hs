@@ -59,10 +59,13 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
+ns :: Namespace
+ns = Namespace "hydra.names"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.names") elements
-    [Formatting.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Formatting.ns]
+    kernelTypesNamespaces $
     Just ("Functions for working with qualified names.")
   where
    elements = [

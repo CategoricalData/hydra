@@ -57,10 +57,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.show.core"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.show.core") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just "String representations of hydra.core types"
   where
    elements = [

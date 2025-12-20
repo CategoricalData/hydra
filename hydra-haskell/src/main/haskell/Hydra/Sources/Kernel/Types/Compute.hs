@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just "Abstractions for single- and bidirectional transformations"
   where
     elements = [
@@ -70,7 +70,7 @@ flow :: Binding
 flow = define "Flow" $
   doc "A variant of the State monad with built-in logging and error handling" $
   T.forAlls ["s", "v"] $ T.wrap $
-  "s" ~> trace ~> flowState @@ "s" @@ "v"
+    "s" ~> trace ~> flowState @@ "s" @@ "v"
 
 flowState :: Binding
 flowState = define "FlowState" $
@@ -94,7 +94,7 @@ trace = define "Trace" $
       doc "A stack of context labels" $
       T.list T.string,
     "messages">:
-      doc "A log of informational messages" $
+      doc "A log of warnings and/or info messages" $
       T.list T.string,
     "other">:
       doc "A map of string keys to arbitrary terms as values, for application-specific use" $

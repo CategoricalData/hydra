@@ -58,10 +58,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.formatting"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.formatting") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just "String formatting types and functions."
   where
     elements = [

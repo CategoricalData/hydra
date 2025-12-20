@@ -106,9 +106,9 @@ haskellCoderDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module ns elements
-    [HaskellSerde.module_, HaskellUtils.module_,
-      AdaptModules.module_, Rewriting.module_, Serialization.module_]
-    (HaskellAst.module_:KernelTypes.kernelTypesModules) $
+    [HaskellSerde.ns, HaskellUtils.ns,
+      AdaptModules.ns, Rewriting.ns, Serialization.ns]
+    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"
@@ -131,7 +131,7 @@ module_ = Module ns elements
       toBinding moduleToHaskell,
       toBinding nameDecls,
       toBinding toDataDeclaration,
-      toBinding toTypeDeclarations,
+--      toBinding toTypeDeclarations,
       toBinding toTypeDeclarationsFrom,
       toBinding typeDecl]
 
@@ -723,128 +723,128 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
     "comments" <<~ Annotations.getTermDescription @@ var "term" $
     var "toDecl" @@ var "comments" @@ var "hname" @@ var "term" @@ nothing
 
-toTypeDeclarations :: TBinding (HaskellNamespaces -> Binding -> Term -> Flow Graph [H.DeclarationWithComments])
-toTypeDeclarations = haskellCoderDefinition "toTypeDeclarations" $
-  "namespaces" ~> "el" ~> "term" ~> lets [
-    "elementName">: Core.bindingName $ var "el",
-    "lname">: Names.localNameOf @@ var "elementName",
-    "hname">: HaskellUtils.simpleName @@ var "lname",
-    "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
-      (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
-      (lets [
-        "h">: Lists.head $ var "vars'",
-        "rest">: Lists.tail $ var "vars'",
-        "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
-        inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
-          H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
-          H._ApplicationDeclarationHead_operand>>: var "hvar"]),
-    "newtypeCons">: "el'" ~> "typ'" ~> lets [
-      "hname">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ (Core.bindingName $ var "el'"))] $
-      "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" $ lets [
-      "hfield">: record H._FieldWithComments [
-        H._FieldWithComments_field>>: record H._Field [
-          H._Field_name>>: var "hname",
-          H._Field_type>>: var "htype"],
-        H._FieldWithComments_comments>>: nothing],
-      "constructorName">: HaskellUtils.simpleName @@ (Names.localNameOf @@ (Core.bindingName $ var "el'"))] $
-      Flows.pure $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
-          H._RecordConstructor_name>>: var "constructorName",
-          H._RecordConstructor_fields>>: list [var "hfield"]],
-        H._ConstructorWithComments_comments>>: nothing],
-    "recordCons">: "lname'" ~> "fields" ~> lets [
-      "toField">: "fieldType" ~> lets [
-        "fname">: Core.fieldTypeName $ var "fieldType",
-        "ftype">: Core.fieldTypeType $ var "fieldType",
-        "hname'">: HaskellUtils.simpleName @@ Strings.cat2
-          (Formatting.decapitalize @@ var "lname'")
-          (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" $
-        "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $
-        Flows.pure $ record H._FieldWithComments [
-          H._FieldWithComments_field>>: record H._Field [
-            H._Field_name>>: var "hname'",
-            H._Field_type>>: var "htype"],
-          H._FieldWithComments_comments>>: var "comments"]] $
-      "hFields" <<~ Flows.mapList (var "toField") (var "fields") $
-      Flows.pure $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
-          H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
-          H._RecordConstructor_fields>>: var "hFields"],
-        H._ConstructorWithComments_comments>>: nothing],
-    "unionCons">: "g'" ~> "lname'" ~> "fieldType" ~> lets [
-      "fname">: Core.fieldTypeName $ var "fieldType",
-      "ftype">: Core.fieldTypeType $ var "fieldType",
-      "deconflict">: "name" ~> lets [
-        "tname">: Names.unqualifyName @@ record _QualifiedName [
-          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
-          _QualifiedName_local>>: var "name"]] $
-        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
-          (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
-          (var "name")] $
-      "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
-      "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-      "typeList" <<~ (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
-        (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
-        Flows.bind (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype") $ "htype" ~>
-          Flows.pure $ list [var "htype"]) $
-      Flows.pure $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
-          H._OrdinaryConstructor_name>>: HaskellUtils.simpleName @@ var "nm",
-          H._OrdinaryConstructor_fields>>: var "typeList"],
-        H._ConstructorWithComments_comments>>: var "comments"]] $
-    Monads.withTrace @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
-      "g" <<~ Monads.getState $
-      "t" <<~ (trace (string "to type declarations") $ DecodeCore.type_ @@ var "term") $
-      "isSer" <<~ (Schemas.isSerializable @@ var "el") $ lets [
-      "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
-        (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
-        (list ([] :: [TTerm H.Name])),
-      "unpackResult">: HaskellUtils.unpackForallType @@ var "g" @@ var "t",
-      "vars">: Pairs.first $ var "unpackResult",
-      "t'">: Pairs.second $ var "unpackResult",
-      "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
-      "decl" <<~ (cases _Type (Rewriting.deannotateType @@ var "t'")
-        (Just $ "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "t" $
-          Flows.pure $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
-            H._TypeDeclaration_name>>: var "hd",
-            H._TypeDeclaration_type>>: var "htype"]) [
-        _Type_record>>: "rt" ~>
-          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
-          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
-            H._DataDeclaration_head>>: var "hd",
-            H._DataDeclaration_constructors>>: list [var "cons"],
-            H._DataDeclaration_deriving>>: list [var "deriv"]],
-        _Type_union>>: "rt" ~>
-          "cons" <<~ Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt") $
-          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
-            H._DataDeclaration_head>>: var "hd",
-            H._DataDeclaration_constructors>>: var "cons",
-            H._DataDeclaration_deriving>>: list [var "deriv"]],
-        _Type_wrap>>: "wrapped" ~> lets [
-          "tname">: Core.wrappedTypeTypeName $ var "wrapped",
-          "wt">: Core.wrappedTypeBody $ var "wrapped"] $
-          "cons" <<~ var "newtypeCons" @@ var "el" @@ var "wt" $
-            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
-              H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
-              H._DataDeclaration_head>>: var "hd",
-              H._DataDeclaration_constructors>>: list [var "cons"],
-              H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
-      "comments" <<~ Annotations.getTermDescription @@ var "term" $
-      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
-        (Flows.bind (typeDecl @@ var "namespaces" @@ var "elementName" @@ var "t") $ "decl'" ~>
-          Flows.pure $ list [var "decl'"])
-        (Flows.pure $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
-      "mainDecl">: record H._DeclarationWithComments [
-        H._DeclarationWithComments_body>>: var "decl",
-        H._DeclarationWithComments_comments>>: var "comments"],
-      "nameDecls'">: nameDecls @@ var "g" @@ var "namespaces" @@ var "elementName" @@ var "t"] $
-      Flows.pure $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"])
+--toTypeDeclarations :: TBinding (HaskellNamespaces -> Binding -> Term -> Flow Graph [H.DeclarationWithComments])
+--toTypeDeclarations = haskellCoderDefinition "toTypeDeclarations" $
+--  "namespaces" ~> "el" ~> "term" ~> lets [
+--    "elementName">: Core.bindingName $ var "el",
+--    "lname">: Names.localNameOf @@ var "elementName",
+--    "hname">: HaskellUtils.simpleName @@ var "lname",
+--    "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
+--      (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
+--      (lets [
+--        "h">: Lists.head $ var "vars'",
+--        "rest">: Lists.tail $ var "vars'",
+--        "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
+--        inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
+--          H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
+--          H._ApplicationDeclarationHead_operand>>: var "hvar"]),
+--    "newtypeCons">: "el'" ~> "typ'" ~> lets [
+--      "hname">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ (Core.bindingName $ var "el'"))] $
+--      "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" $ lets [
+--      "hfield">: record H._FieldWithComments [
+--        H._FieldWithComments_field>>: record H._Field [
+--          H._Field_name>>: var "hname",
+--          H._Field_type>>: var "htype"],
+--        H._FieldWithComments_comments>>: nothing],
+--      "constructorName">: HaskellUtils.simpleName @@ (Names.localNameOf @@ (Core.bindingName $ var "el'"))] $
+--      Flows.pure $ record H._ConstructorWithComments [
+--        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
+--          H._RecordConstructor_name>>: var "constructorName",
+--          H._RecordConstructor_fields>>: list [var "hfield"]],
+--        H._ConstructorWithComments_comments>>: nothing],
+--    "recordCons">: "lname'" ~> "fields" ~> lets [
+--      "toField">: "fieldType" ~> lets [
+--        "fname">: Core.fieldTypeName $ var "fieldType",
+--        "ftype">: Core.fieldTypeType $ var "fieldType",
+--        "hname'">: HaskellUtils.simpleName @@ Strings.cat2
+--          (Formatting.decapitalize @@ var "lname'")
+--          (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
+--        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" $
+--        "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $
+--        Flows.pure $ record H._FieldWithComments [
+--          H._FieldWithComments_field>>: record H._Field [
+--            H._Field_name>>: var "hname'",
+--            H._Field_type>>: var "htype"],
+--          H._FieldWithComments_comments>>: var "comments"]] $
+--      "hFields" <<~ Flows.mapList (var "toField") (var "fields") $
+--      Flows.pure $ record H._ConstructorWithComments [
+--        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
+--          H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
+--          H._RecordConstructor_fields>>: var "hFields"],
+--        H._ConstructorWithComments_comments>>: nothing],
+--    "unionCons">: "g'" ~> "lname'" ~> "fieldType" ~> lets [
+--      "fname">: Core.fieldTypeName $ var "fieldType",
+--      "ftype">: Core.fieldTypeType $ var "fieldType",
+--      "deconflict">: "name" ~> lets [
+--        "tname">: Names.unqualifyName @@ record _QualifiedName [
+--          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
+--          _QualifiedName_local>>: var "name"]] $
+--        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
+--          (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
+--          (var "name")] $
+--      "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
+--      "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
+--      "typeList" <<~ (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
+--        (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
+--        Flows.bind (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype") $ "htype" ~>
+--          Flows.pure $ list [var "htype"]) $
+--      Flows.pure $ record H._ConstructorWithComments [
+--        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
+--          H._OrdinaryConstructor_name>>: HaskellUtils.simpleName @@ var "nm",
+--          H._OrdinaryConstructor_fields>>: var "typeList"],
+--        H._ConstructorWithComments_comments>>: var "comments"]] $
+--    Monads.withTrace @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
+--      "g" <<~ Monads.getState $
+--      "t" <<~ (trace (string "to type declarations") $ DecodeCore.type_ @@ var "term") $
+--      "isSer" <<~ (Schemas.isSerializable @@ var "el") $ lets [
+--      "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
+--        (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
+--        (list ([] :: [TTerm H.Name])),
+--      "unpackResult">: HaskellUtils.unpackForallType @@ var "g" @@ var "t",
+--      "vars">: Pairs.first $ var "unpackResult",
+--      "t'">: Pairs.second $ var "unpackResult",
+--      "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
+--      "decl" <<~ (cases _Type (Rewriting.deannotateType @@ var "t'")
+--        (Just $ "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "t" $
+--          Flows.pure $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
+--            H._TypeDeclaration_name>>: var "hd",
+--            H._TypeDeclaration_type>>: var "htype"]) [
+--        _Type_record>>: "rt" ~>
+--          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
+--          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+--            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
+--            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+--            H._DataDeclaration_head>>: var "hd",
+--            H._DataDeclaration_constructors>>: list [var "cons"],
+--            H._DataDeclaration_deriving>>: list [var "deriv"]],
+--        _Type_union>>: "rt" ~>
+--          "cons" <<~ Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt") $
+--          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+--            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
+--            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+--            H._DataDeclaration_head>>: var "hd",
+--            H._DataDeclaration_constructors>>: var "cons",
+--            H._DataDeclaration_deriving>>: list [var "deriv"]],
+--        _Type_wrap>>: "wrapped" ~> lets [
+--          "tname">: Core.wrappedTypeTypeName $ var "wrapped",
+--          "wt">: Core.wrappedTypeBody $ var "wrapped"] $
+--          "cons" <<~ var "newtypeCons" @@ var "el" @@ var "wt" $
+--            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+--              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
+--              H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+--              H._DataDeclaration_head>>: var "hd",
+--              H._DataDeclaration_constructors>>: list [var "cons"],
+--              H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
+--      "comments" <<~ Annotations.getTermDescription @@ var "term" $
+--      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
+--        (Flows.bind (typeDecl @@ var "namespaces" @@ var "elementName" @@ var "t") $ "decl'" ~>
+--          Flows.pure $ list [var "decl'"])
+--        (Flows.pure $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
+--      "mainDecl">: record H._DeclarationWithComments [
+--        H._DeclarationWithComments_body>>: var "decl",
+--        H._DeclarationWithComments_comments>>: var "comments"],
+--      "nameDecls'">: nameDecls @@ var "g" @@ var "namespaces" @@ var "elementName" @@ var "t"] $
+--      Flows.pure $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"])
 
 -- | Simplified version of toTypeDeclarations that works with Name and Type directly
 -- This is used with the new Definition-based API

@@ -23,17 +23,17 @@ mappings :: String -> Type
 mappings = typeref ns
 
 compute :: String -> Type
-compute = typeref $ moduleNamespace Compute.module_
+compute = typeref $ Compute.ns
 
 core :: String -> Type
-core = typeref $ moduleNamespace Core.module_
+core = typeref $ Core.ns
 
 v3 :: String -> Type
-v3 = typeref $ moduleNamespace PgModel.module_
+v3 = typeref $ PgModel.ns
 
 module_ :: Module
 module_ = Module ns elements
-    [PgModel.module_, Core.module_, Compute.module_] [Core.module_] $
+    [PgModel.ns, Core.ns, Compute.ns] [Core.ns] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     elements = [

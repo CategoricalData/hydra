@@ -59,10 +59,14 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
+
+ns :: Namespace
+ns = Namespace "hydra.substitution"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.substitution") elements
-    [Rewriting.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Rewriting.ns]
+    kernelTypesNamespaces $
     Just ("Variable substitution in type and term expressions.")
   where
    elements = [

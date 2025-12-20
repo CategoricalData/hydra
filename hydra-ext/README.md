@@ -86,13 +86,16 @@ Code generation is similar to Haskell generation (see the [Hydra-Haskell README]
 You can update the Java image of the Hydra kernel with:
 
 ```haskell
-writeJava "../hydra-java/src/gen-main/java" kernelModules
+-- Universe provides all modules for dependency resolution
+-- modulesToGenerate specifies which modules to actually generate
+writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
 ```
 
 For Java tests, use:
 
 ```haskell
-writeJava "../hydra-java/src/gen-test/java" testModules
+let allModules = mainModules ++ testModules
+writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
 ```
 
 ### Python
@@ -101,13 +104,16 @@ writeJava "../hydra-java/src/gen-test/java" testModules
 You can update the Python image of the Hydra kernel with:
 
 ```haskell
-writePython "../hydra-python/src/main/python" kernelModules
+-- Universe provides all modules for dependency resolution
+-- modulesToGenerate specifies which modules to actually generate
+writePython "../hydra-python/src/main/python" kernelModules kernelModules
 ```
 
 For Python tests, use:
 
 ```haskell
-writePython "../hydra-python/src/gen-test/python" testModules
+let allModules = mainModules ++ testModules
+writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
 ```
 
 Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)).
@@ -121,7 +127,8 @@ The coder does not support polymorphic models at this time; type parameters are 
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
-writeCpp "/tmp/cpp" [Core.module_]
+-- Universe and modules to generate can be the same for simple cases
+writeCpp "/tmp/cpp" [Core.module_] [Core.module_]
 ```
 
 **Type mappings:**
@@ -155,7 +162,8 @@ Protobuf (Proto3) does not support polymorphic models, so type parameters are re
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
-writeProtobuf "/tmp/protobuf" [Core.module_]
+-- Universe and modules to generate can be the same for simple cases
+writeProtobuf "/tmp/protobuf" [Core.module_] [Core.module_]
 ```
 
 **Type mappings:**
@@ -185,7 +193,8 @@ This coder operates at the type level only, and can be used in connection with H
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
-writeJsonSchema "/tmp/jsonschema" [Core.module_]
+-- Universe and modules to generate can be the same for simple cases
+writeJsonSchema "/tmp/jsonschema" [Core.module_] [Core.module_]
 ```
 
 **Type mappings:**
@@ -214,7 +223,8 @@ Note: Type references use JSON Schema `$ref` to `#/$defs/TypeName`.
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
-writeGraphql "/tmp/graphql" [Core.module_]
+-- Universe and modules to generate can be the same for simple cases
+writeGraphql "/tmp/graphql" [Core.module_] [Core.module_]
 ```
 
 Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together and map them to a single `.graphql` file.
@@ -246,7 +256,8 @@ The PDL coder generates PDL schema files (`.pdl`).
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
 
-writePdl "/tmp/pdl" [Accessors.module_]
+-- Universe and modules to generate can be the same for simple cases
+writePdl "/tmp/pdl" [Accessors.module_] [Accessors.module_]
 ```
 
 **Type mappings:**
@@ -278,7 +289,8 @@ The Scala coder generates Scala source files (`.scala`). Note that this coder ha
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
 
-writeScala "/tmp/scala" [Accessors.module_]
+-- Universe and modules to generate can be the same for simple cases
+writeScala "/tmp/scala" [Accessors.module_] [Accessors.module_]
 ```
 
 **Type mappings:**
@@ -347,13 +359,15 @@ and the generated Haskell APIs for all of these models can be found [here](https
 For the sake of space, only generated Haskell is checked in to the repository, but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 
 ```haskell
-writeJava "src/gen-main/java" hydraExtModules
+-- Universe provides all modules for dependency resolution
+-- modulesToGenerate specifies which modules to actually generate
+writeJava "src/gen-main/java" (hydraExtModules <> kernelModules) hydraExtModules
 ```
 
 The generated Haskell can be updated using:
 
 ```haskell
-writeHaskell "src/gen-main/haskell" hydraExtModules
+writeHaskell "src/gen-main/haskell" (hydraExtModules <> kernelModules) hydraExtModules
 ```
 
 ## Tools

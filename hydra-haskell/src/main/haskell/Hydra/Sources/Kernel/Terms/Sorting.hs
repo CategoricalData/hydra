@@ -61,10 +61,13 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan as Tarjan
 import qualified Hydra.Topology as Topo
 
 
+ns :: Namespace
+ns = Namespace "hydra.sorting"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.sorting") elements
-    [Tarjan.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Tarjan.ns]
+    kernelTypesNamespaces $
     Just ("Utilities for sorting.")
   where
    elements = [

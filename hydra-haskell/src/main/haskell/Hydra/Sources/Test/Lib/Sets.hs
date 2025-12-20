@@ -13,8 +13,11 @@ import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Data.List as L
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.lib.sets"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.sets") elements [] [] $
+module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.sets primitives"
   where
     elements = [Phantoms.toBinding allTests]

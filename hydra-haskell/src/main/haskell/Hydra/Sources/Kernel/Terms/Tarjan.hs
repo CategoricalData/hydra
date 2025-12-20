@@ -60,10 +60,13 @@ import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Topology as Topo
 
 
+ns :: Namespace
+ns = Namespace "hydra.tarjan"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.tarjan") elements
-    [Constants.module_, Monads.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Constants.ns, Monads.ns]
+    kernelTypesNamespaces $
     Just ("This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where

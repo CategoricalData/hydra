@@ -59,10 +59,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.reflect"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.reflect") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [

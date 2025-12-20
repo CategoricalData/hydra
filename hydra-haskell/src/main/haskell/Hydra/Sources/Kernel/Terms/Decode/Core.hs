@@ -61,10 +61,13 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.decode.core"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.decode.core") elements
-    [ExtractCore.module_, Lexical.module_, Monads.module_, Rewriting.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [ExtractCore.ns, Lexical.ns, Monads.ns, Rewriting.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("Decode hydra.core types from the hydra.core.Term type")
   where
    elements = [

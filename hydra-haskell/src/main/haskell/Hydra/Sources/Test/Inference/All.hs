@@ -21,18 +21,21 @@ import qualified Hydra.Sources.Test.Inference.KernelExamples as KernelExamples
 import qualified Hydra.Sources.Test.Inference.NominalTypes as NominalTypes
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.inference.all"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.inference.all") elements modules kernelTypesModules $
+module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's inference test suite"
   where
     elements = [Phantoms.toBinding allTests]
-    modules = [
-      AlgebraicTypes.module_,
-      AlgorithmW.module_,
-      Failures.module_,
-      Fundamentals.module_,
-      KernelExamples.module_,
-      NominalTypes.module_]
+    namespaces = [
+      AlgebraicTypes.ns,
+      AlgorithmW.ns,
+      Failures.ns,
+      Fundamentals.ns,
+      KernelExamples.ns,
+      NominalTypes.ns]
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

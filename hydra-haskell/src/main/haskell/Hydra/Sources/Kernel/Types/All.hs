@@ -51,3 +51,7 @@ kernelTypesModules = [
   Util.module_,
   Variants.module_,
   Workflow.module_]
+
+-- | Namespaces of all kernel type modules
+kernelTypesNamespaces :: [Namespace]
+kernelTypesNamespaces = fmap moduleNamespace kernelTypesModules

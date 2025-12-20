@@ -55,10 +55,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.literals"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.literals") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just "Conversion functions for literal values."
   where
    elements = [

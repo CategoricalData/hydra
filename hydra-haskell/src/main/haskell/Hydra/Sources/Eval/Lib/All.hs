@@ -80,10 +80,14 @@ evalLibModules = [
   EvalPairs.module_,
   EvalSets.module_]
 
+-- | Namespaces of all eval library modules
+evalLibNamespaces :: [Namespace]
+evalLibNamespaces = Prelude.map moduleNamespace evalLibModules
+
 module_ :: Module
 module_ = Module ns elements
-    evalLibModules
-    kernelTypesModules $
+    evalLibNamespaces
+    kernelTypesNamespaces $
     Just ("Registry of evaluation-level primitive implementations for the Hydra interpreter.")
   where
     elements = []

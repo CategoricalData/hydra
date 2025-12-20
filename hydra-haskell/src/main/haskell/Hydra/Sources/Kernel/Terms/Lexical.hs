@@ -67,8 +67,8 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-   [Monads.module_, Rewriting.module_, ShowCore.module_]
-    kernelTypesModules $
+   [Monads.ns, Rewriting.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("A module for lexical operations over graphs.")
   where
     elements = [

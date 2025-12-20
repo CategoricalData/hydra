@@ -58,10 +58,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.constants"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.constants") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just ("A module for tier-0 constants.")
   where
    elements = [

@@ -20,10 +20,10 @@ geoj :: String -> Type
 geoj = typeref ns
 
 json :: String -> Type
-json = typeref $ moduleNamespace Json.module_
+json = typeref $ Json.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.module_] [] $
+module_ = Module ns elements [Json.ns] [] $
     Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++
           "This model provides some additional structure beyond the JSON encoding described in the specification; " ++
           "For example, it provides MultiPoint not as an object with an array of coordinates which encode points, " ++

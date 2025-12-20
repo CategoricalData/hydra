@@ -10,11 +10,15 @@ import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import Hydra.Sources.Kernel.Types.All
 import qualified Data.Map as M
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.lib.flows"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.flows") elements [Monads.module_] [] $
+module_ = Module ns elements [Monads.ns] kernelTypesNamespaces $
     Just "Test cases for hydra.lib.flows primitives"
   where
     elements = [Phantoms.toBinding allTests]

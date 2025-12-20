@@ -19,7 +19,7 @@ rdf :: String -> Type
 rdf = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just "An RDF 1.1 syntax model"
   where
     elements = [

@@ -68,8 +68,8 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.module_, Monads.module_, ShowCore.module_]
-    kernelTypesModules $
+    [ExtractCore.ns, Monads.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
     elements = [

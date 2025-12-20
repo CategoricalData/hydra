@@ -15,7 +15,9 @@ main = do
   putStrLn "Generating kernel type modules to ../hydra-java/src/gen-main/java..."
   putStrLn ""
 
-  writeJava "../hydra-java/src/gen-main/java" kernelTypesModules
+  -- Universe provides all modules for dependency resolution
+  -- modulesToGenerate specifies which modules to actually generate
+  writeJava "../hydra-java/src/gen-main/java" kernelTypesModules kernelTypesModules
 
   putStrLn ""
   putStrLn "=== Done! ==="

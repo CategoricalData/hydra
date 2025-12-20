@@ -125,9 +125,9 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.module_, Constants.module_, DecodeCore.module_, EncodeCore.module_, Lexical.module_, Monads.module_,
-      Names.module_, Reflect.module_, Rewriting.module_, ShowCore.module_, Sorting.module_, Substitution.module_]
-    kernelTypesModules $
+    [Annotations.ns, Constants.ns, DecodeCore.ns, EncodeCore.ns, Lexical.ns, Monads.ns,
+      Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns, Sorting.ns, Substitution.ns]
+    kernelTypesNamespaces $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
     elements = [

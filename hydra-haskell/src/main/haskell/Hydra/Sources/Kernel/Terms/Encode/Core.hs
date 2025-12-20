@@ -63,10 +63,13 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Encode.Core as EncodeCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.encode.core"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.encode.core") elements
-    [Rewriting.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Rewriting.ns]
+    kernelTypesNamespaces $
     Just ("Mapping of hydra.core constructs in a host language like Haskell or Java "
       <> " to their native Hydra counterparts as terms. "
       <> " This includes an implementation of LambdaGraph's epsilon encoding (types to terms).")

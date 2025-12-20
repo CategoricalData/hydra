@@ -6,6 +6,7 @@
 
 module Main where
 
+import Hydra.Kernel
 import Hydra.Staging.Testing.Generation.Generate
 import Hydra.Ext.Staging.Python.TestCodec (pythonTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
@@ -20,8 +21,14 @@ main = do
   putStrLn "=== Generate Python generation tests ==="
   putStrLn ""
 
-  -- Automatically build the lookup function from module and test group hierarchies
-  let lookupFn = createTestGroupLookup TestSuite.module_ GenTests.allTests
+  -- Get the namespaces from TestSuite's term dependencies
+  let testNamespaces = moduleTermDependencies TestSuite.module_
+
+  -- Build the lookup function from namespaces and test group hierarchy
+  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
+
+  -- Get the list of test modules explicitly
+  let testModules = TestSuite.testSuiteModules
 
   -- Generate generation tests to ../hydra-python/src/gen-test/python
   let outputDir = "../hydra-python/src/gen-test/python"
@@ -29,7 +36,7 @@ main = do
   putStrLn $ "Generating tests into: " ++ outputDir
   putStrLn ""
 
-  generateGenerationTestSuite pythonTestGenerator outputDir TestSuite.module_ lookupFn
+  generateGenerationTestSuite pythonTestGenerator outputDir testModules lookupFn
 
   putStrLn ""
   putStrLn "=== Done! ==="

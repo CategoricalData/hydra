@@ -92,11 +92,14 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.ext.org.json.language"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.ext.org.json.language")
+module_ = Module ns
   [toBinding jsonLanguage]
-  [Rewriting.module_]
-  KernelTypes.kernelTypesModules $
+  [Rewriting.ns]
+  KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for JSON"
 
 define :: String -> TTerm a -> TBinding a

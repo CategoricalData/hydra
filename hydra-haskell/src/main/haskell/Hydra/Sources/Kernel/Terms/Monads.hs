@@ -60,10 +60,13 @@ import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.monads"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.monads") elements
-    [Constants.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Constants.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just ("Functions for working with Hydra's 'flow' and other monads.")
   where
     elements = [

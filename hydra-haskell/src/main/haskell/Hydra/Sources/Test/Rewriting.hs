@@ -17,10 +17,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.rewriting"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.rewriting") elements
+module_ = Module ns elements
     []
-    KernelTypes.kernelTypesModules
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for term rewriting operations")
   where
     elements = [Phantoms.toBinding allTests]

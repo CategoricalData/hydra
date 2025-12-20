@@ -63,10 +63,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.encoding"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.encoding") elements
-    [Annotations.module_, DecodeCore.module_, Formatting.module_, Names.module_, Schemas.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [Annotations.ns, DecodeCore.ns, Formatting.ns, Names.ns, Schemas.ns]
+    kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where
     elements = [
@@ -259,23 +262,13 @@ encodeModule = define "encodeModule" $
         Flows.pure (just (Module.module_
           (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "encodedBindings")
-          (primitive _lists_map @@ encodeModuleDependency @@ (Module.moduleTypeDependencies (var "mod")))
-          (list [var "mod"])
+          -- Transform each type dependency namespace to its encoder namespace
+          (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))
+          -- The encoder module depends on the original type module
+          (list [Module.moduleNamespace (var "mod")])
           (just (Strings.cat $ list [
             string "Term encoders for ",
             Module.unNamespace (Module.moduleNamespace (var "mod"))]))))))
-  where
-    -- Create a placeholder encoder module reference for a type dependency
-    -- This just transforms the namespace, the actual module content isn't needed for imports
-    encodeModuleDependency :: TTerm (Module -> Module)
-    encodeModuleDependency =
-      "depMod" ~>
-        Module.module_
-          (encodeNamespace @@ (Module.moduleNamespace (var "depMod")))
-          (list ([] :: [TTerm Binding]))
-          (list ([] :: [TTerm Module]))
-          (list ([] :: [TTerm Module]))
-          nothing
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
 encodeName :: TBinding (Name -> Term)

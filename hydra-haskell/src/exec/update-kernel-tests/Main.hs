@@ -16,7 +16,11 @@ main = do
   putStrLn "Generating kernel test modules to src/gen-test/haskell..."
   putStrLn ""
 
-  writeHaskell "src/gen-test/haskell" testModules
+  -- Universe provides all modules for dependency resolution
+  -- testModules now includes all test suite modules
+  -- writeHaskell computes transitive closure to include only what's needed
+  let allModules = mainModules ++ testModules
+  writeHaskell "src/gen-test/haskell" allModules baseTestModules
 
   putStrLn ""
   putStrLn "=== Done! ==="

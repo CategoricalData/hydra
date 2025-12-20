@@ -12,10 +12,13 @@ import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.lib.strings"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.lib.strings") elements
-    [TestGraph.module_]
-    KernelTypes.kernelTypesModules
+module_ = Module ns elements
+    [TestGraph.ns]
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for hydra.lib.strings primitives")
   where
     elements = [

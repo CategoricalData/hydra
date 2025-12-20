@@ -56,10 +56,13 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.parsers"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.parsers") elements
+module_ = Module ns elements
     []
-    kernelTypesModules $
+    kernelTypesNamespaces $
     Just "General-purpose parser combinators"
   where
    elements = [

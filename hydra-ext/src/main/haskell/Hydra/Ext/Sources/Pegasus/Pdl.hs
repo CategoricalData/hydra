@@ -20,10 +20,10 @@ pdl :: String -> Type
 pdl = typeref ns
 
 json :: String -> Type
-json = typeref $ moduleNamespace Json.module_
+json = typeref $ Json.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.module_] [Core.module_] $
+module_ = Module ns elements [Json.ns] [Core.ns] $
     Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")
   where

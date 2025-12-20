@@ -21,18 +21,21 @@ import qualified Hydra.Sources.Test.Checking.Fundamentals as Fundamentals
 import qualified Hydra.Sources.Test.Checking.NominalTypes as NominalTypes
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.checking.all"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTypesModules $
+module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's type checking test suite"
   where
     elements = [Phantoms.toBinding allTests]
-    modules = [
-      Advanced.module_,
-      AlgebraicTypes.module_,
-      Collections.module_,
-      Failures.module_,
-      Fundamentals.module_,
-      NominalTypes.module_]
+    namespaces = [
+      Advanced.ns,
+      AlgebraicTypes.ns,
+      Collections.ns,
+      Failures.ns,
+      Fundamentals.ns,
+      NominalTypes.ns]
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

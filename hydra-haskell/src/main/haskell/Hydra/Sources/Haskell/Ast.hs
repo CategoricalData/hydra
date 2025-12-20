@@ -18,7 +18,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.module_] [Core.module_] $
+module_ = Module ns elements [Core.ns] [Core.ns] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     elements = [

@@ -19,10 +19,13 @@ import qualified Hydra.Sources.Haskell.Operators as Operators
 import Hydra.Ast (Expr, Op, BlockStyle)
 
 
+ns :: Namespace
+ns = Namespace "hydra.test.serialization"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.test.serialization") elements
-    [Serialization.module_, Operators.module_]
-    KernelTypes.kernelTypesModules
+module_ = Module ns elements
+    [Serialization.ns, Operators.ns]
+    KernelTypes.kernelTypesNamespaces
     (Just "Test cases for AST serialization")
   where
     elements = [Phantoms.toBinding allTests]

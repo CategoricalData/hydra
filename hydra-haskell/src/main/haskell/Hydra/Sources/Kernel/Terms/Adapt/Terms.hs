@@ -70,11 +70,14 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 
 
+ns :: Namespace
+ns = Namespace "hydra.adapt.terms"
+
 module_ :: Module
-module_ = Module (Namespace "hydra.adapt.terms") elements
-    [AdaptLiterals.module_, AdaptUtils.module_, Annotations.module_, ExtractCore.module_, Monads.module_,
-      Reflect.module_, Rewriting.module_, Schemas.module_, ShowCore.module_]
-    kernelTypesModules $
+module_ = Module ns elements
+    [AdaptLiterals.ns, AdaptUtils.ns, Annotations.ns, ExtractCore.ns, Monads.ns,
+      Reflect.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
+    kernelTypesNamespaces $
     Just "Adapter framework for types and terms"
   where
     elements = [

@@ -636,7 +636,7 @@ Or use the REPL:
 ```haskell
 stack exec ghci
 > :l debug/WritePython.hs
-> writePython "../hydra-python/src/main/python" kernelModules
+> writePython "../hydra-python/src/main/python" kernelModules Nothing
 ```
 
 This regenerates:

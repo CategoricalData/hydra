@@ -60,9 +60,9 @@ data Module =
     -- | The elements defined in this module
     moduleElements :: [Core.Binding],
     -- | Any modules which the term expressions of this module directly depend upon
-    moduleTermDependencies :: [Module],
+    moduleTermDependencies :: [Namespace],
     -- | Any modules which the type expressions of this module directly depend upon
-    moduleTypeDependencies :: [Module],
+    moduleTypeDependencies :: [Namespace],
     -- | An optional human-readable description of the module
     moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
