@@ -71,6 +71,7 @@ module_ = Module ns elements
   where
     elements = [
       toBinding bind,
+      toBinding eitherToFlow_,
       toBinding emptyTrace,
       toBinding exec,
       toBinding fail,
@@ -111,6 +112,15 @@ bind = define "bind" $
         (Compute.flowStateTrace $ var "fs1"))
       (Compute.flowStateValue $ var "fs1")) $
   Compute.flow $ var "q"
+
+eitherToFlow_ :: TBinding ((a -> String) -> Prelude.Either a b -> Flow s b)
+eitherToFlow_ = define "eitherToFlow" $
+  doc "Adapt an either to a flow; a left value is mapped to a failure using the provided function" $
+  "formatError" ~> "e" ~>
+  Eithers.either_
+    ("l" ~> fail @@ (var "formatError" @@ var "l"))
+    ("r" ~> pure @@ var "r")
+    (var "e")
 
 emptyTrace :: TBinding Trace
 emptyTrace = define "emptyTrace" $
