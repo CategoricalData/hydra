@@ -12,15 +12,18 @@ import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
--- import qualified Hydra.Encoding as Encoding  -- Temporarily disabled for regeneration
+import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
+import qualified Hydra.Sources.Kernel.Types.Module as ModuleTypes
+import qualified Hydra.EncodeNew.Module as EncodeModule
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
 import qualified Data.List as L
+import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified System.Directory as SD
@@ -123,8 +126,9 @@ moduleTermDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.l
   (S.fromList $ moduleNamespace <$> modules)
 
 moduleTypeDependenciesTransitive :: M.Map Namespace Module -> [Module] -> [Module]
-moduleTypeDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) $ S.toList $
-  transitiveClosure moduleTypeDependencies mapping modules
+moduleTypeDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) $ S.toList $ S.union
+  (transitiveClosure moduleTypeDependencies mapping modules)
+  (S.fromList $ moduleNamespace <$> modules)
 
 -- | Build a graph from a list of modules.
 -- Elements are partitioned into schema (type definitions) and data (term definitions)
@@ -298,27 +302,70 @@ writeLexicon path = do
 writeLexiconToStandardPath :: IO ()
 writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 
--- | Generate encoder modules for a list of type modules
--- For each type module, generates an encoder module with functions to encode values to Terms
--- NOTE: Temporarily disabled for Module type change regeneration
--- generateEncoderModules :: [Module] -> Flow Graph [Module]
--- generateEncoderModules mods = do
---   results <- CM.mapM Encoding.encodeModule mods
---   return $ Y.catMaybes results
+-- | Generate encoder modules for a list of type modules.
+-- For each type module, generates an encoder module with functions to encode values to Terms.
+-- The universe modules are used for dependency resolution.
+-- Returns Nothing for modules that have no encodable types.
+generateEncoderModules :: [Module] -> [Module] -> IO [Module]
+generateEncoderModules universeModules typeModules = do
+    let graph = modulesToGraph universeModules universeModules
+    case graphSchema graph of
+      Nothing -> fail "No schema graph available"
+      Just schemaGraph -> do
+        mresult <- runFlow schemaGraph (CM.mapM Encoding.encodeModule typeModules)
+        case mresult of
+          Nothing -> fail "Failed to generate encoder modules"
+          Just results -> return $ Y.catMaybes results
 
--- | Write encoder modules as Haskell to the given path
--- NOTE: Temporarily disabled for Module type change regeneration
--- writeEncoderHaskell :: FilePath -> [Module] -> IO ()
--- writeEncoderHaskell basePath typeMods = do
---   let graph = modulesToGraph typeMods
---   mresult <- runFlow graph (generateEncoderModules typeMods)
---   case mresult of
---     Nothing -> fail "Failed to generate encoder modules"
---     Just encoderMods -> do
---       -- Add core types module to each encoder module's type dependencies
---       -- since the encoders reference hydra.core.Term, hydra.core.Injection, etc.
---       let coreModule = CoreTypes.module_
---           withCoreDeps = fmap (addTypeDep coreModule) encoderMods
---       writeHaskell basePath withCoreDeps
---   where
---     addTypeDep dep mod = mod { moduleTypeDependencies = dep : moduleTypeDependencies mod }
+-- | Write encoder modules as Haskell to the given path.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: type modules to generate encoders for
+writeEncoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
+writeEncoderHaskell basePath universeModules typeModules = do
+    encoderMods <- generateEncoderModules universeModules typeModules
+    -- Add core types namespace to each encoder module's type dependencies
+    -- since the encoders reference hydra.core.Term, hydra.core.Injection, etc.
+    let withCoreDeps = fmap addCoreDep encoderMods
+    writeHaskell basePath universeModules withCoreDeps
+  where
+    addCoreDep m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
+
+-- | Convert a generated Module into a Source module.
+-- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
+-- The namespace transforms e.g. "hydra.encodeNew.util" to "hydra.sources.encodeNew.util"
+moduleToSourceModule :: Module -> Module
+moduleToSourceModule m = Module {
+    moduleNamespace = sourceNamespace,
+    moduleElements = [moduleBinding],
+    moduleTermDependencies = [ModuleTypes.ns],  -- Depends on hydra.module for Module type
+    moduleTypeDependencies = [ModuleTypes.ns],
+    moduleDescription = Just $ "Source module for " ++ unNamespace (moduleNamespace m)
+  }
+  where
+    -- Transform namespace: hydra.encodeNew.util -> hydra.sources.encodeNew.util
+    sourceNamespace = Namespace $ "hydra.sources." ++
+      L.intercalate "." (drop 1 $ LS.splitOn "." $ unNamespace $ moduleNamespace m)
+
+    -- Create binding: module_ = <encoded Module>
+    moduleBinding = Binding {
+      bindingName = Name $ unNamespace sourceNamespace ++ ".module_",
+      bindingTerm = EncodeModule.module_ m,
+      bindingType = Just $ TypeScheme [] $ TypeVariable $ Name "hydra.module.Module"
+    }
+
+-- | Generate encoder Source modules for a list of type modules.
+-- These are Source modules that define `module_` bindings containing the encoder Modules as Terms.
+generateEncoderSourceModules :: [Module] -> [Module] -> IO [Module]
+generateEncoderSourceModules universeModules typeModules = do
+    encoderMods <- generateEncoderModules universeModules typeModules
+    return $ fmap moduleToSourceModule encoderMods
+
+-- | Write encoder Source modules as Haskell to the given path.
+-- These go to src/gen-main/haskell/Hydra/Sources/EncodeNew/
+writeEncoderSourceHaskell :: FilePath -> [Module] -> [Module] -> IO ()
+writeEncoderSourceHaskell basePath universeModules typeModules = do
+    sourceMods <- generateEncoderSourceModules universeModules typeModules
+    -- The source modules need the Module encoder and Core types
+    let allMods = universeModules ++ sourceMods
+    writeHaskell basePath allMods sourceMods
