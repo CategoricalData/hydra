@@ -96,7 +96,7 @@ module_ = Module ns elements
       toBinding encodeWrappedType,
       toBinding filterTypeBindings,
       toBinding isEncodableBinding,
-      toBinding isUnitType]
+      toBinding isUnitType_]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -115,7 +115,7 @@ encodeBinding = define "encodeBinding" $
         nothing))
 
 -- | Generate a fully qualified binding name for an encoder function from a type name
--- For example, "hydra.core.Name" -> "hydra.encodeNew.core.name"
+-- For example, "hydra.core.Name" -> "hydra.encode.core.name"
 -- For local types (no namespace), returns just the decapitalized local name
 encodeBindingName :: TBinding (Name -> Name)
 encodeBindingName = define "encodeBindingName" $
@@ -124,11 +124,11 @@ encodeBindingName = define "encodeBindingName" $
     -- Check if name has a namespace (contains ".")
     Logic.ifElse (Logic.not (Lists.null
       (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.core.Name" -> "hydra.encodeNew.core.name"
+      -- Qualified type: e.g., "hydra.core.Name" -> "hydra.encode.core.name"
       (Core.name (
         Strings.intercalate (string ".") (
           Lists.concat2
-            (list [string "hydra", string "encodeNew"])
+            (list [string "hydra", string "encode"])
             (Lists.concat2
               (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
               (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
@@ -258,7 +258,7 @@ encodeModule = define "encodeModule" $
       (Flows.bind (Flows.mapList encodeBinding (var "typeBindings")) (
         "encodedBindings" ~>
         -- The encoder module depends on encoder modules for the type dependencies
-        -- E.g., hydra.encodeNew.module depends on hydra.encodeNew.core
+        -- E.g., hydra.encode.module depends on hydra.encode.core
         Flows.pure (just (Module.module_
           (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "encodedBindings")
@@ -280,14 +280,14 @@ encodeName = define "encodeName" $
       (Core.termLiteral $ Core.literalString (Core.unName (var "n")))
 
 -- | Generate an encoder module namespace from a source module namespace
--- For example, "hydra.util" -> "hydra.encodeNew.util"
+-- For example, "hydra.util" -> "hydra.encode.util"
 encodeNamespace :: TBinding (Namespace -> Namespace)
 encodeNamespace = define "encodeNamespace" $
   doc "Generate an encoder module namespace from a source module namespace" $
   "ns" ~> (
     Module.namespace (
       Strings.cat $ list [
-        string "hydra.encodeNew.",
+        string "hydra.encode.",
         Strings.intercalate (string ".")
           (Lists.tail (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]))
 
@@ -455,8 +455,8 @@ isEncodableBinding = define "isEncodableBinding" $
       (Schemas.isSerializableByName @@ (Core.bindingName (var "b")))
 
 -- | Check whether a type is the unit type
-isUnitType :: TBinding (Type -> Bool)
-isUnitType = define "isUnitType" $
+isUnitType_ :: TBinding (Type -> Bool)
+isUnitType_ = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just $ false) [
     _Type_unit>>: "_" ~> true]

@@ -45,7 +45,7 @@ validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
     Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
     Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
 
-validateGraph :: Ord t0 => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
+validateGraph :: (Ord t0, Ord t1) => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =  
   let checkVertices =  
           let checkVertex = (\el -> Maybes.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema)))

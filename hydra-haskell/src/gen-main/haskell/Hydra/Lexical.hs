@@ -141,7 +141,7 @@ matchUnion tname pairs term =
                 let fname = (Core.fieldName (Core.injectionField v1))
                 in  
                   let val = (Core.fieldTerm (Core.injectionField v1))
-                  in (Maybes.maybe (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field " (Core.unName fname)) " in union type ") (Core.unName tname))) (\f -> f val) (Maps.lookup fname mapping))
+                  in (Maybes.maybe (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field \"" (Core.unName fname)) "\" in union type ") (Core.unName tname))) (\f -> f val) (Maps.lookup fname mapping))
         in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) exp (Monads.unexpected (Strings.cat2 "injection for type " (Core.unName tname)) (Core_.term term)))
       _ -> (Monads.unexpected (Strings.cat [
         "inject(",

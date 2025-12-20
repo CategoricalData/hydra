@@ -41,7 +41,7 @@ demoMeteredEvaluation = do
     let result = flowStateValue state
     putStrLn $ "result: " <> show result
   where
-    context = modulesToGraph [testModule]
+    context = modulesToGraph [testModule] [testModule]
     evaluateSelectedTerm = do
       original <- bindingTerm <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduced <- reduceTerm False original

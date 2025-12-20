@@ -79,7 +79,7 @@ osvJsonDirectoryToNtriples srcDir destDir = do
           osvJsonToNtriples coder (combine srcDir srcFile) (combine destDir destFile)
           return True
 
-osvContext = modulesToGraph [OsvSource.module_]
+osvContext = modulesToGraph [OsvSource.module_] [OsvSource.module_]
 
 osvInstanceContext = emptyInstanceContext osvContext
 

@@ -10,6 +10,8 @@ import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core__
@@ -18,6 +20,32 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | Decode an annotated type from a term
+annotatedType :: (Core.Term -> Compute.Flow Graph.Graph Core.AnnotatedType)
+annotatedType = (Lexical.matchRecord (\m -> Flows.bind (Lexical.getField m (Core.Name "body") type_) (\body -> Flows.bind (Lexical.getField m (Core.Name "annotation") (\mapTerm -> (\x -> case x of
+  Core.TermMap v1 -> (Flows.map Maps.fromList (Flows.mapList (\entry -> Flows.bind (name (Pairs.first entry)) (\k -> Flows.map (\v -> (k, v)) ((\t -> Lexical.matchUnion (Core.Name "hydra.core.Term") [
+    (Core.Name "literal", (\lit -> Flows.map (\x -> Core.TermLiteral x) (Lexical.matchUnion (Core.Name "hydra.core.Literal") [
+      (Core.Name "boolean", (\b -> Flows.map (\x -> Core.LiteralBoolean x) (Core_.boolean b))),
+      (Core.Name "float", (\fv -> Flows.map (\x -> Core.LiteralFloat x) (Lexical.matchUnion (Core.Name "hydra.core.FloatValue") [
+        (Core.Name "bigfloat", (\v -> Flows.map (\x -> Core.FloatValueBigfloat x) (Core_.bigfloat v))),
+        (Core.Name "float32", (\v -> Flows.map (\x -> Core.FloatValueFloat32 x) (Core_.float32 v))),
+        (Core.Name "float64", (\v -> Flows.map (\x -> Core.FloatValueFloat64 x) (Core_.float64 v)))] fv))),
+      (Core.Name "integer", (\iv -> Flows.map (\x -> Core.LiteralInteger x) (Lexical.matchUnion (Core.Name "hydra.core.IntegerValue") [
+        (Core.Name "bigint", (\v -> Flows.map (\x -> Core.IntegerValueBigint x) (Core_.bigint v))),
+        (Core.Name "int8", (\v -> Flows.map (\x -> Core.IntegerValueInt8 x) (Core_.int8 v))),
+        (Core.Name "int16", (\v -> Flows.map (\x -> Core.IntegerValueInt16 x) (Core_.int16 v))),
+        (Core.Name "int32", (\v -> Flows.map (\x -> Core.IntegerValueInt32 x) (Core_.int32 v))),
+        (Core.Name "int64", (\v -> Flows.map (\x -> Core.IntegerValueInt64 x) (Core_.int64 v))),
+        (Core.Name "uint8", (\v -> Flows.map (\x -> Core.IntegerValueUint8 x) (Core_.uint8 v))),
+        (Core.Name "uint16", (\v -> Flows.map (\x -> Core.IntegerValueUint16 x) (Core_.uint16 v))),
+        (Core.Name "uint32", (\v -> Flows.map (\x -> Core.IntegerValueUint32 x) (Core_.uint32 v))),
+        (Core.Name "uint64", (\v -> Flows.map (\x -> Core.IntegerValueUint64 x) (Core_.uint64 v)))] iv))),
+      (Core.Name "string", (\s -> Flows.map (\x -> Core.LiteralString x) (Core_.string s)))] lit))),
+    (Core.Name "variable", (\n -> Flows.map (\x -> Core.TermVariable x) (name n)))] t) (Pairs.second entry)))) (Maps.toList v1)))
+  _ -> (Monads.unexpected "map" (Core__.term mapTerm))) mapTerm)) (\annotation -> Flows.pure (Core.AnnotatedType {
+  Core.annotatedTypeBody = body,
+  Core.annotatedTypeAnnotation = annotation})))))
 
 -- | Decode an application type from a term
 applicationType :: (Core.Term -> Compute.Flow Graph.Graph Core.ApplicationType)
@@ -119,6 +147,7 @@ type_ dat = ((\x -> case x of
     Core.annotatedTypeBody = t,
     Core.annotatedTypeAnnotation = (Core.annotatedTermAnnotation v1)})) (type_ (Core.annotatedTermBody v1)))
   _ -> (Monads.withTrace "dbg 4" (Lexical.matchUnion (Core.Name "hydra.core.Type") [
+    (Core.Name "annotated", (\at -> Flows.map (\x -> Core.TypeAnnotated x) (annotatedType at))),
     (Core.Name "application", (\at -> Flows.map (\x -> Core.TypeApplication x) (applicationType at))),
     (Core.Name "either", (\et -> Flows.map (\x -> Core.TypeEither x) (eitherType et))),
     (Core.Name "forall", (\ft -> Flows.map (\x -> Core.TypeForall x) (forallType ft))),

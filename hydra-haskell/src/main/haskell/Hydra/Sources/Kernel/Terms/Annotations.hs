@@ -62,12 +62,13 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decode.Core  as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Encode.Core  as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Encode.Core            as EncodeCore
+import Hydra.Encoding (encodeBindingName)
 
 
 ns :: Namespace
@@ -75,7 +76,7 @@ ns = Namespace "hydra.annotations"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, DecodeCore.ns, EncodeCore.ns, ExtractCore.ns, Lexical.ns, Monads.ns,
+    [Constants.ns, DecodeCore.ns, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
       Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
@@ -353,7 +354,7 @@ setTermDescription = define "setTermDescription" $
 setType :: TBinding (Maybe Type -> M.Map Name Term -> M.Map Name Term)
 setType = define "setType" $
   doc "Set type in annotations" $
-  "mt" ~> setAnnotation @@ Constants.key_type @@ Maybes.map (EncodeCore.type_) (var "mt")
+  "mt" ~> setAnnotation @@ Constants.key_type @@ Maybes.map (encoderFor _Type) (var "mt")
 
 setTypeAnnotation :: TBinding (Name -> Maybe Term -> Type -> Type)
 setTypeAnnotation = define "setTypeAnnotation" $
@@ -377,7 +378,7 @@ setTypeClasses = define "setTypeClasses" $
     "name" <~ Pairs.first (var "nameClasses") $
     "classes" <~ Pairs.second (var "nameClasses") $
     pair
-      (EncodeCore.name @@ var "name")
+      (encoderFor _Name @@ var "name")
       (Core.termSet (Sets.fromList (Lists.map (var "encodeClass") (Sets.toList (var "classes")))))) $
   "encoded" <~ Logic.ifElse (Maps.null (var "m"))
     nothing
@@ -424,7 +425,7 @@ typeElement = define "typeElement" $
   "name" ~> "typ" ~>
   "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
-    (EncodeCore.type_ @@ var "typ")
+    (encoderFor _Type @@ var "typ")
     (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type)))
 

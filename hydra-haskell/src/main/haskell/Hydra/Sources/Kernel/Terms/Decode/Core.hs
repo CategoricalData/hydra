@@ -71,6 +71,7 @@ module_ = Module ns elements
     Just ("Decode hydra.core types from the hydra.core.Term type")
   where
    elements = [
+     toBinding annotatedType,
      toBinding applicationType,
      toBinding eitherType,
      toBinding fieldType,
@@ -91,6 +92,82 @@ module_ = Module ns elements
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
+
+annotatedType :: TBinding (Term -> Flow Graph AnnotatedType)
+annotatedType = define "annotatedType" $
+    doc "Decode an annotated type from a term" $
+    Lexical.matchRecord @@ (lambda "m" $ binds [
+      "body">: Lexical.getField @@ var "m" @@ Core.nameLift _AnnotatedType_body @@ type_,
+      "annotation">: Lexical.getField @@ var "m" @@ Core.nameLift _AnnotatedType_annotation @@ decodeAnnotationMap] $
+      produce $ Core.annotatedType (var "body") (var "annotation"))
+  where
+    decodeAnnotationMap = lambda "mapTerm" $
+      cases _Term (var "mapTerm")
+        (Just $ Monads.unexpected @@ string "map" @@ (ShowCore.term @@ var "mapTerm")) [
+          _Term_map>>: lambda "m" $
+            Flows.map (unaryFunction Maps.fromList) $
+              Flows.mapList
+                (lambda "entry" $
+                  Flows.bind (name @@ (Pairs.first $ var "entry")) $
+                    lambda "k" $
+                      Flows.map
+                        (lambda "v" $ pair (var "k") (var "v"))
+                        (decodeTerm @@ (Pairs.second $ var "entry")))
+                (Maps.toList $ var "m")]
+
+    -- Minimal term decoder - handles literal and variable terms (sufficient for annotation maps)
+    decodeTerm = lambda "t" $
+      Lexical.matchUnion @@ Core.nameLift _Term @@ list [
+        pair (Core.nameLift _Term_literal)
+          (lambda "lit" $ Flows.map (unaryFunction Core.termLiteral) $ decodeLiteral @@ var "lit"),
+        pair (Core.nameLift _Term_variable)
+          (lambda "n" $ Flows.map (unaryFunction Core.termVariable) $ name @@ var "n")]
+        @@ var "t"
+
+    -- Complete literal decoder (ignoring binary)
+    decodeLiteral = lambda "lit" $
+      Lexical.matchUnion @@ Core.nameLift _Literal @@ list [
+        pair (Core.nameLift _Literal_boolean)
+          (lambda "b" $ Flows.map (unaryFunction Core.literalBoolean) $ ExtractCore.boolean @@ var "b"),
+        pair (Core.nameLift _Literal_float)
+          (lambda "fv" $ Flows.map (unaryFunction Core.literalFloat) $ decodeFloatValue @@ var "fv"),
+        pair (Core.nameLift _Literal_integer)
+          (lambda "iv" $ Flows.map (unaryFunction Core.literalInteger) $ decodeIntegerValue @@ var "iv"),
+        pair (Core.nameLift _Literal_string)
+          (lambda "s" $ Flows.map (unaryFunction Core.literalString) $ ExtractCore.string @@ var "s")]
+        @@ var "lit"
+
+    decodeFloatValue = lambda "fv" $
+      Lexical.matchUnion @@ Core.nameLift _FloatValue @@ list [
+        pair (Core.nameLift _FloatValue_bigfloat)
+          (lambda "v" $ Flows.map (unaryFunction Core.floatValueBigfloat) $ ExtractCore.bigfloat @@ var "v"),
+        pair (Core.nameLift _FloatValue_float32)
+          (lambda "v" $ Flows.map (unaryFunction Core.floatValueFloat32) $ ExtractCore.float32 @@ var "v"),
+        pair (Core.nameLift _FloatValue_float64)
+          (lambda "v" $ Flows.map (unaryFunction Core.floatValueFloat64) $ ExtractCore.float64 @@ var "v")]
+        @@ var "fv"
+
+    decodeIntegerValue = lambda "iv" $
+      Lexical.matchUnion @@ Core.nameLift _IntegerValue @@ list [
+        pair (Core.nameLift _IntegerValue_bigint)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueBigint) $ ExtractCore.bigint @@ var "v"),
+        pair (Core.nameLift _IntegerValue_int8)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueInt8) $ ExtractCore.int8 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_int16)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueInt16) $ ExtractCore.int16 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_int32)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueInt32) $ ExtractCore.int32 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_int64)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueInt64) $ ExtractCore.int64 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_uint8)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueUint8) $ ExtractCore.uint8 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_uint16)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueUint16) $ ExtractCore.uint16 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_uint32)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueUint32) $ ExtractCore.uint32 @@ var "v"),
+        pair (Core.nameLift _IntegerValue_uint64)
+          (lambda "v" $ Flows.map (unaryFunction Core.integerValueUint64) $ ExtractCore.uint64 @@ var "v")]
+        @@ var "iv"
 
 applicationType :: TBinding (Term -> Flow Graph ApplicationType)
 applicationType = define "applicationType" $
@@ -225,6 +302,9 @@ type_ = define "type" $
   lambda "dat" $
   cases _Term (var "dat")
     (Just $ trace (string "dbg 4") $ Lexical.matchUnion @@ Core.nameLift _Type @@ list [
+      pair
+        (Core.nameLift _Type_annotated)
+        (lambda "at" $ Flows.map (unaryFunction Core.typeAnnotated) $ annotatedType @@ var "at"),
       pair
         (Core.nameLift _Type_application)
         (lambda "at" $ Flows.map (unaryFunction Core.typeApplication) $ applicationType @@ var "at"),
