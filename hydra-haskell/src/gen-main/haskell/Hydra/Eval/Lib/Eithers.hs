@@ -16,20 +16,15 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Interpreter-friendly bimap for Either terms.
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap leftFun rightFun eitherTerm = ((\x -> case x of
-  Core.TermEither v1 -> (Flows.pure (Eithers.either
-    (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {
-      Core.applicationFunction = leftFun,
-      Core.applicationArgument = val}))))
-    (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = rightFun,
-      Core.applicationArgument = val}))))
-    v1))
+  Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {
+    Core.applicationFunction = leftFun,
+    Core.applicationArgument = val})))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
+    Core.applicationFunction = rightFun,
+    Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)
 
--- | Interpreter-friendly case analysis for Either terms.
 either :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 either leftFun rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermApplication (Core.Application {
@@ -37,4 +32,11 @@ either leftFun rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})) (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = rightFun,
     Core.applicationArgument = val})) v1))
+  _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)
+
+map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
+map rightFun eitherTerm = ((\x -> case x of
+  Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermEither (Left val)))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
+    Core.applicationFunction = rightFun,
+    Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)

@@ -77,6 +77,7 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim1       _eithers_isLeft           Eithers.isLeft           ["x", "y"]           (Prims.either_ x y) boolean,
     prim1       _eithers_isRight          Eithers.isRight          ["x", "y"]           (Prims.either_ x y) boolean,
     prim1       _eithers_lefts            Eithers.lefts            ["x", "y"]           (list $ Prims.either_ x y) (list x),
+    prim2Eval   _eithers_map              EvalEithers.map          ["x", "y", "z"]      (function x y) (Prims.either_ z x) (Prims.either_ z y),
     prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]           (list $ Prims.either_ x y) (pair (list x) (list y)),
     prim1       _eithers_rights           Eithers.rights           ["x", "y"]           (list $ Prims.either_ x y) (list y)]
   where
