@@ -27,6 +27,9 @@ isRight = E.isRight
 lefts :: [Either a b] -> [a]
 lefts = E.lefts
 
+map :: (a -> b) -> Either c a -> Either c b
+map = fmap
+
 partitionEithers :: [Either a b] -> ([a], [b])
 partitionEithers = E.partitionEithers
 
