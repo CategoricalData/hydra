@@ -177,6 +177,7 @@ module_ = Module ns elements
       toBinding requireRowType,
       toBinding requireSchemaType,
       toBinding requireType,
+      toBinding requireUnionField_,
       toBinding requireUnionType,
       toBinding resolveType,
       toBinding schemaGraphToTypingEnvironment,
@@ -620,6 +621,23 @@ requireType = define "requireType" $
   trace (Strings.cat2 (string "require type ") (Core.unName (var "name"))) $
   Flows.bind (Lexical.withSchemaContext @@ (Lexical.requireElement @@ var "name")) (
     "el" ~> DecodeCore.type_ @@ Core.bindingTerm (var "el"))
+
+requireUnionField_ :: TBinding (Name -> Name -> Flow Graph Type)
+requireUnionField_ = define "requireUnionField" $
+  doc "Require a field type from a union type" $
+  "tname" ~> "fname" ~>
+  "withRowType" <~ ("rt" ~>
+    "matches" <~ (Lists.filter
+      ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
+      (Core.rowTypeFields $ var "rt")) $
+    Logic.ifElse (Lists.null $ var "matches")
+      (Flows.fail $ Strings.cat $ list [
+        string "no field \"",
+        Core.unName (var "fname"),
+        string "\" in union type \"",
+        Core.unName (var "tname")])
+      (produce $ Core.fieldTypeType $ Lists.head $ var "matches")) $
+  Flows.bind (requireUnionType @@ var "tname") (var "withRowType")
 
 requireUnionType :: TBinding (Name -> Flow Graph RowType)
 requireUnionType = define "requireUnionType" $

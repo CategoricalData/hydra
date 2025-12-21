@@ -278,9 +278,9 @@ encodeTerm namespaces term =
               ft = (Core.fieldTerm field)
               lhs = (Ast.ExpressionVariable (Utils.unionFieldReference namespaces sname fn))
               dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
-          in ((\x -> case x of
-            Core.TermUnit -> (Flows.pure lhs)
-            _ -> dflt) (Rewriting.deannotateTerm ft))
+          in (Flows.bind (Schemas.requireUnionField sname fn) (\ftyp -> (\x -> case x of
+            Core.TypeUnit -> (Flows.pure lhs)
+            _ -> dflt) (Rewriting.deannotateType ftyp)))
         Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
         Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
         Core.TermWrap v1 ->  
