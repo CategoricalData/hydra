@@ -362,6 +362,18 @@ requireSchemaType cx tname =
 requireType :: (Core.Name -> Compute.Flow Graph.Graph Core.Type)
 requireType name = (Monads.withTrace (Strings.cat2 "require type " (Core.unName name)) (Flows.bind (Lexical.withSchemaContext (Lexical.requireElement name)) (\el -> Core_.type_ (Core.bindingTerm el))))
 
+-- | Require a field type from a union type
+requireUnionField :: (Core.Name -> Core.Name -> Compute.Flow Graph.Graph Core.Type)
+requireUnionField tname fname =  
+  let withRowType = (\rt ->  
+          let matches = (Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) (Core.rowTypeFields rt))
+          in (Logic.ifElse (Lists.null matches) (Flows.fail (Strings.cat [
+            "no field \"",
+            Core.unName fname,
+            "\" in union type \"",
+            (Core.unName tname)])) (Flows.pure (Core.fieldTypeType (Lists.head matches)))))
+  in (Flows.bind (requireUnionType tname) withRowType)
+
 -- | Require a name to resolve to a union type
 requireUnionType :: (Core.Name -> Compute.Flow Graph.Graph Core.RowType)
 requireUnionType name =  
