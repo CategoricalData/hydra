@@ -55,6 +55,8 @@ import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Dsl.Meta.DeepCore as DC
+import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.Int                as I
 import qualified Data.List               as L
@@ -142,43 +144,25 @@ encodeFieldValue = define "encodeFieldValue" $
   doc "Generate the encoder for a field's value" $
   "typeName" ~> "fieldName" ~> "fieldType" ~>
     -- Create a lambda that encodes the value and wraps in Term.union with injection
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda
-        (Core.name (string "v"))
-        nothing
-        -- Build Term.union containing an encoded Injection with the encoded value
-        (Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_union)
-            (encodeInjection
-              @@ (var "typeName")
-              @@ (var "fieldName")
-              @@ (Core.termApplication $ Core.application
-                  (encodeType @@ var "fieldType")
-                  (Core.termVariable (Core.name (string "v")))))))
+    DC.lambda "v" $
+      -- Build Term.union containing an encoded Injection with the encoded value
+      DC.injection _Term (DC.field _Term_union
+        (encodeInjection @@ var "typeName" @@ var "fieldName"
+          @@ ((encodeType @@ var "fieldType") @@@ DC.var "v")))
 
 -- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
 encodeInjection :: TBinding (Name -> Name -> Term -> Term)
 encodeInjection = define "encodeInjection" $
   doc "Encode an Injection as a term" $
-  "typeName" ~> "fieldName" ~> "fieldTerm" ~>
-    Core.termRecord $ Core.record
-      (Core.nameLift _Injection)
-      (list [
-        Core.field (Core.nameLift _Injection_typeName) (encodeName @@ var "typeName"),
-        Core.field (Core.nameLift _Injection_field) (encodeField
-          @@ (var "fieldName")
-          @@ (var "fieldTerm"))])
+  "typeName" ~> "fieldName" ~> "fieldTerm" ~> DC.record _Injection [
+    DC.field _Injection_typeName (encodeName @@ var "typeName"),
+    DC.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
   where
     -- Encode a Field as a Term (produces a Record of type hydra.core.Field)
     encodeField :: TTerm (Name -> Term -> Term)
-    encodeField =
-      "fname" ~> "fterm" ~>
-        Core.termRecord $ Core.record
-          (Core.nameLift _Field)
-          (list [
-            Core.field (Core.nameLift _Field_name) (encodeName @@ var "fname"),
-            Core.field (Core.nameLift _Field_term) (var "fterm")])
+    encodeField = "fname" ~> "fterm" ~> DC.record _Field [
+      DC.field _Field_name (encodeName @@ var "fname"),
+      DC.field _Field_term (var "fterm")]
 
 -- | Generate an encoder for a literal type
 -- For literals, the input is a native Haskell value (e.g., String, Int32).
@@ -187,64 +171,25 @@ encodeLiteralType :: TBinding (LiteralType -> Term)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Generate an encoder for a literal type" $
   match _LiteralType (Just identityEncoder) [
-    _LiteralType_binary>>: "_" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_literal)
-              (Core.termUnion $ Core.injection
-                (Core.nameLift _Literal)
-                (Core.field (Core.nameLift _Literal_binary)
-                  (Core.termVariable (Core.name (string "x")))))),
-    _LiteralType_boolean>>: "_" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_literal)
-              (Core.termUnion $ Core.injection
-                (Core.nameLift _Literal)
-                (Core.field (Core.nameLift _Literal_boolean)
-                  (Core.termVariable (Core.name (string "x")))))),
-    _LiteralType_string>>: "_" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_literal)
-              (Core.termUnion $ Core.injection
-                (Core.nameLift _Literal)
-                (Core.field (Core.nameLift _Literal_string)
-                  (Core.termVariable (Core.name (string "x")))))),
+    _LiteralType_binary>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
+    _LiteralType_boolean>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
+    _LiteralType_string>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
     -- For integer types, wrap in Term.literal.integer with the specific integer variant
     _LiteralType_integer>>: "intType" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_literal)
-              (Core.termUnion $ Core.injection
-                (Core.nameLift _Literal)
-                (Core.field (Core.nameLift _Literal_integer)
-                  (encodeIntegerValue @@ var "intType" @@ (Core.termVariable (Core.name (string "x"))))))),
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal
+        (DC.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DC.var "x")),
     -- For float types, wrap in Term.literal.float with the specific float variant
     _LiteralType_float>>: "floatType" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_literal)
-              (Core.termUnion $ Core.injection
-                (Core.nameLift _Literal)
-                (Core.field (Core.nameLift _Literal_float)
-                  (encodeFloatValue @@ var "floatType" @@ (Core.termVariable (Core.name (string "x")))))))]
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal
+        (DC.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DC.var "x"))]
   where
+    -- Helper to wrap a Literal value in Term.literal
+    termLiteral lit = DC.injection _Term (DC.field _Term_literal lit)
     -- Default: identity (should not be reached for well-formed types)
-    identityEncoder =
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (string "x")) nothing $
-          Core.termVariable (Core.name (string "x"))
+    identityEncoder = DC.lambda "x" $ DC.var "x"
 
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
@@ -274,10 +219,7 @@ encodeModule = define "encodeModule" $
 encodeName :: TBinding (Name -> Term)
 encodeName = define "encodeName" $
   doc "Encode a Name as a term" $
-  "n" ~>
-    Core.termWrap $ Core.wrappedTerm
-      (Core.nameLift _Name)
-      (Core.termLiteral $ Core.literalString (Core.unName (var "n")))
+  "n" ~> DC.wrap _Name (DC.string (Core.unName (var "n")))
 
 -- | Generate an encoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.encode.util"
@@ -297,36 +239,29 @@ encodeRecordType :: TBinding (RowType -> Term)
 encodeRecordType = define "encodeRecordType" $
   doc "Generate an encoder for a record type" $
   "rt" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "x")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_record)
-            (Core.termRecord $ Core.record
-              (Core.nameLift _Record)
-              (list [
-                Core.field (Core.nameLift _Record_typeName)
-                  (encodeName @@ (Core.rowTypeTypeName (var "rt"))),
-                Core.field (Core.nameLift _Record_fields)
-                  (Core.termList (primitive _lists_map @@ (encodeRecordField @@ var "rt") @@ (Core.rowTypeFields (var "rt"))))])))
+    DC.lambda "x" $
+      DC.injection _Term (DC.field _Term_record
+        (DC.record _Record [
+          DC.field _Record_typeName (encodeName @@ Core.rowTypeTypeName (var "rt")),
+          DC.field _Record_fields
+            (DC.list (primitive _lists_map @@ (encodeRecordField @@ var "rt") @@ Core.rowTypeFields (var "rt")))]))
   where
     -- Helper to encode a single record field
     -- Takes the record type name and a field type, produces an encoded Field term
     encodeRecordField :: TTerm (RowType -> FieldType -> Term)
     encodeRecordField =
       "recType" ~> "ft" ~>
-        Core.termRecord $ Core.record
-          (Core.nameLift _Field)
-          (list [
-            Core.field (Core.nameLift _Field_name)
-              (encodeName @@ (Core.fieldTypeName (var "ft"))),
-            Core.field (Core.nameLift _Field_term)
-              (Core.termApplication $ Core.application
-                (encodeType @@ (Core.fieldTypeType (var "ft")))
-                (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-                    Core.projection (Core.rowTypeTypeName (var "recType")) (Core.fieldTypeName (var "ft")))
-                  (Core.termVariable (Core.name (string "x")))))])
+        DC.record _Field [
+          DC.field _Field_name (encodeName @@ Core.fieldTypeName (var "ft")),
+          DC.field _Field_term
+            ((encodeType @@ Core.fieldTypeType (var "ft"))
+              @@@ (projectField (Core.rowTypeTypeName (var "recType")) (Core.fieldTypeName (var "ft"))
+                    @@@ DC.var "x"))]
+
+    -- Helper to create a field projection term
+    projectField typeName fieldName =
+      Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
+        Core.projection typeName fieldName
 
 -- | Generate an encoder term for a given Type
 -- This generates a function that encodes values of the type to Terms
@@ -336,20 +271,17 @@ encodeType = define "encodeType" $
   match _Type (Just identityEncoder) [
     _Type_annotated>>: "at" ~>
       -- Strip annotation and recurse
-      encodeType @@ (Core.annotatedTypeBody (var "at")),
+      encodeType @@ Core.annotatedTypeBody (var "at"),
     _Type_application>>: "appType" ~>
       -- For type applications like (DataRow v), apply the function encoder to the argument encoder
-      -- encodeType(DataRow) @@ encodeType(v)
-      Core.termApplication $ Core.application
-        (encodeType @@ (Core.applicationTypeFunction (var "appType")))
-        (encodeType @@ (Core.applicationTypeArgument (var "appType"))),
+      (encodeType @@ Core.applicationTypeFunction (var "appType"))
+        @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
     _Type_either>>: "et" ~>
       encodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
       encodeForallType @@ var "ft",
-    _Type_function>>: "_" ~>
+    _Type_function>>: constant $
       -- For function types, use identity encoder since functions can't be serialized as data
-      -- The function is passed through as-is (wrapped in TermFunction at the type level)
       identityEncoder,
     _Type_list>>: "elemType" ~>
       encodeListType @@ var "elemType",
@@ -369,27 +301,15 @@ encodeType = define "encodeType" $
       encodeUnionType @@ var "rt",
     _Type_wrap>>: "wt" ~>
       encodeWrappedType @@ var "wt",
-    _Type_unit>>: "_" ~>
+    _Type_unit>>: constant $
       -- For unit type, return a lambda that ignores input and produces encoded unit term
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda
-          (Core.name (string "_"))
-          nothing
-          (Core.termUnion $ Core.injection
-            (Core.nameLift _Term)
-            (Core.field (Core.nameLift _Term_unit) Core.termUnit)),
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
     _Type_variable>>: "typeName" ~>
       -- For type variables (references to other types), generate a reference to that
-      -- type's encoder. Uses encodeBindingName which produces fully qualified names
-      -- for cross-module references.
+      -- type's encoder. Uses encodeBindingName which produces fully qualified names.
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
-    identityEncoder =
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda
-          (Core.name (string "x"))
-          nothing
-          (Core.termVariable (Core.name (string "x")))
+    identityEncoder = DC.lambda "x" $ DC.var "x"
 
 -- | Generate an encoder for a union type (including enums)
 -- Generates a case match over all variants
@@ -405,10 +325,10 @@ encodeUnionType = define "encodeUnionType" $
           ("ft" ~> Core.field
             (Core.fieldTypeName (var "ft"))
             (encodeFieldValue
-              @@ (Core.rowTypeTypeName (var "rt"))
-              @@ (Core.fieldTypeName (var "ft"))
-              @@ (Core.fieldTypeType (var "ft"))))
-          @@ (Core.rowTypeFields (var "rt")))
+              @@ Core.rowTypeTypeName (var "rt")
+              @@ Core.fieldTypeName (var "ft")
+              @@ Core.fieldTypeType (var "ft")))
+          @@ Core.rowTypeFields (var "rt"))
 
 -- | Generate an encoder for a wrapped type
 -- Unwraps the value, encodes it, and wraps in encoded TermWrap
@@ -416,23 +336,13 @@ encodeWrappedType :: TBinding (WrappedType -> Term)
 encodeWrappedType = define "encodeWrappedType" $
   doc "Generate an encoder for a wrapped type" $
   "wt" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "x")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_wrap)
-            (Core.termRecord $ Core.record
-              (Core.nameLift _WrappedTerm)
-              (list [
-                Core.field (Core.nameLift _WrappedTerm_typeName)
-                  (encodeName @@ (Core.wrappedTypeTypeName (var "wt"))),
-                Core.field (Core.nameLift _WrappedTerm_body)
-                  (Core.termApplication $ Core.application
-                    (encodeType @@ (Core.wrappedTypeBody (var "wt")))
-                    (Core.termApplication $ Core.application
-                      (Core.termFunction $ Core.functionElimination $
-                        Core.eliminationWrap (Core.wrappedTypeTypeName (var "wt")))
-                      (Core.termVariable (Core.name (string "x")))))])))
+    DC.lambda "x" $
+      DC.injection _Term (DC.field _Term_wrap
+        (DC.record _WrappedTerm [
+          DC.field _WrappedTerm_typeName (encodeName @@ Core.wrappedTypeTypeName (var "wt")),
+          DC.field _WrappedTerm_body
+            ((encodeType @@ Core.wrappedTypeBody (var "wt"))
+              @@@ (DC.unwrap (Core.wrappedTypeTypeName (var "wt")) @@@ DC.var "x"))]))
 
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
@@ -459,7 +369,7 @@ isUnitType_ :: TBinding (Type -> Bool)
 isUnitType_ = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just $ false) [
-    _Type_unit>>: "_" ~> true]
+    _Type_unit>>: constant true]
 
 -- | Encode an integer value based on its integer type
 -- Wraps the value in the appropriate IntegerValue variant as an injection
@@ -469,22 +379,19 @@ encodeIntegerValue = define "encodeIntegerValue" $
   "intType" ~> "valTerm" ~>
     Core.termUnion $ Core.injection
       (Core.nameLift _IntegerValue)
-      (Core.field
-        (intTypeToFieldName @@ var "intType")
-        (var "valTerm"))
+      (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
   where
-    -- Map IntegerType to the corresponding field name for IntegerValue
     intTypeToFieldName :: TTerm (IntegerType -> Name)
     intTypeToFieldName = match _IntegerType Nothing [
-      _IntegerType_bigint>>: "_" ~> Core.nameLift _IntegerValue_bigint,
-      _IntegerType_int8>>:   "_" ~> Core.nameLift _IntegerValue_int8,
-      _IntegerType_int16>>:  "_" ~> Core.nameLift _IntegerValue_int16,
-      _IntegerType_int32>>:  "_" ~> Core.nameLift _IntegerValue_int32,
-      _IntegerType_int64>>:  "_" ~> Core.nameLift _IntegerValue_int64,
-      _IntegerType_uint8>>:  "_" ~> Core.nameLift _IntegerValue_uint8,
-      _IntegerType_uint16>>: "_" ~> Core.nameLift _IntegerValue_uint16,
-      _IntegerType_uint32>>: "_" ~> Core.nameLift _IntegerValue_uint32,
-      _IntegerType_uint64>>: "_" ~> Core.nameLift _IntegerValue_uint64]
+      _IntegerType_bigint>>: constant $ Core.nameLift _IntegerValue_bigint,
+      _IntegerType_int8>>:   constant $ Core.nameLift _IntegerValue_int8,
+      _IntegerType_int16>>:  constant $ Core.nameLift _IntegerValue_int16,
+      _IntegerType_int32>>:  constant $ Core.nameLift _IntegerValue_int32,
+      _IntegerType_int64>>:  constant $ Core.nameLift _IntegerValue_int64,
+      _IntegerType_uint8>>:  constant $ Core.nameLift _IntegerValue_uint8,
+      _IntegerType_uint16>>: constant $ Core.nameLift _IntegerValue_uint16,
+      _IntegerType_uint32>>: constant $ Core.nameLift _IntegerValue_uint32,
+      _IntegerType_uint64>>: constant $ Core.nameLift _IntegerValue_uint64]
 
 -- | Encode a float value based on its float type
 -- Wraps the value in the appropriate FloatValue variant as an injection
@@ -494,16 +401,13 @@ encodeFloatValue = define "encodeFloatValue" $
   "floatType" ~> "valTerm" ~>
     Core.termUnion $ Core.injection
       (Core.nameLift _FloatValue)
-      (Core.field
-        (floatTypeToFieldName @@ var "floatType")
-        (var "valTerm"))
+      (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
   where
-    -- Map FloatType to the corresponding field name for FloatValue
     floatTypeToFieldName :: TTerm (FloatType -> Name)
     floatTypeToFieldName = match _FloatType Nothing [
-      _FloatType_bigfloat>>: "_" ~> Core.nameLift _FloatValue_bigfloat,
-      _FloatType_float32>>:  "_" ~> Core.nameLift _FloatValue_float32,
-      _FloatType_float64>>:  "_" ~> Core.nameLift _FloatValue_float64]
+      _FloatType_bigfloat>>: constant $ Core.nameLift _FloatValue_bigfloat,
+      _FloatType_float32>>:  constant $ Core.nameLift _FloatValue_float32,
+      _FloatType_float64>>:  constant $ Core.nameLift _FloatValue_float64]
 
 -- | Generate an encoder for a list type
 -- Maps the element encoder over the list and wraps in Term.list
@@ -511,19 +415,9 @@ encodeListType :: TBinding (Type -> Term)
 encodeListType = define "encodeListType" $
   doc "Generate an encoder for a list type" $
   "elemType" ~>
-    -- Generate a lambda term that applies lists.map at runtime to encode each element
-    -- The result is a Term representing: \xs -> Term.list (lists.map elemEncoder xs)
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "xs")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_list)
-            -- Apply lists.map primitive at runtime to map the element encoder over the input list
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_map)
-                (encodeType @@ var "elemType"))  -- The element encoder
-              (Core.termVariable (Core.name (string "xs")))))
+    DC.lambda "xs" $
+      DC.injection _Term (DC.field _Term_list
+        (DC.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DC.var "xs"))
 
 -- | Generate an encoder for a map type
 -- Encodes each key/value pair and wraps in Term.map
@@ -531,19 +425,12 @@ encodeMapType :: TBinding (MapType -> Term)
 encodeMapType = define "encodeMapType" $
   doc "Generate an encoder for a map type" $
   "mt" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "m")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_map)
-            -- Apply maps.bimap primitive at runtime to encode keys and values
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_bimap)
-                  (encodeType @@ (Core.mapTypeKeys (var "mt"))))    -- Key encoder
-                (encodeType @@ (Core.mapTypeValues (var "mt"))))  -- Value encoder
-              (Core.termVariable (Core.name (string "m")))))
+    DC.lambda "m" $
+      DC.injection _Term (DC.field _Term_map
+        (DC.primitiveEncoded _maps_bimap
+          @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
+          @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
+          @@@ DC.var "m"))
 
 -- | Generate an encoder for an Either type
 -- Generates a case match over Left/Right variants
@@ -551,19 +438,12 @@ encodeEitherType :: TBinding (EitherType -> Term)
 encodeEitherType = define "encodeEitherType" $
   doc "Generate an encoder for an Either type" $
   "et" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "e")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_either)
-            -- Apply eithers.bimap primitive at runtime to encode Left/Right values
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_bimap)
-                  (encodeType @@ (Core.eitherTypeLeft (var "et"))))   -- Left encoder
-                (encodeType @@ (Core.eitherTypeRight (var "et"))))  -- Right encoder
-              (Core.termVariable (Core.name (string "e")))))
+    DC.lambda "e" $
+      DC.injection _Term (DC.field _Term_either
+        (DC.primitiveEncoded _eithers_bimap
+          @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
+          @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
+          @@@ DC.var "e"))
 
 -- | Generate an encoder for a polymorphic (forall) type
 -- For a type like `forall a. T[a]`, generates a lambda that takes an encoder for `a`
@@ -573,66 +453,36 @@ encodeForallType = define "encodeForallType" $
   doc "Generate an encoder for a polymorphic (forall) type" $
   "ft" ~>
     -- Generate a lambda that takes an encoder for the type parameter
-    -- The parameter name is the type variable name (e.g., "a" -> "encodeA" or just use the variable name)
     Core.termFunction $ Core.functionLambda $
       Core.lambda
-        (encodeBindingName @@ (Core.forallTypeParameter (var "ft")))  -- parameter encoder name
+        (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
         nothing
-        -- The body is the encoder for the inner type, which can reference the parameter encoder
-        (encodeType @@ (Core.forallTypeBody (var "ft")))
+        (encodeType @@ Core.forallTypeBody (var "ft"))
 
 -- | Generate an encoder for an optional type
 -- Encodes the inner value if present and wraps in Term.optional
 encodeOptionalType :: TBinding (Type -> Term)
 encodeOptionalType = define "encodeOptionalType" $
   doc "Generate an encoder for an optional type" $
-  "elemType" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "opt")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_maybe)
-            -- Apply maybes.map primitive at runtime to encode the value if present
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_map)
-                (encodeType @@ var "elemType"))  -- Element encoder
-              (Core.termVariable (Core.name (string "opt")))))
+  "elemType" ~> DC.lambda "opt" $
+    DC.injection _Term (DC.field _Term_maybe
+      (DC.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DC.var "opt"))
 
 -- | Generate an encoder for a pair type
 -- Encodes both elements and wraps in Term.pair
 encodePairType :: TBinding (PairType -> Term)
 encodePairType = define "encodePairType" $
   doc "Generate an encoder for a pair type" $
-  "pt" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "p")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_pair)
-            -- Apply pairs.bimap primitive at runtime to encode both elements
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_bimap)
-                  (encodeType @@ (Core.pairTypeFirst (var "pt"))))   -- First encoder
-                (encodeType @@ (Core.pairTypeSecond (var "pt"))))  -- Second encoder
-              (Core.termVariable (Core.name (string "p")))))
+  "pt" ~> DC.lambda "p" $ DC.injection _Term $ DC.field _Term_pair $ DC.primitiveEncoded _pairs_bimap
+    @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
+    @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
+    @@@ DC.var "p"
 
 -- | Generate an encoder for a set type
 -- Encodes each element and wraps in Term.set
 encodeSetType :: TBinding (Type -> Term)
 encodeSetType = define "encodeSetType" $
   doc "Generate an encoder for a set type" $
-  "elemType" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "s")) nothing $
-        Core.termUnion $ Core.injection
-          (Core.nameLift _Term)
-          (Core.field (Core.nameLift _Term_set)
-            -- Apply sets.map primitive at runtime to encode each element
-            (Core.termApplication $ Core.application
-              (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_map)
-                (encodeType @@ var "elemType"))  -- Element encoder
-              (Core.termVariable (Core.name (string "s")))))
+  "elemType" ~> DC.lambda "s" $
+    DC.injection _Term (DC.field _Term_set
+      (DC.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DC.var "s"))
