@@ -29,6 +29,9 @@ isRight = primitive1 _eithers_isRight
 lefts :: TTerm [Either a b] -> TTerm [a]
 lefts = primitive1 _eithers_lefts
 
+map :: TTerm (a -> b) -> TTerm (Either c a) -> TTerm (Either c b)
+map = primitive2 _eithers_map
+
 partitionEithers :: TTerm [Either a b] -> TTerm ([a], [b])
 partitionEithers = primitive1 _eithers_partitionEithers
 

@@ -72,7 +72,8 @@ module_ = Module ns elements
   where
     elements = [
       toBinding bimap_,
-      toBinding either_]
+      toBinding either_,
+      toBinding map_]
 
 -- | Interpreter-friendly bimap for Either terms.
 -- Takes two function terms (for left and right) and an Either term, applies
@@ -102,4 +103,16 @@ either_ = define "either" $
       produce $ Eithers.either_
         ("val" ~> Core.termApplication $ Core.application (var "leftFun") (var "val"))
         ("val" ~> Core.termApplication $ Core.application (var "rightFun") (var "val"))
+        (var "e")]
+
+map_ :: TBinding (Term -> Term -> Flow s Term)
+map_ = define "map" $
+  doc "Interpreter-friendly map for Either terms." $
+  "rightFun" ~> "eitherTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      produce $ Eithers.either_
+        ("val" ~> Core.termEither $ left $ Core.termEither $ left $ var "val")
+        ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
