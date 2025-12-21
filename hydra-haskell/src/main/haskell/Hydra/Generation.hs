@@ -12,13 +12,16 @@ import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
+import qualified Hydra.Sources.Kernel.Terms.Decoding as DecodingSource
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Module as ModuleTypes
 import qualified Hydra.Encode.Module as EncodeModule
+import qualified Hydra.Schemas as Schemas
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -369,3 +372,75 @@ writeEncoderSourceHaskell basePath universeModules typeModules = do
     -- The source modules need the Module encoder and Core types
     let allMods = universeModules ++ sourceMods
     writeHaskell basePath allMods sourceMods
+
+-- | Generate decoder modules for a list of type modules.
+-- For each type module, generates a decoder module with functions to decode Terms to values.
+-- The universe modules are used for dependency resolution.
+-- Returns Nothing for modules that have no decodable types.
+generateDecoderModules :: [Module] -> [Module] -> IO [Module]
+generateDecoderModules universeModules typeModules = case graphSchema graph of
+    Nothing -> fail "No schema graph available"
+    Just schemaGraph -> do
+      mresult <- runFlow schemaGraph (CM.mapM Decoding.decodeModule typeModules)
+      case mresult of
+        Nothing -> fail "Failed to generate decoder modules"
+        Just results -> return $ Y.catMaybes results
+  where
+    graph = modulesToGraph universeModules universeModules
+
+-- | Write decoder modules as Haskell to the given path.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: type modules to generate decoders for
+-- Note: This function bypasses type inference since decoder terms are object-level
+-- Terms that reference primitives in a way inference cannot handle.
+writeDecoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
+writeDecoderHaskell basePath universeModules typeModules = do
+    decoderMods <- generateDecoderModules universeModules typeModules
+    -- Add core types namespace to each decoder module's type dependencies
+    -- since the decoders reference hydra.core.Term, hydra.util.DecodingError, etc.
+    let withCoreDeps = fmap addDeps decoderMods
+    generateDecoderSources basePath universeModules withCoreDeps
+  where
+    addDeps m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
+
+-- | Generate Haskell source files for decoder modules without running type inference.
+-- Decoder modules already have explicit type schemes on their bindings, so we bypass
+-- inference and use those types directly.
+generateDecoderSources :: FilePath -> [Module] -> [Module] -> IO ()
+generateDecoderSources basePath universeModules decoderModules = do
+    mfiles <- runFlow bootstrapGraph (generateFiles decoderModules)
+    case mfiles of
+      Nothing -> fail "Failed to generate decoder files"
+      Just files -> mapM_ writePair files
+  where
+    -- Build the namespace map for type resolution
+    namespaceMap = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ decoderModules]
+    schemaMods = moduleTypeDependenciesTransitive namespaceMap decoderModules
+    schemaElements = L.filter isNativeType $ L.concat (moduleElements <$> schemaMods)
+    schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
+
+    generateFiles mods = withTrace "generate decoder modules" $ do
+      maps <- CM.mapM forEachModule mods
+      return $ L.concat (M.toList <$> maps)
+
+    -- Convert a binding to a TermDefinition using its explicit type scheme
+    bindingToTermDef :: Binding -> TermDefinition
+    bindingToTermDef b = TermDefinition {
+        termDefinitionName = bindingName b,
+        termDefinitionTerm = bindingTerm b,
+        termDefinitionType = case bindingType b of
+          Just ts -> Schemas.typeSchemeToFType ts
+          Nothing -> TypeVariable (Name "unknown") -- fallback, should not happen
+      }
+
+    forEachModule m = withTrace ("decoder module " ++ unNamespace (moduleNamespace m)) $ do
+      let defs = fmap (DefinitionTerm . bindingToTermDef) $ moduleElements m
+      withState schemaGraph $ moduleToHaskell m defs
+
+    writePair (path, s) = do
+        let fullPath = FP.combine basePath path
+        SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+        writeFile fullPath withNewline
+      where
+        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
