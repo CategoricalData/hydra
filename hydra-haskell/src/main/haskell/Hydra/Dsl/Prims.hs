@@ -50,6 +50,12 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = ExtractCore.boolean
     decode = pure . Terms.boolean
 
+comparison :: TermCoder Comparison
+comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
+  where
+    encode = ExtractUtil.comparison
+    decode = pure . Terms.comparison
+
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
 either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
   where
@@ -64,12 +70,6 @@ either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCod
       Prelude.Right y -> do
         yTerm <- coderDecode (termCoderCoder yCoder) y
         return $ Terms.right yTerm
-
-comparison :: TermCoder Comparison
-comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
-  where
-    encode = ExtractUtil.comparison
-    decode = pure . Terms.comparison
 
 floatType :: TermCoder FloatType
 floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode

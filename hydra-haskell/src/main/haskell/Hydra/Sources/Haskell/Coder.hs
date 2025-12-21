@@ -443,9 +443,10 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "ft">: Core.fieldTerm $ var "field",
         "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Flows.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
-        cases _Term (Rewriting.deannotateTerm @@ var "ft")
+        "ftyp" <<~ Schemas.requireUnionField_ @@ var "sname" @@ var "fn" $
+        cases _Type (Rewriting.deannotateType @@ var "ftyp")
           (Just $ var "dflt") [
-          _Term_unit>>: constant $ Flows.pure $ var "lhs"],
+          _Type_unit>>: constant $ Flows.pure $ var "lhs"],
       _Term_unit>>: constant $ Flows.pure $ inject H._Expression H._Expression_tuple $ list ([] :: [TTerm H.Expression]),
       _Term_variable>>: "name" ~>
         Flows.pure $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
