@@ -16,8 +16,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
--- Operators
-
 -- | Function composition operator: f <.> g creates a function that applies g then f
 -- Example: var "stringLength" <.> var "toString"
 (<.>) :: Term -> Term -> Term
@@ -33,7 +31,6 @@ fun @@ arg = apply fun arg
 infixr 0 >:
 (>:) :: String -> Term -> Field
 name>: term = field name term
-
 
 -- | Attach an annotation to a term
 -- Example: annot (M.fromList [(Name "comment", string "A User ID")]) (var "userId")

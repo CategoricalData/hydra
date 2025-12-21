@@ -16,17 +16,15 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Interpreter-friendly bimap for Pair terms.
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap firstFun secondFun pairTerm = ((\x -> case x of
-  Core.TermPair v1 -> (let
-    fst = (Pairs.first v1)
-    snd = (Pairs.second v1)
-    in (Flows.pure (Core.TermPair (
-      (Core.TermApplication (Core.Application {
+  Core.TermPair v1 ->  
+    let fst = (Pairs.first v1)
+    in  
+      let snd = (Pairs.second v1)
+      in (Flows.pure (Core.TermPair (Core.TermApplication (Core.Application {
         Core.applicationFunction = firstFun,
-        Core.applicationArgument = fst})),
-      (Core.TermApplication (Core.Application {
+        Core.applicationArgument = fst}), (Core.TermApplication (Core.Application {
         Core.applicationFunction = secondFun,
-        Core.applicationArgument = snd}))))))
+        Core.applicationArgument = snd})))))
   _ -> (Monads.unexpected "pair value" (Core_.term pairTerm))) pairTerm)
