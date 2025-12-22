@@ -54,6 +54,9 @@ field fname body = Core.field (Core.nameLift fname) body
 lambda :: String -> TTerm Term -> TTerm Term
 lambda v body = Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (P.string v)) P.nothing $ body
 
+constant :: TTerm Term -> TTerm Term
+constant = lambda ignoredVariable
+
 -- | Create a reference to a primitive function
 primitive :: Name -> TTerm Term
 primitive name = Core.termFunction $ Core.functionPrimitive $ Core.nameLift name
@@ -73,9 +76,12 @@ project :: Name -> Name -> TTerm Term
 project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
   Core.projection (Core.nameLift tname) (Core.nameLift fname)
 
+unwrap :: Name -> TTerm Term
+unwrap name = unwrapDynamic (Core.nameLift name)
+
 -- | Create an unwrap elimination for a wrapped type
-unwrap :: TTerm Name -> TTerm Term
-unwrap tname = Core.termFunction $ Core.functionElimination $ Core.eliminationWrap tname
+unwrapDynamic :: TTerm Name -> TTerm Term
+unwrapDynamic tname = Core.termFunction $ Core.functionElimination $ Core.eliminationWrap tname
 
 --------------------------------------------------------------------------------
 -- Literals and basic terms

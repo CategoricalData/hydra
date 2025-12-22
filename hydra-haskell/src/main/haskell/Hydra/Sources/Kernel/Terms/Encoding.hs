@@ -342,7 +342,7 @@ encodeWrappedType = define "encodeWrappedType" $
           DC.field _WrappedTerm_typeName (encodeName @@ Core.wrappedTypeTypeName (var "wt")),
           DC.field _WrappedTerm_body
             ((encodeType @@ Core.wrappedTypeBody (var "wt"))
-              @@@ (DC.unwrap (Core.wrappedTypeTypeName (var "wt")) @@@ DC.var "x"))]))
+              @@@ (DC.unwrapDynamic (Core.wrappedTypeTypeName (var "wt")) @@@ DC.var "x"))]))
 
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)

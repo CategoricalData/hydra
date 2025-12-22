@@ -725,7 +725,14 @@ decodeUnionType rt =
                       Core.wrappedTermBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                         Core.applicationArgument = (Core.TermList [
-                          Core.TermLiteral (Core.LiteralString "no such field ")])}))}))))})),
+                          Core.TermLiteral (Core.LiteralString "no such field "),
+                          Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
+                          Core.TermLiteral (Core.LiteralString " in union type "),
+                          (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "f"),
                     Core.lambdaDomain = Nothing,
@@ -748,7 +755,10 @@ decodeUnitType = (Core.TermFunction (Core.FunctionElimination (Core.EliminationU
   Core.caseStatementCases = [
     Core.Field {
       Core.fieldName = (Core.Name "unit"),
-      Core.fieldTerm = (Core.TermEither (Right Core.TermUnit))}]}))))
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "_"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermEither (Right Core.TermUnit))})))}]}))))
 
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: (Core.WrappedType -> Core.Term)

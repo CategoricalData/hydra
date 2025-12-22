@@ -340,33 +340,21 @@ decodeUnionType = define "decodeUnionType" $
       DC.primitive _maybes_maybe
         @@@ (DC.left $ DC.wrap _DecodingError $ DC.primitive _strings_cat
           @@@ (DC.list $ list [
-            DC.string $ string "no such field "]))
---            DC.primitive _core_unName @@@ DC.var "fname",
---            DC.string $ string " in union type ",
---            DC.primitive _core_unName @@@ DC.var "tname"]))
+            DC.string $ string "no such field ",
+            DC.unwrap _Name @@@ DC.var "fname",
+            DC.string $ string " in union type ",
+            DC.unwrap _Name @@@ DC.var "tname"]))
         @@@ (DC.lambda "f" $ DC.var "f" @@@ DC.var "fterm")
         @@@ (DC.primitive _maps_lookup
           @@@ DC.var "fname"
-          @@@ DC.var "variantMap")
-
---      DC.string $ string "foo"
-
-      {-
-          in Maybes.maybe
-               (Left $ Util.DecodingError $ Strings.cat ["no such field " ++ Core.unName fname ++ " in union type " ++ Core.unName tname])
-               (\f -> f fterm)
-               (M.lookup fname variantMap)
-      -}
-
-
-      ]
+          @@@ DC.var "variantMap")]
 
 decodeUnitType :: TBinding Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
   DC.match _Term
     (just $ leftError $ string "expected a unit value") [
-    DC.field _Term_unit $ DC.right DC.unit]
+    DC.field _Term_unit $ DC.constant $ DC.right DC.unit]
 
 -- | Generate a decoder for a wrapped type
 -- Matches on Term.Wrap, decodes the body, and wraps the result
