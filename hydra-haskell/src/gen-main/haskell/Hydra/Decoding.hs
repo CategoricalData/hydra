@@ -754,7 +754,8 @@ decodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) 
   Module.moduleElements = decodedBindings,
   Module.moduleTermDependencies = (Lists.map decodeNamespace (Module.moduleTypeDependencies mod)),
   Module.moduleTypeDependencies = [
-    Module.moduleNamespace mod],
+    Module.moduleNamespace mod,
+    (Module.Namespace "hydra.util")],
   Module.moduleDescription = (Just (Strings.cat [
     "Term decoders for ",
     (Module.unNamespace (Module.moduleNamespace mod))]))}))))))
