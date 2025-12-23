@@ -142,6 +142,14 @@ letn name value body = lets [(name, value)] body
 pair :: TTerm Term -> TTerm Term -> TTerm Term
 pair (TTerm first) (TTerm second) = Core.termPair $ TTerm $ TermPair (first, second)
 
+-- | Create a Nothing term
+nothing :: TTerm Term
+nothing = TTerm $ TermMaybe Nothing
+
+-- | Create a Just term
+just :: TTerm Term -> TTerm Term
+just (TTerm t) = TTerm $ TermMaybe $ Just t
+
 -- | Create a wrap term with a type name and body
 wrap :: Name -> TTerm Term -> TTerm Term
 wrap tname body = Core.termWrap $ Core.wrappedTerm (Core.nameLift tname) body
