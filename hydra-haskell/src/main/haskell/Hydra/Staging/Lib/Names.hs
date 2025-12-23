@@ -27,6 +27,8 @@ _eithers_isLeft           = qname _hydra_lib_eithers "isLeft" :: Name
 _eithers_isRight          = qname _hydra_lib_eithers "isRight" :: Name
 _eithers_lefts            = qname _hydra_lib_eithers "lefts" :: Name
 _eithers_map              = qname _hydra_lib_eithers "map" :: Name
+_eithers_mapList          = qname _hydra_lib_eithers "mapList" :: Name
+_eithers_mapMaybe         = qname _hydra_lib_eithers "mapMaybe" :: Name
 _eithers_partitionEithers = qname _hydra_lib_eithers "partitionEithers" :: Name
 _eithers_rights           = qname _hydra_lib_eithers "rights" :: Name
 

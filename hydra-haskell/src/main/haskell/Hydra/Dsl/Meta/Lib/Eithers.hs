@@ -32,6 +32,12 @@ lefts = primitive1 _eithers_lefts
 map :: TTerm (a -> b) -> TTerm (Either c a) -> TTerm (Either c b)
 map = primitive2 _eithers_map
 
+mapList :: TTerm (a -> Either e b) -> TTerm [a] -> TTerm (Either e [b])
+mapList = primitive2 _eithers_mapList
+
+mapMaybe :: TTerm (a -> Either c b) -> TTerm (Maybe a) -> TTerm (Either c (Maybe b))
+mapMaybe = primitive2 _eithers_mapMaybe
+
 partitionEithers :: TTerm [Either a b] -> TTerm ([a], [b])
 partitionEithers = primitive1 _eithers_partitionEithers
 
