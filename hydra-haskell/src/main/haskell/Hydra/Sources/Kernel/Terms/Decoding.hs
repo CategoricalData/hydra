@@ -454,21 +454,25 @@ decodeRecordType = define "decodeRecordType" $
             @@@ (DC.project _Record _Record_fields @@@ DC.var "record")))] $
         var "decodeBody"]
 
-
-
 -- | Generate a decoder for an Either type
 -- Matches Term.either and decodes left/right based on the EitherType
 decodeEitherType :: TBinding (EitherType -> Term)
 decodeEitherType = define "decodeEitherType" $
   doc "Generate a decoder for an Either type" $
-  "et" ~>
-    DC.match _Term
-      (just $ leftError $ string "expected either value") [
-      DC.field _Term_either $ DC.lambda "e" $
-        DC.primitive _eithers_bimap
-          @@@ (decodeType @@ Core.eitherTypeLeft (var "et"))
-          @@@ (decodeType @@ Core.eitherTypeRight (var "et"))
-          @@@ DC.var "e"]
+  "et" ~> DC.match _Term
+    (just $ leftError $ string "expected either value") [
+    DC.field _Term_either $ DC.lambda "e" $
+
+      -- Either DecodingError (Either Term Term)
+      DC.primitive _eithers_either
+        @@@ (DC.primitive _eithers_map @@@ (DC.lambda "x" $ DC.left $ DC.var "x"))
+        @@@ (DC.primitive _eithers_map @@@ (DC.lambda "x" $ DC.right $ DC.var "x"))
+        @@@ (
+          -- Either (Either DecodingError Term) (Either DecodingError Term)
+          DC.primitive _eithers_bimap
+            @@@ (decodeType @@ Core.eitherTypeLeft (var "et"))
+            @@@ (decodeType @@ Core.eitherTypeRight (var "et"))
+            @@@ DC.var "e")]
 
 -- | Generate a decoder for a polymorphic (forall) type
 -- For a type like `forall a. T[a]`, generates a lambda that takes a decoder for `a`
@@ -616,9 +620,9 @@ decodeUnionType = define "decodeUnionType" $
   "toVariantPair" <~ ("ft" ~>
     DC.pair
       (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
-      (DC.lambda "term" $ DC.primitive _eithers_map
+      (DC.lambda "input" $ DC.primitive _eithers_map
         @@@ (DC.lambda "t" $ Core.termUnion $ Core.injection (var "typeName") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
-        @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "term"))) $
+        @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "input"))) $
   DC.match _Term
     (just $ leftError $
       Strings.cat $ list [string "expected union of type ", Core.unName (var "typeName")]) [
