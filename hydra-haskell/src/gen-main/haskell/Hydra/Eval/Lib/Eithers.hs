@@ -11,6 +11,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
@@ -77,3 +78,22 @@ mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
   Core.applicationArgument = (Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) elements)))
+
+mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
+mapMaybe funTerm maybeTerm = ((\x -> case x of
+  Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {
+    Core.applicationFunction = (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "err"),
+          Core.lambdaDomain = Nothing,
+          Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "y"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermEither (Right (Core.TermMaybe (Just (Core.TermVariable (Core.Name "y"))))))})))})),
+    Core.applicationArgument = (Core.TermApplication (Core.Application {
+      Core.applicationFunction = funTerm,
+      Core.applicationArgument = val}))})) v1))
+  _ -> (Monads.unexpected "maybe value" (Core__.term maybeTerm))) maybeTerm)
