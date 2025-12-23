@@ -6,10 +6,13 @@ module Hydra.Eval.Lib.Eithers where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
+import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Monads as Monads
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -23,7 +26,7 @@ bimap leftFun rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
     Core.applicationFunction = rightFun,
     Core.applicationArgument = val})))) v1))
-  _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)
+  _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
 either :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 either leftFun rightFun eitherTerm = ((\x -> case x of
@@ -32,11 +35,45 @@ either leftFun rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})) (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = rightFun,
     Core.applicationArgument = val})) v1))
-  _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)
+  _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermEither (Left val)))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
     Core.applicationFunction = rightFun,
     Core.applicationArgument = val})))) v1))
-  _ -> (Monads.unexpected "either value" (Core_.term eitherTerm))) eitherTerm)
+  _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
+
+-- | Interpreter-friendly mapList for Either (traverse).
+mapList :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
+mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "err"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaParameter = (Core.Name "y"),
+      Core.lambdaDomain = Nothing,
+      Core.lambdaBody = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "accErr"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "accErr"))))})))})),
+          Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "ys"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermEither (Right (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "ys"))}))))})))})),
+        Core.applicationArgument = acc}))})))})),
+  Core.applicationArgument = (Core.TermApplication (Core.Application {
+    Core.applicationFunction = funTerm,
+    Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) elements)))
