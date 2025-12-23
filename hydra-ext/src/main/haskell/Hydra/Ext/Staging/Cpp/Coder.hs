@@ -9,11 +9,13 @@ import Hydra.Ext.Staging.Cpp.Names
 import Hydra.Ext.Staging.Cpp.Utils
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Util as Util
 import Hydra.Formatting
 
 import qualified Control.Monad as CM
@@ -264,7 +266,11 @@ encodeType env typ = case deannotateType typ of
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
-    TypeVariable name -> (bindingTerm <$> requireElement name) >>= DecodeCore.type_ >>= \t -> typeref t name
+    TypeVariable name -> do
+      g <- Monads.getState
+      term <- bindingTerm <$> requireElement name
+      t <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g term
+      typeref t name
     TypeWrap (WrappedType name _) -> typeref typ name
     _ -> fail $ "Unsupported type: " ++ show (deannotateType typ)
   where

@@ -48,11 +48,13 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Meta as ShowMeta
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json as Json
 import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Util as Util
 import Hydra.Ext.Staging.Pg.Utils
 import Hydra.Ext.Staging.Pg.Graphson.Utils
 
@@ -182,7 +184,7 @@ typeGraphToDependencyGraphson g = do
 
 typeGraphToDependencyPropertyGraph :: Graph -> Flow Graph (PG.Graph String)
 typeGraphToDependencyPropertyGraph g = do
-    types <- CM.mapM DecodeCore.type_ terms
+    types <- CM.mapM (\t -> Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g t) terms
     let vertices = L.zipWith toVertex names types
     let edges = L.concat $ L.zipWith toEdges names $ fmap (S.toList . freeVariablesInType) types
     return $ PG.Graph

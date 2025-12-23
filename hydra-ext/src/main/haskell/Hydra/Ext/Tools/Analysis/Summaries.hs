@@ -21,8 +21,10 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Util as Util
 import qualified Hydra.Pg.Model as PG
 
 import qualified Control.Monad as CM
@@ -43,8 +45,9 @@ elementSummary withTypes el = do
         Nothing -> return Nothing
         Just ts -> Just <$> if Schemas.isType (deannotateType $ typeSchemeType ts)
           then do
-            typ <- deannotateType <$> (DecodeCore.type_ $ bindingTerm el)
-            return $ " = " ++ ShowCore.type_ typ
+            g <- Monads.getState
+            typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g $ bindingTerm el
+            return $ " = " ++ ShowCore.type_ (deannotateType typ)
           else pure $ " : " ++ ShowCore.typeScheme ts
       else pure Nothing
 
