@@ -378,7 +378,7 @@ decodeModule = define "decodeModule" $
           (decodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "decodedBindings")
           (primitive _lists_map @@ decodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))
-          (list [Module.moduleNamespace (var "mod")])
+          (list [Module.moduleNamespace (var "mod"), Module.namespace $ string "hydra.util"])
           (just (Strings.cat $ list [
             string "Term decoders for ",
             Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
