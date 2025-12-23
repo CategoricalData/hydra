@@ -24,6 +24,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Collect type variable names from a type (forall parameters)
+collectTypeVariables :: (Core.Type -> [Core.Name])
+collectTypeVariables x = case x of
+  Core.TypeAnnotated v1 -> (collectTypeVariables (Core.annotatedTypeBody v1))
+  Core.TypeForall v1 -> (Lists.cons (Core.forallTypeParameter v1) (collectTypeVariables (Core.forallTypeBody v1)))
+  _ -> []
+
 -- | Transform a type binding into a decoder binding
 decodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
 decodeBinding b = (Flows.bind (Core_.type_ (Core.bindingTerm b)) (\typ -> Flows.pure (Core.Binding {
@@ -37,6 +44,53 @@ decodeBindingName n = (Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.
   "hydra",
   "decodeNew"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
   Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
+
+-- | Generate a decoder for an Either type
+decodeEitherType :: (Core.EitherType -> Core.Term)
+decodeEitherType et = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+  Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+  Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected either value"))}))))),
+  Core.caseStatementCases = [
+    Core.Field {
+      Core.fieldName = (Core.Name "either"),
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "e"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bimap"))),
+              Core.applicationArgument = (decodeType (Core.eitherTypeLeft et))})),
+            Core.applicationArgument = (decodeType (Core.eitherTypeRight et))})),
+          Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))})))}]}))))
+
+-- | Generate a decoder for a polymorphic (forall) type
+decodeForallType :: (Core.ForallType -> Core.Term)
+decodeForallType ft = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+  Core.lambdaParameter = (decodeBindingName (Core.forallTypeParameter ft)),
+  Core.lambdaDomain = Nothing,
+  Core.lambdaBody = (decodeType (Core.forallTypeBody ft))})))
+
+-- | Generate a decoder for a list type
+decodeListType :: (Core.Type -> Core.Term)
+decodeListType elemType = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+  Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+  Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected list"))}))))),
+  Core.caseStatementCases = [
+    Core.Field {
+      Core.fieldName = (Core.Name "list"),
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "xs"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
+            Core.applicationArgument = (decodeType elemType)})),
+          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})))}]}))))
 
 -- | Generate a decoder for a literal type
 decodeLiteralType :: (Core.LiteralType -> Core.Term)
@@ -587,6 +641,96 @@ decodeLiteralType x = case x of
                     Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "s"))))})))}]})))),
             Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})))}]}))))
 
+-- | Generate a decoder for a map type
+decodeMapType :: (Core.MapType -> Core.Term)
+decodeMapType mt = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+  Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+  Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected map"))}))))),
+  Core.caseStatementCases = [
+    Core.Field {
+      Core.fieldName = (Core.Name "map"),
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "m"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLet (Core.Let {
+          Core.letBindings = [
+            Core.Binding {
+              Core.bindingName = (Core.Name "pairs"),
+              Core.bindingTerm = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.toList"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.bindingType = Nothing},
+            Core.Binding {
+              Core.bindingName = (Core.Name "decodePair"),
+              Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "kv"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermLet (Core.Let {
+                  Core.letBindings = [
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "k"),
+                      Core.bindingTerm = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "kv"))})),
+                      Core.bindingType = Nothing},
+                    Core.Binding {
+                      Core.bindingName = (Core.Name "v"),
+                      Core.bindingTerm = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "kv"))})),
+                      Core.bindingType = Nothing}],
+                  Core.letBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "err"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "k2"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "err2"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err2"))))})))})),
+                            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "v2"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermEither (Right (Core.TermPair (Core.TermVariable (Core.Name "k2"), (Core.TermVariable (Core.Name "v2"))))))})))})),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (decodeType (Core.mapTypeValues mt)),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))})))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (decodeType (Core.mapTypeKeys mt)),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "k"))}))}))}))}))),
+              Core.bindingType = Nothing}],
+          Core.letBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "err"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "decodedPairs"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermEither (Right (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "decodedPairs"))}))))})))})),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "decodePair"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "pairs"))}))}))}))})))}]}))))
+
 -- | Transform a type module into a decoder module
 decodeModule :: (Module.Module -> Compute.Flow Graph.Graph (Maybe Module.Module))
 decodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Flows.pure Nothing) (Flows.bind (Flows.mapList decodeBinding typeBindings) (\decodedBindings -> Flows.pure (Just (Module.Module {
@@ -599,35 +743,239 @@ decodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) 
     "Term decoders for ",
     (Module.unNamespace (Module.moduleNamespace mod))]))}))))))
 
+-- | Generate a decoder for an optional type
+decodeMaybeType :: (Core.Type -> Core.Term)
+decodeMaybeType elemType = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+  Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+  Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected optional value"))}))))),
+  Core.caseStatementCases = [
+    Core.Field {
+      Core.fieldName = (Core.Name "maybe"),
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "opt"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapMaybe"))),
+            Core.applicationArgument = (decodeType elemType)})),
+          Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))})))}]}))))
+
 -- | Generate a decoder module namespace from a source module namespace
 decodeNamespace :: (Module.Namespace -> Module.Namespace)
 decodeNamespace ns = (Module.Namespace (Strings.cat [
   "hydra.decodeNew.",
   (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))]))
 
--- | Generate a decoder for a record type
-decodeRecordType :: (Core.RowType -> Core.Term)
-decodeRecordType rt = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+-- | Generate a decoder for a pair type
+decodePairType :: (Core.PairType -> Core.Term)
+decodePairType pt = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
   Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
   Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
     Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
-      "expected record of type ",
-      (Core.unName (Core.rowTypeTypeName rt))])))}))))),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected pair"))}))))),
   Core.caseStatementCases = [
     Core.Field {
-      Core.fieldName = (Core.Name "record"),
+      Core.fieldName = (Core.Name "pair"),
       Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-        Core.lambdaParameter = (Core.Name "record"),
+        Core.lambdaParameter = (Core.Name "p"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))}]}))))
+        Core.lambdaBody = (Core.TermLet (Core.Let {
+          Core.letBindings = [
+            Core.Binding {
+              Core.bindingName = (Core.Name "a"),
+              Core.bindingTerm = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "p"))})),
+              Core.bindingType = Nothing},
+            Core.Binding {
+              Core.bindingName = (Core.Name "b"),
+              Core.bindingTerm = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "p"))})),
+              Core.bindingType = Nothing}],
+          Core.letBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "err"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "a2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "err2"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err2"))))})))})),
+                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "b2"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermEither (Right (Core.TermPair (Core.TermVariable (Core.Name "a2"), (Core.TermVariable (Core.Name "b2"))))))})))})),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (decodeType (Core.pairTypeSecond pt)),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))})))})),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (decodeType (Core.pairTypeFirst pt)),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))}))})))}]}))))
+
+-- | Generate a decoder for a record type
+decodeRecordType :: (Core.RowType -> Core.Term)
+decodeRecordType rt =  
+  let typeName = (Core.rowTypeTypeName rt)
+  in  
+    let fieldTypes = (Core.rowTypeFields rt)
+    in  
+      let decodeFieldTerm = (\ft -> Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
+                  Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+                    Core.wrappedTermBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
+                      Core.applicationArgument = (Core.TermList [
+                        Core.TermLiteral (Core.LiteralString "missing field "),
+                        Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))),
+                        (Core.TermLiteral (Core.LiteralString " in record"))])}))}))))})),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "fieldTerm"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (decodeType (Core.fieldTypeType ft)),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "fieldTerm"))}))})))})),
+              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.lookup"))),
+                  Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))}))}))
+      in  
+        let toFieldLambda = (\ft -> \body -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.fieldTypeName ft),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = body})))
+        in  
+          let decodeBody = (Lists.foldl (\acc -> \ft -> Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "err"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+                    Core.applicationArgument = (toFieldLambda ft acc)})),
+                  Core.applicationArgument = (decodeFieldTerm ft)})) (Core.TermEither (Right (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = typeName,
+                  Core.recordFields = (Lists.map (\ft -> Core.Field {
+                    Core.fieldName = (Core.fieldTypeName ft),
+                    Core.fieldTerm = (Core.TermVariable (Core.fieldTypeName ft))}) fieldTypes)})))) (Lists.reverse fieldTypes))
+          in (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+            Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+              Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
+                "expected record of type ",
+                (Core.unName typeName)])))}))))),
+            Core.caseStatementCases = [
+              Core.Field {
+                Core.fieldName = (Core.Name "record"),
+                Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "record"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermLet (Core.Let {
+                    Core.letBindings = [
+                      Core.Binding {
+                        Core.bindingName = (Core.Name "fieldMap"),
+                        Core.bindingTerm = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
+                          Core.applicationArgument = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
+                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "f"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.core.Field"),
+                                    Core.projectionField = (Core.Name "name")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}), (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.core.Field"),
+                                    Core.projectionField = (Core.Name "term")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))))})))})),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.core.Record"),
+                                Core.projectionField = (Core.Name "fields")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "record"))}))}))})),
+                        Core.bindingType = Nothing}],
+                    Core.letBody = decodeBody}))})))}]}))))
+
+-- | Generate a decoder for a set type
+decodeSetType :: (Core.Type -> Core.Term)
+decodeSetType elemType = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+  Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+  Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+    Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
+    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected set"))}))))),
+  Core.caseStatementCases = [
+    Core.Field {
+      Core.fieldName = (Core.Name "set"),
+      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "s"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLet (Core.Let {
+          Core.letBindings = [
+            Core.Binding {
+              Core.bindingName = (Core.Name "elements"),
+              Core.bindingTerm = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.toList"))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
+              Core.bindingType = Nothing}],
+          Core.letBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "err"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
+              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "decodedElems"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermEither (Right (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "decodedElems"))}))))})))})),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.mapList"))),
+                Core.applicationArgument = (decodeType elemType)})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "elements"))}))}))}))})))}]}))))
 
 -- | Generate a decoder term for a Type
 decodeType :: (Core.Type -> Core.Term)
 decodeType x = case x of
   Core.TypeAnnotated v1 -> (decodeType (Core.annotatedTypeBody v1))
+  Core.TypeApplication v1 -> (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (decodeType (Core.applicationTypeFunction v1)),
+    Core.applicationArgument = (decodeType (Core.applicationTypeArgument v1))}))
+  Core.TypeEither v1 -> (decodeEitherType v1)
+  Core.TypeForall v1 -> (decodeForallType v1)
+  Core.TypeList v1 -> (decodeListType v1)
   Core.TypeLiteral v1 -> (decodeLiteralType v1)
+  Core.TypeMap v1 -> (decodeMapType v1)
+  Core.TypeMaybe v1 -> (decodeMaybeType v1)
+  Core.TypePair v1 -> (decodePairType v1)
   Core.TypeRecord v1 -> (decodeRecordType v1)
+  Core.TypeSet v1 -> (decodeSetType v1)
   Core.TypeUnion v1 -> (decodeUnionType v1)
   Core.TypeUnit -> decodeUnitType
   Core.TypeWrap v1 -> (decodeWrappedType v1)
@@ -792,25 +1140,65 @@ decodeWrappedType wt = (Core.TermFunction (Core.FunctionElimination (Core.Elimin
                 Core.projectionField = (Core.Name "body")})))),
               Core.applicationArgument = (Core.TermVariable (Core.Name "wrappedTerm"))}))}))}))})))}]}))))
 
+-- | Get full result type for decoder
+decoderFullResultType :: (Core.Type -> Core.Type)
+decoderFullResultType x = case x of
+  Core.TypeAnnotated v1 -> (decoderFullResultType (Core.annotatedTypeBody v1))
+  Core.TypeApplication v1 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (decoderFullResultType (Core.applicationTypeFunction v1)),
+    Core.applicationTypeArgument = (Core.applicationTypeArgument v1)}))
+  Core.TypeEither v1 -> (Core.TypeEither (Core.EitherType {
+    Core.eitherTypeLeft = (decoderFullResultType (Core.eitherTypeLeft v1)),
+    Core.eitherTypeRight = (decoderFullResultType (Core.eitherTypeRight v1))}))
+  Core.TypeForall v1 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (decoderFullResultType (Core.forallTypeBody v1)),
+    Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v1))}))
+  Core.TypeList v1 -> (Core.TypeList (decoderFullResultType v1))
+  Core.TypeLiteral _ -> (Core.TypeVariable (Core.Name "hydra.core.Literal"))
+  Core.TypeMap v1 -> (Core.TypeMap (Core.MapType {
+    Core.mapTypeKeys = (decoderFullResultType (Core.mapTypeKeys v1)),
+    Core.mapTypeValues = (decoderFullResultType (Core.mapTypeValues v1))}))
+  Core.TypeMaybe v1 -> (Core.TypeMaybe (decoderFullResultType v1))
+  Core.TypePair v1 -> (Core.TypePair (Core.PairType {
+    Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v1)),
+    Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v1))}))
+  Core.TypeRecord v1 -> (Core.TypeVariable (Core.rowTypeTypeName v1))
+  Core.TypeSet v1 -> (Core.TypeSet (decoderFullResultType v1))
+  Core.TypeUnion v1 -> (Core.TypeVariable (Core.rowTypeTypeName v1))
+  Core.TypeUnit -> Core.TypeUnit
+  Core.TypeVariable v1 -> (Core.TypeVariable v1)
+  Core.TypeWrap v1 -> (Core.TypeVariable (Core.wrappedTypeTypeName v1))
+  _ -> (Core.TypeVariable (Core.Name "hydra.core.Term"))
+
 -- | Compute the result type name for a decoder
 decoderResultType :: (Core.Type -> Core.Name)
 decoderResultType x = case x of
   Core.TypeAnnotated v1 -> (decoderResultType (Core.annotatedTypeBody v1))
+  Core.TypeApplication v1 -> (decoderResultType (Core.applicationTypeFunction v1))
+  Core.TypeForall v1 -> (decoderResultType (Core.forallTypeBody v1))
   Core.TypeLiteral _ -> (Core.Name "hydra.core.Literal")
   Core.TypeRecord v1 -> (Core.rowTypeTypeName v1)
   Core.TypeUnion v1 -> (Core.rowTypeTypeName v1)
   Core.TypeWrap v1 -> (Core.wrappedTypeTypeName v1)
   _ -> (Core.Name "hydra.core.Term")
 
+-- | Build decoder function type
+decoderType :: (Core.Type -> Core.Type)
+decoderType typ =  
+  let resultType = (decoderFullResultType typ)
+  in  
+    let baseType = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+            Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
+              Core.eitherTypeRight = resultType}))}))
+    in (prependForallDecoders baseType typ)
+
 -- | Build type scheme for a decoder function
 decoderTypeScheme :: (Core.Type -> Core.TypeScheme)
 decoderTypeScheme typ = Core.TypeScheme {
-  Core.typeSchemeVariables = [],
-  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-    Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
-      Core.eitherTypeRight = (Core.TypeVariable (decoderResultType typ))}))}))}
+  Core.typeSchemeVariables = (collectTypeVariables typ),
+  Core.typeSchemeType = (decoderType typ)}
 
 -- | Filter bindings to only decodable type definitions
 filterTypeBindings :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])
@@ -819,3 +1207,16 @@ filterTypeBindings bindings = (Flows.map Maybes.cat (Flows.mapList isDecodableBi
 -- | Check if a binding is decodable (serializable type)
 isDecodableBinding :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe Core.Binding))
 isDecodableBinding b = (Flows.map (\serializable -> Logic.ifElse serializable (Just b) Nothing) (Schemas.isSerializableByName (Core.bindingName b)))
+
+-- | Prepend decoder types for forall parameters to base type
+prependForallDecoders :: (Core.Type -> Core.Type -> Core.Type)
+prependForallDecoders baseType x = case x of
+  Core.TypeAnnotated v1 -> (prependForallDecoders baseType (Core.annotatedTypeBody v1))
+  Core.TypeForall v1 -> (Core.TypeFunction (Core.FunctionType {
+    Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
+        Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v1))}))})),
+    Core.functionTypeCodomain = (prependForallDecoders baseType (Core.forallTypeBody v1))}))
+  _ -> baseType
