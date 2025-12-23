@@ -217,6 +217,23 @@ decodeInvalidTerms = do
     H.it "Try to decode an incomplete representation of a Type" $ do
       shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_integer)
 
+    H.it "Try to decode a Name from non-string" $ do
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name testGraph $ wrap _Name $ int32 42)
+
+    H.it "Try to decode a Literal from wrong union variant" $ do
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $ inject untyped (Name "unknownVariant") $ string "bad")
+
+    H.it "Try to decode a record with missing field" $ do
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.field testGraph $
+        record _Field [Field _Field_name $ wrap _Name $ string "onlyName"])
+
+    H.it "Try to decode a Lambda with wrong body type" $ do
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.lambda testGraph $
+        record _Lambda [
+          Field _Lambda_parameter $ wrap _Name $ string "x",
+          Field _Lambda_domain $ optional Nothing,
+          Field _Lambda_body $ string "notATerm"])
+
 metadataIsPreserved :: H.SpecWith ()
 metadataIsPreserved = do
   H.describe "Check that metadata is preserved through a type-encoding round trip" $ do
@@ -241,6 +258,56 @@ testRoundTripsFromType = do
           (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ EncodeCore.type_ typ)
           typ
 
+testRoundTripsFromLiteral :: H.SpecWith ()
+testRoundTripsFromLiteral = do
+  H.describe "Check that encoding, then decoding random literals is a no-op" $ do
+
+    H.it "Try random literals" $
+      QC.property $ \lit ->
+        shouldSucceedWith
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $ EncodeCore.literal lit)
+          lit
+
+testRoundTripsFromLiteralType :: H.SpecWith ()
+testRoundTripsFromLiteralType = do
+  H.describe "Check that encoding, then decoding random literal types is a no-op" $ do
+
+    H.it "Try random literal types" $
+      QC.property $ \litType ->
+        shouldSucceedWith
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType testGraph $ EncodeCore.literalType litType)
+          litType
+
+testRoundTripsFromName :: H.SpecWith ()
+testRoundTripsFromName = do
+  H.describe "Check that encoding, then decoding random names is a no-op" $ do
+
+    H.it "Try random names" $
+      QC.property $ \name ->
+        shouldSucceedWith
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name testGraph $ EncodeCore.name name)
+          name
+
+testRoundTripsFromIntegerType :: H.SpecWith ()
+testRoundTripsFromIntegerType = do
+  H.describe "Check that encoding, then decoding random integer types is a no-op" $ do
+
+    H.it "Try random integer types" $
+      QC.property $ \intType ->
+        shouldSucceedWith
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.integerType testGraph $ EncodeCore.integerType intType)
+          intType
+
+testRoundTripsFromFloatType :: H.SpecWith ()
+testRoundTripsFromFloatType = do
+  H.describe "Check that encoding, then decoding random float types is a no-op" $ do
+
+    H.it "Try random float types" $
+      QC.property $ \floatType ->
+        shouldSucceedWith
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.floatType testGraph $ EncodeCore.floatType floatType)
+          floatType
+
 spec :: H.Spec
 spec = do
   individualEncoderTestCases
@@ -248,3 +315,8 @@ spec = do
   decodeInvalidTerms
   metadataIsPreserved
   testRoundTripsFromType
+  testRoundTripsFromLiteral
+  testRoundTripsFromLiteralType
+  testRoundTripsFromName
+  testRoundTripsFromIntegerType
+  testRoundTripsFromFloatType
