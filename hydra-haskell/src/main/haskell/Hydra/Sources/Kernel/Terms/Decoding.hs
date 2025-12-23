@@ -79,20 +79,31 @@ module_ = Module ns elements
     Just "Functions for generating term decoders from type modules"
   where
     elements = [
+      toBinding collectTypeVariables,
       toBinding decodeBinding,
       toBinding decodeBindingName,
+      toBinding decodeEitherType,
+      toBinding decodeForallType,
+      toBinding decodeListType,
       toBinding decodeLiteralType,
+      toBinding decodeMapType,
       toBinding decodeModule,
+      toBinding decodeMaybeType,
       toBinding decodeNamespace,
+      toBinding decodePairType,
       toBinding decodeRecordType,
+      toBinding decodeSetType,
       toBinding decodeType,
       toBinding decodeUnionType,
       toBinding decodeUnitType,
       toBinding decodeWrappedType,
+      toBinding decoderFullResultType,
       toBinding decoderResultType,
+      toBinding decoderType,
       toBinding decoderTypeScheme,
       toBinding filterTypeBindings,
-      toBinding isDecodableBinding]
+      toBinding isDecodableBinding,
+      toBinding prependForallDecoders]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -101,13 +112,19 @@ define = definitionInModule module_
 -- Helper functions
 --------------------------------------------------------------------------------
 
--- | Cast a term from one phantom type to another (the underlying Term is unchanged)
-castTerm :: TTerm a -> TTerm b
-castTerm (TTerm t) = TTerm t
-
 -- | Make a decoding error from a string message
 decodingError :: TTerm String -> TTerm DecodingError
 decodingError msg = Phantoms.wrap _DecodingError msg
+
+-- | Helper to create a decoding error term from a message (object-level)
+-- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
+decodingErrorTerm :: TTerm String -> TTerm Term
+decodingErrorTerm msg = DC.wrap _DecodingError $ DC.string msg
+
+-- | Helper to create a Left (error) result term
+-- Returns: Term.either (Left (decodingErrorTerm msg))
+leftError :: TTerm String -> TTerm Term
+leftError msg = DC.left $ decodingErrorTerm msg
 
 --------------------------------------------------------------------------------
 -- Main decoder functions
@@ -121,6 +138,11 @@ decoderResultType = define "decoderResultType" $
   match _Type (Just (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       decoderResultType @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      -- For type applications like ColumnSchema<t>, get result type from function part
+      decoderResultType @@ (Core.applicationTypeFunction (var "appType")),
+    _Type_forall>>: "ft" ~>
+      decoderResultType @@ (Core.forallTypeBody (var "ft")),
     _Type_literal>>: "_" ~>
       Core.nameLift _Literal,
     _Type_record>>: "rt" ~>
@@ -131,18 +153,116 @@ decoderResultType = define "decoderResultType" $
       Core.wrappedTypeTypeName (var "wt")]
 
 -- | Build a decoder type scheme: Term -> Either DecodingError ResultType
+-- For polymorphic types, adds extra arguments for the decoders of type parameters
 decoderTypeScheme :: TBinding (Type -> TypeScheme)
 decoderTypeScheme = define "decoderTypeScheme" $
   doc "Build type scheme for a decoder function" $
   "typ" ~>
-    -- TypeScheme with no type variables (Either is not parameterized by state)
     Core.typeScheme
-      (list ([] :: [TTerm Name]))
-      (Core.typeFunction $ Core.functionType
-        (Core.typeVariable (Core.nameLift _Term))
-        (Core.typeEither $ Core.eitherType
-          (Core.typeVariable (Core.nameLift _DecodingError))
-          (Core.typeVariable (decoderResultType @@ var "typ"))))
+      (collectTypeVariables @@ var "typ")
+      (decoderType @@ var "typ")
+
+-- | Collect type variables from forall types
+collectTypeVariables :: TBinding (Type -> [Name])
+collectTypeVariables = define "collectTypeVariables" $
+  doc "Collect type variable names from a type (forall parameters)" $
+  match _Type (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      collectTypeVariables @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~>
+      Lists.cons (Core.forallTypeParameter (var "ft"))
+        (collectTypeVariables @@ Core.forallTypeBody (var "ft"))]
+
+-- | Build the decoder function type for a given type
+-- For monomorphic types: Term -> Either DecodingError ResultType
+-- For polymorphic types: (Term -> Either DecodingError a) -> ... -> Term -> Either DecodingError ResultType<a>
+decoderType :: TBinding (Type -> Type)
+decoderType = define "decoderType" $
+  doc "Build decoder function type" $
+  "typ" ~>
+  -- Get the result type (the full type, preserving type applications)
+  "resultType" <~ (decoderFullResultType @@ var "typ") $
+  -- Build the base decoder type: Term -> Either DecodingError ResultType
+  "baseType" <~ (Core.typeFunction $ Core.functionType
+    (Core.typeVariable (Core.nameLift _Term))
+    (Core.typeEither $ Core.eitherType
+      (Core.typeVariable (Core.nameLift _DecodingError))
+      (var "resultType"))) $
+  -- Prepend decoder types for each forall parameter
+  prependForallDecoders @@ var "baseType" @@ var "typ"
+
+-- | Helper to prepend decoder types for forall parameters
+-- For forall a. forall b. T: prepends (Term -> E a) -> (Term -> E b) -> to the base type
+prependForallDecoders :: TBinding (Type -> Type -> Type)
+prependForallDecoders = define "prependForallDecoders" $
+  doc "Prepend decoder types for forall parameters to base type" $
+  "baseType" ~> match _Type (Just $ var "baseType") [
+    _Type_annotated>>: "at" ~>
+      prependForallDecoders @@ var "baseType" @@ Core.annotatedTypeBody (var "at"),
+    _Type_forall>>: "ft" ~>
+      -- For forall a. T: build (Term -> Either E a) -> prependForallDecoders(baseType, T)
+      Core.typeFunction $ Core.functionType
+        (Core.typeFunction $ Core.functionType
+          (Core.typeVariable (Core.nameLift _Term))
+          (Core.typeEither $ Core.eitherType
+            (Core.typeVariable (Core.nameLift _DecodingError))
+            (Core.typeVariable (Core.forallTypeParameter (var "ft")))))
+        (prependForallDecoders @@ var "baseType" @@ Core.forallTypeBody (var "ft"))]
+
+-- | Get the full result type for a decoder, preserving type applications
+-- For forall t. ColumnSchema<t>, returns ColumnSchema<t> (as a Type, not just a Name)
+decoderFullResultType :: TBinding (Type -> Type)
+decoderFullResultType = define "decoderFullResultType" $
+  doc "Get full result type for decoder" $
+  match _Type (Just $ Core.typeVariable (Core.nameLift _Term)) [
+    _Type_annotated>>: "at" ~>
+      decoderFullResultType @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      -- Preserve the full application: e.g., ColumnSchema<t> stays as Type.application
+      Core.typeApplication $ Core.applicationType
+        (decoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
+        (Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      -- Either L R -> Either (decoded L) (decoded R)
+      Core.typeEither $ Core.eitherType
+        (decoderFullResultType @@ Core.eitherTypeLeft (var "et"))
+        (decoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    _Type_forall>>: "ft" ~>
+      -- For forall t. Body, we need to apply the type parameter to the body's result type
+      -- e.g., forall t. RecordType{name=ColumnSchema} -> ColumnSchema t
+      Core.typeApplication $ Core.applicationType
+        (decoderFullResultType @@ Core.forallTypeBody (var "ft"))
+        (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
+    _Type_list>>: "elemType" ~>
+      -- [a] -> [decoded a]
+      Core.typeList (decoderFullResultType @@ var "elemType"),
+    _Type_literal>>: "_" ~>
+      Core.typeVariable (Core.nameLift _Literal),
+    _Type_map>>: "mt" ~>
+      -- Map k v -> Map (decoded k) (decoded v)
+      Core.typeMap $ Core.mapType
+        (decoderFullResultType @@ Core.mapTypeKeys (var "mt"))
+        (decoderFullResultType @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      -- Maybe a -> Maybe (decoded a)
+      Core.typeMaybe (decoderFullResultType @@ var "elemType"),
+    _Type_pair>>: "pt" ~>
+      -- (a, b) -> (decoded a, decoded b)
+      Core.typePair $ Core.pairType
+        (decoderFullResultType @@ Core.pairTypeFirst (var "pt"))
+        (decoderFullResultType @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_set>>: "elemType" ~>
+      -- Set a -> Set (decoded a)
+      Core.typeSet (decoderFullResultType @@ var "elemType"),
+    _Type_union>>: "rt" ~>
+      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_unit>>: constant Core.typeUnit,
+    _Type_variable>>: "name" ~>
+      Core.typeVariable (var "name"),
+    _Type_wrap>>: "wt" ~>
+      Core.typeVariable (Core.wrappedTypeTypeName (var "wt"))]
 
 -- | Decode a single type binding into a decoder binding
 -- Uses Flow to decode the Type from the binding's term, then generates decoder
@@ -176,16 +296,6 @@ decodeBindingName = define "decodeBindingName" $
               (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
       -- Local type: just decapitalize
       (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
-
--- | Helper to create a decoding error term from a message (object-level)
--- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
-decodingErrorTerm :: TTerm String -> TTerm Term
-decodingErrorTerm msg = DC.wrap _DecodingError $ DC.string msg
-
--- | Helper to create a Left (error) result term
--- Returns: Term.either (Left (decodingErrorTerm msg))
-leftError :: TTerm String -> TTerm Term
-leftError msg = DC.left $ decodingErrorTerm msg
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -291,13 +401,185 @@ decodeNamespace = define "decodeNamespace" $
 decodeRecordType :: TBinding (RowType -> Term)
 decodeRecordType = define "decodeRecordType" $
   doc "Generate a decoder for a record type" $
-  "rt" ~> DC.match _Term
+  "rt" ~>
+  "typeName" <~ (Core.rowTypeTypeName $ var "rt") $
+  "fieldTypes" <~ (Core.rowTypeFields $ var "rt") $
+  -- For each field, build a term that decodes it from fieldMap
+  -- Returns: Either DecodingError fieldValue
+  "decodeFieldTerm" <~ ("ft" ~>
+    DC.primitive _maybes_maybe
+      -- If missing: Left error
+      @@@ (DC.left $ DC.wrap _DecodingError $ DC.primitive _strings_cat
+        @@@ (DC.list $ list [
+          DC.string $ string "missing field ",
+          DC.string $ Core.unName $ Core.fieldTypeName $ var "ft",
+          DC.string $ string " in record"]))
+      -- If found: decode the term
+      @@@ (DC.lambda "fieldTerm" $
+        (decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "fieldTerm")
+      @@@ (DC.primitive _maps_lookup
+        @@@ (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
+        @@@ DC.var "fieldMap")) $
+  -- Build the body: a nested chain of eithers.either calls that decode each field and build the record
+  -- We need: d1 >>= \v1 -> d2 >>= \v2 -> d3 >>= \v3 -> Right Record{...}
+  -- Which is: either Left (\v1 -> either Left (\v2 -> either Left (\v3 -> Right Record{...}) d3) d2) d1
+  -- Using foldl on reversed list to build from inside out
+  -- The lambda for each field uses the field name as the parameter
+  "toFieldLambda" <~ ("ft" ~> "body" ~>
+    Core.termFunction $ Core.functionLambda $
+      Core.lambda (Core.fieldTypeName $ var "ft") nothing $ var "body") $
+  "decodeBody" <~ (
+    Lists.foldl
+      ("acc" ~> "ft" ~>
+        DC.primitive _eithers_either
+          @@@ (DC.lambda "err" $ DC.left $ DC.var "err")  -- propagate Left
+          @@@ (var "toFieldLambda" @@ var "ft" @@ var "acc")  -- bind Right value and continue
+          @@@ (var "decodeFieldTerm" @@ var "ft"))
+      -- Base case: Right with the constructed record (wrapped as Term)
+      (DC.right $ Core.termRecord $ Core.record (var "typeName") $
+        Lists.map ("ft" ~> Core.field (Core.fieldTypeName $ var "ft") $ Core.termVariable $ Core.fieldTypeName $ var "ft")
+          (var "fieldTypes"))
+      (Lists.reverse $ var "fieldTypes")) $
+  DC.match _Term
     (just $ leftError (
-      Strings.cat $ list [string "expected record of type ", Core.unName (Core.rowTypeTypeName (var "rt"))])) [
+      Strings.cat $ list [string "expected record of type ", Core.unName (var "typeName")])) [
     DC.field _Term_record $ DC.lambda "record" $
-      DC.string $ string "foo"]
+      DC.lets [
+        -- Build Map Name Term from the record's fields
+        ("fieldMap", DC.primitive _maps_fromList
+          @@@ (DC.primitive _lists_map
+            @@@ (DC.lambda "f" $ DC.pair
+              (DC.project _Field _Field_name @@@ DC.var "f")
+              (DC.project _Field _Field_term @@@ DC.var "f"))
+            @@@ (DC.project _Record _Record_fields @@@ DC.var "record")))] $
+        var "decodeBody"]
 
 
+
+-- | Generate a decoder for an Either type
+-- Matches Term.either and decodes left/right based on the EitherType
+decodeEitherType :: TBinding (EitherType -> Term)
+decodeEitherType = define "decodeEitherType" $
+  doc "Generate a decoder for an Either type" $
+  "et" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected either value") [
+      DC.field _Term_either $ DC.lambda "e" $
+        DC.primitive _eithers_bimap
+          @@@ (decodeType @@ Core.eitherTypeLeft (var "et"))
+          @@@ (decodeType @@ Core.eitherTypeRight (var "et"))
+          @@@ DC.var "e"]
+
+-- | Generate a decoder for a polymorphic (forall) type
+-- For a type like `forall a. T[a]`, generates a lambda that takes a decoder for `a`
+-- and returns a decoder for the body type `T[a]`
+decodeForallType :: TBinding (ForallType -> Term)
+decodeForallType = define "decodeForallType" $
+  doc "Generate a decoder for a polymorphic (forall) type" $
+  "ft" ~>
+    -- Generate a lambda that takes a decoder for the type parameter
+    Core.termFunction $ Core.functionLambda $
+      Core.lambda
+        (decodeBindingName @@ Core.forallTypeParameter (var "ft"))
+        nothing
+        (decodeType @@ Core.forallTypeBody (var "ft"))
+
+-- | Generate a decoder for a list type
+-- Matches Term.list and decodes each element
+decodeListType :: TBinding (Type -> Term)
+decodeListType = define "decodeListType" $
+  doc "Generate a decoder for a list type" $
+  "elemType" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected list") [
+      DC.field _Term_list $ DC.lambda "xs" $
+        DC.primitive _eithers_mapList
+          @@@ (decodeType @@ var "elemType")
+          @@@ DC.var "xs"]
+
+-- | Generate a decoder for a map type
+-- Matches Term.map, converts to list of pairs, decodes each pair, rebuilds map
+decodeMapType :: TBinding (MapType -> Term)
+decodeMapType = define "decodeMapType" $
+  doc "Generate a decoder for a map type" $
+  "mt" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected map") [
+      DC.field _Term_map $ DC.lambda "m" $
+        -- Convert Map Term Term to [(Term, Term)]
+        DC.lets [
+          ("pairs", DC.primitive _maps_toList @@@ DC.var "m"),
+          -- Decoder for a single pair: (Term, Term) -> Either Error (k, v)
+          ("decodePair", DC.lambda "kv" $
+            DC.lets [
+              ("k", DC.primitive _pairs_first @@@ DC.var "kv"),
+              ("v", DC.primitive _pairs_second @@@ DC.var "kv")] $
+              -- Decode key, then decode value, combine into pair
+              DC.primitive _eithers_either
+                @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
+                @@@ (DC.lambda "k2" $
+                      DC.primitive _eithers_either
+                        @@@ (DC.lambda "err2" $ DC.left $ DC.var "err2")
+                        @@@ (DC.lambda "v2" $ DC.right $ DC.pair (DC.var "k2") (DC.var "v2"))
+                        @@@ ((decodeType @@ Core.mapTypeValues (var "mt")) @@@ DC.var "v"))
+                @@@ ((decodeType @@ Core.mapTypeKeys (var "mt")) @@@ DC.var "k"))] $
+          -- Map decodePair over pairs list, then fromList
+          DC.primitive _eithers_either
+            @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
+            @@@ (DC.lambda "decodedPairs" $ DC.right $ DC.primitive _maps_fromList @@@ DC.var "decodedPairs")
+            @@@ (DC.primitive _eithers_mapList @@@ DC.var "decodePair" @@@ DC.var "pairs")]
+
+-- | Generate a decoder for an optional/maybe type
+-- Matches Term.maybe and decodes the inner value if present
+decodeMaybeType :: TBinding (Type -> Term)
+decodeMaybeType = define "decodeMaybeType" $
+  doc "Generate a decoder for an optional type" $
+  "elemType" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected optional value") [
+      DC.field _Term_maybe $ DC.lambda "opt" $
+        DC.primitive _eithers_mapMaybe
+          @@@ (decodeType @@ var "elemType")
+          @@@ DC.var "opt"]
+
+-- | Generate a decoder for a pair type
+-- Matches Term.pair and decodes both elements
+decodePairType :: TBinding (PairType -> Term)
+decodePairType = define "decodePairType" $
+  doc "Generate a decoder for a pair type" $
+  "pt" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected pair") [
+      DC.field _Term_pair $ DC.lambda "p" $
+        DC.lets [
+          ("a", DC.primitive _pairs_first @@@ DC.var "p"),
+          ("b", DC.primitive _pairs_second @@@ DC.var "p")] $
+          -- Decode first, then decode second, combine into pair
+          DC.primitive _eithers_either
+            @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
+            @@@ (DC.lambda "a2" $
+                  DC.primitive _eithers_either
+                    @@@ (DC.lambda "err2" $ DC.left $ DC.var "err2")
+                    @@@ (DC.lambda "b2" $ DC.right $ DC.pair (DC.var "a2") (DC.var "b2"))
+                    @@@ ((decodeType @@ Core.pairTypeSecond (var "pt")) @@@ DC.var "b"))
+            @@@ ((decodeType @@ Core.pairTypeFirst (var "pt")) @@@ DC.var "a")]
+
+-- | Generate a decoder for a set type
+-- Matches Term.set, converts to list, decodes each element, rebuilds set
+decodeSetType :: TBinding (Type -> Term)
+decodeSetType = define "decodeSetType" $
+  doc "Generate a decoder for a set type" $
+  "elemType" ~>
+    DC.match _Term
+      (just $ leftError $ string "expected set") [
+      DC.field _Term_set $ DC.lambda "s" $
+        DC.lets [
+          ("elements", DC.primitive _sets_toList @@@ DC.var "s")] $
+          -- Map decoder over elements list, then fromList
+          DC.primitive _eithers_either
+            @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
+            @@@ (DC.lambda "decodedElems" $ DC.right $ DC.primitive _sets_fromList @@@ DC.var "decodedElems")
+            @@@ (DC.primitive _eithers_mapList @@@ (decodeType @@ var "elemType") @@@ DC.var "elements")]
 
 -- | Generate a decoder term for a given Type
 decodeType :: TBinding (Type -> Term)
@@ -305,8 +587,19 @@ decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
   match _Type (Just $ DC.lambda "t" $ leftError $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeType @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      -- For type applications like ColumnSchema<t>, apply the function decoder to the argument decoder
+      (decodeType @@ Core.applicationTypeFunction (var "appType"))
+        @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~> decodeEitherType @@ var "et",
+    _Type_forall>>: "ft" ~> decodeForallType @@ var "ft",
+    _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
     _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",
+    _Type_map>>: "mt" ~> decodeMapType @@ var "mt",
+    _Type_maybe>>: "elemType" ~> decodeMaybeType @@ var "elemType",
+    _Type_pair>>: "pt" ~> decodePairType @@ var "pt",
     _Type_record>>: "rt" ~> decodeRecordType @@ var "rt",
+    _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
     _Type_union>>: "rt" ~> decodeUnionType @@ var "rt",
     _Type_unit>>: constant decodeUnitType,
     _Type_wrap>>: "wt" ~> decodeWrappedType @@ var "wt",
