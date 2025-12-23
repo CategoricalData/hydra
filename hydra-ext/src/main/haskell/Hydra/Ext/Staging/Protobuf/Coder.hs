@@ -6,11 +6,13 @@ import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import Hydra.Ext.Staging.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Util as Util
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -267,7 +269,9 @@ encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ 
         TypeVariable name -> if noms
           then forNominal name
           else do
-            typ <- (bindingTerm <$> requireElement name) >>= DecodeCore.type_
+            g <- Monads.getState
+            term <- bindingTerm <$> requireElement name
+            typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g term
             encodeSimpleType noms typ
         t -> unexpected "simple type" $ show $ removeTypeAnnotations t
       where

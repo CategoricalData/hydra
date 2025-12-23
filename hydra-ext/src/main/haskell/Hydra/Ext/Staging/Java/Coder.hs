@@ -18,10 +18,12 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
+import qualified Hydra.Util as Util
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -277,7 +279,8 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
 
 declarationForType :: Bool -> Aliases -> (Binding, TypeApplicationTerm) -> Flow Graph Java.TypeDeclarationWithComments
 declarationForType isSer aliases (el, TypeApplicationTerm term _) = withTrace ("element " ++ unName (bindingName el)) $ do
-    t <- DecodeCore.type_ term >>= adaptTypeToLanguage javaLanguage
+    g <- Monads.getState
+    t <- Monads.eitherToFlow Util.unDecodingError (DecodeCore.type_ g term) >>= adaptTypeToLanguage javaLanguage
     cd <- toClassDecl False isSer aliases [] (bindingName el) t
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
