@@ -12,6 +12,8 @@ import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Monads as Monads
+import qualified Hydra.Util as Util
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Decoding as DecodingSource
@@ -129,9 +131,10 @@ moduleTermDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.l
   (S.fromList $ moduleNamespace <$> modules)
 
 moduleTypeDependenciesTransitive :: M.Map Namespace Module -> [Module] -> [Module]
-moduleTypeDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) $ S.toList $ S.union
-  (transitiveClosure moduleTypeDependencies mapping modules)
-  (S.fromList $ moduleNamespace <$> modules)
+moduleTypeDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) typeNamespaces
+  where
+    termMods = moduleTermDependenciesTransitive mapping modules
+    typeNamespaces = S.toList $ transitiveClosure moduleTypeDependencies mapping termMods
 
 -- | Build a graph from a list of modules.
 -- Elements are partitioned into schema (type definitions) and data (term definitions)
@@ -266,7 +269,8 @@ generateLexicon graph = do
 formatTypeBinding :: Binding -> Flow Graph String
 formatTypeBinding binding = do
   let name = unName $ bindingName binding
-  typ <- DecodeCore.type_ (bindingTerm binding)
+  g <- Monads.getState
+  typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g (bindingTerm binding)
   let typeStr = ShowCore.type_ typ
   return $ "  " ++ name ++ " = " ++ typeStr
 

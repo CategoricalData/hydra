@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
+import qualified Hydra.Sources.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore

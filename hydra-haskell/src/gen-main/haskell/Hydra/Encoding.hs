@@ -16,8 +16,10 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -26,10 +28,10 @@ import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
 encodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-encodeBinding b = (Flows.bind (Core_.type_ (Core.bindingTerm b)) (\typ -> Flows.pure (Core.Binding {
+encodeBinding b = (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
   Core.bindingName = (encodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (encodeType typ),
-  Core.bindingType = Nothing})))
+  Core.bindingType = Nothing}))))
 
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: (Core.Name -> Core.Name)

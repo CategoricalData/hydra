@@ -159,7 +159,7 @@ traceSummary t =
       in (Strings.intercalate "\n" (Lists.concat2 messageLines keyvalLines))
 
 unexpected :: (String -> String -> Compute.Flow t0 t1)
-unexpected expected actual = (fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " expected) " but found: ") actual))
+unexpected expected actual = (fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " expected) " but found ") actual))
 
 warn :: (String -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 warn msg b = (Compute.Flow (\s0 -> \t0 ->  
