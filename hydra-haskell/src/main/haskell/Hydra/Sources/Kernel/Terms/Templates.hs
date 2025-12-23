@@ -54,7 +54,8 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -63,7 +64,7 @@ ns = Namespace "hydra.templates"
 
 module_ :: Module
 module_ = Module ns elements
-    [DecodeCore.ns, ShowCore.ns]
+    [moduleNamespace DecodeCore.module_, Monads.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -81,7 +82,8 @@ graphToSchema = define "graphToSchema" $
   "toPair" <~ ("nameAndEl" ~>
     "name" <~ Pairs.first (var "nameAndEl") $
     "el" <~ Pairs.second (var "nameAndEl") $
-    Flows.bind (trace (string "graph to schema") $ DecodeCore.type_ @@ (Core.bindingTerm (var "el"))) (
+    "cx" <<~ Monads.getState $
+    Flows.bind (trace (string "graph to schema") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el")))) (
       "t" ~> Flows.pure (pair (var "name") (var "t")))) $
   Flows.bind (Flows.mapList (var "toPair") (Maps.toList (Graph.graphElements (var "g")))) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))

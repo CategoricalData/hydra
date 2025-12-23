@@ -7,6 +7,7 @@ module Hydra.Lexical where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -54,6 +55,10 @@ dereferenceSchemaType name types =
   in (Maybes.bind (Maps.lookup name types) (\ts -> Maybes.map (\ts2 -> Core.TypeScheme {
     Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) (Core.typeSchemeVariables ts2)),
     Core.typeSchemeType = (Core.typeSchemeType ts2)}) (forType (Core.typeSchemeType ts))))
+
+-- | Look up an element by name in a graph, returning Either an error or the binding
+dereferenceVariable :: (Graph.Graph -> Core.Name -> Either String Core.Binding)
+dereferenceVariable g name = (Maybes.maybe (Left (Strings.cat2 "no such element: " (Core.unName name))) (\right_ -> Right right_) (lookupElement g name))
 
 -- | Create a graph from a parent graph, optional schema, and list of element bindings
 elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Core.Binding] -> Graph.Graph)
@@ -194,6 +199,14 @@ stripAndDereferenceTerm term =
   in ((\x -> case x of
     Core.TermVariable v1 -> (Flows.bind (requireTerm v1) (\t -> stripAndDereferenceTerm t))
     _ -> (Flows.pure stripped)) stripped)
+
+-- | Strip annotations and dereference variables, returning Either an error or the resolved term
+stripAndDereferenceTermEither :: (Graph.Graph -> Core.Term -> Either String Core.Term)
+stripAndDereferenceTermEither g term =  
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in ((\x -> case x of
+    Core.TermVariable v1 -> (Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither g (Core.bindingTerm binding)) (dereferenceVariable g v1))
+    _ -> (Right stripped)) stripped)
 
 withEmptyGraph :: (Compute.Flow Graph.Graph t0 -> Compute.Flow t1 t0)
 withEmptyGraph = (Monads.withState emptyGraph)

@@ -51,7 +51,8 @@ import qualified Hydra.Dsl.Meta.Util          as Util
 import qualified Hydra.Dsl.Meta.Variants      as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
@@ -70,7 +71,7 @@ ns = Namespace "hydra.encoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, DecodeCore.ns, Formatting.ns, Names.ns, Schemas.ns]
+    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Monads.ns, Names.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where
@@ -109,7 +110,8 @@ encodeBinding :: TBinding (Binding -> Flow Graph Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
   "b" ~>
-    Flows.bind (DecodeCore.type_ @@ (Core.bindingTerm (var "b"))) (
+    "cx" <<~ Monads.getState $
+    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "b")))) (
       "typ" ~>
       Flows.pure (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))

@@ -150,6 +150,9 @@ nothing = TTerm $ TermMaybe Nothing
 just :: TTerm Term -> TTerm Term
 just (TTerm t) = TTerm $ TermMaybe $ Just t
 
+ref :: TBinding a -> TTerm Term
+ref (TBinding name _) = Core.termVariable $ Core.nameLift name
+
 -- | Create a wrap term with a type name and body
 wrap :: Name -> TTerm Term -> TTerm Term
 wrap tname body = Core.termWrap $ Core.wrappedTerm (Core.nameLift tname) body

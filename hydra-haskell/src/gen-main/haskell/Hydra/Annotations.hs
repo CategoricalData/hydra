@@ -25,6 +25,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -73,7 +74,7 @@ getTermDescription term = (getDescription (termAnnotationInternal term))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Monads.withTrace "get type" (Core_.type_ dat))) (Maps.lookup Constants.key_type anns))
+getType anns = (Flows.bind Monads.getState (\cx -> Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Monads.withTrace "get type" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx dat)))) (Maps.lookup Constants.key_type anns)))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
@@ -81,13 +82,13 @@ getTypeAnnotation key typ = (Maps.lookup key (typeAnnotationInternal typ))
 
 -- | Get type classes from term
 getTypeClasses :: (Core.Term -> Compute.Flow Graph.Graph (M.Map Core.Name (S.Set Classes.TypeClass)))
-getTypeClasses term =  
+getTypeClasses term = (Flows.bind Monads.getState (\cx ->  
   let decodeClass = (\term ->  
           let byName = (Maps.fromList [
                   (Core.Name "equality", Classes.TypeClassEquality),
                   (Core.Name "ordering", Classes.TypeClassOrdering)])
           in (Flows.bind (Core___.unitVariant (Core.Name "hydra.classes.TypeClass") term) (\fn -> Maybes.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
-  in (Maybes.maybe (Flows.pure Maps.empty) (\term -> Core___.map Core_.name (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))
+  in (Maybes.maybe (Flows.pure Maps.empty) (\term -> Core___.map (\t -> Monads.eitherToFlow Util.unDecodingError (Core_.name cx t)) (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))))
 
 -- | Get type description
 getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))

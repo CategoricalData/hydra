@@ -59,7 +59,7 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms as AdaptTerms
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
@@ -72,7 +72,7 @@ ns = Namespace "hydra.adapt.modules"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptTerms.ns, AdaptUtils.ns, Annotations.ns, DecodeCore.ns,
+    [AdaptTerms.ns, AdaptUtils.ns, Annotations.ns, moduleNamespace DecodeCore.module_,
       Lexical.ns, Monads.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
@@ -154,6 +154,7 @@ adaptedModuleDefinitions :: TBinding (Language -> Module -> Flow Graph [Definiti
 adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
   doc "Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language" $
   "lang" ~> "mod" ~>
+  "cx" <<~ Monads.getState $
   "els" <~ Module.moduleElements (var "mod") $
   "adaptersFor" <~ lambda "types" (
     "adapters" <<~ Flows.mapList (languageAdapter @@ var "lang") (var "types") $
@@ -166,7 +167,7 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
     "name" <~ Core.bindingName (var "el") $
     Logic.ifElse (Annotations.isNativeType @@ var "el")
       ("adaptedTyp" <<~ (
-        "coreTyp" <<~ (trace (string "adapt module definitions") $ DecodeCore.type_ @@ var "term") $
+        "coreTyp" <<~ (trace (string "adapt module definitions") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "term")) $
         adaptTypeToLanguage @@ var "lang" @@ var "coreTyp") $
        produce $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
       (Maybes.maybe

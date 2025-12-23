@@ -26,6 +26,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -43,7 +44,7 @@ adaptTypeToLanguage :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph
 adaptTypeToLanguage lang typ = (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Compute.adapterTarget adapter)))
 
 adaptedModuleDefinitions :: (Coders.Language -> Module.Module -> Compute.Flow Graph.Graph [Module.Definition])
-adaptedModuleDefinitions lang mod =  
+adaptedModuleDefinitions lang mod = (Flows.bind Monads.getState (\cx ->  
   let els = (Module.moduleElements mod)
   in  
     let adaptersFor = (\types -> Flows.bind (Flows.mapList (languageAdapter lang) types) (\adapters -> Flows.pure (Maps.fromList (Lists.zip types adapters))))
@@ -58,7 +59,7 @@ adaptedModuleDefinitions lang mod =
                     let typ = (Core.typeApplicationTermType tt)
                     in  
                       let name = (Core.bindingName el)
-                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Monads.withTrace "adapt module definitions" (Core_.type_ term)) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
+                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Monads.withTrace "adapt module definitions" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx term))) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
                         Module.typeDefinitionName = name,
                         Module.typeDefinitionType = adaptedTyp})))) (Maybes.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
                         Module.termDefinitionName = name,
@@ -66,7 +67,7 @@ adaptedModuleDefinitions lang mod =
                         Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
       in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
         let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
-        in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))
+        in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))))
 
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
 constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) (Utils.unidirectionalCoder encodeTerm)))))

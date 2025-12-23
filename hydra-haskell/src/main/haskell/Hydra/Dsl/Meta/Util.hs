@@ -13,6 +13,12 @@ caseConventionPascal = injectUnit _CaseConvention _CaseConvention_pascal
 caseConventionLowerSnake = injectUnit _CaseConvention _CaseConvention_lowerSnake
 caseConventionUpperSnake = injectUnit _CaseConvention _CaseConvention_upperSnake
 
+decodingError :: TTerm String -> TTerm DecodingError
+decodingError = wrap _DecodingError
+
+unDecodingError :: TTerm (DecodingError -> String)
+unDecodingError = unwrap _DecodingError
+
 precisionArbitrary :: TTerm Precision
 precisionArbitrary = injectUnit _Precision _Precision_arbitrary
 

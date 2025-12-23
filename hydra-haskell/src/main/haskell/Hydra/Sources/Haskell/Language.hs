@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core     as DecodeCore
+import qualified Hydra.Sources.Decode.Core               as DecodeCore
 import qualified Hydra.Sources.Encode.Core                as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
