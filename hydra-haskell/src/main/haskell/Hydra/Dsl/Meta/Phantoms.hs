@@ -17,6 +17,7 @@ import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Show.Core as ShowCore
 import Hydra.Encoding (encodeBindingName)
+import Hydra.Decoding (decodeBindingName)
 
 import Prelude hiding ((++))
 import qualified Data.List as L
@@ -210,6 +211,11 @@ encodedUnion = inject _Term _Term_union
 
 encodedVariant :: Name -> Name -> TTerm Term -> TTerm Term
 encodedVariant tname fname term = encodedUnion $ encodedInjection tname fname term
+
+-- | Get a reference to a decoder function in hydra.decode.core for a given type name
+-- The decoder takes a graph context and a term, returning either a decoding error or the decoded value
+decoderFor :: Name -> TTerm (Graph -> Term -> Prelude.Either DecodingError a)
+decoderFor typeName = var $ unName $ decodeBindingName typeName
 
 -- | Get a reference to an encoder function in hydra.encode.core for a given type name
 encoderFor :: Name -> TTerm (a -> Term)

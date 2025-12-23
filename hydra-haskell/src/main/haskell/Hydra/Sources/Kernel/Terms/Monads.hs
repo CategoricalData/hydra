@@ -270,7 +270,8 @@ traceSummary = define "traceSummary" $
 unexpected :: TBinding (String -> String -> Flow s x)
 unexpected = define "unexpected" $
   doc "Fail if an actual value does not match an expected value" $
-  "expected" ~> "actual" ~> fail @@ (string "expected " ++ var "expected" ++ string " but found: " ++ var "actual")
+  "expected" ~> "actual" ~>
+    fail @@ (string "expected " ++ var "expected" ++ string " but found " ++ var "actual")
 
 warn :: TBinding (String -> Flow s a -> Flow s a)
 warn = define "warn" $

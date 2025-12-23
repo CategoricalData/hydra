@@ -61,7 +61,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
-import qualified Hydra.Sources.Kernel.Terms.Decode.Core  as DecodeCore
+import qualified Hydra.Sources.Decode.Core  as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
@@ -76,7 +76,7 @@ ns = Namespace "hydra.annotations"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, DecodeCore.ns, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
+    [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
       Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
@@ -204,9 +204,11 @@ getTermDescription = define "getTermDescription" $
 getType :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
 getType = define "getType" $
   doc "Get type from annotations" $
-  "anns" ~> Maybes.maybe
+  "anns" ~>
+  "cx" <<~ Monads.getState $
+  Maybes.maybe
     (produce nothing)
-    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ DecodeCore.type_ @@ var "dat"))
+    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "dat")))
     (Maps.lookup (Constants.key_type) (var "anns"))
 
 getTypeAnnotation :: TBinding (Name -> Type -> Maybe Term)
@@ -218,6 +220,7 @@ getTypeClasses :: TBinding (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
 getTypeClasses = define "getTypeClasses" $
   doc "Get type classes from term" $
   "term" ~>
+  "cx" <<~ Monads.getState $
   "decodeClass" <~ ("term" ~>
     "byName" <~ Maps.fromList (list [
       pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
@@ -230,7 +233,7 @@ getTypeClasses = define "getTypeClasses" $
   Maybes.maybe
     (produce Maps.empty)
     ("term" ~> ExtractCore.map
-      @@ (DecodeCore.name)
+      @@ ("t" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Name @@ var "cx" @@ var "t"))
       @@ (ExtractCore.setOf @@ var "decodeClass")
       @@ (var "term"))
     (getTermAnnotation @@ Constants.key_classes @@ var "term")

@@ -3739,7 +3739,7 @@ unionEliminationsWithDefaultsTests = Testing.TestGroup {
                 Core.lambdaParameter = (Core.Name "b"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.show"))),
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showBoolean"))),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))})))},
             Core.Field {
               Core.fieldName = (Core.Name "string"),
@@ -3757,7 +3757,7 @@ unionEliminationsWithDefaultsTests = Testing.TestGroup {
                 Core.lambdaParameter = (Core.Name "b"),
                 Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeBoolean)),
                 Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.show"))),
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showBoolean"))),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))})))},
             Core.Field {
               Core.fieldName = (Core.Name "string"),
@@ -4886,7 +4886,7 @@ recursiveUnionEliminationsTests = Testing.TestGroup {
                           Core.lambdaParameter = (Core.Name "b"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.show"))),
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showBoolean"))),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))})))},
                       Core.Field {
                         Core.fieldName = (Core.Name "string"),
@@ -4921,7 +4921,7 @@ recursiveUnionEliminationsTests = Testing.TestGroup {
                           Core.lambdaParameter = (Core.Name "b"),
                           Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeBoolean)),
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.show"))),
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showBoolean"))),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))})))},
                       Core.Field {
                         Core.fieldName = (Core.Name "string"),

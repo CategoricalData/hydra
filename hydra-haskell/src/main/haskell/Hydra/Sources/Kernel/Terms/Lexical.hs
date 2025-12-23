@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (chooseUniqueName, dereferenceElement, dereferenceSchemaType, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, lookupElement, lookupPrimitive, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, schemaContext, stripAndDereferenceTerm, withEmptyGraph, withSchemaContext)
+import Hydra.Kernel hiding (chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, lookupElement, lookupPrimitive, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, schemaContext, stripAndDereferenceTerm, stripAndDereferenceTermEither, withEmptyGraph, withSchemaContext)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -75,6 +75,7 @@ module_ = Module ns elements
       toBinding chooseUniqueName,
       toBinding dereferenceElement,
       toBinding dereferenceSchemaType,
+      toBinding dereferenceVariable,
       toBinding elementsToGraph,
       toBinding emptyGraph,
       toBinding extendGraphWithBindings,
@@ -93,6 +94,7 @@ module_ = Module ns elements
       toBinding resolveTerm,
       toBinding schemaContext,
       toBinding stripAndDereferenceTerm,
+      toBinding stripAndDereferenceTermEither,
       toBinding withEmptyGraph,
       toBinding withSchemaContext]
 
@@ -137,6 +139,16 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
         (Lists.concat2 (Core.typeSchemeVariables (var "ts")) (Core.typeSchemeVariables (var "ts2")))
         (Core.typeSchemeType (var "ts2")))
       (var "forType" @@ (Core.typeSchemeType (var "ts"))))
+
+-- | Dereference a variable name in a graph, returning Either an error message or the binding
+dereferenceVariable :: TBinding (Graph -> Name -> Either String Binding)
+dereferenceVariable = define "dereferenceVariable" $
+  doc "Look up an element by name in a graph, returning Either an error or the binding" $
+  "g" ~> "name" ~>
+  Maybes.maybe
+    (left ((string "no such element: ") ++ (Core.unName (var "name"))))
+    right_
+    (lookupElement @@ var "g" @@ var "name")
 
 elementsToGraph :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
@@ -329,6 +341,21 @@ stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
     _Term_variable>>: "v" ~>
       "t" <<~ requireTerm @@ var "v" $
       stripAndDereferenceTerm @@ var "t"]
+
+-- | Strip annotations and dereference variables, returning Either String Term
+-- This is the pure (non-Flow) version for use in generated decoders
+stripAndDereferenceTermEither :: TBinding (Graph -> Term -> Either String Term)
+stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
+  doc "Strip annotations and dereference variables, returning Either an error or the resolved term" $
+  "g" ~> "term" ~>
+  "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
+  cases _Term (var "stripped")
+    (Just (right (var "stripped"))) [
+    _Term_variable>>: "v" ~>
+      Eithers.either_
+        left_  -- propagate error
+        ("binding" ~> stripAndDereferenceTermEither @@ var "g" @@ (Core.bindingTerm (var "binding")))
+        (dereferenceVariable @@ var "g" @@ var "v")]
 
 -- TODO: move into hydra.lexical
 withEmptyGraph :: TBinding (Flow Graph a -> Flow s a)
