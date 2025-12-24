@@ -54,6 +54,7 @@ module_ = Module ns elements [] [ns] $ -- Note: hydra.core uniquely takes itself
       typeApplicationTerm,
       typeLambda,
       typeScheme,
+      typeVariableMetadata,
       wrappedTerm,
       wrappedType]
 
@@ -565,7 +566,18 @@ typeScheme = define "TypeScheme" $
       T.list name,
     "type">:
       doc "The type expression"
-      type_]
+      type_,
+    "constraints">:
+      doc "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names." $
+      T.maybe $ T.map name typeVariableMetadata]
+
+typeVariableMetadata :: Binding
+typeVariableMetadata = define "TypeVariableMetadata" $
+  doc "Metadata associated with a type variable, including typeclass constraints" $
+  T.record [
+    "classes">:
+      doc "The set of typeclass constraints on this type variable" $
+      T.set name]
 
 wrappedTerm :: Binding
 wrappedTerm = define "WrappedTerm" $
