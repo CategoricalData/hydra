@@ -272,7 +272,7 @@ encodeDefinition env def = case def of
 --      else return ()
 
       comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term)
-      stmt <- encodeTermAssignment env name term (fTypeToTypeScheme typ) comment
+      stmt <- encodeTermAssignment env name term typ comment
       return [[stmt]]
 
   DefinitionType (TypeDefinition name typ) -> withTrace ("type element " ++ unName name) $ do
@@ -1102,7 +1102,7 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
     add meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) -> extendMetaForTerm True meta2 term
         where
-          meta2 = extendMetaForType True True typ meta
+          meta2 = extendMetaForType True True (typeSchemeType typ) meta
       DefinitionType (TypeDefinition _ typ) -> foldOverType TraversalOrderPre (\m t -> extendMetaForType True False t m) meta2 typ
         where
           meta2 = meta {pythonModuleMetadataUsesName = True}
@@ -1159,7 +1159,7 @@ withDefinitions env defs = withLet env lt
     bindings = Y.catMaybes $ fmap toBinding defs
     toBinding def = case def of
       DefinitionTerm (TermDefinition name term typ) ->
-        Just $ Binding name term (Just $ fTypeToTypeScheme typ)
+        Just $ Binding name term (Just typ)
       DefinitionType _ -> Nothing
 
 withLambda :: PythonEnvironment -> Lambda -> (PythonEnvironment -> Flow s a) -> Flow s a

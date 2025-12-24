@@ -119,17 +119,18 @@ constructModule mod defs = do
     encodeTermDefinition (TermDefinition name term typ) = withTrace ("term " ++ unName name) $ do
         rhs <- encodeTerm term
         let lname = localNameOf name
+        let typ' = typeSchemeType typ
         Scala.StatDefn <$> case rhs of
           Scala.DataApply _ -> toVal lname rhs
-          Scala.DataFunctionData fun -> case deannotateType typ of
-            TypeFunction (FunctionType _ cod) -> toDefn lname typ fun cod
+          Scala.DataFunctionData fun -> case deannotateType typ' of
+            TypeFunction (FunctionType _ cod) -> toDefn lname typ' fun cod
             _ -> toVal lname rhs
           Scala.DataLit _ -> toVal lname rhs
           Scala.DataRef _ -> toVal lname rhs
           _ -> toVal lname rhs
       where
-        toDefn lname typ (Scala.Data_FunctionDataFunction (Scala.Data_Function params body)) cod = do
-          let freeTypeVars = S.toList $ freeVariablesInType typ
+        toDefn lname typ0 (Scala.Data_FunctionDataFunction (Scala.Data_Function params body)) cod = do
+          let freeTypeVars = S.toList $ freeVariablesInType typ0
           let tparams = stparam <$> freeTypeVars
           scod <- encodeType cod
           return $ Scala.DefnDef $ Scala.Defn_Def []
