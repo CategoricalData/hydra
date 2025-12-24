@@ -281,3 +281,10 @@ _strings_toList      = qname _hydra_lib_strings "toList" :: Name
 _strings_toLower     = qname _hydra_lib_strings "toLower" :: Name
 _strings_toUpper     = qname _hydra_lib_strings "toUpper" :: Name
 _strings_unlines     = qname _hydra_lib_strings "unlines" :: Name
+
+-- | Type class names for qualified types
+_hydra_typeclass :: Namespace
+_hydra_typeclass = Namespace "hydra.typeclass"
+
+_typeclass_Eq  = qname _hydra_typeclass "Eq" :: Name
+_typeclass_Ord = qname _hydra_typeclass "Ord" :: Name
