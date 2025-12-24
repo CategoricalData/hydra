@@ -110,7 +110,7 @@ qualifiedName = define "QualifiedName" $
 
 termDefinition :: Binding
 termDefinition = define "TermDefinition" $
-  doc "A term-level definition, including a name, a term, and the type of the term" $
+  doc "A term-level definition, including a name, a term, and the type scheme of the term" $
   T.record [
     "name">:
       doc "The name of the term"
@@ -119,8 +119,8 @@ termDefinition = define "TermDefinition" $
       doc "The term being defined"
       Core.term,
     "type">:
-      doc "The type of the term"
-      Core.type_]
+      doc "The type scheme of the term, including any class constraints"
+      Core.typeScheme]
 
 typeDefinition :: Binding
 typeDefinition = define "TypeDefinition" $

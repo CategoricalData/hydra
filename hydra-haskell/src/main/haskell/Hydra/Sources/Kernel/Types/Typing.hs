@@ -42,6 +42,10 @@ inferenceContext = define "InferenceContext" $
         ++ " This environment is (usually) smaller than the schema and primitive typing environments,"
         ++ " and is subject to global substitutions.") $
       T.map Core.name Core.typeScheme,
+    "classConstraints">:
+      doc ("A mutable map from type variable names to their accumulated class constraints."
+        ++ " This is populated during type inference when operations requiring Eq or Ord are encountered.") $
+      T.map Core.name Core.typeVariableMetadata,
     "debug">:
       doc "Whether to enable debug output during type inference"
       T.boolean]
@@ -58,7 +62,10 @@ inferenceResult = define "InferenceResult" $
       Core.type_,
     "subst">:
       doc "The type substitution resulting from unification"
-      typeSubst]
+      typeSubst,
+    "classConstraints">:
+      doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
+      T.map Core.name Core.typeVariableMetadata]
 
 termSubst :: Binding
 termSubst = define "TermSubst" $
