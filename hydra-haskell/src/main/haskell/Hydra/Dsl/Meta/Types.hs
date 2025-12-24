@@ -163,7 +163,8 @@ map k v = typeMap $ mapType k v
 mono :: TTerm Type -> TTerm TypeScheme
 mono t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables $ Phantoms.list ([] :: [TTerm Name]),
-  Phantoms.field _TypeScheme_type t]
+  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_constraints Phantoms.nothing]
 
 -- | Create a term-encoded maybe (optional/nullable) type
 -- Example: maybe string
@@ -185,7 +186,8 @@ pair first second = Core.typePair $ Core.pairType first second
 poly :: [String] -> TTerm Type -> TTerm TypeScheme
 poly params t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
-  Phantoms.field _TypeScheme_type t]
+  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_constraints Phantoms.nothing]
 
 -- | Create a term-encoded product type (tuple) with multiple components using nested pairs
 -- Example: product [string, int32, boolean]

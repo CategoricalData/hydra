@@ -141,7 +141,7 @@ caseConversionTestCase fromConvention toConvention fromString toString =
 
 encodedTestGroupToBinding :: Namespace -> String -> TTerm TestGroup -> Binding
 encodedTestGroupToBinding ns lname group = Binding name (unTTerm group)
-    $ Just $ TypeScheme [] typ
+    $ Just $ TypeScheme [] typ Nothing
   where
     name = unqualifyName $ QualifiedName (Just ns) lname
     typ = TypeVariable _TestGroup
