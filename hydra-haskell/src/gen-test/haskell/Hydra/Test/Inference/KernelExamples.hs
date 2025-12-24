@@ -85,7 +85,8 @@ testGroupForNestedLet = Testing.TestGroup {
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}))}})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],

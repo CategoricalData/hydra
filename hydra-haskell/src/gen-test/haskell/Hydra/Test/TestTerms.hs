@@ -43,7 +43,8 @@ testElementArthur = Core.Binding {
   Core.bindingTerm = testDataArthur,
   Core.bindingType = (Just (Core.TypeScheme {
     Core.typeSchemeVariables = [],
-    Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName)}))}
+    Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName),
+    Core.typeSchemeConstraints = Nothing}))}
 
 testElementFirstName :: Core.Binding
 testElementFirstName = Core.Binding {
@@ -55,4 +56,5 @@ testElementFirstName = Core.Binding {
     Core.typeSchemeVariables = [],
     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
-      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}))}
+      Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
+    Core.typeSchemeConstraints = Nothing}))}

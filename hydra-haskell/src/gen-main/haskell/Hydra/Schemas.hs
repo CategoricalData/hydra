@@ -167,7 +167,8 @@ fTypeToTypeScheme typ =
           Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
           _ -> Core.TypeScheme {
             Core.typeSchemeVariables = (Lists.reverse vars),
-            Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
+            Core.typeSchemeType = typ,
+            Core.typeSchemeConstraints = Nothing}) (Rewriting.deannotateType typ))
   in (gatherForall [] typ)
 
 -- | Fully strip a type of forall quantifiers
@@ -212,6 +213,7 @@ graphToInferenceContext graph =
         Typing.inferenceContextSchemaTypes = schemaTypes,
         Typing.inferenceContextPrimitiveTypes = primTypes,
         Typing.inferenceContextDataTypes = varTypes,
+        Typing.inferenceContextClassConstraints = Maps.empty,
         Typing.inferenceContextDebug = False})))
 
 graphToTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing.TypeContext)
@@ -230,9 +232,14 @@ instantiateTypeScheme scheme =
   let oldVars = (Core.typeSchemeVariables scheme)
   in (Flows.bind (freshNames (Lists.length oldVars)) (\newVars ->  
     let subst = (Typing.TypeSubst (Maps.fromList (Lists.zip oldVars (Lists.map (\x -> Core.TypeVariable x) newVars))))
-    in (Flows.pure (Core.TypeScheme {
-      Core.typeSchemeVariables = newVars,
-      Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme))}))))
+    in  
+      let nameSubst = (Maps.fromList (Lists.zip oldVars newVars))
+      in  
+        let renamedConstraints = (Maybes.map (\oldConstraints -> Maps.fromList (Lists.map (\kv -> (Maybes.fromMaybe (Pairs.first kv) (Maps.lookup (Pairs.first kv) nameSubst), (Pairs.second kv))) (Maps.toList oldConstraints))) (Core.typeSchemeConstraints scheme))
+        in (Flows.pure (Core.TypeScheme {
+          Core.typeSchemeVariables = newVars,
+          Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme)),
+          Core.typeSchemeConstraints = renamedConstraints}))))
 
 -- | Determines whether a given term is an encoded type
 isEncodedType :: (Core.Term -> Bool)
@@ -395,7 +402,8 @@ schemaGraphToTypingEnvironment g =
           Core.TypeForall v1 -> (toTypeScheme (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
           _ -> Core.TypeScheme {
             Core.typeSchemeVariables = (Lists.reverse vars),
-            Core.typeSchemeType = typ}) (Rewriting.deannotateType typ))
+            Core.typeSchemeType = typ,
+            Core.typeSchemeConstraints = Nothing}) (Rewriting.deannotateType typ))
   in  
     let toPair = (\el -> Flows.bind Monads.getState (\cx ->  
             let forTerm = (\term -> (\x -> case x of
@@ -404,9 +412,11 @@ schemaGraphToTypingEnvironment g =
                     _ -> (Flows.pure Nothing)) term)
             in (Flows.bind (Maybes.maybe (Flows.map (\typ -> Just (fTypeToTypeScheme typ)) (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})) (Flows.map Maybes.pure (Monads.eitherToFlow Util.unDecodingError (Core_.typeScheme cx (Core.bindingTerm el)))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
+              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme")),
+              Core.typeSchemeConstraints = Nothing})) (Flows.map Maybes.pure (Monads.eitherToFlow Util.unDecodingError (Core_.typeScheme cx (Core.bindingTerm el)))) (Logic.ifElse (Equality.equal ts (Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (forTerm (Rewriting.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)) (\mts -> Flows.pure (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))))
+              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+              Core.typeSchemeConstraints = Nothing})) (Flows.map (\decoded -> Just (toTypeScheme [] decoded)) (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (forTerm (Rewriting.deannotateTerm (Core.bindingTerm el))))) (Core.bindingType el)) (\mts -> Flows.pure (Maybes.map (\ts -> (Core.bindingName el, ts)) mts)))))
     in (Monads.withTrace "schema graph to typing environment" (Monads.withState g (Flows.bind (Flows.mapList toPair (Maps.elems (Graph.graphElements g))) (\mpairs -> Flows.pure (Maps.fromList (Maybes.cat mpairs))))))
 
 -- | Find the equivalent graph representation of a term
@@ -473,7 +483,8 @@ typeToTypeScheme t0 =
           Core.TypeForall v1 -> (helper (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
           _ -> Core.TypeScheme {
             Core.typeSchemeVariables = (Lists.reverse vars),
-            Core.typeSchemeType = t}) (Rewriting.deannotateType t))
+            Core.typeSchemeType = t,
+            Core.typeSchemeConstraints = Nothing}) (Rewriting.deannotateType t))
   in (helper [] t0)
 
 -- | Encode a map of named types to a map of elements

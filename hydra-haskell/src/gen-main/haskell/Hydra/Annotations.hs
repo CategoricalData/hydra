@@ -100,7 +100,8 @@ isNativeType el =
   let isFlaggedAsFirstClassType = (Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el))))
   in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
     Core.typeSchemeVariables = [],
-    Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
+    Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+    Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
 hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Maybes.isJust (Maps.lookup Constants.key_description anns))
@@ -243,7 +244,8 @@ typeElement name typ =
       Core.bindingTerm = dataTerm,
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type"))}))}
+        Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+        Core.typeSchemeConstraints = Nothing}))}
 
 whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))

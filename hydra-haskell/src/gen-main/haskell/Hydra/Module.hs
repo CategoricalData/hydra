@@ -117,15 +117,15 @@ _QualifiedName_namespace = (Core.Name "namespace")
 
 _QualifiedName_local = (Core.Name "local")
 
--- | A term-level definition, including a name, a term, and the type of the term
+-- | A term-level definition, including a name, a term, and the type scheme of the term
 data TermDefinition = 
   TermDefinition {
     -- | The name of the term
     termDefinitionName :: Core.Name,
     -- | The term being defined
     termDefinitionTerm :: Core.Term,
-    -- | The type of the term
-    termDefinitionType :: Core.Type}
+    -- | The type scheme of the term, including any class constraints
+    termDefinitionType :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 
 _TermDefinition = (Core.Name "hydra.module.TermDefinition")

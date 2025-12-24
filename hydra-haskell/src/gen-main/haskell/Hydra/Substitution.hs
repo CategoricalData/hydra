@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Typing as Typing
@@ -48,13 +49,33 @@ substituteInConstraint subst c = Typing.TypeConstraint {
 substituteInConstraints :: (Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint])
 substituteInConstraints subst cs = (Lists.map (substituteInConstraint subst) cs)
 
+-- | Apply a type substitution to class constraints, renaming keys as needed
+substInClassConstraints :: (Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata)
+substInClassConstraints subst constraints =  
+  let substMap = (Typing.unTypeSubst subst)
+  in (Lists.foldl (\acc -> \pair ->  
+    let varName = (Pairs.first pair)
+    in  
+      let metadata = (Pairs.second pair)
+      in (Maybes.maybe (Maps.insert varName metadata acc) (\targetType -> (\x -> case x of
+        Core.TypeVariable v1 -> (Maybes.maybe (Maps.insert v1 metadata acc) (\existing ->  
+          let merged = Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata))}
+          in (Maps.insert v1 merged acc)) (Maps.lookup v1 acc))
+        _ -> acc) targetType) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
+
 -- | Apply a type substitution to an inference context
 substInContext :: (Typing.TypeSubst -> Typing.InferenceContext -> Typing.InferenceContext)
-substInContext subst cx = Typing.InferenceContext {
-  Typing.inferenceContextSchemaTypes = (Typing.inferenceContextSchemaTypes cx),
-  Typing.inferenceContextPrimitiveTypes = (Typing.inferenceContextPrimitiveTypes cx),
-  Typing.inferenceContextDataTypes = (Maps.map (substInTypeScheme subst) (Typing.inferenceContextDataTypes cx)),
-  Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
+substInContext subst cx =  
+  let newDataTypes = (Maps.map (substInTypeScheme subst) (Typing.inferenceContextDataTypes cx))
+  in  
+    let newClassConstraints = (substInClassConstraints subst (Typing.inferenceContextClassConstraints cx))
+    in Typing.InferenceContext {
+      Typing.inferenceContextSchemaTypes = (Typing.inferenceContextSchemaTypes cx),
+      Typing.inferenceContextPrimitiveTypes = (Typing.inferenceContextPrimitiveTypes cx),
+      Typing.inferenceContextDataTypes = newDataTypes,
+      Typing.inferenceContextClassConstraints = newClassConstraints,
+      Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
 
 -- | Apply a term substitution to a term
 substituteInTerm :: (Typing.TermSubst -> Core.Term -> Core.Term)
@@ -104,7 +125,8 @@ substInType subst typ0 =
 substInTypeScheme :: (Typing.TypeSubst -> Core.TypeScheme -> Core.TypeScheme)
 substInTypeScheme subst ts = Core.TypeScheme {
   Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-  Core.typeSchemeType = (substInType subst (Core.typeSchemeType ts))}
+  Core.typeSchemeType = (substInType subst (Core.typeSchemeType ts)),
+  Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints subst) (Core.typeSchemeConstraints ts))}
 
 -- | Apply a type substitution to the type annotations within a term
 substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)

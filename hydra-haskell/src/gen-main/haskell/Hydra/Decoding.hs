@@ -1900,7 +1900,8 @@ decoderType typ =
 decoderTypeScheme :: (Core.Type -> Core.TypeScheme)
 decoderTypeScheme typ = Core.TypeScheme {
   Core.typeSchemeVariables = (collectTypeVariables typ),
-  Core.typeSchemeType = (decoderType typ)}
+  Core.typeSchemeType = (decoderType typ),
+  Core.typeSchemeConstraints = Nothing}
 
 -- | Filter bindings to only decodable type definitions
 filterTypeBindings :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])

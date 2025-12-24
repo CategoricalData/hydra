@@ -64,7 +64,7 @@ adaptedModuleDefinitions lang mod = (Flows.bind Monads.getState (\cx ->
                         Module.typeDefinitionType = adaptedTyp})))) (Maybes.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
                         Module.termDefinitionName = name,
                         Module.termDefinitionTerm = adapted,
-                        Module.termDefinitionType = (Compute.adapterTarget adapter)})))) (Maps.lookup typ adapters))))
+                        Module.termDefinitionType = (Schemas.typeToTypeScheme (Compute.adapterTarget adapter))})))) (Maps.lookup typ adapters))))
       in (Flows.bind (Lexical.withSchemaContext (Flows.mapList Schemas.elementAsTypeApplicationTerm els)) (\tterms ->  
         let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
         in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))))
