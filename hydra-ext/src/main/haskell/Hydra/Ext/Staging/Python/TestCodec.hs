@@ -210,7 +210,7 @@ namespacesForPythonModule mod = do
   where
     bindingToDefinition :: Binding -> Maybe Definition
     bindingToDefinition (Binding name term mts) = case mts of
-      Just ts -> Just $ DefinitionTerm $ TermDefinition name term (typeSchemeType ts)
+      Just ts -> Just $ DefinitionTerm $ TermDefinition name term ts
       Nothing -> Nothing  -- Skip bindings without type info
 
 -- | Convert namespace to Python module name

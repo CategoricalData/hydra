@@ -592,7 +592,7 @@ gatherMetadata defs = L.foldl addDef start defs
 
     addDef meta def = case def of
       DefinitionTerm (TermDefinition _ term typ) ->
-        foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType meta typ) term
+        foldOverTerm TraversalOrderPre extendMetaForTerm (extendMetaForType meta (typeSchemeType typ)) term
       DefinitionType (TypeDefinition _ typ) ->
         foldOverType TraversalOrderPre extendMetaForType meta typ
 
