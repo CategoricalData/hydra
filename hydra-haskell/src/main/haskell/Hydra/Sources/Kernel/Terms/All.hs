@@ -43,12 +43,55 @@ import qualified Hydra.Sources.Kernel.Terms.Tarjan          as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 
+-- Secondary, generated decoding modules
+import qualified Hydra.Sources.Decode.Accessors     as DecodeAccessors
+import qualified Hydra.Sources.Decode.Ast           as DecodeAst
+import qualified Hydra.Sources.Decode.Classes       as DecodeClasses
+import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
+import qualified Hydra.Sources.Decode.Compute       as DecodeCompute
+import qualified Hydra.Sources.Decode.Constraints   as DecodeConstraints
+import qualified Hydra.Sources.Decode.Core          as DecodeCore
+import qualified Hydra.Sources.Decode.Grammar       as DecodeGrammar
+import qualified Hydra.Sources.Decode.Json          as DecodeJson
+import qualified Hydra.Sources.Decode.Module        as DecodeModule
+import qualified Hydra.Sources.Decode.Parsing       as DecodeParsing
+import qualified Hydra.Sources.Decode.Phantoms      as DecodePhantoms
+import qualified Hydra.Sources.Decode.Query         as DecodeQuery
+import qualified Hydra.Sources.Decode.Relational    as DecodeRelational
+import qualified Hydra.Sources.Decode.Tabular       as DecodeTabular
+import qualified Hydra.Sources.Decode.Testing       as DecodeTesting
+import qualified Hydra.Sources.Decode.Topology      as DecodeTopology
+import qualified Hydra.Sources.Decode.Typing        as DecodeTyping
+import qualified Hydra.Sources.Decode.Util          as DecodeUtil
+import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
+import qualified Hydra.Sources.Decode.Workflow      as DecodeWorkflow
+
 -- Secondary, generated encoding modules
-import qualified Hydra.Sources.Encode.Core     as EncodeCore
+import qualified Hydra.Sources.Encode.Accessors     as EncodeAccessors
+import qualified Hydra.Sources.Encode.Ast           as EncodeAst
+import qualified Hydra.Sources.Encode.Classes       as EncodeClasses
+import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
+import qualified Hydra.Sources.Encode.Compute       as EncodeCompute
+import qualified Hydra.Sources.Encode.Constraints   as EncodeConstraints
+import qualified Hydra.Sources.Encode.Core          as EncodeCore
+import qualified Hydra.Sources.Encode.Grammar       as EncodeGrammar
+import qualified Hydra.Sources.Encode.Json          as EncodeJson
+import qualified Hydra.Sources.Encode.Module        as EncodeModule
+import qualified Hydra.Sources.Encode.Parsing       as EncodeParsing
+import qualified Hydra.Sources.Encode.Phantoms      as EncodePhantoms
+import qualified Hydra.Sources.Encode.Query         as EncodeQuery
+import qualified Hydra.Sources.Encode.Relational    as EncodeRelational
+import qualified Hydra.Sources.Encode.Tabular       as EncodeTabular
+import qualified Hydra.Sources.Encode.Testing       as EncodeTesting
+import qualified Hydra.Sources.Encode.Topology      as EncodeTopology
+import qualified Hydra.Sources.Encode.Typing        as EncodeTyping
+import qualified Hydra.Sources.Encode.Util          as EncodeUtil
+import qualified Hydra.Sources.Encode.Variants      as EncodeVariants
+import qualified Hydra.Sources.Encode.Workflow      as EncodeWorkflow
 
 
 kernelTermsModules :: [Module]
-kernelTermsModules = kernelPrimaryTermsModules ++ kernelEncodingModules
+kernelTermsModules = kernelPrimaryTermsModules ++ kernelDecodingModules ++ kernelEncodingModules
 
 kernelPrimaryTermsModules :: [Module]
 kernelPrimaryTermsModules = [
@@ -92,6 +135,50 @@ kernelPrimaryTermsModules = [
   Templates.module_,
   Unification.module_]
 
+kernelDecodingModules :: [Module]
+kernelDecodingModules = [
+  DecodeAccessors.module_,
+  DecodeAst.module_,
+  DecodeClasses.module_,
+  DecodeCoders.module_,
+  DecodeCompute.module_,
+  DecodeConstraints.module_,
+  DecodeCore.module_,
+  DecodeGrammar.module_,
+  DecodeJson.module_,
+  DecodeModule.module_,
+  DecodeParsing.module_,
+  DecodePhantoms.module_,
+  DecodeQuery.module_,
+  DecodeRelational.module_,
+  DecodeTabular.module_,
+  DecodeTesting.module_,
+  DecodeTopology.module_,
+  DecodeTyping.module_,
+  DecodeUtil.module_,
+  DecodeVariants.module_,
+  DecodeWorkflow.module_]
+
 kernelEncodingModules :: [Module]
 kernelEncodingModules = [
-  EncodeCore.module_]
+  EncodeAccessors.module_,
+  EncodeAst.module_,
+  EncodeClasses.module_,
+  EncodeCoders.module_,
+  EncodeCompute.module_,
+  EncodeConstraints.module_,
+  EncodeCore.module_,
+  EncodeGrammar.module_,
+  EncodeJson.module_,
+  EncodeModule.module_,
+  EncodeParsing.module_,
+  EncodePhantoms.module_,
+  EncodeQuery.module_,
+  EncodeRelational.module_,
+  EncodeTabular.module_,
+  EncodeTesting.module_,
+  EncodeTopology.module_,
+  EncodeTyping.module_,
+  EncodeUtil.module_,
+  EncodeVariants.module_,
+  EncodeWorkflow.module_]
