@@ -36,6 +36,55 @@ import qualified Hydra.Eval.Lib.Sets as EvalSets
 import qualified Data.List as L
 
 
+-- Type variables (TypeVar) for primitive type schemes
+-- Unconstrained
+_a, _b, _c, _d, _k, _k1, _k2, _s, _v, _v1, _v2, _w, _x, _y, _z :: TypeVar
+_a = v "a"
+_b = v "b"
+_c = v "c"
+_d = v "d"
+_k = v "k"
+_k1 = v "k1"
+_k2 = v "k2"
+_s = v "s"
+_v = v "v"
+_v1 = v "v1"
+_v2 = v "v2"
+_w = v "w"
+_x = v "x"
+_y = v "y"
+_z = v "z"
+
+-- Ord-constrained
+_kOrd, _k1Ord, _k2Ord, _xOrd, _yOrd :: TypeVar
+_kOrd = vOrd "k"
+_k1Ord = vOrd "k1"
+_k2Ord = vOrd "k2"
+_xOrd = vOrd "x"
+_yOrd = vOrd "y"
+
+-- Eq-constrained
+_xEq :: TypeVar
+_xEq = vEq "x"
+
+-- Term coders for type variables (used in primitive implementations)
+a_, b_, c_, d_, k_, k1_, k2_, s_, v_, v1_, v2_, w_, x_, y_, z_ :: TermCoder Term
+a_ = variable "a"
+b_ = variable "b"
+c_ = variable "c"
+d_ = variable "d"
+k_ = variable "k"
+k1_ = variable "k1"
+k2_ = variable "k2"
+s_ = variable "s"
+v_ = variable "v"
+v1_ = variable "v1"
+v2_ = variable "v2"
+w_ = variable "w"
+x_ = variable "x"
+y_ = variable "y"
+z_ = variable "z"
+
 standardLibraries :: [Library]
 standardLibraries = [
   hydraLibChars,
@@ -70,104 +119,83 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
-    prim3Eval   _eithers_bimap            EvalEithers.bimap        ["x", "y", "z", "w"] (function x z) (function y w) (Prims.either_ x y) (Prims.either_ z w),
-    prim3Eval   _eithers_either           EvalEithers.either       ["x", "y", "z"]      (function x z) (function y z) (Prims.either_ x y) z,
-    prim2       _eithers_fromLeft         Eithers.fromLeft         ["x", "y"]           x (Prims.either_ x y) x,
-    prim2       _eithers_fromRight        Eithers.fromRight        ["x", "y"]           y (Prims.either_ x y) y,
-    prim1       _eithers_isLeft           Eithers.isLeft           ["x", "y"]           (Prims.either_ x y) boolean,
-    prim1       _eithers_isRight          Eithers.isRight          ["x", "y"]           (Prims.either_ x y) boolean,
-    prim1       _eithers_lefts            Eithers.lefts            ["x", "y"]           (list $ Prims.either_ x y) (list x),
-    prim2Eval   _eithers_map              EvalEithers.map          ["x", "y", "z"]      (function x y) (Prims.either_ z x) (Prims.either_ z y),
-    prim2Eval   _eithers_mapList          EvalEithers.mapList      ["x", "y", "z"]      (function x (Prims.either_ z y)) (list x) (Prims.either_ z (list y)),
-    prim2Eval   _eithers_mapMaybe         EvalEithers.mapMaybe     ["x", "y", "z"]      (function x (Prims.either_ z y)) (optional x) (Prims.either_ z (optional y)),
+    prim3Eval   _eithers_bimap            EvalEithers.bimap        [_x, _y, _z, _w] (function x_ z_) (function y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
+    prim3Eval   _eithers_either           EvalEithers.either       [_x, _y, _z]     (function x_ z_) (function y_ z_) (Prims.either_ x_ y_) z_,
+    prim2       _eithers_fromLeft         Eithers.fromLeft         [_x, _y]         x_ (Prims.either_ x_ y_) x_,
+    prim2       _eithers_fromRight        Eithers.fromRight        [_x, _y]         y_ (Prims.either_ x_ y_) y_,
+    prim1       _eithers_isLeft           Eithers.isLeft           [_x, _y]         (Prims.either_ x_ y_) boolean,
+    prim1       _eithers_isRight          Eithers.isRight          [_x, _y]         (Prims.either_ x_ y_) boolean,
+    prim1       _eithers_lefts            Eithers.lefts            [_x, _y]         (list $ Prims.either_ x_ y_) (list x_),
+    prim2Eval   _eithers_map              EvalEithers.map          [_x, _y, _z]     (function x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
+    prim2Eval   _eithers_mapList          EvalEithers.mapList      [_x, _y, _z]     (function x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
+    prim2Eval   _eithers_mapMaybe         EvalEithers.mapMaybe     [_x, _y, _z]     (function x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
     -- TODO: add mapMap, mapPair, mapSet when their implementations are ready
-    prim1       _eithers_partitionEithers Eithers.partitionEithers ["x", "y"]           (list $ Prims.either_ x y) (pair (list x) (list y)),
-    prim1       _eithers_rights           Eithers.rights           ["x", "y"]           (list $ Prims.either_ x y) (list y)]
-  where
-    x = variable "x"
-    y = variable "y"
-    z = variable "z"
-    w = variable "w"
+    prim1       _eithers_partitionEithers Eithers.partitionEithers [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
+    prim1       _eithers_rights           Eithers.rights           [_x, _y]         (list $ Prims.either_ x_ y_) (list y_)]
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary _hydra_lib_equality [
-    prim2 _equality_compare  Equality.compare  ["x"] x x comparison,
-    prim2 _equality_equal    Equality.equal    ["x"] x x boolean,
-    prim1 _equality_identity Equality.identity ["x"] x x,
-    prim2 _equality_gt       Equality.gt       ["x"] x x boolean,
-    prim2 _equality_gte      Equality.gte      ["x"] x x boolean,
-    prim2 _equality_lt       Equality.lt       ["x"] x x boolean,
-    prim2 _equality_lte      Equality.lte      ["x"] x x boolean,
-    prim2 _equality_max      Equality.max      ["x"] x x x,
-    prim2 _equality_min      Equality.min      ["x"] x x x]
-  where
-    x = variable "x"
+    prim2 _equality_compare  Equality.compare  [_xOrd] x_ x_ comparison,
+    prim2 _equality_equal    Equality.equal    [_xEq]  x_ x_ boolean,
+    prim1 _equality_identity Equality.identity [_x]    x_ x_,
+    prim2 _equality_gt       Equality.gt       [_xOrd] x_ x_ boolean,
+    prim2 _equality_gte      Equality.gte      [_xOrd] x_ x_ boolean,
+    prim2 _equality_lt       Equality.lt       [_xOrd] x_ x_ boolean,
+    prim2 _equality_lte      Equality.lte      [_xOrd] x_ x_ boolean,
+    prim2 _equality_max      Equality.max      [_xOrd] x_ x_ x_,
+    prim2 _equality_min      Equality.min      [_xOrd] x_ x_ x_]
 
 hydraLibFlows :: Library
 hydraLibFlows = standardLibrary _hydra_lib_flows [
-    prim2Eval _flows_apply    EvalFlows.apply    ["s", "x", "y"]        (flow s (function x y)) (flow s x) (flow s y),
-    prim2Eval _flows_bind     EvalFlows.bind     ["s", "x", "y"]        (flow s x) (function x (flow s y)) (flow s y),
-    prim1     _flows_fail     Flows.fail         ["s", "x"]             string (flow s x),
-    prim3Eval _flows_foldl    EvalFlows.foldl    ["y", "x", "s"]        (function y (function x (flow s y))) y (list x) (flow s y),
-    prim2Eval _flows_map      EvalFlows.map      ["x", "y", "s"]        (function x y) (flow s x) (flow s y),
-    prim2Eval _flows_mapElems EvalFlows.mapElems ["v1", "s", "v2", "k"] (function v1 (flow s v2)) (Prims.map k v1) (flow s (Prims.map k v2)),
-    prim2Eval _flows_mapKeys  EvalFlows.mapKeys  ["k1", "s", "k2", "v"] (function k1 (flow s k2)) (Prims.map k1 v) (flow s (Prims.map k2 v)),
-    prim2Eval _flows_mapList  EvalFlows.mapList  ["x", "s", "y"]        (function x (flow s y)) (list x) (flow s (list y)),
-    prim2Eval _flows_mapMaybe EvalFlows.mapMaybe ["x", "s", "y"]        (function x $ flow s y) (optional x) (flow s $ optional y),
-    prim2Eval _flows_mapSet   EvalFlows.mapSet   ["x", "s", "y"]        (function x (flow s y)) (set x) (flow s (set y)),
-    prim1     _flows_pure     Flows.pure         ["x", "s"]             x (flow s x),
-    prim1     _flows_sequence Flows.sequence     ["s", "x"]             (list (flow s x)) (flow s (list x))]
-  where
-    s = variable "s"
-    k = variable "k"
-    k1 = variable "k1"
-    k2 = variable "k2"
-    x = variable "x"
-    v = variable "v"
-    v1 = variable "v1"
-    v2 = variable "v2"
-    y = variable "y"
+    prim2Eval _flows_apply    EvalFlows.apply    [_s, _x, _y]                 (flow s_ (function x_ y_)) (flow s_ x_) (flow s_ y_),
+    prim2Eval _flows_bind     EvalFlows.bind     [_s, _x, _y]                 (flow s_ x_) (function x_ (flow s_ y_)) (flow s_ y_),
+    prim1     _flows_fail     Flows.fail         [_s, _x]                     string (flow s_ x_),
+    prim3Eval _flows_foldl    EvalFlows.foldl    [_y, _x, _s]                 (function y_ (function x_ (flow s_ y_))) y_ (list x_) (flow s_ y_),
+    prim2Eval _flows_map      EvalFlows.map      [_x, _y, _s]                 (function x_ y_) (flow s_ x_) (flow s_ y_),
+    prim2Eval _flows_mapElems EvalFlows.mapElems [_v1, _s, _v2, _kOrd]        (function v1_ (flow s_ v2_)) (Prims.map k_ v1_) (flow s_ (Prims.map k_ v2_)),
+    prim2Eval _flows_mapKeys  EvalFlows.mapKeys  [_k1Ord, _s, _k2Ord, _v]     (function k1_ (flow s_ k2_)) (Prims.map k1_ v_) (flow s_ (Prims.map k2_ v_)),
+    prim2Eval _flows_mapList  EvalFlows.mapList  [_x, _s, _y]                 (function x_ (flow s_ y_)) (list x_) (flow s_ (list y_)),
+    prim2Eval _flows_mapMaybe EvalFlows.mapMaybe [_x, _s, _y]                 (function x_ $ flow s_ y_) (optional x_) (flow s_ $ optional y_),
+    prim2Eval _flows_mapSet   EvalFlows.mapSet   [_xOrd, _s, _yOrd]           (function x_ (flow s_ y_)) (set x_) (flow s_ (set y_)),
+    prim1     _flows_pure     Flows.pure         [_x, _s]                     x_ (flow s_ x_),
+    prim1     _flows_sequence Flows.sequence     [_s, _x]                     (list (flow s_ x_)) (flow s_ (list x_))]
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
-    prim2Eval _lists_apply       EvalLists.apply     ["x", "y"] (list $ function x y) (list x) (list y),
-    prim2     _lists_at          Lists.at            ["x"] int32 (list x) x,
-    prim2Eval _lists_bind        EvalLists.bind      ["x", "y"] (list x) (function x (list y)) (list y),
-    prim1     _lists_concat      Lists.concat        ["x"] (list (list x)) (list x),
-    prim2     _lists_concat2     Lists.concat2       ["x"] (list x) (list x) (list x),
-    prim2     _lists_cons        Lists.cons          ["x"] x (list x) (list x),
-    prim2     _lists_drop        Lists.drop          ["x"] int32 (list x) (list x),
-    prim2Eval _lists_dropWhile   EvalLists.dropWhile ["x"] (function x boolean) (list x) (list x),
-    prim2     _lists_elem        Lists.elem          ["x"] x (list x) boolean,
-    prim2Eval _lists_filter      EvalLists.filter    ["x"] (function x boolean) (list x) (list x),
-    prim3Eval _lists_foldl       EvalLists.foldl     ["y", "x"] (function y (function x y)) y (list x) y,
-    prim1     _lists_group       Lists.group         ["x"] (list x) (list (list x)),
-    prim1     _lists_head        Lists.head          ["x"] (list x) x,
-    prim1     _lists_init        Lists.init          ["x"] (list x) (list x),
-    prim2     _lists_intercalate Lists.intercalate   ["x"] (list x) (list (list x)) (list x),
-    prim2     _lists_intersperse Lists.intersperse   ["x"] x (list x) (list x),
-    prim1     _lists_last        Lists.last          ["x"] (list x) x,
-    prim1     _lists_length      Lists.length        ["x"] (list x) int32,
-    prim2Eval _lists_map         EvalLists.map       ["x", "y"] (function x y) (list x) (list y),
-    prim1     _lists_nub         Lists.nub           ["x"] (list x) (list x),
-    prim1     _lists_null        Lists.null          ["x"] (list x) boolean,
-    prim1     _lists_pure        Lists.pure          ["x"] x (list x),
-    prim2     _lists_replicate   Lists.replicate     ["x"] int32 x (list x),
-    prim1     _lists_reverse     Lists.reverse       ["x"] (list x) (list x),
-    prim1     _lists_safeHead    Lists.safeHead      ["x"] (list x) (optional x),
-    prim1     _lists_singleton   Lists.singleton     ["x"] x (list x),
-    prim2Eval _lists_sortOn      EvalLists.sortOn    ["x", "y"] (function x y) (list x) (list x),
-    prim2Eval _lists_span        EvalLists.span      ["x"] (function x boolean) (list x) (pair (list x) (list x)),
-    prim1     _lists_sort        Lists.sort          ["x"] (list x) (list x),
-    prim1     _lists_tail        Lists.tail          ["x"] (list x) (list x),
-    prim2     _lists_take        Lists.take          ["x"] int32 (list x) (list x),
-    prim1     _lists_transpose   Lists.transpose     ["x"] (list (list x)) (list (list x)),
-    prim2     _lists_zip         Lists.zip           ["x", "y"] (list x) (list y) (list (pair x y)),
-    prim3Eval _lists_zipWith     EvalLists.zipWith   ["x", "y", "z"] (function x $ function y z) (list x) (list y) (list z)]
-  where
-    x = variable "x"
-    y = variable "y"
-    z = variable "z"
+    prim2Eval _lists_apply       EvalLists.apply     [_x, _y]     (list $ function x_ y_) (list x_) (list y_),
+    prim2     _lists_at          Lists.at            [_x]         int32 (list x_) x_,
+    prim2Eval _lists_bind        EvalLists.bind      [_x, _y]     (list x_) (function x_ (list y_)) (list y_),
+    prim1     _lists_concat      Lists.concat        [_x]         (list (list x_)) (list x_),
+    prim2     _lists_concat2     Lists.concat2       [_x]         (list x_) (list x_) (list x_),
+    prim2     _lists_cons        Lists.cons          [_x]         x_ (list x_) (list x_),
+    prim2     _lists_drop        Lists.drop          [_x]         int32 (list x_) (list x_),
+    prim2Eval _lists_dropWhile   EvalLists.dropWhile [_x]         (function x_ boolean) (list x_) (list x_),
+    prim2     _lists_elem        Lists.elem          [_xEq]       x_ (list x_) boolean,
+    prim2Eval _lists_filter      EvalLists.filter    [_x]         (function x_ boolean) (list x_) (list x_),
+    prim3Eval _lists_foldl       EvalLists.foldl     [_y, _x]     (function y_ (function x_ y_)) y_ (list x_) y_,
+    prim1     _lists_group       Lists.group         [_xEq]       (list x_) (list (list x_)),
+    prim1     _lists_head        Lists.head          [_x]         (list x_) x_,
+    prim1     _lists_init        Lists.init          [_x]         (list x_) (list x_),
+    prim2     _lists_intercalate Lists.intercalate   [_x]         (list x_) (list (list x_)) (list x_),
+    prim2     _lists_intersperse Lists.intersperse   [_x]         x_ (list x_) (list x_),
+    prim1     _lists_last        Lists.last          [_x]         (list x_) x_,
+    prim1     _lists_length      Lists.length        [_x]         (list x_) int32,
+    prim2Eval _lists_map         EvalLists.map       [_x, _y]     (function x_ y_) (list x_) (list y_),
+    prim1     _lists_nub         Lists.nub           [_xEq]       (list x_) (list x_),
+    prim1     _lists_null        Lists.null          [_x]         (list x_) boolean,
+    prim1     _lists_pure        Lists.pure          [_x]         x_ (list x_),
+    prim2     _lists_replicate   Lists.replicate     [_x]         int32 x_ (list x_),
+    prim1     _lists_reverse     Lists.reverse       [_x]         (list x_) (list x_),
+    prim1     _lists_safeHead    Lists.safeHead      [_x]         (list x_) (optional x_),
+    prim1     _lists_singleton   Lists.singleton     [_x]         x_ (list x_),
+    prim2Eval _lists_sortOn      EvalLists.sortOn    [_x, _yOrd]  (function x_ y_) (list x_) (list x_),
+    prim2Eval _lists_span        EvalLists.span      [_x]         (function x_ boolean) (list x_) (pair (list x_) (list x_)),
+    prim1     _lists_sort        Lists.sort          [_xOrd]      (list x_) (list x_),
+    prim1     _lists_tail        Lists.tail          [_x]         (list x_) (list x_),
+    prim2     _lists_take        Lists.take          [_x]         int32 (list x_) (list x_),
+    prim1     _lists_transpose   Lists.transpose     [_x]         (list (list x_)) (list (list x_)),
+    prim2     _lists_zip         Lists.zip           [_x, _y]     (list x_) (list y_) (list (pair x_ y_)),
+    prim3Eval _lists_zipWith     EvalLists.zipWith   [_x, _y, _z] (function x_ $ function y_ z_) (list x_) (list y_) (list z_)]
 
 hydraLibLiterals :: Library
 hydraLibLiterals = standardLibrary _hydra_lib_literals [
@@ -219,44 +247,35 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
 
 hydraLibLogic :: Library
 hydraLibLogic = standardLibrary _hydra_lib_logic [
-    prim2 _logic_and    Logic.and    []    boolean boolean boolean,
-    prim3 _logic_ifElse Logic.ifElse ["x"] boolean x x x,
-    prim1 _logic_not    Logic.not    []    boolean boolean,
-    prim2 _logic_or     Logic.or     []    boolean boolean boolean]
-  where
-    x = variable "x"
+    prim2 _logic_and    Logic.and    []   boolean boolean boolean,
+    prim3 _logic_ifElse Logic.ifElse [_x] boolean x_ x_ x_,
+    prim1 _logic_not    Logic.not    []   boolean boolean,
+    prim2 _logic_or     Logic.or     []   boolean boolean boolean]
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary _hydra_lib_maps [
-    prim3Eval _maps_alter           EvalMaps.alter         ["v", "k"]               (function (optional v) (optional v)) k mapKv mapKv,
-    prim3Eval _maps_bimap           EvalMaps.bimap         ["k1", "k2", "v1", "v2"] (function k1 k2) (function v1 v2) (Prims.map k1 v1) (Prims.map k2 v2),
-    prim1     _maps_elems           Maps.elems             ["k", "v"]               mapKv (list v),
-    prim2     _maps_delete          Maps.delete            ["k", "v"]               k mapKv mapKv,
-    prim0     _maps_empty           Maps.empty             ["k", "v"]               mapKv,
-    prim2Eval _maps_filter          EvalMaps.filter        ["v", "k"]               (function v boolean) mapKv mapKv,
-    prim2Eval _maps_filterWithKey   EvalMaps.filterWithKey ["k", "v"]               (function k (function v boolean)) mapKv mapKv,
-    prim3     _maps_findWithDefault Maps.findWithDefault   ["v", "k"]               v k mapKv v,
-    prim1     _maps_fromList        Maps.fromList          ["k", "v"]               (list $ pair k v) mapKv,
-    prim3     _maps_insert          Maps.insert            ["k", "v"]               k v mapKv mapKv,
-    prim1     _maps_keys            Maps.keys              ["k", "v"]               mapKv (list k),
-    prim2     _maps_lookup          Maps.lookup            ["k", "v"]               k mapKv (optional v),
-    prim2Eval _maps_map             EvalMaps.map           ["v1", "v2", "k"]        (function v1 v2) (Prims.map k v1) (Prims.map k v2),
-    prim2Eval _maps_mapKeys         EvalMaps.mapKeys       ["k1", "k2", "v"]        (function k1 k2) (Prims.map k1 v) (Prims.map k2 v),
-    prim2     _maps_member          Maps.member            ["k", "v"]               k mapKv boolean,
-    prim1     _maps_null            Maps.null              ["k", "v"]               mapKv boolean,
-    prim1     _maps_size            Maps.size              ["k", "v"]               mapKv int32,
-    prim2     _maps_singleton       Maps.singleton         ["k", "v"]               k v mapKv,
-    prim1     _maps_size            Maps.size              ["k", "v"]               mapKv int32,
-    prim1     _maps_toList          Maps.toList            ["k", "v"]               mapKv (list $ pair k v),
-    prim2     _maps_union           Maps.union             ["k", "v"]               mapKv mapKv mapKv]
+    prim3Eval _maps_alter           EvalMaps.alter         [_v, _kOrd]                  (function (optional v_) (optional v_)) k_ mapKv mapKv,
+    prim3Eval _maps_bimap           EvalMaps.bimap         [_k1Ord, _k2Ord, _v1, _v2]   (function k1_ k2_) (function v1_ v2_) (Prims.map k1_ v1_) (Prims.map k2_ v2_),
+    prim1     _maps_elems           Maps.elems             [_kOrd, _v]                  mapKv (list v_),
+    prim2     _maps_delete          Maps.delete            [_kOrd, _v]                  k_ mapKv mapKv,
+    prim0     _maps_empty           Maps.empty             [_kOrd, _v]                  mapKv,
+    prim2Eval _maps_filter          EvalMaps.filter        [_v, _kOrd]                  (function v_ boolean) mapKv mapKv,
+    prim2Eval _maps_filterWithKey   EvalMaps.filterWithKey [_kOrd, _v]                  (function k_ (function v_ boolean)) mapKv mapKv,
+    prim3     _maps_findWithDefault Maps.findWithDefault   [_v, _kOrd]                  v_ k_ mapKv v_,
+    prim1     _maps_fromList        Maps.fromList          [_kOrd, _v]                  (list $ pair k_ v_) mapKv,
+    prim3     _maps_insert          Maps.insert            [_kOrd, _v]                  k_ v_ mapKv mapKv,
+    prim1     _maps_keys            Maps.keys              [_kOrd, _v]                  mapKv (list k_),
+    prim2     _maps_lookup          Maps.lookup            [_kOrd, _v]                  k_ mapKv (optional v_),
+    prim2Eval _maps_map             EvalMaps.map           [_v1, _v2, _kOrd]            (function v1_ v2_) (Prims.map k_ v1_) (Prims.map k_ v2_),
+    prim2Eval _maps_mapKeys         EvalMaps.mapKeys       [_k1Ord, _k2Ord, _v]         (function k1_ k2_) (Prims.map k1_ v_) (Prims.map k2_ v_),
+    prim2     _maps_member          Maps.member            [_kOrd, _v]                  k_ mapKv boolean,
+    prim1     _maps_null            Maps.null              [_kOrd, _v]                  mapKv boolean,
+    prim1     _maps_size            Maps.size              [_kOrd, _v]                  mapKv int32,
+    prim2     _maps_singleton       Maps.singleton         [_kOrd, _v]                  k_ v_ mapKv,
+    prim1     _maps_toList          Maps.toList            [_kOrd, _v]                  mapKv (list $ pair k_ v_),
+    prim2     _maps_union           Maps.union             [_kOrd, _v]                  mapKv mapKv mapKv]
   where
-    k = variable "k"
-    k1 = variable "k1"
-    k2 = variable "k2"
-    v = variable "v"
-    v1 = variable "v1"
-    v2 = variable "v2"
-    mapKv = Prims.map k v
+    mapKv = Prims.map k_ v_
 
 hydraLibMathFloat64 :: Library
 hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
@@ -304,54 +323,42 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
 
 hydraLibMaybes :: Library
 hydraLibMaybes = standardLibrary _hydra_lib_maybes [
-    prim2Eval _maybes_apply     EvalMaybes.apply    ["x", "y"]      (optional $ function x y) (optional x) (optional y),
-    prim2Eval _maybes_bind      EvalMaybes.bind     ["x", "y"]      (optional x) (function x (optional y)) (optional y),
-    prim3Eval _maybes_cases     EvalMaybes.cases    ["x", "y"]      (optional x) y (function x y) y,
-    prim1     _maybes_cat       Maybes.cat          ["x"]           (list $ optional x) (list x),
-    prim3Eval _maybes_compose   EvalMaybes.compose  ["x", "y", "z"] (function x $ optional y) (function y $ optional z) x (optional z),
-    prim1     _maybes_fromJust  Maybes.fromJust     ["x"]           (optional x) x,
-    prim2     _maybes_fromMaybe Maybes.fromMaybe    ["x"]           x (optional x) x,
-    prim1     _maybes_isJust    Maybes.isJust       ["x"]           (optional x) boolean,
-    prim1     _maybes_isNothing Maybes.isNothing    ["x"]           (optional x) boolean,
-    prim2Eval _maybes_map       EvalMaybes.map      ["x", "y"]      (function x y) (optional x) (optional y),
-    prim2Eval _maybes_mapMaybe  EvalMaybes.mapMaybe ["x", "y"]      (function x $ optional y) (list x) (list y),
-    prim3Eval _maybes_maybe     EvalMaybes.maybe    ["y", "x"]      y (function x y) (optional x) y,
-    prim1     _maybes_pure      Maybes.pure         ["x"]           x (optional x)]
-  where
-    x = variable "x"
-    y = variable "y"
-    z = variable "z"
+    prim2Eval _maybes_apply     EvalMaybes.apply    [_x, _y]     (optional $ function x_ y_) (optional x_) (optional y_),
+    prim2Eval _maybes_bind      EvalMaybes.bind     [_x, _y]     (optional x_) (function x_ (optional y_)) (optional y_),
+    prim3Eval _maybes_cases     EvalMaybes.cases    [_x, _y]     (optional x_) y_ (function x_ y_) y_,
+    prim1     _maybes_cat       Maybes.cat          [_x]         (list $ optional x_) (list x_),
+    prim3Eval _maybes_compose   EvalMaybes.compose  [_x, _y, _z] (function x_ $ optional y_) (function y_ $ optional z_) x_ (optional z_),
+    prim1     _maybes_fromJust  Maybes.fromJust     [_x]         (optional x_) x_,
+    prim2     _maybes_fromMaybe Maybes.fromMaybe    [_x]         x_ (optional x_) x_,
+    prim1     _maybes_isJust    Maybes.isJust       [_x]         (optional x_) boolean,
+    prim1     _maybes_isNothing Maybes.isNothing    [_x]         (optional x_) boolean,
+    prim2Eval _maybes_map       EvalMaybes.map      [_x, _y]     (function x_ y_) (optional x_) (optional y_),
+    prim2Eval _maybes_mapMaybe  EvalMaybes.mapMaybe [_x, _y]     (function x_ $ optional y_) (list x_) (list y_),
+    prim3Eval _maybes_maybe     EvalMaybes.maybe    [_y, _x]     y_ (function x_ y_) (optional x_) y_,
+    prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_)]
 
 hydraLibPairs :: Library
 hydraLibPairs = standardLibrary _hydra_lib_pairs [
-    prim3Eval _pairs_bimap  EvalPairs.bimap  ["a", "b", "c", "d"] (function a c) (function b d) (pair a b) (pair c d),
-    prim1     _pairs_first  Pairs.first      ["a", "b"]           (pair a b) a,
-    prim1     _pairs_second Pairs.second     ["a", "b"]           (pair a b) b]
-  where
-    a = variable "a"
-    b = variable "b"
-    c = variable "c"
-    d = variable "d"
+    prim3Eval _pairs_bimap  EvalPairs.bimap  [_a, _b, _c, _d] (function a_ c_) (function b_ d_) (pair a_ b_) (pair c_ d_),
+    prim1     _pairs_first  Pairs.first      [_a, _b]         (pair a_ b_) a_,
+    prim1     _pairs_second Pairs.second     [_a, _b]         (pair a_ b_) b_]
 
 hydraLibSets :: Library
 hydraLibSets = standardLibrary _hydra_lib_sets [
-    prim2     _sets_delete       Sets.delete       ["x"]      x (set x) (set x),
-    prim2     _sets_difference   Sets.difference   ["x"]      (set x) (set x) (set x),
-    prim0     _sets_empty        Sets.empty        ["x"]      (set x),
-    prim1     _sets_fromList     Sets.fromList     ["x"]      (list x) (set x),
-    prim2     _sets_insert       Sets.insert       ["x"]      x (set x) (set x),
-    prim2     _sets_intersection Sets.intersection ["x"]      (set x) (set x) (set x),
-    prim2Eval _sets_map          EvalSets.map      ["x", "y"] (function x y) (set x) (set y),
-    prim2     _sets_member       Sets.member       ["x"]      x (set x) boolean,
-    prim1     _sets_null         Sets.null         ["x"]      (set x) boolean,
-    prim1     _sets_singleton    Sets.singleton    ["x"]      x (set x),
-    prim1     _sets_size         Sets.size         ["x"]      (set x) int32,
-    prim1     _sets_toList       Sets.toList       ["x"]      (set x) (list x),
-    prim2     _sets_union        Sets.union        ["x"]      (set x) (set x) (set x),
-    prim1     _sets_unions       Sets.unions       ["x"]      (list $ set x) (set x)]
-  where
-    x = variable "x"
-    y = variable "y"
+    prim2     _sets_delete       Sets.delete       [_xOrd]        x_ (set x_) (set x_),
+    prim2     _sets_difference   Sets.difference   [_xOrd]        (set x_) (set x_) (set x_),
+    prim0     _sets_empty        Sets.empty        [_xOrd]        (set x_),
+    prim1     _sets_fromList     Sets.fromList     [_xOrd]        (list x_) (set x_),
+    prim2     _sets_insert       Sets.insert       [_xOrd]        x_ (set x_) (set x_),
+    prim2     _sets_intersection Sets.intersection [_xOrd]        (set x_) (set x_) (set x_),
+    prim2Eval _sets_map          EvalSets.map      [_xOrd, _yOrd] (function x_ y_) (set x_) (set y_),
+    prim2     _sets_member       Sets.member       [_xOrd]        x_ (set x_) boolean,
+    prim1     _sets_null         Sets.null         [_xOrd]        (set x_) boolean,
+    prim1     _sets_singleton    Sets.singleton    [_xOrd]        x_ (set x_),
+    prim1     _sets_size         Sets.size         [_xOrd]        (set x_) int32,
+    prim1     _sets_toList       Sets.toList       [_xOrd]        (set x_) (list x_),
+    prim2     _sets_union        Sets.union        [_xOrd]        (set x_) (set x_) (set x_),
+    prim1     _sets_unions       Sets.unions       [_xOrd]        (list $ set x_) (set x_)]
 
 hydraLibStrings :: Library
 hydraLibStrings = standardLibrary _hydra_lib_strings [
