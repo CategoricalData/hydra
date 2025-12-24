@@ -39,7 +39,8 @@ testGroupForSystemF = Testing.TestGroup {
             Core.Name "t0"],
           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -57,7 +58,8 @@ testGroupForSystemF = Testing.TestGroup {
           Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -77,7 +79,8 @@ testGroupForSystemF = Testing.TestGroup {
             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -97,7 +100,8 @@ testGroupForSystemF = Testing.TestGroup {
           Core.letBody = (Core.TermVariable (Core.Name "f"))})),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -119,7 +123,8 @@ testGroupForSystemF = Testing.TestGroup {
             Core.Name "t0"],
           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-            Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+            Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -144,7 +149,8 @@ testGroupForSystemF = Testing.TestGroup {
           Core.typeSchemeVariables = [],
           Core.typeSchemeType = (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-            Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}))}})),
+            Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -183,7 +189,8 @@ testGroupForSystemF = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+          Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -213,7 +220,8 @@ testGroupForSystemF = Testing.TestGroup {
             Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
             Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -264,7 +272,8 @@ testGroupForSystemF = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -317,7 +326,8 @@ testGroupForSystemF = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t3"))}))}))}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t3"))}))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -368,7 +378,8 @@ testGroupForSystemF = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []},
     Testing.TestCaseWithMetadata {
@@ -419,6 +430,7 @@ testGroupForSystemF = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
               Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = []}]}

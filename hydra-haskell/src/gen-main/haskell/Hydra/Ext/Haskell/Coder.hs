@@ -484,16 +484,20 @@ toDataDeclaration namespaces def =
                   let hbindings = (Lists.zipWith toBinding hnames hterms)
                   in (toDecl comments hname_ env (Just (Ast.LocalBindings hbindings)))))
               _ -> (Flows.bind (encodeTerm namespaces term_) (\hterm ->  
-                let vb = (Utils.simpleValueBinding hname_ hterm bindings)
-                in (Flows.bind (Annotations.getTypeClasses (Rewriting.removeTypesFromTerm term)) (\explicitClasses -> Flows.bind (encodeTypeWithClassAssertions namespaces explicitClasses typ) (\htype ->  
-                  let decl = (Ast.DeclarationTypedBinding (Ast.TypedBinding {
-                          Ast.typedBindingTypeSignature = Ast.TypeSignature {
-                            Ast.typeSignatureName = hname_,
-                            Ast.typeSignatureType = htype},
-                          Ast.typedBindingValueBinding = (rewriteValueBinding vb)}))
-                  in (Flows.pure (Ast.DeclarationWithComments {
-                    Ast.declarationWithCommentsBody = decl,
-                    Ast.declarationWithCommentsComments = comments})))))))) (Rewriting.deannotateTerm term_))
+                let vb = (Utils.simpleValueBinding hname_ hterm bindings) 
+                    schemeConstraints = (Core.typeSchemeConstraints typ)
+                    schemeClasses = (typeSchemeConstraintsToClassMap schemeConstraints)
+                in (Flows.bind (Annotations.getTypeClasses (Rewriting.removeTypesFromTerm term)) (\explicitClasses ->  
+                  let combinedClasses = (Maps.union schemeClasses explicitClasses)
+                  in (Flows.bind (encodeTypeWithClassAssertions namespaces combinedClasses (Core.typeSchemeType typ)) (\htype ->  
+                    let decl = (Ast.DeclarationTypedBinding (Ast.TypedBinding {
+                            Ast.typedBindingTypeSignature = Ast.TypeSignature {
+                              Ast.typeSignatureName = hname_,
+                              Ast.typeSignatureType = htype},
+                            Ast.typedBindingValueBinding = (rewriteValueBinding vb)}))
+                    in (Flows.pure (Ast.DeclarationWithComments {
+                      Ast.declarationWithCommentsBody = decl,
+                      Ast.declarationWithCommentsComments = comments}))))))))) (Rewriting.deannotateTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term Nothing))
 
 toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
@@ -648,3 +652,12 @@ typeDecl namespaces name typ =
     in (Flows.pure (Ast.DeclarationWithComments {
       Ast.declarationWithCommentsBody = decl,
       Ast.declarationWithCommentsComments = Nothing})))))
+
+typeSchemeConstraintsToClassMap :: (Ord t0) => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
+typeSchemeConstraintsToClassMap maybeConstraints =  
+  let nameToTypeClass = (\className ->  
+          let classNameStr = (Core.unName className) 
+              isEq = (Equality.equal classNameStr "hydra.typeclass.Eq")
+              isOrd = (Equality.equal classNameStr "hydra.typeclass.Ord")
+          in (Logic.ifElse isEq (Just Classes.TypeClassEquality) (Logic.ifElse isOrd (Just Classes.TypeClassOrdering) Nothing)))
+  in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map nameToTypeClass (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)

@@ -20,6 +20,8 @@ data InferenceContext =
     inferenceContextPrimitiveTypes :: (M.Map Core.Name Core.TypeScheme),
     -- | A mutable typing environment which is specific to the current graph being processed. This environment is (usually) smaller than the schema and primitive typing environments, and is subject to global substitutions.
     inferenceContextDataTypes :: (M.Map Core.Name Core.TypeScheme),
+    -- | A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
+    inferenceContextClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
     -- | Whether to enable debug output during type inference
     inferenceContextDebug :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -32,6 +34,8 @@ _InferenceContext_primitiveTypes = (Core.Name "primitiveTypes")
 
 _InferenceContext_dataTypes = (Core.Name "dataTypes")
 
+_InferenceContext_classConstraints = (Core.Name "classConstraints")
+
 _InferenceContext_debug = (Core.Name "debug")
 
 -- | The result of applying inference rules to a term.
@@ -42,7 +46,9 @@ data InferenceResult =
     -- | The inferred type of the term
     inferenceResultType :: Core.Type,
     -- | The type substitution resulting from unification
-    inferenceResultSubst :: TypeSubst}
+    inferenceResultSubst :: TypeSubst,
+    -- | Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
+    inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata)}
   deriving (Eq, Ord, Read, Show)
 
 _InferenceResult = (Core.Name "hydra.typing.InferenceResult")
@@ -52,6 +58,8 @@ _InferenceResult_term = (Core.Name "term")
 _InferenceResult_type = (Core.Name "type")
 
 _InferenceResult_subst = (Core.Name "subst")
+
+_InferenceResult_classConstraints = (Core.Name "classConstraints")
 
 -- | A substitution of term variables for terms
 newtype TermSubst = 
