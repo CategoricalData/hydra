@@ -133,7 +133,8 @@ module_ = Module ns elements
       toBinding toDataDeclaration,
 --      toBinding toTypeDeclarations,
       toBinding toTypeDeclarationsFrom,
-      toBinding typeDecl]
+      toBinding typeDecl,
+      toBinding typeSchemeConstraintsToClassMap]
 
 -- TODO: make these settings configurable
 includeTypeDefinitions :: TBinding Bool
@@ -699,9 +700,14 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
       cases _Term (Rewriting.deannotateTerm @@ var "term'")
         (Just $
           "hterm" <<~ encodeTerm @@ var "namespaces" @@ var "term'" $ lets [
-         "vb">: HaskellUtils.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings"] $
+         "vb">: HaskellUtils.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
+         -- Extract constraints from the TypeScheme and convert to class assertions
+         "schemeConstraints">: Core.typeSchemeConstraints (var "typ"),
+         "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ (Rewriting.removeTypesFromTerm @@ var "term") $
-         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "explicitClasses" @@ var "typ" $ lets [
+         -- Combine constraints from TypeScheme with any explicit annotations
+         "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
+         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
              H._TypeSignature_name>>: var "hname'",
@@ -1021,3 +1027,28 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     Flows.pure $ record H._DeclarationWithComments [
       H._DeclarationWithComments_body>>: var "decl",
       H._DeclarationWithComments_comments>>: nothing]
+
+-- | Convert TypeScheme constraints to the Map format used by encodeTypeWithClassAssertions.
+-- TypeScheme constraints are Maybe (Map Name TypeVariableMetadata), where TypeVariableMetadata
+-- has a 'classes' field of type Set Name. We convert this to Map Name (Set TypeClass).
+typeSchemeConstraintsToClassMap :: TBinding (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set TypeClass))
+typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
+  "maybeConstraints" ~> lets [
+    -- Convert a class name to a TypeClass, returning Nothing for unknown classes
+    "nameToTypeClass">: "className" ~> lets [
+      "classNameStr">: Core.unName $ var "className",
+      "isEq">: Equality.equal (var "classNameStr") (string "hydra.typeclass.Eq"),
+      "isOrd">: Equality.equal (var "classNameStr") (string "hydra.typeclass.Ord")] $
+      Logic.ifElse (var "isEq")
+        (just $ inject _TypeClass _TypeClass_equality unit)
+        (Logic.ifElse (var "isOrd")
+          (just $ inject _TypeClass _TypeClass_ordering unit)
+          nothing)] $
+    Maybes.maybe
+      Maps.empty
+      ("constraints" ~>
+        Maps.map
+          ("meta" ~> Sets.fromList $
+            Maybes.cat $ Lists.map (var "nameToTypeClass") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
+          (var "constraints"))
+      (var "maybeConstraints")
