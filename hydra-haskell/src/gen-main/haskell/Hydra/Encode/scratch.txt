@@ -1,0 +1,11 @@
+import qualified Hydra.Encode.Util as EncodeUtil
+import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Show.Core as ShowCore
+
+
+ShowCore.term $ EncodeUtil.caseConvention CaseConventionUpperSnake
+ShowCore.term $ EncodeUtil.precision $ PrecisionBits 32
+ShowCore.term $ EncodeCore.fieldType $ FieldType (Name "foo") $ TypeLiteral LiteralTypeString
+
+"inject(hydra.util.CaseConvention){upperSnake=unit}"
+"inject(hydra.util.Precision){bits=32:int32}"

@@ -671,7 +671,18 @@ typeScheme x = (Core.TermRecord (Core.Record {
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map name xs)) (Core.typeSchemeVariables x))},
     Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (type_ (Core.typeSchemeType x))}]}))
+      Core.fieldTerm = (type_ (Core.typeSchemeType x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "constraints"),
+      Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableMetadata m)) opt)) (Core.typeSchemeConstraints x))}]}))
+
+typeVariableMetadata :: (Core.TypeVariableMetadata -> Core.Term)
+typeVariableMetadata x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.core.TypeVariableMetadata"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "classes"),
+      Core.fieldTerm = ((\s -> Core.TermSet (Sets.map name s)) (Core.typeVariableMetadataClasses x))}]}))
 
 wrappedTerm :: (Core.WrappedTerm -> Core.Term)
 wrappedTerm x = (Core.TermRecord (Core.Record {
