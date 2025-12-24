@@ -12,7 +12,8 @@ import Hydra.Kernel hiding (
   inferTypeOfPair, inferTypeOfPrimitive, inferTypeOfProjection, inferTypeOfRecord, inferTypeOfSet,
   inferTypeOfTerm, inferTypeOfTypeLambda, inferTypeOfTypeApplication, inferTypeOfUnit, inferTypeOfUnwrap,
   inferTypeOfVariable, inferTypeOfWrappedTerm, inferTypesOfTemporaryBindings, initialTypeContext,
-  isUnbound, mapConstraints, showInferenceResult, yield, yieldChecked, yieldDebug)
+  isUnbound, mapConstraints, mergeClassConstraints, showInferenceResult, yield, yieldChecked,
+  yieldCheckedWithConstraints, yieldDebug, yieldWithConstraints)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -136,10 +137,13 @@ module_ = Module ns elements
       toBinding initialTypeContext,
       toBinding isUnbound,
       toBinding mapConstraints,
+      toBinding mergeClassConstraints,
       toBinding showInferenceResult,
       toBinding yield,
       toBinding yieldChecked,
-      toBinding yieldDebug]
+      toBinding yieldCheckedWithConstraints,
+      toBinding yieldDebug,
+      toBinding yieldWithConstraints]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -182,7 +186,8 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
               (Lists.concat2
                 (Core.typeSchemeVariables $ var "ts")
                 (var "unbound"))
-              (Core.typeSchemeType $ var "ts") $
+              (Core.typeSchemeType $ var "ts")
+              (Core.typeSchemeConstraints $ var "ts") $
             "bterm2" <~ Lists.foldl
               ("t" ~> "v" ~> Core.termTypeLambda
                 (Core.typeLambda (var "v") (var "t")))
@@ -206,6 +211,7 @@ emptyInferenceContext :: TBinding InferenceContext
 emptyInferenceContext = define "emptyInferenceContext" $
   doc "An empty inference context" $
   Typing.inferenceContext
+    (Phantoms.map M.empty)
     (Phantoms.map M.empty)
     (Phantoms.map M.empty)
     (Phantoms.map M.empty)
@@ -248,13 +254,37 @@ freshVariableType = define "freshVariableType" $
   doc "Generate a fresh type variable" $
   Flows.map (unaryFunction Core.typeVariable) (Schemas.freshName)
 
+mergeClassConstraints :: TBinding (M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+mergeClassConstraints = define "mergeClassConstraints" $
+  doc "Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets." $
+  "m1" ~> "m2" ~>
+  Lists.foldl
+    ("acc" ~> "pair" ~>
+      "k" <~ Pairs.first (var "pair") $
+      "v" <~ Pairs.second (var "pair") $
+      Maybes.maybe
+        (Maps.insert (var "k") (var "v") (var "acc"))
+        ("existing" ~>
+          "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "v")) $
+          Maps.insert (var "k") (var "merged") (var "acc"))
+        (Maps.lookup (var "k") (var "acc")))
+    (var "m1")
+    (Maps.toList $ var "m2")
+
 generalize :: TBinding (InferenceContext -> Type -> TypeScheme)
 generalize = define "generalize" $
   doc "Generalize a type to a type scheme" $
   "cx" ~> "typ" ~>
   "vars" <~ Lists.nub (Lists.filter (isUnbound @@ var "cx") $
      Rewriting.freeVariablesInTypeOrdered @@ var "typ") $
-  Core.typeScheme (var "vars") (var "typ")
+  -- Extract constraints for the generalized variables from the context
+  "allConstraints" <~ Typing.inferenceContextClassConstraints (var "cx") $
+  "relevantConstraints" <~ Maps.fromList (Maybes.cat $ Lists.map
+    ("v" ~> Maybes.map ("meta" ~> pair (var "v") (var "meta")) $ Maps.lookup (var "v") (var "allConstraints"))
+    (var "vars")) $
+  -- Only include constraints if there are any
+  "constraintsMaybe" <~ Logic.ifElse (Maps.null $ var "relevantConstraints") Phantoms.nothing (just $ var "relevantConstraints") $
+  Core.typeScheme (var "vars") (var "typ") (var "constraintsMaybe")
 
 inferGraphTypes :: TBinding (Graph -> Flow s Graph)
 inferGraphTypes = define "inferGraphTypes" $
@@ -367,10 +397,12 @@ inferTypeOfAnnotatedTerm = define "inferTypeOfAnnotatedTerm" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "itype" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
+  "iconstraints" <~ Typing.inferenceResultClassConstraints (var "result") $
   produce $ Typing.inferenceResult
     (Core.termAnnotated $ Core.annotatedTerm (var "iterm") (var "ann"))
     (var "itype")
     (var "isubst")
+    (var "iconstraints")
 
 inferTypeOfApplication :: TBinding (InferenceContext -> Application -> Flow s InferenceResult)
 inferTypeOfApplication = define "inferTypeOfApplication" $
@@ -382,6 +414,7 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
   "a" <~ Typing.inferenceResultTerm (var "lhsResult") $
   "t0" <~ Typing.inferenceResultType (var "lhsResult") $
   "s0" <~ Typing.inferenceResultSubst (var "lhsResult") $
+  "c0" <~ Typing.inferenceResultClassConstraints (var "lhsResult") $
   "rhsResult" <<~ inferTypeOfTerm
     @@ (Substitution.substInContext @@ var "s0" @@ var "cx")
     @@ var "e1"
@@ -389,6 +422,7 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
   "b" <~ Typing.inferenceResultTerm (var "rhsResult") $
   "t1" <~ Typing.inferenceResultType (var "rhsResult") $
   "s1" <~ Typing.inferenceResultSubst (var "rhsResult") $
+  "c1" <~ Typing.inferenceResultClassConstraints (var "rhsResult") $
   "v" <<~ Schemas.freshName $
   "s2" <<~ Unification.unifyTypes
     @@ (Typing.inferenceContextSchemaTypes $ var "cx")
@@ -401,7 +435,13 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
     (Substitution.substTypesInTerm @@ var "s2" @@ var "b")) $
   "rType" <~ Substitution.substInType @@ var "s2" @@ Core.typeVariable (var "v") $
   "rSubst" <~ Substitution.composeTypeSubstList @@ list [var "s0", var "s1", var "s2"] $
-  produce $ Typing.inferenceResult (var "rExpr") (var "rType") (var "rSubst")
+  -- Apply substitutions to constraints, then merge
+  -- c0 needs both s1 and s2 applied (from rhs inference and unification)
+  -- c1 needs just s2 applied (from unification)
+  "c0Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ (Substitution.substInClassConstraints @@ var "s1" @@ var "c0") $
+  "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
+  "rConstraints" <~ mergeClassConstraints @@ var "c0Subst" @@ var "c1Subst" $
+  produce $ Typing.inferenceResult (var "rExpr") (var "rType") (var "rSubst") (var "rConstraints")
 
 inferTypeOfCaseStatement :: TBinding (InferenceContext -> CaseStatement -> Flow s InferenceResult)
 inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
@@ -565,7 +605,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "body" <~ Core.lambdaBody (var "lambda") $
   "vdom" <<~ Schemas.freshName $
   "dom" <~ Core.typeVariable (var "vdom") $
-  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TTerm Name])) (var "dom"))] @@ var "cx") $
+  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TTerm Name])) (var "dom") Phantoms.nothing)] @@ var "cx") $
   "result" <<~ inferTypeOfTerm @@ var "cx2" @@ var "body" @@ (string "lambda body") $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "icod" <~ Typing.inferenceResultType (var "result") $
@@ -578,7 +618,9 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
     Rewriting.freeVariablesInType @@ var "icod",
     freeVariablesInContext @@ (Substitution.substInContext @@ var "isubst" @@ var "cx2")]) $
   "cx3" <~ Substitution.substInContext @@ var "isubst" @@ var "cx" $
-  produce $ Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst")
+  -- Apply substitution to constraints so variable names track through unification
+  "iconstraints" <~ Substitution.substInClassConstraints @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
+  produce $ Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst") (var "iconstraints")
 
 -- | Normalize a let term before inferring its type.
 inferTypeOfLet :: TBinding (InferenceContext -> Let -> Flow s InferenceResult)
@@ -627,7 +669,8 @@ inferTypeOfLet = define "inferTypeOfLet" $
     "iterm" <~ Typing.inferenceResultTerm (var "result") $
     "itype" <~ Typing.inferenceResultType (var "result") $
     "isubst" <~ Typing.inferenceResultSubst (var "result") $
-    Typing.inferenceResult (var "restoreLet" @@ var "iterm") (var "itype") (var "isubst")) $
+    "iconstraints" <~ Typing.inferenceResultClassConstraints (var "result") $
+    Typing.inferenceResult (var "restoreLet" @@ var "iterm") (var "itype") (var "isubst") (var "iconstraints")) $
   "res" <~ (cases _Term (var "rewrittenLet")
      (Just $ inferTypeOfTerm @@ var "cx" @@ var "rewrittenLet" @@ (string "empty let term")) [
      _Term_let>>: "l" ~> inferTypeOfLetNormalized @@ var "cx" @@ var "l"]) $
@@ -651,16 +694,18 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   -- Extend the context with temporary monomorphic type schemes
   -- This allows recursive references during inference
   "cx1" <~ (extendContext
-    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TTerm Name])) (var "t")) (var "tbins0"))
+    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
     @@ (var "cx0")) $
   
   -- Phase 2: Infer the actual types of all binding terms
-  -- This returns: (inferred terms, inferred types, substitution s1)
+  -- This returns: (inferred terms, (inferred types, (substitution s1, constraints)))
   "inferredResult" <<~ inferTypesOfTemporaryBindings @@ var "cx1" @@ var "bins0" $
   "bterms1" <~ Pairs.first (var "inferredResult") $  -- Terms with type applications embedded
   "tbins1" <~ Pairs.first (Pairs.second $ var "inferredResult") $  -- Actual inferred types
-  "s1" <~ Pairs.second (Pairs.second $ var "inferredResult") $  -- Substitution from inference
-  
+  "substAndConstraints" <~ Pairs.second (Pairs.second $ var "inferredResult") $
+  "s1" <~ Pairs.first (var "substAndConstraints") $  -- Substitution from inference
+  "inferredConstraints" <~ Pairs.second (var "substAndConstraints") $  -- Constraints from bindings
+
   -- Phase 3: Unify temporary types with actual inferred types
   -- This ensures the temporary placeholders match what we actually inferred
   -- Returns substitution s2 that maps temporary variables to their actual types
@@ -672,10 +717,16 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   exec (Checking.checkTypeSubst @@ var "cx0" @@ var "s2") $
 
   -- Apply the composed substitution to the original context
+  -- Also merge the inferred constraints into the context's classConstraints
   -- This context will be used for generalization
-  "g2" <~ (Substitution.substInContext @@
+  "g2base" <~ (Substitution.substInContext @@
     (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") @@
     (var "cx0")) $
+  -- Apply s2 to the inferred constraints to rename variables according to unification
+  "constraintsWithS2" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "inferredConstraints" $
+  -- Merge the substituted constraints into the context so generalize can see them
+  "mergedConstraints" <~ mergeClassConstraints @@ (Typing.inferenceContextClassConstraints $ var "g2base") @@ var "constraintsWithS2" $
+  "g2" <~ Typing.inferenceContextWithClassConstraints (var "g2base") (var "mergedConstraints") $
 
   -- Apply s2 to the terms as well as the types
   -- This ensures type applications in the terms use the same variables as the types
@@ -737,11 +788,23 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "bins1" <~ (Lists.map (var "createBinding") $
     Lists.zip (var "tsbins1") (var "bterms1Subst")) $
 
+  -- Collect constraints from body result, applying the final substitution
+  "bodyConstraints" <~ Substitution.substInClassConstraints @@ var "sbody" @@ (Typing.inferenceResultClassConstraints $ var "bodyResult") $
+
+  -- Apply the body substitution to the binding constraints as well
+  -- This ensures the constraint variable names are consistent with the final types
+  "bindingConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "sbody" @@ var "constraintsWithS2" $
+
+  -- Merge binding constraints with body constraints
+  -- This ensures that constraints from Maps.lookup (etc.) inside let bindings propagate up
+  "allConstraints" <~ mergeClassConstraints @@ var "bindingConstraintsSubst" @@ var "bodyConstraints" $
+
   -- Return the final let term with properly typed bindings
   "ret" <~ (Typing.inferenceResult
     (Core.termLet $ Core.let_ (var "bins1") (var "body1"))
     (var "tbody")
-    (Substitution.composeTypeSubstList @@ list [var "s1", var "s2", var "sbody"])) $
+    (Substitution.composeTypeSubstList @@ list [var "s1", var "s2", var "sbody"])
+    (var "allConstraints")) $
   produce $ var "ret"
 
 inferTypeOfList :: TBinding (InferenceContext -> [Term] -> Flow s InferenceResult)
@@ -761,6 +824,7 @@ inferTypeOfLiteral = define "inferTypeOfLiteral" $
     (Core.termLiteral $ var "lit")
     (Core.typeLiteral $ Reflect.literalType @@ var "lit")
     (Substitution.idTypeSubst)
+    Maps.empty
 
 inferTypeOfMap :: TBinding (InferenceContext -> M.Map Term Term -> Flow s InferenceResult)
 inferTypeOfMap = define "inferTypeOfMap" $
@@ -864,18 +928,21 @@ inferTypeOfPair = define "inferTypeOfPair" $
 
 inferTypeOfPrimitive :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
-  doc "Infer the type of a primitive function" $
+  doc "Infer the type of a primitive function. Class constraints from the primitive's type scheme are propagated to the inference result." $
   "cx" ~> "name" ~>
   Maybes.maybe
     (Flows.fail $ Strings.cat2 (string "No such primitive: ") (Core.unName $ var "name"))
     ("scheme" ~>
       "ts" <<~ Schemas.instantiateTypeScheme @@ var "scheme" $
-      yieldChecked
+      -- Extract constraints from the instantiated type scheme and pass them to the result
+      "constraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+      yieldCheckedWithConstraints
         @@ (buildTypeApplicationTerm
           @@ Core.typeSchemeVariables (var "ts")
           @@ (Core.termFunction $ Core.functionPrimitive $ var "name"))
         @@ Core.typeSchemeType (var "ts")
-        @@ Substitution.idTypeSubst)
+        @@ Substitution.idTypeSubst
+        @@ var "constraints")
     (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ var "cx"))
 
 inferTypeOfProjection :: TBinding (InferenceContext -> Projection -> Flow s InferenceResult)
@@ -984,6 +1051,7 @@ inferTypeOfUnit = define "inferTypeOfUnit" $
     (Core.termUnit)
     (Core.typeUnit)
     (Substitution.idTypeSubst)
+    Maps.empty
 
 inferTypeOfUnwrap :: TBinding (InferenceContext -> Name -> Flow s InferenceResult)
 inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
@@ -1009,12 +1077,15 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
     (Flows.fail $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
     ("scheme" ~>
       "ts" <<~ Schemas.instantiateTypeScheme @@ var "scheme" $
+      -- Collect constraints from the variable's type scheme (may have constraints if it's a let-bound polymorphic variable)
+      "constraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
       produce $ Typing.inferenceResult
         (buildTypeApplicationTerm
           @@ Core.typeSchemeVariables (var "ts")
           @@ Core.termVariable (var "name"))
         (Core.typeSchemeType $ var "ts")
-        (Substitution.idTypeSubst))
+        (Substitution.idTypeSubst)
+        (var "constraints"))
     (Maps.lookup (var "name") (Typing.inferenceContextDataTypes $ var "cx"))
 
 inferTypeOfWrappedTerm :: TBinding (InferenceContext -> WrappedTerm -> Flow s InferenceResult)
@@ -1039,8 +1110,9 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")]
 
 inferTypesOfTemporaryBindings :: TBinding (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
+-- | Returns: (terms, (types, (subst, constraints)))
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
-  doc "Infer types for temporary let bindings" $
+  doc "Infer types for temporary let bindings. Returns a 4-tuple of (terms, types, substitution, accumulated constraints)" $
   "cx" ~> "bins" ~>
   "dflt" <~ (
     "binding" <~ Lists.head (var "bins") $
@@ -1055,19 +1127,27 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "j" <~ Typing.inferenceResultTerm (var "result1") $
     "u_prime" <~ Typing.inferenceResultType (var "result1") $
     "u" <~ Typing.inferenceResultSubst (var "result1") $
+    "c1" <~ Typing.inferenceResultClassConstraints (var "result1") $
     "result2" <<~ inferTypesOfTemporaryBindings @@
       (Substitution.substInContext @@ var "u" @@ var "cx") @@
       var "tl" $
     "h" <~ Pairs.first (var "result2") $
     "r_prime" <~ Pairs.first (Pairs.second $ var "result2") $
-    "r" <~ Pairs.second (Pairs.second $ var "result2") $
+    "restPair" <~ Pairs.second (Pairs.second $ var "result2") $
+    "r" <~ Pairs.first (var "restPair") $
+    "c2" <~ Pairs.second (var "restPair") $
+    -- Apply the substitution r to c1's variable names before merging
+    -- This ensures constraints are tracked under the correct (substituted) variable names
+    "c1Subst" <~ Substitution.substInClassConstraints @@ var "r" @@ var "c1" $
+    -- Merge the substituted constraints from this binding with constraints from the rest
+    "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
     Flows.pure $ pair
       (Lists.cons (Substitution.substTypesInTerm @@ var "r" @@ var "j") (var "h"))
       (pair
         (Lists.cons (Substitution.substInType @@ var "r" @@ var "u_prime") (var "r_prime"))
-        (Substitution.composeTypeSubst @@ var "u" @@ var "r"))) $
+        (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) $
   Logic.ifElse (Lists.null $ var "bins")
-    (Flows.pure $ pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (Substitution.idTypeSubst)))
+    (Flows.pure $ pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty)))
     (var "dflt")
 
 initialTypeContext :: TBinding (Graph -> Flow s TypeContext)
@@ -1120,12 +1200,23 @@ showInferenceResult = define "showInferenceResult" $
 
 yield :: TBinding (Term -> Type -> TypeSubst -> InferenceResult)
 yield = define "yield" $
-  doc "Create an inference result" $
+  doc "Create an inference result with no class constraints" $
   "term" ~> "typ" ~> "subst" ~>
   Typing.inferenceResult
     (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
     (Substitution.substInType @@ var "subst" @@ var "typ")
     (var "subst")
+    Maps.empty
+
+yieldWithConstraints :: TBinding (Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> InferenceResult)
+yieldWithConstraints = define "yieldWithConstraints" $
+  doc "Create an inference result with class constraints" $
+  "term" ~> "typ" ~> "subst" ~> "constraints" ~>
+  Typing.inferenceResult
+    (Substitution.substTypesInTerm @@ var "subst" @@ var "term")
+    (Substitution.substInType @@ var "subst" @@ var "typ")
+    (var "subst")
+    (var "constraints")
 
 -- TODO: pass context and variables, and actually check types
 yieldChecked :: TBinding (Term -> Type -> TypeSubst -> Flow s InferenceResult)
@@ -1134,7 +1225,17 @@ yieldChecked = define "yieldChecked" $
   "term" ~> "typ" ~> "subst" ~>
   "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
   "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
-  produce $ Typing.inferenceResult (var "iterm") (var "itype") (var "subst")
+  produce $ Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty
+
+yieldCheckedWithConstraints :: TBinding (Term -> Type -> TypeSubst -> M.Map Name TypeVariableMetadata -> Flow s InferenceResult)
+yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
+  doc "Create a checked inference result with class constraints" $
+  "term" ~> "typ" ~> "subst" ~> "constraints" ~>
+  "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
+  "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
+  -- Apply the substitution to constraint keys as well, so they track the final variable names
+  "iconstraints" <~ Substitution.substInClassConstraints @@ var "subst" @@ var "constraints" $
+  produce $ Typing.inferenceResult (var "iterm") (var "itype") (var "subst") (var "iconstraints")
 
 yieldDebug :: TBinding (InferenceContext -> String -> Term -> Type -> TypeSubst -> Flow s InferenceResult)
 yieldDebug = define "yieldDebug" $
@@ -1149,4 +1250,4 @@ yieldDebug = define "yieldDebug" $
       (string "\n\tsubst: "), ShowTyping.typeSubst @@ var "subst",
       (string "\n\trterm: "), ShowCore.term @@ var "rterm",
       (string "\n\trtyp: "),  ShowCore.type_ @@ var "rtyp"]) $
-  produce $ Typing.inferenceResult (var "rterm") (var "rtyp") (var "subst")
+  produce $ Typing.inferenceResult (var "rterm") (var "rtyp") (var "subst") Maps.empty

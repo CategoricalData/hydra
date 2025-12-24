@@ -52,7 +52,7 @@ testElementArthur = defineTerm "testElementArthur" $
   Core.binding
     (name "firstName")
     testDataArthur
-    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) (Core.typeVariable TestTypes.testTypePersonName))
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Phantoms.nothing)
 
 testElementFirstName :: TBinding Binding
 testElementFirstName = defineTerm "testElementFirstName" $
@@ -60,4 +60,4 @@ testElementFirstName = defineTerm "testElementFirstName" $
     (name "firstName")
     (project TestTypes.testTypePersonName (name "firstName"))
     (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TTerm Name]))
-      (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string))
+      (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string) Phantoms.nothing)

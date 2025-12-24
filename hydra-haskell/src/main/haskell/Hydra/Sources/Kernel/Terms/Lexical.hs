@@ -122,13 +122,14 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
   doc "Resolve a schema type through a chain of zero or more typedefs" $
   "name" ~> "types" ~>
   "forType" <~ ("t" ~> cases _Type (var "t")
-    (Just (just (Core.typeScheme (list ([] :: [TTerm Name])) (var "t")))) [
+    (Just (just (Core.typeScheme (list ([] :: [TTerm Name])) (var "t") Phantoms.nothing))) [
     _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~> Maybes.map
       ("ts" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.cons (Core.forallTypeParameter (var "ft")) (Core.typeSchemeVariables (var "ts")))
-        (Core.typeSchemeType (var "ts")))
+        (Core.typeSchemeType (var "ts"))
+        (Core.typeSchemeConstraints (var "ts")))
       (var "forType" @@ (Core.forallTypeBody (var "ft"))),
     _Type_variable>>: "v" ~> dereferenceSchemaType @@ var "v" @@ var "types"]) $
   Maybes.bind
@@ -137,7 +138,8 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       ("ts2" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.concat2 (Core.typeSchemeVariables (var "ts")) (Core.typeSchemeVariables (var "ts2")))
-        (Core.typeSchemeType (var "ts2")))
+        (Core.typeSchemeType (var "ts2"))
+        (Core.typeSchemeConstraints (var "ts2")))
       (var "forType" @@ (Core.typeSchemeType (var "ts"))))
 
 -- | Dereference a variable name in a graph, returning Either an error message or the binding
