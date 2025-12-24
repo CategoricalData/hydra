@@ -10,6 +10,7 @@ import Hydra.Constants
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 -- Operators
@@ -161,7 +162,7 @@ map keys vals = TypeMap $ MapType (asType keys) (asType vals)
 -- | Create a monomorphic type scheme
 -- Example: mono int32
 mono :: AsType a => a -> TypeScheme
-mono = TypeScheme [] . asType
+mono t = TypeScheme [] (asType t) Nothing
 
 -- | Non-negative 32-bit integer type
 -- Currently an alias for int32; intended for semantic annotation
@@ -188,7 +189,17 @@ pair first second = TypePair $ PairType (asType first) (asType second)
 -- Example: poly ["a", "b"] (var "a" --> var "b")
 -- This represents a type forall a b. a -> b that can be instantiated with different types
 poly :: AsType a => [String] -> a -> TypeScheme
-poly vs t = TypeScheme (Name <$> vs) (asType t)
+poly vs t = TypeScheme (Name <$> vs) (asType t) Nothing
+
+-- | Create a polymorphic type scheme with explicit type variables and constraints
+-- Example: polyConstrained [("a", [Name "hydra.core.Eq"])] (var "a" --> var "a" --> boolean)
+-- This represents a type forall a. (Eq a) => a -> a -> Boolean
+polyConstrained :: AsType a => [(String, [Name])] -> a -> TypeScheme
+polyConstrained vsWithConstraints t = TypeScheme vars (asType t) (Just constraintMap)
+  where
+    vars = Name . fst <$> vsWithConstraints
+    constraintMap = M.fromList
+      [(Name v, TypeVariableMetadata $ S.fromList classes) | (v, classes) <- vsWithConstraints, not (L.null classes)]
 
 -- | Create a product type using nested pairs (deprecated: use pair directly)
 -- Example: product [string, int32, boolean] creates pair string (pair int32 boolean)
