@@ -756,9 +756,23 @@ typeScheme :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.TypeSc
 typeScheme cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\variables -> Eithers.either (\err -> Left err) (\type_ -> Right (Core.TypeScheme {
+    in (Eithers.either (\err -> Left err) (\variables -> Eithers.either (\err -> Left err) (\type_ -> Eithers.either (\err -> Left err) (\constraints -> Right (Core.TypeScheme {
       Core.typeSchemeVariables = variables,
-      Core.typeSchemeType = type_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+      Core.typeSchemeType = type_,
+      Core.typeSchemeConstraints = constraints})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+      "missing field ",
+      "constraints",
+      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermMaybe v2 -> (Eithers.mapMaybe (\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+        Core.TermMap v3 ->  
+          let pairs = (Maps.toList v3) 
+              decodePair = (\kv ->  
+                      let k = (Pairs.first kv) 
+                          v = (Pairs.second kv)
+                      in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (typeVariableMetadata cx v)) (name cx k)))
+          in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
+        _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) v2)
+      _ -> (Left (Util.DecodingError "expected optional value"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "constraints") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "type",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "type") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -768,6 +782,21 @@ typeScheme cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
       Core.TermList v2 -> (Eithers.mapList (name cx) v2)
       _ -> (Left (Util.DecodingError "expected list"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "variables") fieldMap)))
   _ -> (Left (Util.DecodingError "expected record of type hydra.core.TypeScheme"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
+typeVariableMetadata :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.TypeVariableMetadata)
+typeVariableMetadata cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v1 ->  
+    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
+    in (Eithers.either (\err -> Left err) (\classes -> Right (Core.TypeVariableMetadata {
+      Core.typeVariableMetadataClasses = classes})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+      "missing field ",
+      "classes",
+      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermSet v2 ->  
+        let elements = (Sets.toList v2)
+        in (Eithers.either (\err -> Left err) (\decodedElems -> Right (Sets.fromList decodedElems)) (Eithers.mapList (name cx) elements))
+      _ -> (Left (Util.DecodingError "expected set"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "classes") fieldMap)))
+  _ -> (Left (Util.DecodingError "expected record of type hydra.core.TypeVariableMetadata"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 wrappedTerm :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.WrappedTerm)
 wrappedTerm cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
