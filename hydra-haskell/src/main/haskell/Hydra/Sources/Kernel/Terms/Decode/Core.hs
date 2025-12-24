@@ -355,13 +355,21 @@ type_ = define "type" $
         (lambda "t" $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTermAnnotation $ var "annotatedTerm"))
         (type_ @@ (Core.annotatedTermBody $ var "annotatedTerm"))]
 
+typeVariableMetadata :: TBinding (Term -> Flow Graph TypeVariableMetadata)
+typeVariableMetadata = define "typeVariableMetadata" $
+  doc "Decode type variable metadata from a term" $
+  Lexical.matchRecord @@ (lambda "m" $ binds [
+    "classes">: Lexical.getField @@ var "m" @@ Core.nameLift _TypeVariableMetadata_classes @@ (ExtractCore.setOf @@ name)] $
+    produce $ Core.typeVariableMetadata (var "classes"))
+
 typeScheme :: TBinding (Term -> Flow Graph TypeScheme)
 typeScheme = define "typeScheme" $
   doc "Decode a type scheme from a term" $
   Lexical.matchRecord @@ (lambda "m" $ binds [
     "vars">: Lexical.getField @@ var "m" @@ Core.nameLift _TypeScheme_variables @@ (ExtractCore.listOf @@ name),
     "body">: Lexical.getField @@ var "m" @@ Core.nameLift _TypeScheme_type @@ type_] $
-    produce $ Core.typeScheme (var "vars") (var "body"))
+    -- Note: constraints field is optional; for now we default to Nothing during decoding
+    produce $ Core.typeScheme (var "vars") (var "body") Phantoms.nothing)
 
 wrappedType :: TBinding (Term -> Flow Graph WrappedType)
 wrappedType = define "wrappedType" $

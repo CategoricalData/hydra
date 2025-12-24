@@ -175,6 +175,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
     Core.typeScheme
       (collectTypeVariables @@ var "typ")
       (decoderType @@ var "typ")
+      Phantoms.nothing
 
 -- | Collect type variables from forall types
 -- Note: Graph is NOT included as a type variable - it's a concrete type

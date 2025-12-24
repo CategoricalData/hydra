@@ -174,7 +174,7 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
         (Flows.fail $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))
         (lambda "adapter" (
           "adapted" <<~ Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term" $
-          produce $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Compute.adapterTarget $ var "adapter")))
+          produce $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Schemas.typeToTypeScheme @@ (Compute.adapterTarget $ var "adapter"))))
         (Maps.lookup (var "typ") (var "adapters")))) $
   "tterms" <<~ Lexical.withSchemaContext @@ (Flows.mapList (Schemas.elementAsTypeApplicationTerm) (var "els")) $
   "types" <~ Sets.toList (Sets.fromList (Lists.map (Rewriting.deannotateType <.> unaryFunction Core.typeApplicationTermType) (var "tterms"))) $

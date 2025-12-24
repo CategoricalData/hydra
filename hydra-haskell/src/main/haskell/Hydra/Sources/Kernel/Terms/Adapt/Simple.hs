@@ -344,7 +344,7 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
   "t0" <~ Core.typeSchemeType (var "ts0") $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
-  produce $ Core.typeScheme (var "vars0") (var "t1")
+  produce $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
 dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
@@ -374,7 +374,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Module.termDefinition
       (Core.bindingName $ var "el")
       (Core.bindingTerm $ var "el")
-      (Schemas.typeSchemeToFType @@ var "ts")) $
+      (var "ts")) $
 
   produce $ pair
     (var "graph2")
