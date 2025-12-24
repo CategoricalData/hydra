@@ -56,7 +56,8 @@ testGroupForCaseStatements = Testing.TestGroup {
           Core.typeSchemeVariables = [],
           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeSimpleNumberName),
-            Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+            Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -89,7 +90,8 @@ testGroupForCaseStatements = Testing.TestGroup {
           Core.typeSchemeVariables = [],
           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName),
-            Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
+            Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
@@ -114,7 +116,8 @@ testGroupForProjections = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
-                Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -135,7 +138,8 @@ testGroupForProjections = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t1"))})),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -147,7 +151,8 @@ testGroupForProjections = Testing.TestGroup {
               Core.applicationArgument = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo"))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+              Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -177,7 +182,8 @@ testGroupForRecords = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-122.4194))))}]})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeLatLonName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeLatLonName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -197,7 +203,8 @@ testGroupForRecords = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
-                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -222,7 +229,8 @@ testGroupForRecords = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)),
                 Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
-                  Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))}))}})),
+                  Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -248,7 +256,8 @@ testGroupForRecords = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeLatLonPolyName),
-                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -258,7 +267,8 @@ testGroupForRecords = Testing.TestGroup {
             Testing.inferenceTestCaseInput = TestTerms.testDataArthur,
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -289,7 +299,8 @@ testGroupForRecords = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermMaybe Nothing)}]}))))}]})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -320,7 +331,8 @@ testGroupForRecords = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeIntListName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -348,7 +360,8 @@ testGroupForRecords = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
-                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -381,7 +394,8 @@ testGroupForRecords = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
-                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -415,7 +429,8 @@ testGroupForRecords = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeListName),
-                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -453,7 +468,8 @@ testGroupForRecords = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
-                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -487,7 +503,8 @@ testGroupForRecords = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListAName),
-                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -513,7 +530,8 @@ testGroupForVariants = Testing.TestGroup {
                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1638200308368)))}})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeTimestampName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeTimestampName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -527,7 +545,8 @@ testGroupForVariants = Testing.TestGroup {
                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeUnionMonomorphicName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -549,7 +568,8 @@ testGroupForVariants = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
-                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -565,7 +585,8 @@ testGroupForVariants = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
-                Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -591,7 +612,8 @@ testGroupForVariants = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeUnionPolymorphicRecursiveName),
-                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -615,7 +637,8 @@ testGroupForWrappers = Testing.TestGroup {
               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeStringAliasName)}})),
+              Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypeStringAliasName),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -632,7 +655,8 @@ testGroupForWrappers = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.functionTypeCodomain = (Core.TypeVariable TestTypes.testTypeStringAliasName)}))}})),
+                Core.functionTypeCodomain = (Core.TypeVariable TestTypes.testTypeStringAliasName)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -649,7 +673,8 @@ testGroupForWrappers = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypeStringAliasName),
-                Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -663,7 +688,8 @@ testGroupForWrappers = Testing.TestGroup {
                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString)}})),
+              Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeString),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],

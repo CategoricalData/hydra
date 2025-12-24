@@ -707,7 +707,9 @@ data TypeScheme =
     -- | The free type variables
     typeSchemeVariables :: [Name],
     -- | The type expression
-    typeSchemeType :: Type}
+    typeSchemeType :: Type,
+    -- | Optional metadata for type variables, including typeclass constraints. The map keys are type variable names.
+    typeSchemeConstraints :: (Maybe (M.Map Name TypeVariableMetadata))}
   deriving (Eq, Ord, Read, Show)
 
 _TypeScheme = (Name "hydra.core.TypeScheme")
@@ -715,6 +717,19 @@ _TypeScheme = (Name "hydra.core.TypeScheme")
 _TypeScheme_variables = (Name "variables")
 
 _TypeScheme_type = (Name "type")
+
+_TypeScheme_constraints = (Name "constraints")
+
+-- | Metadata associated with a type variable, including typeclass constraints
+data TypeVariableMetadata = 
+  TypeVariableMetadata {
+    -- | The set of typeclass constraints on this type variable
+    typeVariableMetadataClasses :: (S.Set Name)}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeVariableMetadata = (Name "hydra.core.TypeVariableMetadata")
+
+_TypeVariableMetadata_classes = (Name "classes")
 
 -- | A term wrapped in a type name
 data WrappedTerm = 

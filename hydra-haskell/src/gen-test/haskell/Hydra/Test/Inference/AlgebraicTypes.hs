@@ -47,7 +47,8 @@ testGroupForEithers = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
+                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -59,7 +60,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}})),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -77,7 +79,8 @@ testGroupForEithers = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
+                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -89,7 +92,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
-                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -107,7 +111,8 @@ testGroupForEithers = Testing.TestGroup {
                 (Core.Name "t1")],
               Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))}))}})),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -120,7 +125,8 @@ testGroupForEithers = Testing.TestGroup {
                 (Core.Name "t1")],
               Core.typeSchemeType = (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
-                Core.eitherTypeRight = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}})),
+                Core.eitherTypeRight = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -141,7 +147,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBoolean)})))}})),
+                Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBoolean)}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -157,7 +164,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                 Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBoolean)}))})))}})),
+                  Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -180,7 +188,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))}))}))}})),
+                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -198,7 +207,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t1")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -216,7 +226,8 @@ testGroupForEithers = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeList (Core.TypeEither (Core.EitherType {
                 Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
+                Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -232,7 +243,8 @@ testGroupForEithers = Testing.TestGroup {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
-                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}
@@ -259,7 +271,8 @@ testGroupForFolds = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}})),
+                  Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -275,7 +288,8 @@ testGroupForFolds = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -296,7 +310,8 @@ testGroupForFolds = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -317,7 +332,8 @@ testGroupForFolds = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
-                Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -333,7 +349,8 @@ testGroupForFolds = Testing.TestGroup {
               Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -349,7 +366,8 @@ testGroupForFolds = Testing.TestGroup {
               Core.applicationArgument = (Core.TermMaybe Nothing)})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}})),
+              Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -371,7 +389,8 @@ testGroupForFolds = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
-                Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))}})),
+                Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -392,7 +411,8 @@ testGroupForFolds = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
-                Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -416,7 +436,8 @@ testGroupForLists = Testing.TestGroup {
               (Core.TermLiteral (Core.LiteralString "bar"))]),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}})),
+              Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -433,7 +454,8 @@ testGroupForLists = Testing.TestGroup {
               (Core.TermList [])]),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
-              Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)))}})),
+              Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -448,7 +470,8 @@ testGroupForLists = Testing.TestGroup {
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}})),
+              Core.typeSchemeType = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -464,7 +487,8 @@ testGroupForLists = Testing.TestGroup {
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}})),
+              Core.typeSchemeType = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0")))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -485,7 +509,8 @@ testGroupForLists = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}})),
+                Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -506,7 +531,8 @@ testGroupForLists = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}))}})),
+                Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -528,7 +554,8 @@ testGroupForLists = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))}))}})),
+                Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}
@@ -549,7 +576,8 @@ testGroupForMaps = Testing.TestGroup {
           Core.typeSchemeVariables = [],
           Core.typeSchemeType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-            Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+            Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -563,7 +591,8 @@ testGroupForMaps = Testing.TestGroup {
             (Core.Name "t1")],
           Core.typeSchemeType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
-            Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))}))}})),
+            Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -588,7 +617,8 @@ testGroupForMaps = Testing.TestGroup {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
               Core.functionTypeCodomain = (Core.TypeMap (Core.MapType {
                 Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
-                Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}))}))}))}})),
+                Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}))}))})),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
@@ -605,7 +635,8 @@ testGroupForOptionals = Testing.TestGroup {
         Testing.inferenceTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))}})),
+          Core.typeSchemeType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -616,7 +647,8 @@ testGroupForOptionals = Testing.TestGroup {
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [
             Core.Name "t0"],
-          Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}})),
+          Core.typeSchemeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0"))),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
@@ -639,7 +671,8 @@ testGroupForPairs = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -653,7 +686,8 @@ testGroupForPairs = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}})),
+                Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -671,7 +705,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -685,7 +720,8 @@ testGroupForPairs = Testing.TestGroup {
                 (Core.Name "t1")],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}})),
+                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -704,7 +740,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.pairTypeFirst = (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
-                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeBoolean)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -719,7 +756,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                 Core.pairTypeSecond = (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                  Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))}))}})),
+                  Core.pairTypeSecond = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -742,7 +780,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
-                  Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}))}})),
+                  Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -760,7 +799,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeVariable (Core.Name "t0")),
-                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))}})),
+                  Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -779,7 +819,8 @@ testGroupForPairs = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -793,7 +834,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeList (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]},
@@ -810,7 +852,8 @@ testGroupForPairs = Testing.TestGroup {
               Core.typeSchemeVariables = [],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -823,7 +866,8 @@ testGroupForPairs = Testing.TestGroup {
                 Core.Name "t0"],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))}})),
+                Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]},
@@ -837,7 +881,8 @@ testGroupForPairs = Testing.TestGroup {
                 (Core.Name "t1")],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))}))}})),
+                Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t1")))})),
+              Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}],
@@ -856,7 +901,8 @@ testGroupForSets = Testing.TestGroup {
           Core.TermLiteral (Core.LiteralBoolean True)])),
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeBoolean))}})),
+          Core.typeSchemeType = (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeBoolean)),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -868,7 +914,8 @@ testGroupForSets = Testing.TestGroup {
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [
             Core.Name "t0"],
-          Core.typeSchemeType = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0"))))}})),
+          Core.typeSchemeType = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))),
+          Core.typeSchemeConstraints = Nothing}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}

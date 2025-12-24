@@ -63,7 +63,7 @@ hydraTermToStlc context term = case term of
     pair a b = App (App (Const Pair) a) b
 
 hydraTypeSchemeToStlc :: Core.TypeScheme -> Either String TypSch
-hydraTypeSchemeToStlc (Core.TypeScheme vars body) = do
+hydraTypeSchemeToStlc (Core.TypeScheme vars body _) = do
     sbody <- toStlc body
     return $ Forall (Core.unName <$> vars) sbody
   where
@@ -138,8 +138,8 @@ toType ty = case ty of
 -- | Convert a System F type expression to a Hydra type scheme
 toTypeScheme :: FTy -> Core.TypeScheme
 toTypeScheme ty = case ty of
-  FForall vars body -> Core.TypeScheme (Core.Name <$> vars) $ toType body
-  _ -> Core.TypeScheme [] $ toType ty
+  FForall vars body -> Core.TypeScheme (Core.Name <$> vars) (toType body) Nothing
+  _ -> Core.TypeScheme [] (toType ty) Nothing
 
 termToInferredFExpr :: HydraContext -> Core.Term -> IO (FExpr, FTy)
 termToInferredFExpr context term = do

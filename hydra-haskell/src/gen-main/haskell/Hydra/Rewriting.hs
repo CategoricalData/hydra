@@ -70,9 +70,12 @@ deannotateTypeSchemeRecursive ts =
   let vars = (Core.typeSchemeVariables ts)
   in  
     let typ = (Core.typeSchemeType ts)
-    in Core.TypeScheme {
-      Core.typeSchemeVariables = vars,
-      Core.typeSchemeType = (deannotateTypeRecursive typ)}
+    in  
+      let constraints = (Core.typeSchemeConstraints ts)
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = vars,
+        Core.typeSchemeType = (deannotateTypeRecursive typ),
+        Core.typeSchemeConstraints = constraints}
 
 -- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
 detypeTerm :: (Core.Term -> Core.Term)
@@ -389,13 +392,26 @@ normalizeTypeVariablesInTerm term =
                                                                       in  
                                                                         let newVal = (rewriteWithSubst ((newSubst, newBound), (Math.add next k)) (Core.bindingTerm b))
                                                                         in  
-                                                                          let b1 = Core.Binding {
-                                                                                  Core.bindingName = (Core.bindingName b),
-                                                                                  Core.bindingTerm = newVal,
-                                                                                  Core.bindingType = (Just (Core.TypeScheme {
-                                                                                    Core.typeSchemeVariables = newVars,
-                                                                                    Core.typeSchemeType = (substType newSubst typ)}))}
-                                                                          in (step (Lists.cons b1 acc) tl))
+                                                                          let renameConstraintKeys = (\constraintMap -> Maps.fromList (Lists.map (\p ->  
+                                                                                  let oldName = (Pairs.first p)
+                                                                                  in  
+                                                                                    let meta = (Pairs.second p)
+                                                                                    in  
+                                                                                      let newName = (Maybes.fromMaybe oldName (Maps.lookup oldName newSubst))
+                                                                                      in (newName, meta)) (Maps.toList constraintMap)))
+                                                                          in  
+                                                                            let oldConstraints = (Core.typeSchemeConstraints ts)
+                                                                            in  
+                                                                              let newConstraints = (Maybes.map renameConstraintKeys oldConstraints)
+                                                                              in  
+                                                                                let b1 = Core.Binding {
+                                                                                        Core.bindingName = (Core.bindingName b),
+                                                                                        Core.bindingTerm = newVal,
+                                                                                        Core.bindingType = (Just (Core.TypeScheme {
+                                                                                          Core.typeSchemeVariables = newVars,
+                                                                                          Core.typeSchemeType = (substType newSubst typ),
+                                                                                          Core.typeSchemeConstraints = newConstraints}))}
+                                                                                in (step (Lists.cons b1 acc) tl))
                                                   in (Logic.ifElse (Lists.null bs) (Lists.reverse acc) (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b))))
                                     in  
                                       let bindings1 = (step [] bindings0)
