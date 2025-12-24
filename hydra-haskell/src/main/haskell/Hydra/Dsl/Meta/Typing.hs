@@ -18,12 +18,14 @@ inferenceContext
   :: TTerm (M.Map Name TypeScheme)
   -> TTerm (M.Map Name TypeScheme)
   -> TTerm (M.Map Name TypeScheme)
+  -> TTerm (M.Map Name TypeVariableMetadata)
   -> TTerm Bool
   -> TTerm InferenceContext
-inferenceContext schemaTypes primitiveTypes dataTypes debug = Phantoms.record _InferenceContext [
+inferenceContext schemaTypes primitiveTypes dataTypes classConstraints debug = Phantoms.record _InferenceContext [
   _InferenceContext_schemaTypes>>: schemaTypes,
   _InferenceContext_primitiveTypes>>: primitiveTypes,
   _InferenceContext_dataTypes>>: dataTypes,
+  _InferenceContext_classConstraints>>: classConstraints,
   _InferenceContext_debug>>: debug]
 
 inferenceContextSchemaTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
@@ -35,6 +37,9 @@ inferenceContextPrimitiveTypes ic = Phantoms.project _InferenceContext _Inferenc
 inferenceContextDataTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
 inferenceContextDataTypes ic = Phantoms.project _InferenceContext _InferenceContext_dataTypes @@ ic
 
+inferenceContextClassConstraints :: TTerm InferenceContext -> TTerm (M.Map Name TypeVariableMetadata)
+inferenceContextClassConstraints ic = Phantoms.project _InferenceContext _InferenceContext_classConstraints @@ ic
+
 inferenceContextDebug :: TTerm InferenceContext -> TTerm Bool
 inferenceContextDebug ic = Phantoms.project _InferenceContext _InferenceContext_debug @@ ic
 
@@ -43,13 +48,23 @@ inferenceContextWithDataTypes ctx dataTypes = inferenceContext
   (Hydra.Dsl.Meta.Typing.inferenceContextSchemaTypes ctx)
   (Hydra.Dsl.Meta.Typing.inferenceContextPrimitiveTypes ctx)
   dataTypes
+  (Hydra.Dsl.Meta.Typing.inferenceContextClassConstraints ctx)
   (Hydra.Dsl.Meta.Typing.inferenceContextDebug ctx)
 
-inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm InferenceResult
-inferenceResult term type_ subst = Phantoms.record _InferenceResult [
+inferenceContextWithClassConstraints :: TTerm InferenceContext -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm InferenceContext
+inferenceContextWithClassConstraints ctx classConstraints = inferenceContext
+  (Hydra.Dsl.Meta.Typing.inferenceContextSchemaTypes ctx)
+  (Hydra.Dsl.Meta.Typing.inferenceContextPrimitiveTypes ctx)
+  (Hydra.Dsl.Meta.Typing.inferenceContextDataTypes ctx)
+  classConstraints
+  (Hydra.Dsl.Meta.Typing.inferenceContextDebug ctx)
+
+inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm InferenceResult
+inferenceResult term type_ subst classConstraints = Phantoms.record _InferenceResult [
   _InferenceResult_term>>: term,
   _InferenceResult_type>>: type_,
-  _InferenceResult_subst>>: asTerm subst]
+  _InferenceResult_subst>>: asTerm subst,
+  _InferenceResult_classConstraints>>: classConstraints]
 
 inferenceResultTerm :: TTerm InferenceResult -> TTerm Term
 inferenceResultTerm ir = Phantoms.project _InferenceResult _InferenceResult_term @@ ir
@@ -59,6 +74,9 @@ inferenceResultType ir = Phantoms.project _InferenceResult _InferenceResult_type
 
 inferenceResultSubst :: TTerm InferenceResult -> TTerm TypeSubst
 inferenceResultSubst ir = Phantoms.project _InferenceResult _InferenceResult_subst @@ ir
+
+inferenceResultClassConstraints :: TTerm InferenceResult -> TTerm (M.Map Name TypeVariableMetadata)
+inferenceResultClassConstraints ir = Phantoms.project _InferenceResult _InferenceResult_classConstraints @@ ir
 
 termSubst :: TTerm (M.Map Name Term) -> TTerm TermSubst
 termSubst = Phantoms.wrap _TermSubst

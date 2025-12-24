@@ -25,6 +25,42 @@ import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
 
+-- | A type variable specification with optional class constraints
+data TypeVar = TypeVar {
+  typeVarName :: String,
+  typeVarClasses :: [Name]
+}
+
+-- | Create an unconstrained type variable
+v :: String -> TypeVar
+v name = TypeVar name []
+
+-- | Create a type variable with Ord constraint
+vOrd :: String -> TypeVar
+vOrd name = TypeVar name [Name "hydra.typeclass.Ord"]
+
+-- | Create a type variable with Eq constraint
+vEq :: String -> TypeVar
+vEq name = TypeVar name [Name "hydra.typeclass.Eq"]
+
+-- | Convert a list of TypeVars to the format needed by polyConstrained
+-- Filters out variables with no constraints
+typeVarsToConstraints :: [TypeVar] -> [(String, [Name])]
+typeVarsToConstraints = filter (not . L.null . snd) . fmap (\tv -> (typeVarName tv, typeVarClasses tv))
+
+-- | Get just the variable names from a list of TypeVars
+typeVarNames :: [TypeVar] -> [String]
+typeVarNames = fmap typeVarName
+
+-- | Build a TypeScheme from type variables and a type
+-- Uses polyConstrained if there are any constraints, otherwise poly
+buildTypeScheme :: [TypeVar] -> Type -> TypeScheme
+buildTypeScheme vars typ =
+  let constraints = typeVarsToConstraints vars
+  in if L.null constraints
+     then Types.poly (typeVarNames vars) typ
+     else Types.polyConstrained (fmap (\tv -> (typeVarName tv, typeVarClasses tv)) vars) typ
+
 instance IsString (TermCoder Term) where fromString = variable
 
 bigfloat :: TermCoder Double
@@ -197,16 +233,16 @@ pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType
       yTerm <- coderDecode (termCoderCoder yCoder) y
       return $ Terms.pair xTerm yTerm
 
-prim0 :: Name -> x -> [String]  -> TermCoder x -> Primitive
+prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl
   where
-    typ = Types.poly vars $ termCoderType output
+    typ = buildTypeScheme vars $ termCoderType output
     impl _ = coderDecode (termCoderCoder output) value
 
-prim1 :: Name -> (x -> y) -> [String] -> TermCoder x -> TermCoder y -> Primitive
+prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
 prim1 name compute vars input1 output = Primitive name typ impl
   where
-    typ = Types.poly vars $ Types.functionMany [
+    typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType output]
     impl args = do
@@ -214,10 +250,10 @@ prim1 name compute vars input1 output = Primitive name typ impl
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
-prim2 :: Name -> (x -> y -> z) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2 name compute vars input1 input2 output = Primitive name typ impl
   where
-    typ = Types.poly vars $ Types.functionMany [
+    typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType input2,
       termCoderType output]
@@ -227,31 +263,10 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim1Eval :: Name -> (Term -> Flow Graph Term) -> [String] -> TermCoder x -> TermCoder y -> Primitive
-prim1Eval name compute vars input1 output = Primitive name typ impl
-  where
-    typ = Types.poly vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 1 args
-      compute (args !! 0)
-
-prim2Eval :: Name -> (Term -> Term -> Flow Graph Term) -> [String] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2Eval name compute vars input1 input2 output = Primitive name typ impl
-  where
-    typ = Types.poly vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType input2,
-      termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 2 args
-      compute (args !! 0) (args !! 1)
-
-prim3 :: Name -> (w -> x -> y -> z) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
   where
-    typ = Types.poly vars $ Types.functionMany [
+    typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType input2,
       termCoderType input3,
@@ -263,10 +278,31 @@ prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
       arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
       coderDecode (termCoderCoder output) $ compute arg1 arg2 arg3
 
-prim3Eval :: Name -> (Term -> Term -> Term -> Flow Graph Term) -> [String] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim1Eval :: Name -> (Term -> Flow Graph Term) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
+prim1Eval name compute vars input1 output = Primitive name typ impl
+  where
+    typ = buildTypeScheme vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType output]
+    impl args = do
+      ExtractCore.nArgs name 1 args
+      compute (args !! 0)
+
+prim2Eval :: Name -> (Term -> Term -> Flow Graph Term) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
+prim2Eval name compute vars input1 input2 output = Primitive name typ impl
+  where
+    typ = buildTypeScheme vars $ Types.functionMany [
+      termCoderType input1,
+      termCoderType input2,
+      termCoderType output]
+    impl args = do
+      ExtractCore.nArgs name 2 args
+      compute (args !! 0) (args !! 1)
+
+prim3Eval :: Name -> (Term -> Term -> Term -> Flow Graph Term) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim3Eval name compute vars input1 input2 input3 output = Primitive name typ impl
   where
-    typ = Types.poly vars $ Types.functionMany [
+    typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType input2,
       termCoderType input3,

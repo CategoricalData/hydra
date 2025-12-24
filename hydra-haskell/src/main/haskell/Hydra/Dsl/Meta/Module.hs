@@ -66,11 +66,11 @@ qualifiedNameLocal qn = project _QualifiedName _QualifiedName_local @@ qn
 qualifiedNameNamespace :: TTerm QualifiedName -> TTerm (Maybe Namespace)
 qualifiedNameNamespace qn = project _QualifiedName _QualifiedName_namespace @@ qn
 
-termDefinition :: TTerm Name -> TTerm Term -> TTerm Type -> TTerm TermDefinition
-termDefinition name term type_ = record _TermDefinition [
+termDefinition :: TTerm Name -> TTerm Term -> TTerm TypeScheme -> TTerm TermDefinition
+termDefinition name term typeScheme = record _TermDefinition [
   _TermDefinition_name>>: name,
   _TermDefinition_term>>: term,
-  _TermDefinition_type>>: type_]
+  _TermDefinition_type>>: typeScheme]
 
 termDefinitionName :: TTerm TermDefinition -> TTerm Name
 termDefinitionName td = project _TermDefinition _TermDefinition_name @@ td
@@ -78,7 +78,7 @@ termDefinitionName td = project _TermDefinition _TermDefinition_name @@ td
 termDefinitionTerm :: TTerm TermDefinition -> TTerm Term
 termDefinitionTerm td = project _TermDefinition _TermDefinition_term @@ td
 
-termDefinitionType :: TTerm TermDefinition -> TTerm Type
+termDefinitionType :: TTerm TermDefinition -> TTerm TypeScheme
 termDefinitionType td = project _TermDefinition _TermDefinition_type @@ td
 
 typeDefinition :: TTerm Name -> TTerm Type -> TTerm TypeDefinition

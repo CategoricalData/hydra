@@ -477,16 +477,27 @@ typePair = inject _Type _Type_pair
 typeRecord :: TTerm RowType -> TTerm Type
 typeRecord = inject _Type _Type_record
 
-typeScheme :: TTerm [Name] -> TTerm Type -> TTerm TypeScheme
-typeScheme variables body = Phantoms.record _TypeScheme [
+typeScheme :: TTerm [Name] -> TTerm Type -> TTerm (Maybe (M.Map Name TypeVariableMetadata)) -> TTerm TypeScheme
+typeScheme variables body constraints = Phantoms.record _TypeScheme [
   _TypeScheme_variables>>: variables,
-  _TypeScheme_type>>: body]
+  _TypeScheme_type>>: body,
+  _TypeScheme_constraints>>: constraints]
+
+typeVariableMetadata :: TTerm (S.Set Name) -> TTerm TypeVariableMetadata
+typeVariableMetadata classes = Phantoms.record _TypeVariableMetadata [
+  _TypeVariableMetadata_classes>>: classes]
+
+typeVariableMetadataClasses :: TTerm TypeVariableMetadata -> TTerm (S.Set Name)
+typeVariableMetadataClasses meta = Phantoms.project _TypeVariableMetadata _TypeVariableMetadata_classes @@ meta
 
 typeSchemeVariables :: TTerm TypeScheme -> TTerm [Name]
 typeSchemeVariables ts = Phantoms.project _TypeScheme _TypeScheme_variables @@ ts
 
 typeSchemeType :: TTerm TypeScheme -> TTerm Type
 typeSchemeType ts = Phantoms.project _TypeScheme _TypeScheme_type @@ ts
+
+typeSchemeConstraints :: TTerm TypeScheme -> TTerm (Maybe (M.Map Name TypeVariableMetadata))
+typeSchemeConstraints ts = Phantoms.project _TypeScheme _TypeScheme_constraints @@ ts
 
 typeSet :: TTerm Type -> TTerm Type
 typeSet = inject _Type _Type_set
