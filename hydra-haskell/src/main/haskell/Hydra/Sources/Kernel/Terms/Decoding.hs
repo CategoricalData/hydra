@@ -550,10 +550,11 @@ decodeMapType = define "decodeMapType" $
         DC.lets [
           ("pairs", DC.primitive _maps_toList @@@ DC.var "m"),
           -- Decoder for a single pair: (Term, Term) -> Either Error (k, v)
+          -- Note: Using "rawKey" and "rawVal" to avoid name collision with type variable decoders
           ("decodePair", DC.lambda "kv" $
             DC.lets [
-              ("k", DC.primitive _pairs_first @@@ DC.var "kv"),
-              ("v", DC.primitive _pairs_second @@@ DC.var "kv")] $
+              ("rawKey", DC.primitive _pairs_first @@@ DC.var "kv"),
+              ("rawVal", DC.primitive _pairs_second @@@ DC.var "kv")] $
               -- Decode key, then decode value, combine into pair (pass cx to decoders)
               DC.primitive _eithers_either
                 @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
@@ -561,8 +562,8 @@ decodeMapType = define "decodeMapType" $
                       DC.primitive _eithers_either
                         @@@ (DC.lambda "err2" $ DC.left $ DC.var "err2")
                         @@@ (DC.lambda "v2" $ DC.right $ DC.pair (DC.var "k2") (DC.var "v2"))
-                        @@@ ((decodeType @@ Core.mapTypeValues (var "mt")) @@@ DC.var "cx" @@@ DC.var "v"))
-                @@@ ((decodeType @@ Core.mapTypeKeys (var "mt")) @@@ DC.var "cx" @@@ DC.var "k"))] $
+                        @@@ ((decodeType @@ Core.mapTypeValues (var "mt")) @@@ DC.var "cx" @@@ DC.var "rawVal"))
+                @@@ ((decodeType @@ Core.mapTypeKeys (var "mt")) @@@ DC.var "cx" @@@ DC.var "rawKey"))] $
           -- Map decodePair over pairs list, then fromList
           DC.primitive _eithers_either
             @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
@@ -584,6 +585,7 @@ decodeMaybeType = define "decodeMaybeType" $
 
 -- | Generate a decoder for a pair type
 -- Matches Term.pair and decodes both elements
+-- Note: Using "rawFirst" and "rawSecond" to avoid name collision with type variable decoders
 decodePairType :: TBinding (PairType -> Term)
 decodePairType = define "decodePairType" $
   doc "Generate a decoder for a pair type" $
@@ -592,17 +594,17 @@ decodePairType = define "decodePairType" $
       (just $ leftError $ string "expected pair") [
       DC.field _Term_pair $ DC.lambda "p" $
         DC.lets [
-          ("a", DC.primitive _pairs_first @@@ DC.var "p"),
-          ("b", DC.primitive _pairs_second @@@ DC.var "p")] $
+          ("rawFirst", DC.primitive _pairs_first @@@ DC.var "p"),
+          ("rawSecond", DC.primitive _pairs_second @@@ DC.var "p")] $
           -- Decode first, then decode second, combine into pair (pass cx to decoders)
           DC.primitive _eithers_either
             @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
-            @@@ (DC.lambda "a2" $
+            @@@ (DC.lambda "decodedFirst" $
                   DC.primitive _eithers_either
                     @@@ (DC.lambda "err2" $ DC.left $ DC.var "err2")
-                    @@@ (DC.lambda "b2" $ DC.right $ DC.pair (DC.var "a2") (DC.var "b2"))
-                    @@@ ((decodeType @@ Core.pairTypeSecond (var "pt")) @@@ DC.var "cx" @@@ DC.var "b"))
-            @@@ ((decodeType @@ Core.pairTypeFirst (var "pt")) @@@ DC.var "cx" @@@ DC.var "a")]
+                    @@@ (DC.lambda "decodedSecond" $ DC.right $ DC.pair (DC.var "decodedFirst") (DC.var "decodedSecond"))
+                    @@@ ((decodeType @@ Core.pairTypeSecond (var "pt")) @@@ DC.var "cx" @@@ DC.var "rawSecond"))
+            @@@ ((decodeType @@ Core.pairTypeFirst (var "pt")) @@@ DC.var "cx" @@@ DC.var "rawFirst")]
 
 -- | Generate a decoder for a set type
 -- Matches Term.set, converts to list, decodes each element, rebuilds set
