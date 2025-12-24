@@ -364,7 +364,7 @@ fTypeToTypeScheme = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
   "typ" ~>
   "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (Rewriting.deannotateType @@ var "typ")
-     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ")) [
+     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Phantoms.nothing) [
      _Type_forall>>: "ft" ~> var "gatherForall" @@
        (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
        (Core.forallTypeBody $ var "ft")]) $
@@ -425,7 +425,7 @@ graphToInferenceContext = define "graphToInferenceContext" $
     ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts")) $ Core.bindingType $ var "b")
     (Maps.elems $ Graph.graphElements $ var "graph")) $
   "schemaTypes" <<~ schemaGraphToTypingEnvironment @@ var "schema" $
-  produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") false
+  produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") Maps.empty false
 
 graphToTypeContext :: TBinding (Graph -> Flow s TypeContext)
 graphToTypeContext = define "graphToTypeContext" $
@@ -448,8 +448,19 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
   "oldVars" <~ Core.typeSchemeVariables (var "scheme") $
   "newVars" <<~ freshNames @@ Lists.length (var "oldVars") $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "oldVars") (Lists.map (unaryFunction Core.typeVariable) $ var "newVars")) $
-  produce $ Core.typeScheme (var "newVars") $
-    Substitution.substInType @@ var "subst" @@ Core.typeSchemeType (var "scheme")
+  -- Build a name-to-name substitution for renaming constraint keys
+  "nameSubst" <~ Maps.fromList (Lists.zip (var "oldVars") (var "newVars")) $
+  -- Rename the keys in the constraints map using the name substitution
+  "renamedConstraints" <~ Maybes.map
+    ("oldConstraints" ~> Maps.fromList (Lists.map
+      ("kv" ~> pair
+        (Maybes.fromMaybe (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv") (var "nameSubst")))
+        (Pairs.second $ var "kv"))
+      (Maps.toList $ var "oldConstraints")))
+    (Core.typeSchemeConstraints (var "scheme")) $
+  produce $ Core.typeScheme (var "newVars")
+    (Substitution.substInType @@ var "subst" @@ Core.typeSchemeType (var "scheme"))
+    (var "renamedConstraints")
 
 isEnumRowType :: TBinding (RowType -> Bool)
 isEnumRowType = define "isEnumRowType" $
@@ -674,7 +685,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment" $
   "g" ~>
   "toTypeScheme" <~ ("vars" ~> "typ" ~> cases _Type (Rewriting.deannotateType @@ var "typ")
-    (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ"))) [
+    (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ") Phantoms.nothing)) [
     _Type_forall>>: "ft" ~> var "toTypeScheme"
       @@ Lists.cons (Core.forallTypeParameter (var "ft")) (var "vars")
       @@ Core.forallTypeBody (var "ft")]) $
@@ -697,10 +708,10 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     "mts" <<~ optCases (Core.bindingType (var "el"))
       (Flows.map ("typ" ~> just $ fTypeToTypeScheme @@ var "typ") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el"))))
       ("ts" ~> Logic.ifElse
-        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme))))
+        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
         (Flows.map (unaryFunction just) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
         (Logic.ifElse
-          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type))))
+          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
           (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded")) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
           (var "forTerm" @@ (Rewriting.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
@@ -782,7 +793,7 @@ typeToTypeScheme = define "typeToTypeScheme" $
   doc "Convert a (System F -style) type to a type scheme" $
   "t0" ~>
   "helper" <~ ("vars" ~> "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
-    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t")) [
+    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t") Phantoms.nothing) [
     _Type_forall>>: "ft" ~> var "helper"
       @@ (Lists.cons (Core.forallTypeParameter $ var "ft") $ var "vars")
       @@ (Core.forallTypeBody $ var "ft")]) $

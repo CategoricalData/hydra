@@ -26,8 +26,8 @@ constructModule mod termDefs = do
     keyvals <- withTrace "encoding terms" (CM.mapM toYaml termDefs)
     return $ YM.NodeMapping $ M.fromList keyvals
   where
-    toYaml (TermDefinition name term typ) = withTrace ("element " ++ unName name) $ do
-      coder <- yamlCoder typ
+    toYaml (TermDefinition name term typeScheme) = withTrace ("element " ++ unName name) $ do
+      coder <- yamlCoder (typeSchemeType typeScheme)
       node <- coderEncode coder term
       return (YM.NodeScalar $ YM.ScalarStr $ localNameOf name, node)
     ns = unNamespace $ moduleNamespace mod

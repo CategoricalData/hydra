@@ -254,7 +254,7 @@ isNativeType = define "isNativeType" $
       (getTermAnnotation @@ Constants.key_firstClassType @@ (Core.bindingTerm (var "el")))) $
   Maybes.maybe false
     ("ts" ~> Logic.and
-      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type))))
+      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
       (Logic.not (var "isFlaggedAsFirstClassType")))
     (Core.bindingType (var "el"))
 
@@ -430,7 +430,7 @@ typeElement = define "typeElement" $
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
     (encoderFor _Type @@ var "typ")
     (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type)))
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
 
 whenFlag :: TBinding (Name -> Flow s a -> Flow s a -> Flow s a)
 whenFlag = define "whenFlag" $

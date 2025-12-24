@@ -330,7 +330,7 @@ moduleToSourceModule m = Module {
     moduleBinding = Binding {
       bindingName = Name $ unNamespace sourceNamespace ++ ".module_",
       bindingTerm = EncodeModule.module_ m,
-      bindingType = Just $ TypeScheme [] $ TypeVariable $ Name "hydra.module.Module"
+      bindingType = Just $ TypeScheme [] (TypeVariable $ Name "hydra.module.Module") Nothing
     }
 
 ----------------------------------------

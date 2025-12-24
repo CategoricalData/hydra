@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Substitution where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   composeTypeSubst, composeTypeSubstList, idTypeSubst, singletonTypeSubst,
-  substituteInConstraint, substituteInConstraints, substInContext, substituteInTerm,
+  substituteInConstraint, substituteInConstraints, substInClassConstraints, substInContext, substituteInTerm,
   substInType, substInTypeScheme, substTypesInTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
@@ -76,6 +76,7 @@ module_ = Module ns elements
      toBinding singletonTypeSubst,
      toBinding substituteInConstraint,
      toBinding substituteInConstraints,
+     toBinding substInClassConstraints,
      toBinding substInContext,
      toBinding substituteInTerm,
      toBinding substInType,
@@ -121,12 +122,55 @@ substituteInConstraints = define "substituteInConstraints" $
   doc "Apply a type substitution to a list of type constraints" $
   lambdas ["subst", "cs"] $ Lists.map (substituteInConstraint @@ var "subst") (var "cs")
 
+-- | Apply a type substitution to a map of class constraints.
+-- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
+-- When a type variable is mapped to a non-variable type, the constraint is dropped (the type is now concrete).
+substInClassConstraints :: TBinding (TypeSubst -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
+substInClassConstraints = define "substInClassConstraints" $
+  doc "Apply a type substitution to class constraints, renaming keys as needed" $
+  "subst" ~> "constraints" ~>
+  "substMap" <~ Typing.unTypeSubst (var "subst") $
+  -- For each (varName, metadata) in constraints:
+  -- 1. Look up varName in the substitution
+  -- 2. If found and it maps to TypeVariable newName, add (newName, metadata) to result
+  -- 3. If not found, keep (varName, metadata) in result
+  -- 4. If found but maps to a non-variable type, drop the constraint
+  Lists.foldl
+    ("acc" ~> "pair" ~>
+      "varName" <~ Pairs.first (var "pair") $
+      "metadata" <~ Pairs.second (var "pair") $
+      Maybes.maybe
+        -- Not in substitution: keep original
+        (Maps.insert (var "varName") (var "metadata") (var "acc"))
+        -- In substitution: check if mapped to a type variable
+        ("targetType" ~>
+          cases _Type (var "targetType") (Just $ var "acc") [
+            _Type_variable>>: "newVarName" ~>
+              -- Mapped to a variable: use the new variable name
+              Maybes.maybe
+                -- No existing entry for newVarName: just insert
+                (Maps.insert (var "newVarName") (var "metadata") (var "acc"))
+                -- Existing entry: merge the class sets
+                ("existing" ~>
+                  "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
+                  Maps.insert (var "newVarName") (var "merged") (var "acc"))
+                (Maps.lookup (var "newVarName") (var "acc"))])
+        (Maps.lookup (var "varName") (var "substMap")))
+    Maps.empty
+    (Maps.toList $ var "constraints")
+
 substInContext :: TBinding (TypeSubst -> InferenceContext -> InferenceContext)
 substInContext = define "substInContext" $
   doc "Apply a type substitution to an inference context" $
-  lambdas ["subst", "cx"] $ Typing.inferenceContextWithDataTypes
-    (var "cx")
-    (Maps.map (substInTypeScheme @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx"))
+  lambdas ["subst", "cx"] $
+    "newDataTypes" <~ Maps.map (substInTypeScheme @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx") $
+    "newClassConstraints" <~ substInClassConstraints @@ var "subst" @@ (Typing.inferenceContextClassConstraints $ var "cx") $
+    Typing.inferenceContext
+      (Typing.inferenceContextSchemaTypes $ var "cx")
+      (Typing.inferenceContextPrimitiveTypes $ var "cx")
+      (var "newDataTypes")
+      (var "newClassConstraints")
+      (Typing.inferenceContextDebug $ var "cx")
 
 substituteInTerm :: TBinding (TermSubst -> Term -> Term)
 substituteInTerm = define "substituteInTerm" $
@@ -189,6 +233,8 @@ substInTypeScheme = define "substInTypeScheme" $
   lambdas ["subst", "ts"] $ Core.typeScheme
     (Core.typeSchemeVariables $ var "ts")
     (substInType @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
+    -- Also apply the substitution to the constraints
+    (Maybes.map (substInClassConstraints @@ var "subst") (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TBinding (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $

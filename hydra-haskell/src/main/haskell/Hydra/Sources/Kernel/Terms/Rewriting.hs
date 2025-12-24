@@ -225,7 +225,8 @@ deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
   "typ" <~ Core.typeSchemeType (var "ts") $
-  Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ")
+  "constraints" <~ Core.typeSchemeConstraints (var "ts") $
+  Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
 
 detypeTerm :: TBinding (Term -> Term)
 detypeTerm = define "detypeTerm" $
@@ -611,10 +612,22 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
             "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
             "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
             "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
+            -- Rename constraint keys using newSubst (a Map Name Name)
+            -- For each (varName, metadata), if varName is in newSubst, use the new name
+            "renameConstraintKeys" <~ ("constraintMap" ~>
+              Maps.fromList $ Lists.map
+                ("p" ~>
+                  "oldName" <~ Pairs.first (var "p") $
+                  "meta" <~ Pairs.second (var "p") $
+                  "newName" <~ Maybes.fromMaybe (var "oldName") (Maps.lookup (var "oldName") (var "newSubst")) $
+                  pair (var "newName") (var "meta"))
+                (Maps.toList $ var "constraintMap")) $
+            "oldConstraints" <~ Core.typeSchemeConstraints (var "ts") $
+            "newConstraints" <~ Maybes.map (var "renameConstraintKeys") (var "oldConstraints") $
             "b1"       <~ Core.binding
               (Core.bindingName $ var "b")
               (var "newVal")
-              (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ")) $
+              (just $ Core.typeScheme (var "newVars") (var "substType" @@ var "newSubst" @@ var "typ") (var "newConstraints")) $
             -- Note: do not advance 'next' for the next sibling; keep current 'next'
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
           Logic.ifElse (Lists.null (var "bs"))
