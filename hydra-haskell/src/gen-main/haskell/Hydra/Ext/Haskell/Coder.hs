@@ -39,6 +39,7 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -111,6 +112,7 @@ constructModule namespaces mod defs =
                   "map",
                   "pure",
                   "sum"]),
+                (("Data.ByteString", (Just "B")), []),
                 (("Data.Int", (Just "I")), []),
                 (("Data.List", (Just "L")), []),
                 (("Data.Map", (Just "M")), []),
@@ -188,6 +190,7 @@ encodeFunction namespaces fun = ((\x -> case x of
 
 encodeLiteral :: (Core.Literal -> Compute.Flow t0 Ast.Expression)
 encodeLiteral l = ((\x -> case x of
+  Core.LiteralBinary v1 -> (Flows.pure (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Ast.LiteralString (Literals.binaryToString v1)))))
   Core.LiteralBoolean v1 -> (Flows.pure (Utils.hsvar (Logic.ifElse v1 "True" "False")))
   Core.LiteralFloat v1 -> ((\x -> case x of
     Core.FloatValueFloat32 v2 -> (Flows.pure (Utils.hslit (Ast.LiteralFloat v2)))
@@ -321,6 +324,7 @@ encodeType namespaces typ =
       in (encode body)
     Core.TypeList v1 -> (Flows.bind (encode v1) (\hlt -> Flows.pure (Ast.TypeList hlt)))
     Core.TypeLiteral v1 -> ((\x -> case x of
+      Core.LiteralTypeBinary -> (Flows.pure (Ast.TypeVariable (Utils.rawName "B.ByteString")))
       Core.LiteralTypeBoolean -> (Flows.pure (Ast.TypeVariable (Utils.rawName "Bool")))
       Core.LiteralTypeFloat v2 -> ((\x -> case x of
         Core.FloatTypeFloat32 -> (Flows.pure (Ast.TypeVariable (Utils.rawName "Float")))
