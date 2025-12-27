@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map, product)
 import Data.Int
+import qualified Data.ByteString as B
 import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -47,9 +48,9 @@ annotated term ann = TermAnnotated $ AnnotatedTerm term ann
 apply :: Term -> Term -> Term
 apply fun arg = TermApplication $ Application fun arg
 
--- | Create a binary data literal. The encoding scheme is currently application-dependent.
--- Example: binary ""\x48\x65\x00\xff\x20\x7a\x1b\x80"
-binary :: String -> Term
+-- | Create a binary data literal from a ByteString.
+-- Example: binary (B.pack [0x48, 0x65, 0x00, 0xff, 0x20, 0x7a, 0x1b, 0x80])
+binary :: B.ByteString -> Term
 binary = literal . Literals.binary
 
 -- | Create a bigfloat literal. Note: in practice, precision is limited to 64 bits (same as Double) in Haskell.

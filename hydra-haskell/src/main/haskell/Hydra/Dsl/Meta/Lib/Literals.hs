@@ -7,6 +7,7 @@ import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
+import qualified Data.ByteString as B
 import Data.Int
 
 
@@ -46,7 +47,7 @@ bigintToUint32 = primitive1 _literals_bigintToUint32
 bigintToUint64 :: TTerm Integer -> TTerm Integer
 bigintToUint64 = primitive1 _literals_bigintToUint64
 
-binaryToString :: TTerm String -> TTerm String
+binaryToString :: TTerm B.ByteString -> TTerm String
 binaryToString = primitive1 _literals_binaryToString
 
 float32ToBigfloat :: TTerm Float -> TTerm Double
@@ -130,7 +131,7 @@ showUint64 = primitive1 _literals_showUint64
 showString :: TTerm String -> TTerm String
 showString = primitive1 _literals_showString
 
-stringToBinary :: TTerm String -> TTerm String
+stringToBinary :: TTerm String -> TTerm B.ByteString
 stringToBinary = primitive1 _literals_stringToBinary
 
 uint8ToBigint :: TTerm Int16 -> TTerm Integer
