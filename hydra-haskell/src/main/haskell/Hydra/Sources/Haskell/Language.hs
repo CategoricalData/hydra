@@ -112,6 +112,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
+    Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,

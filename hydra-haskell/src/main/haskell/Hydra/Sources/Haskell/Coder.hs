@@ -213,6 +213,7 @@ constructModule = haskellCoderDefinition "constructModule" $ "namespaces" ~> "mo
       Lists.map (var "toImport") $ list [
         pair (pair (string "Prelude") nothing) (list $ string <$> [
           "Enum", "Ordering", "fail", "map", "pure", "sum"]),
+        pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
         pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
         pair (pair (string "Data.List") (just $ string "L")) (list ([] :: [TTerm String])),
         pair (pair (string "Data.Map") (just $ string "M")) (list ([] :: [TTerm String])),
@@ -307,6 +308,14 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
   "l" ~>
     cases _Literal (var "l")
       (Just $ Flows.fail $ Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l")) [
+      _Literal_binary>>: "bs" ~>
+        -- Generate: Literals.stringToBinary "base64string"
+        -- Binary data is stored as a ByteString; we encode to base64 for the source and decode at runtime
+        -- Note: Literals.binaryToString is called at coder-execution time to convert ByteString to base64 String
+        Flows.pure $ HaskellUtils.hsapp
+          @@ (HaskellUtils.hsvar @@ string "Literals.stringToBinary")
+          @@ (HaskellUtils.hslit @@ (inject H._Literal H._Literal_string
+              $ Literals.binaryToString $ var "bs")),
       _Literal_boolean>>: "b" ~>
         Flows.pure $ HaskellUtils.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
       _Literal_float>>: "fv" ~>
@@ -502,6 +511,8 @@ encodeType = haskellCoderDefinition "encodeType" $
     _Type_literal>>: "lt" ~>
       cases _LiteralType (var "lt")
         (Just $ Flows.fail $ Strings.cat2 (string "unexpected literal type: ") (ShowCore.literalType @@ var "lt")) [
+        _LiteralType_binary>>: constant $
+          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
           Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Bool",
         _LiteralType_float>>: "ft" ~>
