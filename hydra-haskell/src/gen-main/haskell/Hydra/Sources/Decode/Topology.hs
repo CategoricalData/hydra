@@ -7,6 +7,7 @@ module Hydra.Sources.Decode.Topology where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -259,7 +260,7 @@ module_ = Module.Module {
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "counter"),
+                                  Core.lambdaParameter = (Core.Name "field_counter"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -270,7 +271,7 @@ module_ = Module.Module {
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "indices"),
+                                        Core.lambdaParameter = (Core.Name "field_indices"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -281,7 +282,7 @@ module_ = Module.Module {
                                                 Core.lambdaDomain = Nothing,
                                                 Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                             Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "lowLinks"),
+                                              Core.lambdaParameter = (Core.Name "field_lowLinks"),
                                               Core.lambdaDomain = Nothing,
                                               Core.lambdaBody = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -292,7 +293,7 @@ module_ = Module.Module {
                                                       Core.lambdaDomain = Nothing,
                                                       Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                    Core.lambdaParameter = (Core.Name "stack"),
+                                                    Core.lambdaParameter = (Core.Name "field_stack"),
                                                     Core.lambdaDomain = Nothing,
                                                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -303,7 +304,7 @@ module_ = Module.Module {
                                                             Core.lambdaDomain = Nothing,
                                                             Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                                         Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                          Core.lambdaParameter = (Core.Name "onStack"),
+                                                          Core.lambdaParameter = (Core.Name "field_onStack"),
                                                           Core.lambdaDomain = Nothing,
                                                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -314,29 +315,29 @@ module_ = Module.Module {
                                                                   Core.lambdaDomain = Nothing,
                                                                   Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                                               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                                Core.lambdaParameter = (Core.Name "sccs"),
+                                                                Core.lambdaParameter = (Core.Name "field_sccs"),
                                                                 Core.lambdaDomain = Nothing,
                                                                 Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                                                   Core.recordTypeName = (Core.Name "hydra.topology.TarjanState"),
                                                                   Core.recordFields = [
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "counter"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "counter"))},
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_counter"))},
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "indices"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "indices"))},
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_indices"))},
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "lowLinks"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "lowLinks"))},
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_lowLinks"))},
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "stack"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "stack"))},
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_stack"))},
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "onStack"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "onStack"))},
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_onStack"))},
                                                                     Core.Field {
                                                                       Core.fieldName = (Core.Name "sccs"),
-                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "sccs"))}]}))))})))})),
+                                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_sccs"))}]}))))})))})),
                                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
