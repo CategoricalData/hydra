@@ -5,6 +5,7 @@ module Hydra.Dsl.Literals where
 import Hydra.Core
 
 import Data.Int
+import qualified Data.ByteString as B
 
 
 -- | Create an arbitrary-precision floating point literal
@@ -18,8 +19,8 @@ bigint :: Integer -> Literal
 bigint = integer . IntegerValueBigint . fromIntegral
 
 -- | Create a binary data literal
--- Example: binary "\x48\x65\x6C\x6C\x6F"
-binary :: String -> Literal
+-- Example: binary (B.pack [0x48, 0x65, 0x6C, 0x6C, 0x6F])
+binary :: B.ByteString -> Literal
 binary = LiteralBinary
 
 -- | Create a boolean literal

@@ -6,14 +6,15 @@ import Hydra.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
 import Data.Int
+import qualified Data.ByteString as B
 
 
 -- Note: does not yet properly capture arbitrary-precision floating-point numbers,
 --       because code generation does not.
 type Bigfloat = Double
 
--- Note: does not distinguish Binary from String, because code generation does not.
-type Binary = String
+-- Binary is now properly represented as ByteString
+type Binary = B.ByteString
 
 bigfloat :: Bigfloat -> TTerm Bigfloat
 bigfloat = TTerm . Terms.bigfloat

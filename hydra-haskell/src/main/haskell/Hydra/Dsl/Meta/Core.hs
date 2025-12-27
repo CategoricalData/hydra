@@ -13,6 +13,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 import Hydra.Sources.Libraries
 
+import qualified Data.ByteString as B
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -299,7 +300,7 @@ letBody l = Phantoms.project _Let _Let_body @@ l
 letWithBody :: TTerm Let -> TTerm Term -> TTerm Let
 letWithBody l body = let_ (Hydra.Dsl.Meta.Core.letBindings l) body
 
-literalBinary :: TTerm String -> TTerm Literal
+literalBinary :: TTerm B.ByteString -> TTerm Literal
 literalBinary = inject _Literal _Literal_binary
 
 literalBoolean :: TTerm Bool -> TTerm Literal
