@@ -14,6 +14,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.Meta.Base
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 
+import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -84,12 +85,12 @@ booleanLift :: TTerm Bool -> TTerm Term
 booleanLift = Core.termLiteral . Core.literalBoolean
 
 -- | Create a term-encoded binary (byte string) literal
--- Example: binary "SGVsbG8gV29ybGQ="
-binary :: String -> TTerm Term
+-- Example: binary (B.pack [0x48, 0x65, 0x6C, 0x6C, 0x6F])
+binary :: B.ByteString -> TTerm Term
 binary = binaryLift . TTerm . Terms.binary
 
--- | Lift a TTerm String to a term-encoded binary literal
-binaryLift :: TTerm String -> TTerm Term
+-- | Lift a TTerm ByteString to a term-encoded binary literal
+binaryLift :: TTerm B.ByteString -> TTerm Term
 binaryLift = Core.termLiteral . Core.literalBinary
 
 -- | Create a term-encoded constant function that always returns the same term-encoded value

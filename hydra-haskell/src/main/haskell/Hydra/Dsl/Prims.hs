@@ -18,6 +18,7 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Show.Core as ShowCore
 
 import Data.Int
+import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -75,7 +76,7 @@ bigint = TermCoder Types.bigint $ Coder encode decode
     encode = ExtractCore.bigint
     decode = pure . Terms.bigint
 
-binary :: TermCoder String
+binary :: TermCoder B.ByteString
 binary = TermCoder Types.binary $ Coder encode decode
   where
     encode = ExtractCore.binary
