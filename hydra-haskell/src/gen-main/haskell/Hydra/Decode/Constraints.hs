@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -25,9 +26,9 @@ pathEquation :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Constrain
 pathEquation cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\left -> Eithers.either (\err -> Left err) (\right -> Right (Constraints.PathEquation {
-      Constraints.pathEquationLeft = left,
-      Constraints.pathEquationRight = right})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_left -> Eithers.either (\err -> Left err) (\field_right -> Right (Constraints.PathEquation {
+      Constraints.pathEquationLeft = field_left,
+      Constraints.pathEquationRight = field_right})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "right",
       " in record"]))) (\fieldTerm -> Query.path cx fieldTerm) (Maps.lookup (Core.Name "right") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -40,9 +41,9 @@ patternImplication :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Con
 patternImplication cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\antecedent -> Eithers.either (\err -> Left err) (\consequent -> Right (Constraints.PatternImplication {
-      Constraints.patternImplicationAntecedent = antecedent,
-      Constraints.patternImplicationConsequent = consequent})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_antecedent -> Eithers.either (\err -> Left err) (\field_consequent -> Right (Constraints.PatternImplication {
+      Constraints.patternImplicationAntecedent = field_antecedent,
+      Constraints.patternImplicationConsequent = field_consequent})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "consequent",
       " in record"]))) (\fieldTerm -> Query.pattern cx fieldTerm) (Maps.lookup (Core.Name "consequent") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [

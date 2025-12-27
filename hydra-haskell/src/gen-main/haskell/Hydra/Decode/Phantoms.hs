@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -25,9 +26,9 @@ tBinding :: (t0 -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Phanto
 tBinding a cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\term -> Right (Phantoms.TBinding {
-      Phantoms.tBindingName = name,
-      Phantoms.tBindingTerm = term})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_term -> Right (Phantoms.TBinding {
+      Phantoms.tBindingName = field_name,
+      Phantoms.tBindingTerm = field_term})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "term",
       " in record"]))) (\fieldTerm -> tTerm a cx fieldTerm) (Maps.lookup (Core.Name "term") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [

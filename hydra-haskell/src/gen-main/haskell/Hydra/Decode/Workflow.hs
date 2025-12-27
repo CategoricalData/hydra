@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import qualified Hydra.Workflow as Workflow
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -26,9 +27,9 @@ hydraSchemaSpec :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Workfl
 hydraSchemaSpec cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\modules -> Eithers.either (\err -> Left err) (\typeName -> Right (Workflow.HydraSchemaSpec {
-      Workflow.hydraSchemaSpecModules = modules,
-      Workflow.hydraSchemaSpecTypeName = typeName})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_modules -> Eithers.either (\err -> Left err) (\field_typeName -> Right (Workflow.HydraSchemaSpec {
+      Workflow.hydraSchemaSpecModules = field_modules,
+      Workflow.hydraSchemaSpecTypeName = field_typeName})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "typeName",
       " in record"]))) (\fieldTerm -> Core_.name cx fieldTerm) (Maps.lookup (Core.Name "typeName") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -67,11 +68,11 @@ transformWorkflow :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Work
 transformWorkflow cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\schemaSpec -> Eithers.either (\err -> Left err) (\srcDir -> Eithers.either (\err -> Left err) (\destDir -> Right (Workflow.TransformWorkflow {
-      Workflow.transformWorkflowName = name,
-      Workflow.transformWorkflowSchemaSpec = schemaSpec,
-      Workflow.transformWorkflowSrcDir = srcDir,
-      Workflow.transformWorkflowDestDir = destDir})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_schemaSpec -> Eithers.either (\err -> Left err) (\field_srcDir -> Eithers.either (\err -> Left err) (\field_destDir -> Right (Workflow.TransformWorkflow {
+      Workflow.transformWorkflowName = field_name,
+      Workflow.transformWorkflowSchemaSpec = field_schemaSpec,
+      Workflow.transformWorkflowSrcDir = field_srcDir,
+      Workflow.transformWorkflowDestDir = field_destDir})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "destDir",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of

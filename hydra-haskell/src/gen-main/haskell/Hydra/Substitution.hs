@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -49,20 +50,22 @@ substituteInConstraint subst c = Typing.TypeConstraint {
 substituteInConstraints :: (Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint])
 substituteInConstraints subst cs = (Lists.map (substituteInConstraint subst) cs)
 
--- | Apply a type substitution to class constraints, renaming keys as needed
+-- | Apply a type substitution to class constraints, propagating to free variables
 substInClassConstraints :: (Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata)
 substInClassConstraints subst constraints =  
   let substMap = (Typing.unTypeSubst subst)
-  in (Lists.foldl (\acc -> \pair ->  
-    let varName = (Pairs.first pair)
-    in  
-      let metadata = (Pairs.second pair)
-      in (Maybes.maybe (Maps.insert varName metadata acc) (\targetType -> (\x -> case x of
-        Core.TypeVariable v1 -> (Maybes.maybe (Maps.insert v1 metadata acc) (\existing ->  
-          let merged = Core.TypeVariableMetadata {
-                  Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata))}
-          in (Maps.insert v1 merged acc)) (Maps.lookup v1 acc))
-        _ -> acc) targetType) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
+  in  
+    let insertOrMerge = (\varName -> \metadata -> \acc -> Maybes.maybe (Maps.insert varName metadata acc) (\existing ->  
+            let merged = Core.TypeVariableMetadata {
+                    Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses metadata))}
+            in (Maps.insert varName merged acc)) (Maps.lookup varName acc))
+    in (Lists.foldl (\acc -> \pair ->  
+      let varName = (Pairs.first pair)
+      in  
+        let metadata = (Pairs.second pair)
+        in (Maybes.maybe (insertOrMerge varName metadata acc) (\targetType ->  
+          let freeVars = (Sets.toList (Rewriting.freeVariablesInType targetType))
+          in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
 
 -- | Apply a type substitution to an inference context
 substInContext :: (Typing.TypeSubst -> Typing.InferenceContext -> Typing.InferenceContext)

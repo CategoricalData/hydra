@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -25,10 +26,10 @@ accessorEdge :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Accessors
 accessorEdge cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\source -> Eithers.either (\err -> Left err) (\path -> Eithers.either (\err -> Left err) (\target -> Right (Accessors.AccessorEdge {
-      Accessors.accessorEdgeSource = source,
-      Accessors.accessorEdgePath = path,
-      Accessors.accessorEdgeTarget = target})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_source -> Eithers.either (\err -> Left err) (\field_path -> Eithers.either (\err -> Left err) (\field_target -> Right (Accessors.AccessorEdge {
+      Accessors.accessorEdgeSource = field_source,
+      Accessors.accessorEdgePath = field_path,
+      Accessors.accessorEdgeTarget = field_target})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "target",
       " in record"]))) (\fieldTerm -> accessorNode cx fieldTerm) (Maps.lookup (Core.Name "target") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -44,9 +45,9 @@ accessorGraph :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Accessor
 accessorGraph cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\nodes -> Eithers.either (\err -> Left err) (\edges -> Right (Accessors.AccessorGraph {
-      Accessors.accessorGraphNodes = nodes,
-      Accessors.accessorGraphEdges = edges})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_nodes -> Eithers.either (\err -> Left err) (\field_edges -> Right (Accessors.AccessorGraph {
+      Accessors.accessorGraphNodes = field_nodes,
+      Accessors.accessorGraphEdges = field_edges})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "edges",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -63,10 +64,10 @@ accessorNode :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Accessors
 accessorNode cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\label -> Eithers.either (\err -> Left err) (\id -> Right (Accessors.AccessorNode {
-      Accessors.accessorNodeName = name,
-      Accessors.accessorNodeLabel = label,
-      Accessors.accessorNodeId = id})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_label -> Eithers.either (\err -> Left err) (\field_id -> Right (Accessors.AccessorNode {
+      Accessors.accessorNodeName = field_name,
+      Accessors.accessorNodeLabel = field_label,
+      Accessors.accessorNodeId = field_id})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "id",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of

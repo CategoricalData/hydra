@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Query as Query
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -58,10 +59,10 @@ edge :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Edge)
 edge cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\type_ -> Eithers.either (\err -> Left err) (\out -> Eithers.either (\err -> Left err) (\in_ -> Right (Query.Edge {
-      Query.edgeType = type_,
-      Query.edgeOut = out,
-      Query.edgeIn = in_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_type -> Eithers.either (\err -> Left err) (\field_out -> Eithers.either (\err -> Left err) (\field_in -> Right (Query.Edge {
+      Query.edgeType = field_type,
+      Query.edgeOut = field_out,
+      Query.edgeIn = field_in})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "in",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -81,9 +82,9 @@ graphPattern :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Gra
 graphPattern cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\graph -> Eithers.either (\err -> Left err) (\patterns -> Right (Query.GraphPattern {
-      Query.graphPatternGraph = graph,
-      Query.graphPatternPatterns = patterns})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_graph -> Eithers.either (\err -> Left err) (\field_patterns -> Right (Query.GraphPattern {
+      Query.graphPatternGraph = field_graph,
+      Query.graphPatternPatterns = field_patterns})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "patterns",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -160,9 +161,9 @@ query :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Query)
 query cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\variables -> Eithers.either (\err -> Left err) (\patterns -> Right (Query.Query {
-      Query.queryVariables = variables,
-      Query.queryPatterns = patterns})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_variables -> Eithers.either (\err -> Left err) (\field_patterns -> Right (Query.Query {
+      Query.queryVariables = field_variables,
+      Query.queryPatterns = field_patterns})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "patterns",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -179,9 +180,9 @@ range :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Range)
 range cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\min -> Eithers.either (\err -> Left err) (\max -> Right (Query.Range {
-      Query.rangeMin = min,
-      Query.rangeMax = max})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_min -> Eithers.either (\err -> Left err) (\field_max -> Right (Query.Range {
+      Query.rangeMin = field_min,
+      Query.rangeMax = field_max})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "max",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -248,9 +249,9 @@ regexSequence :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Re
 regexSequence cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\path -> Eithers.either (\err -> Left err) (\quantifier -> Right (Query.RegexSequence {
-      Query.regexSequencePath = path,
-      Query.regexSequenceQuantifier = quantifier})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_path -> Eithers.either (\err -> Left err) (\field_quantifier -> Right (Query.RegexSequence {
+      Query.regexSequencePath = field_path,
+      Query.regexSequenceQuantifier = field_quantifier})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "quantifier",
       " in record"]))) (\fieldTerm -> regexQuantifier cx fieldTerm) (Maps.lookup (Core.Name "quantifier") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -281,10 +282,10 @@ triplePattern :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Query.Tr
 triplePattern cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\subject -> Eithers.either (\err -> Left err) (\predicate -> Eithers.either (\err -> Left err) (\object -> Right (Query.TriplePattern {
-      Query.triplePatternSubject = subject,
-      Query.triplePatternPredicate = predicate,
-      Query.triplePatternObject = object})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_subject -> Eithers.either (\err -> Left err) (\field_predicate -> Eithers.either (\err -> Left err) (\field_object -> Right (Query.TriplePattern {
+      Query.triplePatternSubject = field_subject,
+      Query.triplePatternPredicate = field_predicate,
+      Query.triplePatternObject = field_object})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "object",
       " in record"]))) (\fieldTerm -> node cx fieldTerm) (Maps.lookup (Core.Name "object") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
