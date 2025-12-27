@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -34,6 +35,7 @@ haskellLanguage = Coders.Language {
       Variants.EliminationVariantUnion,
       Variants.EliminationVariantWrap])
     literalVariants = (Sets.fromList [
+      Variants.LiteralVariantBinary,
       Variants.LiteralVariantBoolean,
       Variants.LiteralVariantFloat,
       Variants.LiteralVariantInteger,
