@@ -7,6 +7,7 @@ module Hydra.Sources.Decode.Grammar where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -429,7 +430,7 @@ module_ = Module.Module {
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "label"),
+                                  Core.lambdaParameter = (Core.Name "field_label"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -440,17 +441,17 @@ module_ = Module.Module {
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "pattern"),
+                                        Core.lambdaParameter = (Core.Name "field_pattern"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                           Core.recordTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
                                           Core.recordFields = [
                                             Core.Field {
                                               Core.fieldName = (Core.Name "label"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "label"))},
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_label"))},
                                             Core.Field {
                                               Core.fieldName = (Core.Name "pattern"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "pattern"))}]}))))})))})),
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_pattern"))}]}))))})))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1061,7 +1062,7 @@ module_ = Module.Module {
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "symbol"),
+                                  Core.lambdaParameter = (Core.Name "field_symbol"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1072,17 +1073,17 @@ module_ = Module.Module {
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "pattern"),
+                                        Core.lambdaParameter = (Core.Name "field_pattern"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                           Core.recordTypeName = (Core.Name "hydra.grammar.Production"),
                                           Core.recordFields = [
                                             Core.Field {
                                               Core.fieldName = (Core.Name "symbol"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "symbol"))},
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_symbol"))},
                                             Core.Field {
                                               Core.fieldName = (Core.Name "pattern"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "pattern"))}]}))))})))})),
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_pattern"))}]}))))})))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {

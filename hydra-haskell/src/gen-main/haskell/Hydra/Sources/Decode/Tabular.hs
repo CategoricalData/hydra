@@ -7,6 +7,7 @@ module Hydra.Sources.Decode.Tabular where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -415,7 +416,7 @@ module_ = Module.Module {
                                       Core.lambdaDomain = Nothing,
                                       Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.Name "header"),
+                                    Core.lambdaParameter = (Core.Name "field_header"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -426,17 +427,17 @@ module_ = Module.Module {
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                         Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                          Core.lambdaParameter = (Core.Name "data"),
+                                          Core.lambdaParameter = (Core.Name "field_data"),
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                             Core.recordTypeName = (Core.Name "hydra.tabular.Table"),
                                             Core.recordFields = [
                                               Core.Field {
                                                 Core.fieldName = (Core.Name "header"),
-                                                Core.fieldTerm = (Core.TermVariable (Core.Name "header"))},
+                                                Core.fieldTerm = (Core.TermVariable (Core.Name "field_header"))},
                                               Core.Field {
                                                 Core.fieldName = (Core.Name "data"),
-                                                Core.fieldTerm = (Core.TermVariable (Core.Name "data"))}]}))))})))})),
+                                                Core.fieldTerm = (Core.TermVariable (Core.Name "field_data"))}]}))))})))})),
                                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {

@@ -7,6 +7,7 @@ module Hydra.Sources.Decode.Workflow where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -85,7 +86,7 @@ module_ = Module.Module {
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "modules"),
+                                  Core.lambdaParameter = (Core.Name "field_modules"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -96,17 +97,17 @@ module_ = Module.Module {
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "typeName"),
+                                        Core.lambdaParameter = (Core.Name "field_typeName"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                           Core.recordTypeName = (Core.Name "hydra.workflow.HydraSchemaSpec"),
                                           Core.recordFields = [
                                             Core.Field {
                                               Core.fieldName = (Core.Name "modules"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "modules"))},
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_modules"))},
                                             Core.Field {
                                               Core.fieldName = (Core.Name "typeName"),
-                                              Core.fieldTerm = (Core.TermVariable (Core.Name "typeName"))}]}))))})))})),
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeName"))}]}))))})))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -556,7 +557,7 @@ module_ = Module.Module {
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.Name "name"),
+                                  Core.lambdaParameter = (Core.Name "field_name"),
                                   Core.lambdaDomain = Nothing,
                                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -567,7 +568,7 @@ module_ = Module.Module {
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.Name "schemaSpec"),
+                                        Core.lambdaParameter = (Core.Name "field_schemaSpec"),
                                         Core.lambdaDomain = Nothing,
                                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -578,7 +579,7 @@ module_ = Module.Module {
                                                 Core.lambdaDomain = Nothing,
                                                 Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                             Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "srcDir"),
+                                              Core.lambdaParameter = (Core.Name "field_srcDir"),
                                               Core.lambdaDomain = Nothing,
                                               Core.lambdaBody = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -589,23 +590,23 @@ module_ = Module.Module {
                                                       Core.lambdaDomain = Nothing,
                                                       Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                                                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                    Core.lambdaParameter = (Core.Name "destDir"),
+                                                    Core.lambdaParameter = (Core.Name "field_destDir"),
                                                     Core.lambdaDomain = Nothing,
                                                     Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                                       Core.recordTypeName = (Core.Name "hydra.workflow.TransformWorkflow"),
                                                       Core.recordFields = [
                                                         Core.Field {
                                                           Core.fieldName = (Core.Name "name"),
-                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "name"))},
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_name"))},
                                                         Core.Field {
                                                           Core.fieldName = (Core.Name "schemaSpec"),
-                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "schemaSpec"))},
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_schemaSpec"))},
                                                         Core.Field {
                                                           Core.fieldName = (Core.Name "srcDir"),
-                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "srcDir"))},
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_srcDir"))},
                                                         Core.Field {
                                                           Core.fieldName = (Core.Name "destDir"),
-                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "destDir"))}]}))))})))})),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_destDir"))}]}))))})))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
