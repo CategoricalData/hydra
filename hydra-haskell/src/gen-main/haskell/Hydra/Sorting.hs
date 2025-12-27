@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Tarjan as Tarjan
 import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

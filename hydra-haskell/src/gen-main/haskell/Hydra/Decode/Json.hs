@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -50,13 +51,13 @@ value cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strippe
                   Core.TermMap v2 ->  
                     let pairs = (Maps.toList v2) 
                         decodePair = (\kv ->  
-                                let k = (Pairs.first kv) 
-                                    v = (Pairs.second kv)
-                                in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (value cx v)) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+                                let rawKey = (Pairs.first kv) 
+                                    rawVal = (Pairs.second kv)
+                                in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (value cx rawVal)) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                                   Core.TermLiteral v3 -> ((\x -> case x of
                                     Core.LiteralString v4 -> (Right v4)
                                     _ -> (Left (Util.DecodingError "expected string literal"))) v3)
-                                  _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx k))))
+                                  _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx rawKey))))
                     in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
                   _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "string", (\input -> Eithers.map (\t -> Json.ValueString t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of

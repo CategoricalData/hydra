@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -27,11 +28,11 @@ graph cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strippe
   Core.TermMap v1 ->  
     let pairs = (Maps.toList v1) 
         decodePair = (\kv ->  
-                let k = (Pairs.first kv) 
-                    v = (Pairs.second kv)
+                let rawKey = (Pairs.first kv) 
+                    rawVal = (Pairs.second kv)
                 in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                   Core.TermList v2 -> (Eithers.mapList (vertex cx) v2)
-                  _ -> (Left (Util.DecodingError "expected list"))) stripped) (Lexical.stripAndDereferenceTermEither cx v))) (vertex cx k)))
+                  _ -> (Left (Util.DecodingError "expected list"))) stripped) (Lexical.stripAndDereferenceTermEither cx rawVal))) (vertex cx rawKey)))
     in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
   _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
@@ -39,13 +40,13 @@ tarjanState :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Topology.T
 tarjanState cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\counter -> Eithers.either (\err -> Left err) (\indices -> Eithers.either (\err -> Left err) (\lowLinks -> Eithers.either (\err -> Left err) (\stack -> Eithers.either (\err -> Left err) (\onStack -> Eithers.either (\err -> Left err) (\sccs -> Right (Topology.TarjanState {
-      Topology.tarjanStateCounter = counter,
-      Topology.tarjanStateIndices = indices,
-      Topology.tarjanStateLowLinks = lowLinks,
-      Topology.tarjanStateStack = stack,
-      Topology.tarjanStateOnStack = onStack,
-      Topology.tarjanStateSccs = sccs})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_counter -> Eithers.either (\err -> Left err) (\field_indices -> Eithers.either (\err -> Left err) (\field_lowLinks -> Eithers.either (\err -> Left err) (\field_stack -> Eithers.either (\err -> Left err) (\field_onStack -> Eithers.either (\err -> Left err) (\field_sccs -> Right (Topology.TarjanState {
+      Topology.tarjanStateCounter = field_counter,
+      Topology.tarjanStateIndices = field_indices,
+      Topology.tarjanStateLowLinks = field_lowLinks,
+      Topology.tarjanStateStack = field_stack,
+      Topology.tarjanStateOnStack = field_onStack,
+      Topology.tarjanStateSccs = field_sccs})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "sccs",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -71,15 +72,15 @@ tarjanState cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
                     in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                       Core.TermLiteral v3 -> ((\x -> case x of
                         Core.LiteralInteger v4 -> ((\x -> case x of
                           Core.IntegerValueInt32 v5 -> (Right v5)
                           _ -> (Left (Util.DecodingError "expected int32 value"))) v4)
                         _ -> (Left (Util.DecodingError "expected int32 literal"))) v3)
-                      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx v))) (vertex cx k)))
+                      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx rawVal))) (vertex cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "lowLinks") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -88,15 +89,15 @@ tarjanState cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
                     in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                       Core.TermLiteral v3 -> ((\x -> case x of
                         Core.LiteralInteger v4 -> ((\x -> case x of
                           Core.IntegerValueInt32 v5 -> (Right v5)
                           _ -> (Left (Util.DecodingError "expected int32 value"))) v4)
                         _ -> (Left (Util.DecodingError "expected int32 literal"))) v3)
-                      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx v))) (vertex cx k)))
+                      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx rawVal))) (vertex cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "indices") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",

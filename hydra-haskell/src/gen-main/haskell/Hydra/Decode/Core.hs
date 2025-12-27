@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -25,18 +26,18 @@ annotatedTerm :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Ann
 annotatedTerm cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\body -> Eithers.either (\err -> Left err) (\annotation -> Right (Core.AnnotatedTerm {
-      Core.annotatedTermBody = body,
-      Core.annotatedTermAnnotation = annotation})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_body -> Eithers.either (\err -> Left err) (\field_annotation -> Right (Core.AnnotatedTerm {
+      Core.annotatedTermBody = field_body,
+      Core.annotatedTermAnnotation = field_annotation})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "annotation",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx v)) (name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx rawVal)) (name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "annotation") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -48,18 +49,18 @@ annotatedType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Ann
 annotatedType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\body -> Eithers.either (\err -> Left err) (\annotation -> Right (Core.AnnotatedType {
-      Core.annotatedTypeBody = body,
-      Core.annotatedTypeAnnotation = annotation})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_body -> Eithers.either (\err -> Left err) (\field_annotation -> Right (Core.AnnotatedType {
+      Core.annotatedTypeBody = field_body,
+      Core.annotatedTypeAnnotation = field_annotation})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "annotation",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx v)) (name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx rawVal)) (name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "annotation") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -71,9 +72,9 @@ application :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Appli
 application cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\function -> Eithers.either (\err -> Left err) (\argument -> Right (Core.Application {
-      Core.applicationFunction = function,
-      Core.applicationArgument = argument})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_function -> Eithers.either (\err -> Left err) (\field_argument -> Right (Core.Application {
+      Core.applicationFunction = field_function,
+      Core.applicationArgument = field_argument})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "argument",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "argument") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -86,9 +87,9 @@ applicationType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.A
 applicationType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\function -> Eithers.either (\err -> Left err) (\argument -> Right (Core.ApplicationType {
-      Core.applicationTypeFunction = function,
-      Core.applicationTypeArgument = argument})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_function -> Eithers.either (\err -> Left err) (\field_argument -> Right (Core.ApplicationType {
+      Core.applicationTypeFunction = field_function,
+      Core.applicationTypeArgument = field_argument})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "argument",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "argument") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -101,10 +102,10 @@ binding :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Binding)
 binding cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\term -> Eithers.either (\err -> Left err) (\type_ -> Right (Core.Binding {
-      Core.bindingName = name,
-      Core.bindingTerm = term,
-      Core.bindingType = type_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_term -> Eithers.either (\err -> Left err) (\field_type -> Right (Core.Binding {
+      Core.bindingName = field_name,
+      Core.bindingTerm = field_term,
+      Core.bindingType = field_type})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "type",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -122,10 +123,10 @@ caseStatement :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Cas
 caseStatement cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\default_ -> Eithers.either (\err -> Left err) (\cases -> Right (Core.CaseStatement {
-      Core.caseStatementTypeName = typeName,
-      Core.caseStatementDefault = default_,
-      Core.caseStatementCases = cases})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_default -> Eithers.either (\err -> Left err) (\field_cases -> Right (Core.CaseStatement {
+      Core.caseStatementTypeName = field_typeName,
+      Core.caseStatementDefault = field_default,
+      Core.caseStatementCases = field_cases})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "cases",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -145,9 +146,9 @@ eitherType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Either
 eitherType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\left -> Eithers.either (\err -> Left err) (\right -> Right (Core.EitherType {
-      Core.eitherTypeLeft = left,
-      Core.eitherTypeRight = right})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_left -> Eithers.either (\err -> Left err) (\field_right -> Right (Core.EitherType {
+      Core.eitherTypeLeft = field_left,
+      Core.eitherTypeRight = field_right})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "right",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "right") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -160,9 +161,9 @@ pairType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.PairType
 pairType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\first -> Eithers.either (\err -> Left err) (\second -> Right (Core.PairType {
-      Core.pairTypeFirst = first,
-      Core.pairTypeSecond = second})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_first -> Eithers.either (\err -> Left err) (\field_second -> Right (Core.PairType {
+      Core.pairTypeFirst = field_first,
+      Core.pairTypeSecond = field_second})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "second",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "second") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -193,9 +194,9 @@ field :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Field)
 field cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\term -> Right (Core.Field {
-      Core.fieldName = name,
-      Core.fieldTerm = term})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_term -> Right (Core.Field {
+      Core.fieldName = field_name,
+      Core.fieldTerm = field_term})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "term",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "term") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -208,9 +209,9 @@ fieldType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.FieldTy
 fieldType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\type_ -> Right (Core.FieldType {
-      Core.fieldTypeName = name,
-      Core.fieldTypeType = type_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_type -> Right (Core.FieldType {
+      Core.fieldTypeName = field_name,
+      Core.fieldTypeType = field_type})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "type",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "type") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -283,9 +284,9 @@ forallType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Forall
 forallType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\parameter -> Eithers.either (\err -> Left err) (\body -> Right (Core.ForallType {
-      Core.forallTypeParameter = parameter,
-      Core.forallTypeBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_parameter -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.ForallType {
+      Core.forallTypeParameter = field_parameter,
+      Core.forallTypeBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -316,9 +317,9 @@ functionType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Func
 functionType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\domain -> Eithers.either (\err -> Left err) (\codomain -> Right (Core.FunctionType {
-      Core.functionTypeDomain = domain,
-      Core.functionTypeCodomain = codomain})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_domain -> Eithers.either (\err -> Left err) (\field_codomain -> Right (Core.FunctionType {
+      Core.functionTypeDomain = field_domain,
+      Core.functionTypeCodomain = field_codomain})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "codomain",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "codomain") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -331,9 +332,9 @@ injection :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Injecti
 injection cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\field -> Right (Core.Injection {
-      Core.injectionTypeName = typeName,
-      Core.injectionField = field})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_field -> Right (Core.Injection {
+      Core.injectionTypeName = field_typeName,
+      Core.injectionField = field_field})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "field",
       " in record"]))) (\fieldTerm -> field cx fieldTerm) (Maps.lookup (Core.Name "field") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -466,10 +467,10 @@ lambda :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Lambda)
 lambda cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\parameter -> Eithers.either (\err -> Left err) (\domain -> Eithers.either (\err -> Left err) (\body -> Right (Core.Lambda {
-      Core.lambdaParameter = parameter,
-      Core.lambdaDomain = domain,
-      Core.lambdaBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_parameter -> Eithers.either (\err -> Left err) (\field_domain -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.Lambda {
+      Core.lambdaParameter = field_parameter,
+      Core.lambdaDomain = field_domain,
+      Core.lambdaBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -487,9 +488,9 @@ let_ :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Let)
 let_ cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\bindings -> Eithers.either (\err -> Left err) (\body -> Right (Core.Let {
-      Core.letBindings = bindings,
-      Core.letBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_bindings -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.Let {
+      Core.letBindings = field_bindings,
+      Core.letBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -562,9 +563,9 @@ mapType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.MapType)
 mapType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\keys -> Eithers.either (\err -> Left err) (\values -> Right (Core.MapType {
-      Core.mapTypeKeys = keys,
-      Core.mapTypeValues = values})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_keys -> Eithers.either (\err -> Left err) (\field_values -> Right (Core.MapType {
+      Core.mapTypeKeys = field_keys,
+      Core.mapTypeValues = field_values})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "values",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "values") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -586,9 +587,9 @@ projection :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Projec
 projection cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\field -> Right (Core.Projection {
-      Core.projectionTypeName = typeName,
-      Core.projectionField = field})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_field -> Right (Core.Projection {
+      Core.projectionTypeName = field_typeName,
+      Core.projectionField = field_field})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "field",
       " in record"]))) (\fieldTerm -> name cx fieldTerm) (Maps.lookup (Core.Name "field") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -601,9 +602,9 @@ record :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Record)
 record cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\fields -> Right (Core.Record {
-      Core.recordTypeName = typeName,
-      Core.recordFields = fields})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_fields -> Right (Core.Record {
+      Core.recordTypeName = field_typeName,
+      Core.recordFields = field_fields})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "fields",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -618,9 +619,9 @@ rowType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.RowType)
 rowType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\fields -> Right (Core.RowType {
-      Core.rowTypeTypeName = typeName,
-      Core.rowTypeFields = fields})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_fields -> Right (Core.RowType {
+      Core.rowTypeTypeName = field_typeName,
+      Core.rowTypeFields = field_fields})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "fields",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -654,9 +655,9 @@ term cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                   Core.TermMap v2 ->  
                     let pairs = (Maps.toList v2) 
                         decodePair = (\kv ->  
-                                let k = (Pairs.first kv) 
-                                    v = (Pairs.second kv)
-                                in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx v)) (term cx k)))
+                                let rawKey = (Pairs.first kv) 
+                                    rawVal = (Pairs.second kv)
+                                in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (term cx rawVal)) (term cx rawKey)))
                     in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
                   _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "maybe", (\input -> Eithers.map (\t -> Core.TermMaybe t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -664,9 +665,9 @@ term cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                   _ -> (Left (Util.DecodingError "expected optional value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "pair", (\input -> Eithers.map (\t -> Core.TermPair t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                   Core.TermPair v2 ->  
-                    let a = (Pairs.first v2) 
-                        b = (Pairs.second v2)
-                    in (Eithers.either (\err -> Left err) (\a2 -> Eithers.either (\err2 -> Left err2) (\b2 -> Right (a2, b2)) (term cx b)) (term cx a))
+                    let rawFirst = (Pairs.first v2) 
+                        rawSecond = (Pairs.second v2)
+                    in (Eithers.either (\err -> Left err) (\decodedFirst -> Eithers.either (\err2 -> Left err2) (\decodedSecond -> Right (decodedFirst, decodedSecond)) (term cx rawSecond)) (term cx rawFirst))
                   _ -> (Left (Util.DecodingError "expected pair"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "record", (\input -> Eithers.map (\t -> Core.TermRecord t) (record cx input))),
                 (Core.Name "set", (\input -> Eithers.map (\t -> Core.TermSet t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -726,9 +727,9 @@ typeApplicationTerm :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Co
 typeApplicationTerm cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\body -> Eithers.either (\err -> Left err) (\type_ -> Right (Core.TypeApplicationTerm {
-      Core.typeApplicationTermBody = body,
-      Core.typeApplicationTermType = type_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_body -> Eithers.either (\err -> Left err) (\field_type -> Right (Core.TypeApplicationTerm {
+      Core.typeApplicationTermBody = field_body,
+      Core.typeApplicationTermType = field_type})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "type",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "type") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -741,9 +742,9 @@ typeLambda :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.TypeLa
 typeLambda cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\parameter -> Eithers.either (\err -> Left err) (\body -> Right (Core.TypeLambda {
-      Core.typeLambdaParameter = parameter,
-      Core.typeLambdaBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_parameter -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.TypeLambda {
+      Core.typeLambdaParameter = field_parameter,
+      Core.typeLambdaBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -756,10 +757,10 @@ typeScheme :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.TypeSc
 typeScheme cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\variables -> Eithers.either (\err -> Left err) (\type_ -> Eithers.either (\err -> Left err) (\constraints -> Right (Core.TypeScheme {
-      Core.typeSchemeVariables = variables,
-      Core.typeSchemeType = type_,
-      Core.typeSchemeConstraints = constraints})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_variables -> Eithers.either (\err -> Left err) (\field_type -> Eithers.either (\err -> Left err) (\field_constraints -> Right (Core.TypeScheme {
+      Core.typeSchemeVariables = field_variables,
+      Core.typeSchemeType = field_type,
+      Core.typeSchemeConstraints = field_constraints})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "constraints",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -767,9 +768,9 @@ typeScheme cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
         Core.TermMap v3 ->  
           let pairs = (Maps.toList v3) 
               decodePair = (\kv ->  
-                      let k = (Pairs.first kv) 
-                          v = (Pairs.second kv)
-                      in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (typeVariableMetadata cx v)) (name cx k)))
+                      let rawKey = (Pairs.first kv) 
+                          rawVal = (Pairs.second kv)
+                      in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (typeVariableMetadata cx rawVal)) (name cx rawKey)))
           in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
         _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) v2)
       _ -> (Left (Util.DecodingError "expected optional value"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "constraints") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -787,8 +788,8 @@ typeVariableMetadata :: (Graph.Graph -> Core.Term -> Either Util.DecodingError C
 typeVariableMetadata cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\classes -> Right (Core.TypeVariableMetadata {
-      Core.typeVariableMetadataClasses = classes})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_classes -> Right (Core.TypeVariableMetadata {
+      Core.typeVariableMetadataClasses = field_classes})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "classes",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -802,9 +803,9 @@ wrappedTerm :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Wrapp
 wrappedTerm cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\body -> Right (Core.WrappedTerm {
-      Core.wrappedTermTypeName = typeName,
-      Core.wrappedTermBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.WrappedTerm {
+      Core.wrappedTermTypeName = field_typeName,
+      Core.wrappedTermBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> term cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -817,9 +818,9 @@ wrappedType :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Core.Wrapp
 wrappedType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\typeName -> Eithers.either (\err -> Left err) (\body -> Right (Core.WrappedType {
-      Core.wrappedTypeTypeName = typeName,
-      Core.wrappedTypeBody = body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_typeName -> Eithers.either (\err -> Left err) (\field_body -> Right (Core.WrappedType {
+      Core.wrappedTypeTypeName = field_typeName,
+      Core.wrappedTypeBody = field_body})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "body",
       " in record"]))) (\fieldTerm -> type_ cx fieldTerm) (Maps.lookup (Core.Name "body") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [

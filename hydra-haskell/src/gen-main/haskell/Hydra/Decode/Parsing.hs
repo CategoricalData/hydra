@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -24,9 +25,9 @@ parseError :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Parsing.Par
 parseError cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\message -> Eithers.either (\err -> Left err) (\remainder -> Right (Parsing.ParseError {
-      Parsing.parseErrorMessage = message,
-      Parsing.parseErrorRemainder = remainder})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_message -> Eithers.either (\err -> Left err) (\field_remainder -> Right (Parsing.ParseError {
+      Parsing.parseErrorMessage = field_message,
+      Parsing.parseErrorRemainder = field_remainder})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "remainder",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -64,9 +65,9 @@ parseSuccess :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> G
 parseSuccess a cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\value -> Eithers.either (\err -> Left err) (\remainder -> Right (Parsing.ParseSuccess {
-      Parsing.parseSuccessValue = value,
-      Parsing.parseSuccessRemainder = remainder})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_value -> Eithers.either (\err -> Left err) (\field_remainder -> Right (Parsing.ParseSuccess {
+      Parsing.parseSuccessValue = field_value,
+      Parsing.parseSuccessRemainder = field_remainder})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "remainder",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of

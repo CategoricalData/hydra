@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -49,9 +50,9 @@ labeledPattern :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Grammar
 labeledPattern cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\label -> Eithers.either (\err -> Left err) (\pattern -> Right (Grammar.LabeledPattern {
-      Grammar.labeledPatternLabel = label,
-      Grammar.labeledPatternPattern = pattern})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_label -> Eithers.either (\err -> Left err) (\field_pattern -> Right (Grammar.LabeledPattern {
+      Grammar.labeledPatternLabel = field_label,
+      Grammar.labeledPatternPattern = field_pattern})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "pattern",
       " in record"]))) (\fieldTerm -> pattern cx fieldTerm) (Maps.lookup (Core.Name "pattern") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -96,9 +97,9 @@ production :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Grammar.Pro
 production cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\symbol -> Eithers.either (\err -> Left err) (\pattern -> Right (Grammar.Production {
-      Grammar.productionSymbol = symbol,
-      Grammar.productionPattern = pattern})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_symbol -> Eithers.either (\err -> Left err) (\field_pattern -> Right (Grammar.Production {
+      Grammar.productionSymbol = field_symbol,
+      Grammar.productionPattern = field_pattern})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "pattern",
       " in record"]))) (\fieldTerm -> pattern cx fieldTerm) (Maps.lookup (Core.Name "pattern") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [

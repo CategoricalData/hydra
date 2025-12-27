@@ -18,6 +18,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -27,12 +28,12 @@ inferenceContext :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typin
 inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\schemaTypes -> Eithers.either (\err -> Left err) (\primitiveTypes -> Eithers.either (\err -> Left err) (\dataTypes -> Eithers.either (\err -> Left err) (\classConstraints -> Eithers.either (\err -> Left err) (\debug -> Right (Typing.InferenceContext {
-      Typing.inferenceContextSchemaTypes = schemaTypes,
-      Typing.inferenceContextPrimitiveTypes = primitiveTypes,
-      Typing.inferenceContextDataTypes = dataTypes,
-      Typing.inferenceContextClassConstraints = classConstraints,
-      Typing.inferenceContextDebug = debug})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_schemaTypes -> Eithers.either (\err -> Left err) (\field_primitiveTypes -> Eithers.either (\err -> Left err) (\field_dataTypes -> Eithers.either (\err -> Left err) (\field_classConstraints -> Eithers.either (\err -> Left err) (\field_debug -> Right (Typing.InferenceContext {
+      Typing.inferenceContextSchemaTypes = field_schemaTypes,
+      Typing.inferenceContextPrimitiveTypes = field_primitiveTypes,
+      Typing.inferenceContextDataTypes = field_dataTypes,
+      Typing.inferenceContextClassConstraints = field_classConstraints,
+      Typing.inferenceContextDebug = field_debug})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "debug",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -46,9 +47,9 @@ inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeVariableMetadata cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeVariableMetadata cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "classConstraints") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -57,9 +58,9 @@ inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "dataTypes") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -68,9 +69,9 @@ inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "primitiveTypes") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -79,9 +80,9 @@ inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeScheme cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "schemaTypes") fieldMap)))
   _ -> (Left (Util.DecodingError "expected record of type hydra.typing.InferenceContext"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -90,20 +91,20 @@ inferenceResult :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing
 inferenceResult cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\err -> Left err) (\type_ -> Eithers.either (\err -> Left err) (\subst -> Eithers.either (\err -> Left err) (\classConstraints -> Right (Typing.InferenceResult {
-      Typing.inferenceResultTerm = term,
-      Typing.inferenceResultType = type_,
-      Typing.inferenceResultSubst = subst,
-      Typing.inferenceResultClassConstraints = classConstraints})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_term -> Eithers.either (\err -> Left err) (\field_type -> Eithers.either (\err -> Left err) (\field_subst -> Eithers.either (\err -> Left err) (\field_classConstraints -> Right (Typing.InferenceResult {
+      Typing.inferenceResultTerm = field_term,
+      Typing.inferenceResultType = field_type,
+      Typing.inferenceResultSubst = field_subst,
+      Typing.inferenceResultClassConstraints = field_classConstraints})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "classConstraints",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeVariableMetadata cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.typeVariableMetadata cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "classConstraints") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -123,9 +124,9 @@ termSubst cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
     Core.TermMap v2 ->  
       let pairs = (Maps.toList v2) 
           decodePair = (\kv ->  
-                  let k = (Pairs.first kv) 
-                      v = (Pairs.second kv)
-                  in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.term cx v)) (Core_.name cx k)))
+                  let rawKey = (Pairs.first kv) 
+                      rawVal = (Pairs.second kv)
+                  in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.term cx rawVal)) (Core_.name cx rawKey)))
       in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
     _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v1)))
   _ -> (Left (Util.DecodingError "expected wrapped type hydra.typing.TermSubst"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -134,10 +135,10 @@ typeConstraint :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing.
 typeConstraint cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\left -> Eithers.either (\err -> Left err) (\right -> Eithers.either (\err -> Left err) (\comment -> Right (Typing.TypeConstraint {
-      Typing.typeConstraintLeft = left,
-      Typing.typeConstraintRight = right,
-      Typing.typeConstraintComment = comment})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_left -> Eithers.either (\err -> Left err) (\field_right -> Eithers.either (\err -> Left err) (\field_comment -> Right (Typing.TypeConstraint {
+      Typing.typeConstraintLeft = field_left,
+      Typing.typeConstraintRight = field_right,
+      Typing.typeConstraintComment = field_comment})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "comment",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -157,12 +158,12 @@ typeContext :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing.Typ
 typeContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\types -> Eithers.either (\err -> Left err) (\metadata -> Eithers.either (\err -> Left err) (\typeVariables -> Eithers.either (\err -> Left err) (\lambdaVariables -> Eithers.either (\err -> Left err) (\inferenceContext -> Right (Typing.TypeContext {
-      Typing.typeContextTypes = types,
-      Typing.typeContextMetadata = metadata,
-      Typing.typeContextTypeVariables = typeVariables,
-      Typing.typeContextLambdaVariables = lambdaVariables,
-      Typing.typeContextInferenceContext = inferenceContext})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_types -> Eithers.either (\err -> Left err) (\field_metadata -> Eithers.either (\err -> Left err) (\field_typeVariables -> Eithers.either (\err -> Left err) (\field_lambdaVariables -> Eithers.either (\err -> Left err) (\field_inferenceContext -> Right (Typing.TypeContext {
+      Typing.typeContextTypes = field_types,
+      Typing.typeContextMetadata = field_metadata,
+      Typing.typeContextTypeVariables = field_typeVariables,
+      Typing.typeContextLambdaVariables = field_lambdaVariables,
+      Typing.typeContextInferenceContext = field_inferenceContext})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "inferenceContext",
       " in record"]))) (\fieldTerm -> inferenceContext cx fieldTerm) (Maps.lookup (Core.Name "inferenceContext") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -186,9 +187,9 @@ typeContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.term cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.term cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "metadata") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
@@ -197,9 +198,9 @@ typeContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
       Core.TermMap v2 ->  
         let pairs = (Maps.toList v2) 
             decodePair = (\kv ->  
-                    let k = (Pairs.first kv) 
-                        v = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.type_ cx v)) (Core_.name cx k)))
+                    let rawKey = (Pairs.first kv) 
+                        rawVal = (Pairs.second kv)
+                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.type_ cx rawVal)) (Core_.name cx rawKey)))
         in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
       _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "types") fieldMap)))
   _ -> (Left (Util.DecodingError "expected record of type hydra.typing.TypeContext"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -210,9 +211,9 @@ typeSubst cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
     Core.TermMap v2 ->  
       let pairs = (Maps.toList v2) 
           decodePair = (\kv ->  
-                  let k = (Pairs.first kv) 
-                      v = (Pairs.second kv)
-                  in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.type_ cx v)) (Core_.name cx k)))
+                  let rawKey = (Pairs.first kv) 
+                      rawVal = (Pairs.second kv)
+                  in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.type_ cx rawVal)) (Core_.name cx rawKey)))
       in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
     _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v1)))
   _ -> (Left (Util.DecodingError "expected wrapped type hydra.typing.TypeSubst"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

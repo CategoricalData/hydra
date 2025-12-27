@@ -34,6 +34,7 @@ import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing_
 import qualified Hydra.Unification as Unification
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -157,7 +158,7 @@ inferGraphTypes g0 =
             let toBinding = (\el -> Core.Binding {
                     Core.bindingName = (Core.bindingName el),
                     Core.bindingTerm = (Core.bindingTerm el),
-                    Core.bindingType = Nothing})
+                    Core.bindingType = (Core.bindingType el)})
             in (Core.TermLet (Core.Let {
               Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
               Core.letBody = (Graph.graphBody g)})))
@@ -531,67 +532,77 @@ inferTypeOfLetNormalized cx0 letTerm =
                       in  
                         let constraintsWithS2 = (Substitution.substInClassConstraints s2 inferredConstraints)
                         in  
-                          let mergedConstraints = (mergeClassConstraints (Typing_.inferenceContextClassConstraints g2base) constraintsWithS2)
+                          let composedSubst = (Substitution.composeTypeSubst s1 s2)
                           in  
-                            let g2 = Typing_.InferenceContext {
-                                    Typing_.inferenceContextSchemaTypes = (Typing_.inferenceContextSchemaTypes g2base),
-                                    Typing_.inferenceContextPrimitiveTypes = (Typing_.inferenceContextPrimitiveTypes g2base),
-                                    Typing_.inferenceContextDataTypes = (Typing_.inferenceContextDataTypes g2base),
-                                    Typing_.inferenceContextClassConstraints = mergedConstraints,
-                                    Typing_.inferenceContextDebug = (Typing_.inferenceContextDebug g2base)}
+                            let originalBindingConstraints = (Lists.foldl (\acc -> \b -> Maybes.maybe acc (\ts -> Maybes.maybe acc (\c -> mergeClassConstraints acc c) (Core.typeSchemeConstraints ts)) (Core.bindingType b)) Maps.empty bins0)
                             in  
-                              let bterms1Subst = (Lists.map (Substitution.substTypesInTerm s2) bterms1)
+                              let originalConstraintsSubst = (Substitution.substInClassConstraints composedSubst originalBindingConstraints)
                               in  
-                                let tsbins1 = (Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1))
-                                in (Flows.bind (inferTypeOfTerm (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->  
-                                  let body1 = (Typing_.inferenceResultTerm bodyResult)
+                                let allInferredConstraints = (mergeClassConstraints constraintsWithS2 originalConstraintsSubst)
+                                in  
+                                  let mergedConstraints = (mergeClassConstraints (Typing_.inferenceContextClassConstraints g2base) allInferredConstraints)
                                   in  
-                                    let tbody = (Typing_.inferenceResultType bodyResult)
+                                    let g2 = Typing_.InferenceContext {
+                                            Typing_.inferenceContextSchemaTypes = (Typing_.inferenceContextSchemaTypes g2base),
+                                            Typing_.inferenceContextPrimitiveTypes = (Typing_.inferenceContextPrimitiveTypes g2base),
+                                            Typing_.inferenceContextDataTypes = (Typing_.inferenceContextDataTypes g2base),
+                                            Typing_.inferenceContextClassConstraints = mergedConstraints,
+                                            Typing_.inferenceContextDebug = (Typing_.inferenceContextDebug g2base)}
                                     in  
-                                      let sbody = (Typing_.inferenceResultSubst bodyResult)
+                                      let bterms1Subst = (Lists.map (Substitution.substTypesInTerm s2) bterms1)
                                       in  
-                                        let st1 = (Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->  
-                                                let name = (Pairs.first pair)
-                                                in  
-                                                  let ts = (Pairs.second pair)
-                                                  in (name, (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)))) tsbins1)))
-                                        in  
-                                          let createBinding = (\bindingPair ->  
-                                                  let nameTsPair = (Pairs.first bindingPair)
-                                                  in  
-                                                    let term = (Pairs.second bindingPair)
-                                                    in  
-                                                      let name = (Pairs.first nameTsPair)
-                                                      in  
-                                                        let ts = (Pairs.second nameTsPair)
-                                                        in  
-                                                          let typeLambdaTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
-                                                                  Core.typeLambdaParameter = v,
-                                                                  Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
-                                                          in Core.Binding {
-                                                            Core.bindingName = name,
-                                                            Core.bindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst sbody s2) typeLambdaTerm),
-                                                            Core.bindingType = (Just (Substitution.substInTypeScheme sbody ts))})
+                                        let tsbins1 = (Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1))
+                                        in (Flows.bind (inferTypeOfTerm (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->  
+                                          let body1 = (Typing_.inferenceResultTerm bodyResult)
                                           in  
-                                            let bins1 = (Lists.map createBinding (Lists.zip tsbins1 bterms1Subst))
+                                            let tbody = (Typing_.inferenceResultType bodyResult)
                                             in  
-                                              let bodyConstraints = (Substitution.substInClassConstraints sbody (Typing_.inferenceResultClassConstraints bodyResult))
+                                              let sbody = (Typing_.inferenceResultSubst bodyResult)
                                               in  
-                                                let bindingConstraintsSubst = (Substitution.substInClassConstraints sbody constraintsWithS2)
+                                                let st1 = (Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->  
+                                                        let name = (Pairs.first pair)
+                                                        in  
+                                                          let ts = (Pairs.second pair)
+                                                          in (name, (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)))) tsbins1)))
                                                 in  
-                                                  let allConstraints = (mergeClassConstraints bindingConstraintsSubst bodyConstraints)
+                                                  let createBinding = (\bindingPair ->  
+                                                          let nameTsPair = (Pairs.first bindingPair)
+                                                          in  
+                                                            let term = (Pairs.second bindingPair)
+                                                            in  
+                                                              let name = (Pairs.first nameTsPair)
+                                                              in  
+                                                                let ts = (Pairs.second nameTsPair)
+                                                                in  
+                                                                  let typeLambdaTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
+                                                                          Core.typeLambdaParameter = v,
+                                                                          Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
+                                                                  in  
+                                                                    let finalTs = (Substitution.substInTypeScheme sbody ts)
+                                                                    in Core.Binding {
+                                                                      Core.bindingName = name,
+                                                                      Core.bindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst sbody s2) typeLambdaTerm),
+                                                                      Core.bindingType = (Just finalTs)})
                                                   in  
-                                                    let ret = Typing_.InferenceResult {
-                                                            Typing_.inferenceResultTerm = (Core.TermLet (Core.Let {
-                                                              Core.letBindings = bins1,
-                                                              Core.letBody = body1})),
-                                                            Typing_.inferenceResultType = tbody,
-                                                            Typing_.inferenceResultSubst = (Substitution.composeTypeSubstList [
-                                                              s1,
-                                                              s2,
-                                                              sbody]),
-                                                            Typing_.inferenceResultClassConstraints = allConstraints}
-                                                    in (Flows.pure ret))))))))))
+                                                    let bins1 = (Lists.map createBinding (Lists.zip tsbins1 bterms1Subst))
+                                                    in  
+                                                      let bodyConstraints = (Substitution.substInClassConstraints sbody (Typing_.inferenceResultClassConstraints bodyResult))
+                                                      in  
+                                                        let bindingConstraintsSubst = (Substitution.substInClassConstraints sbody constraintsWithS2)
+                                                        in  
+                                                          let allConstraints = (mergeClassConstraints bindingConstraintsSubst bodyConstraints)
+                                                          in  
+                                                            let ret = Typing_.InferenceResult {
+                                                                    Typing_.inferenceResultTerm = (Core.TermLet (Core.Let {
+                                                                      Core.letBindings = bins1,
+                                                                      Core.letBody = body1})),
+                                                                    Typing_.inferenceResultType = tbody,
+                                                                    Typing_.inferenceResultSubst = (Substitution.composeTypeSubstList [
+                                                                      s1,
+                                                                      s2,
+                                                                      sbody]),
+                                                                    Typing_.inferenceResultClassConstraints = allConstraints}
+                                                            in (Flows.pure ret))))))))))
 
 inferTypeOfLet :: (Typing_.InferenceContext -> Core.Let -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfLet cx let0 =  
@@ -901,22 +912,26 @@ inferTypesOfTemporaryBindings cx bins =
                     in  
                       let u = (Typing_.inferenceResultSubst result1)
                       in  
-                        let c1 = (Typing_.inferenceResultClassConstraints result1)
-                        in (Flows.bind (inferTypesOfTemporaryBindings (Substitution.substInContext u cx) tl) (\result2 ->  
-                          let h = (Pairs.first result2)
-                          in  
-                            let r_prime = (Pairs.first (Pairs.second result2))
+                        let c1Inferred = (Typing_.inferenceResultClassConstraints result1)
+                        in (Flows.bind (Maybes.maybe (Flows.pure Maps.empty) (\ts -> Flows.bind (Schemas.instantiateTypeScheme ts) (\instantiatedTs ->  
+                          let freshConstraints = (Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs))
+                          in (Flows.bind (Unification.unifyTypes (Typing_.inferenceContextSchemaTypes cx) (Core.typeSchemeType instantiatedTs) u_prime "original binding type") (\unifySubst -> Flows.pure (Substitution.substInClassConstraints unifySubst freshConstraints))))) (Core.bindingType binding)) (\originalBindingConstraints ->  
+                          let c1 = (mergeClassConstraints c1Inferred originalBindingConstraints)
+                          in (Flows.bind (inferTypesOfTemporaryBindings (Substitution.substInContext u cx) tl) (\result2 ->  
+                            let h = (Pairs.first result2)
                             in  
-                              let restPair = (Pairs.second (Pairs.second result2))
+                              let r_prime = (Pairs.first (Pairs.second result2))
                               in  
-                                let r = (Pairs.first restPair)
+                                let restPair = (Pairs.second (Pairs.second result2))
                                 in  
-                                  let c2 = (Pairs.second restPair)
+                                  let r = (Pairs.first restPair)
                                   in  
-                                    let c1Subst = (Substitution.substInClassConstraints r c1)
+                                    let c2 = (Pairs.second restPair)
                                     in  
-                                      let mergedConstraints = (mergeClassConstraints c1Subst c2)
-                                      in (Flows.pure (Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))))))))
+                                      let c1Subst = (Substitution.substInClassConstraints r c1)
+                                      in  
+                                        let mergedConstraints = (mergeClassConstraints c1Subst c2)
+                                        in (Flows.pure (Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))))))))))
   in (Logic.ifElse (Lists.null bins) (Flows.pure ([], ([], (Substitution.idTypeSubst, Maps.empty)))) dflt)
 
 initialTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing_.TypeContext)

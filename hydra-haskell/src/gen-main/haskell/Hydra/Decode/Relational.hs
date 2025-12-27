@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -35,9 +36,9 @@ columnSchema :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> G
 columnSchema t cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\domain -> Right (Relational.ColumnSchema {
-      Relational.columnSchemaName = name,
-      Relational.columnSchemaDomain = domain})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_domain -> Right (Relational.ColumnSchema {
+      Relational.columnSchemaName = field_name,
+      Relational.columnSchemaDomain = field_domain})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "domain",
       " in record"]))) (\fieldTerm -> t cx fieldTerm) (Maps.lookup (Core.Name "domain") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
@@ -50,9 +51,9 @@ foreignKey :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Relational.
 foreignKey cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\foreignRelation -> Eithers.either (\err -> Left err) (\keys -> Right (Relational.ForeignKey {
-      Relational.foreignKeyForeignRelation = foreignRelation,
-      Relational.foreignKeyKeys = keys})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_foreignRelation -> Eithers.either (\err -> Left err) (\field_keys -> Right (Relational.ForeignKey {
+      Relational.foreignKeyForeignRelation = field_foreignRelation,
+      Relational.foreignKeyKeys = field_keys})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "keys",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -96,11 +97,11 @@ relationSchema :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) ->
 relationSchema t cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\name -> Eithers.either (\err -> Left err) (\columns -> Eithers.either (\err -> Left err) (\primaryKeys -> Eithers.either (\err -> Left err) (\foreignKeys -> Right (Relational.RelationSchema {
-      Relational.relationSchemaName = name,
-      Relational.relationSchemaColumns = columns,
-      Relational.relationSchemaPrimaryKeys = primaryKeys,
-      Relational.relationSchemaForeignKeys = foreignKeys})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_columns -> Eithers.either (\err -> Left err) (\field_primaryKeys -> Eithers.either (\err -> Left err) (\field_foreignKeys -> Right (Relational.RelationSchema {
+      Relational.relationSchemaName = field_name,
+      Relational.relationSchemaColumns = field_columns,
+      Relational.relationSchemaPrimaryKeys = field_primaryKeys,
+      Relational.relationSchemaForeignKeys = field_foreignKeys})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "foreignKeys",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
@@ -121,7 +122,7 @@ relationSchema t cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       " in record"]))) (\fieldTerm -> relationName cx fieldTerm) (Maps.lookup (Core.Name "name") fieldMap)))
   _ -> (Left (Util.DecodingError "expected record of type hydra.relational.RelationSchema"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-relationship :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Relational.Relationship t0))
+relationship :: (Ord t0) => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Relational.Relationship t0))
 relationship v cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v1 -> (Eithers.map (\b -> Relational.Relationship b) ((\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
     Core.TermSet v2 ->  

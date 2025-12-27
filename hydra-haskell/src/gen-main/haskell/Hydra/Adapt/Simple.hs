@@ -27,6 +27,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -72,14 +73,40 @@ adaptDataGraph constraints doExpand graph0 =
                   Graph.graphSchema = (Graph.graphSchema sg)})))))) schema0) (\schema1 ->  
                 let gterm0 = (Schemas.graphAsTerm graph0)
                 in (Flows.bind (Logic.ifElse doExpand (expand graph0 gterm0) (Flows.pure gterm0)) (\gterm1 -> Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 ->  
-                  let els1 = (Schemas.termAsGraph gterm2)
-                  in (Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 -> Flows.pure (Graph.Graph {
-                    Graph.graphElements = els1,
-                    Graph.graphEnvironment = env0,
-                    Graph.graphTypes = Maps.empty,
-                    Graph.graphBody = Core.TermUnit,
-                    Graph.graphPrimitives = prims1,
-                    Graph.graphSchema = schema1}))))))))
+                  let els1Raw = (Schemas.termAsGraph gterm2)
+                  in (Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 ->  
+                    let originalConstraints = (Maps.fromList (Maybes.cat (Lists.map (\el -> Maybes.bind (Core.bindingType el) (\ts -> Maybes.map (\c -> (Core.bindingName el, c)) (Core.typeSchemeConstraints ts))) (Maps.elems els0))))
+                    in  
+                      let mergeConstraints = (\el ->  
+                              let bname = (Core.bindingName el)
+                              in  
+                                let origConstraints = (Maps.lookup bname originalConstraints)
+                                in (Maybes.maybe el (\origC -> Maybes.maybe (Core.Binding {
+                                  Core.bindingName = bname,
+                                  Core.bindingTerm = (Core.bindingTerm el),
+                                  Core.bindingType = (Just (Core.TypeScheme {
+                                    Core.typeSchemeVariables = [],
+                                    Core.typeSchemeType = (Core.TypeVariable (Core.Name "a")),
+                                    Core.typeSchemeConstraints = (Just origC)}))}) (\ts ->  
+                                  let inferredC = (Core.typeSchemeConstraints ts)
+                                  in  
+                                    let mergedC = (Maybes.maybe (Just origC) (\infC -> Just (Maps.union origC infC)) inferredC)
+                                    in Core.Binding {
+                                      Core.bindingName = bname,
+                                      Core.bindingTerm = (Core.bindingTerm el),
+                                      Core.bindingType = (Just (Core.TypeScheme {
+                                        Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
+                                        Core.typeSchemeType = (Core.typeSchemeType ts),
+                                        Core.typeSchemeConstraints = mergedC}))}) (Core.bindingType el)) origConstraints))
+                      in  
+                        let els1 = (Maps.fromList (Lists.map (\el -> (Core.bindingName el, (mergeConstraints el))) (Maps.elems els1Raw)))
+                        in (Flows.pure (Graph.Graph {
+                          Graph.graphElements = els1,
+                          Graph.graphEnvironment = env0,
+                          Graph.graphTypes = Maps.empty,
+                          Graph.graphBody = Core.TermUnit,
+                          Graph.graphPrimitives = prims1,
+                          Graph.graphSchema = schema1})))))))))
 
 adaptGraphSchema :: (Ord t0) => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
