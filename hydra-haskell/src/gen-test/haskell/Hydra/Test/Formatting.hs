@@ -7,6 +7,7 @@ module Hydra.Test.Formatting where
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

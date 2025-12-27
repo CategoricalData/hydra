@@ -12,6 +12,7 @@ import qualified Hydra.Test.Inference.KernelExamples as KernelExamples
 import qualified Hydra.Test.Inference.NominalTypes as NominalTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
