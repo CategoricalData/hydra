@@ -22,6 +22,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -46,10 +47,10 @@ bigintValue v = ((\x -> case x of
   _ -> (Monads.unexpected "bigint" (Core_.integer v))) v)
 
 -- | Extract a binary data value from a term
-binary :: (Core.Term -> Compute.Flow Graph.Graph String)
+binary :: (Core.Term -> Compute.Flow Graph.Graph B.ByteString)
 binary t = (Flows.bind (literal t) (\l -> binaryLiteral l))
 
-binaryLiteral :: (Core.Literal -> Compute.Flow t0 String)
+binaryLiteral :: (Core.Literal -> Compute.Flow t0 B.ByteString)
 binaryLiteral v = ((\x -> case x of
   Core.LiteralBinary v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "binary" (Core_.literal v))) v)

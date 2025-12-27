@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M

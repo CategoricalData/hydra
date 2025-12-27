@@ -5,6 +5,7 @@
 module Hydra.Core where
 
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -406,7 +407,7 @@ _Let_body = (Name "body")
 -- | A term constant; an instance of a literal type
 data Literal = 
   -- | A binary literal
-  LiteralBinary String |
+  LiteralBinary B.ByteString |
   -- | A boolean literal
   LiteralBoolean Bool |
   -- | A floating-point literal

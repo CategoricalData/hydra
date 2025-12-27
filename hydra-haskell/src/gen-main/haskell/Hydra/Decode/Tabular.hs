@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -44,9 +45,9 @@ table :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Gr
 table v cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\header -> Eithers.either (\err -> Left err) (\data_ -> Right (Tabular.Table {
-      Tabular.tableHeader = header,
-      Tabular.tableData = data_})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Eithers.either (\err -> Left err) (\field_header -> Eithers.either (\err -> Left err) (\field_data -> Right (Tabular.Table {
+      Tabular.tableHeader = field_header,
+      Tabular.tableData = field_data})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "missing field ",
       "data",
       " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
