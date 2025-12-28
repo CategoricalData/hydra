@@ -4,6 +4,14 @@ module Hydra.Lib.Literals where
 
 import Data.Int
 import Text.Read (readMaybe)
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Base64 as B64
+import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
+
+-- Note: These binary conversion functions have two versions:
+-- 1. String -> String versions for backward compatibility with current generated code
+-- 2. ByteString versions will be used after regenerating Core.hs
 
 
 bigfloatToBigint :: Double -> Integer
@@ -42,8 +50,13 @@ bigintToUint32 = fromIntegral
 bigintToUint64 :: Integer -> Integer
 bigintToUint64 = id
 
-binaryToString :: String -> String
-binaryToString s = s
+-- | Encode a ByteString to a base64-encoded String
+binaryToString :: B.ByteString -> String
+binaryToString = T.unpack . TE.decodeUtf8 . B64.encode
+
+-- | Alias for binaryToString (for compatibility during transition)
+binaryToStringBS :: B.ByteString -> String
+binaryToStringBS = binaryToString
 
 float32ToBigfloat :: Float -> Double
 float32ToBigfloat = realToFrac
@@ -130,8 +143,12 @@ showUint64 = show
 showString :: String -> String
 showString = show
 
-stringToBinary :: String -> String
-stringToBinary s = s
+-- | Decode a base64-encoded String to a ByteString.
+-- Returns an empty ByteString if decoding fails.
+stringToBinary :: String -> B.ByteString
+stringToBinary s = case B64.decode (TE.encodeUtf8 $ T.pack s) of
+  Left _ -> B.empty
+  Right bs -> bs
 
 uint8ToBigint :: Int16 -> Integer
 uint8ToBigint = fromIntegral
