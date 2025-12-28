@@ -124,37 +124,38 @@ substituteInConstraints = define "substituteInConstraints" $
 
 -- | Apply a type substitution to a map of class constraints.
 -- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
--- When a type variable is mapped to a non-variable type, the constraint is dropped (the type is now concrete).
+-- When a type variable is mapped to a complex type, the constraint is propagated to all free variables in that type.
 substInClassConstraints :: TBinding (TypeSubst -> M.Map Name TypeVariableMetadata -> M.Map Name TypeVariableMetadata)
 substInClassConstraints = define "substInClassConstraints" $
-  doc "Apply a type substitution to class constraints, renaming keys as needed" $
+  doc "Apply a type substitution to class constraints, propagating to free variables" $
   "subst" ~> "constraints" ~>
   "substMap" <~ Typing.unTypeSubst (var "subst") $
+  -- Helper to insert a constraint, merging with existing if present
+  "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
+    Maybes.maybe
+      (Maps.insert (var "varName") (var "metadata") (var "acc"))
+      ("existing" ~>
+        "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
+        Maps.insert (var "varName") (var "merged") (var "acc"))
+      (Maps.lookup (var "varName") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution
-  -- 2. If found and it maps to TypeVariable newName, add (newName, metadata) to result
-  -- 3. If not found, keep (varName, metadata) in result
-  -- 4. If found but maps to a non-variable type, drop the constraint
+  -- 2. If not found, keep (varName, metadata) in result
+  -- 3. If found, propagate constraint to all free variables in the target type
   Lists.foldl
     ("acc" ~> "pair" ~>
       "varName" <~ Pairs.first (var "pair") $
       "metadata" <~ Pairs.second (var "pair") $
       Maybes.maybe
         -- Not in substitution: keep original
-        (Maps.insert (var "varName") (var "metadata") (var "acc"))
-        -- In substitution: check if mapped to a type variable
+        (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
+        -- In substitution: propagate constraint to all free variables in the target type
         ("targetType" ~>
-          cases _Type (var "targetType") (Just $ var "acc") [
-            _Type_variable>>: "newVarName" ~>
-              -- Mapped to a variable: use the new variable name
-              Maybes.maybe
-                -- No existing entry for newVarName: just insert
-                (Maps.insert (var "newVarName") (var "metadata") (var "acc"))
-                -- Existing entry: merge the class sets
-                ("existing" ~>
-                  "merged" <~ Core.typeVariableMetadata (Sets.union (Core.typeVariableMetadataClasses $ var "existing") (Core.typeVariableMetadataClasses $ var "metadata")) $
-                  Maps.insert (var "newVarName") (var "merged") (var "acc"))
-                (Maps.lookup (var "newVarName") (var "acc"))])
+          "freeVars" <~ Sets.toList (Rewriting.freeVariablesInType @@ var "targetType") $
+          Lists.foldl
+            ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
+            (var "acc")
+            (var "freeVars"))
         (Maps.lookup (var "varName") (var "substMap")))
     Maps.empty
     (Maps.toList $ var "constraints")
