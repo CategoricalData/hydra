@@ -659,10 +659,21 @@ class TypeScheme:
     
     variables: Annotated[frozenlist[Name], "The free type variables"]
     type: Annotated[Type, "The type expression"]
+    constraints: Annotated[Maybe[FrozenDict[Name, TypeVariableMetadata]], "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names."]
 
 TYPE_SCHEME__NAME = Name("hydra.core.TypeScheme")
 TYPE_SCHEME__VARIABLES__NAME = Name("variables")
 TYPE_SCHEME__TYPE__NAME = Name("type")
+TYPE_SCHEME__CONSTRAINTS__NAME = Name("constraints")
+
+@dataclass(frozen=True)
+class TypeVariableMetadata:
+    r"""Metadata associated with a type variable, including typeclass constraints."""
+    
+    classes: Annotated[frozenset[Name], "The set of typeclass constraints on this type variable"]
+
+TYPE_VARIABLE_METADATA__NAME = Name("hydra.core.TypeVariableMetadata")
+TYPE_VARIABLE_METADATA__CLASSES__NAME = Name("classes")
 
 @dataclass(frozen=True)
 class WrappedTerm:

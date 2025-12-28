@@ -5,7 +5,7 @@ r"""Adapter framework for types and terms."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.adapt.literals
 import hydra.adapt.utils
 import hydra.coders
@@ -29,11 +29,6 @@ import hydra.schemas
 import hydra.show.core
 import hydra.variants
 
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-T2 = TypeVar("T2")
-T3 = TypeVar("T3")
-
 def with_graph_context(f: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[hydra.coders.AdapterContext, T0]:
     return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.coders.AdapterContext, hydra.coders.AdapterContext], hydra.monads.get_state()), (lambda cx: hydra.monads.with_state(cx.graph, f)))
 
@@ -56,10 +51,10 @@ def pass_literal(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterC
 def pass_unit(_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     return hydra.lib.flows.pure(cast(hydra.compute.Adapter[T2, T3, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.core.Term], hydra.compute.Coder((lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))), (lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))))))))
 
-def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
+def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.Type:
     r"""Convert a union row type to a record row type."""
     
-    def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
+    def make_optional(f: hydra.core.FieldType) -> hydra.core.Type:
         fn = f.name
         ft = f.type
         return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
@@ -87,7 +82,7 @@ def for_type_reference(name: hydra.core.Name) -> hydra.compute.Flow[hydra.coders
     def for_missing_adapter(cx: hydra.coders.AdapterContext, lossy: bool, adapters: FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], placeholder: hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
         def new_adapters() -> FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
             return hydra.lib.maps.insert(name, placeholder, adapters)
-        def new_cx() -> hydra.coders.AdapterContext:
+        def new_cx() -> hydra.core.Type:
             return hydra.coders.AdapterContext(cx.graph, cx.language, new_adapters())
         return hydra.lib.flows.bind(hydra.monads.put_state(new_cx()), (lambda ignored: hydra.lib.flows.bind(with_graph_context(hydra.schemas.resolve_type(cast(hydra.core.Type, hydra.core.TypeVariable(name)))), (lambda mt: hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(lossy, cast(hydra.core.Type, hydra.core.TypeVariable(name)), cast(hydra.core.Type, hydra.core.TypeVariable(name)), hydra.adapt.utils.bidirectional((lambda dir, term: hydra.lib.flows.pure(term)))))), (lambda v1: for_type(cx, adapters, v1)), mt)))))
     def flow() -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -101,7 +96,7 @@ def for_type_reference(name: hydra.core.Name) -> hydra.compute.Flow[hydra.coders
 def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert function types to union types."""
     
-    def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term) -> hydra.core.Term:
+    def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term) -> hydra.core.Type:
         match stripped_term:
             case hydra.core.TermFunction(value=f):
                 match f:
@@ -469,7 +464,7 @@ def simplify_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.
 def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Create an adapter for any type."""
     
-    def constraints(cx: hydra.coders.AdapterContext) -> hydra.coders.LanguageConstraints:
+    def constraints(cx: hydra.coders.AdapterContext) -> hydra.core.Type:
         return cx.language.constraints
     def supported(cx: hydra.coders.AdapterContext, v1: hydra.core.Type) -> bool:
         return hydra.adapt.utils.type_is_supported(constraints(cx), v1)
@@ -627,7 +622,7 @@ def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapt
             sfields = rt.fields
             def target() -> hydra.core.Type:
                 return cast(hydra.core.Type, hydra.core.TypeRecord(union_type_to_record_type(rt)))
-            def to_record_field(term: hydra.core.Term, fn: hydra.core.Name, f: hydra.core.FieldType) -> hydra.core.Field:
+            def to_record_field(term: hydra.core.Term, fn: hydra.core.Name, f: hydra.core.FieldType) -> hydra.core.Type:
                 fn_ = f.name
                 return hydra.core.Field(fn_, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(fn_, fn), (lambda : cast(Maybe[hydra.core.Term], Just(term))), (lambda : cast(Maybe[hydra.core.Term], Nothing()))))))
             return hydra.lib.flows.bind(term_adapter(target()), (lambda ad: hydra.lib.flows.pure(cast(hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.compute.Adapter(ad.is_lossy, t, ad.target, cast(hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], hydra.compute.Coder((lambda term_: hydra.lib.flows.bind(with_graph_context(hydra.extract.core.injection(rt.type_name, term_)), (lambda field: (fn := field.name, term := field.term, ad.coder.encode(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(nm, hydra.lib.lists.map((lambda v1: to_record_field(term, fn, v1)), sfields))))))[2]))), (lambda term: hydra.lib.flows.bind(ad.coder.decode(term), (lambda rec_term: for_rec_term(nm, ad, term, rec_term)))))))))))

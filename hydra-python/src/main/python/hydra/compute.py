@@ -78,7 +78,7 @@ class Trace:
     r"""A container for logging and error information."""
     
     stack: Annotated[frozenlist[str], "A stack of context labels"]
-    messages: Annotated[frozenlist[str], "A log of informational messages"]
+    messages: Annotated[frozenlist[str], "A log of warnings and/or info messages"]
     other: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "A map of string keys to arbitrary terms as values, for application-specific use"]
 
 TRACE__NAME = hydra.core.Name("hydra.compute.Trace")

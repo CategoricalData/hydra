@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.adapt.utils
 import hydra.coders
 import hydra.compute
@@ -26,10 +26,7 @@ import hydra.show.core
 import hydra.util
 import hydra.variants
 
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-
-def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.util.Comparison:
+def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.core.Type:
     r"""Compare two precision values."""
     
     match p1:
@@ -58,7 +55,7 @@ def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hyd
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue) -> hydra.core.FloatValue:
+def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue) -> hydra.core.Type:
     r"""Convert a float value to a different float type."""
     
     def decoder(fv2: hydra.core.FloatValue) -> Decimal:
@@ -74,7 +71,7 @@ def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue)
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encoder(d: Decimal) -> hydra.core.FloatValue:
+    def encoder(d: Decimal) -> hydra.core.Type:
         match target:
             case hydra.core.FloatType.BIGFLOAT:
                 return cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(d))
@@ -89,7 +86,7 @@ def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue)
                 raise AssertionError("Unreachable: all variants handled")
     return encoder(decoder(fv))
 
-def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.IntegerValue) -> hydra.core.IntegerValue:
+def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.IntegerValue) -> hydra.core.Type:
     r"""Convert an integer value to a different integer type."""
     
     def decoder(iv2: hydra.core.IntegerValue) -> int:
@@ -123,7 +120,7 @@ def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.Integer
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encoder(d: int) -> hydra.core.IntegerValue:
+    def encoder(d: int) -> hydra.core.Type:
         match target:
             case hydra.core.IntegerType.BIGINT:
                 return cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(d))
@@ -277,7 +274,7 @@ def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.code
                 case _:
                     raise TypeError("Unsupported Literal")
         def match_integer(step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
-            def for_value(val: hydra.core.IntegerValue) -> hydra.core.Literal:
+            def for_value(val: hydra.core.IntegerValue) -> hydra.core.Type:
                 match val:
                     case hydra.core.IntegerValueUint8(value=v):
                         return cast(hydra.core.Literal, hydra.core.LiteralBoolean(hydra.lib.equality.equal(v, 1)))

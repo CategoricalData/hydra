@@ -5,7 +5,7 @@ r"""General-purpose parser combinators."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
@@ -13,10 +13,6 @@ import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.parsing
-
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-T2 = TypeVar("T2")
 
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     def parse(input: str) -> hydra.parsing.ParseResult[T0]:

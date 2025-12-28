@@ -5,7 +5,7 @@ r"""String formatting types and functions."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -17,8 +17,6 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.util
-
-T0 = TypeVar("T0")
 
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     r"""A helper which maps the first letter of a string to another string."""

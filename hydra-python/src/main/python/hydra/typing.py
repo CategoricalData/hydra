@@ -15,12 +15,14 @@ class InferenceContext:
     schema_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the schema of the graph."]
     primitive_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the set of primitives in the graph."]
     data_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A mutable typing environment which is specific to the current graph being processed. This environment is (usually) smaller than the schema and primitive typing environments, and is subject to global substitutions."]
+    class_constraints: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."]
     debug: Annotated[bool, "Whether to enable debug output during type inference"]
 
 INFERENCE_CONTEXT__NAME = hydra.core.Name("hydra.typing.InferenceContext")
 INFERENCE_CONTEXT__SCHEMA_TYPES__NAME = hydra.core.Name("schemaTypes")
 INFERENCE_CONTEXT__PRIMITIVE_TYPES__NAME = hydra.core.Name("primitiveTypes")
 INFERENCE_CONTEXT__DATA_TYPES__NAME = hydra.core.Name("dataTypes")
+INFERENCE_CONTEXT__CLASS_CONSTRAINTS__NAME = hydra.core.Name("classConstraints")
 INFERENCE_CONTEXT__DEBUG__NAME = hydra.core.Name("debug")
 
 @dataclass(frozen=True)
@@ -30,11 +32,13 @@ class InferenceResult:
     term: Annotated[hydra.core.Term, "The term which was inferred"]
     type: Annotated[hydra.core.Type, "The inferred type of the term"]
     subst: Annotated[TypeSubst, "The type substitution resulting from unification"]
+    class_constraints: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"]
 
 INFERENCE_RESULT__NAME = hydra.core.Name("hydra.typing.InferenceResult")
 INFERENCE_RESULT__TERM__NAME = hydra.core.Name("term")
 INFERENCE_RESULT__TYPE__NAME = hydra.core.Name("type")
 INFERENCE_RESULT__SUBST__NAME = hydra.core.Name("subst")
+INFERENCE_RESULT__CLASS_CONSTRAINTS__NAME = hydra.core.Name("classConstraints")
 
 class TermSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Term]"]):
     r"""A substitution of term variables for terms."""

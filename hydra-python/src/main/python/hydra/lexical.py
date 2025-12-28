@@ -4,11 +4,12 @@ r"""A module for lexical operations over graphs."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
+from typing import cast
 import hydra.compute
 import hydra.core
 import hydra.graph
+import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -25,14 +26,9 @@ import hydra.rewriting
 import hydra.show.core
 import hydra.typing
 
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-T2 = TypeVar("T2")
-T3 = TypeVar("T3")
-
-def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Name:
-    def try_name(index: int) -> hydra.core.Name:
-        def candidate() -> hydra.core.Name:
+def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Type:
+    def try_name(index: int) -> hydra.core.Type:
+        def candidate() -> hydra.core.Type:
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(index, 1), (lambda : name), (lambda : hydra.core.Name(hydra.lib.strings.cat2(name.value, hydra.lib.literals.show_int32(index)))))
         return hydra.lib.logic.if_else(hydra.lib.sets.member(candidate(), reserved), (lambda : try_name(hydra.lib.math.add(index, 1))), (lambda : candidate()))
     return try_name(1)
@@ -54,28 +50,33 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
                 return for_type(at.body)
             
             case hydra.core.TypeForall(value=ft):
-                return hydra.lib.maybes.map((lambda ts: hydra.core.TypeScheme(hydra.lib.lists.cons(ft.parameter, ts.variables), ts.type)), for_type(ft.body))
+                return hydra.lib.maybes.map((lambda ts: hydra.core.TypeScheme(hydra.lib.lists.cons(ft.parameter, ts.variables), ts.type, ts.constraints)), for_type(ft.body))
             
             case hydra.core.TypeVariable(value=v):
                 return dereference_schema_type(v, types)
             
             case _:
-                return cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), t)))
-    return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type)), for_type(ts.type))))
+                return cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(cast(frozenlist[hydra.core.Name], ()), t, cast(Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]], Nothing()))))
+    return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type, ts2.constraints)), for_type(ts.type))))
 
-def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
+def dereference_variable(g: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
+    r"""Look up an element by name in a graph, returning Either an error or the binding."""
+    
+    return hydra.lib.maybes.maybe(cast(Either[str, hydra.core.Binding], Left(hydra.lib.strings.cat2("no such element: ", name.value))), (lambda right_: cast(Either[str, hydra.core.Binding], Right(right_))), lookup_element(g, name))
+
+def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.core.Type:
     r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
     
     def to_pair(el: hydra.core.Binding) -> tuple[hydra.core.Name, hydra.core.Binding]:
         return cast(tuple[hydra.core.Name, hydra.core.Binding], (el.name, el))
     return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.from_list(hydra.lib.lists.map(to_pair, elements))), parent.environment, parent.types, parent.body, parent.primitives, schema)
 
-def empty_graph() -> hydra.graph.Graph:
+def empty_graph() -> hydra.core.Type:
     r"""An empty graph; no elements, no primitives, no schema, and an arbitrary body."""
     
     return hydra.graph.Graph(cast(FrozenDict[hydra.core.Name, hydra.core.Binding], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], hydra.lib.maps.empty()), cast(FrozenDict[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty()), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), cast(FrozenDict[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty()), cast(Maybe[hydra.graph.Graph], Nothing()))
 
-def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.graph.Graph:
+def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.core.Type:
     r"""Add bindings to an existing graph."""
     
     def to_el(binding: hydra.core.Binding) -> tuple[hydra.core.Name, hydra.core.Binding]:
@@ -130,7 +131,7 @@ def match_union(tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name,
             def exp() -> hydra.compute.Flow[hydra.graph.Graph, T0]:
                 fname = injection.field.name
                 val = injection.field.term
-                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field ", fname.value), " in union type "), tname.value)), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
+                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname.value), "\" in union type "), tname.value)), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), (lambda : exp()), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("injection for type ", tname.value), hydra.show.core.term(term))))
         
         case _:
@@ -175,7 +176,7 @@ def resolve_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph,
 def require_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     return hydra.lib.flows.bind(resolve_term(name), (lambda mt: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such element: ", name.value)), cast(Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], (lambda x1: hydra.lib.flows.pure(x1))), mt)))
 
-def schema_context(g: hydra.graph.Graph) -> hydra.graph.Graph:
+def schema_context(g: hydra.graph.Graph) -> hydra.core.Type:
     r"""Note: assuming for now that primitive functions are the same in the schema graph."""
     
     return hydra.lib.maybes.from_maybe(g, g.schema)
@@ -188,6 +189,17 @@ def strip_and_dereference_term(term: hydra.core.Term) -> hydra.compute.Flow[hydr
         
         case _:
             return hydra.lib.flows.pure(stripped)
+
+def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
+    r"""Strip annotations and dereference variables, returning Either an error or the resolved term."""
+    
+    stripped = hydra.rewriting.deannotate_and_detype_term(term)
+    match stripped:
+        case hydra.core.TermVariable(value=v):
+            return hydra.lib.eithers.either((lambda left_: cast(Either[str, hydra.core.Term], Left(left_))), (lambda binding: strip_and_dereference_term_either(g, binding.term)), dereference_variable(g, v))
+        
+        case _:
+            return cast(Either[str, hydra.core.Term], Right(stripped))
 
 def with_empty_graph(v1: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[T1, T0]:
     return hydra.monads.with_state(empty_graph(), v1)

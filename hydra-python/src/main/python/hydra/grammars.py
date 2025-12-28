@@ -129,7 +129,7 @@ def is_complex(pat: hydra.grammar.Pattern) -> bool:
         case _:
             return False
 
-def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
+def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Type:
     r"""Convert local name to qualified name."""
     
     return hydra.names.unqualify_name(hydra.module.QualifiedName(cast(Maybe[hydra.module.Namespace], Just(ns)), local))
@@ -214,7 +214,7 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
         case _:
             return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(hydra.core.Name("Placeholder"), t)))
 
-def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
+def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.core.Type:
     r"""Convert a BNF grammar to a Hydra module."""
     
     def prod_pairs() -> frozenlist[tuple[str, hydra.grammar.Pattern]]:
@@ -227,4 +227,4 @@ def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar
         return hydra.lib.lists.concat(hydra.lib.lists.zip_with((lambda v1, v2: make_elements(False, ns, v1, v2)), capitalized_names(), patterns()))
     def elements() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.map((lambda pair: (lname := (lambda : hydra.lib.pairs.first(pair)), typ := (lambda : wrap_type(hydra.lib.pairs.second(pair))), hydra.annotations.type_element(to_name(ns, lname()), typ()))[2]), element_pairs())
-    return hydra.module.Module(ns, elements(), cast(frozenlist[hydra.module.Module], ()), cast(frozenlist[hydra.module.Module], ()), desc)
+    return hydra.module.Module(ns, elements(), cast(frozenlist[hydra.module.Namespace], ()), cast(frozenlist[hydra.module.Namespace], ()), desc)
