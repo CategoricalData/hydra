@@ -12,6 +12,9 @@ import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as BC
+
 
 ns :: Namespace
 ns = Namespace "hydra.test.lib.literals"
@@ -368,18 +371,19 @@ literalsReadString = subgroup "readString" [
     testNothing name x = primCase name _literals_readString [string x] (Core.termMaybe nothing)
 
 -- Binary/String conversion
+-- Note: binaryToStringBS and stringToBinary use base64 encoding
 
 literalsStringToBinary :: TTerm TestGroup
 literalsStringToBinary = subgroup "stringToBinary" [
-  test "simple string" "hello" "hello",
-  test "empty string" "" ""]
+  test "simple base64" "aGVsbG8=" (BC.pack "hello"),
+  test "empty string" "" B.empty]
   where
     test name x result = primCase name _literals_stringToBinary [string x] (binary result)
 
 literalsBinaryToString :: TTerm TestGroup
 literalsBinaryToString = subgroup "binaryToString" [
-  test "simple string" "hello" "hello",
-  test "empty string" "" ""]
+  test "simple binary" (BC.pack "hello") "aGVsbG8=",
+  test "empty binary" B.empty ""]
   where
     test name x result = primCase name _literals_binaryToString [binary x] (string result)
 
@@ -434,7 +438,7 @@ allTests = definitionInModule module_ "allTests" $
       literalsReadFloat64,
       literalsReadBigfloat,
       literalsReadBoolean,
-      literalsReadString]
-      -- Binary conversions (TODO: restore)
---      literalsStringToBinary,
---      literalsBinaryToString]
+      literalsReadString,
+      -- Binary conversions
+      literalsStringToBinary,
+      literalsBinaryToString]
