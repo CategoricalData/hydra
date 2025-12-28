@@ -13,6 +13,8 @@ import qualified Hydra.Dsl.Meta.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as BC
 import qualified Data.List as L
 import qualified Data.Map  as M
 
@@ -629,7 +631,7 @@ floatLiteralsTests = define "floatLiteralsTests" $
 binaryLiteralsTests :: TBinding TestGroup
 binaryLiteralsTests = define "binaryLiteralsTests" $
   subgroup "Binary literals" [
-  noChange "binary" (binary "SGVsbG8gV29ybGQ=") T.binary]
+  noChange "binary" (binary (BC.pack "Hello World")) T.binary]
 
 literalsInComplexContextsTests :: TBinding TestGroup
 literalsInComplexContextsTests = define "literalsInComplexContextsTests" $
