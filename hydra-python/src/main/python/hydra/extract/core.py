@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -24,9 +24,6 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
-
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
 def bigfloat_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, Decimal]:
     match v:
@@ -340,9 +337,9 @@ def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
 
 def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fv: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
     def pair(kv_pair: tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
-        def kterm() -> hydra.core.Term:
+        def kterm() -> hydra.core.Type:
             return hydra.lib.pairs.first(kv_pair)
-        def vterm() -> hydra.core.Term:
+        def vterm() -> hydra.core.Type:
             return hydra.lib.pairs.second(kv_pair)
         return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure(cast(tuple[T0, T1], (kval, vval)))))))
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:

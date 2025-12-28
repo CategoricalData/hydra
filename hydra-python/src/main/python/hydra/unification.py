@@ -4,7 +4,7 @@ r"""Utilities for type unification."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -20,13 +20,10 @@ import hydra.show.core
 import hydra.substitution
 import hydra.typing
 
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-
 def join_types(left: hydra.core.Type, right: hydra.core.Type, comment: str) -> hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]]:
     sleft = hydra.rewriting.deannotate_type(left)
     sright = hydra.rewriting.deannotate_type(right)
-    def join_one(l: hydra.core.Type, r: hydra.core.Type) -> hydra.typing.TypeConstraint:
+    def join_one(l: hydra.core.Type, r: hydra.core.Type) -> hydra.core.Type:
         return hydra.typing.TypeConstraint(l, r, hydra.lib.strings.cat2("join types; ", comment))
     def cannot_unify() -> hydra.compute.Flow[T1, T2]:
         return hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("cannot unify ", hydra.show.core.type(sleft)), " with "), hydra.show.core.type(sright)))
@@ -158,7 +155,7 @@ def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constr
         comment = c.comment
         def bind(v: hydra.core.Name, t: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
             subst = hydra.substitution.singleton_type_subst(v, t)
-            def with_result(s: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
+            def with_result(s: hydra.typing.TypeSubst) -> hydra.core.Type:
                 return hydra.substitution.compose_type_subst(subst, s)
             return hydra.lib.flows.map(with_result, unify_type_constraints(schema_types, hydra.substitution.substitute_in_constraints(subst, rest)))
         def try_binding(v: hydra.core.Name, t: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
@@ -188,7 +185,7 @@ def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constr
     return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : hydra.lib.flows.pure(hydra.substitution.id_type_subst())), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))
 
 def unify_type_lists(schema_types: FrozenDict[hydra.core.Name, T0], l: frozenlist[hydra.core.Type], r: frozenlist[hydra.core.Type], comment: str) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
-    def to_constraint(l2: hydra.core.Type, r2: hydra.core.Type) -> hydra.typing.TypeConstraint:
+    def to_constraint(l2: hydra.core.Type, r2: hydra.core.Type) -> hydra.core.Type:
         return hydra.typing.TypeConstraint(l2, r2, comment)
     return unify_type_constraints(schema_types, hydra.lib.lists.zip_with(to_constraint, l, r))
 

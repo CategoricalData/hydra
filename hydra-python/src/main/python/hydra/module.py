@@ -55,8 +55,8 @@ class Module:
     
     namespace: Annotated[Namespace, "A common prefix for all element names in the module"]
     elements: Annotated[frozenlist[hydra.core.Binding], "The elements defined in this module"]
-    term_dependencies: Annotated[frozenlist[Module], "Any modules which the term expressions of this module directly depend upon"]
-    type_dependencies: Annotated[frozenlist[Module], "Any modules which the type expressions of this module directly depend upon"]
+    term_dependencies: Annotated[frozenlist[Namespace], "Any modules which the term expressions of this module directly depend upon"]
+    type_dependencies: Annotated[frozenlist[Namespace], "Any modules which the type expressions of this module directly depend upon"]
     description: Annotated[Maybe[str], "An optional human-readable description of the module"]
 
 MODULE__NAME = hydra.core.Name("hydra.module.Module")
@@ -95,11 +95,11 @@ QUALIFIED_NAME__LOCAL__NAME = hydra.core.Name("local")
 
 @dataclass(frozen=True)
 class TermDefinition:
-    r"""A term-level definition, including a name, a term, and the type of the term."""
+    r"""A term-level definition, including a name, a term, and the type scheme of the term."""
     
     name: Annotated[hydra.core.Name, "The name of the term"]
     term: Annotated[hydra.core.Term, "The term being defined"]
-    type: Annotated[hydra.core.Type, "The type of the term"]
+    type: Annotated[hydra.core.TypeScheme, "The type scheme of the term, including any class constraints"]
 
 TERM_DEFINITION__NAME = hydra.core.Name("hydra.module.TermDefinition")
 TERM_DEFINITION__NAME__NAME = hydra.core.Name("name")

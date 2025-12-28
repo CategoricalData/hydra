@@ -88,14 +88,14 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
+def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.core.Type:
     r"""Build an accessor graph from a term."""
     
     dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody())
     def helper(ids: FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], mroot: Maybe[hydra.accessors.AccessorNode], path: frozenlist[hydra.accessors.TermAccessor], state: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], accessor_term: tuple[hydra.accessors.TermAccessor, hydra.core.Term]) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
-        def accessor() -> hydra.accessors.TermAccessor:
+        def accessor() -> hydra.core.Type:
             return hydra.lib.pairs.first(accessor_term)
-        def current_term() -> hydra.core.Term:
+        def current_term() -> hydra.core.Type:
             return hydra.lib.pairs.second(accessor_term)
         def nodes_edges() -> tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]]:
             return hydra.lib.pairs.first(state)
@@ -125,7 +125,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     raw_label = hydra.names.compact_name(namespaces, name)
                     def unique_label() -> str:
                         return hydra.names.unique_label(current_visited(), raw_label)
-                    def node() -> hydra.accessors.AccessorNode:
+                    def node() -> hydra.core.Type:
                         return hydra.accessors.AccessorNode(name, raw_label, unique_label())
                     def new_visited() -> frozenset[str]:
                         return hydra.lib.sets.insert(unique_label(), current_visited())
@@ -143,11 +143,11 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                 def ids1() -> FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]:
                     return hydra.lib.pairs.second(nodes_visited_ids1())
                 def add_binding_term(current_state: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], node_binding: tuple[hydra.accessors.AccessorNode, hydra.core.Binding]) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
-                    def root() -> hydra.accessors.AccessorNode:
+                    def root() -> hydra.core.Type:
                         return hydra.lib.pairs.first(node_binding)
-                    def binding() -> hydra.core.Binding:
+                    def binding() -> hydra.core.Type:
                         return hydra.lib.pairs.second(node_binding)
-                    def term1() -> hydra.core.Term:
+                    def term1() -> hydra.core.Type:
                         return binding().term
                     return helper(ids1(), cast(Maybe[hydra.accessors.AccessorNode], Just(root())), cast(frozenlist[hydra.accessors.TermAccessor], ()), current_state, cast(tuple[hydra.accessors.TermAccessor, hydra.core.Term], (dont_care_accessor, term1())))
                 def node_binding_pairs() -> frozenlist[tuple[hydra.accessors.AccessorNode, hydra.core.Binding]]:

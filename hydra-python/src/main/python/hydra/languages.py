@@ -9,7 +9,7 @@ import hydra.lib.sets
 import hydra.reflect
 import hydra.variants
 
-def hydra_language() -> hydra.coders.Language:
+def hydra_language() -> hydra.core.Type:
     r"""Language constraints for Hydra Core, i.e. no constraints."""
     
     def elimination_variants() -> frozenset[hydra.variants.EliminationVariant]:

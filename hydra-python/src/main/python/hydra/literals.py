@@ -8,7 +8,7 @@ from typing import cast
 import hydra.core
 import hydra.lib.literals
 
-def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core.FloatValue:
+def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core.Type:
     r"""Convert a bigfloat to a floating-point value of a given type (note: lossy)."""
     
     match ft:
@@ -24,7 +24,7 @@ def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.IntegerValue:
+def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.Type:
     r"""Convert a bigint to an integer value of a given type (note: lossy)."""
     
     match it:

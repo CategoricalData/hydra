@@ -39,6 +39,11 @@ COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
 COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
 COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
 
+class DecodingError(Node[str]):
+    r"""An error that occurred during decoding of a term."""
+
+DECODING_ERROR__NAME = hydra.core.Name("hydra.util.DecodingError")
+
 class PrecisionArbitrary:
     r"""Arbitrary precision."""
 

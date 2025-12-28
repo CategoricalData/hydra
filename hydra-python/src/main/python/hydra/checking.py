@@ -5,7 +5,7 @@ r"""Type checking and type reconstruction (type-of) for the results of Hydra uni
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.compute
 import hydra.constants
 import hydra.core
@@ -31,8 +31,6 @@ import hydra.show.core
 import hydra.show.meta
 import hydra.substitution
 import hydra.typing
-
-T0 = TypeVar("T0")
 
 def all_equal(els: frozenlist[T0]) -> bool:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : True), (lambda : hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, hydra.lib.equality.equal(t, hydra.lib.lists.head(els)))), True, hydra.lib.lists.tail(els))))
@@ -353,7 +351,7 @@ def type_of_type_lambda(tx: hydra.typing.TypeContext, type_args: frozenlist[hydr
     v = tl.parameter
     body = tl.body
     vars = tx.type_variables
-    def tx2() -> hydra.typing.TypeContext:
+    def tx2() -> hydra.core.Type:
         return hydra.typing.TypeContext(tx.types, tx.metadata, hydra.lib.sets.insert(v, vars), tx.lambda_variables, tx.inference_context)
     return hydra.lib.flows.bind(type_of(tx2(), cast(frozenlist[hydra.core.Type], ()), body), (lambda t1: hydra.lib.flows.bind(check_type_variables(tx2(), t1), (lambda _: apply_type_arguments_to_type(tx, type_args, cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(v, t1))))))))
 

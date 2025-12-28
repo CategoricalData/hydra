@@ -5,7 +5,7 @@ r"""This implementation of Tarjan's algorithm was originally based on GraphSCC b
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.compute
 import hydra.constants
 import hydra.core
@@ -20,8 +20,6 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.monads
 import hydra.topology
-
-T0 = TypeVar("T0")
 
 def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:
@@ -38,7 +36,7 @@ def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> t
         return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map()))
     return cast(tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]], (graph(), vertex_to_key))
 
-def initial_state() -> hydra.topology.TarjanState:
+def initial_state() -> hydra.core.Type:
     r"""Initial state for Tarjan's algorithm."""
     
     return hydra.topology.TarjanState(0, cast(FrozenDict[int, int], hydra.lib.maps.empty()), cast(FrozenDict[int, int], hydra.lib.maps.empty()), cast(frozenlist[int], ()), cast(frozenset[int], hydra.lib.sets.empty()), cast(frozenlist[frozenlist[int]], ()))
@@ -52,9 +50,9 @@ def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, fr
                 return hydra.lib.lists.head(st.stack)
             def xs() -> frozenlist[int]:
                 return hydra.lib.lists.tail(st.stack)
-            def new_st() -> hydra.topology.TarjanState:
+            def new_st() -> hydra.core.Type:
                 return hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
-            def new_st2() -> hydra.topology.TarjanState:
+            def new_st2() -> hydra.core.Type:
                 return hydra.topology.TarjanState(new_st().counter, new_st().indices, new_st().low_links, new_st().stack, hydra.lib.sets.delete(x(), st.on_stack), new_st().sccs)
             def acc_() -> frozenlist[int]:
                 return hydra.lib.lists.cons(x(), acc)
@@ -74,6 +72,6 @@ def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> fr
         return hydra.lib.maps.keys(graph)
     def process_vertex(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:
         return hydra.lib.flows.bind(hydra.lib.flows.map((lambda st: hydra.lib.maps.member(v, st.indices)), cast(hydra.compute.Flow[hydra.topology.TarjanState, hydra.topology.TarjanState], hydra.monads.get_state())), (lambda visited: hydra.lib.logic.if_else(hydra.lib.logic.not_(visited), (lambda : strong_connect(graph, v)), (lambda : hydra.lib.flows.pure(None)))))
-    def final_state() -> hydra.topology.TarjanState:
+    def final_state() -> hydra.core.Type:
         return hydra.monads.exec(hydra.lib.flows.map_list(process_vertex, verts()), initial_state())
     return hydra.lib.lists.reverse(hydra.lib.lists.map(cast(Callable[[frozenlist[int]], frozenlist[int]], (lambda x1: hydra.lib.lists.sort(x1))), final_state().sccs))

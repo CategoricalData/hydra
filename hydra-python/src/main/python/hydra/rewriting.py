@@ -5,7 +5,7 @@ r"""Utilities for type and term rewriting and analysis."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
-from typing import TypeVar, cast
+from typing import cast
 import hydra.accessors
 import hydra.coders
 import hydra.compute
@@ -25,10 +25,7 @@ import hydra.lib.strings
 import hydra.names
 import hydra.sorting
 
-T0 = TypeVar("T0")
-T1 = TypeVar("T1")
-
-def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
+def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Type:
     r"""Strip type annotations from the top levels of a term."""
     
     match t:
@@ -44,7 +41,7 @@ def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
         case _:
             return t
 
-def deannotate_term(t: hydra.core.Term) -> hydra.core.Term:
+def deannotate_term(t: hydra.core.Term) -> hydra.core.Type:
     r"""Strip all annotations (including System F type annotations) from the top levels of a term."""
     
     match t:
@@ -76,7 +73,7 @@ def deannotate_type_parameters(t: hydra.core.Type) -> hydra.core.Type:
 
 def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydra.core.Type], hydra.core.Type], typ0: hydra.core.Type) -> hydra.core.Type:
     def fsub(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
-        def for_field(field: hydra.core.FieldType) -> hydra.core.FieldType:
+        def for_field(field: hydra.core.FieldType) -> hydra.core.Type:
             return hydra.core.FieldType(field.name, recurse(field.type))
         match typ:
             case hydra.core.TypeAnnotated(value=at):
@@ -146,14 +143,15 @@ def deannotate_type_recursive(typ: hydra.core.Type) -> hydra.core.Type:
                 return rewritten
     return rewrite_type(cast(Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydra.core.Type], hydra.core.Type], (lambda x1: (lambda x2: strip(x1, x2)))), typ)
 
-def deannotate_type_scheme_recursive(ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
+def deannotate_type_scheme_recursive(ts: hydra.core.TypeScheme) -> hydra.core.Type:
     r"""Recursively strip all annotations from a type scheme."""
     
     vars = ts.variables
     typ = ts.type
-    return hydra.core.TypeScheme(vars, deannotate_type_recursive(typ))
+    constraints = ts.constraints
+    return hydra.core.TypeScheme(vars, deannotate_type_recursive(typ), constraints)
 
-def detype_term(t: hydra.core.Term) -> hydra.core.Term:
+def detype_term(t: hydra.core.Term) -> hydra.core.Type:
     r"""Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact."""
     
     match t:
@@ -171,11 +169,11 @@ def detype_term(t: hydra.core.Term) -> hydra.core.Term:
         case _:
             return t
 
-def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Term:
-    def fsub(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
-        def for_field(f2: hydra.core.Field) -> hydra.core.Field:
+def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Type:
+    def fsub(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Type:
+        def for_field(f2: hydra.core.Field) -> hydra.core.Type:
             return hydra.core.Field(f2.name, recurse(f2.term))
-        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Elimination:
+        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Type:
             match elm:
                 case hydra.core.EliminationRecord(value=p):
                     return cast(hydra.core.Elimination, hydra.core.EliminationRecord(p))
@@ -188,7 +186,7 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def for_function(fun: hydra.core.Function) -> hydra.core.Function:
+        def for_function(fun: hydra.core.Function) -> hydra.core.Type:
             match fun:
                 case hydra.core.FunctionElimination(value=elm):
                     return cast(hydra.core.Function, hydra.core.FunctionElimination(for_elimination(elm)))
@@ -201,8 +199,8 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def for_let(lt: hydra.core.Let) -> hydra.core.Let:
-            def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+        def for_let(lt: hydra.core.Let) -> hydra.core.Type:
+            def map_binding(b: hydra.core.Binding) -> hydra.core.Type:
                 return hydra.core.Binding(b.name, recurse(b.term), b.type)
             return hydra.core.Let(hydra.lib.lists.map(map_binding, lt.bindings), recurse(lt.body))
         def for_map(m: FrozenDict[hydra.core.Term, hydra.core.Term]) -> FrozenDict[hydra.core.Term, hydra.core.Term]:
@@ -266,14 +264,14 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def recurse(v1: hydra.core.Term) -> hydra.core.Term:
+    def recurse(v1: hydra.core.Term) -> hydra.core.Type:
         return f((lambda v12: fsub(recurse, v12)), v1)
     return recurse(term0)
 
-def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Term:
+def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Type:
     r"""Substitute multiple variables in a term."""
     
-    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Type:
         match term2:
             case hydra.core.TermVariable(value=n):
                 return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.from_maybe(n, hydra.lib.maps.lookup(n, subst))))
@@ -290,7 +288,7 @@ def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], te
                 return recurse(term2)
     return rewrite_term(replace, term)
 
-def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
+def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Type:
     r"""Flatten nested let expressions."""
     
     def rewrite_binding(binding: hydra.core.Binding) -> tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]]:
@@ -303,11 +301,11 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
                 ann = at.annotation
                 def recursive() -> tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]]:
                     return rewrite_binding(hydra.core.Binding(key0, val1, t))
-                def inner_binding() -> hydra.core.Binding:
+                def inner_binding() -> hydra.core.Type:
                     return hydra.lib.pairs.first(recursive())
                 def deps() -> frozenlist[hydra.core.Binding]:
                     return hydra.lib.pairs.second(recursive())
-                def val2() -> hydra.core.Term:
+                def val2() -> hydra.core.Type:
                     return inner_binding().term
                 return cast(tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]], (hydra.core.Binding(key0, cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(val2(), ann))), t), deps()))
             
@@ -315,23 +313,23 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
                 bindings1 = inner_let.bindings
                 body1 = inner_let.body
                 prefix = hydra.lib.strings.cat2(key0.value, "_")
-                def qualify(n: hydra.core.Name) -> hydra.core.Name:
+                def qualify(n: hydra.core.Name) -> hydra.core.Type:
                     return hydra.core.Name(hydra.lib.strings.cat2(prefix, n.value))
                 def to_subst_pair(b: hydra.core.Binding) -> tuple[hydra.core.Name, hydra.core.Name]:
                     return cast(tuple[hydra.core.Name, hydra.core.Name], (b.name, qualify(b.name)))
                 def subst() -> FrozenDict[hydra.core.Name, hydra.core.Name]:
                     return cast(FrozenDict[hydra.core.Name, hydra.core.Name], hydra.lib.maps.from_list(hydra.lib.lists.map(to_subst_pair, bindings1)))
-                def replace_vars(v1: hydra.core.Term) -> hydra.core.Term:
+                def replace_vars(v1: hydra.core.Term) -> hydra.core.Type:
                     return substitute_variables(subst(), v1)
-                def new_body() -> hydra.core.Term:
+                def new_body() -> hydra.core.Type:
                     return replace_vars(body1)
-                def new_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+                def new_binding(b: hydra.core.Binding) -> hydra.core.Type:
                     return hydra.core.Binding(qualify(b.name), replace_vars(b.term), b.type)
                 return cast(tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]], (hydra.core.Binding(key0, new_body(), t), hydra.lib.lists.map(new_binding, bindings1)))
             
             case _:
                 return cast(tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]], (hydra.core.Binding(key0, val0, t), cast(frozenlist[hydra.core.Binding], ())))
-    def flatten(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Term:
+    def flatten(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Type:
         rewritten = recurse(term2)
         match rewritten:
             case hydra.core.TermLet(value=lt):
@@ -724,15 +722,15 @@ def is_lambda(term: hydra.core.Term) -> bool:
         case _:
             return False
 
-def lift_lambda_above_let(term0: hydra.core.Term) -> hydra.core.Term:
+def lift_lambda_above_let(term0: hydra.core.Term) -> hydra.core.Type:
     r"""Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python."""
     
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
-        def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Type:
+        def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Type:
             return hydra.core.Binding(b.name, rewrite(recurse, b.term), b.type)
         def rewrite_bindings(bs: frozenlist[hydra.core.Binding]) -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.map(rewrite_binding, bs)
-        def dig_for_lambdas(original: hydra.core.Term, cons: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
+        def dig_for_lambdas(original: hydra.core.Term, cons: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Type:
             match term2:
                 case hydra.core.TermAnnotated(value=at):
                     return dig_for_lambdas(original, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cons(t), at.annotation)))), at.body)
@@ -768,7 +766,7 @@ def map_beneath_type_annotations(f: Callable[[hydra.core.Type], hydra.core.Type]
         case _:
             return f(t)
 
-def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
+def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Type:
     r"""Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..."""
     
     def replace_name(subst: FrozenDict[T0, T0], v: T0) -> T0:
@@ -782,7 +780,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                 case _:
                     return recurse(typ2)
         return rewrite_type(rewrite, typ)
-    def rewrite_with_subst(state: tuple[tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], int], term0: hydra.core.Term) -> hydra.core.Term:
+    def rewrite_with_subst(state: tuple[tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], int], term0: hydra.core.Term) -> hydra.core.Type:
         def sb() -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]]:
             return hydra.lib.pairs.first(state)
         def next() -> int:
@@ -791,7 +789,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
             return hydra.lib.pairs.first(sb())
         def bound_vars() -> frozenset[hydra.core.Name]:
             return hydra.lib.pairs.second(sb())
-        def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
+        def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Type:
             match term2:
                 case hydra.core.TermFunction(value=v1):
                     match v1:
@@ -809,14 +807,14 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                     bindings0 = lt.bindings
                     body0 = lt.body
                     def step(acc: frozenlist[hydra.core.Binding], bs: frozenlist[hydra.core.Binding]) -> frozenlist[hydra.core.Binding]:
-                        def b() -> hydra.core.Binding:
+                        def b() -> hydra.core.Type:
                             return hydra.lib.lists.head(bs)
                         def tl() -> frozenlist[hydra.core.Binding]:
                             return hydra.lib.lists.tail(bs)
                         def no_type() -> frozenlist[hydra.core.Binding]:
-                            def new_val() -> hydra.core.Term:
+                            def new_val() -> hydra.core.Type:
                                 return rewrite_with_subst(cast(tuple[tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], int], (cast(tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], (subst(), bound_vars())), next())), b().term)
-                            def b1() -> hydra.core.Binding:
+                            def b1() -> hydra.core.Type:
                                 return hydra.core.Binding(b().name, new_val(), cast(Maybe[hydra.core.TypeScheme], Nothing()))
                             return step(hydra.lib.lists.cons(b1(), acc), tl())
                         def with_type(ts: hydra.core.TypeScheme) -> frozenlist[hydra.core.Binding]:
@@ -825,7 +823,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                             def k() -> int:
                                 return hydra.lib.lists.length(vars)
                             def gen(i: int, rem: int, acc2: frozenlist[hydra.core.Name]) -> frozenlist[hydra.core.Name]:
-                                def ti() -> hydra.core.Name:
+                                def ti() -> hydra.core.Type:
                                     return hydra.core.Name(hydra.lib.strings.cat2("t", hydra.lib.literals.show_int32(hydra.lib.math.add(next(), i))))
                                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(rem, 0), (lambda : hydra.lib.lists.reverse(acc2)), (lambda : gen(hydra.lib.math.add(i, 1), hydra.lib.math.sub(rem, 1), hydra.lib.lists.cons(ti(), acc2))))
                             def new_vars() -> frozenlist[hydra.core.Name]:
@@ -834,10 +832,15 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                                 return hydra.lib.maps.union(cast(FrozenDict[hydra.core.Name, hydra.core.Name], hydra.lib.maps.from_list(hydra.lib.lists.zip(vars, new_vars()))), subst())
                             def new_bound() -> frozenset[hydra.core.Name]:
                                 return hydra.lib.sets.union(bound_vars(), hydra.lib.sets.from_list(new_vars()))
-                            def new_val() -> hydra.core.Term:
+                            def new_val() -> hydra.core.Type:
                                 return rewrite_with_subst(cast(tuple[tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], int], (cast(tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], (new_subst(), new_bound())), hydra.lib.math.add(next(), k()))), b().term)
-                            def b1() -> hydra.core.Binding:
-                                return hydra.core.Binding(b().name, new_val(), cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(new_vars(), subst_type(new_subst(), typ)))))
+                            def rename_constraint_keys(constraint_map: FrozenDict[hydra.core.Name, T0]) -> FrozenDict[hydra.core.Name, T0]:
+                                return cast(FrozenDict[hydra.core.Name, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (old_name := (lambda : hydra.lib.pairs.first(p)), meta := (lambda : hydra.lib.pairs.second(p)), new_name := (lambda : hydra.lib.maybes.from_maybe(old_name(), hydra.lib.maps.lookup(old_name(), new_subst()))), cast(tuple[hydra.core.Name, T0], (new_name(), meta())))[3]), hydra.lib.maps.to_list(constraint_map))))
+                            old_constraints = ts.constraints
+                            def new_constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
+                                return hydra.lib.maybes.map(cast(Callable[[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]], FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]], (lambda x1: rename_constraint_keys(x1))), old_constraints)
+                            def b1() -> hydra.core.Type:
+                                return hydra.core.Binding(b().name, new_val(), cast(Maybe[hydra.core.TypeScheme], Just(hydra.core.TypeScheme(new_vars(), subst_type(new_subst(), typ), new_constraints()))))
                             return step(hydra.lib.lists.cons(b1(), acc), tl())
                         return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), (lambda : hydra.lib.lists.reverse(acc)), (lambda : hydra.lib.maybes.maybe(no_type(), (lambda ts: with_type(ts)), b().type)))
                     def bindings1() -> frozenlist[hydra.core.Binding]:
@@ -855,7 +858,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
         return rewrite_term(rewrite, term0)
     return rewrite_with_subst(cast(tuple[tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], int], (cast(tuple[FrozenDict[hydra.core.Name, hydra.core.Name], frozenset[hydra.core.Name]], (cast(FrozenDict[hydra.core.Name, hydra.core.Name], hydra.lib.maps.empty()), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()))), 0)), term)
 
-def prune_let(l: hydra.core.Let) -> hydra.core.Let:
+def prune_let(l: hydra.core.Let) -> hydra.core.Type:
     r"""Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings."""
     
     def binding_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
@@ -869,10 +872,10 @@ def prune_let(l: hydra.core.Let) -> hydra.core.Let:
         return hydra.lib.lists.filter((lambda b: hydra.lib.sets.member(b.name, reachable())), l.bindings)
     return hydra.core.Let(pruned_bindings(), l.body)
 
-def remove_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
+def remove_term_annotations(term: hydra.core.Term) -> hydra.core.Type:
     r"""Recursively remove term annotations, including within subterms."""
     
-    def remove(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
+    def remove(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Type:
         rewritten = recurse(term2)
         match term2:
             case hydra.core.TermAnnotated(value=at):
@@ -895,12 +898,12 @@ def remove_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
                 return rewritten
     return rewrite_type(cast(Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydra.core.Type], hydra.core.Type], (lambda x1: (lambda x2: remove(x1, x2)))), typ)
 
-def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
+def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Type:
     r"""Strip type annotations from terms while preserving other annotations."""
     
-    def strip(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Term:
+    def strip(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Type:
         rewritten = recurse(term2)
-        def strip_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+        def strip_binding(b: hydra.core.Binding) -> hydra.core.Type:
             return hydra.core.Binding(b.name, b.term, cast(Maybe[hydra.core.TypeScheme], Nothing()))
         match rewritten:
             case hydra.core.TermFunction(value=f):
@@ -927,10 +930,10 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
                 return rewritten
     return rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], (lambda x1: (lambda x2: strip(x1, x2)))), term)
 
-def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, term: hydra.core.Term) -> hydra.core.Term:
+def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, term: hydra.core.Term) -> hydra.core.Type:
     r"""Replace a free variable in a term."""
     
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Type:
         match t:
             case hydra.core.TermFunction(value=f):
                 match f:
@@ -1326,13 +1329,13 @@ def rewrite_term_m(f: Callable[[
 def rewrite_term_with_context(f: Callable[[
   Callable[[T0, hydra.core.Term], hydra.core.Term],
   T0,
-  hydra.core.Term], hydra.core.Term], cx0: T0, term0: hydra.core.Term) -> hydra.core.Term:
-    def for_subterms(recurse0: Callable[[T1, hydra.core.Term], hydra.core.Term], cx: T1, term: hydra.core.Term) -> hydra.core.Term:
-        def recurse(v1: hydra.core.Term) -> hydra.core.Term:
+  hydra.core.Term], hydra.core.Term], cx0: T0, term0: hydra.core.Term) -> hydra.core.Type:
+    def for_subterms(recurse0: Callable[[T1, hydra.core.Term], hydra.core.Term], cx: T1, term: hydra.core.Term) -> hydra.core.Type:
+        def recurse(v1: hydra.core.Term) -> hydra.core.Type:
             return recurse0(cx, v1)
-        def for_field(field: hydra.core.Field) -> hydra.core.Field:
+        def for_field(field: hydra.core.Field) -> hydra.core.Type:
             return hydra.core.Field(field.name, recurse(field.term))
-        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Elimination:
+        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Type:
             match elm:
                 case hydra.core.EliminationRecord(value=p):
                     return cast(hydra.core.Elimination, hydra.core.EliminationRecord(p))
@@ -1345,7 +1348,7 @@ def rewrite_term_with_context(f: Callable[[
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def for_function(fun: hydra.core.Function) -> hydra.core.Function:
+        def for_function(fun: hydra.core.Function) -> hydra.core.Type:
             match fun:
                 case hydra.core.FunctionElimination(value=elm):
                     return cast(hydra.core.Function, hydra.core.FunctionElimination(for_elimination(elm)))
@@ -1358,8 +1361,8 @@ def rewrite_term_with_context(f: Callable[[
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def for_let(lt: hydra.core.Let) -> hydra.core.Let:
-            def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+        def for_let(lt: hydra.core.Let) -> hydra.core.Type:
+            def map_binding(b: hydra.core.Binding) -> hydra.core.Type:
                 return hydra.core.Binding(b.name, recurse(b.term), b.type)
             return hydra.core.Let(hydra.lib.lists.map(map_binding, lt.bindings), recurse(lt.body))
         def for_map(m: FrozenDict[hydra.core.Term, hydra.core.Term]) -> FrozenDict[hydra.core.Term, hydra.core.Term]:
@@ -1423,7 +1426,7 @@ def rewrite_term_with_context(f: Callable[[
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def rewrite(cx: T0, term: hydra.core.Term) -> hydra.core.Term:
+    def rewrite(cx: T0, term: hydra.core.Term) -> hydra.core.Type:
         return f((lambda v1, v2: for_subterms(rewrite, v1, v2)), cx, term)
     return rewrite(cx0, term0)
 
@@ -1543,10 +1546,10 @@ def rewrite_term_with_context_m(f: Callable[[
         return f((lambda v1, v2: for_subterms(rewrite, v1, v2)), cx, term)
     return rewrite(cx0, term0)
 
-def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Term:
+def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Type:
     r"""Substitute one variable for another in a term."""
     
-    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Type:
         match term2:
             case hydra.core.TermVariable(value=x):
                 return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.logic.if_else(hydra.lib.equality.equal(x, from_), (lambda : to), (lambda : x))))
@@ -1563,19 +1566,19 @@ def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra
                 return recurse(term2)
     return rewrite_term(replace, term)
 
-def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
+def simplify_term(term: hydra.core.Term) -> hydra.core.Type:
     r"""Simplify terms by applying beta reduction where possible."""
     
     def simplify(recurse: Callable[[hydra.core.Term], T0], term2: hydra.core.Term) -> T0:
-        def for_rhs(rhs: hydra.core.Term, var: hydra.core.Name, body: hydra.core.Term) -> hydra.core.Term:
+        def for_rhs(rhs: hydra.core.Term, var: hydra.core.Name, body: hydra.core.Term) -> hydra.core.Type:
             match deannotate_term(rhs):
                 case hydra.core.TermVariable(value=v):
                     return simplify_term(substitute_variable(var, v, body))
                 
                 case _:
                     return term2
-        def for_lhs(lhs: hydra.core.Term, rhs: hydra.core.Term) -> hydra.core.Term:
-            def for_fun(fun: hydra.core.Function) -> hydra.core.Term:
+        def for_lhs(lhs: hydra.core.Term, rhs: hydra.core.Term) -> hydra.core.Type:
+            def for_fun(fun: hydra.core.Function) -> hydra.core.Type:
                 match fun:
                     case hydra.core.FunctionLambda(value=l):
                         var = l.parameter
@@ -1590,7 +1593,7 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
                 
                 case _:
                     return term2
-        def for_term(stripped: hydra.core.Term) -> hydra.core.Term:
+        def for_term(stripped: hydra.core.Term) -> hydra.core.Type:
             match stripped:
                 case hydra.core.TermApplication(value=app):
                     lhs = app.function
@@ -1599,7 +1602,7 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
                 
                 case _:
                     return term2
-        def stripped() -> hydra.core.Term:
+        def stripped() -> hydra.core.Type:
             return deannotate_term(term2)
         return recurse(for_term(stripped()))
     return rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], (lambda x1: (lambda x2: simplify(x1, x2)))), term)
@@ -1780,7 +1783,7 @@ def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.
     def deps_of(name_and_term: tuple[T0, hydra.core.Term]) -> tuple[T0, frozenlist[hydra.core.Name]]:
         def name() -> T0:
             return hydra.lib.pairs.first(name_and_term)
-        def term() -> hydra.core.Term:
+        def term() -> hydra.core.Type:
             return hydra.lib.pairs.second(name_and_term)
         return cast(tuple[T0, frozenlist[hydra.core.Name]], (name(), hydra.lib.logic.if_else(has_type_annotation(term()), (lambda : cast(frozenlist[hydra.core.Name], ())), (lambda : hydra.lib.sets.to_list(hydra.lib.sets.intersection(keys(), free_variables_in_term(term())))))))
     def to_pair(name: hydra.core.Name) -> tuple[hydra.core.Name, hydra.core.Term]:
@@ -1816,7 +1819,7 @@ def type_names_in_type(typ0: hydra.core.Type) -> frozenset[hydra.core.Name]:
 def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.sets.union(free_variables_in_type(typ), type_names_in_type(typ))), (lambda : free_variables_in_type(typ)))
 
-def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Term:
+def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Type:
     r"""Unshadow lambda-bound variables in a term."""
     
     def rewrite(recurse: Callable[[FrozenDict[hydra.core.Name, int], hydra.core.Term], tuple[FrozenDict[hydra.core.Name, int], hydra.core.Term]], m: FrozenDict[hydra.core.Name, int], term: hydra.core.Term) -> tuple[FrozenDict[hydra.core.Name, int], hydra.core.Term]:
