@@ -7,11 +7,18 @@ import Hydra.Dsl.Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
+import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Test.QuickCheck as QC
+
+
+-- Arbitrary instance for ByteString
+instance QC.Arbitrary B.ByteString where
+  arbitrary = B.pack <$> QC.arbitrary
+  shrink bs = B.pack <$> QC.shrink (B.unpack bs)
 
 
 instance QC.Arbitrary LiteralType

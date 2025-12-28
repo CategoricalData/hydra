@@ -7,6 +7,7 @@ Test.Hspec.hspec Hydra.Adapt.LiteralsSpec.spec
 module Hydra.Adapt.LiteralsSpec where
 
 import Hydra.Kernel
+import qualified Hydra.Lib.Literals as Literals
 
 import Hydra.TestUtils
 
@@ -95,11 +96,11 @@ testIntegerAdapter = H.describe "Test integer adapter" $ do
 testLiteralAdapter :: H.SpecWith ()
 testLiteralAdapter = H.describe "Test literal adapter" $ do
 
-  H.it "encode binary data as strings" $
+  H.it "encode binary data as strings (base64)" $
     QC.property $ \b -> checkLiteralAdapter
       [LiteralVariantString]
       LiteralTypeBinary LiteralTypeString False
-      (LiteralBinary b) (LiteralString b)
+      (LiteralBinary b) (LiteralString $ Literals.binaryToStringBS b)
 
   H.it "encode booleans as strings" $
     QC.property $ \b -> checkLiteralAdapter
