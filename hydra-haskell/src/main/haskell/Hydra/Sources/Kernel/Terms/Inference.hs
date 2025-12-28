@@ -307,7 +307,7 @@ inferGraphTypes = define "inferGraphTypes" $
     "toBinding" <~ ("el" ~> Core.binding
       (Core.bindingName $ var "el")
       (Core.bindingTerm $ var "el")
-      nothing) $
+      (Core.bindingType $ var "el")) $  -- Preserve original TypeScheme with its constraints
     Core.termLet $ Core.let_
       (Lists.map (var "toBinding") $ Maps.elems $ Graph.graphElements $ var "g")
       (Graph.graphBody $ var "g")) $
@@ -680,12 +680,12 @@ inferTypeOfLetNormalized :: TBinding (InferenceContext -> Let -> Flow s Inferenc
 inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   doc "Infer the type of a let (letrec) term which is already in a normal form" $
   "cx0" ~> "letTerm" ~>
-  
+
   -- Extract the bindings and body from the let term
   "bins0" <~ Core.letBindings (var "letTerm") $
   "body0" <~ Core.letBody (var "letTerm") $
   "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bins0") $
-  
+
   -- Phase 1: Create fresh temporary type variables for each binding
   -- These act as placeholders during the initial inference pass
   "bvars" <<~ Schemas.freshNames @@ (Lists.length $ var "bins0") $
@@ -724,8 +724,29 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
     (var "cx0")) $
   -- Apply s2 to the inferred constraints to rename variables according to unification
   "constraintsWithS2" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "inferredConstraints" $
-  -- Merge the substituted constraints into the context so generalize can see them
-  "mergedConstraints" <~ mergeClassConstraints @@ (Typing.inferenceContextClassConstraints $ var "g2base") @@ var "constraintsWithS2" $
+
+  -- Extract constraints from the ORIGINAL bindings' TypeSchemes
+  -- These are constraints that were specified by the user/generator (e.g., Ord constraints from decoderTypeScheme)
+  -- We need to apply the composed substitution to rename variables to match the inferred types
+  "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
+  "originalBindingConstraints" <~ Lists.foldl
+    ("acc" ~> "b" ~>
+      Maybes.maybe
+        (var "acc")
+        ("ts" ~> Maybes.maybe
+          (var "acc")
+          ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")
+          (Core.typeSchemeConstraints $ var "ts"))
+        (Core.bindingType $ var "b"))
+    Maps.empty
+    (var "bins0") $
+  -- Apply the composed substitution to the original constraints to rename variables
+  "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
+
+  -- Merge all constraints: inferred + original binding constraints
+  "allInferredConstraints" <~ mergeClassConstraints @@ var "constraintsWithS2" @@ var "originalConstraintsSubst" $
+  -- Merge the combined constraints into the context so generalize can see them
+  "mergedConstraints" <~ mergeClassConstraints @@ (Typing.inferenceContextClassConstraints $ var "g2base") @@ var "allInferredConstraints" $
   "g2" <~ Typing.inferenceContextWithClassConstraints (var "g2base") (var "mergedConstraints") $
 
   -- Apply s2 to the terms as well as the types
@@ -778,12 +799,15 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
       (Substitution.substituteInTerm @@ var "st1" @@ var "term")
       (Lists.reverse $ Core.typeSchemeVariables $ var "ts") $
 
+    -- Apply body substitution to the type scheme to get final variable names and constraints
+    "finalTs" <~ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts" $
+
     -- Apply remaining substitutions (senv and s2) to the wrapped term
     Core.binding (var "name")
       (Substitution.substTypesInTerm @@
         (Substitution.composeTypeSubst @@ var "sbody" @@ var "s2") @@
         (var "typeLambdaTerm"))
-      (just $ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts")) $
+      (just $ var "finalTs")) $
   
   "bins1" <~ (Lists.map (var "createBinding") $
     Lists.zip (var "tsbins1") (var "bterms1Subst")) $
@@ -1127,7 +1151,34 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "j" <~ Typing.inferenceResultTerm (var "result1") $
     "u_prime" <~ Typing.inferenceResultType (var "result1") $
     "u" <~ Typing.inferenceResultSubst (var "result1") $
-    "c1" <~ Typing.inferenceResultClassConstraints (var "result1") $
+    "c1Inferred" <~ Typing.inferenceResultClassConstraints (var "result1") $
+
+    -- Extract constraints from the original binding's TypeScheme (if present)
+    -- These need to be instantiated with fresh variable names and unified with the inferred type
+    "originalBindingConstraints" <<~ Maybes.maybe
+      (Flows.pure Maps.empty)
+      ("ts" ~>
+        -- Instantiate the type scheme to get fresh variable names
+        -- The constraints in the instantiated scheme will have fresh names that correspond
+        -- to the type variables in the instantiated type
+        Flows.bind (Schemas.instantiateTypeScheme @@ var "ts") ("instantiatedTs" ~>
+          -- Get the constraints from the instantiated type scheme
+          "freshConstraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
+          -- We also need to unify the instantiated type with the inferred type
+          -- so that the fresh constraint variables get mapped to the actual inferred variables
+          Flows.bind (Unification.unifyTypes
+            @@ (Typing.inferenceContextSchemaTypes $ var "cx")
+            @@ (Core.typeSchemeType $ var "instantiatedTs")
+            @@ var "u_prime"
+            @@ string "original binding type") ("unifySubst" ~>
+              -- Apply the unification substitution to the fresh constraints
+              -- This maps the fresh constraint variables to the actual inferred type variables
+              Flows.pure (Substitution.substInClassConstraints @@ var "unifySubst" @@ var "freshConstraints"))))
+      (Core.bindingType $ var "binding") $
+
+    -- Merge the original binding constraints with the inferred constraints
+    "c1" <~ mergeClassConstraints @@ var "c1Inferred" @@ var "originalBindingConstraints" $
+
     "result2" <<~ inferTypesOfTemporaryBindings @@
       (Substitution.substInContext @@ var "u" @@ var "cx") @@
       var "tl" $
