@@ -81,7 +81,9 @@ module_ = Module ns elements
   where
     elements = [
       toBinding collectForallVariables,
+      toBinding collectOrdConstrainedVariables,
       toBinding collectTypeVariables,
+      toBinding collectTypeVariablesFromType,
       toBinding decodeBinding,
       toBinding decodeBindingName,
       toBinding decodeEitherType,
@@ -168,14 +170,29 @@ decoderResultType = define "decoderResultType" $
 
 -- | Build a decoder type scheme: Term -> Either DecodingError ResultType
 -- For polymorphic types, adds extra arguments for the decoders of type parameters
+-- Includes Ord constraints for type variables that appear in Set element positions
 decoderTypeScheme :: TBinding (Type -> TypeScheme)
 decoderTypeScheme = define "decoderTypeScheme" $
   doc "Build type scheme for a decoder function" $
   "typ" ~>
+    "typeVars" <~ collectTypeVariables @@ var "typ" $
+    "allOrdVars" <~ collectOrdConstrainedVariables @@ var "typ" $
+    -- Filter to only include actual forall-bound type variables
+    -- (collectOrdConstrainedVariables may return nominal type references like "hydra.relational.ColumnName")
+    "ordVars" <~ Lists.filter
+      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      (var "allOrdVars") $
+    -- Build constraints: for each ordVar, add Ord constraint (uses original var names, normalization renames them)
+    "constraints" <~ (
+      Logic.ifElse (Lists.null (var "ordVars"))
+        Phantoms.nothing
+        (just $ Maps.fromList $ Lists.map
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.name $ string "hydra.typeclass.Ord"))
+          (var "ordVars"))) $
     Core.typeScheme
-      (collectTypeVariables @@ var "typ")
+      (var "typeVars")
       (decoderType @@ var "typ")
-      Phantoms.nothing
+      (var "constraints")
 
 -- | Collect type variables from forall types
 -- Note: Graph is NOT included as a type variable - it's a concrete type
@@ -194,6 +211,98 @@ collectForallVariables = define "collectForallVariables" $
     _Type_forall>>: "ft" ~>
       Lists.cons (Core.forallTypeParameter (var "ft"))
         (collectForallVariables @@ Core.forallTypeBody (var "ft"))]
+
+-- | Collect type variables that appear in Set element positions and need Ord constraints.
+-- This is a pure function that traverses the type structure without dereferencing type names.
+-- The collected variables use their original names; normalization will rename them later.
+collectOrdConstrainedVariables :: TBinding (Type -> [Name])
+collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
+  doc "Collect type variables needing Ord constraints (from Set element types)" $
+  match _Type (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      collectOrdConstrainedVariables @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      Lists.concat2
+        (collectOrdConstrainedVariables @@ Core.applicationTypeFunction (var "appType"))
+        (collectOrdConstrainedVariables @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      Lists.concat2
+        (collectOrdConstrainedVariables @@ Core.eitherTypeLeft (var "et"))
+        (collectOrdConstrainedVariables @@ Core.eitherTypeRight (var "et")),
+    _Type_forall>>: "ft" ~>
+      collectOrdConstrainedVariables @@ Core.forallTypeBody (var "ft"),
+    _Type_list>>: "elemType" ~>
+      collectOrdConstrainedVariables @@ var "elemType",
+    _Type_map>>: "mt" ~>
+      Lists.concat2
+        (collectOrdConstrainedVariables @@ Core.mapTypeKeys (var "mt"))
+        (collectOrdConstrainedVariables @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      collectOrdConstrainedVariables @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      Lists.concat2
+        (collectOrdConstrainedVariables @@ Core.pairTypeFirst (var "pt"))
+        (collectOrdConstrainedVariables @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> collectOrdConstrainedVariables @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    -- For Set<T>, collect all type variables from T (they all need Ord)
+    -- plus recurse into T for nested Sets
+    _Type_set>>: "elemType" ~>
+      Lists.concat2
+        (collectTypeVariablesFromType @@ var "elemType")
+        (collectOrdConstrainedVariables @@ var "elemType"),
+    _Type_union>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> collectOrdConstrainedVariables @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_wrap>>: "wt" ~>
+      collectOrdConstrainedVariables @@ Core.wrappedTypeBody (var "wt")]
+
+-- | Collect all type variables from a type expression (for use in Set element types)
+collectTypeVariablesFromType :: TBinding (Type -> [Name])
+collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
+  doc "Collect all type variable names from a type expression" $
+  match _Type (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      collectTypeVariablesFromType @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      Lists.concat2
+        (collectTypeVariablesFromType @@ Core.applicationTypeFunction (var "appType"))
+        (collectTypeVariablesFromType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      Lists.concat2
+        (collectTypeVariablesFromType @@ Core.eitherTypeLeft (var "et"))
+        (collectTypeVariablesFromType @@ Core.eitherTypeRight (var "et")),
+    _Type_forall>>: "ft" ~>
+      collectTypeVariablesFromType @@ Core.forallTypeBody (var "ft"),
+    _Type_list>>: "elemType" ~>
+      collectTypeVariablesFromType @@ var "elemType",
+    _Type_map>>: "mt" ~>
+      Lists.concat2
+        (collectTypeVariablesFromType @@ Core.mapTypeKeys (var "mt"))
+        (collectTypeVariablesFromType @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      collectTypeVariablesFromType @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      Lists.concat2
+        (collectTypeVariablesFromType @@ Core.pairTypeFirst (var "pt"))
+        (collectTypeVariablesFromType @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> collectTypeVariablesFromType @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_set>>: "elemType" ~>
+      collectTypeVariablesFromType @@ var "elemType",
+    _Type_union>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> collectTypeVariablesFromType @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_variable>>: "name" ~>
+      list [var "name"],
+    _Type_wrap>>: "wt" ~>
+      collectTypeVariablesFromType @@ Core.wrappedTypeBody (var "wt")]
 
 -- | Build the decoder function type for a given type
 -- For monomorphic types: Graph -> Term -> Either DecodingError ResultType
@@ -459,10 +568,11 @@ decodeRecordType = define "decodeRecordType" $
   -- We need: d1 >>= \v1 -> d2 >>= \v2 -> d3 >>= \v3 -> Right Record{...}
   -- Which is: either Left (\v1 -> either Left (\v2 -> either Left (\v3 -> Right Record{...}) d3) d2) d1
   -- Using foldl on reversed list to build from inside out
-  -- The lambda for each field uses the field name as the parameter
+  -- The lambda for each field uses the field name with a prefix to avoid shadowing decoder functions
+  "localVarName" <~ ("ft" ~> Core.name $ Strings.cat $ list [string "field_", Core.unName $ Core.fieldTypeName $ var "ft"]) $
   "toFieldLambda" <~ ("ft" ~> "body" ~>
     Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.fieldTypeName $ var "ft") nothing $ var "body") $
+      Core.lambda (var "localVarName" @@ var "ft") nothing $ var "body") $
   "decodeBody" <~ (
     Lists.foldl
       ("acc" ~> "ft" ~>
@@ -472,7 +582,7 @@ decodeRecordType = define "decodeRecordType" $
           @@@ (var "decodeFieldTerm" @@ var "ft"))
       -- Base case: Right with the constructed record (wrapped as Term)
       (DC.right $ Core.termRecord $ Core.record (var "typeName") $
-        Lists.map ("ft" ~> Core.field (Core.fieldTypeName $ var "ft") $ Core.termVariable $ Core.fieldTypeName $ var "ft")
+        Lists.map ("ft" ~> Core.field (Core.fieldTypeName $ var "ft") $ Core.termVariable $ var "localVarName" @@ var "ft")
           (var "fieldTypes"))
       (Lists.reverse $ var "fieldTypes")) $
   deannotateAndMatch

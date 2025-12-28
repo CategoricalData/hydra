@@ -143,22 +143,50 @@ adaptDataGraph = define "adaptDataGraph" $
     (var "expand" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
   "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
-  "els1" <~ Schemas.termAsGraph @@ var "gterm2" $
+  "els1Raw" <~ Schemas.termAsGraph @@ var "gterm2" $
   "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
 
---  Flows.fail $ "adapted data graph: " ++ (ShowCore.term @@ var "gterm2")
---  Flows.fail $ "adapted elements: " ++ (Strings.intercalate "," $ Lists.map (ShowCore.binding) (Maps.elems $ var "els1"))
---  Flows.fail $ "schema graph: " ++ (optCases (var "schema1")
---    ("none")
---    ("sg" ~> ShowGraph.graph @@ var "sg"))
---  "gfinal" <~ Graph.graph
---    (var "els1")
---    (var "env0")
---    Maps.empty
---    Core.termUnit
---    (var "prims1")
---    (var "schema1") $
---  Flows.fail $ "final graph: " ++ (ShowGraph.graph @@ var "gfinal")
+  -- Collect existing constraints from original bindings (keyed by binding name)
+  -- These need to be preserved through adaptation since termAsGraph doesn't preserve TypeScheme constraints
+  "originalConstraints" <~ Maps.fromList (Maybes.cat $ Lists.map
+    ("el" ~> Maybes.bind
+      (Core.bindingType $ var "el")
+      ("ts" ~> Maybes.map
+        ("c" ~> pair (Core.bindingName $ var "el") (var "c"))
+        (Core.typeSchemeConstraints $ var "ts")))
+    (Maps.elems $ var "els0")) $
+
+  -- Merge original constraints back into adapted bindings
+  "mergeConstraints" <~ ("el" ~>
+    "bname" <~ Core.bindingName (var "el") $
+    "origConstraints" <~ Maps.lookup (var "bname") (var "originalConstraints") $
+    Maybes.maybe
+      (var "el")  -- No original constraints, keep binding as-is
+      ("origC" ~> Maybes.maybe
+        -- No inferred type scheme, create one with just the constraints
+        (Core.binding
+          (var "bname")
+          (Core.bindingTerm $ var "el")
+          (just $ Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.name $ string "a") (just $ var "origC")))
+        ("ts" ~>
+          "inferredC" <~ Core.typeSchemeConstraints (var "ts") $
+          "mergedC" <~ Maybes.maybe
+            (just $ var "origC")  -- No inferred constraints, use original
+            ("infC" ~> just $ Maps.union (var "origC") (var "infC"))  -- Merge both
+            (var "inferredC") $
+          Core.binding
+            (var "bname")
+            (Core.bindingTerm $ var "el")
+            (just $ Core.typeScheme
+              (Core.typeSchemeVariables $ var "ts")
+              (Core.typeSchemeType $ var "ts")
+              (var "mergedC")))
+        (Core.bindingType $ var "el"))
+      (var "origConstraints")) $
+
+  "els1" <~ Maps.fromList (Lists.map
+    ("el" ~> pair (Core.bindingName $ var "el") (var "mergeConstraints" @@ var "el"))
+    (Maps.elems $ var "els1Raw")) $
 
   produce $ Graph.graph
     (var "els1")
