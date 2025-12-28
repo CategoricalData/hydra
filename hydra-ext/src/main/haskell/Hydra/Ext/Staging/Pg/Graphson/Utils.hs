@@ -5,6 +5,7 @@ import Hydra.Ext.Staging.Pg.Graphson.Coder
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Ext.Dsl.Pg.Mappings
 import qualified Hydra.Json as Json
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
@@ -121,7 +122,7 @@ termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
   where
     encodeTerm term = case deannotateTerm term of
         TermLiteral lv -> case lv of
-          LiteralBinary s -> pure $ G.ValueBinary s
+          LiteralBinary s -> pure $ G.ValueBinary $ Literals.binaryToStringBS s
           LiteralBoolean b -> pure $ G.ValueBoolean b
           LiteralFloat fv -> case fv of
             FloatValueBigfloat f -> pure $ G.ValueBigDecimal $ G.BigDecimalValue $ show f

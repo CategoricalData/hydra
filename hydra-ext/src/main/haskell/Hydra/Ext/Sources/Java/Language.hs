@@ -114,6 +114,7 @@ javaLanguage = javaLanguageDefinition "javaLanguage" $
     Variants.eliminationVariantUnion,
     Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
+    Variants.literalVariantBinary, -- byte[]
     Variants.literalVariantBoolean, -- boolean
     Variants.literalVariantFloat, -- (see float types)
     Variants.literalVariantInteger, -- (see integer types)

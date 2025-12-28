@@ -8,6 +8,7 @@ module Hydra.Ext.Staging.Avro.Coder (
 
 import Hydra.Kernel
 import Hydra.Extract.Json
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Types as Types
@@ -90,8 +91,8 @@ avroHydraAdapter schema = case schema of
                   decode (TermUnion (Injection _ (Field fn _))) = return $ Json.ValueString $ unName fn
               Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
                 where
-                  encode (Json.ValueString s) = pure $ Terms.binary s
-                  decode term = Json.ValueString <$> (withEmptyGraph $ ExtractCore.binary term)
+                  encode (Json.ValueString s) = pure $ Terms.binary (Literals.stringToBinary s)
+                  decode term = Json.ValueString . Literals.binaryToStringBS <$> (withEmptyGraph $ ExtractCore.binary term)
               Avro.NamedTypeRecord r -> do
                   let avroFields = Avro.recordFields r
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
@@ -214,8 +215,8 @@ avroHydraAdapter schema = case schema of
             decode term = Json.ValueNumber <$> withEmptyGraph (ExtractCore.float64 term)
         Avro.PrimitiveBytes -> simpleAdapter Types.binary encode decode
           where
-            encode (Json.ValueString s) = pure $ Terms.binary s
-            decode term = Json.ValueString <$> withEmptyGraph (ExtractCore.binary term)
+            encode (Json.ValueString s) = pure $ Terms.binary (Literals.stringToBinary s)
+            decode term = Json.ValueString . Literals.binaryToStringBS <$> withEmptyGraph (ExtractCore.binary term)
         Avro.PrimitiveString -> simpleAdapter Types.string encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.string s

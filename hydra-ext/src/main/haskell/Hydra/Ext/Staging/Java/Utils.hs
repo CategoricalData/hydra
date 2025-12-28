@@ -630,3 +630,25 @@ addVarRename :: Name -> Name -> Aliases -> Aliases
 addVarRename original renamed aliases = aliases {
   aliasesVarRenames = M.insert original renamed (aliasesVarRenames aliases)
 }
+
+-- | Create a Java primitive type for byte
+javaBytePrimitiveType :: Java.PrimitiveTypeWithAnnotations
+javaBytePrimitiveType = Java.PrimitiveTypeWithAnnotations
+  (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeByte) []
+
+-- | Create an array creation expression for primitive byte arrays with an initializer
+--   e.g. new byte[] {1, 2, 3}
+javaArrayCreation :: Java.PrimitiveTypeWithAnnotations -> Maybe Java.ArrayInitializer -> Java.Expression
+javaArrayCreation primType minit = javaPrimaryToJavaExpression $
+    Java.PrimaryArrayCreation $
+    Java.ArrayCreationExpressionPrimitiveArray $
+    Java.ArrayCreationExpression_PrimitiveArray primType [] init
+  where
+    init = Y.fromMaybe (Java.ArrayInitializer []) minit
+
+-- | Create an array initializer from a list of expressions
+--   e.g. {1, 2, 3}
+javaArrayInitializer :: [Java.Expression] -> Java.ArrayInitializer
+javaArrayInitializer exprs = Java.ArrayInitializer [fmap toVarInit exprs]
+  where
+    toVarInit = Java.VariableInitializerExpression

@@ -2,6 +2,7 @@ module Hydra.Ext.Staging.Rdf.Utils where
 
 import Hydra.Kernel
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
+import qualified Hydra.Lib.Literals as Literals
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -24,7 +25,7 @@ emptyLangStrings = Rdf.LangStrings M.empty
 
 encodeLiteral :: Literal -> Flow (Graph) Rdf.Literal
 encodeLiteral lit = case lit of
-    LiteralBinary s -> fail "base 64 encoding not yet implemented"
+    LiteralBinary s -> pure $ xsd Literals.binaryToStringBS s "base64Binary"
     LiteralBoolean b -> pure $ xsd (\b -> if b then "true" else "false") b "boolean"
     LiteralFloat f -> pure $ case f of
       FloatValueBigfloat v -> xsd show v "decimal"

@@ -28,6 +28,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Arity as Arity
 
 import qualified Control.Monad as CM
+import qualified Data.ByteString as B
 import qualified Data.List  as L
 import qualified Data.Map   as M
 import qualified Data.Set   as S
@@ -422,11 +423,19 @@ encodeIntegerValue iv = case iv of
 
 encodeLiteral :: Literal -> Flow s Py.Expression
 encodeLiteral lit = case lit of
+  LiteralBinary bs -> pure $ encodeBinaryValue bs
   LiteralBoolean b -> pure $ pyAtomToPyExpression $ if b then Py.AtomTrue else Py.AtomFalse
   LiteralFloat f -> encodeFloatValue f
   LiteralInteger i -> encodeIntegerValue i
   LiteralString s -> pure $ stringToPyExpression Py.QuoteStyleDouble s
-  _ -> fail $ "unsupported literal variant: " ++ show (literalVariant lit)
+  where
+    -- Encode a ByteString as bytes([b1, b2, ...]) in Python
+    encodeBinaryValue :: B.ByteString -> Py.Expression
+    encodeBinaryValue bs = functionCall (pyNameToPyPrimary $ Py.Name "bytes")
+      [pyAtomToPyExpression $ Py.AtomList $ pyList byteExprs]
+      where
+        byteExprs = fmap toByteExpr $ B.unpack bs
+        toByteExpr w = pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $ fromIntegral w
 
 encodeLiteralType :: LiteralType -> Flow PyGraph Py.Expression
 encodeLiteralType lt = do
