@@ -40,7 +40,7 @@ from hydra.core import (
     TypeWrap,
     WrappedType,
 )
-from hydra.dsl.python import FrozenDict
+from hydra.dsl.python import FrozenDict, Nothing
 
 
 # Operators - TODO: find Python equivalents for these special syntax forms
@@ -104,12 +104,12 @@ def foralls(vs: Sequence[str], body: Type) -> Type:
 
 def mono(t: Type) -> TypeScheme:
     """Create a monomorphic type scheme."""
-    return TypeScheme((), t)
+    return TypeScheme((), t, Nothing())
 
 
 def poly(vs: Sequence[str], t: Type) -> TypeScheme:
     """Create a polymorphic type scheme with explicit type variables."""
-    return TypeScheme(tuple(Name(v) for v in vs), t)
+    return TypeScheme(tuple(Name(v) for v in vs), t, Nothing())
 
 
 def bigfloat() -> Type:

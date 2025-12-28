@@ -114,7 +114,8 @@ def build_test_graph() -> hydra.graph.Graph:
         # Create a binding with type scheme for Type
         type_scheme = hydra.core.TypeScheme(
             variables=(),
-            type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))
+            type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
+            constraints=Nothing()
         )
         type_bindings[name] = hydra.core.Binding(
             name=name,
