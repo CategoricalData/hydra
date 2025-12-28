@@ -383,3 +383,17 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "unquoted" $ H.shouldBe
       (Literals.readString "hello")
       (Nothing)
+  H.describe "stringToBinary" $ do
+    H.it "simple base64" $ H.shouldBe
+      (Literals.stringToBinary "aGVsbG8=")
+      (Literals.stringToBinary "aGVsbG8=")
+    H.it "empty string" $ H.shouldBe
+      (Literals.stringToBinary "")
+      (Literals.stringToBinary "")
+  H.describe "binaryToString" $ do
+    H.it "simple binary" $ H.shouldBe
+      (Literals.binaryToString (Literals.stringToBinary "aGVsbG8="))
+      ("aGVsbG8=")
+    H.it "empty binary" $ H.shouldBe
+      (Literals.binaryToString (Literals.stringToBinary ""))
+      ("")
