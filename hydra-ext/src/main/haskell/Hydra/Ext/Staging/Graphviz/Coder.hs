@@ -7,6 +7,7 @@ module Hydra.Ext.Staging.Graphviz.Coder (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Names as Names
 import qualified Hydra.Show.Accessors as ShowAccessors
 
@@ -134,7 +135,7 @@ termLabel compact namespaces term = case term of
     TermLet (Let bindings env) -> simpleLabel "let"
     TermList _ -> simpleLabel $ if compact then "[]" else "list"
     TermLiteral l -> simpleLabel $ case l of
-      LiteralBinary s -> s
+      LiteralBinary s -> Literals.binaryToStringBS s
       LiteralBoolean b -> show b
       LiteralInteger i -> case i of
         IntegerValueBigint v -> show v

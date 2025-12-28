@@ -4,6 +4,7 @@ module Hydra.Ext.Staging.Scala.Prepare (
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Lib.Literals as Literals
 
 import qualified Data.Set as S
 
@@ -12,7 +13,7 @@ prepareLiteralType :: LiteralType -> (LiteralType, Literal -> Literal, S.Set Str
 prepareLiteralType at = case at of
   LiteralTypeBinary -> subst LiteralTypeString
     "binary strings" "character strings"
-    $ \(LiteralBinary v) -> LiteralString v
+    $ \(LiteralBinary v) -> LiteralString (Literals.binaryToStringBS v)
   LiteralTypeFloat ft -> (LiteralTypeFloat rtyp, \(LiteralFloat v) -> LiteralFloat $ rep v, msgs)
     where
       (rtyp, rep, msgs) = prepareFloatType ft
