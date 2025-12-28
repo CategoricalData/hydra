@@ -26,6 +26,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Util as Util
 
 import qualified Control.Monad as CM
+import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
@@ -620,6 +621,11 @@ encodeFunction env dom cod fun = case fun of
 
 encodeLiteral :: Literal -> Java.Expression
 encodeLiteral lit = case lit of
+    LiteralBinary bs -> javaArrayCreation javaBytePrimitiveType (Just byteValues)
+      where
+        byteValues = javaArrayInitializer $ fmap toByteExpr $ B.unpack bs
+        toByteExpr w = javaLiteralToJavaExpression $ Java.LiteralInteger $
+          Java.IntegerLiteral $ fromIntegral w
     LiteralBoolean b -> litExp $ javaBoolean b
     LiteralFloat f -> case f of
         FloatValueBigfloat v -> javaConstructorCall
@@ -648,6 +654,8 @@ encodeLiteral lit = case lit of
 --       to build function types, parameterized types, etc.
 encodeLiteralType :: LiteralType -> Flow Graph Java.Type
 encodeLiteralType lt = case lt of
+    LiteralTypeBinary -> pure $ Java.TypeReference $ Java.ReferenceTypeArray $
+      Java.ArrayType (Java.Dims [[]]) $ Java.ArrayType_VariantPrimitive javaBytePrimitiveType
     LiteralTypeBoolean -> simple "Boolean"
     LiteralTypeFloat ft -> case ft of
       FloatTypeBigfloat -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigDecimal"

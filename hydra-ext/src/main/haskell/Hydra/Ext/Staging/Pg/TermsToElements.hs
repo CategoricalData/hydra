@@ -9,6 +9,7 @@ import Hydra.Pg.Mapping
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Lib.Literals as Literals
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -133,7 +134,7 @@ parsePattern pat = withTrace "parse path pattern" $ do
     -- TODO: replace this with a more standard function
     toString term = case deannotateTerm term of
       TermLiteral lit -> pure $ case lit of
-        LiteralBinary b -> b
+        LiteralBinary b -> Literals.binaryToStringBS b
         LiteralBoolean b -> show b
         LiteralInteger i -> case i of
           IntegerValueBigint v -> show v
