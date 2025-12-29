@@ -5,7 +5,7 @@ r"""This implementation of Tarjan's algorithm was originally based on GraphSCC b
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.constants
 import hydra.core
@@ -20,6 +20,8 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.monads
 import hydra.topology
+
+T0 = TypeVar("T0")
 
 def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:

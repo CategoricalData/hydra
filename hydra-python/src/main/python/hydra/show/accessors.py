@@ -4,7 +4,7 @@ r"""Utilities for working with term accessors."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.accessors
 import hydra.core
 import hydra.lib.lists
@@ -16,6 +16,10 @@ import hydra.lib.strings
 import hydra.module
 import hydra.names
 import hydra.rewriting
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
     r"""Convert a term accessor to a string representation."""

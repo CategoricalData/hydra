@@ -20,19 +20,19 @@ import hydra.typing
 import hydra.util
 
 def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.InferenceContext], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.InferenceContext], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeSubst]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeSubst], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeSubst], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceResult]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.InferenceResult], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.InferenceResult], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TermSubst]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TermSubst], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TermSubst], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeConstraint]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeConstraint], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeConstraint], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def type_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeContext]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeContext], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.typing.TypeContext], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))

@@ -5,7 +5,7 @@ r"""Term encoders for hydra.module."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.core
 import hydra.lib.lists
@@ -13,6 +13,8 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.module
+
+T0 = TypeVar("T0")
 
 def term_definition(x: hydra.module.TermDefinition) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.TermDefinition"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type_scheme(x.type))))))

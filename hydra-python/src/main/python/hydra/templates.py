@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.decode.core
@@ -21,6 +21,10 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.show.core
 import hydra.util
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""

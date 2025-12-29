@@ -93,15 +93,27 @@ def register_equality_primitives() -> dict[Name, Primitive]:
 def register_eithers_primitives() -> dict[Name, Primitive]:
     """Register all eithers primitive functions."""
     from hydra.lib import eithers
+    from hydra.eval.lib import eithers as eval_eithers
+    from hydra.dsl.python import Just
 
     namespace = "hydra.lib.eithers"
     primitives: dict[Name, Primitive] = {}
 
     x = prims.variable("x")
     y = prims.variable("y")
+    z = prims.variable("z")
 
-    # Note: 'either' function is special and would need interpreter support
-    # For now we register the simpler functions
+    # bimap :: (x -> y) -> (z -> w) -> Either x z -> Either y w
+    w = prims.variable("w")
+    primitives[qname(namespace, "bimap")] = prims.prim3_interp(
+        qname(namespace, "bimap"), Just(eval_eithers.bimap), ["x", "y", "z", "w"],
+        prims.function(x, y), prims.function(z, w), prims.either(x, z), prims.either(y, w)
+    )
+    # either :: (x -> z) -> (y -> z) -> Either x y -> z
+    primitives[qname(namespace, "either")] = prims.prim3_interp(
+        qname(namespace, "either"), Just(eval_eithers.either), ["x", "y", "z"],
+        prims.function(x, z), prims.function(y, z), prims.either(x, y), z
+    )
     primitives[qname(namespace, "fromLeft")] = prims.prim2(
         qname(namespace, "fromLeft"), eithers.from_left, ["x", "y"],
         x, prims.either(x, y), x
@@ -207,6 +219,8 @@ def register_flows_primitives() -> dict[Name, Primitive]:
 def register_lists_primitives() -> dict[Name, Primitive]:
     """Register all list primitive functions."""
     from hydra.lib import lists
+    from hydra.eval.lib import lists as eval_lists
+    from hydra.dsl.python import Nothing, Just
 
     namespace = "hydra.lib.lists"
     primitives: dict[Name, Primitive] = {}
@@ -216,8 +230,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     c = prims.variable("c")
 
     # prim2: apply :: [a -> b] -> [a] -> [b]
-    primitives[qname(namespace, "apply")] = prims.prim2(
-        qname(namespace, "apply"), lists.apply, ["a", "b"],
+    primitives[qname(namespace, "apply")] = prims.prim2_interp(
+        qname(namespace, "apply"), Just(eval_lists.apply_), ["a", "b"],
         prims.list_(prims.function(a, b)), prims.list_(a), prims.list_(b)
     )
     # prim2: at :: Int32 -> [a] -> a
@@ -250,6 +264,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "drop"), lists.drop, ["a"],
         prims.int32(), prims.list_(a), prims.list_(a)
     )
+    # prim2: dropWhile :: (a -> Bool) -> [a] -> [a]
+    primitives[qname(namespace, "dropWhile")] = prims.prim2_interp(
+        qname(namespace, "dropWhile"), Nothing(), ["a"],
+        prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
+    )
     # prim2: elem :: a -> [a] -> Bool
     primitives[qname(namespace, "elem")] = prims.prim2(
         qname(namespace, "elem"), lists.elem, ["a"],
@@ -261,8 +280,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
     # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
-    primitives[qname(namespace, "foldl")] = prims.prim3(
-        qname(namespace, "foldl"), lists.foldl, ["b", "a"],
+    primitives[qname(namespace, "foldl")] = prims.prim3_interp(
+        qname(namespace, "foldl"), Just(eval_lists.foldl_), ["b", "a"],
         prims.function(b, prims.function(a, b)), b, prims.list_(a), b
     )
     # prim1: group :: [a] -> [[a]]
@@ -297,8 +316,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "length"), lists.length, ["a"], prims.list_(a), prims.int32()
     )
     # prim2: map :: (a -> b) -> [a] -> [b]
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), lists.map, ["a", "b"],
+    primitives[qname(namespace, "map")] = prims.prim2_interp(
+        qname(namespace, "map"), Just(eval_lists.map_), ["a", "b"],
         prims.function(a, b), prims.list_(a), prims.list_(b)
     )
     # prim1: nub :: [a] -> [a]
@@ -340,6 +359,16 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "sort"), lists.sort, ["a"],
         prims.list_(a), prims.list_(a)
     )
+    # prim2: sortOn :: (a -> b) -> [a] -> [a]
+    primitives[qname(namespace, "sortOn")] = prims.prim2_interp(
+        qname(namespace, "sortOn"), Nothing(), ["a", "b"],
+        prims.function(a, b), prims.list_(a), prims.list_(a)
+    )
+    # prim2: span :: (a -> Bool) -> [a] -> ([a], [a])
+    primitives[qname(namespace, "span")] = prims.prim2_interp(
+        qname(namespace, "span"), Nothing(), ["a"],
+        prims.function(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
+    )
     # prim1: tail :: [a] -> [a]
     primitives[qname(namespace, "tail")] = prims.prim1(
         qname(namespace, "tail"), lists.tail, ["a"], prims.list_(a), prims.list_(a)
@@ -360,8 +389,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         prims.list_(a), prims.list_(b), prims.list_(prims.pair(a, b))
     )
     # prim3: zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
-    primitives[qname(namespace, "zipWith")] = prims.prim3(
-        qname(namespace, "zipWith"), lists.zip_with, ["a", "b", "c"],
+    primitives[qname(namespace, "zipWith")] = prims.prim3_interp(
+        qname(namespace, "zipWith"), Just(eval_lists.zipWith_), ["a", "b", "c"],
         prims.function(a, prims.function(b, c)), prims.list_(a), prims.list_(b), prims.list_(c)
     )
 
@@ -397,6 +426,8 @@ def register_logic_primitives() -> dict[Name, Primitive]:
 def register_maps_primitives() -> dict[Name, Primitive]:
     """Register all map primitive functions."""
     from hydra.lib import maps
+    from hydra.eval.lib import maps as eval_maps
+    from hydra.dsl.python import Just
 
     namespace = "hydra.lib.maps"
     primitives: dict[Name, Primitive] = {}
@@ -415,8 +446,8 @@ def register_maps_primitives() -> dict[Name, Primitive]:
         prims.function(prims.optional(v), prims.optional(v)), k, map_kv, map_kv
     )
     # prim3: bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-    primitives[qname(namespace, "bimap")] = prims.prim3(
-        qname(namespace, "bimap"), maps.bimap, ["k1", "k2", "v1", "v2"],
+    primitives[qname(namespace, "bimap")] = prims.prim3_interp(
+        qname(namespace, "bimap"), Just(eval_maps.bimap), ["k1", "k2", "v1", "v2"],
         prims.function(k1, k2), prims.function(v1, v2), prims.map_(k1, v1), prims.map_(k2, v2)
     )
     # prim2: delete :: k -> Map k v -> Map k v
@@ -470,13 +501,13 @@ def register_maps_primitives() -> dict[Name, Primitive]:
         k, map_kv, prims.optional(v)
     )
     # prim2: map :: (v1 -> v2) -> Map k v1 -> Map k v2
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), maps.map, ["v1", "v2", "k"],
+    primitives[qname(namespace, "map")] = prims.prim2_interp(
+        qname(namespace, "map"), Just(eval_maps.map_), ["v1", "v2", "k"],
         prims.function(v1, v2), prims.map_(k, v1), prims.map_(k, v2)
     )
     # prim2: mapKeys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-    primitives[qname(namespace, "mapKeys")] = prims.prim2(
-        qname(namespace, "mapKeys"), maps.map_keys, ["k1", "k2", "v"],
+    primitives[qname(namespace, "mapKeys")] = prims.prim2_interp(
+        qname(namespace, "mapKeys"), Just(eval_maps.map_keys), ["k1", "k2", "v"],
         prims.function(k1, k2), prims.map_(k1, v), prims.map_(k2, v)
     )
     # prim2: member :: k -> Map k v -> Bool
@@ -644,13 +675,48 @@ def register_math_primitives() -> dict[Name, Primitive]:
 def register_maybes_primitives() -> dict[Name, Primitive]:
     """Register all maybe primitive functions."""
     from hydra.lib import maybes
+    from hydra.eval.lib import maybes as eval_maybes
+    from hydra.dsl.python import Just, Nothing
 
     namespace = "hydra.lib.maybes"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
     b = prims.variable("b")
+    c = prims.variable("c")
 
+    # apply :: Maybe (a -> b) -> Maybe a -> Maybe b
+    primitives[qname(namespace, "apply")] = prims.prim2_interp(
+        qname(namespace, "apply"), Just(eval_maybes.apply), ["a", "b"],
+        prims.optional(prims.function(a, b)), prims.optional(a), prims.optional(b)
+    )
+    # bind :: Maybe a -> (a -> Maybe b) -> Maybe b
+    primitives[qname(namespace, "bind")] = prims.prim2_interp(
+        qname(namespace, "bind"), Just(eval_maybes.bind), ["a", "b"],
+        prims.optional(a), prims.function(a, prims.optional(b)), prims.optional(b)
+    )
+    # cases :: Maybe a -> b -> (a -> b) -> b
+    primitives[qname(namespace, "cases")] = prims.prim3_interp(
+        qname(namespace, "cases"), Just(eval_maybes.cases), ["a", "b"],
+        prims.optional(a), b, prims.function(a, b), b
+    )
+    # cat :: [Maybe a] -> [a]
+    primitives[qname(namespace, "cat")] = prims.prim1(
+        qname(namespace, "cat"), maybes.cat, ["a"],
+        prims.list_(prims.optional(a)), prims.list_(a)
+    )
+    # compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
+    # Note: compose returns a function, which is complex to implement in interpreted form
+    primitives[qname(namespace, "compose")] = prims.prim2_interp(
+        qname(namespace, "compose"), Nothing(), ["a", "b", "c"],
+        prims.function(a, prims.optional(b)), prims.function(b, prims.optional(c)),
+        prims.function(a, prims.optional(c))
+    )
+    # fromJust :: Maybe a -> a
+    primitives[qname(namespace, "fromJust")] = prims.prim1(
+        qname(namespace, "fromJust"), maybes.from_just, ["a"],
+        prims.optional(a), a
+    )
     primitives[qname(namespace, "fromMaybe")] = prims.prim2(
         qname(namespace, "fromMaybe"), maybes.from_maybe, ["a"],
         a, prims.optional(a), a
@@ -663,9 +729,20 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
         qname(namespace, "isNothing"), maybes.is_nothing, ["a"],
         prims.optional(a), prims.boolean()
     )
+    # map :: (a -> b) -> Maybe a -> Maybe b
+    primitives[qname(namespace, "map")] = prims.prim2_interp(
+        qname(namespace, "map"), Just(eval_maybes.map_), ["a", "b"],
+        prims.function(a, b), prims.optional(a), prims.optional(b)
+    )
+    # mapMaybe :: (a -> Maybe b) -> [a] -> [b]
+    # Note: mapMaybe requires evaluating the function on each element, complex for interpreter
+    primitives[qname(namespace, "mapMaybe")] = prims.prim2_interp(
+        qname(namespace, "mapMaybe"), Nothing(), ["a", "b"],
+        prims.function(a, prims.optional(b)), prims.list_(a), prims.list_(b)
+    )
     # maybe: b -> (a -> b) -> Maybe a -> b
-    primitives[qname(namespace, "maybe")] = prims.prim3(
-        qname(namespace, "maybe"), maybes.maybe, ["a", "b"],
+    primitives[qname(namespace, "maybe")] = prims.prim3_interp(
+        qname(namespace, "maybe"), Just(eval_maybes.maybe), ["a", "b"],
         b, prims.function(a, b), prims.optional(a), b
     )
     primitives[qname(namespace, "pure")] = prims.prim1(
@@ -679,6 +756,8 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
 def register_sets_primitives() -> dict[Name, Primitive]:
     """Register all set primitive functions."""
     from hydra.lib import sets
+    from hydra.eval.lib import sets as eval_sets
+    from hydra.dsl.python import Just
 
     namespace = "hydra.lib.sets"
     primitives: dict[Name, Primitive] = {}
@@ -710,8 +789,8 @@ def register_sets_primitives() -> dict[Name, Primitive]:
         qname(namespace, "intersection"), sets.intersection, ["a"],
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), sets.map, ["a", "b"],
+    primitives[qname(namespace, "map")] = prims.prim2_interp(
+        qname(namespace, "map"), Just(eval_sets.map_), ["a", "b"],
         prims.function(a, prims.variable("b")), prims.set_(a), prims.set_(prims.variable("b"))
     )
     primitives[qname(namespace, "member")] = prims.prim2(
@@ -996,13 +1075,22 @@ def register_literals_primitives() -> dict[Name, Primitive]:
 def register_pairs_primitives() -> dict[Name, Primitive]:
     """Register all pairs primitive functions."""
     from hydra.lib import pairs
+    from hydra.eval.lib import pairs as eval_pairs
+    from hydra.dsl.python import Just
 
     namespace = "hydra.lib.pairs"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
     b = prims.variable("b")
+    c = prims.variable("c")
+    d = prims.variable("d")
 
+    # bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)
+    primitives[qname(namespace, "bimap")] = prims.prim3_interp(
+        qname(namespace, "bimap"), Just(eval_pairs.bimap), ["a", "b", "c", "d"],
+        prims.function(a, c), prims.function(b, d), prims.pair(a, b), prims.pair(c, d)
+    )
     primitives[qname(namespace, "first")] = prims.prim1(
         qname(namespace, "first"), pairs.first, ["a", "b"],
         prims.pair(a, b), a

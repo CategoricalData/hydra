@@ -52,24 +52,60 @@ ACCESSOR_PATH__NAME = hydra.core.Name("hydra.accessors.AccessorPath")
 
 class TermAccessorAnnotatedBody:
     r"""Access the body of an annotated term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorAnnotatedBody)
+    def __hash__(self):
+        return hash("TermAccessorAnnotatedBody")
 
 class TermAccessorApplicationFunction:
     r"""Access the function of an application term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorApplicationFunction)
+    def __hash__(self):
+        return hash("TermAccessorApplicationFunction")
 
 class TermAccessorApplicationArgument:
     r"""Access the argument of an application term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorApplicationArgument)
+    def __hash__(self):
+        return hash("TermAccessorApplicationArgument")
 
 class TermAccessorLambdaBody:
     r"""Access the body of a lambda term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorLambdaBody)
+    def __hash__(self):
+        return hash("TermAccessorLambdaBody")
 
 class TermAccessorUnionCasesDefault:
     r"""Access the default case of a union elimination."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorUnionCasesDefault)
+    def __hash__(self):
+        return hash("TermAccessorUnionCasesDefault")
 
 class TermAccessorUnionCasesBranch(Node["hydra.core.Name"]):
     r"""Access a specific branch of a union elimination by field name."""
 
 class TermAccessorLetBody:
     r"""Access the body of a let term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorLetBody)
+    def __hash__(self):
+        return hash("TermAccessorLetBody")
 
 class TermAccessorLetBinding(Node["hydra.core.Name"]):
     r"""Access a specific binding in a let term by variable name."""
@@ -85,6 +121,12 @@ class TermAccessorMapValue(Node[int]):
 
 class TermAccessorMaybeTerm:
     r"""Access the term inside a Just value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorMaybeTerm)
+    def __hash__(self):
+        return hash("TermAccessorMaybeTerm")
 
 class TermAccessorProductTerm(Node[int]):
     r"""Access an element of a product (tuple) by index."""
@@ -97,18 +139,48 @@ class TermAccessorSetElement(Node[int]):
 
 class TermAccessorSumTerm:
     r"""Access the term inside a sum variant."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorSumTerm)
+    def __hash__(self):
+        return hash("TermAccessorSumTerm")
 
 class TermAccessorTypeLambdaBody:
     r"""Access the body of a type lambda term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorTypeLambdaBody)
+    def __hash__(self):
+        return hash("TermAccessorTypeLambdaBody")
 
 class TermAccessorTypeApplicationTerm:
     r"""Access the term being applied to a type."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorTypeApplicationTerm)
+    def __hash__(self):
+        return hash("TermAccessorTypeApplicationTerm")
 
 class TermAccessorInjectionTerm:
     r"""Access the term inside a union injection."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorInjectionTerm)
+    def __hash__(self):
+        return hash("TermAccessorInjectionTerm")
 
 class TermAccessorWrappedTerm:
     r"""Access the term inside a wrapped term."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermAccessorWrappedTerm)
+    def __hash__(self):
+        return hash("TermAccessorWrappedTerm")
 
 class _TermAccessorMeta(type):
     def __getitem__(cls, item):

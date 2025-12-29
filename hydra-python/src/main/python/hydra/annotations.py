@@ -5,7 +5,7 @@ r"""Utilities for reading and writing type and term annotations."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.classes
 import hydra.compute
 import hydra.constants
@@ -28,6 +28,11 @@ import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 import hydra.util
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def aggregate_annotations(get_value: Callable[[T0], Maybe[T1]], get_x: Callable[[T1], T0], get_anns: Callable[[T1], FrozenDict[T2, T3]], t: T0) -> FrozenDict[T2, T3]:
     def to_pairs(rest: frozenlist[frozenlist[tuple[T2, T3]]], t2: T0) -> frozenlist[frozenlist[tuple[T2, T3]]]:

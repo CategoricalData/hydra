@@ -5,12 +5,14 @@ r"""Term encoders for hydra.relational."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps
 import hydra.lib.sets
 import hydra.relational
+
+T0 = TypeVar("T0")
 
 def column_name(x: hydra.relational.ColumnName) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.relational.ColumnName"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.value))))

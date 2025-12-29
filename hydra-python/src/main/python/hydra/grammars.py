@@ -5,7 +5,7 @@ r"""A utility for converting a BNF grammar to a Hydra module."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.annotations
 import hydra.constants
 import hydra.core
@@ -22,6 +22,8 @@ import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.module
 import hydra.names
+
+T0 = TypeVar("T0")
 
 def child_name(lname: str, n: str) -> str:
     r"""Generate child name."""

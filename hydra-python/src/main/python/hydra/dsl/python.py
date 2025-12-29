@@ -145,3 +145,12 @@ class FrozenDict(Mapping[K, V]):
     def __repr__(self) -> str:
         """Get a string representation of the FrozenDict."""
         return f"FrozenDict({dict(self.data)})"
+
+
+def unsupported(message: str) -> None:
+    """Raise NotImplementedError for unsupported features.
+
+    This function is called by generated code when a feature is not yet supported
+    in the Python backend (e.g., inline match expressions).
+    """
+    raise NotImplementedError(message)

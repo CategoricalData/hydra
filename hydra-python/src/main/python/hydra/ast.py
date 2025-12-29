@@ -173,18 +173,42 @@ SYMBOL__NAME = hydra.core.Name("hydra.ast.Symbol")
 
 class WsNone:
     r"""No whitespace."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, WsNone)
+    def __hash__(self):
+        return hash("WsNone")
 
 class WsSpace:
     r"""A single space."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, WsSpace)
+    def __hash__(self):
+        return hash("WsSpace")
 
 class WsBreak:
     r"""A line break."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, WsBreak)
+    def __hash__(self):
+        return hash("WsBreak")
 
 class WsBreakAndIndent(Node[str]):
     r"""A line break followed by indentation."""
 
 class WsDoubleBreak:
     r"""Two line breaks."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, WsDoubleBreak)
+    def __hash__(self):
+        return hash("WsDoubleBreak")
 
 class _WsMeta(type):
     def __getitem__(cls, item):

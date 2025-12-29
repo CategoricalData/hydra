@@ -5,7 +5,7 @@ r"""Term encoders for hydra.testing."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.ast
 import hydra.encode.coders
@@ -20,6 +20,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.testing
+
+T0 = TypeVar("T0")
 
 def alpha_conversion_test_case(x: hydra.testing.AlphaConversionTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.AlphaConversionTestCase"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("oldVariable"), hydra.encode.core.name(x.old_variable)), hydra.core.Field(hydra.core.Name("newVariable"), hydra.encode.core.name(x.new_variable)), hydra.core.Field(hydra.core.Name("result"), hydra.encode.core.term(x.result))))))
@@ -42,10 +44,10 @@ def eta_expansion_test_case(x: hydra.testing.EtaExpansionTestCase) -> hydra.core
 def evaluation_style(v1: hydra.testing.EvaluationStyle) -> hydra.core.Type:
     match v1:
         case hydra.testing.EvaluationStyle.EAGER:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.EvaluationStyle"), hydra.core.Field(hydra.core.Name("eager"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.EvaluationStyle"), hydra.core.Field(hydra.core.Name("eager"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.testing.EvaluationStyle.LAZY:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.EvaluationStyle"), hydra.core.Field(hydra.core.Name("lazy"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.EvaluationStyle"), hydra.core.Field(hydra.core.Name("lazy"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -59,13 +61,13 @@ def flatten_let_terms_test_case(x: hydra.testing.FlattenLetTermsTestCase) -> hyd
 def fold_operation(v1: hydra.testing.FoldOperation) -> hydra.core.Type:
     match v1:
         case hydra.testing.FoldOperation.SUM_INT32_LITERALS:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("sumInt32Literals"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("sumInt32Literals"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.testing.FoldOperation.COLLECT_LIST_LENGTHS:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("collectListLengths"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("collectListLengths"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.testing.FoldOperation.COLLECT_LABELS:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("collectLabels"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.FoldOperation"), hydra.core.Field(hydra.core.Name("collectLabels"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -106,10 +108,10 @@ def normalize_type_variables_test_case(x: hydra.testing.NormalizeTypeVariablesTe
 def term_rewriter(v1: hydra.testing.TermRewriter) -> hydra.core.Type:
     match v1:
         case hydra.testing.TermRewriter.REPLACE_FOO_WITH_BAR:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TermRewriter"), hydra.core.Field(hydra.core.Name("replaceFooWithBar"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TermRewriter"), hydra.core.Field(hydra.core.Name("replaceFooWithBar"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.testing.TermRewriter.REPLACE_INT32_WITH_INT64:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TermRewriter"), hydra.core.Field(hydra.core.Name("replaceInt32WithInt64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TermRewriter"), hydra.core.Field(hydra.core.Name("replaceInt32WithInt64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -120,7 +122,7 @@ def rewrite_term_test_case(x: hydra.testing.RewriteTermTestCase) -> hydra.core.T
 def type_rewriter(v1: hydra.testing.TypeRewriter) -> hydra.core.Type:
     match v1:
         case hydra.testing.TypeRewriter.REPLACE_STRING_WITH_INT32:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TypeRewriter"), hydra.core.Field(hydra.core.Name("replaceStringWithInt32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TypeRewriter"), hydra.core.Field(hydra.core.Name("replaceStringWithInt32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

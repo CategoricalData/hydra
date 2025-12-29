@@ -5,7 +5,7 @@ r"""Entry point for Hydra's adapter (type/term rewriting) framework."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.adapt.terms
 import hydra.adapt.utils
 import hydra.annotations
@@ -29,6 +29,11 @@ import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
 import hydra.util
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def language_adapter(lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     def get_pair(typ2: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, tuple[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.coders.AdapterContext]]:

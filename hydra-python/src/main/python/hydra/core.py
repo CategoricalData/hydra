@@ -397,9 +397,21 @@ LITERAL__STRING__NAME = Name("string")
 
 class LiteralTypeBinary:
     r"""The type of a binary (byte string) value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, LiteralTypeBinary)
+    def __hash__(self):
+        return hash("LiteralTypeBinary")
 
 class LiteralTypeBoolean:
     r"""The type of a boolean (true/false) value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, LiteralTypeBoolean)
+    def __hash__(self):
+        return hash("LiteralTypeBoolean")
 
 class LiteralTypeFloat(Node["FloatType"]):
     r"""The type of a floating-point value."""
@@ -409,6 +421,12 @@ class LiteralTypeInteger(Node["IntegerType"]):
 
 class LiteralTypeString:
     r"""The type of a string value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, LiteralTypeString)
+    def __hash__(self):
+        return hash("LiteralTypeString")
 
 class _LiteralTypeMeta(type):
     def __getitem__(cls, item):
@@ -518,6 +536,12 @@ class TermUnion(Node["Injection"]):
 
 class TermUnit:
     r"""A unit value; a term with no value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TermUnit)
+    def __hash__(self):
+        return hash("TermUnit")
 
 class TermVariable(Node["Name"]):
     r"""A variable reference."""
@@ -596,6 +620,12 @@ class TypeUnion(Node["RowType"]):
 
 class TypeUnit:
     r"""The unit type."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TypeUnit)
+    def __hash__(self):
+        return hash("TypeUnit")
 
 class TypeVariable(Node["Name"]):
     r"""A type variable."""

@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Just, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.eithers
 import hydra.lib.lists
@@ -17,6 +17,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
+
+T0 = TypeVar("T0")
 
 def float_type(ft: hydra.core.FloatType) -> str:
     r"""Show a float type as a string."""

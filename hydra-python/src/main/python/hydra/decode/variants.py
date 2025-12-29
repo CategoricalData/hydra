@@ -17,16 +17,16 @@ import hydra.util
 import hydra.variants
 
 def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.EliminationVariant]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.EliminationVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.EliminationVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.FunctionVariant]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.FunctionVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.FunctionVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.LiteralVariant]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.LiteralVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.LiteralVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TermVariant]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.TermVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.TermVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TypeVariant]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.TypeVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: "inline match expressions are unsupported"), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.variants.TypeVariant], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))

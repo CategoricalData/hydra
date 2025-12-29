@@ -5,7 +5,7 @@ r"""Type inference following Algorithm W, extended for nominal terms and types."
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.annotations
 import hydra.checking
 import hydra.compute
@@ -35,6 +35,10 @@ import hydra.sorting
 import hydra.substitution
 import hydra.typing
 import hydra.unification
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def bind_constraints(cx: hydra.typing.InferenceContext, f: Callable[[hydra.typing.TypeSubst], hydra.compute.Flow[T0, T1]], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T0, T1]:
     return hydra.lib.flows.bind(hydra.unification.unify_type_constraints(cx.schema_types, constraints), (lambda s: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s), (lambda _: f(s)))))
@@ -107,7 +111,7 @@ def infer_type_of_unwrap(cx: hydra.typing.InferenceContext, tname: hydra.core.Na
 def free_variables_in_context(cx: hydra.typing.InferenceContext) -> frozenset[hydra.core.Name]:
     r"""Get all free variables in an inference context."""
     
-    return hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], (lambda x1: (lambda x2: hydra.lib.sets.union(x1, x2)))), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map(hydra.rewriting.free_variables_in_type_scheme_simple, hydra.lib.maps.elems(cx.data_types)))
+    return hydra.lib.lists.foldl(cast(Callable[[frozenset[hydra.core.Name], frozenset[hydra.core.Name]], frozenset[hydra.core.Name]], (lambda x1, x2: hydra.lib.sets.union(x1, x2))), cast(frozenset[hydra.core.Name], hydra.lib.sets.empty()), hydra.lib.lists.map(hydra.rewriting.free_variables_in_type_scheme_simple, hydra.lib.maps.elems(cx.data_types)))
 
 def yield_checked_with_constraints(term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     iterm = hydra.substitution.subst_types_in_term(subst, term)

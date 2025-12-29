@@ -22,8 +22,8 @@ def schema_spec(v1: hydra.workflow.SchemaSpec) -> hydra.core.Type:
         case hydra.workflow.SchemaSpecFile(value=v2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.workflow.SchemaSpec"), hydra.core.Field(hydra.core.Name("file"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x)))))(v2)))))
         
-        case hydra.workflow.SchemaSpecProvided(value=v3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.workflow.SchemaSpec"), hydra.core.Field(hydra.core.Name("provided"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+        case hydra.workflow.SchemaSpecProvided():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.workflow.SchemaSpec"), hydra.core.Field(hydra.core.Name("provided"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

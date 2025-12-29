@@ -5,7 +5,7 @@ r"""Utilities for sorting."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.logic
@@ -15,6 +15,10 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.tarjan
 import hydra.topology
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
     def source_to_target_mapping(els: frozenlist[T2]) -> frozenlist[T2]:

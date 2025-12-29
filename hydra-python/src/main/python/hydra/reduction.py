@@ -5,7 +5,7 @@ r"""Functions for reducing terms and types, i.e. performing computations."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.arity
 import hydra.checking
 import hydra.compute
@@ -28,6 +28,11 @@ import hydra.lib.strings
 import hydra.rewriting
 import hydra.schemas
 import hydra.typing
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Type:
     r"""Alpha convert a variable in a term."""
@@ -63,7 +68,7 @@ def beta_reduce_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Gra
         return hydra.lib.flows.bind(recurse(t), (lambda r: find_app(r)))
     return hydra.rewriting.rewrite_type_m(cast(Callable[[
       Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]],
-      hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], (lambda x1: (lambda x2: map_expr(x1, x2)))), typ)
+      hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], (lambda x1, x2: map_expr(x1, x2))), typ)
 
 def contract_term(term: hydra.core.Term) -> hydra.core.Type:
     r"""Apply the special rules:
@@ -94,7 +99,7 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Type:
             
             case _:
                 return rec
-    return hydra.rewriting.rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], (lambda x1: (lambda x2: rewrite(x1, x2)))), term)
+    return hydra.rewriting.rewrite_term(cast(Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], (lambda x1, x2: rewrite(x1, x2))), term)
 
 count_primitive_invocations = True
 
@@ -459,7 +464,7 @@ def rewrite_term_with_type_context(f: Callable[[
     return hydra.rewriting.rewrite_term_with_context(cast(Callable[[
       Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.core.Term],
       hydra.typing.TypeContext,
-      hydra.core.Term], hydra.core.Term], (lambda x1: (lambda x2: (lambda x3: f2(x1, x2, x3))))), cx0, term0)
+      hydra.core.Term], hydra.core.Term], (lambda x1, x2, x3: f2(x1, x2, x3))), cx0, term0)
 
 def term_is_closed(term: hydra.core.Term) -> bool:
     r"""Whether a term is closed, i.e. represents a complete program."""
