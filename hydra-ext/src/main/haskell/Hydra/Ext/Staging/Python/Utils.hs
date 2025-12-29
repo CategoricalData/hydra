@@ -313,3 +313,57 @@ unionTypeClassStatements310 (Py.Name nameStr) mcomment tyexpr = [metaClass, unio
     passStmt = pySimpleStatementToPyStatement Py.SimpleStatementPass
 
     docStmt = pyExpressionToPyStatement $ tripleQuotedString docString
+
+-- | Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants.
+-- These empty classes need equality methods to work properly in sets/dicts and comparisons.
+-- Generates:
+--   __slots__ = ()
+--   def __eq__(self, other): return isinstance(other, ClassName)
+--   def __hash__(self): return hash("ClassName")
+unitVariantMethods :: Py.Name -> [Py.Statement]
+unitVariantMethods className = [slotsStmt, eqMethod, hashMethod]
+  where
+    classNameStr = Py.unName className
+
+    -- __slots__ = ()
+    slotsStmt = assignmentStatement (Py.Name "__slots__") $
+      pyPrimaryToPyExpression $ Py.PrimarySimple $ Py.AtomTuple $ Py.Tuple []
+
+    -- def __eq__(self, other): return isinstance(other, ClassName)
+    eqMethod = Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
+      Py.FunctionDefRaw
+        False  -- not async
+        (Py.Name "__eq__")
+        []  -- no type params
+        (Just eqParams)
+        Nothing  -- no return type
+        Nothing  -- no type comment
+        (indentedBlock Nothing [[returnIsinstance]])
+
+    eqParams = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters
+      [Py.ParamNoDefault (Py.Param (Py.Name "self") Nothing) Nothing,
+       Py.ParamNoDefault (Py.Param (Py.Name "other") Nothing) Nothing]
+      [] Nothing
+
+    returnIsinstance = pySimpleStatementToPyStatement $ Py.SimpleStatementReturn $ Py.ReturnStatement
+      [Py.StarExpressionSimple $ functionCall (pyNameToPyPrimary $ Py.Name "isinstance")
+        [pyNameToPyExpression $ Py.Name "other", pyNameToPyExpression className]]
+
+    -- def __hash__(self): return hash("ClassName")
+    hashMethod = Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
+      Py.FunctionDefRaw
+        False  -- not async
+        (Py.Name "__hash__")
+        []  -- no type params
+        (Just hashParams)
+        Nothing  -- no return type
+        Nothing  -- no type comment
+        (indentedBlock Nothing [[returnHash]])
+
+    hashParams = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters
+      [Py.ParamNoDefault (Py.Param (Py.Name "self") Nothing) Nothing]
+      [] Nothing
+
+    returnHash = pySimpleStatementToPyStatement $ Py.SimpleStatementReturn $ Py.ReturnStatement
+      [Py.StarExpressionSimple $ functionCall (pyNameToPyPrimary $ Py.Name "hash")
+        [doubleQuotedString classNameStr]]
