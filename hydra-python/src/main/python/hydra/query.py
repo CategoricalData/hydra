@@ -64,6 +64,12 @@ class NodeVariable(Node["Variable"]):
 
 class NodeWildcard:
     r"""An anonymous variable which we do not care to join across patterns."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, NodeWildcard)
+    def __hash__(self):
+        return hash("NodeWildcard")
 
 class _Node_Meta(type):
     def __getitem__(cls, item):
@@ -160,15 +166,39 @@ RANGE__MAX__NAME = hydra.core.Name("max")
 
 class RegexQuantifierOne:
     r"""No quantifier; matches a single occurrence."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, RegexQuantifierOne)
+    def __hash__(self):
+        return hash("RegexQuantifierOne")
 
 class RegexQuantifierZeroOrOne:
     r"""The ? quanifier; matches zero or one occurrence."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, RegexQuantifierZeroOrOne)
+    def __hash__(self):
+        return hash("RegexQuantifierZeroOrOne")
 
 class RegexQuantifierZeroOrMore:
     r"""The * quantifier; matches any number of occurrences."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, RegexQuantifierZeroOrMore)
+    def __hash__(self):
+        return hash("RegexQuantifierZeroOrMore")
 
 class RegexQuantifierOneOrMore:
     r"""The + quantifier; matches one or more occurrences."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, RegexQuantifierOneOrMore)
+    def __hash__(self):
+        return hash("RegexQuantifierOneOrMore")
 
 class RegexQuantifierExactly(Node[int]):
     r"""The {n} quantifier; matches exactly n occurrences."""

@@ -3,10 +3,13 @@
 r"""Term encoders for hydra.phantoms."""
 
 from __future__ import annotations
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.core
 import hydra.phantoms
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def t_term(a: T0, x: hydra.phantoms.TTerm[T1]) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.phantoms.TTerm"), hydra.encode.core.term(x.value))))

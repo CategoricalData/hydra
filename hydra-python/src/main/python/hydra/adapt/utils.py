@@ -5,7 +5,7 @@ r"""Additional adapter utilities, above and beyond the generated ones."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -24,6 +24,12 @@ import hydra.rewriting
 import hydra.show.core
 import hydra.util
 import hydra.variants
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
+T4 = TypeVar("T4")
 
 def bidirectional(f: Callable[[hydra.coders.CoderDirection, T0], hydra.compute.Flow[T1, T0]]) -> hydra.compute.Coder[T1, T1, T0, T0]:
     return cast(hydra.compute.Coder[T1, T1, T0, T0], hydra.compute.Coder((lambda v1: f(hydra.coders.CoderDirection.ENCODE, v1)), (lambda v1: f(hydra.coders.CoderDirection.DECODE, v1))))

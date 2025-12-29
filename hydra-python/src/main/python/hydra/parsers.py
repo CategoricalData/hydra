@@ -5,7 +5,7 @@ r"""General-purpose parser combinators."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.equality
 import hydra.lib.lists
@@ -13,6 +13,10 @@ import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.parsing
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     def parse(input: str) -> hydra.parsing.ParseResult[T0]:
@@ -93,7 +97,7 @@ def fail(msg: str) -> hydra.parsing.Parser[T0]:
     return cast(hydra.parsing.Parser[T0], hydra.parsing.Parser((lambda input: cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError(msg, input)))))))
 
 def choice(ps: frozenlist[hydra.parsing.Parser[T0]]) -> hydra.parsing.Parser[T0]:
-    return hydra.lib.lists.foldl(cast(Callable[[hydra.parsing.Parser[T0], hydra.parsing.Parser[T0]], hydra.parsing.Parser[T0]], (lambda x1: (lambda x2: alt(x1, x2)))), fail("no choice matched"), ps)
+    return hydra.lib.lists.foldl(cast(Callable[[hydra.parsing.Parser[T0], hydra.parsing.Parser[T0]], hydra.parsing.Parser[T0]], (lambda x1, x2: alt(x1, x2))), fail("no choice matched"), ps)
 
 def eof() -> hydra.parsing.Parser[None]:
     r"""A parser that succeeds only at the end of input."""

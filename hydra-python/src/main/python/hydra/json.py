@@ -16,6 +16,12 @@ class ValueBoolean(Node[bool]):
 
 class ValueNull:
     r"""JSON's null value."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, ValueNull)
+    def __hash__(self):
+        return hash("ValueNull")
 
 class ValueNumber(Node[Decimal]):
     r"""A numeric value."""

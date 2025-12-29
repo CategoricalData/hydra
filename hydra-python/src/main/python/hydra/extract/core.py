@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -24,6 +24,9 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def bigfloat_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, Decimal]:
     match v:

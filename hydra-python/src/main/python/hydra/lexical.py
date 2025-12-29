@@ -5,7 +5,7 @@ r"""A module for lexical operations over graphs."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -25,6 +25,11 @@ import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 import hydra.typing
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Type:
     def try_name(index: int) -> hydra.core.Type:

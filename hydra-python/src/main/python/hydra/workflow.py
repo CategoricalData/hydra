@@ -47,6 +47,12 @@ class SchemaSpecFile(Node[str]):
 
 class SchemaSpecProvided:
     r"""A schema which will be provided within the workflow."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, SchemaSpecProvided)
+    def __hash__(self):
+        return hash("SchemaSpecProvided")
 
 class _SchemaSpecMeta(type):
     def __getitem__(cls, item):

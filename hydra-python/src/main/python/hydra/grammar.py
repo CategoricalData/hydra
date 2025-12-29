@@ -48,6 +48,12 @@ class PatternLabeled(Node["LabeledPattern"]):
 
 class PatternNil:
     r"""An empty pattern."""
+    
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, PatternNil)
+    def __hash__(self):
+        return hash("PatternNil")
 
 class PatternNonterminal(Node["Symbol"]):
     r"""A nonterminal symbol reference."""

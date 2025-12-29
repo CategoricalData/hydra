@@ -5,7 +5,7 @@ r"""Functions for working with Hydra's 'flow' and other monads."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.compute
 import hydra.constants
 import hydra.core
@@ -19,6 +19,12 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.show.core
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
+T4 = TypeVar("T4")
 
 def bind(l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.compute.Flow[T0, T2]]) -> hydra.compute.Flow[T0, T2]:
     def q(s0: T0, t0: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T2]:
@@ -115,7 +121,7 @@ def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.com
         return hydra.lib.logic.if_else(False, (lambda : cast(Either[str, hydra.compute.Trace], Left("never happens"))), (lambda : cast(Either[str, hydra.compute.Trace], Right(hydra.compute.Trace(t.stack, t.messages, hydra.lib.maps.insert(flag, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), t.other))))))
     def restore(ignored: T2, t1: hydra.compute.Trace) -> hydra.core.Type:
         return hydra.compute.Trace(t1.stack, t1.messages, hydra.lib.maps.delete(flag, t1.other))
-    return mutate_trace(mutate, cast(Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], (lambda x1: (lambda x2: restore(x1, x2)))), f)
+    return mutate_trace(mutate, cast(Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], (lambda x1, x2: restore(x1, x2))), f)
 
 def with_state(cx0: T0, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T2, T1]:
     return cast(hydra.compute.Flow[T2, T1], hydra.compute.Flow((lambda cx1, t1: (f1 := (lambda : f.value(cx0, t1)), cast(hydra.compute.FlowState[T2, T1], hydra.compute.FlowState(f1().value, cx1, f1().trace)))[1])))

@@ -12,16 +12,16 @@ import hydra.lib.maybes
 def associativity(v1: hydra.ast.Associativity) -> hydra.core.Type:
     match v1:
         case hydra.ast.Associativity.NONE:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("none"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("none"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.ast.Associativity.LEFT:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("left"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("left"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.ast.Associativity.RIGHT:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("right"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("right"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.ast.Associativity.BOTH:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("both"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v4)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("both"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -48,20 +48,20 @@ def indent_style(v1: hydra.ast.IndentStyle) -> hydra.core.Type:
 
 def ws(v1: hydra.ast.Ws) -> hydra.core.Type:
     match v1:
-        case hydra.ast.WsNone(value=v):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("none"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+        case hydra.ast.WsNone():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("none"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
-        case hydra.ast.WsSpace(value=v2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("space"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+        case hydra.ast.WsSpace():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("space"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
-        case hydra.ast.WsBreak(value=v3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("break"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+        case hydra.ast.WsBreak():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("break"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.ast.WsBreakAndIndent(value=v4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("breakAndIndent"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x)))))(v4)))))
         
-        case hydra.ast.WsDoubleBreak(value=v5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("doubleBreak"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v5)))))
+        case hydra.ast.WsDoubleBreak():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("doubleBreak"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

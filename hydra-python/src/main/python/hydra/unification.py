@@ -4,7 +4,7 @@ r"""Utilities for type unification."""
 
 from __future__ import annotations
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -19,6 +19,10 @@ import hydra.rewriting
 import hydra.show.core
 import hydra.substitution
 import hydra.typing
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def join_types(left: hydra.core.Type, right: hydra.core.Type, comment: str) -> hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]]:
     sleft = hydra.rewriting.deannotate_type(left)

@@ -31,12 +31,12 @@ def encode_binding_name(n: hydra.core.Name) -> hydra.core.Type:
 def encode_float_value(float_type: hydra.core.FloatType, val_term: hydra.core.Term) -> hydra.core.Type:
     r"""Encode a float value based on its float type."""
     
-    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field("inline match expressions are unsupported", val_term))))
+    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.dsl.python.unsupported("inline match expressions are not yet supported"), val_term))))
 
 def encode_integer_value(int_type: hydra.core.IntegerType, val_term: hydra.core.Term) -> hydra.core.Type:
     r"""Encode an integer value based on its integer type."""
     
-    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field("inline match expressions are unsupported", val_term))))
+    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.dsl.python.unsupported("inline match expressions are not yet supported"), val_term))))
 
 def encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Type:
     r"""Generate an encoder for a literal type."""

@@ -4,9 +4,11 @@ r"""Term encoders for hydra.parsing."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.parsing
+
+T0 = TypeVar("T0")
 
 def parse_error(x: hydra.parsing.ParseError) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.parsing.ParseError"), (hydra.core.Field(hydra.core.Name("message"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.message)), hydra.core.Field(hydra.core.Name("remainder"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.remainder))))))

@@ -23,13 +23,13 @@ def projection(x: hydra.core.Projection) -> hydra.core.Type:
 def float_type(v1: hydra.core.FloatType) -> hydra.core.Type:
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.FloatType.FLOAT32:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.FloatType.FLOAT64:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -37,42 +37,42 @@ def float_type(v1: hydra.core.FloatType) -> hydra.core.Type:
 def integer_type(v1: hydra.core.IntegerType) -> hydra.core.Type:
     match v1:
         case hydra.core.IntegerType.BIGINT:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.INT8:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int8"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int8"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.INT16:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int16"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int16"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.INT32:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v4)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.INT64:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v5)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.UINT8:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint8"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v6)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint8"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.UINT16:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint16"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v7)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint16"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.UINT32:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v8)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint32"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.IntegerType.UINT64:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v9)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(v1: hydra.core.LiteralType) -> hydra.core.Type:
     match v1:
-        case hydra.core.LiteralTypeBinary(value=v):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v)))))
+        case hydra.core.LiteralTypeBinary():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
-        case hydra.core.LiteralTypeBoolean(value=v2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v2)))))
+        case hydra.core.LiteralTypeBoolean():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.LiteralTypeFloat(value=v3):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), float_type(v3)))))
@@ -80,8 +80,8 @@ def literal_type(v1: hydra.core.LiteralType) -> hydra.core.Type:
         case hydra.core.LiteralTypeInteger(value=v4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("integer"), integer_type(v4)))))
         
-        case hydra.core.LiteralTypeString(value=v5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v5)))))
+        case hydra.core.LiteralTypeString():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -284,8 +284,8 @@ def term(v1: hydra.core.Term) -> hydra.core.Type:
         case hydra.core.TermUnion(value=v15):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), injection(v15)))))
         
-        case hydra.core.TermUnit(value=v16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v16)))))
+        case hydra.core.TermUnit():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.TermVariable(value=v17):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), name(v17)))))
@@ -337,8 +337,8 @@ def type(v1: hydra.core.Type) -> hydra.core.Type:
         case hydra.core.TypeUnion(value=v13):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), row_type(v13)))))
         
-        case hydra.core.TypeUnit(value=v14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v14)))))
+        case hydra.core.TypeUnit():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.core.TypeVariable(value=v15):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), name(v15)))))

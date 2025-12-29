@@ -38,8 +38,8 @@ def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Type:
         case hydra.grammar.PatternLabeled(value=v4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("labeled"), labeled_pattern(v4)))))
         
-        case hydra.grammar.PatternNil(value=v5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("nil"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v5)))))
+        case hydra.grammar.PatternNil():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("nil"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.grammar.PatternNonterminal(value=v6):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("nonterminal"), symbol(v6)))))

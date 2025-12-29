@@ -19,8 +19,8 @@ def value(v1: hydra.json.Value) -> hydra.core.Type:
         case hydra.json.ValueBoolean(value=v2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.Value"), hydra.core.Field(hydra.core.Name("boolean"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x)))))(v2)))))
         
-        case hydra.json.ValueNull(value=v3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.Value"), hydra.core.Field(hydra.core.Name("null"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(v3)))))
+        case hydra.json.ValueNull():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.Value"), hydra.core.Field(hydra.core.Name("null"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
         
         case hydra.json.ValueNumber(value=v4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.Value"), hydra.core.Field(hydra.core.Name("number"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(x)))))))(v4)))))
