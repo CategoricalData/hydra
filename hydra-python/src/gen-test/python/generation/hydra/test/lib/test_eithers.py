@@ -47,6 +47,16 @@ import hydra.topology
 import hydra.typing
 import hydra.util
 
+# bimap
+
+def test_bimap__map_left_value():
+
+    assert (hydra.lib.eithers.bimap((lambda x: hydra.lib.math.mul(x, 2)), (lambda s: hydra.lib.strings.length(s)), Left(5))) == (Left(10))
+
+def test_bimap__map_right_value():
+
+    assert (hydra.lib.eithers.bimap((lambda x: hydra.lib.math.mul(x, 2)), (lambda s: hydra.lib.strings.length(s)), Right("ab"))) == (Right(2))
+
 # isLeft
 
 def test_isleft__left_value():

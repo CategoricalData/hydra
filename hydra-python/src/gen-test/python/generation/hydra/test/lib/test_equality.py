@@ -47,6 +47,20 @@ import hydra.topology
 import hydra.typing
 import hydra.util
 
+# compare
+
+def test_compare__less_than():
+
+    assert (hydra.lib.equality.compare(3, 5)) == (hydra.util.Comparison.LESS_THAN)
+
+def test_compare__equal():
+
+    assert (hydra.lib.equality.compare(5, 5)) == (hydra.util.Comparison.EQUAL_TO)
+
+def test_compare__greater_than():
+
+    assert (hydra.lib.equality.compare(5, 3)) == (hydra.util.Comparison.GREATER_THAN)
+
 # equal
 
 def test_equal__equal_integers():

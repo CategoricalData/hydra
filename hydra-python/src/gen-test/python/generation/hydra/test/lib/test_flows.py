@@ -47,6 +47,12 @@ import hydra.topology
 import hydra.typing
 import hydra.util
 
+# apply
+
+def test_apply__apply_add():
+
+    assert (hydra.monads.bind(hydra.monads.pure((lambda x1: hydra.lib.math.add(3, x1))), (lambda f: hydra.monads.bind(hydra.monads.pure(5), (lambda x: hydra.monads.pure(f(x)))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(8), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
 # bind
 
 def test_bind__bind_add():
@@ -63,15 +69,59 @@ def test_fail__fail_with_message():
 
     assert (hydra.monads.fail("test error message").value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Nothing(), None, hydra.compute.Trace((), ("Error: test error message ()",), FrozenDict({}))))
 
+# foldl
+
+def test_foldl__foldl_sum():
+
+    assert (hydra.monads.bind(hydra.monads.pure(0), (lambda a0: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(a0, 1)), (lambda a1: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(a1, 2)), (lambda a2: hydra.monads.pure(hydra.lib.math.add(a2, 3)))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(6), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
 # map
 
 def test_map__map_negate():
 
-    assert (hydra.monads.map(hydra.lib.math.negate, hydra.monads.pure(5)).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(-5), None, hydra.compute.Trace((), (), FrozenDict({}))))
+    assert (hydra.lib.flows.map(hydra.lib.math.negate, hydra.monads.pure(5)).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(-5), None, hydra.compute.Trace((), (), FrozenDict({}))))
 
 def test_map__map_abs():
 
-    assert (hydra.monads.map(hydra.lib.math.abs, hydra.monads.pure(-3)).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(3), None, hydra.compute.Trace((), (), FrozenDict({}))))
+    assert (hydra.lib.flows.map(hydra.lib.math.abs, hydra.monads.pure(-3)).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(3), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# mapElems
+
+def test_mapelems__mapelems_add_one():
+
+    assert (hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(1, 1)), (lambda v1: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(2, 1)), (lambda v2: hydra.monads.pure(hydra.lib.maps.from_list((("a", v1), ("b", v2)))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(FrozenDict({
+  "a": 2,
+  "b": 3})), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# mapKeys
+
+def test_mapkeys__mapkeys_add_one():
+
+    assert (hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(1, 1)), (lambda k1: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(2, 1)), (lambda k2: hydra.monads.pure(hydra.lib.maps.from_list(((k1, "a"), (k2, "b")))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(FrozenDict({
+  2: "a",
+  3: "b"})), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# mapList
+
+def test_maplist__maplist_add_one():
+
+    assert (hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(1, 1)), (lambda y1: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(2, 1)), (lambda y2: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(3, 1)), (lambda y3: hydra.monads.pure((y1, y2, y3)))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just((2, 3, 4)), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# mapMaybe
+
+def test_mapmaybe__mapmaybe_just():
+
+    assert (hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(5, 1)), (lambda y: hydra.monads.pure(Just(y)))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(Just(6)), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+def test_mapmaybe__mapmaybe_nothing():
+
+    assert (hydra.monads.pure(Nothing()).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(Nothing()), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# mapSet
+
+def test_mapset__mapset_add_one():
+
+    assert (hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(1, 1)), (lambda y1: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(2, 1)), (lambda y2: hydra.monads.bind(hydra.monads.pure(hydra.lib.math.add(3, 1)), (lambda y3: hydra.monads.pure(hydra.lib.sets.from_list((y1, y2, y3))))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(frozenset({2, 3, 4})), None, hydra.compute.Trace((), (), FrozenDict({}))))
 
 # pure
 
@@ -90,3 +140,9 @@ def test_pure__pure_negative():
 def test_pure__pure_string():
 
     assert (hydra.monads.pure("hello").value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just("hello"), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# sequence
+
+def test_sequence__sequence_pure_list():
+
+    assert (hydra.monads.bind(hydra.monads.pure(1), (lambda x1: hydra.monads.bind(hydra.monads.pure(2), (lambda x2: hydra.monads.bind(hydra.monads.pure(3), (lambda x3: hydra.monads.pure((x1, x2, x3)))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just((1, 2, 3)), None, hydra.compute.Trace((), (), FrozenDict({}))))
