@@ -396,6 +396,33 @@ reduceTerm eager term =
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
               in (Rewriting.rewriteTermM mapping term)
 
+rewriteAndFoldTermWithTypeContext :: (((t0 -> Core.Term -> t1) -> Typing.TypeContext -> t0 -> Core.Term -> t1) -> Typing.TypeContext -> t0 -> Core.Term -> t1)
+rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =  
+  let f2 = (\recurse -> \cx -> \val -> \term ->  
+          let recurse1 = (\val -> \term -> recurse cx val term)
+          in ((\x -> case x of
+            Core.TermFunction v1 -> ((\x -> case x of
+              Core.FunctionLambda v2 ->  
+                let cx1 = (Schemas.extendTypeContextForLambda cx v2)
+                in  
+                  let recurse2 = (\val -> \term -> recurse cx1 val term)
+                  in (f recurse2 cx1 val term)
+              _ -> (f recurse1 cx val term)) v1)
+            Core.TermLet v1 ->  
+              let cx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
+              in  
+                let recurse2 = (\val -> \term -> recurse cx1 val term)
+                in (f recurse2 cx1 val term)
+            Core.TermTypeLambda v1 ->  
+              let cx1 = (Schemas.extendTypeContextForTypeLambda cx v1)
+              in  
+                let recurse2 = (\val -> \term -> recurse cx1 val term)
+                in (f recurse2 cx1 val term)
+            _ -> (f recurse1 cx val term)) term))
+  in  
+    let rewrite = (\cx -> \val -> \term -> f2 rewrite cx val term)
+    in (rewrite cx0 val0 term0)
+
 -- | Rewrite a term with the help of a type context which is updated as we descend into subterms
 rewriteTermWithTypeContext :: (((Typing.TypeContext -> Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Typing.TypeContext -> Core.Term -> Core.Term)
 rewriteTermWithTypeContext f cx0 term0 =  
