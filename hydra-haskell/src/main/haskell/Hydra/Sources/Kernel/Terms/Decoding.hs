@@ -118,6 +118,8 @@ define = definitionInModule module_
 
 -- | Build a decoder term that takes cx and raw, strips annotations/dereferences variables, and matches on it
 -- The result is: \cx -> \raw -> either (\err -> Left (DecodingError err)) (\stripped -> case stripped of ...) (stripAndDereferenceTermEither cx raw)
+-- Note: We use the original inline style - the Python coder should handle this pattern by recognizing
+-- when a lambda body is a case application and generating a proper function with match statement.
 deannotateAndMatch :: TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
 deannotateAndMatch dflt cses = DC.lambda "cx" $ DC.lambda "raw" $
   DC.primitive _eithers_either

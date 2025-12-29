@@ -112,8 +112,7 @@ writePython "../hydra-python/src/main/python" kernelModules kernelModules
 For Python tests, use:
 
 ```haskell
-let allModules = mainModules ++ testModules
-writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
+writePython "../hydra-python/src/gen-test/python" mainModules testModules
 ```
 
 Note: Python generation currently requires extra memory when generating the entire kernel (see [Issue #209](https://github.com/CategoricalData/hydra/issues/209)).
