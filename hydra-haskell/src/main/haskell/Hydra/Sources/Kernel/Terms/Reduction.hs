@@ -1,7 +1,7 @@
 module Hydra.Sources.Kernel.Terms.Reduction where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm, reduceTerm, rewriteTermWithTypeContext, termIsClosed, termIsValue)
+import Hydra.Kernel hiding (alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm, reduceTerm, rewriteAndFoldTermWithTypeContext, rewriteTermWithTypeContext, termIsClosed, termIsValue)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -87,6 +87,7 @@ module_ = Module ns elements
      toBinding etaExpansionArity,
      toBinding etaExpandTypedTerm,
      toBinding reduceTerm,
+     toBinding rewriteAndFoldTermWithTypeContext,
      toBinding rewriteTermWithTypeContext,
      toBinding termIsClosed,
      toBinding termIsValue]
@@ -375,7 +376,6 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
 --  trace ("term0: " ++ (ShowCore.term @@ var "term0")) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
 
--- Note: unused / untested
 etaReduceTerm :: TBinding (Term -> Term)
 etaReduceTerm = define "etaReduceTerm" $
   doc "Eta-reduce a term by removing redundant lambda abstractions" $
@@ -607,6 +607,35 @@ reduceTerm = define "reduceTerm" $
 
 
 
+
+rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
+  doc ("Rewrite a term while folding to produce a value, with TypeContext updated as we descend into subterms."
+    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  -- f2 wraps f to handle TypeContext updates for lambda/let/typeLambda
+  "f2" <~ ("recurse" ~> "cx" ~> "val" ~> "term" ~>
+    -- recurse1 is what the user sees: it takes just (val, term) and handles cx internally
+    "recurse1" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx" @@ var "val" @@ var "term") $
+    -- Determine updated context based on term type, then call user's f
+    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "val" @@ var "term") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "val" @@ var "term") [
+        _Function_lambda>>: "l" ~>
+          "cx1" <~ Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l" $
+          "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
+          var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term"],
+      _Term_let>>: "l" ~>
+        "cx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term",
+      _Term_typeLambda>>: "tl" ~>
+        "cx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl" $
+        "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term"]) $
+  -- Use rewriteAndFoldTerm, threading f2 through with context management
+  "rewrite" <~ ("cx" ~> "val" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "val" @@ var "term") $
+  var "rewrite" @@ var "cx0" @@ var "val0" @@ var "term0"
 
 rewriteTermWithTypeContext :: TBinding (((TypeContext -> Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
 rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
