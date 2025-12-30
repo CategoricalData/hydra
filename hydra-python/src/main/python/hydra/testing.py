@@ -159,6 +159,40 @@ FREE_VARIABLES_TEST_CASE__NAME = hydra.core.Name("hydra.testing.FreeVariablesTes
 FREE_VARIABLES_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 FREE_VARIABLES_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
+class HoistPredicate(Enum):
+    r"""A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings."""
+    
+    CASE_STATEMENTS = "caseStatements"
+    r"""Hoist case statements (elimination unions) that appear in non-top-level positions."""
+    
+    APPLICATIONS = "applications"
+    r"""Hoist function applications that appear in non-top-level positions."""
+    
+    LISTS = "lists"
+    r"""Hoist list terms that appear in non-top-level positions."""
+    
+    NOTHING = "nothing"
+    r"""Never hoist anything (identity transformation for let terms)."""
+
+HOIST_PREDICATE__NAME = hydra.core.Name("hydra.testing.HoistPredicate")
+HOIST_PREDICATE__CASE_STATEMENTS__NAME = hydra.core.Name("caseStatements")
+HOIST_PREDICATE__APPLICATIONS__NAME = hydra.core.Name("applications")
+HOIST_PREDICATE__LISTS__NAME = hydra.core.Name("lists")
+HOIST_PREDICATE__NOTHING__NAME = hydra.core.Name("nothing")
+
+@dataclass(frozen=True)
+class HoistSubtermsTestCase:
+    r"""A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings."""
+    
+    predicate: Annotated[HoistPredicate, "The predicate that determines which subterms to hoist"]
+    input: Annotated[hydra.core.Term, "The input term (must contain a let expression for hoisting to occur)"]
+    output: Annotated[hydra.core.Term, "The expected output term with hoisted subterms as new bindings"]
+
+HOIST_SUBTERMS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.HoistSubtermsTestCase")
+HOIST_SUBTERMS_TEST_CASE__PREDICATE__NAME = hydra.core.Name("predicate")
+HOIST_SUBTERMS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+HOIST_SUBTERMS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
 class TermRewriter(Enum):
     r"""A predefined term rewriter for testing rewriteTerm."""
     
@@ -400,13 +434,16 @@ class TestCaseRewriteTerm(Node["RewriteTermTestCase"]):
 class TestCaseRewriteType(Node["RewriteTypeTestCase"]):
     r"""A rewrite type test."""
 
+class TestCaseHoistSubterms(Node["HoistSubtermsTestCase"]):
+    r"""A hoist subterms test."""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms"""
     
     pass
 
@@ -438,6 +475,7 @@ TEST_CASE__NORMALIZE_TYPE_VARIABLES__NAME = hydra.core.Name("normalizeTypeVariab
 TEST_CASE__FOLD_OVER_TERM__NAME = hydra.core.Name("foldOverTerm")
 TEST_CASE__REWRITE_TERM__NAME = hydra.core.Name("rewriteTerm")
 TEST_CASE__REWRITE_TYPE__NAME = hydra.core.Name("rewriteType")
+TEST_CASE__HOIST_SUBTERMS__NAME = hydra.core.Name("hoistSubterms")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:

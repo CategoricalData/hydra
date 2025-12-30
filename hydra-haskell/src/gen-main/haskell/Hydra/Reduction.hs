@@ -291,23 +291,37 @@ etaExpandTypedTerm tx0 term0 =
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
--- | Hoist case statements into bindings in the nearest enclosing let term. This is useful for targets such as Python which only support case statements (match) at the top level.
+-- | Hoist case statements into bindings in the nearest enclosing let term. This is useful for targets such as Python which only support case statements (match) at the top level. Also hoists applications where the function is a case statement.
 hoistCaseStatements :: (Typing.TypeContext -> Core.Term -> Core.Term)
 hoistCaseStatements = (hoistSubterms (\path -> \term ->  
-  let isUnionElim = ((\x -> case x of
+  let isUnionElimDirect = (\t -> (\x -> case x of
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionElimination v2 -> ((\x -> case x of
               Core.EliminationUnion _ -> True
               _ -> False) v2)
             _ -> False) v1)
-          _ -> False) term)
-  in (Logic.ifElse (Logic.not isUnionElim) False ( 
-    let innerPath = (Lists.tail path)
-    in (Logic.ifElse (Lists.null innerPath) False ( 
-      let allAppLhs = (Lists.foldl (\acc -> \accessor -> Logic.and acc ((\x -> case x of
-              Accessors.TermAccessorApplicationFunction -> True
-              _ -> False) accessor)) True innerPath)
-      in (Logic.not allAppLhs)))))))
+          _ -> False) t)
+  in  
+    let isUnionElim = (isUnionElimDirect term)
+    in  
+      let isAppWithCaseFn = ((\x -> case x of
+              Core.TermApplication v1 -> (isUnionElimDirect (Core.applicationFunction v1))
+              _ -> False) term)
+      in (Logic.ifElse (Lists.null path) False ( 
+        let innerPath = (Lists.tail path)
+        in (Logic.ifElse (Lists.null innerPath) False (Logic.ifElse isAppWithCaseFn ( 
+          let allAppLhs = (Lists.foldl (\acc -> \accessor -> Logic.and acc ((\x -> case x of
+                  Accessors.TermAccessorApplicationFunction -> True
+                  _ -> False) accessor)) True innerPath)
+          in (Logic.not allAppLhs)) (Logic.ifElse isUnionElim ( 
+          let lastIsAppFn = ((\x -> case x of
+                  Accessors.TermAccessorApplicationFunction -> True
+                  _ -> False) (Lists.last innerPath))
+          in (Logic.ifElse lastIsAppFn False ( 
+            let allAppLhs2 = (Lists.foldl (\acc -> \accessor -> Logic.and acc ((\x -> case x of
+                    Accessors.TermAccessorApplicationFunction -> True
+                    _ -> False) accessor)) True innerPath)
+            in (Logic.not allAppLhs2)))) False)))))))
 
 -- | Hoist subterms into bindings in the nearest enclosing let term, based on a predicate. The predicate receives the path (from the let body/binding root) and the term, and returns True if the term should be hoisted. When hoisting a term that contains free variables which are lambda-bound between the enclosing let and the current position, those variables are captured: the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables. Useful for targets that require certain constructs (e.g., case statements) at the top level.
 hoistSubterms :: (([Accessors.TermAccessor] -> Core.Term -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)

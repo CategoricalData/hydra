@@ -241,7 +241,7 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Type:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("rewriteType"), rewrite_type_test_case(v27)))))
         
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported TestCase")
 
 def test_case_with_metadata(x: hydra.testing.TestCaseWithMetadata) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.TestCaseWithMetadata"), (hydra.core.Field(hydra.core.Name("name"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.name)), hydra.core.Field(hydra.core.Name("case"), test_case(x.case)), hydra.core.Field(hydra.core.Name("description"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), opt))))(x.description)), hydra.core.Field(hydra.core.Name("tags"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(tag, xs))))(x.tags))))))

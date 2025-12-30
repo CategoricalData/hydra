@@ -32,8 +32,8 @@ def term_arity(v1: hydra.core.Term) -> int:
         case hydra.core.TermApplication(value=arg_):
             return (lambda arg_2: (lambda xapp: hydra.lib.math.sub(xapp, 1))(term_arity(arg_2)))(arg_.function)
         
-        case hydra.core.TermFunction(value=v12):
-            return function_arity(v12)
+        case hydra.core.TermFunction(value=v1):
+            return function_arity(v1)
         
         case _:
             return 0
