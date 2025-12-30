@@ -210,14 +210,19 @@ constructModule = haskellCoderDefinition "constructModule" $ "namespaces" ~> "mo
           H._Import_module>>: wrap H._ModuleName $ var "name",
           H._Import_as>>: Maybes.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
-      Lists.map (var "toImport") $ list [
-        pair (pair (string "Prelude") nothing) (list $ string <$> [
-          "Enum", "Ordering", "fail", "map", "pure", "sum"]),
-        pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
-        pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
-        pair (pair (string "Data.List") (just $ string "L")) (list ([] :: [TTerm String])),
-        pair (pair (string "Data.Map") (just $ string "M")) (list ([] :: [TTerm String])),
-        pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String]))]] $
+      Lists.map (var "toImport") $ Lists.concat2
+        (list [
+          pair (pair (string "Prelude") nothing) (list $ string <$> [
+            "Enum", "Ordering", "fail", "map", "pure", "sum"]),
+          pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
+          pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
+          pair (pair (string "Data.List") (just $ string "L")) (list ([] :: [TTerm String])),
+          pair (pair (string "Data.Map") (just $ string "M")) (list ([] :: [TTerm String])),
+          pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String]))])
+        -- Conditionally add Hydra.Lib.Literals import if binary literals are present
+        (Logic.ifElse (Schemas.moduleContainsBinaryLiterals @@ var "mod")
+          (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
+          (list ([] :: [TTerm ((String, Maybe String), [String])])))] $
     "g" <<~ Monads.getState $
     "declLists" <<~ Flows.mapList (var "createDeclarations" @@ var "g") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",

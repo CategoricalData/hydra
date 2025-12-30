@@ -5,7 +5,6 @@
 module Hydra.Test.Lib.Literals where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -13,6 +12,7 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Hydra.Lib.Literals as Literals
 
 -- | Test cases for hydra.lib.literals primitives
 allTests :: Testing.TestGroup
