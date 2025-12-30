@@ -31,6 +31,22 @@ def even(x: int) -> bool:
     return x % 2 == 0
 
 
+def max_(x: int, y: int) -> int:
+    """Return the maximum of two integers."""
+    return _builtins.max(x, y)
+
+# Alias for Hydra compatibility (max is a Python builtin)
+max = max_
+
+
+def min_(x: int, y: int) -> int:
+    """Return the minimum of two integers."""
+    return _builtins.min(x, y)
+
+# Alias for Hydra compatibility (min is a Python builtin)
+min = min_
+
+
 def mod(a: int, b: int) -> int:
     """Mathematical modulo with result having same sign as divisor."""
     return a % b

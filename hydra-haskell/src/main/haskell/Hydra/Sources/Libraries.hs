@@ -310,6 +310,8 @@ hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim2 _math_add    Math.add    [] int32 int32 int32,
   prim2 _math_div    Math.div    [] int32 int32 int32,
   prim1 _math_even   Math.even   [] int32 boolean,
+  prim2 _math_max    Math.max    [] int32 int32 int32,
+  prim2 _math_min    Math.min    [] int32 int32 int32,
   prim2 _math_mod    Math.mod    [] int32 int32 int32,
   prim2 _math_mul    Math.mul    [] int32 int32 int32,
   prim1 _math_negate Math.negate [] int32 int32,

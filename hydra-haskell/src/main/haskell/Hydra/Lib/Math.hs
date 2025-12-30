@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Math where
 
-import Prelude (Num, Integral, Enum, Bool, Double, Integer, Float, (.), ($), (+), (-), (*))
+import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, (.), ($), (+), (-), (*))
 import qualified Prelude
 
 
@@ -63,6 +63,12 @@ log = Prelude.log
 
 logBase :: Double -> Double -> Double
 logBase = Prelude.logBase
+
+max :: Ord a => a -> a -> a
+max = Prelude.max
+
+min :: Ord a => a -> a -> a
+min = Prelude.min
 
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 mod :: Integral a => a -> a -> a

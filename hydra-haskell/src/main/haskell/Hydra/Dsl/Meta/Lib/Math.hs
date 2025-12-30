@@ -65,6 +65,12 @@ log = primitive1 _math_log
 logBase :: TTerm Double -> TTerm Double -> TTerm Double
 logBase = primitive2 _math_logBase
 
+max :: Ord a => TTerm a -> TTerm a -> TTerm a
+max = primitive2 _math_max
+
+min :: Ord a => TTerm a -> TTerm a -> TTerm a
+min = primitive2 _math_min
+
 mod :: Integral a => TTerm a -> TTerm a -> TTerm a
 mod = primitive2 _math_mod
 
