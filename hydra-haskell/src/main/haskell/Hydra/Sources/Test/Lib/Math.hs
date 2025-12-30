@@ -60,6 +60,28 @@ mathEven = subgroup "even" [
   where
     test name x result = primCase name _math_even [int32 x] result
 
+mathMax :: TTerm TestGroup
+mathMax = subgroup "max" [
+  test "first is larger" 10 5 10,
+  test "second is larger" 5 10 10,
+  test "equal values" 7 7 7,
+  test "negative numbers" (-3) (-5) (-3),
+  test "mixed sign" (-5) 5 5,
+  test "with zero" 0 42 42]
+  where
+    test name x y result = primCase name _math_max [int32 x, int32 y] (int32 result)
+
+mathMin :: TTerm TestGroup
+mathMin = subgroup "min" [
+  test "first is smaller" 5 10 5,
+  test "second is smaller" 10 5 5,
+  test "equal values" 7 7 7,
+  test "negative numbers" (-3) (-5) (-5),
+  test "mixed sign" (-5) 5 (-5),
+  test "with zero" 0 42 0]
+  where
+    test name x y result = primCase name _math_min [int32 x, int32 y] (int32 result)
+
 mathMod :: TTerm TestGroup
 mathMod = subgroup "mod" [
   test "basic modulo" 10 3 1,
@@ -345,6 +367,8 @@ allTests = definitionInModule module_ "allTests" $
       mathAdd,
       mathDiv,
       mathEven,
+      mathMax,
+      mathMin,
       mathMod,
       mathMul,
       mathNegate,

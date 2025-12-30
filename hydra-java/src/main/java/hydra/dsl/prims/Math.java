@@ -3,6 +3,8 @@ package hydra.dsl.prims;
 import hydra.core.Term;
 import hydra.lib.math.Add;
 import hydra.lib.math.Div;
+import hydra.lib.math.Max;
+import hydra.lib.math.Min;
 import hydra.lib.math.Mod;
 import hydra.lib.math.Mul;
 import hydra.lib.math.Neg;
@@ -29,6 +31,24 @@ public interface Math {
      */
     static Term div() {
         return new Div().term();
+    }
+
+    /**
+     * Returns a term representing the max primitive operation.
+     *
+     * @return a term for computing the maximum of two values
+     */
+    static Term max() {
+        return new Max().term();
+    }
+
+    /**
+     * Returns a term representing the min primitive operation.
+     *
+     * @return a term for computing the minimum of two values
+     */
+    static Term min() {
+        return new Min().term();
     }
 
     /**
