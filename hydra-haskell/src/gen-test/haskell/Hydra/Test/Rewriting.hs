@@ -3005,5 +3005,217 @@ allTests = Testing.TestGroup {
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]}))})),
               Core.annotatedTermAnnotation = M.empty}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "rewriteAndFoldTermWithPath",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through application - sum literals",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through nested applications",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x"),
+                      (Core.TermVariable (Core.Name "y"))])})))}))),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through let bindings",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermList [
+                Core.TermVariable (Core.Name "x"),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 32)))])})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through record fields",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "Point"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "x"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "y"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through case branches",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+              Core.caseStatementTypeName = (Core.Name "Result"),
+              Core.caseStatementDefault = Nothing,
+              Core.caseStatementCases = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "ok"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "err"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})))),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through pair",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7))))),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through optional",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through wrapped term",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermWrap (Core.WrappedTerm {
+              Core.wrappedTermTypeName = (Core.Name "Age"),
+              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through type lambda",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermTypeLambda (Core.TypeLambda {
+              Core.typeLambdaParameter = (Core.Name "a"),
+              Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through type application",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))),
+              Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "path tracking through set elements",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "deep nesting - application in lambda in let",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "x"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
+            Testing.foldOverTermTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "collect list lengths in nested structure",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermList [
+              Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
+              (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))])]),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
+            Testing.foldOverTermTestCaseOutput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "collect list lengths in let body",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
+            Testing.foldOverTermTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "xs"),
+                  Core.bindingTerm = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))]),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
+            Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
+            Testing.foldOverTermTestCaseOutput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

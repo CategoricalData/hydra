@@ -90,6 +90,7 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags)
     TestCaseFoldOverTerm _ -> Nothing
     TestCaseRewriteTerm _ -> Nothing
     TestCaseRewriteType _ -> Nothing
+    TestCaseHoistSubterms _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term

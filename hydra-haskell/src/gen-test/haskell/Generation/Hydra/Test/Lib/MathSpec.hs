@@ -68,6 +68,44 @@ spec = H.describe "hydra.lib.math primitives" $ do
     H.it "zero" $ H.shouldBe
       (Math.even 0)
       (True)
+  H.describe "max" $ do
+    H.it "first is larger" $ H.shouldBe
+      (Math.max 10 5)
+      (10)
+    H.it "second is larger" $ H.shouldBe
+      (Math.max 5 10)
+      (10)
+    H.it "equal values" $ H.shouldBe
+      (Math.max 7 7)
+      (7)
+    H.it "negative numbers" $ H.shouldBe
+      (Math.max (-3) (-5))
+      ((-3))
+    H.it "mixed sign" $ H.shouldBe
+      (Math.max (-5) 5)
+      (5)
+    H.it "with zero" $ H.shouldBe
+      (Math.max 0 42)
+      (42)
+  H.describe "min" $ do
+    H.it "first is smaller" $ H.shouldBe
+      (Math.min 5 10)
+      (5)
+    H.it "second is smaller" $ H.shouldBe
+      (Math.min 10 5)
+      (5)
+    H.it "equal values" $ H.shouldBe
+      (Math.min 7 7)
+      (7)
+    H.it "negative numbers" $ H.shouldBe
+      (Math.min (-3) (-5))
+      ((-5))
+    H.it "mixed sign" $ H.shouldBe
+      (Math.min (-5) 5)
+      ((-5))
+    H.it "with zero" $ H.shouldBe
+      (Math.min 0 42)
+      (0)
   H.describe "mod" $ do
     H.it "basic modulo" $ H.shouldBe
       (Math.mod 10 3)

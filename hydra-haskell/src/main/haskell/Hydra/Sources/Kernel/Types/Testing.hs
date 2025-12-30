@@ -40,6 +40,8 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, Json.ns, 
       foldOperation,
       foldOverTermTestCase,
       freeVariablesTestCase,
+      hoistPredicate,
+      hoistSubtermsTestCase,
       termRewriter,
       rewriteTermTestCase,
       typeRewriter,
@@ -207,6 +209,39 @@ freeVariablesTestCase = define "FreeVariablesTestCase" $
     "output">:
       doc "The expected set of free variable names" $
       T.set Core.name]
+
+hoistPredicate :: Binding
+hoistPredicate = define "HoistPredicate" $
+  doc "A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings." $
+  T.union [
+    "caseStatements">:
+      doc "Hoist case statements (elimination unions) that appear in non-top-level positions" $
+      T.unit,
+    "applications">:
+      doc "Hoist function applications that appear in non-top-level positions" $
+      T.unit,
+    "lists">:
+      doc "Hoist list terms that appear in non-top-level positions" $
+      T.unit,
+    "nothing">:
+      doc "Never hoist anything (identity transformation for let terms)" $
+      T.unit]
+
+hoistSubtermsTestCase :: Binding
+hoistSubtermsTestCase = define "HoistSubtermsTestCase" $
+  doc ("A test case which hoists subterms into let bindings based on a predicate,"
+    <> " and compares the result with the expected term."
+    <> " The predicate decides which subterms at which positions should be extracted into new bindings.") $
+  T.record [
+    "predicate">:
+      doc "The predicate that determines which subterms to hoist"
+      hoistPredicate,
+    "input">:
+      doc "The input term (must contain a let expression for hoisting to occur)"
+      Core.term,
+    "output">:
+      doc "The expected output term with hoisted subterms as new bindings"
+      Core.term]
 
 termRewriter :: Binding
 termRewriter = define "TermRewriter" $
@@ -463,7 +498,10 @@ testCase = define "TestCase" $
       rewriteTermTestCase,
     "rewriteType">:
       doc "A rewrite type test"
-      rewriteTypeTestCase]
+      rewriteTypeTestCase,
+    "hoistSubterms">:
+      doc "A hoist subterms test"
+      hoistSubtermsTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $

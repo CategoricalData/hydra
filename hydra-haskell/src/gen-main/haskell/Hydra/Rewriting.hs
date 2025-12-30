@@ -733,6 +733,172 @@ rewriteAndFoldTermM f term0 =
     let recurse = (f (fsub recurse))
     in (recurse term0)
 
+rewriteAndFoldTermWithPath :: ((([Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term))
+rewriteAndFoldTermWithPath f term0 =  
+  let fsub = (\recurse -> \path -> \val0 -> \term0 ->  
+          let forSingleWithAccessor = (\rec -> \cons -> \accessor -> \val -> \term ->  
+                  let r = (rec (Lists.concat2 path [
+                          accessor]) val term)
+                  in (Pairs.first r, (cons (Pairs.second r))))
+          in  
+            let forManyWithAccessors = (\rec -> \cons -> \val -> \accessorTermPairs ->  
+                    let rr = (Lists.foldl (\r -> \atp ->  
+                            let r2 = (rec (Lists.concat2 path [
+                                    Pairs.first atp]) (Pairs.first r) (Pairs.second atp))
+                            in (Pairs.first r2, (Lists.cons (Pairs.second r2) (Pairs.second r)))) (val, []) accessorTermPairs)
+                    in (Pairs.first rr, (cons (Lists.reverse (Pairs.second rr)))))
+            in  
+              let forFieldWithAccessor = (\mkAccessor -> \val -> \field ->  
+                      let r = (recurse (Lists.concat2 path [
+                              mkAccessor (Core.fieldName field)]) val (Core.fieldTerm field))
+                      in (Pairs.first r, Core.Field {
+                        Core.fieldName = (Core.fieldName field),
+                        Core.fieldTerm = (Pairs.second r)}))
+              in  
+                let forFieldsWithAccessor = (\mkAccessor -> forManyWithAccessors (\path1 -> \val1 -> \field1 -> forFieldWithAccessor mkAccessor val1 field1) (\x -> x))
+                in  
+                  let forPairWithAccessors = (\keyAccessor -> \valAccessor -> \val -> \kv ->  
+                          let rk = (recurse (Lists.concat2 path [
+                                  keyAccessor]) val (Pairs.first kv))
+                          in  
+                            let rv = (recurse (Lists.concat2 path [
+                                    valAccessor]) (Pairs.first rk) (Pairs.second kv))
+                            in (Pairs.first rv, (Pairs.second rk, (Pairs.second rv))))
+                  in  
+                    let forBindingWithAccessor = (\val -> \binding ->  
+                            let r = (recurse (Lists.concat2 path [
+                                    Accessors.TermAccessorLetBinding (Core.bindingName binding)]) val (Core.bindingTerm binding))
+                            in (Pairs.first r, Core.Binding {
+                              Core.bindingName = (Core.bindingName binding),
+                              Core.bindingTerm = (Pairs.second r),
+                              Core.bindingType = (Core.bindingType binding)}))
+                    in  
+                      let forElimination = (\val -> \elm ->  
+                              let r = ((\x -> case x of
+                                      Core.EliminationUnion v1 ->  
+                                        let rmd = (Maybes.map (\def -> recurse (Lists.concat2 path [
+                                                Accessors.TermAccessorUnionCasesDefault]) val def) (Core.caseStatementDefault v1))
+                                        in  
+                                          let val1 = (Maybes.maybe val Pairs.first rmd)
+                                          in  
+                                            let rcases = (forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f -> (Accessors.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v1)))
+                                            in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
+                                              Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                                              Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                                              Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
+                                                Core.fieldName = (Pairs.first ft),
+                                                Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v1)) (Pairs.second rcases)))})))
+                                      _ -> (val, elm)) elm)
+                              in (Pairs.first r, (Pairs.second r)))
+                      in  
+                        let forFunction = (\val -> \fun -> (\x -> case x of
+                                Core.FunctionElimination v1 ->  
+                                  let re = (forElimination val v1)
+                                  in (Pairs.first re, (Core.FunctionElimination (Pairs.second re)))
+                                Core.FunctionLambda v1 ->  
+                                  let rl = (recurse (Lists.concat2 path [
+                                          Accessors.TermAccessorLambdaBody]) val (Core.lambdaBody v1))
+                                  in (Pairs.first rl, (Core.FunctionLambda (Core.Lambda {
+                                    Core.lambdaParameter = (Core.lambdaParameter v1),
+                                    Core.lambdaDomain = (Core.lambdaDomain v1),
+                                    Core.lambdaBody = (Pairs.second rl)})))
+                                _ -> (val, fun)) fun)
+                        in  
+                          let dflt = (val0, term0)
+                          in ((\x -> case x of
+                            Core.TermAnnotated v1 -> (forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
+                              Core.annotatedTermBody = t,
+                              Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})) Accessors.TermAccessorAnnotatedBody val0 (Core.annotatedTermBody v1))
+                            Core.TermApplication v1 ->  
+                              let rlhs = (recurse (Lists.concat2 path [
+                                      Accessors.TermAccessorApplicationFunction]) val0 (Core.applicationFunction v1))
+                              in  
+                                let rrhs = (recurse (Lists.concat2 path [
+                                        Accessors.TermAccessorApplicationArgument]) (Pairs.first rlhs) (Core.applicationArgument v1))
+                                in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Pairs.second rlhs),
+                                  Core.applicationArgument = (Pairs.second rrhs)})))
+                            Core.TermEither v1 -> (Eithers.either (\l ->  
+                              let rl = (recurse (Lists.concat2 path [
+                                      Accessors.TermAccessorSumTerm]) val0 l)
+                              in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->  
+                              let rr = (recurse (Lists.concat2 path [
+                                      Accessors.TermAccessorSumTerm]) val0 r)
+                              in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v1)
+                            Core.TermFunction v1 ->  
+                              let rf = (forFunction val0 v1)
+                              in (Pairs.first rf, (Core.TermFunction (Pairs.second rf)))
+                            Core.TermLet v1 ->  
+                              let renv = (recurse (Lists.concat2 path [
+                                      Accessors.TermAccessorLetBody]) val0 (Core.letBody v1))
+                              in  
+                                let rbindings = (Lists.foldl (\r -> \binding ->  
+                                        let rb = (forBindingWithAccessor (Pairs.first r) binding)
+                                        in (Pairs.first rb, (Lists.cons (Pairs.second rb) (Pairs.second r)))) (Pairs.first renv, []) (Core.letBindings v1))
+                                in (Pairs.first rbindings, (Core.TermLet (Core.Let {
+                                  Core.letBindings = (Lists.reverse (Pairs.second rbindings)),
+                                  Core.letBody = (Pairs.second renv)})))
+                            Core.TermList v1 ->  
+                              let idx = 0
+                              in  
+                                let rr = (Lists.foldl (\r -> \el ->  
+                                        let r2 = (recurse (Lists.concat2 path [
+                                                Accessors.TermAccessorListElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el)
+                                        in (Math.add (Pairs.first r) 1, (Pairs.first r2, (Lists.cons (Pairs.second r2) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) v1)
+                                in (Pairs.first (Pairs.second rr), (Core.TermList (Lists.reverse (Pairs.second (Pairs.second rr)))))
+                            Core.TermMap v1 ->  
+                              let idx = 0
+                              in  
+                                let rr = (Lists.foldl (\r -> \kv ->  
+                                        let rk = (recurse (Lists.concat2 path [
+                                                Accessors.TermAccessorMapKey (Pairs.first r)]) (Pairs.first (Pairs.second r)) (Pairs.first kv))
+                                        in  
+                                          let rv = (recurse (Lists.concat2 path [
+                                                  Accessors.TermAccessorMapValue (Pairs.first r)]) (Pairs.first rk) (Pairs.second kv))
+                                          in (Math.add (Pairs.first r) 1, (Pairs.first rv, (Lists.cons (Pairs.second rk, (Pairs.second rv)) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Maps.toList v1))
+                                in (Pairs.first (Pairs.second rr), (Core.TermMap (Maps.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
+                            Core.TermMaybe v1 -> (Maybes.maybe dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermMaybe (Just t1)) Accessors.TermAccessorMaybeTerm val0 t) v1)
+                            Core.TermPair v1 ->  
+                              let rf = (recurse (Lists.concat2 path [
+                                      Accessors.TermAccessorProductTerm 0]) val0 (Pairs.first v1))
+                              in  
+                                let rs = (recurse (Lists.concat2 path [
+                                        Accessors.TermAccessorProductTerm 1]) (Pairs.first rf) (Pairs.second v1))
+                                in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
+                            Core.TermRecord v1 ->  
+                              let rfields = (forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v1)))
+                              in (Pairs.first rfields, (Core.TermRecord (Core.Record {
+                                Core.recordTypeName = (Core.recordTypeName v1),
+                                Core.recordFields = (Lists.map (\ft -> Core.Field {
+                                  Core.fieldName = (Pairs.first ft),
+                                  Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.recordFields v1)) (Pairs.second rfields)))})))
+                            Core.TermSet v1 ->  
+                              let idx = 0
+                              in  
+                                let rr = (Lists.foldl (\r -> \el ->  
+                                        let r2 = (recurse (Lists.concat2 path [
+                                                Accessors.TermAccessorSetElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el)
+                                        in (Math.add (Pairs.first r) 1, (Pairs.first r2, (Lists.cons (Pairs.second r2) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Sets.toList v1))
+                                in (Pairs.first (Pairs.second rr), (Core.TermSet (Sets.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
+                            Core.TermTypeApplication v1 -> (forSingleWithAccessor recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = t,
+                              Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})) Accessors.TermAccessorTypeApplicationTerm val0 (Core.typeApplicationTermBody v1))
+                            Core.TermTypeLambda v1 -> (forSingleWithAccessor recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
+                              Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+                              Core.typeLambdaBody = t})) Accessors.TermAccessorTypeLambdaBody val0 (Core.typeLambdaBody v1))
+                            Core.TermUnion v1 -> (forSingleWithAccessor recurse (\t -> Core.TermUnion (Core.Injection {
+                              Core.injectionTypeName = (Core.injectionTypeName v1),
+                              Core.injectionField = Core.Field {
+                                Core.fieldName = (Core.fieldName (Core.injectionField v1)),
+                                Core.fieldTerm = t}})) Accessors.TermAccessorInjectionTerm val0 (Core.fieldTerm (Core.injectionField v1)))
+                            Core.TermWrap v1 -> (forSingleWithAccessor recurse (\t -> Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+                              Core.wrappedTermBody = t})) Accessors.TermAccessorWrappedTerm val0 (Core.wrappedTermBody v1))
+                            _ -> dflt) term0))
+  in  
+    let recurse = (f (fsub recurse))
+    in (recurse [] term0)
+
 rewriteTerm :: (((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term)
 rewriteTerm f term0 =  
   let fsub = (\recurse -> \term ->  

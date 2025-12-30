@@ -21,6 +21,7 @@ import qualified Hydra.Json as Json
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Coders as Coders
 
 import qualified Control.Monad as CM
@@ -131,6 +132,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isUsesKern
       H.it "rewrite type" $ H.shouldBe
         (runTypeRewriter rewriter input)
         output
+    TestCaseHoistSubterms (HoistSubtermsTestCase predicate input output) ->
+      H.it "hoist subterms" $ H.shouldBe
+        (runHoistSubterms predicate input)
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
@@ -211,3 +216,25 @@ runTypeRewriter TypeRewriterReplaceStringWithInt32 = Rewriting.rewriteType rewri
     rewrite recurse typ = case typ of
       TypeLiteral LiteralTypeString -> TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
       _ -> recurse typ
+
+-- | Run hoistSubterms with the given predicate
+runHoistSubterms :: HoistPredicate -> Term -> Term
+runHoistSubterms pred term = Reduction.hoistSubterms (predicateFn pred) emptyTypeContext term
+  where
+    -- A predicate returns True if the term at the given path should be hoisted.
+    -- The path represents the position within the let body/binding.
+    -- Note: path is from innermost to outermost (reversed from traversal order).
+    predicateFn :: HoistPredicate -> [TermAccessor] -> Term -> Bool
+    predicateFn HoistPredicateNothing _ _ = False
+    predicateFn HoistPredicateLists path term = case term of
+      TermList _ -> not (null path)  -- Only hoist if not at top level
+      _ -> False
+    predicateFn HoistPredicateApplications path term = case term of
+      TermApplication _ -> not (null path)  -- Only hoist if not at top level
+      _ -> False
+    predicateFn HoistPredicateCaseStatements path term = case term of
+      TermFunction (FunctionElimination _) -> not (null path)  -- Case statements are eliminations
+      _ -> False
+
+    emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty emptyInferenceContext
+    emptyInferenceContext = InferenceContext M.empty M.empty M.empty M.empty False
