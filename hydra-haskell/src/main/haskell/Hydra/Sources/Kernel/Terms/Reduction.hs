@@ -424,42 +424,77 @@ etaReduceTerm = define "etaReduceTerm" $
 hoistCaseStatements :: TBinding (TypeContext -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
   doc ("Hoist case statements into bindings in the nearest enclosing let term."
-    <> " This is useful for targets such as Python which only support case statements (match) at the top level.") $
+    <> " This is useful for targets such as Python which only support case statements (match) at the top level."
+    <> " Also hoists applications where the function is a case statement.") $
   hoistSubterms @@ shouldHoistCaseStatement
   where
-    -- Predicate: hoist union eliminations that are not at level 0 or level 1 in an application LHS.
+    -- Predicate: hoist if:
+    -- 1. Term is a union elimination (case statement) not at level 0 or 1, AND not at ApplicationFunction position
+    -- 2. Term is an application where the function (at the root of an application spine) is a union elimination
     -- The path starts from within the let body/binding (first element indicates let body or binding).
     -- Level 0 = top level (empty path after ignoring let indicator)
     -- Level 1 = in application LHS chain from top
     -- Level 2+ = should be hoisted (not purely in application LHS chain)
     shouldHoistCaseStatement :: TTerm ([TermAccessor] -> Term -> Bool)
     shouldHoistCaseStatement = "path" ~> "term" ~>
-      -- First check if it's a union elimination (case statement) - most terms are not
-      "isUnionElim" <~ (cases _Term (var "term")
-        (Just false) [
-        _Term_function>>: "f" ~> cases _Function (var "f")
+      -- Helper to check if a term is a union elimination (direct check, no recursion)
+      "isUnionElimDirect" <~ ("t" ~>
+        cases _Term (var "t")
           (Just false) [
-          _Function_elimination>>: "e" ~> cases _Elimination (var "e")
+          _Term_function>>: "f" ~> cases _Function (var "f")
             (Just false) [
-            _Elimination_union>>: constant true]]]) $
-      Logic.ifElse (Logic.not $ var "isUnionElim")
+            _Function_elimination>>: "e" ~> cases _Elimination (var "e")
+              (Just false) [
+              _Elimination_union>>: constant true]]]) $
+      -- Check if the term is a case statement
+      "isUnionElim" <~ var "isUnionElimDirect" @@ var "term" $
+      -- Check if the term is an application where the immediate function is a case statement
+      -- For (case... @ arg), the function is case...
+      -- For ((case... @ arg1) @ arg2), the function is (case... @ arg1)
+      -- We want to hoist the outermost application where the root is a case statement
+      "isAppWithCaseFn" <~ (cases _Term (var "term")
+        (Just false) [
+        _Term_application>>: "app" ~>
+          var "isUnionElimDirect" @@ (Core.applicationFunction $ var "app")]) $
+      -- Check position: ignore the first path element (let body/binding indicator)
+      -- Empty path means at the root (shouldn't happen, but handle gracefully)
+      Logic.ifElse (Lists.null $ var "path")
         false
-        -- Check position: ignore the first path element (let body/binding indicator)
         ("innerPath" <~ Lists.tail (var "path") $
          -- Empty inner path means at top level of let body/binding - don't hoist
          Logic.ifElse (Lists.null $ var "innerPath")
            false
-           -- Check if purely in application LHS chain from top (level 1)
-           -- We use foldl to check if all elements are applicationFunction
-           ("allAppLhs" <~ Lists.foldl
-             ("acc" ~> "accessor" ~>
-               Logic.and (var "acc") (cases _TermAccessor (var "accessor")
-                 (Just false) [
-                 _TermAccessor_applicationFunction>>: constant true]))
-             true
-             (var "innerPath") $
-            -- Hoist unless we're in a pure application LHS chain from top
-            Logic.not (var "allAppLhs")))
+        -- For applications with case as immediate function, hoist the whole application
+        (Logic.ifElse (var "isAppWithCaseFn")
+          -- Check if purely in application LHS chain from top (level 1) - if so, don't hoist
+          ("allAppLhs" <~ Lists.foldl
+            ("acc" ~> "accessor" ~>
+              Logic.and (var "acc") (cases _TermAccessor (var "accessor")
+                (Just false) [
+                _TermAccessor_applicationFunction>>: constant true]))
+            true
+            (var "innerPath") $
+           Logic.not (var "allAppLhs"))
+          -- For bare case statements, also check we're not at ApplicationFunction position
+          (Logic.ifElse (var "isUnionElim")
+            -- Check if we're at the function position of an application (last element is ApplicationFunction)
+            -- If so, don't hoist - the parent application should be hoisted instead
+            ("lastIsAppFn" <~ cases _TermAccessor (Lists.last $ var "innerPath")
+              (Just false) [
+              _TermAccessor_applicationFunction>>: constant true] $
+             Logic.ifElse (var "lastIsAppFn")
+               false
+               -- Check if purely in application LHS chain from top (level 1)
+               ("allAppLhs2" <~ Lists.foldl
+                 ("acc" ~> "accessor" ~>
+                   Logic.and (var "acc") (cases _TermAccessor (var "accessor")
+                     (Just false) [
+                     _TermAccessor_applicationFunction>>: constant true]))
+                 true
+                 (var "innerPath") $
+                -- Hoist unless we're in a pure application LHS chain from top
+                Logic.not (var "allAppLhs2")))
+            false)))
 
 hoistSubterms :: TBinding (([TermAccessor] -> Term -> Bool) -> TypeContext -> Term -> Term)
 hoistSubterms = define "hoistSubterms" $

@@ -36,53 +36,54 @@ import qualified System.FilePath as FP
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeCpp = generateSources moduleToCpp cppLanguage False
+writeCpp = generateSources moduleToCpp cppLanguage False False
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeGraphql = generateSources moduleToGraphql graphqlLanguage False
+writeGraphql = generateSources moduleToGraphql graphqlLanguage False False
 
 -- | Generate Java source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeJava :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeJava = generateSources moduleToJava javaLanguage True
+writeJava = generateSources moduleToJava javaLanguage True False
 
 -- | Generate JSON Schema files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False
+writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False False
 
 -- | Generate PDL (Pegasus) source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writePdl :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writePdl = generateSources moduleToPdl pdlLanguage False
+writePdl = generateSources moduleToPdl pdlLanguage False False
 
 -- | Generate Protocol Buffers source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeProtobuf = generateSources moduleToProtobuf protobufLanguage False
+writeProtobuf = generateSources moduleToProtobuf protobufLanguage False False
 
 -- | Generate Python source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
+-- Note: Python uses doHoist=True to hoist case statements to let bindings
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writePython = generateSources moduleToPython pythonLanguage True
+writePython = generateSources moduleToPython pythonLanguage True True  -- hoisting disabled pending inference fix
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeScala = generateSources moduleToScala scalaLanguage True
+writeScala = generateSources moduleToScala scalaLanguage True False

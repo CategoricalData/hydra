@@ -318,6 +318,15 @@ def is_unit_term(v1: hydra.core.Term) -> bool:
         case _:
             return False
 
+def module_contains_binary_literals(mod: hydra.module.Module) -> bool:
+    r"""Check whether a module contains any binary literal values."""
+    
+    def check_term(found: bool, term: hydra.core.Term) -> bool:
+        return hydra.lib.logic.or_(found, hydra.dsl.python.unsupported("inline match expressions are not yet supported"))
+    def term_contains_binary(term: hydra.core.Term) -> bool:
+        return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, check_term, False, term)
+    return hydra.lib.lists.foldl((lambda acc, el: hydra.lib.logic.or_(acc, term_contains_binary(el.term))), False, mod.elements)
+
 def module_dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace."""
     
