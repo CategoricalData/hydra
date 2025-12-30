@@ -35,6 +35,7 @@ import Hydra.Kernel hiding (
   isUnitTerm,
   isUnitType,
   isType,
+  moduleContainsBinaryLiterals,
   moduleDependencyNamespaces,
   namespacesForDefinitions,
   nominalApplication,
@@ -168,6 +169,7 @@ module_ = Module ns elements
       toBinding isType,
       toBinding isUnitTerm,
       toBinding isUnitType,
+      toBinding moduleContainsBinaryLiterals,
       toBinding moduleDependencyNamespaces,
       toBinding namespacesForDefinitions,
       toBinding nominalApplication,
@@ -542,6 +544,22 @@ isUnitType :: TBinding (Type -> Bool)
 isUnitType = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just false) [_Type_unit>>: constant true]
+
+moduleContainsBinaryLiterals :: TBinding (Module -> Bool)
+moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
+  doc "Check whether a module contains any binary literal values" $
+  "mod" ~>
+  "checkTerm" <~ ("found" ~> "term" ~> Logic.or (var "found") $
+    cases _Term (var "term") (Just false) [
+      _Term_literal>>: "lit" ~>
+        cases _Literal (var "lit") (Just false) [
+          _Literal_binary>>: constant true]]) $
+  "termContainsBinary" <~ ("term" ~>
+    Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
+  Lists.foldl
+    ("acc" ~> "el" ~> Logic.or (var "acc") (var "termContainsBinary" @@ Core.bindingTerm (var "el")))
+    false
+    (Module.moduleElements (var "mod"))
 
 moduleDependencyNamespaces :: TBinding (Bool -> Bool -> Bool -> Bool -> Module -> Flow Graph (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $

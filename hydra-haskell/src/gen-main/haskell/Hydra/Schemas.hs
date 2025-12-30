@@ -302,6 +302,18 @@ isUnitType x = case x of
   Core.TypeUnit -> True
   _ -> False
 
+-- | Check whether a module contains any binary literal values
+moduleContainsBinaryLiterals :: (Module.Module -> Bool)
+moduleContainsBinaryLiterals mod =  
+  let checkTerm = (\found -> \term -> Logic.or found ((\x -> case x of
+          Core.TermLiteral v1 -> ((\x -> case x of
+            Core.LiteralBinary _ -> True
+            _ -> False) v1)
+          _ -> False) term))
+  in  
+    let termContainsBinary = (\term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term)
+    in (Lists.foldl (\acc -> \el -> Logic.or acc (termContainsBinary (Core.bindingTerm el))) False (Module.moduleElements mod))
+
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
 moduleDependencyNamespaces binds withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces binds withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))

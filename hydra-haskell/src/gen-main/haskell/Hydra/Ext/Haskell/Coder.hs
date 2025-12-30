@@ -104,7 +104,7 @@ constructModule namespaces mod defs =
                         Ast.importModule = (Ast.ModuleName name),
                         Ast.importAs = (Maybes.map (\x -> Ast.ModuleName x) malias),
                         Ast.importSpec = spec})
-              in (Lists.map toImport [
+              in (Lists.map toImport (Lists.concat2 [
                 (("Prelude", Nothing), [
                   "Enum",
                   "Ordering",
@@ -116,7 +116,8 @@ constructModule namespaces mod defs =
                 (("Data.Int", (Just "I")), []),
                 (("Data.List", (Just "L")), []),
                 (("Data.Map", (Just "M")), []),
-                (("Data.Set", (Just "S")), [])])
+                (("Data.Set", (Just "S")), [])] (Logic.ifElse (Schemas.moduleContainsBinaryLiterals mod) [
+                (("Hydra.Lib.Literals", (Just "Literals")), [])] [])))
   in (Flows.bind Monads.getState (\g -> Flows.bind (Flows.mapList (createDeclarations g) defs) (\declLists ->  
     let decls = (Lists.concat declLists) 
         mc = (Module.moduleDescription mod)
