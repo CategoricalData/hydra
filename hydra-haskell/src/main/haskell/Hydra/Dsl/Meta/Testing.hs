@@ -530,3 +530,39 @@ etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 etaCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseEtaExpansion $ etaExpansionTestCase input output)
   nothing noTags
+
+----------------------------------------
+-- Hoist subterms test case helpers
+
+testCaseHoistSubterms :: TTerm HoistSubtermsTestCase -> TTerm TestCase
+testCaseHoistSubterms = inject _TestCase _TestCase_hoistSubterms
+
+hoistSubtermsTestCase :: TTerm HoistPredicate -> TTerm Term -> TTerm Term -> TTerm HoistSubtermsTestCase
+hoistSubtermsTestCase predicate input output = Phantoms.record _HoistSubtermsTestCase [
+  _HoistSubtermsTestCase_predicate>>: predicate,
+  _HoistSubtermsTestCase_input>>: input,
+  _HoistSubtermsTestCase_output>>: output]
+
+-- Hoist predicate constructors
+
+-- | Hoist case statements (elimination unions) at non-top-level positions
+hoistPredicateCaseStatements :: TTerm HoistPredicate
+hoistPredicateCaseStatements = inject _HoistPredicate _HoistPredicate_caseStatements $ Phantoms.unit
+
+-- | Hoist function applications at non-top-level positions
+hoistPredicateApplications :: TTerm HoistPredicate
+hoistPredicateApplications = inject _HoistPredicate _HoistPredicate_applications $ Phantoms.unit
+
+-- | Hoist list terms at non-top-level positions
+hoistPredicateLists :: TTerm HoistPredicate
+hoistPredicateLists = inject _HoistPredicate _HoistPredicate_lists $ Phantoms.unit
+
+-- | Never hoist anything (identity transformation)
+hoistPredicateNothing :: TTerm HoistPredicate
+hoistPredicateNothing = inject _HoistPredicate _HoistPredicate_nothing $ Phantoms.unit
+
+-- | Convenience function for creating hoist subterms test cases
+hoistCase :: String -> TTerm HoistPredicate -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCase cname predicate input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseHoistSubterms $ hoistSubtermsTestCase predicate input output)
+  nothing noTags

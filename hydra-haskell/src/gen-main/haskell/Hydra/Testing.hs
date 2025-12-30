@@ -209,6 +209,47 @@ _FreeVariablesTestCase_input = (Core.Name "input")
 
 _FreeVariablesTestCase_output = (Core.Name "output")
 
+-- | A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings.
+data HoistPredicate = 
+  -- | Hoist case statements (elimination unions) that appear in non-top-level positions
+  HoistPredicateCaseStatements  |
+  -- | Hoist function applications that appear in non-top-level positions
+  HoistPredicateApplications  |
+  -- | Hoist list terms that appear in non-top-level positions
+  HoistPredicateLists  |
+  -- | Never hoist anything (identity transformation for let terms)
+  HoistPredicateNothing 
+  deriving (Eq, Ord, Read, Show)
+
+_HoistPredicate = (Core.Name "hydra.testing.HoistPredicate")
+
+_HoistPredicate_caseStatements = (Core.Name "caseStatements")
+
+_HoistPredicate_applications = (Core.Name "applications")
+
+_HoistPredicate_lists = (Core.Name "lists")
+
+_HoistPredicate_nothing = (Core.Name "nothing")
+
+-- | A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings.
+data HoistSubtermsTestCase = 
+  HoistSubtermsTestCase {
+    -- | The predicate that determines which subterms to hoist
+    hoistSubtermsTestCasePredicate :: HoistPredicate,
+    -- | The input term (must contain a let expression for hoisting to occur)
+    hoistSubtermsTestCaseInput :: Core.Term,
+    -- | The expected output term with hoisted subterms as new bindings
+    hoistSubtermsTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_HoistSubtermsTestCase = (Core.Name "hydra.testing.HoistSubtermsTestCase")
+
+_HoistSubtermsTestCase_predicate = (Core.Name "predicate")
+
+_HoistSubtermsTestCase_input = (Core.Name "input")
+
+_HoistSubtermsTestCase_output = (Core.Name "output")
+
 -- | A predefined term rewriter for testing rewriteTerm
 data TermRewriter = 
   -- | Replace all string literal 'foo' with 'bar'
@@ -488,7 +529,9 @@ data TestCase =
   -- | A rewrite term test
   TestCaseRewriteTerm RewriteTermTestCase |
   -- | A rewrite type test
-  TestCaseRewriteType RewriteTypeTestCase
+  TestCaseRewriteType RewriteTypeTestCase |
+  -- | A hoist subterms test
+  TestCaseHoistSubterms HoistSubtermsTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -546,6 +589,8 @@ _TestCase_foldOverTerm = (Core.Name "foldOverTerm")
 _TestCase_rewriteTerm = (Core.Name "rewriteTerm")
 
 _TestCase_rewriteType = (Core.Name "rewriteType")
+
+_TestCase_hoistSubterms = (Core.Name "hoistSubterms")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 

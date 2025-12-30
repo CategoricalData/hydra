@@ -35,6 +35,7 @@ import Hydra.Kernel hiding (
   replaceTypedefs,
   rewriteAndFoldTerm,
   rewriteAndFoldTermM,
+  rewriteAndFoldTermWithPath,
   rewriteTerm,
   rewriteTermM,
   rewriteTermWithContext,
@@ -157,6 +158,7 @@ module_ = Module ns elements
 --     toBinding rewrite,
      toBinding rewriteAndFoldTerm,
      toBinding rewriteAndFoldTermM,
+     toBinding rewriteAndFoldTermWithPath,
      toBinding rewriteTerm,
      toBinding rewriteTermM,
      toBinding rewriteTermWithContext,
@@ -945,6 +947,286 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
 --  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
+
+-- | Rewrite a term with path tracking, and fold a function over it.
+-- The path is the list of accessors from the root to the current term.
+-- The function f receives: (recurse path acc term -> (acc', term')) -> path -> acc -> term -> (acc', term')
+rewriteAndFoldTermWithPath :: TBinding ((([TermAccessor] -> a -> Term -> (a, Term)) -> [TermAccessor] -> a -> Term -> (a, Term)) -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
+  doc "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position." $
+  "f" ~> "term0" ~>
+  "fsub" <~ ("recurse" ~> "path" ~> "val0" ~> "term0" ~>
+    -- Helper to recurse into a single subterm with a given accessor
+    "forSingleWithAccessor" <~ ("rec" ~> "cons" ~> "accessor" ~> "val" ~> "term" ~>
+      "r" <~ var "rec" @@ Lists.concat2 (var "path") (list [var "accessor"]) @@ var "val" @@ var "term" $
+      pair (Pairs.first $ var "r") (var "cons" @@ (Pairs.second $ var "r"))) $
+    -- Helper to recurse into multiple subterms, each with its own accessor
+    "forManyWithAccessors" <~ ("rec" ~> "cons" ~> "val" ~> "accessorTermPairs" ~>
+      "rr" <~ Lists.foldl
+        ("r" ~> "atp" ~>
+          "r2" <~ var "rec"
+            @@ Lists.concat2 (var "path") (list [Pairs.first $ var "atp"])
+            @@ (Pairs.first $ var "r")
+            @@ (Pairs.second $ var "atp") $
+          pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ var "r")))
+        (pair (var "val") (list ([] :: [TTerm Term])))
+        (var "accessorTermPairs") $
+      pair (Pairs.first $ var "rr") (var "cons" @@ (Lists.reverse $ Pairs.second $ var "rr"))) $
+    -- Helper for record/case fields with accessors
+    "forFieldWithAccessor" <~ ("mkAccessor" ~> "val" ~> "field" ~>
+      "r" <~ var "recurse"
+        @@ Lists.concat2 (var "path") (list [var "mkAccessor" @@ (Core.fieldName $ var "field")])
+        @@ var "val"
+        @@ Core.fieldTerm (var "field") $
+      pair (Pairs.first $ var "r") (Core.field (Core.fieldName $ var "field") (Pairs.second $ var "r"))) $
+    "forFieldsWithAccessor" <~ ("mkAccessor" ~> var "forManyWithAccessors" @@
+      ("path1" ~> "val1" ~> "field1" ~> var "forFieldWithAccessor" @@ var "mkAccessor" @@ var "val1" @@ var "field1")
+      @@ ("x" ~> var "x")) $
+    -- Helper for map key/value pairs
+    "forPairWithAccessors" <~ ("keyAccessor" ~> "valAccessor" ~> "val" ~> "kv" ~>
+      "rk" <~ var "recurse"
+        @@ Lists.concat2 (var "path") (list [var "keyAccessor"])
+        @@ var "val"
+        @@ (Pairs.first $ var "kv") $
+      "rv" <~ var "recurse"
+        @@ Lists.concat2 (var "path") (list [var "valAccessor"])
+        @@ (Pairs.first $ var "rk")
+        @@ (Pairs.second $ var "kv") $
+      pair
+        (Pairs.first $ var "rv")
+        (pair (Pairs.second $ var "rk") (Pairs.second $ var "rv"))) $
+    -- Helper for let bindings
+    "forBindingWithAccessor" <~ ("val" ~> "binding" ~>
+      "r" <~ var "recurse"
+        @@ Lists.concat2 (var "path") (list [Accessors.termAccessorLetBinding $ Core.bindingName $ var "binding"])
+        @@ var "val"
+        @@ Core.bindingTerm (var "binding") $
+      pair
+        (Pairs.first $ var "r")
+        (Core.binding
+          (Core.bindingName $ var "binding")
+          (Pairs.second $ var "r")
+          (Core.bindingType $ var "binding"))) $
+    -- Helper for elimination
+    "forElimination" <~ ("val" ~> "elm" ~>
+      "r" <~ cases _Elimination (var "elm")
+        (Just $ pair (var "val") (var "elm")) [
+        _Elimination_union>>: "cs" ~>
+          "rmd" <~ Maybes.map
+            ("def" ~> var "recurse"
+              @@ Lists.concat2 (var "path") (list [Accessors.termAccessorUnionCasesDefault])
+              @@ var "val"
+              @@ var "def")
+            (Core.caseStatementDefault $ var "cs") $
+          "val1" <~ optCases (var "rmd")
+            (var "val")
+            (unaryFunction Pairs.first) $
+          "rcases" <~ var "forManyWithAccessors"
+            @@ var "recurse"
+            @@ ("x" ~> var "x")
+            @@ var "val1"
+            @@ Lists.map
+              ("f" ~> pair
+                (Accessors.termAccessorUnionCasesBranch $ Core.fieldName $ var "f")
+                (Core.fieldTerm $ var "f"))
+              (Core.caseStatementCases $ var "cs") $
+          pair
+            (Pairs.first $ var "rcases")
+            (Core.eliminationUnion $ Core.caseStatement
+              (Core.caseStatementTypeName $ var "cs")
+              (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
+              (Lists.map
+                ("ft" ~> Core.field
+                  (Pairs.first $ var "ft")
+                  (Pairs.second $ var "ft"))
+                (Lists.zip
+                  (Lists.map (unaryFunction Core.fieldName) (Core.caseStatementCases $ var "cs"))
+                  (Pairs.second $ var "rcases"))))] $
+      pair (Pairs.first $ var "r") (Pairs.second $ var "r")) $
+    -- Helper for function
+    "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
+      (Just $ pair (var "val") (var "fun")) [
+      _Function_elimination>>: "elm" ~>
+         "re" <~ var "forElimination" @@ var "val" @@ var "elm" $
+         pair (Pairs.first $ var "re") (Core.functionElimination (Pairs.second $ var "re")),
+      _Function_lambda>>: "l" ~>
+        "rl" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorLambdaBody])
+          @@ var "val"
+          @@ (Core.lambdaBody $ var "l") $
+        pair
+          (Pairs.first $ var "rl")
+          (Core.functionLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            (Core.lambdaDomain $ var "l")
+            (Pairs.second $ var "rl"))]) $
+    "dflt" <~ pair (var "val0") (var "term0") $
+    cases _Term (var "term0")
+      (Just $ var "dflt") [
+      _Term_annotated>>: "at" ~> var "forSingleWithAccessor"
+        @@ var "recurse"
+        @@ ("t" ~> Core.termAnnotated $ Core.annotatedTerm (var "t") (Core.annotatedTermAnnotation $ var "at"))
+        @@ Accessors.termAccessorAnnotatedBody
+        @@ var "val0"
+        @@ (Core.annotatedTermBody $ var "at"),
+      _Term_application>>: "a" ~>
+        "rlhs" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorApplicationFunction])
+          @@ var "val0"
+          @@ (Core.applicationFunction $ var "a") $
+        "rrhs" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorApplicationArgument])
+          @@ (Pairs.first $ var "rlhs")
+          @@ (Core.applicationArgument $ var "a") $
+        pair
+          (Pairs.first $ var "rrhs")
+          (Core.termApplication $ Core.application
+            (Pairs.second $ var "rlhs")
+            (Pairs.second $ var "rrhs")),
+      _Term_either>>: "e" ~> Eithers.either_
+        ("l" ~>
+          "rl" <~ var "recurse"
+            @@ Lists.concat2 (var "path") (list [Accessors.termAccessorSumTerm])
+            @@ var "val0"
+            @@ var "l" $
+          pair (Pairs.first $ var "rl") (Core.termEither $ left $ Pairs.second $ var "rl"))
+        ("r" ~>
+          "rr" <~ var "recurse"
+            @@ Lists.concat2 (var "path") (list [Accessors.termAccessorSumTerm])
+            @@ var "val0"
+            @@ var "r" $
+          pair (Pairs.first $ var "rr") (Core.termEither $ right $ Pairs.second $ var "rr"))
+        (var "e"),
+      _Term_function>>: "f" ~>
+        "rf" <~ var "forFunction" @@ var "val0" @@ var "f" $
+        pair (Pairs.first $ var "rf") (Core.termFunction $ Pairs.second $ var "rf"),
+      _Term_let>>: "l" ~>
+        "renv" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorLetEnvironment])
+          @@ var "val0"
+          @@ (Core.letBody $ var "l") $
+        "rbindings" <~ Lists.foldl
+          ("r" ~> "binding" ~>
+            "rb" <~ var "forBindingWithAccessor" @@ (Pairs.first $ var "r") @@ var "binding" $
+            pair (Pairs.first $ var "rb") (Lists.cons (Pairs.second $ var "rb") (Pairs.second $ var "r")))
+          (pair (Pairs.first $ var "renv") (list ([] :: [TTerm Binding])))
+          (Core.letBindings $ var "l") $
+        pair
+          (Pairs.first $ var "rbindings")
+          (Core.termLet $ Core.let_ (Lists.reverse $ Pairs.second $ var "rbindings") (Pairs.second $ var "renv")),
+      _Term_list>>: "els" ~>
+        "idx" <~ int32 0 $
+        "rr" <~ Lists.foldl
+          ("r" ~> "el" ~>
+            "r2" <~ var "recurse"
+              @@ Lists.concat2 (var "path") (list [Accessors.termAccessorListElement $ Pairs.first $ var "r"])
+              @@ (Pairs.first $ Pairs.second $ var "r")
+              @@ var "el" $
+            pair
+              (Math.add (Pairs.first $ var "r") (int32 1))
+              (pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ Pairs.second $ var "r"))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm Term]))))
+          (var "els") $
+        pair (Pairs.first $ Pairs.second $ var "rr") (Core.termList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
+      _Term_map>>: "m" ~>
+        "idx" <~ int32 0 $
+        "rr" <~ Lists.foldl
+          ("r" ~> "kv" ~>
+            "rk" <~ var "recurse"
+              @@ Lists.concat2 (var "path") (list [Accessors.termAccessorMapKey $ Pairs.first $ var "r"])
+              @@ (Pairs.first $ Pairs.second $ var "r")
+              @@ (Pairs.first $ var "kv") $
+            "rv" <~ var "recurse"
+              @@ Lists.concat2 (var "path") (list [Accessors.termAccessorMapValue $ Pairs.first $ var "r"])
+              @@ (Pairs.first $ var "rk")
+              @@ (Pairs.second $ var "kv") $
+            pair
+              (Math.add (Pairs.first $ var "r") (int32 1))
+              (pair
+                (Pairs.first $ var "rv")
+                (Lists.cons (pair (Pairs.second $ var "rk") (Pairs.second $ var "rv")) (Pairs.second $ Pairs.second $ var "r"))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm (Term, Term)]))))
+          (Maps.toList $ var "m") $
+        pair (Pairs.first $ Pairs.second $ var "rr") (Core.termMap $ Maps.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
+      _Term_maybe>>: "mt" ~> optCases (var "mt")
+        (var "dflt")
+        ("t" ~> var "forSingleWithAccessor"
+          @@ var "recurse"
+          @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
+          @@ Accessors.termAccessorOptionalTerm
+          @@ var "val0"
+          @@ var "t"),
+      _Term_pair>>: "p" ~>
+        "rf" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorProductTerm $ int32 0])
+          @@ var "val0"
+          @@ (Pairs.first $ var "p") $
+        "rs" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorProductTerm $ int32 1])
+          @@ (Pairs.first $ var "rf")
+          @@ (Pairs.second $ var "p") $
+        pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
+      _Term_record>>: "r" ~>
+        "rfields" <~ var "forManyWithAccessors"
+          @@ var "recurse"
+          @@ ("x" ~> var "x")
+          @@ var "val0"
+          @@ Lists.map
+            ("f" ~> pair
+              (Accessors.termAccessorRecordField $ Core.fieldName $ var "f")
+              (Core.fieldTerm $ var "f"))
+            (Core.recordFields $ var "r") $
+        pair
+          (Pairs.first $ var "rfields")
+          (Core.termRecord $ Core.record
+            (Core.recordTypeName $ var "r")
+            (Lists.map
+              ("ft" ~> Core.field (Pairs.first $ var "ft") (Pairs.second $ var "ft"))
+              (Lists.zip
+                (Lists.map (unaryFunction Core.fieldName) (Core.recordFields $ var "r"))
+                (Pairs.second $ var "rfields")))),
+      _Term_set>>: "els" ~>
+        "idx" <~ int32 0 $
+        "rr" <~ Lists.foldl
+          ("r" ~> "el" ~>
+            "r2" <~ var "recurse"
+              @@ Lists.concat2 (var "path") (list [Accessors.termAccessorSetElement $ Pairs.first $ var "r"])
+              @@ (Pairs.first $ Pairs.second $ var "r")
+              @@ var "el" $
+            pair
+              (Math.add (Pairs.first $ var "r") (int32 1))
+              (pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ Pairs.second $ var "r"))))
+          (pair (var "idx") (pair (var "val0") (list ([] :: [TTerm Term]))))
+          (Sets.toList $ var "els") $
+        pair (Pairs.first $ Pairs.second $ var "rr") (Core.termSet $ Sets.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
+      _Term_typeApplication>>: "ta" ~> var "forSingleWithAccessor"
+        @@ var "recurse"
+        @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
+        @@ Accessors.termAccessorTypeApplicationTerm
+        @@ var "val0"
+        @@ (Core.typeApplicationTermBody $ var "ta"),
+      _Term_typeLambda>>: "tl" ~> var "forSingleWithAccessor"
+        @@ var "recurse"
+        @@ ("t" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "t"))
+        @@ Accessors.termAccessorTypeLambdaBody
+        @@ var "val0"
+        @@ (Core.typeLambdaBody $ var "tl"),
+      _Term_union>>: "inj" ~> var "forSingleWithAccessor"
+        @@ var "recurse"
+        @@ ("t" ~> Core.termUnion $ Core.injection
+          (Core.injectionTypeName $ var "inj")
+          (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
+        @@ Accessors.termAccessorInjectionTerm
+        @@ var "val0"
+        @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
+      _Term_wrap>>: "wt" ~> var "forSingleWithAccessor"
+        @@ var "recurse"
+        @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
+        @@ Accessors.termAccessorWrappedTerm
+        @@ var "val0"
+        @@ (Core.wrappedTermBody $ var "wt")]) $
+  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
+  var "recurse" @@ list ([] :: [TTerm TermAccessor]) @@ var "term0"
 
 rewriteAndFoldTermM :: TBinding (((a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term))
 rewriteAndFoldTermM = define "rewriteAndFoldTermM" $

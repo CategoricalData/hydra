@@ -350,7 +350,37 @@ pytest
 
 ### Common test suite
 
-If the primitive is used in Hydra kernel code, it will be tested across all languages via the common test suite defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Tests/`.
+All primitives should have test cases in the common test suite, which ensures consistent behavior across all language implementations. Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
+
+**Adding test cases:**
+
+1. Open or create the test file for your library (e.g., `Test/Lib/Chars.hs`)
+
+2. Add a test group following the existing pattern:
+```haskell
+charsIsAlphaNum :: TTerm TestGroup
+charsIsAlphaNum = subgroup "isAlphaNum" [
+  test "lowercase letter" (ord 'a') true,
+  test "uppercase letter" (ord 'Z') true,
+  test "digit" (ord '5') true,
+  test "space" (ord ' ') false]
+  where
+    test name x result = primCase name _chars_isAlphaNum [int32 x] result
+```
+
+3. Add the test group to the `allTests` binding in the same file
+
+4. Regenerate the test suite for all implementations (see [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) for details):
+```bash
+# From hydra-haskell
+./bin/update-kernel-tests.sh
+
+# From hydra-ext (for Java and Python)
+./bin/update-java-kernel.sh
+./bin/update-python-kernel.sh
+```
+
+5. Run tests in each language to verify the new test cases pass
 
 ## Checklist
 
@@ -371,6 +401,10 @@ When adding a new primitive function:
   - [ ] Function implementation in `hydra.lib.<library>`
   - [ ] Registration in `hydra.sources.libraries` (when pattern finalized)
   - [ ] DSL wrapper (pattern to be finalized)
+- [ ] **Common Test Suite**
+  - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
+  - [ ] Test group registered in `allTests`
+  - [ ] Kernel tests regenerated for all implementations
 - [ ] **Tests pass** in all three languages
 - [ ] **Documentation** updated if needed
 

@@ -1,7 +1,10 @@
 module Hydra.Sources.Kernel.Terms.Reduction where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm, reduceTerm, rewriteAndFoldTermWithTypeContext, rewriteTermWithTypeContext, termIsClosed, termIsValue)
+import Hydra.Kernel hiding (
+  alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm,
+  hoistCaseStatements, hoistSubterms,
+  reduceTerm, rewriteAndFoldTermWithTypeContext, rewriteAndFoldTermWithTypeContextAndPath, rewriteTermWithTypeContext, termIsClosed, termIsValue)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -86,8 +89,11 @@ module_ = Module ns elements
      toBinding etaExpandTerm,
      toBinding etaExpansionArity,
      toBinding etaExpandTypedTerm,
+     toBinding hoistCaseStatements,
+     toBinding hoistSubterms,
      toBinding reduceTerm,
      toBinding rewriteAndFoldTermWithTypeContext,
+     toBinding rewriteAndFoldTermWithTypeContextAndPath,
      toBinding rewriteTermWithTypeContext,
      toBinding termIsClosed,
      toBinding termIsValue]
@@ -415,6 +421,173 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
+hoistCaseStatements :: TBinding (TypeContext -> Term -> Term)
+hoistCaseStatements = define "hoistCaseStatements" $
+  doc ("Hoist case statements into bindings in the nearest enclosing let term."
+    <> " This is useful for targets such as Python which only support case statements (match) at the top level.") $
+  hoistSubterms @@ shouldHoistCaseStatement
+  where
+    -- Predicate: hoist union eliminations that are not at level 0 or level 1 in an application LHS.
+    -- The path starts from within the let body/binding (first element indicates let body or binding).
+    -- Level 0 = top level (empty path after ignoring let indicator)
+    -- Level 1 = in application LHS chain from top
+    -- Level 2+ = should be hoisted (not purely in application LHS chain)
+    shouldHoistCaseStatement :: TTerm ([TermAccessor] -> Term -> Bool)
+    shouldHoistCaseStatement = "path" ~> "term" ~>
+      -- First check if it's a union elimination (case statement) - most terms are not
+      "isUnionElim" <~ (cases _Term (var "term")
+        (Just false) [
+        _Term_function>>: "f" ~> cases _Function (var "f")
+          (Just false) [
+          _Function_elimination>>: "e" ~> cases _Elimination (var "e")
+            (Just false) [
+            _Elimination_union>>: constant true]]]) $
+      Logic.ifElse (Logic.not $ var "isUnionElim")
+        false
+        -- Check position: ignore the first path element (let body/binding indicator)
+        ("innerPath" <~ Lists.tail (var "path") $
+         -- Empty inner path means at top level of let body/binding - don't hoist
+         Logic.ifElse (Lists.null $ var "innerPath")
+           false
+           -- Check if purely in application LHS chain from top (level 1)
+           -- We use foldl to check if all elements are applicationFunction
+           ("allAppLhs" <~ Lists.foldl
+             ("acc" ~> "accessor" ~>
+               Logic.and (var "acc") (cases _TermAccessor (var "accessor")
+                 (Just false) [
+                 _TermAccessor_applicationFunction>>: constant true]))
+             true
+             (var "innerPath") $
+            -- Hoist unless we're in a pure application LHS chain from top
+            Logic.not (var "allAppLhs")))
+
+hoistSubterms :: TBinding (([TermAccessor] -> Term -> Bool) -> TypeContext -> Term -> Term)
+hoistSubterms = define "hoistSubterms" $
+  doc ("Hoist subterms into bindings in the nearest enclosing let term, based on a predicate."
+    <> " The predicate receives the path (from the let body/binding root) and the term,"
+    <> " and returns True if the term should be hoisted."
+    <> " When hoisting a term that contains free variables which are lambda-bound between"
+    <> " the enclosing let and the current position, those variables are captured:"
+    <> " the hoisted binding is wrapped in lambdas for those variables, and the reference"
+    <> " is replaced with an application of those variables."
+    <> " Useful for targets that require certain constructs (e.g., case statements) at the top level.") $
+  "shouldHoist" ~> "cx0" ~> "term0" ~>
+
+  -- Outer rewrite: find let terms and process them
+  "outerRewrite" <~ ("recurse" ~> "cx" ~> "counter" ~> "term" ~>
+    "dflt" <~ var "recurse" @@ var "counter" @@ var "term" $
+
+    "forLet" <~ ("l" ~>
+      "body" <~ Core.letBody (var "l") $
+      "bindings" <~ Core.letBindings (var "l") $
+      -- Capture the lambdaVariables at the let level - this is our reference point
+      "parentLambdaVars" <~ Typing.typeContextLambdaVariables (var "cx") $
+
+      -- Process a subterm (body or binding RHS), collecting hoisted bindings
+      -- Uses rewriteAndFoldTermWithPath for term reconstruction, with TypeContext tracked in accumulator
+      "processSubterm" <~ ("counterAndExtra" ~> "subterm" ~>
+        "counter0" <~ Pairs.first (var "counterAndExtra") $
+        "extraBindings0" <~ Pairs.second (var "counterAndExtra") $
+
+        -- Inner rewrite using rewriteAndFoldTermWithPath
+        -- The function receives: recurse -> path -> acc -> term -> (acc', term')
+        -- acc is ((counter, extraBindings), currentTypeContext)
+        -- Strategy: always recurse into subterms first (inside-out processing),
+        -- then check if the current term should be hoisted.
+        "innerRewrite" <~ ("recurse" ~> "path" ~> "acc" ~> "term" ~>
+          "counterExtra" <~ Pairs.first (var "acc") $
+          "innerCx" <~ Pairs.second (var "acc") $
+          -- Process all terms including lambdas - we handle variable capture properly
+          cases _Term (var "term")
+            (Just $
+              -- First determine the updated TypeContext for subterms
+              "subCx" <~ (cases _Term (var "term")
+                (Just $ var "innerCx") [
+                _Term_function>>: "fun" ~> cases _Function (var "fun")
+                  (Just $ var "innerCx") [
+                  _Function_lambda>>: "l" ~> Schemas.extendTypeContextForLambda @@ var "innerCx" @@ var "l"],
+                _Term_let>>: "l" ~> Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "innerCx" @@ var "l",
+                _Term_typeLambda>>: "tl" ~> Schemas.extendTypeContextForTypeLambda @@ var "innerCx" @@ var "tl"]) $
+              -- First recurse into subterms (inside-out processing)
+              -- Pass the updated context for subterms
+              "processed" <~ var "recurse" @@ var "path" @@ pair (var "counterExtra") (var "subCx") @@ var "term" $
+              "newAcc" <~ Pairs.first (var "processed") $
+              "newCounterExtra" <~ Pairs.first (var "newAcc") $
+              "processedTerm" <~ Pairs.second (var "processed") $
+              -- Then check if this term should be hoisted
+              Logic.ifElse (var "shouldHoist" @@ var "path" @@ var "processedTerm")
+                -- Hoist the processed term (subterms already handled)
+                ("counter" <~ Pairs.first (var "newCounterExtra") $
+                 "extraBindings" <~ Pairs.second (var "newCounterExtra") $
+                 "bindingName" <~ Core.name (Strings.cat2 (string "_hoist_") (Literals.showInt32 (var "counter"))) $
+                 -- Find lambda-bound variables that need to be captured:
+                 -- Variables that are in the current lambdaVariables but not in the parent let's lambdaVariables,
+                 -- AND that occur free in the term being hoisted
+                 "currentLambdaVars" <~ Typing.typeContextLambdaVariables (var "innerCx") $
+                 "newLambdaVars" <~ Sets.difference (var "currentLambdaVars") (var "parentLambdaVars") $
+                 "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "processedTerm" $
+                 "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars") (var "freeVars")) $
+                 -- Wrap the term in lambdas for each captured variable
+                 "wrappedTerm" <~ Lists.foldl
+                   ("body" ~> "varName" ~>
+                     Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName") nothing (var "body"))
+                   (var "processedTerm")
+                   (Lists.reverse $ var "capturedVars") $
+                 "newBinding" <~ Core.binding (var "bindingName") (var "wrappedTerm") nothing $
+                 -- Create the reference: apply the binding to all captured variables
+                 "reference" <~ Lists.foldl
+                   ("fn" ~> "varName" ~>
+                     Core.termApplication $ Core.application (var "fn") (Core.termVariable $ var "varName"))
+                   (Core.termVariable $ var "bindingName")
+                   (var "capturedVars") $
+                 -- Return with the original innerCx (not subCx) since we're at the hoisted term's level
+                 pair
+                   (pair (pair (Math.add (var "counter") (int32 1)) (Lists.concat2 (var "extraBindings") (list [var "newBinding"]))) (var "innerCx"))
+                   (var "reference"))
+                -- Don't hoist: return the processed term with the original context
+                (pair (pair (var "newCounterExtra") (var "innerCx")) (var "processedTerm"))) [
+            -- Nested let terms: recursively process them with forLet
+            _Term_let>>: "nestedL" ~>
+              "nestedResult" <~ var "forLet" @@ var "nestedL" $
+              -- forLet returns (counter, term), we need to convert to (((counter, extraBindings), cx), term)
+              pair (pair (pair (Pairs.first $ var "nestedResult") (Pairs.second $ var "counterExtra")) (var "innerCx")) (Pairs.second $ var "nestedResult")]) $
+
+        -- Run the rewrite with combined accumulator: ((counter, extraBindings), typeContext)
+        "result" <~ Rewriting.rewriteAndFoldTermWithPath @@ var "innerRewrite" @@ pair (pair (var "counter0") (var "extraBindings0")) (var "cx") @@ var "subterm" $
+        -- Extract just (counter, extraBindings) and the term
+        pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+
+      -- Process body
+      "pBody" <~ var "processSubterm" @@ pair (var "counter") (list ([] :: [TTerm Binding])) @@ var "body" $
+      "counterExtra1" <~ Pairs.first (var "pBody") $
+      "newBody" <~ Pairs.second (var "pBody") $
+
+      -- Process each binding
+      "foldBinding" <~ ("acc" ~> "binding" ~>
+        "counterExtra" <~ Pairs.first (var "acc") $
+        "newBindingsSoFar" <~ Pairs.second (var "acc") $
+        "p" <~ var "processSubterm" @@ var "counterExtra" @@ (Core.bindingTerm $ var "binding") $
+        "newCounterExtra" <~ Pairs.first (var "p") $
+        "newTerm" <~ Pairs.second (var "p") $
+        "newBinding" <~ Core.bindingWithTerm (var "binding") (var "newTerm") $
+        pair (var "newCounterExtra") (Lists.concat2 (var "newBindingsSoFar") (list [var "newBinding"]))) $
+
+      "pBindings" <~ Lists.foldl (var "foldBinding") (pair (var "counterExtra1") (list ([] :: [TTerm Binding]))) (var "bindings") $
+      "counterExtra2" <~ Pairs.first (var "pBindings") $
+      "counter2" <~ Pairs.first (var "counterExtra2") $
+      "extraBindings" <~ Pairs.second (var "counterExtra2") $
+      "newBindings" <~ Pairs.second (var "pBindings") $
+
+      "allBindings" <~ Lists.concat2 (var "newBindings") (var "extraBindings") $
+      pair (var "counter2") (Core.termLet $ Core.let_ (var "allBindings") (var "newBody"))) $
+
+    cases _Term (var "term")
+      (Just $ var "dflt") [
+      -- For let terms, process with forLet (nested lets handled recursively inside processSubterm)
+      _Term_let>>: "l" ~> var "forLet" @@ var "l"]) $
+
+  Pairs.second $ rewriteAndFoldTermWithTypeContext @@ var "outerRewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
+
 reduceTerm :: TBinding (Bool -> Term -> Flow Graph Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
@@ -611,46 +784,134 @@ reduceTerm = define "reduceTerm" $
 rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
   doc ("Rewrite a term while folding to produce a value, with TypeContext updated as we descend into subterms."
-    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext.") $
+    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext."
+    <> " The user function f receives a recurse function that handles subterm traversal and TypeContext management.") $
   "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  -- f2 wraps f to handle TypeContext updates for lambda/let/typeLambda
-  "f2" <~ ("recurse" ~> "cx" ~> "val" ~> "term" ~>
-    -- recurse1 is what the user sees: it takes just (val, term) and handles cx internally
-    "recurse1" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx" @@ var "val" @@ var "term") $
-    -- Determine updated context based on term type, then call user's f
-    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "val" @@ var "term") [
+  -- wrapper is the function we pass to rewriteAndFoldTerm
+  -- Combined state is (val, cx). The low-level recurse handles term structure traversal.
+  "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
+    "val" <~ Pairs.first (var "valAndCx") $
+    "cx" <~ Pairs.second (var "valAndCx") $
+    -- Determine updated context based on the current term
+    "cx1" <~ (cases _Term (var "term")
+      (Just $ var "cx") [
       _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "val" @@ var "term") [
+        (Just $ var "cx") [
+        _Function_lambda>>: "l" ~> Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl"]) $
+    -- Create a recurse function for the user that unwraps/wraps the combined state
+    "recurseForUser" <~ ("newVal" ~> "subterm" ~>
+      -- Call low-level recurse with combined state (newVal, cx1)
+      -- Note: cx1 is the context for subterms of the current term
+      "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
+      -- Return just (val', term') to the user
+      pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+    -- Call the user's function with the context-aware recurse
+    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "cx1" @@ var "val" @@ var "term" $
+    -- Combine the result with cx1 for the fold state
+    pair (pair (Pairs.first $ var "fResult") (var "cx1")) (Pairs.second $ var "fResult")) $
+  -- Use rewriteAndFoldTerm to handle the actual traversal, with (val, cx) as combined state
+  "result" <~ Rewriting.rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
+  -- Extract just the val part of the result
+  pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
+
+-- | The most general-purpose term rewriting function, combining:
+--   - Folding to produce a value (like rewriteAndFoldTerm)
+--   - TypeContext tracking (like rewriteTermWithTypeContext)
+--   - Path tracking via TermAccessors (new capability)
+--
+-- The user function receives:
+--   - A recurse function: (TermAccessor, a, Term) -> (a, Term)
+--     The accessor indicates which subterm position we're recursing into
+--   - The current path (list of TermAccessors from root to current position)
+--   - The current TypeContext
+--   - The current accumulated value
+--   - The current term
+-- And returns (newVal, newTerm)
+--
+-- Note: The user is responsible for calling recurse on subterms they want to descend into.
+-- Use subtermsWithAccessors to get the (accessor, subterm) pairs for the current term.
+rewriteAndFoldTermWithTypeContextAndPath :: TBinding (
+  (((TermAccessor, a, Term) -> (a, Term)) -> [TermAccessor] -> TypeContext -> a -> Term -> (a, Term))
+  -> TypeContext -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithTypeContextAndPath = define "rewriteAndFoldTermWithTypeContextAndPath" $
+  doc ("Rewrite a term while folding to produce a value, with both TypeContext and accessor path tracked."
+    <> " The path is a list of TermAccessors representing the position from the root to the current term."
+    <> " Combines the features of rewriteAndFoldTerm, rewriteTermWithTypeContext, and path tracking."
+    <> " The recurse function takes (accessor, val, term) so the path can be extended appropriately.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  -- f2 wraps f to handle path and TypeContext updates
+  "f2" <~ ("recurse" ~> "path" ~> "cx" ~> "val" ~> "term" ~>
+    -- recurse1 is what the user sees: it takes (accessor, val, term) and handles path/cx internally
+    "recurse1" <~ ("accessorValTerm" ~>
+      "accessor" <~ Pairs.first (var "accessorValTerm") $
+      "v" <~ Pairs.first (Pairs.second (var "accessorValTerm")) $
+      "t" <~ Pairs.second (Pairs.second (var "accessorValTerm")) $
+      "newPath" <~ Lists.concat2 (var "path") (list [var "accessor"]) $
+      var "recurse" @@ var "newPath" @@ var "cx" @@ var "v" @@ var "t") $
+    -- Determine updated context based on term type, then call user's f
+    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "path" @@ var "cx" @@ var "val" @@ var "term") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "f" @@ var "recurse1" @@ var "path" @@ var "cx" @@ var "val" @@ var "term") [
         _Function_lambda>>: "l" ~>
           "cx1" <~ Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l" $
-          "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
-          var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term"],
+          "recurse2" <~ ("accessorValTerm" ~>
+            "accessor" <~ Pairs.first (var "accessorValTerm") $
+            "v" <~ Pairs.first (Pairs.second (var "accessorValTerm")) $
+            "t" <~ Pairs.second (Pairs.second (var "accessorValTerm")) $
+            "newPath" <~ Lists.concat2 (var "path") (list [var "accessor"]) $
+            var "recurse" @@ var "newPath" @@ var "cx1" @@ var "v" @@ var "t") $
+          var "f" @@ var "recurse2" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term"],
       _Term_let>>: "l" ~>
         "cx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
-        "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term",
+        "recurse2" <~ ("accessorValTerm" ~>
+          "accessor" <~ Pairs.first (var "accessorValTerm") $
+          "v" <~ Pairs.first (Pairs.second (var "accessorValTerm")) $
+          "t" <~ Pairs.second (Pairs.second (var "accessorValTerm")) $
+          "newPath" <~ Lists.concat2 (var "path") (list [var "accessor"]) $
+          var "recurse" @@ var "newPath" @@ var "cx1" @@ var "v" @@ var "t") $
+        var "f" @@ var "recurse2" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term",
       _Term_typeLambda>>: "tl" ~>
         "cx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl" $
-        "recurse2" <~ ("val" ~> "term" ~> var "recurse" @@ var "cx1" @@ var "val" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "val" @@ var "term"]) $
-  -- Use rewriteAndFoldTerm, threading f2 through with context management
-  "rewrite" <~ ("cx" ~> "val" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "val" @@ var "term") $
-  var "rewrite" @@ var "cx0" @@ var "val0" @@ var "term0"
+        "recurse2" <~ ("accessorValTerm" ~>
+          "accessor" <~ Pairs.first (var "accessorValTerm") $
+          "v" <~ Pairs.first (Pairs.second (var "accessorValTerm")) $
+          "t" <~ Pairs.second (Pairs.second (var "accessorValTerm")) $
+          "newPath" <~ Lists.concat2 (var "path") (list [var "accessor"]) $
+          var "recurse" @@ var "newPath" @@ var "cx1" @@ var "v" @@ var "t") $
+        var "f" @@ var "recurse2" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term"]) $
+  -- Local fixpoint that threads path and context through
+  "rewrite" <~ ("path" ~> "cx" ~> "val" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "path" @@ var "cx" @@ var "val" @@ var "term") $
+  var "rewrite" @@ (list ([] :: [TTerm TermAccessor])) @@ var "cx0" @@ var "val0" @@ var "term0"
 
-rewriteTermWithTypeContext :: TBinding (((TypeContext -> Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
+rewriteTermWithTypeContext :: TBinding (((Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
 rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
   doc "Rewrite a term with the help of a type context which is updated as we descend into subterms" $
   "f" ~> "cx0" ~> "term0" ~>
+  -- f2 wraps f to handle TypeContext updates for lambda/let/typeLambda
   "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
-    "recurse1" <~ ("cx" ~> "term" ~>
-      "fallback" <~ var "recurse" @@ var "cx" @@ var "term" $
-      cases _Term (var "term") (Just $ var "fallback") [
-        _Term_function>>: "fun" ~> cases _Function (var "fun") (Just $ var "fallback") [
-          _Function_lambda>>: "l" ~> var "recurse" @@ (Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l") @@ var "term"],
-        _Term_let>>: "l" ~> var "recurse" @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l") @@ var "term",
-        _Term_typeLambda>>: "tl" ~> var "recurse" @@ (Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl") @@ var "term"]) $
-    var "f" @@ var "recurse1" @@ var "term") $
-  Rewriting.rewriteTermWithContext @@ var "f2" @@ var "cx0" @@ var "term0"
+    -- recurse1 is what the user sees: it takes just term and handles cx internally
+    "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
+    -- Determine updated context based on term type, then call user's f
+    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+        _Function_lambda>>: "l" ~>
+          "cx1" <~ Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l" $
+          "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+          var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
+      _Term_let>>: "l" ~>
+        "cx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
+      _Term_typeLambda>>: "tl" ~>
+        "cx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
+  -- Local fixpoint that threads context through
+  "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
+  var "rewrite" @@ var "cx0" @@ var "term0"
 
 termIsClosed :: TBinding (Term -> Bool)
 termIsClosed = define "termIsClosed" $

@@ -7,8 +7,12 @@ import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Terms as T
 import qualified Hydra.Dsl.Meta.Types as MetaTypes
+import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Base (name)
+
+import qualified Data.Map as M
 
 
 ns :: Namespace
@@ -319,4 +323,294 @@ allTests = definitionInModule module_ "allTests" $
       listReductionTests,
       optionalReductionTests,
       alphaConversionTests,
-      typeReductionTests]
+      typeReductionTests,
+      hoistSubtermsGroup]
+
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
+
+-- Helper to build an empty annotation map
+emptyAnnMap :: TTerm (M.Map Name Term)
+emptyAnnMap = Phantoms.map M.empty
+
+-- Helper for single-binding let
+letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr varName value body = T.lets [(nm varName, value)] body
+
+-- Helper for multi-binding let
+multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
+multiLet bindings body = T.lets ((\(n, v) -> (nm n, v)) <$> bindings) body
+
+-- | Test cases for hoistSubterms
+-- This function hoists subterms matching a predicate into let bindings.
+-- The predicate receives the path (list of TermAccessors) and the term.
+-- Hoisting only occurs within existing let expressions.
+hoistSubtermsGroup :: TTerm TestGroup
+hoistSubtermsGroup = subgroup "hoistSubterms" [
+    -- ============================================================
+    -- Test: hoistNothing predicate (identity transformation)
+    -- The hoistNothing predicate never hoists anything.
+    -- ============================================================
+
+    hoistCase "hoistNothing: simple let unchanged"
+      hoistPredicateNothing
+      -- Input: let x = 42 in x
+      (letExpr "x" (T.int32 42) (T.var "x"))
+      -- Output: unchanged
+      (letExpr "x" (T.int32 42) (T.var "x")),
+
+    hoistCase "hoistNothing: let with list in body unchanged"
+      hoistPredicateNothing
+      -- Input: let x = 1 in [x, 2, 3]
+      (letExpr "x" (T.int32 1) (T.list [T.var "x", T.int32 2, T.int32 3]))
+      -- Output: unchanged - hoistNothing never hoists
+      (letExpr "x" (T.int32 1) (T.list [T.var "x", T.int32 2, T.int32 3])),
+
+    hoistCase "hoistNothing: let with application in body unchanged"
+      hoistPredicateNothing
+      -- Input: let f = g in f (h 42)
+      (letExpr "f" (T.var "g") (T.apply (T.var "f") (T.apply (T.var "h") (T.int32 42))))
+      -- Output: unchanged
+      (letExpr "f" (T.var "g") (T.apply (T.var "f") (T.apply (T.var "h") (T.int32 42)))),
+
+    -- ============================================================
+    -- Test: hoistLists predicate
+    -- Hoists list terms at non-top-level positions.
+    -- ============================================================
+
+    hoistCase "hoistLists: list in application argument is hoisted"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [1, 2, 3]
+      (letExpr "x" (T.int32 1) (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2, T.int32 3])))
+      -- Output: the list is hoisted to a new binding _hoist_1
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.list [T.int32 1, T.int32 2, T.int32 3])]
+        (T.apply (T.var "f") (T.var "_hoist_1"))),
+
+    hoistCase "hoistLists: multiple lists are hoisted in order"
+      hoistPredicateLists
+      -- Input: let x = 1 in pair [1, 2] [3, 4]
+      (letExpr "x" (T.int32 1)
+        (T.apply (T.apply (T.var "pair") (T.list [T.int32 1, T.int32 2]))
+                                         (T.list [T.int32 3, T.int32 4])))
+      -- Output: both lists hoisted with sequential naming
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.list [T.int32 1, T.int32 2]),
+        ("_hoist_2", T.list [T.int32 3, T.int32 4])]
+        (T.apply (T.apply (T.var "pair") (T.var "_hoist_1")) (T.var "_hoist_2"))),
+
+    hoistCase "hoistLists: list in binding value is hoisted"
+      hoistPredicateLists
+      -- Input: let x = f [1, 2] in x
+      (letExpr "x" (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2])) (T.var "x"))
+      -- Output: the list in binding is hoisted
+      (multiLet [
+        ("x", T.apply (T.var "f") (T.var "_hoist_1")),
+        ("_hoist_1", T.list [T.int32 1, T.int32 2])]
+        (T.var "x")),
+
+    hoistCase "hoistLists: nested lists hoisted from inside out"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [[1, 2], 3]
+      (letExpr "x" (T.int32 1)
+        (T.apply (T.var "f") (T.list [T.list [T.int32 1, T.int32 2], T.int32 3])))
+      -- Output: inner list hoisted first, then outer list (each subterm visited once)
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.list [T.int32 1, T.int32 2]),
+        ("_hoist_2", T.list [T.var "_hoist_1", T.int32 3])]
+        (T.apply (T.var "f") (T.var "_hoist_2"))),
+
+    -- ============================================================
+    -- Test: hoistApplications predicate
+    -- Hoists function applications at non-top-level positions.
+    -- ============================================================
+
+    hoistCase "hoistApplications: application in list element is hoisted"
+      hoistPredicateApplications
+      -- Input: let x = 1 in [f x, y]
+      (letExpr "x" (T.int32 1)
+        (T.list [T.apply (T.var "f") (T.var "x"), T.var "y"]))
+      -- Output: the application is hoisted
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.apply (T.var "f") (T.var "x"))]
+        (T.list [T.var "_hoist_1", T.var "y"])),
+
+    hoistCase "hoistApplications: application in record field is hoisted"
+      hoistPredicateApplications
+      -- Input: let x = 1 in {value: f x}
+      (letExpr "x" (T.int32 1)
+        (T.record (nm "Data") [(nm "value", T.apply (T.var "f") (T.var "x"))]))
+      -- Output: the application is hoisted
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.apply (T.var "f") (T.var "x"))]
+        (T.record (nm "Data") [(nm "value", T.var "_hoist_1")])),
+
+    hoistCase "hoistApplications: nested applications hoisted from inside out"
+      hoistPredicateApplications
+      -- Input: let x = 1 in [f (g x)]
+      (letExpr "x" (T.int32 1)
+        (T.list [T.apply (T.var "f") (T.apply (T.var "g") (T.var "x"))]))
+      -- Output: inner application hoisted first, then outer
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.apply (T.var "g") (T.var "x")),
+        ("_hoist_2", T.apply (T.var "f") (T.var "_hoist_1"))]
+        (T.list [T.var "_hoist_2"])),
+
+    -- ============================================================
+    -- Test: hoistCaseStatements predicate
+    -- Hoists case/match statements at non-top-level positions.
+    -- ============================================================
+
+    hoistCase "hoistCaseStatements: case in application argument is hoisted"
+      hoistPredicateCaseStatements
+      -- Input: let x = just 42 in f (match x with just y -> y | nothing -> 0)
+      (letExpr "x" (T.optional $ T.just $ T.int32 42)
+        (T.apply (T.var "f")
+          (T.match (nm "Optional") (T.just $ T.var "x")
+            [(nm "just", T.lambda "y" (T.var "y")),
+             (nm "nothing", T.int32 0)])))
+      -- Output: the case statement is hoisted
+      (multiLet [
+        ("x", T.optional $ T.just $ T.int32 42),
+        ("_hoist_1", T.match (nm "Optional") (T.just $ T.var "x")
+          [(nm "just", T.lambda "y" (T.var "y")),
+           (nm "nothing", T.int32 0)])]
+        (T.apply (T.var "f") (T.var "_hoist_1"))),
+
+    hoistCase "hoistCaseStatements: case in list element is hoisted"
+      hoistPredicateCaseStatements
+      -- Input: let x = 1 in [match y with ok -> x | err -> 0]
+      (letExpr "x" (T.int32 1)
+        (T.list [T.match (nm "Result") (T.just $ T.var "y")
+          [(nm "ok", T.var "x"),
+           (nm "err", T.int32 0)]]))
+      -- Output: case is hoisted
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.match (nm "Result") (T.just $ T.var "y")
+          [(nm "ok", T.var "x"),
+           (nm "err", T.int32 0)])]
+        (T.list [T.var "_hoist_1"])),
+
+    -- ============================================================
+    -- Test: Nested let expressions
+    -- Hoisting respects let boundaries - each let is processed independently.
+    -- ============================================================
+
+    hoistCase "hoistLists: nested let - inner let processed independently"
+      hoistPredicateLists
+      -- Input: let x = 1 in (let y = 2 in f [x, y])
+      (letExpr "x" (T.int32 1)
+        (letExpr "y" (T.int32 2)
+          (T.apply (T.var "f") (T.list [T.var "x", T.var "y"]))))
+      -- Output: the list is hoisted into the inner let
+      (letExpr "x" (T.int32 1)
+        (multiLet [
+          ("y", T.int32 2),
+          ("_hoist_1", T.list [T.var "x", T.var "y"])]
+          (T.apply (T.var "f") (T.var "_hoist_1")))),
+
+    -- ============================================================
+    -- Test: Non-let terms are unchanged
+    -- hoistSubtermsIntoLet only affects let expressions.
+    -- ============================================================
+
+    hoistCase "hoistLists: non-let term is unchanged"
+      hoistPredicateLists
+      -- Input: f [1, 2, 3] (no enclosing let)
+      (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2, T.int32 3]))
+      -- Output: unchanged - no let to hoist into
+      (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2, T.int32 3])),
+
+    hoistCase "hoistApplications: bare application unchanged"
+      hoistPredicateApplications
+      -- Input: f (g x) (no enclosing let)
+      (T.apply (T.var "f") (T.apply (T.var "g") (T.var "x")))
+      -- Output: unchanged
+      (T.apply (T.var "f") (T.apply (T.var "g") (T.var "x"))),
+
+    -- ============================================================
+    -- Test: Lambda-bound variable capture during hoisting
+    -- When hoisting a term that contains free variables which are
+    -- lambda-bound between the enclosing let and the current position,
+    -- those variables must be captured: the hoisted binding is wrapped
+    -- in lambdas for those variables, and the reference is replaced
+    -- with an application of those variables.
+    -- ============================================================
+
+    -- Case 1: Hoisted term refers to let-bound variable (no capture needed)
+    hoistCase "hoistLists: term referring to let-bound variable needs no capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in f [x, 2]
+      -- The list refers to x which is let-bound, not lambda-bound
+      (letExpr "x" (T.int32 1)
+        (T.apply (T.var "f") (T.list [T.var "x", T.int32 2])))
+      -- Output: list is hoisted without any lambda wrapping
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.list [T.var "x", T.int32 2])]
+        (T.apply (T.var "f") (T.var "_hoist_1"))),
+
+    -- Case 2: Hoisted term refers to lambda-bound variable ABOVE the let (no capture needed)
+    hoistCase "hoistLists: term referring to lambda above let needs no capture"
+      hoistPredicateLists
+      -- Input: \y -> let x = 1 in f [y, x]
+      -- y is lambda-bound above the let, so it's in parentLambdaVars
+      (T.lambda "y"
+        (letExpr "x" (T.int32 1)
+          (T.apply (T.var "f") (T.list [T.var "y", T.var "x"]))))
+      -- Output: list is hoisted without lambda wrapping (y was bound before let)
+      (T.lambda "y"
+        (multiLet [
+          ("x", T.int32 1),
+          ("_hoist_1", T.list [T.var "y", T.var "x"])]
+          (T.apply (T.var "f") (T.var "_hoist_1")))),
+
+    -- Case 3: Lambda-bound variable between let and hoisted term, but NOT free in hoisted term
+    hoistCase "hoistLists: lambda-bound var not free in hoisted term needs no capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\y -> f [x, 2])
+      -- y is lambda-bound between let and list, but y does not appear in the list [x, 2]
+      -- So [x, 2] should be hoisted without capturing y
+      (letExpr "x" (T.int32 1)
+        (T.lambda "y" (T.apply (T.var "f") (T.list [T.var "x", T.int32 2]))))
+      -- Output: list [x, 2] is hoisted without lambda wrapping for y (y not free in list)
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.list [T.var "x", T.int32 2])]
+        (T.lambda "y" (T.apply (T.var "f") (T.var "_hoist_1")))),
+
+    -- Case 4: Lambda-bound variable between let and hoisted term, IS free in hoisted term
+    hoistCase "hoistLists: lambda-bound var free in hoisted term requires capture"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\y -> f [x, y])
+      -- y is lambda-bound between let and list, and y appears in the list [x, y]
+      -- So [x, y] should be hoisted with y captured
+      (letExpr "x" (T.int32 1)
+        (T.lambda "y" (T.apply (T.var "f") (T.list [T.var "x", T.var "y"]))))
+      -- Output: _hoist_1 = \y -> [x, y], reference becomes _hoist_1 y
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.lambda "y" (T.list [T.var "x", T.var "y"]))]
+        (T.lambda "y" (T.apply (T.var "f") (T.apply (T.var "_hoist_1") (T.var "y"))))),
+
+    -- Case 5: Multiple lambda-bound variables, only some free in hoisted term
+    hoistCase "hoistLists: only free lambda-bound vars are captured"
+      hoistPredicateLists
+      -- Input: let x = 1 in (\a -> \b -> f [x, b])
+      -- Both a and b are lambda-bound between let and list
+      -- But only b appears in the list [x, b], so only b is captured
+      (letExpr "x" (T.int32 1)
+        (T.lambda "a" (T.lambda "b" (T.apply (T.var "f") (T.list [T.var "x", T.var "b"])))))
+      -- Output: _hoist_1 = \b -> [x, b], reference becomes _hoist_1 b
+      (multiLet [
+        ("x", T.int32 1),
+        ("_hoist_1", T.lambda "b" (T.list [T.var "x", T.var "b"]))]
+        (T.lambda "a" (T.lambda "b" (T.apply (T.var "f") (T.apply (T.var "_hoist_1") (T.var "b"))))))]

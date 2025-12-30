@@ -4,6 +4,7 @@
 
 module Hydra.Reduction where
 
+import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Compute as Compute
@@ -290,6 +291,143 @@ etaExpandTypedTerm tx0 term0 =
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
+-- | Hoist case statements into bindings in the nearest enclosing let term. This is useful for targets such as Python which only support case statements (match) at the top level.
+hoistCaseStatements :: (Typing.TypeContext -> Core.Term -> Core.Term)
+hoistCaseStatements = (hoistSubterms (\path -> \term ->  
+  let isUnionElim = ((\x -> case x of
+          Core.TermFunction v1 -> ((\x -> case x of
+            Core.FunctionElimination v2 -> ((\x -> case x of
+              Core.EliminationUnion _ -> True
+              _ -> False) v2)
+            _ -> False) v1)
+          _ -> False) term)
+  in (Logic.ifElse (Logic.not isUnionElim) False ( 
+    let innerPath = (Lists.tail path)
+    in (Logic.ifElse (Lists.null innerPath) False ( 
+      let allAppLhs = (Lists.foldl (\acc -> \accessor -> Logic.and acc ((\x -> case x of
+              Accessors.TermAccessorApplicationFunction -> True
+              _ -> False) accessor)) True innerPath)
+      in (Logic.not allAppLhs)))))))
+
+-- | Hoist subterms into bindings in the nearest enclosing let term, based on a predicate. The predicate receives the path (from the let body/binding root) and the term, and returns True if the term should be hoisted. When hoisting a term that contains free variables which are lambda-bound between the enclosing let and the current position, those variables are captured: the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables. Useful for targets that require certain constructs (e.g., case statements) at the top level.
+hoistSubterms :: (([Accessors.TermAccessor] -> Core.Term -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)
+hoistSubterms shouldHoist cx0 term0 =  
+  let outerRewrite = (\recurse -> \cx -> \counter -> \term ->  
+          let dflt = (recurse counter term)
+          in  
+            let forLet = (\l ->  
+                    let body = (Core.letBody l)
+                    in  
+                      let bindings = (Core.letBindings l)
+                      in  
+                        let parentLambdaVars = (Typing.typeContextLambdaVariables cx)
+                        in  
+                          let processSubterm = (\counterAndExtra -> \subterm ->  
+                                  let counter0 = (Pairs.first counterAndExtra)
+                                  in  
+                                    let extraBindings0 = (Pairs.second counterAndExtra)
+                                    in  
+                                      let innerRewrite = (\recurse -> \path -> \acc -> \term ->  
+                                              let counterExtra = (Pairs.first acc)
+                                              in  
+                                                let innerCx = (Pairs.second acc)
+                                                in ((\x -> case x of
+                                                  Core.TermLet v1 ->  
+                                                    let nestedResult = (forLet v1)
+                                                    in (((Pairs.first nestedResult, (Pairs.second counterExtra)), innerCx), (Pairs.second nestedResult))
+                                                  _ ->  
+                                                    let subCx = ((\x -> case x of
+                                                            Core.TermFunction v1 -> ((\x -> case x of
+                                                              Core.FunctionLambda v2 -> (Schemas.extendTypeContextForLambda innerCx v2)
+                                                              _ -> innerCx) v1)
+                                                            Core.TermLet v1 -> (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) innerCx v1)
+                                                            Core.TermTypeLambda v1 -> (Schemas.extendTypeContextForTypeLambda innerCx v1)
+                                                            _ -> innerCx) term)
+                                                    in  
+                                                      let processed = (recurse path (counterExtra, subCx) term)
+                                                      in  
+                                                        let newAcc = (Pairs.first processed)
+                                                        in  
+                                                          let newCounterExtra = (Pairs.first newAcc)
+                                                          in  
+                                                            let processedTerm = (Pairs.second processed)
+                                                            in (Logic.ifElse (shouldHoist path processedTerm) ( 
+                                                              let counter = (Pairs.first newCounterExtra)
+                                                              in  
+                                                                let extraBindings = (Pairs.second newCounterExtra)
+                                                                in  
+                                                                  let bindingName = (Core.Name (Strings.cat2 "_hoist_" (Literals.showInt32 counter)))
+                                                                  in  
+                                                                    let currentLambdaVars = (Typing.typeContextLambdaVariables innerCx)
+                                                                    in  
+                                                                      let newLambdaVars = (Sets.difference currentLambdaVars parentLambdaVars)
+                                                                      in  
+                                                                        let freeVars = (Rewriting.freeVariablesInTerm processedTerm)
+                                                                        in  
+                                                                          let capturedVars = (Sets.toList (Sets.intersection newLambdaVars freeVars))
+                                                                          in  
+                                                                            let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                                                    Core.lambdaParameter = varName,
+                                                                                    Core.lambdaDomain = Nothing,
+                                                                                    Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars))
+                                                                            in  
+                                                                              let newBinding = Core.Binding {
+                                                                                      Core.bindingName = bindingName,
+                                                                                      Core.bindingTerm = wrappedTerm,
+                                                                                      Core.bindingType = Nothing}
+                                                                              in  
+                                                                                let reference = (Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
+                                                                                        Core.applicationFunction = fn,
+                                                                                        Core.applicationArgument = (Core.TermVariable varName)})) (Core.TermVariable bindingName) capturedVars)
+                                                                                in (((Math.add counter 1, (Lists.concat2 extraBindings [
+                                                                                  newBinding])), innerCx), reference)) ((newCounterExtra, innerCx), processedTerm))) term))
+                                      in  
+                                        let result = (Rewriting.rewriteAndFoldTermWithPath innerRewrite ((counter0, extraBindings0), cx) subterm)
+                                        in (Pairs.first (Pairs.first result), (Pairs.second result)))
+                          in  
+                            let pBody = (processSubterm (counter, []) body)
+                            in  
+                              let counterExtra1 = (Pairs.first pBody)
+                              in  
+                                let newBody = (Pairs.second pBody)
+                                in  
+                                  let foldBinding = (\acc -> \binding ->  
+                                          let counterExtra = (Pairs.first acc)
+                                          in  
+                                            let newBindingsSoFar = (Pairs.second acc)
+                                            in  
+                                              let p = (processSubterm counterExtra (Core.bindingTerm binding))
+                                              in  
+                                                let newCounterExtra = (Pairs.first p)
+                                                in  
+                                                  let newTerm = (Pairs.second p)
+                                                  in  
+                                                    let newBinding = Core.Binding {
+                                                            Core.bindingName = (Core.bindingName binding),
+                                                            Core.bindingTerm = newTerm,
+                                                            Core.bindingType = (Core.bindingType binding)}
+                                                    in (newCounterExtra, (Lists.concat2 newBindingsSoFar [
+                                                      newBinding])))
+                                  in  
+                                    let pBindings = (Lists.foldl foldBinding (counterExtra1, []) bindings)
+                                    in  
+                                      let counterExtra2 = (Pairs.first pBindings)
+                                      in  
+                                        let counter2 = (Pairs.first counterExtra2)
+                                        in  
+                                          let extraBindings = (Pairs.second counterExtra2)
+                                          in  
+                                            let newBindings = (Pairs.second pBindings)
+                                            in  
+                                              let allBindings = (Lists.concat2 newBindings extraBindings)
+                                              in (counter2, (Core.TermLet (Core.Let {
+                                                Core.letBindings = allBindings,
+                                                Core.letBody = newBody}))))
+            in ((\x -> case x of
+              Core.TermLet v1 -> (forLet v1)
+              _ -> dflt) term))
+  in (Pairs.second (rewriteAndFoldTermWithTypeContext outerRewrite cx0 1 term0))
+
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 reduceTerm eager term =  
@@ -396,48 +534,120 @@ reduceTerm eager term =
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
               in (Rewriting.rewriteTermM mapping term)
 
-rewriteAndFoldTermWithTypeContext :: (((t0 -> Core.Term -> t1) -> Typing.TypeContext -> t0 -> Core.Term -> t1) -> Typing.TypeContext -> t0 -> Core.Term -> t1)
+rewriteAndFoldTermWithTypeContext :: (((t0 -> Core.Term -> (t0, Core.Term)) -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term)) -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =  
-  let f2 = (\recurse -> \cx -> \val -> \term ->  
-          let recurse1 = (\val -> \term -> recurse cx val term)
+  let wrapper = (\lowLevelRecurse -> \valAndCx -> \term ->  
+          let val = (Pairs.first valAndCx)
+          in  
+            let cx = (Pairs.second valAndCx)
+            in  
+              let cx1 = ((\x -> case x of
+                      Core.TermFunction v1 -> ((\x -> case x of
+                        Core.FunctionLambda v2 -> (Schemas.extendTypeContextForLambda cx v2)
+                        _ -> cx) v1)
+                      Core.TermLet v1 -> (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
+                      Core.TermTypeLambda v1 -> (Schemas.extendTypeContextForTypeLambda cx v1)
+                      _ -> cx) term)
+              in  
+                let recurseForUser = (\newVal -> \subterm ->  
+                        let result = (lowLevelRecurse (newVal, cx1) subterm)
+                        in (Pairs.first (Pairs.first result), (Pairs.second result)))
+                in  
+                  let fResult = (f recurseForUser cx1 val term)
+                  in ((Pairs.first fResult, cx1), (Pairs.second fResult)))
+  in  
+    let result = (Rewriting.rewriteAndFoldTerm wrapper (val0, cx0) term0)
+    in (Pairs.first (Pairs.first result), (Pairs.second result))
+
+rewriteAndFoldTermWithTypeContextAndPath :: ((((t0, (t1, Core.Term)) -> t2) -> [t0] -> Typing.TypeContext -> t1 -> Core.Term -> t2) -> Typing.TypeContext -> t1 -> Core.Term -> t2)
+rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =  
+  let f2 = (\recurse -> \path -> \cx -> \val -> \term ->  
+          let recurse1 = (\accessorValTerm ->  
+                  let accessor = (Pairs.first accessorValTerm)
+                  in  
+                    let v = (Pairs.first (Pairs.second accessorValTerm))
+                    in  
+                      let t = (Pairs.second (Pairs.second accessorValTerm))
+                      in  
+                        let newPath = (Lists.concat2 path [
+                                accessor])
+                        in (recurse newPath cx v t))
           in ((\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionLambda v2 ->  
                 let cx1 = (Schemas.extendTypeContextForLambda cx v2)
                 in  
-                  let recurse2 = (\val -> \term -> recurse cx1 val term)
-                  in (f recurse2 cx1 val term)
-              _ -> (f recurse1 cx val term)) v1)
+                  let recurse2 = (\accessorValTerm ->  
+                          let accessor = (Pairs.first accessorValTerm)
+                          in  
+                            let v = (Pairs.first (Pairs.second accessorValTerm))
+                            in  
+                              let t = (Pairs.second (Pairs.second accessorValTerm))
+                              in  
+                                let newPath = (Lists.concat2 path [
+                                        accessor])
+                                in (recurse newPath cx1 v t))
+                  in (f recurse2 path cx1 val term)
+              _ -> (f recurse1 path cx val term)) v1)
             Core.TermLet v1 ->  
               let cx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
               in  
-                let recurse2 = (\val -> \term -> recurse cx1 val term)
-                in (f recurse2 cx1 val term)
+                let recurse2 = (\accessorValTerm ->  
+                        let accessor = (Pairs.first accessorValTerm)
+                        in  
+                          let v = (Pairs.first (Pairs.second accessorValTerm))
+                          in  
+                            let t = (Pairs.second (Pairs.second accessorValTerm))
+                            in  
+                              let newPath = (Lists.concat2 path [
+                                      accessor])
+                              in (recurse newPath cx1 v t))
+                in (f recurse2 path cx1 val term)
             Core.TermTypeLambda v1 ->  
               let cx1 = (Schemas.extendTypeContextForTypeLambda cx v1)
               in  
-                let recurse2 = (\val -> \term -> recurse cx1 val term)
-                in (f recurse2 cx1 val term)
-            _ -> (f recurse1 cx val term)) term))
+                let recurse2 = (\accessorValTerm ->  
+                        let accessor = (Pairs.first accessorValTerm)
+                        in  
+                          let v = (Pairs.first (Pairs.second accessorValTerm))
+                          in  
+                            let t = (Pairs.second (Pairs.second accessorValTerm))
+                            in  
+                              let newPath = (Lists.concat2 path [
+                                      accessor])
+                              in (recurse newPath cx1 v t))
+                in (f recurse2 path cx1 val term)
+            _ -> (f recurse1 path cx val term)) term))
   in  
-    let rewrite = (\cx -> \val -> \term -> f2 rewrite cx val term)
-    in (rewrite cx0 val0 term0)
+    let rewrite = (\path -> \cx -> \val -> \term -> f2 rewrite path cx val term)
+    in (rewrite [] cx0 val0 term0)
 
--- | Rewrite a term with the help of a type context which is updated as we descend into subterms
-rewriteTermWithTypeContext :: (((Typing.TypeContext -> Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Typing.TypeContext -> Core.Term -> Core.Term)
+rewriteTermWithTypeContext :: (((Core.Term -> t0) -> Typing.TypeContext -> Core.Term -> t0) -> Typing.TypeContext -> Core.Term -> t0)
 rewriteTermWithTypeContext f cx0 term0 =  
   let f2 = (\recurse -> \cx -> \term ->  
-          let recurse1 = (\cx -> \term ->  
-                  let fallback = (recurse cx term)
-                  in ((\x -> case x of
-                    Core.TermFunction v1 -> ((\x -> case x of
-                      Core.FunctionLambda v2 -> (recurse (Schemas.extendTypeContextForLambda cx v2) term)
-                      _ -> fallback) v1)
-                    Core.TermLet v1 -> (recurse (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1) term)
-                    Core.TermTypeLambda v1 -> (recurse (Schemas.extendTypeContextForTypeLambda cx v1) term)
-                    _ -> fallback) term))
-          in (f recurse1 term))
-  in (Rewriting.rewriteTermWithContext f2 cx0 term0)
+          let recurse1 = (\term -> recurse cx term)
+          in ((\x -> case x of
+            Core.TermFunction v1 -> ((\x -> case x of
+              Core.FunctionLambda v2 ->  
+                let cx1 = (Schemas.extendTypeContextForLambda cx v2)
+                in  
+                  let recurse2 = (\term -> recurse cx1 term)
+                  in (f recurse2 cx1 term)
+              _ -> (f recurse1 cx term)) v1)
+            Core.TermLet v1 ->  
+              let cx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
+              in  
+                let recurse2 = (\term -> recurse cx1 term)
+                in (f recurse2 cx1 term)
+            Core.TermTypeLambda v1 ->  
+              let cx1 = (Schemas.extendTypeContextForTypeLambda cx v1)
+              in  
+                let recurse2 = (\term -> recurse cx1 term)
+                in (f recurse2 cx1 term)
+            _ -> (f recurse1 cx term)) term))
+  in  
+    let rewrite = (\cx -> \term -> f2 rewrite cx term)
+    in (rewrite cx0 term0)
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: (Core.Term -> Bool)
