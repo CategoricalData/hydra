@@ -190,6 +190,9 @@ isComplexBinding tc b@(Binding _ term (Just ts)) = isPolymorphic || isNonNullary
   where
     isPolymorphic = not $ L.null $ typeSchemeVariables ts
     isNonNullary = typeArity (typeSchemeType ts) > 0
+-- Bindings without type schemes (e.g., lifted case expressions) are treated as complex
+-- since they represent functions that need to be encoded specially
+isComplexBinding tc b@(Binding _ term Nothing) = isComplexTerm tc term
 
 -- | Determine whether a given term requires needs to be treated as a (possibly nullary) function,
 --   rather than a simple value. The term might be an actual function, or it may have type parameters

@@ -161,10 +161,10 @@ type LiftCounter = Int
 -- Instead, FunctionElimination is now handled in encodeFunction by generating
 -- a runtime error via hydra.dsl.python.unsupported().
 --
--- TODO: Re-enable this transformation once we can provide proper type schemes
--- for lifted bindings, or modify the type analyzer to handle untyped bindings.
+-- This transformation lifts inline case expressions to let bindings so they can be
+-- encoded as Python match statements.
 liftInlineCaseExpressions :: Term -> Term
-liftInlineCaseExpressions term0 = term0  -- Disabled: return term unchanged
+liftInlineCaseExpressions term0 = snd $ go 1 term0
   where
     go :: LiftCounter -> Term -> (LiftCounter, Term)
     go n term = case deannotateTerm term of
@@ -448,6 +448,11 @@ encodeBindingAsAssignment env (Binding name term (Just ts)) = do
         then makeThunk pbody
         else pbody
   return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
+-- Bindings without type schemes (e.g., lifted case expressions) use simple assignment
+encodeBindingAsAssignment env (Binding name term Nothing) = do
+  let pyName = encodeName False CaseConventionLowerSnake env name
+  pbody <- encodeTermInline env False term
+  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pbody
 
 encodeBindingAs :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
 encodeBindingAs env (Binding name1 term1 mts) = do
@@ -528,7 +533,8 @@ encodeDefinition env def = case def of
     withTrace ("data element " ++ unName name) $ do
       -- Lift inline case expressions to let bindings before encoding
       -- This transforms (case x of {...}) arg into let matchFn = ... in matchFn arg
-      let term = liftInlineCaseExpressions term0
+      -- DISABLED: Using kernel-level hoisting (doHoist=True in writePython) instead
+      let term = term0
 
       comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term0)
       stmt <- encodeTermAssignment env name term typ comment
@@ -553,8 +559,9 @@ encodeFieldType env (FieldType fname ftype) = do
 encodeFloatValue :: FloatValue -> Flow s Py.Expression
 encodeFloatValue fv = case fv of
   FloatValueBigfloat f -> pure $ functionCall (pyNameToPyPrimary $ Py.Name "Decimal") [singleQuotedString $ show f]
+  -- All other float types map to Python's float (which is 64-bit)
+  FloatValueFloat32 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
   FloatValueFloat64 f -> pure $ pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberFloat $ realToFrac f
-  _ -> fail $ "unsupported floating point type: " ++ show (floatValueType fv)
 
 encodeForallType :: PythonEnvironment -> ForallType -> Flow PyGraph Py.Expression
 encodeForallType env lt = do
@@ -582,8 +589,8 @@ encodeFunction env f = case f of
 --    let pparams = fmap (termVariableReference env) params
     if (L.null bindings)
       then return $ Py.ExpressionLambda $ Py.Lambda
-        (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
-        pbody
+             (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+             pbody
       else do
         -- Create walrus operator expressions for each binding
         pbindingExprs <- CM.mapM (encodeBindingAsAssignment innerEnv) bindings
@@ -604,8 +611,8 @@ encodeFunction env f = case f of
                             [indexValue]
 
         return $ Py.ExpressionLambda $ Py.Lambda
-          (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
-          (pyPrimaryToPyExpression indexedExpr)
+                   (Py.LambdaParameters Nothing (fmap Py.LambdaParamNoDefault pparams) [] Nothing)
+                   (pyPrimaryToPyExpression indexedExpr)
   -- Only nullary primitives should appear here.
   FunctionPrimitive name -> encodeVariable env name []
   -- Case eliminations as values (not applied) cannot be directly expressed in Python
@@ -712,13 +719,12 @@ encodeLiteralType lt = do
     findName = case lt of
       LiteralTypeBinary -> pure "bytes"
       LiteralTypeBoolean -> pure "bool"
-      LiteralTypeFloat ft -> case ft of
-        FloatTypeBigfloat -> pure "Decimal"
-        FloatTypeFloat64 -> pure "float"
-        _ -> fail $ "unsupported floating-point type: " ++ show ft
-      LiteralTypeInteger it -> case it of
-        IntegerTypeBigint -> pure "int"
-        _ -> fail $ "unsupported integer type: " ++ show it
+      -- All float types map to Python's float, except bigfloat which uses Decimal
+      LiteralTypeFloat ft -> pure $ case ft of
+        FloatTypeBigfloat -> "Decimal"
+        _ -> "float"
+      -- All integer types map to Python's int (arbitrary precision)
+      LiteralTypeInteger _ -> pure "int"
       LiteralTypeString -> pure "str"
 
 encodeModule :: Module -> [Definition] -> Flow Graph Py.Module
@@ -955,7 +961,11 @@ encodeTermInline env noCast term = case deannotateTerm term of
           $ encodeEnumValue env $ fieldName field
         else do
           -- Omit argument for unit-valued variants (resolves #206)
-          args <- if Schemas.isUnitTerm (fieldTerm field)
+          -- Check both: if the term is literally unit, OR if the variant type is unit
+          let isUnitVariant = case L.find (\ft -> fieldTypeName ft == fieldName field) (rowTypeFields rt) of
+                Just ft -> Schemas.isUnitType $ deannotateType $ fieldTypeType ft
+                Nothing -> False
+          args <- if Schemas.isUnitTerm (fieldTerm field) || isUnitVariant
             then return []
             else do
               parg <- encode $ fieldTerm field
@@ -1212,18 +1222,26 @@ encodeVariable env name args = do
           Nothing -> return $ if isNullary typ && isComplexVariable (pythonEnvironmentTypeContext env) name
             then asFunctionCallTmp "three"
             else asFunctionReference (fTypeToTypeScheme typ)
-      Nothing -> case lookupPrimitive g name of
-        Just prim -> return $ if primitiveArity prim == L.length args
-          then asFunctionCallTmp "four"
-          else if L.null args
-            then asFunctionReference (primitiveType prim)
-            else asPartialApplication (primitiveArity prim)
-        -- Check if the variable is a graph element (external binding)
-        Nothing -> case M.lookup name (graphElements g) of
-          Just el -> case bindingType el of
-            Just ts -> return $ asFunctionReference ts
-            Nothing -> return asVariable
-          Nothing -> fail $ "Unknown variable: " ++ unName name
+      -- Check for untyped lambda variables (lambda has no domain annotation)
+      -- These are in typeContextLambdaVariables but NOT in typeContextTypes
+      Nothing -> if S.member name (typeContextLambdaVariables tc)
+        then return asVariable
+        else case lookupPrimitive g name of
+          Just prim -> return $ if primitiveArity prim == L.length args
+            then asFunctionCallTmp "four"
+            else if L.null args
+              then asFunctionReference (primitiveType prim)
+              else asPartialApplication (primitiveArity prim)
+          -- Check if the variable is a graph element (external binding)
+          Nothing -> case M.lookup name (graphElements g) of
+            Just el -> case bindingType el of
+              Just ts -> return $ asFunctionReference ts
+              Nothing -> return asVariable
+            -- Check if the variable is a local let binding without a type (e.g., lifted case expression)
+            -- These bindings are in typeContextMetadata but not in typeContextTypes
+            Nothing -> case M.lookup name (typeContextMetadata tc) of
+              Just _ -> return $ asFunctionCallTmp "five"  -- Lifted case expression binding
+              Nothing -> fail $ "Unknown variable: " ++ unName name
   where
     tc = pythonEnvironmentTypeContext env
     asVariable = termVariableReference env name
