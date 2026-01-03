@@ -3,9 +3,9 @@ module Hydra.Sources.Kernel.Terms.Substitution where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  composeTypeSubst, composeTypeSubstList, idTypeSubst, singletonTypeSubst,
+  composeTypeSubst, composeTypeSubstNonEmpty, composeTypeSubstList, idTypeSubst, singletonTypeSubst,
   substituteInConstraint, substituteInConstraints, substInClassConstraints, substInContext, substituteInTerm,
-  substInType, substInTypeScheme, substTypesInTerm)
+  substInType, substInTypeNonEmpty, substInTypeScheme, substTypesInTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -71,6 +71,7 @@ module_ = Module ns elements
   where
    elements = [
      toBinding composeTypeSubst,
+     toBinding composeTypeSubstNonEmpty,
      toBinding composeTypeSubstList,
      toBinding idTypeSubst,
      toBinding singletonTypeSubst,
@@ -80,6 +81,7 @@ module_ = Module ns elements
      toBinding substInContext,
      toBinding substituteInTerm,
      toBinding substInType,
+     toBinding substInTypeNonEmpty,
      toBinding substInTypeScheme,
      toBinding substTypesInTerm]
 
@@ -89,6 +91,20 @@ define = definitionInModule module_
 composeTypeSubst :: TBinding (TypeSubst -> TypeSubst -> TypeSubst)
 composeTypeSubst = define "composeTypeSubst" $
   doc "Compose two type substitutions" $
+  lambdas ["s1", "s2"] $
+    -- Short-circuit: if s1 is empty, return s2
+    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "s1")
+      (var "s2") $
+    -- Short-circuit: if s2 is empty, return s1
+    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "s2")
+      (var "s1") $
+    -- Otherwise, compose normally
+    composeTypeSubstNonEmpty @@ var "s1" @@ var "s2"
+
+-- | Helper for composeTypeSubst when both substitutions are non-empty
+composeTypeSubstNonEmpty :: TBinding (TypeSubst -> TypeSubst -> TypeSubst)
+composeTypeSubstNonEmpty = define "composeTypeSubstNonEmpty" $
+  doc "Compose two non-empty type substitutions (internal helper)" $
   lambdas ["s1", "s2"] $ lets [
     "isExtra">: lambdas ["k", "v"] $ Maybes.isNothing (Maps.lookup (var "k") (Typing.unTypeSubst $ var "s1")),
     "withExtra">: Maps.filterWithKey (var "isExtra") (Typing.unTypeSubst $ var "s2")] $
@@ -211,22 +227,34 @@ substituteInTerm = define "substituteInTerm" $
 substInType :: TBinding (TypeSubst -> Type -> Type)
 substInType = define "substInType" $
   doc "Apply a type substitution to a type" $
-  "subst" ~> "typ0" ~> lets [
-    "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
-      _Type_forall>>: lambda "lt" $ Maybes.maybe
-        (var "recurse" @@ var "typ")
-        (lambda "styp" $ Core.typeForall $ Core.forallType
-          (Core.forallTypeParameter $ var "lt")
-          (substInType
-            @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
-            @@ (Core.forallTypeBody $ var "lt")))
-        (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
-      _Type_variable>>: lambda "v" $ Maybes.maybe
-        (var "typ")
-        (lambda "styp" $ var "styp")
-        (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
-    "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
-    (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
+  "subst" ~> "typ0" ~>
+    -- Short-circuit: if substitution is empty, return type unchanged
+    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "subst")
+      (var "typ0") $
+    -- Otherwise, apply the substitution
+    substInTypeNonEmpty @@ var "subst" @@ var "typ0"
+
+-- | Helper for substInType when substitution is non-empty
+substInTypeNonEmpty :: TBinding (TypeSubst -> Type -> Type)
+substInTypeNonEmpty = define "substInTypeNonEmpty" $
+  doc "Apply a non-empty type substitution to a type (internal helper)" $
+  "subst" ~> "typ0" ~>
+    lets [
+      "rewrite">: lambdas ["recurse", "typ"] $ cases _Type (var "typ") (Just $ var "recurse" @@ var "typ") [
+        _Type_forall>>: lambda "lt" $ Maybes.maybe
+          (var "recurse" @@ var "typ")
+          (lambda "styp" $ Core.typeForall $ Core.forallType
+            (Core.forallTypeParameter $ var "lt")
+            (substInType
+              @@ (var "removeVar" @@ (Core.forallTypeParameter $ var "lt"))
+              @@ (Core.forallTypeBody $ var "lt")))
+          (Maps.lookup (Core.forallTypeParameter $ var "lt") (Typing.unTypeSubst $ var "subst")),
+        _Type_variable>>: lambda "v" $ Maybes.maybe
+          (var "typ")
+          (lambda "styp" $ var "styp")
+          (Maps.lookup (var "v") (Typing.unTypeSubst $ var "subst"))],
+      "removeVar">: lambdas ["v"] $ Typing.typeSubst $ Maps.delete (var "v") (Typing.unTypeSubst $ var "subst")] $
+      (Rewriting.rewriteType) @@ var "rewrite" @@ var "typ0"
 
 substInTypeScheme :: TBinding (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeScheme = define "substInTypeScheme" $
