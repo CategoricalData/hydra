@@ -42,6 +42,7 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, Json.ns, 
       freeVariablesTestCase,
       hoistPredicate,
       hoistSubtermsTestCase,
+      hoistCaseStatementsTestCase,
       termRewriter,
       rewriteTermTestCase,
       typeRewriter,
@@ -50,7 +51,10 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, Json.ns, 
       inferenceFailureTestCase,
       inferenceTestCase,
       jsonCoderTestCase,
+      jsonDecodeTestCase,
+      jsonEncodeTestCase,
       jsonParserTestCase,
+      jsonRoundtripTestCase,
       liftLambdaAboveLetTestCase,
       jsonWriterTestCase,
       parserTestCase,
@@ -243,6 +247,19 @@ hoistSubtermsTestCase = define "HoistSubtermsTestCase" $
       doc "The expected output term with hoisted subterms as new bindings"
       Core.term]
 
+hoistCaseStatementsTestCase :: Binding
+hoistCaseStatementsTestCase = define "HoistCaseStatementsTestCase" $
+  doc ("A test case for the hoistCaseStatements function, which hoists case statements"
+    <> " into let bindings, but only when they appear inside a lambda body."
+    <> " This is used for targets like Python which don't support inline match expressions.") $
+  T.record [
+    "input">:
+      doc "The input term"
+      Core.term,
+    "output">:
+      doc "The expected output term with hoisted case statements"
+      Core.term]
+
 termRewriter :: Binding
 termRewriter = define "TermRewriter" $
   doc "A predefined term rewriter for testing rewriteTerm" $
@@ -337,6 +354,45 @@ jsonCoderTestCase = define "JsonCoderTestCase" $
     "json">:
       doc "The expected JSON value"
       Json.value]
+
+jsonDecodeTestCase :: Binding
+jsonDecodeTestCase = define "JsonDecodeTestCase" $
+  doc ("A test case for the Either-based JSON decoder."
+    <> " Takes a type, input JSON, and expected result (Either String Term).") $
+  T.record [
+    "type">:
+      doc "The Hydra type to decode into"
+      Core.type_,
+    "json">:
+      doc "The input JSON value"
+      Json.value,
+    "expected">:
+      doc "The expected result: Left for error, Right for decoded term" $
+      T.either_ T.string Core.term]
+
+jsonEncodeTestCase :: Binding
+jsonEncodeTestCase = define "JsonEncodeTestCase" $
+  doc ("A test case for the Either-based JSON encoder."
+    <> " Takes an input term and expected result (Either String Value).") $
+  T.record [
+    "term">:
+      doc "The Hydra term to encode"
+      Core.term,
+    "expected">:
+      doc "The expected result: Left for error, Right for encoded JSON" $
+      T.either_ T.string Json.value]
+
+jsonRoundtripTestCase :: Binding
+jsonRoundtripTestCase = define "JsonRoundtripTestCase" $
+  doc ("A test case for round-trip encoding/decoding using the Either-based JSON functions."
+    <> " Encodes a term, then decodes it back, verifying the result equals the original.") $
+  T.record [
+    "type">:
+      doc "The Hydra type for encoding/decoding"
+      Core.type_,
+    "term">:
+      doc "The Hydra term to round-trip"
+      Core.term]
 
 jsonParserTestCase :: Binding
 jsonParserTestCase = define "JsonParserTestCase" $
@@ -452,11 +508,20 @@ testCase = define "TestCase" $
       doc "A type inference failure test"
       inferenceFailureTestCase,
     "jsonCoder">:
-      doc "A JSON coder (round-trip) test"
+      doc "A JSON coder (round-trip) test using Flow-based coder"
       jsonCoderTestCase,
+    "jsonDecode">:
+      doc "A JSON decode test using Either-based decoder"
+      jsonDecodeTestCase,
+    "jsonEncode">:
+      doc "A JSON encode test using Either-based encoder"
+      jsonEncodeTestCase,
     "jsonParser">:
       doc "A JSON parser test"
       jsonParserTestCase,
+    "jsonRoundtrip">:
+      doc "A JSON round-trip test using Either-based encoder/decoder"
+      jsonRoundtripTestCase,
     "jsonWriter">:
       doc "A JSON writer test"
       jsonWriterTestCase,
@@ -501,7 +566,10 @@ testCase = define "TestCase" $
       rewriteTypeTestCase,
     "hoistSubterms">:
       doc "A hoist subterms test"
-      hoistSubtermsTestCase]
+      hoistSubtermsTestCase,
+    "hoistCaseStatements">:
+      doc "A hoist case statements test"
+      hoistCaseStatementsTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $

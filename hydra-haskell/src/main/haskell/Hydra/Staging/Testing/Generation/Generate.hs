@@ -205,14 +205,47 @@ generateAllModuleTestsIncremental testGen baseDir modulePairs writeFile = do
   putState g
 
   -- Generate files one at a time, writing each immediately
-  mapM_ (generateAndWriteModule testGen baseDir writeFile) (zip [1..] modulePairs)
+  -- Continue on failures so that one failing module doesn't block others
+  successCount <- generateModulesWithContinueOnError testGen baseDir writeFile (zip [1..] modulePairs) 0
 
   -- Generate an aggregator file if the generator provides one
   case testGenAggregatorFile testGen of
     Just genAggregator -> do
       let aggregator = genAggregator baseDir (map fst modulePairs)
-      unsafePerformIO (writeFile aggregator) `seq` return (length modulePairs + 1)
-    Nothing -> return (length modulePairs)
+      unsafePerformIO (writeFile aggregator) `seq` return (successCount + 1)
+    Nothing -> return successCount
+
+-- | Generate modules one at a time, continuing on errors
+-- Returns the count of successfully generated modules
+generateModulesWithContinueOnError :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> [(Int, (Module, TestGroup))] -> Int -> Flow Graph Int
+generateModulesWithContinueOnError _ _ _ [] count = return count
+generateModulesWithContinueOnError testGen baseDir writeFile ((idx, pair):rest) count = do
+  let (sourceModule, _) = pair
+      ns = moduleNamespace sourceModule
+  trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
+
+  -- Try to generate this module using tryFlow, which catches errors and returns Maybe
+  mresult <- tryFlow (generateModuleTest testGen baseDir pair)
+
+  -- Handle result
+  newCount <- case mresult of
+    Just result -> do
+      -- Success: write the file
+      unsafePerformIO (writeFile result) `seq` return ()
+      return (count + 1)
+    Nothing -> do
+      -- Failure: log and continue
+      trace ("  ✗ Generation failed for " ++ show ns ++ " (continuing...)") $ return ()
+      return count
+
+  -- Continue with remaining modules
+  generateModulesWithContinueOnError testGen baseDir writeFile rest newCount
+
+-- | Try to run a Flow, returning Nothing if it fails instead of propagating the error
+tryFlow :: Flow s a -> Flow s (Maybe a)
+tryFlow f = Flow $ \s t ->
+  let FlowState mval s' t' = unFlow f s t
+  in FlowState (Just mval) s' t'
 
 -- | Generate a single module test and write it immediately
 generateAndWriteModule :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> (Int, (Module, TestGroup)) -> Flow Graph ()

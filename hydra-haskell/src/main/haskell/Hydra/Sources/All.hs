@@ -17,7 +17,9 @@ import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 import qualified Hydra.Sources.Json.Coder as JsonCoder
+import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Json.Decoding as JsonDecoding
+import qualified Hydra.Sources.Json.Encode as JsonEncode
 import qualified Hydra.Sources.Json.Extract as JsonExtract
 import qualified Hydra.Sources.Json.Language as JsonLanguage
 import qualified Hydra.Sources.Json.Parser as JsonParser
@@ -31,7 +33,9 @@ mainModules = kernelModules ++ jsonModules ++ otherModules
 jsonModules :: [Module]
 jsonModules = [
   JsonCoder.module_,
+  JsonDecode.module_,
   JsonDecoding.module_,
+  JsonEncode.module_,
   JsonExtract.module_,
   JsonLanguage.module_,
   JsonParser.module_,

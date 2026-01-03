@@ -25,6 +25,7 @@ type Int32 = I.Int32
 
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
+tag_disabledForPython = Tag "disabledForPython"
 tag_usesKernelRefs = Tag "usesKernelRefs"
 
 noTags :: TTerm [Tag]
@@ -69,6 +70,7 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
+isDisabledForPython tcase = tag_disabledForPython `L.elem` Testing.testCaseWithMetadataTags tcase
 isUsesKernelRefs tcase = tag_usesKernelRefs `L.elem` Testing.testCaseWithMetadataTags tcase
 
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
@@ -190,8 +192,17 @@ testCaseInferenceFailure = inject _TestCase _TestCase_inferenceFailure
 testCaseJsonCoder :: TTerm JsonCoderTestCase -> TTerm TestCase
 testCaseJsonCoder = inject _TestCase _TestCase_jsonCoder
 
+testCaseJsonDecode :: TTerm JsonDecodeTestCase -> TTerm TestCase
+testCaseJsonDecode = inject _TestCase _TestCase_jsonDecode
+
+testCaseJsonEncode :: TTerm JsonEncodeTestCase -> TTerm TestCase
+testCaseJsonEncode = inject _TestCase _TestCase_jsonEncode
+
 testCaseJsonParser :: TTerm JsonParserTestCase -> TTerm TestCase
 testCaseJsonParser = inject _TestCase _TestCase_jsonParser
+
+testCaseJsonRoundtrip :: TTerm JsonRoundtripTestCase -> TTerm TestCase
+testCaseJsonRoundtrip = inject _TestCase _TestCase_jsonRoundtrip
 
 testCaseJsonWriter :: TTerm JsonWriterTestCase -> TTerm TestCase
 testCaseJsonWriter = inject _TestCase _TestCase_jsonWriter
@@ -252,6 +263,43 @@ jsonCoderTestCase typ term json = Phantoms.record _JsonCoderTestCase [
 coderCase :: String -> TTerm Type -> TTerm Term -> TTerm Value -> TTerm TestCaseWithMetadata
 coderCase cname typ term json = testCaseWithMetadata (Phantoms.string cname)
   (testCaseJsonCoder $ jsonCoderTestCase typ term json)
+  nothing noTags
+
+----------------------------------------
+-- JSON encode/decode/roundtrip test case helpers (Either-based)
+
+jsonDecodeTestCase :: TTerm Type -> TTerm Value -> TTerm (Either String Term) -> TTerm JsonDecodeTestCase
+jsonDecodeTestCase typ json expected = Phantoms.record _JsonDecodeTestCase [
+  _JsonDecodeTestCase_type>>: typ,
+  _JsonDecodeTestCase_json>>: json,
+  _JsonDecodeTestCase_expected>>: expected]
+
+jsonEncodeTestCase :: TTerm Term -> TTerm (Either String Value) -> TTerm JsonEncodeTestCase
+jsonEncodeTestCase term expected = Phantoms.record _JsonEncodeTestCase [
+  _JsonEncodeTestCase_term>>: term,
+  _JsonEncodeTestCase_expected>>: expected]
+
+jsonRoundtripTestCase :: TTerm Type -> TTerm Term -> TTerm JsonRoundtripTestCase
+jsonRoundtripTestCase typ term = Phantoms.record _JsonRoundtripTestCase [
+  _JsonRoundtripTestCase_type>>: typ,
+  _JsonRoundtripTestCase_term>>: term]
+
+-- | Convenience function for creating JSON decode test cases (Either-based)
+jsonDecodeCase :: String -> TTerm Type -> TTerm Value -> TTerm (Either String Term) -> TTerm TestCaseWithMetadata
+jsonDecodeCase cname typ json expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJsonDecode $ jsonDecodeTestCase typ json expected)
+  nothing noTags
+
+-- | Convenience function for creating JSON encode test cases (Either-based)
+jsonEncodeCase :: String -> TTerm Term -> TTerm (Either String Value) -> TTerm TestCaseWithMetadata
+jsonEncodeCase cname term expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJsonEncode $ jsonEncodeTestCase term expected)
+  nothing noTags
+
+-- | Convenience function for creating JSON round-trip test cases (Either-based)
+jsonRoundtripCase :: String -> TTerm Type -> TTerm Term -> TTerm TestCaseWithMetadata
+jsonRoundtripCase cname typ term = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJsonRoundtrip $ jsonRoundtripTestCase typ term)
   nothing noTags
 
 testCaseTopologicalSort :: TTerm TopologicalSortTestCase -> TTerm TestCase
@@ -565,4 +613,21 @@ hoistPredicateNothing = inject _HoistPredicate _HoistPredicate_nothing $ Phantom
 hoistCase :: String -> TTerm HoistPredicate -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 hoistCase cname predicate input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseHoistSubterms $ hoistSubtermsTestCase predicate input output)
+  nothing noTags
+
+----------------------------------------
+-- Hoist case statements test case helpers
+
+testCaseHoistCaseStatements :: TTerm HoistCaseStatementsTestCase -> TTerm TestCase
+testCaseHoistCaseStatements = inject _TestCase _TestCase_hoistCaseStatements
+
+hoistCaseStatementsTestCase :: TTerm Term -> TTerm Term -> TTerm HoistCaseStatementsTestCase
+hoistCaseStatementsTestCase input output = Phantoms.record _HoistCaseStatementsTestCase [
+  _HoistCaseStatementsTestCase_input>>: input,
+  _HoistCaseStatementsTestCase_output>>: output]
+
+-- | Convenience function for creating hoist case statements test cases
+hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+hoistCaseStatementsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseHoistCaseStatements $ hoistCaseStatementsTestCase input output)
   nothing noTags
