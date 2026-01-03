@@ -82,6 +82,8 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
 -- apply (Just f) (Just x) = Just (f x); otherwise Nothing
+-- We manually construct the result because the nested lambda would be flattened in Python.
+-- The logic is: apply (Just f) (Just x) = Just (f x)
 apply_ :: TBinding (Term -> Term -> Flow s Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for Maybe terms." $
@@ -92,11 +94,11 @@ apply_ = define "apply" $
       cases _Term (var "argOptTerm")
         (Just (Monads.unexpected @@ string "optional value" @@ (ShowCore.term @@ var "argOptTerm"))) [
         _Term_maybe>>: "mx" ~>
-          produce $ Core.termMaybe $ Maybes.apply
-            (Maybes.map
-              ("f" ~> "x" ~> Core.termApplication $ Core.application (var "f") (var "x"))
-              (var "mf"))
-            (var "mx")]]
+          -- Manual applicative apply: for Just f, Just x => Just (f x); else Nothing
+          -- We use Maybes.bind to handle the nested Maybes without requiring curried lambdas
+          produce $ Core.termMaybe $
+            Maybes.bind (var "mf") $
+              "f" ~> Maybes.map ("x" ~> Core.termApplication $ Core.application (var "f") (var "x")) (var "mx")]]
 
 -- | Interpreter-friendly monadic bind for Maybe terms.
 -- bind (Just x) f = f x; bind Nothing f = Nothing
