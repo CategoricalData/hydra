@@ -250,6 +250,21 @@ _HoistSubtermsTestCase_input = (Core.Name "input")
 
 _HoistSubtermsTestCase_output = (Core.Name "output")
 
+-- | A test case for the hoistCaseStatements function, which hoists case statements into let bindings, but only when they appear inside a lambda body. This is used for targets like Python which don't support inline match expressions.
+data HoistCaseStatementsTestCase = 
+  HoistCaseStatementsTestCase {
+    -- | The input term
+    hoistCaseStatementsTestCaseInput :: Core.Term,
+    -- | The expected output term with hoisted case statements
+    hoistCaseStatementsTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_HoistCaseStatementsTestCase = (Core.Name "hydra.testing.HoistCaseStatementsTestCase")
+
+_HoistCaseStatementsTestCase_input = (Core.Name "input")
+
+_HoistCaseStatementsTestCase_output = (Core.Name "output")
+
 -- | A predefined term rewriter for testing rewriteTerm
 data TermRewriter = 
   -- | Replace all string literal 'foo' with 'bar'
@@ -376,10 +391,59 @@ _JsonCoderTestCase_term = (Core.Name "term")
 
 _JsonCoderTestCase_json = (Core.Name "json")
 
+-- | A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term).
+data JsonDecodeTestCase = 
+  JsonDecodeTestCase {
+    -- | The Hydra type to decode into
+    jsonDecodeTestCaseType :: Core.Type,
+    -- | The input JSON value
+    jsonDecodeTestCaseJson :: Json.Value,
+    -- | The expected result: Left for error, Right for decoded term
+    jsonDecodeTestCaseExpected :: (Either String Core.Term)}
+  deriving (Eq, Ord, Read, Show)
+
+_JsonDecodeTestCase = (Core.Name "hydra.testing.JsonDecodeTestCase")
+
+_JsonDecodeTestCase_type = (Core.Name "type")
+
+_JsonDecodeTestCase_json = (Core.Name "json")
+
+_JsonDecodeTestCase_expected = (Core.Name "expected")
+
+-- | A test case for the Either-based JSON encoder. Takes an input term and expected result (Either String Value).
+data JsonEncodeTestCase = 
+  JsonEncodeTestCase {
+    -- | The Hydra term to encode
+    jsonEncodeTestCaseTerm :: Core.Term,
+    -- | The expected result: Left for error, Right for encoded JSON
+    jsonEncodeTestCaseExpected :: (Either String Json.Value)}
+  deriving (Eq, Ord, Read, Show)
+
+_JsonEncodeTestCase = (Core.Name "hydra.testing.JsonEncodeTestCase")
+
+_JsonEncodeTestCase_term = (Core.Name "term")
+
+_JsonEncodeTestCase_expected = (Core.Name "expected")
+
 -- | A test case which parses a JSON string and compares the result with an expected JSON value
 type JsonParserTestCase = (ParserTestCase Json.Value)
 
 _JsonParserTestCase = (Core.Name "hydra.testing.JsonParserTestCase")
+
+-- | A test case for round-trip encoding/decoding using the Either-based JSON functions. Encodes a term, then decodes it back, verifying the result equals the original.
+data JsonRoundtripTestCase = 
+  JsonRoundtripTestCase {
+    -- | The Hydra type for encoding/decoding
+    jsonRoundtripTestCaseType :: Core.Type,
+    -- | The Hydra term to round-trip
+    jsonRoundtripTestCaseTerm :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_JsonRoundtripTestCase = (Core.Name "hydra.testing.JsonRoundtripTestCase")
+
+_JsonRoundtripTestCase_type = (Core.Name "type")
+
+_JsonRoundtripTestCase_term = (Core.Name "term")
 
 -- | A test case which lifts lambda abstractions above let expressions and compares the result with the expected term
 data LiftLambdaAboveLetTestCase = 
@@ -498,10 +562,16 @@ data TestCase =
   TestCaseInference InferenceTestCase |
   -- | A type inference failure test
   TestCaseInferenceFailure InferenceFailureTestCase |
-  -- | A JSON coder (round-trip) test
+  -- | A JSON coder (round-trip) test using Flow-based coder
   TestCaseJsonCoder JsonCoderTestCase |
+  -- | A JSON decode test using Either-based decoder
+  TestCaseJsonDecode JsonDecodeTestCase |
+  -- | A JSON encode test using Either-based encoder
+  TestCaseJsonEncode JsonEncodeTestCase |
   -- | A JSON parser test
   TestCaseJsonParser JsonParserTestCase |
+  -- | A JSON round-trip test using Either-based encoder/decoder
+  TestCaseJsonRoundtrip JsonRoundtripTestCase |
   -- | A JSON writer test
   TestCaseJsonWriter JsonWriterTestCase |
   -- | A lift lambda above let test
@@ -531,7 +601,9 @@ data TestCase =
   -- | A rewrite type test
   TestCaseRewriteType RewriteTypeTestCase |
   -- | A hoist subterms test
-  TestCaseHoistSubterms HoistSubtermsTestCase
+  TestCaseHoistSubterms HoistSubtermsTestCase |
+  -- | A hoist case statements test
+  TestCaseHoistCaseStatements HoistCaseStatementsTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -560,7 +632,13 @@ _TestCase_inferenceFailure = (Core.Name "inferenceFailure")
 
 _TestCase_jsonCoder = (Core.Name "jsonCoder")
 
+_TestCase_jsonDecode = (Core.Name "jsonDecode")
+
+_TestCase_jsonEncode = (Core.Name "jsonEncode")
+
 _TestCase_jsonParser = (Core.Name "jsonParser")
+
+_TestCase_jsonRoundtrip = (Core.Name "jsonRoundtrip")
 
 _TestCase_jsonWriter = (Core.Name "jsonWriter")
 
@@ -591,6 +669,8 @@ _TestCase_rewriteTerm = (Core.Name "rewriteTerm")
 _TestCase_rewriteType = (Core.Name "rewriteType")
 
 _TestCase_hoistSubterms = (Core.Name "hoistSubterms")
+
+_TestCase_hoistCaseStatements = (Core.Name "hoistCaseStatements")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 

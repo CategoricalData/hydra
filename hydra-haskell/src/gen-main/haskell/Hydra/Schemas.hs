@@ -98,21 +98,19 @@ elementsWithDependencies original =
 extendTypeContextForLambda :: (Typing.TypeContext -> Core.Lambda -> Typing.TypeContext)
 extendTypeContextForLambda tcontext lam =  
   let var = (Core.lambdaParameter lam)
-  in  
-    let dom = (Maybes.fromJust (Core.lambdaDomain lam))
-    in Typing.TypeContext {
-      Typing.typeContextTypes = (Maps.insert var dom (Typing.typeContextTypes tcontext)),
-      Typing.typeContextMetadata = (Maps.delete var (Typing.typeContextMetadata tcontext)),
-      Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
-      Typing.typeContextLambdaVariables = (Sets.insert var (Typing.typeContextLambdaVariables tcontext)),
-      Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
+  in Typing.TypeContext {
+    Typing.typeContextTypes = (Maybes.maybe (Typing.typeContextTypes tcontext) (\dom -> Maps.insert var dom (Typing.typeContextTypes tcontext)) (Core.lambdaDomain lam)),
+    Typing.typeContextMetadata = (Maps.delete var (Typing.typeContextMetadata tcontext)),
+    Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
+    Typing.typeContextLambdaVariables = (Sets.insert var (Typing.typeContextLambdaVariables tcontext)),
+    Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tcontext)}
 
 -- | Extend a type context by descending into a let body
 extendTypeContextForLet :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> Typing.TypeContext -> Core.Let -> Typing.TypeContext)
 extendTypeContextForLet forBinding tcontext letrec =  
   let bindings = (Core.letBindings letrec)
   in Typing.TypeContext {
-    Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (typeSchemeToFType (Maybes.fromJust (Core.bindingType b))))) bindings))),
+    Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, (typeSchemeToFType ts))) (Core.bindingType b)) bindings)))),
     Typing.typeContextMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding tcontext b)) (Typing.typeContextMetadata tcontext) bindings),
     Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
     Typing.typeContextLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Typing.typeContextLambdaVariables tcontext) bindings),
