@@ -22,7 +22,11 @@ import qualified Data.Set as S
 
 -- | Compose two type substitutions
 composeTypeSubst :: (Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst)
-composeTypeSubst s1 s2 =  
+composeTypeSubst s1 s2 = (Logic.ifElse (Maps.null (Typing.unTypeSubst s1)) s2 (Logic.ifElse (Maps.null (Typing.unTypeSubst s2)) s1 (composeTypeSubstNonEmpty s1 s2)))
+
+-- | Compose two non-empty type substitutions (internal helper)
+composeTypeSubstNonEmpty :: (Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst)
+composeTypeSubstNonEmpty s1 s2 =  
   let isExtra = (\k -> \v -> Maybes.isNothing (Maps.lookup k (Typing.unTypeSubst s1))) 
       withExtra = (Maps.filterWithKey isExtra (Typing.unTypeSubst s2))
   in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
@@ -114,7 +118,11 @@ substituteInTerm subst term0 =
 
 -- | Apply a type substitution to a type
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
-substInType subst typ0 =  
+substInType subst typ0 = (Logic.ifElse (Maps.null (Typing.unTypeSubst subst)) typ0 (substInTypeNonEmpty subst typ0))
+
+-- | Apply a non-empty type substitution to a type (internal helper)
+substInTypeNonEmpty :: (Typing.TypeSubst -> Core.Type -> Core.Type)
+substInTypeNonEmpty subst typ0 =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
           Core.TypeForall v1 -> (Maybes.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
             Core.forallTypeParameter = (Core.forallTypeParameter v1),
