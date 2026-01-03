@@ -7,7 +7,8 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
-import Hydra.Ext.Org.Json.Coder
+import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
+import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
@@ -415,3 +416,36 @@ writeEncoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 
 ----------------------------------------
+-- JSON Module Export
+----------------------------------------
+
+-- | Convert a Module to a JSON string.
+-- This encodes the Module as a Term using EncodeModule.module_, then converts
+-- the Term to JSON using untypedTermToJson, and finally serializes to a string.
+moduleToJson :: Module -> Flow Graph String
+moduleToJson mod = do
+    let term = EncodeModule.module_ mod
+    json <- JsonCoder.untypedTermToJson term
+    return $ JsonWriter.printJson json
+
+-- | Write a single module to a JSON file.
+-- The file path is derived from the module namespace.
+writeModuleJson :: FilePath -> Module -> IO ()
+writeModuleJson basePath mod = do
+    mjson <- runFlow bootstrapGraph (moduleToJson mod)
+    case mjson of
+      Nothing -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod)
+      Just jsonStr -> do
+        let filePath = basePath FP.</> namespaceToPath (moduleNamespace mod) ++ ".json"
+        SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
+        writeFile filePath (jsonStr ++ "\n")
+        putStrLn $ "Wrote: " ++ filePath
+
+-- | Write multiple modules to JSON files.
+-- Each module is written to basePath/<namespace-path>.json
+writeModulesJson :: FilePath -> [Module] -> IO ()
+writeModulesJson basePath mods = mapM_ (writeModuleJson basePath) mods
+
+-- | Convert a namespace to a file path (e.g., "hydra.monads" -> "hydra/monads")
+namespaceToPath :: Namespace -> FilePath
+namespaceToPath ns = L.intercalate "/" $ LS.splitOn "." $ unNamespace ns
