@@ -213,7 +213,7 @@ constructModule = haskellCoderDefinition "constructModule" $ "namespaces" ~> "mo
       Lists.map (var "toImport") $ Lists.concat2
         (list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
-            "Enum", "Ordering", "fail", "map", "pure", "sum"]),
+            "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"]),
           pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
           pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
           pair (pair (string "Data.List") (just $ string "L")) (list ([] :: [TTerm String])),
