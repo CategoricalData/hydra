@@ -21,6 +21,9 @@ _gen_test_path = _root / "gen-test" / "python"
 sys.path.insert(0, str(_gen_test_path))
 sys.path.insert(0, str(_main_path))
 
+# Note: Performance optimizations are now built into the generated code
+# (short-circuits in substInType and composeTypeSubst)
+
 from typing import Callable, Optional
 import pytest
 import importlib.util
@@ -78,13 +81,34 @@ def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     disabled_tag = hydra.testing.Tag("disabled")
     return disabled_tag in tcase.tags
 
+def is_disabled_for_python(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
+    """Check if a test case is marked as disabled for Python.
+
+    These are tests that are too slow in Python (typically type inference tests
+    with complex polymorphism) and should be skipped until performance is improved.
+    """
+    disabled_for_python_tag = hydra.testing.Tag("disabledForPython")
+    return disabled_for_python_tag in tcase.tags
+
+import os
+
+# Environment variable to force running slow tests (disabledForPython)
+# Set HYDRA_RUN_SLOW_TESTS=1 to run these tests
+RUN_SLOW_TESTS = os.environ.get("HYDRA_RUN_SLOW_TESTS", "0") == "1"
+
 def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case should be skipped.
 
-    Only skip tests that are:
+    Skip tests that are:
     - disabled: explicitly marked as not working
+    - disabledForPython: too slow in Python (10+ seconds per test)
+      unless HYDRA_RUN_SLOW_TESTS=1 is set
     """
-    return is_disabled(tcase)
+    if is_disabled(tcase):
+        return True
+    if is_disabled_for_python(tcase) and not RUN_SLOW_TESTS:
+        return True
+    return False
 
 
 def build_test_graph() -> hydra.graph.Graph:
@@ -123,6 +147,84 @@ def build_test_graph() -> hydra.graph.Graph:
             type=Just(type_scheme)
         )
 
+    # Add additional types needed by tests that aren't in test_types
+    # hydra.compute.Coder is needed by eta_expansion tests
+    coder_name = hydra.core.Name("hydra.compute.Coder")
+    # Coder<s1, s2, v1, v2> is a record with:
+    #   encode: v1 -> Flow s1 v2
+    #   decode: v2 -> Flow s2 v1
+    s1 = hydra.core.TypeVariable(hydra.core.Name("s1"))
+    s2 = hydra.core.TypeVariable(hydra.core.Name("s2"))
+    v1 = hydra.core.TypeVariable(hydra.core.Name("v1"))
+    v2 = hydra.core.TypeVariable(hydra.core.Name("v2"))
+    flow_name = hydra.core.Name("hydra.compute.Flow")
+
+    # Flow s a = s -> FlowState s a  (simplified as application)
+    flow_s1_v2 = hydra.core.TypeApplication(hydra.core.ApplicationType(
+        hydra.core.TypeApplication(hydra.core.ApplicationType(
+            hydra.core.TypeVariable(flow_name), s1
+        )), v2
+    ))
+    flow_s2_v1 = hydra.core.TypeApplication(hydra.core.ApplicationType(
+        hydra.core.TypeApplication(hydra.core.ApplicationType(
+            hydra.core.TypeVariable(flow_name), s2
+        )), v1
+    ))
+
+    encode_type = hydra.core.TypeFunction(hydra.core.FunctionType(v1, flow_s1_v2))
+    decode_type = hydra.core.TypeFunction(hydra.core.FunctionType(v2, flow_s2_v1))
+
+    coder_record = hydra.core.TypeRecord(hydra.core.RowType(
+        coder_name,
+        (
+            hydra.core.FieldType(hydra.core.Name("encode"), encode_type),
+            hydra.core.FieldType(hydra.core.Name("decode"), decode_type),
+        )
+    ))
+
+    # Wrap in forall for all 4 type variables
+    coder_type = hydra.core.TypeForall(hydra.core.ForallType(
+        hydra.core.Name("s1"),
+        hydra.core.TypeForall(hydra.core.ForallType(
+            hydra.core.Name("s2"),
+            hydra.core.TypeForall(hydra.core.ForallType(
+                hydra.core.Name("v1"),
+                hydra.core.TypeForall(hydra.core.ForallType(
+                    hydra.core.Name("v2"),
+                    coder_record
+                ))
+            ))
+        ))
+    ))
+
+    coder_term = hydra.encode.core.type(coder_type)
+    coder_type_scheme = hydra.core.TypeScheme(
+        variables=(),
+        type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
+        constraints=Nothing()
+    )
+    type_bindings[coder_name] = hydra.core.Binding(
+        name=coder_name,
+        term=coder_term,
+        type=Just(coder_type_scheme)
+    )
+
+    # hydra.coders.CoderDirection is an enum with encode and decode variants
+    coder_direction_name = hydra.core.Name("hydra.coders.CoderDirection")
+    coder_direction_type = hydra.core.TypeUnion(hydra.core.RowType(
+        coder_direction_name,
+        (
+            hydra.core.FieldType(hydra.core.Name("encode"), hydra.core.TypeUnit()),
+            hydra.core.FieldType(hydra.core.Name("decode"), hydra.core.TypeUnit()),
+        )
+    ))
+    coder_direction_term = hydra.encode.core.type(coder_direction_type)
+    type_bindings[coder_direction_name] = hydra.core.Binding(
+        name=coder_direction_name,
+        term=coder_direction_term,
+        type=Just(coder_type_scheme)  # Reuse the same scheme for Type
+    )
+
     # Create the schema graph with test types
     schema_graph = hydra.graph.Graph(
         elements=FrozenDict(type_bindings),
@@ -160,11 +262,12 @@ def build_test_graph() -> hydra.graph.Graph:
     )
 
 
-# Cache the test graph and inference context at module level.
+# Cache the test graph, inference context, and type context at module level.
 # This mirrors the Haskell approach where cx is computed once and reused,
 # avoiding the ~19 second overhead per test of rebuilding the inference context.
 _test_graph: Optional[hydra.graph.Graph] = None
 _inference_context: Optional[hydra.typing.InferenceContext] = None
+_type_context: Optional[hydra.typing.TypeContext] = None
 
 
 def get_test_graph() -> hydra.graph.Graph:
@@ -199,6 +302,28 @@ def get_inference_context() -> hydra.typing.InferenceContext:
             case Just(value=cx):
                 _inference_context = cx
     return _inference_context
+
+
+def get_type_context() -> hydra.typing.TypeContext:
+    """
+    Get the cached type context, building it if necessary.
+
+    This is used for typed eta expansion tests. In Haskell:
+        tx <- graphToTypeContext testGraph
+    """
+    global _type_context
+    if _type_context is None:
+        graph = get_test_graph()
+        tx_flow = hydra.schemas.graph_to_type_context(graph)
+        tx_state = tx_flow.value(graph, hydra.monads.empty_trace())
+
+        match tx_state.value:
+            case Nothing():
+                errors = "\n".join(tx_state.trace.messages)
+                raise RuntimeError(f"Failed to create type context:\n{errors}")
+            case Just(value=tx):
+                _type_context = tx
+    return _type_context
 
 
 def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
@@ -455,11 +580,26 @@ def run_deannotate_type_test(test_case: hydra.testing.DeannotateTypeTestCase) ->
 
 
 def run_eta_expansion_test(desc: str, test_case: hydra.testing.EtaExpansionTestCase) -> None:
-    """Execute an eta expansion test."""
-    # Use cached test graph
-    graph = get_test_graph()
+    """Execute an eta expansion test.
 
-    result = hydra.reduction.eta_expand_term(graph, test_case.input)
+    Note: Uses eta_expand_typed_term (not eta_expand_term) to match Haskell behavior.
+    The typed version uses type information to avoid expanding bare primitives at top level.
+    """
+    # Use cached test graph and type context
+    graph = get_test_graph()
+    tx = get_type_context()
+
+    # Run the typed eta expansion (matches Haskell's etaExpandTypedTerm)
+    flow_result = hydra.reduction.eta_expand_typed_term(tx, test_case.input)
+    flow_state = flow_result.value(graph, hydra.compute.Trace((), (), hydra.lib.maps.empty()))
+
+    match flow_state.value:
+        case Nothing():
+            messages = flow_state.trace.messages
+            error_msg = "; ".join(messages) if messages else "unknown error"
+            pytest.fail(f"Eta expansion failed for {desc}: {error_msg}")
+        case Just(value=result):
+            pass
     assert result == test_case.output, (
         f"Eta expansion failed for {desc}:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
@@ -608,8 +748,10 @@ def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestC
             pass
 
     # Compare the inferred type with expected output type
+    # Convert the TypeScheme to a Type with forall quantifiers for comparison
     expected_type_str = hydra.show.core.type(test_case.output_type)
-    inferred_type_str = hydra.show.core.type(inferred_scheme.type)
+    inferred_type = hydra.schemas.type_scheme_to_f_type(inferred_scheme)
+    inferred_type_str = hydra.show.core.type(inferred_type)
 
     assert inferred_type_str == expected_type_str, (
         f"Type checking type mismatch for {desc}:\n"
@@ -813,7 +955,7 @@ def run_test_group(parent_desc: str, runner: TestRunner, tgroup: hydra.testing.T
         run_test_group(full_desc, runner, subgroup)
 
 
-def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, prefix: str = "") -> list:
+def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, prefix: str = "", hydra_path: str = "") -> list:
     """
     Generate pytest test functions from a test group.
 
@@ -824,20 +966,35 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
         group: The test group to generate tests from
         runner: The test runner function
         prefix: Prefix for test names (built up from parent groups)
+        hydra_path: The Hydra path (preserving original names for cross-language correlation)
 
     Returns:
-        List of (test_name, test_function) tuples
+        List of (test_name, hydra_path, test_function) tuples
     """
     tests = []
 
-    # Generate a safe test name from the group name
+    # Generate a safe test name from the group name (for Python)
     safe_group_name = group.name.replace(" ", "_").replace("-", "_").lower()
     new_prefix = f"{prefix}{safe_group_name}_" if prefix else f"{safe_group_name}_"
+
+    # Build the Hydra path (preserving original names with spaces/caps)
+    new_hydra_path = f"{hydra_path}/{group.name}" if hydra_path else group.name
 
     # Generate tests for cases in this group
     for i, tcase in enumerate(group.cases, 1):
         test_name = f"{new_prefix}case_{i}"
+        case_hydra_path = f"{new_hydra_path}/{tcase.name}"
         desc = f"{group.name}, {tcase.name}"
+
+        # Check if test should be skipped based on tags
+        if should_skip_test(tcase):
+            def make_skip_test():
+                """Create a skip test for slow/disabled tests"""
+                def test_fn():
+                    pytest.skip("Test is disabled or too slow")
+                return test_fn
+            tests.append((test_name, case_hydra_path, make_skip_test()))
+            continue
 
         def make_test(test_desc: str, test_case: hydra.testing.TestCaseWithMetadata):
             """Closure to capture test_desc and test_case"""
@@ -849,7 +1006,7 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
                     pytest.skip("Test is disabled or not supported")
             return test_fn
 
-        tests.append((test_name, make_test(desc, tcase)))
+        tests.append((test_name, case_hydra_path, make_test(desc, tcase)))
 
     # Recursively generate tests for subgroups
     # Note: subgroups can be either strings (names to look up) or TestGroup objects directly
@@ -860,7 +1017,7 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
         else:
             # It's already a TestGroup object
             subgroup_obj = subgroup_item
-        tests.extend(generate_pytest_tests(subgroup_obj, runner, new_prefix))
+        tests.extend(generate_pytest_tests(subgroup_obj, runner, new_prefix, new_hydra_path))
 
     return tests
 
@@ -868,6 +1025,10 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
 # Generate all test functions from the test suite
 _all_tests = generate_pytest_tests(test_suite.all_tests(), default_test_runner)
 
+# Build a mapping from Python test names to Hydra paths for cross-language benchmarking
+# This can be imported by benchmark tools to correlate test results across implementations
+HYDRA_PATH_MAP: dict[str, str] = {f"test_{name}": path for name, path, _ in _all_tests}
+
 # Dynamically add test functions to module namespace for pytest discovery
-for test_name, test_fn in _all_tests:
+for test_name, hydra_path, test_fn in _all_tests:
     globals()[f"test_{test_name}"] = test_fn
