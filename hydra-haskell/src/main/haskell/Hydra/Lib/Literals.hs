@@ -79,6 +79,9 @@ int64ToBigint = fromIntegral
 readBigfloat :: String -> Maybe Double
 readBigfloat s = readMaybe s :: Maybe Double
 
+readBigint :: String -> Maybe Integer
+readBigint s = readMaybe s :: Maybe Integer
+
 readBoolean :: String -> Maybe Bool
 readBoolean s = if s == "true" then Just True
   else if s == "false" then Just False
@@ -90,6 +93,16 @@ readFloat32 s = readMaybe s :: Maybe Float
 readFloat64 :: String -> Maybe Double
 readFloat64 s = readMaybe s :: Maybe Double
 
+readInt8 :: String -> Maybe Int8
+readInt8 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= -128 && n <= 127 then Just (fromIntegral n) else Nothing
+
+readInt16 :: String -> Maybe Int16
+readInt16 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= -32768 && n <= 32767 then Just (fromIntegral n) else Nothing
+
 readInt32 :: String -> Maybe Int
 readInt32 s = readMaybe s :: Maybe Int
 
@@ -98,6 +111,30 @@ readInt64 s = readMaybe s :: Maybe Int64
 
 readString :: String -> Maybe String
 readString s = readMaybe s :: Maybe String
+
+-- Note: Hydra uses wider signed types to represent unsigned values without overflow
+-- Uint8 -> Int16, Uint16 -> Int, Uint32 -> Int64, Uint64 -> Integer
+-- The read functions parse as unsigned and validate the range
+
+readUint8 :: String -> Maybe Int16
+readUint8 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= 0 && n <= 255 then Just (fromIntegral n) else Nothing
+
+readUint16 :: String -> Maybe Int
+readUint16 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= 0 && n <= 65535 then Just (fromIntegral n) else Nothing
+
+readUint32 :: String -> Maybe Int64
+readUint32 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= 0 && n <= 4294967295 then Just (fromIntegral n) else Nothing
+
+readUint64 :: String -> Maybe Integer
+readUint64 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= 0 && n <= 18446744073709551615 then Just n else Nothing
 
 showBigfloat :: Double -> String
 showBigfloat = show

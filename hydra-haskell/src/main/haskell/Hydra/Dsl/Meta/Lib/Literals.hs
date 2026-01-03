@@ -11,7 +11,7 @@ import qualified Data.ByteString as B
 import Data.Int
 
 
-bigfloatToBigint :: TTerm Double -> TTerm Double
+bigfloatToBigint :: TTerm Double -> TTerm Integer
 bigfloatToBigint = primitive1 _literals_bigfloatToBigint
 
 bigfloatToFloat32 :: TTerm Double -> TTerm Float
@@ -71,6 +71,9 @@ int64ToBigint = primitive1 _literals_int64ToBigint
 readBigfloat :: TTerm String -> TTerm (Maybe Double)
 readBigfloat = primitive1 _literals_readBigfloat
 
+readBigint :: TTerm String -> TTerm (Maybe Integer)
+readBigint = primitive1 _literals_readBigint
+
 readBoolean :: TTerm String -> TTerm (Maybe Bool)
 readBoolean = primitive1 _literals_readBoolean
 
@@ -80,6 +83,12 @@ readFloat32 = primitive1 _literals_readFloat32
 readFloat64 :: TTerm String -> TTerm (Maybe Double)
 readFloat64 = primitive1 _literals_readFloat64
 
+readInt8 :: TTerm String -> TTerm (Maybe Int8)
+readInt8 = primitive1 _literals_readInt8
+
+readInt16 :: TTerm String -> TTerm (Maybe Int16)
+readInt16 = primitive1 _literals_readInt16
+
 readInt32 :: TTerm String -> TTerm (Maybe Int)
 readInt32 = primitive1 _literals_readInt32
 
@@ -88,6 +97,20 @@ readInt64 = primitive1 _literals_readInt64
 
 readString :: TTerm String -> TTerm (Maybe String)
 readString = primitive1 _literals_readString
+
+-- Note: Hydra uses wider signed types to represent unsigned values
+-- Uint8 -> Int16, Uint16 -> Int, Uint32 -> Int64, Uint64 -> Integer
+readUint8 :: TTerm String -> TTerm (Maybe Int16)
+readUint8 = primitive1 _literals_readUint8
+
+readUint16 :: TTerm String -> TTerm (Maybe Int)
+readUint16 = primitive1 _literals_readUint16
+
+readUint32 :: TTerm String -> TTerm (Maybe Int64)
+readUint32 = primitive1 _literals_readUint32
+
+readUint64 :: TTerm String -> TTerm (Maybe Integer)
+readUint64 = primitive1 _literals_readUint64
 
 showBigfloat :: TTerm Double -> TTerm String
 showBigfloat = primitive1 _literals_showBigfloat
