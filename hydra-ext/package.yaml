@@ -59,6 +59,24 @@ executables:
     dependencies:
       - hydra-ext
 
+  update-python-eval-lib:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-python-eval-lib
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
+  update-python-kernel-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-python-kernel-tests
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec
+
   update-python-generation-tests:
     main: Main.hs
     source-dirs:
