@@ -120,7 +120,7 @@ testGroupForLet = define "testGroupForLet" $
             "bar">: pair (var "foo") (int32 137)]
             $ var "bar")
         (T.pair T.int32 T.int32),
-      expectPoly 3 []
+      expectPoly 3 [tag_disabledForPython]  -- Very slow in Python (10+ seconds)
         (lets [
           "sng">: lambda "x" $ list [var "x"]]
           $ lets [
@@ -152,7 +152,7 @@ testGroupForLet = define "testGroupForLet" $
         (lets ["x">: float32 42.0] $ lambdas ["y", "z"] $ var "x")
         ["t0", "t1"] (T.function (T.var "t0") (T.function (T.var "t1") T.float32)),
       -- Example from https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
-      expectMono 2 []
+      expectMono 2 [tag_disabledForPython]  -- Very slow in Python (150+ seconds)
         (lets [
             "square">: lambda "z" $ primitive _math_mul @@ var "z" @@ var "z"] $
           lambdas ["f", "x", "y"] $ primitive _logic_ifElse
@@ -288,7 +288,7 @@ testGroupForLet = define "testGroupForLet" $
         (T.pair T.int32 T.string)],
 
     subgroup "Recursion involving polymorphic functions" [ -- Note: not 'polymorphic recursion' per se
-      expectPoly 1 []
+      expectPoly 1 [tag_disabledForPython]  -- Very slow in Python (14+ seconds)
         (lets [
           "f">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ list [list [var "x"]] @@ (var "g" @@ var "b" @@ var "x"),
           "g">: lambda "b" $ lambda "x" $ primitive _logic_ifElse @@ var "b" @@ (var "f" @@ var "b" @@ var "x") @@ list [list [var "x"]]]

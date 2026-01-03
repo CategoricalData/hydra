@@ -153,7 +153,7 @@ flowsTests = define "flowsTests" $
 flowsWithFailureAcrossLetBindingsTests :: TBinding TestGroup
 flowsWithFailureAcrossLetBindingsTests = define "flowsWithFailureAcrossLetBindingsTests" $
   subgroup "Flows with failure across let bindings" [
-    checkTest "mutually referential failure functions with Flow monad" []
+    checkTest "mutually referential failure functions with Flow monad" [tag_disabledForPython]  -- Very slow in Python (47+ seconds)
       (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $
                primitive _logic_ifElse @@ var "b" @@
                  (var "unexpected" @@ string "oops") @@

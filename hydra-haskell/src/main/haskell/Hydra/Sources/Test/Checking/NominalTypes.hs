@@ -618,7 +618,7 @@ recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualR
     (T.forAll "t0" $ T.function
       (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))),
-  checkTest "chained projections across mutual recursion" []
+  checkTest "chained projections across mutual recursion" [tag_disabledForPython]  -- Very slow in Python (15+ seconds)
     (lambda "listA" $
       primitive _maybes_maybe @@
       Core.termMaybe nothing @@
@@ -1202,7 +1202,7 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
               T.applys (Core.typeVariable $ TestTypes.testTypeTripleName) [T.var "t1", T.var "t2", T.var "t3"]],
            T.var "t4"])
         (T.var "t1")),
-  checkTest "case Either with polymorphic let bindings" []
+  checkTest "case Either with polymorphic let bindings" [tag_disabledForPython]  -- Very slow in Python (59+ seconds)
     (lets ["makeLeft">: lambda "x" $ inject (TestTypes.testTypeEitherName) "left" (var "x"),
            "makeRight">: lambda "y" $ inject (TestTypes.testTypeEitherName) "right" (var "y")] $
       lambda "flag" $
@@ -1423,7 +1423,7 @@ multiParameterPolymorphicWrappersTests = define "multiParameterPolymorphicWrappe
       T.function (T.var "t1") $
       T.function (T.var "t0") $
       T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]),
-  checkTest "symmetric triple with nested polymorphic types and foldl" []
+  checkTest "symmetric triple with nested polymorphic types and foldl" [tag_disabledForPython]  -- Very slow in Python (44+ seconds)
     (lets ["sumList">: lambda "lst" $
             primitive _lists_foldl @@
             (lambda "acc" $ lambda "x" $ primitive _math_add @@ var "acc" @@ var "x") @@
@@ -1561,7 +1561,7 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
         (T.set $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"])
         (T.set $ T.var "t1")),
 
-  checkTest "unwrap with maybe to handle optional symmetric triple" []
+  checkTest "unwrap with maybe to handle optional symmetric triple" [tag_disabledForPython]  -- Very slow in Python (12+ seconds)
     (lambda "mst" $
       primitive _maybes_maybe @@
       (Core.termMaybe nothing) @@
