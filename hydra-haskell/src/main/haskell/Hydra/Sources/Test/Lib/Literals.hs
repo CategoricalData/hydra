@@ -308,6 +308,27 @@ literalsShowString = subgroup "showString" [
 
 -- Read functions
 
+literalsReadInt8 :: TTerm TestGroup
+literalsReadInt8 = subgroup "readInt8" [
+  testJust "positive" "42" 42,
+  testJust "negative" "-42" (-42),
+  testJust "max value" "127" 127,
+  testJust "min value" "-128" (-128),
+  testNothing "invalid" "abc",
+  testNothing "overflow" "128"]
+  where
+    testJust name x result = primCase name _literals_readInt8 [string x] (Core.termMaybe $ just (int8 result))
+    testNothing name x = primCase name _literals_readInt8 [string x] (Core.termMaybe nothing)
+
+literalsReadInt16 :: TTerm TestGroup
+literalsReadInt16 = subgroup "readInt16" [
+  testJust "positive" "1000" 1000,
+  testJust "negative" "-1000" (-1000),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readInt16 [string x] (Core.termMaybe $ just (int16 result))
+    testNothing name x = primCase name _literals_readInt16 [string x] (Core.termMaybe nothing)
+
 literalsReadInt32 :: TTerm TestGroup
 literalsReadInt32 = subgroup "readInt32" [
   testJust "positive" "42" 42,
@@ -369,6 +390,58 @@ literalsReadString = subgroup "readString" [
   where
     testJust name x result = primCase name _literals_readString [string x] (Core.termMaybe $ just (string result))
     testNothing name x = primCase name _literals_readString [string x] (Core.termMaybe nothing)
+
+literalsReadUint8 :: TTerm TestGroup
+literalsReadUint8 = subgroup "readUint8" [
+  testJust "zero" "0" 0,
+  testJust "typical" "100" 100,
+  testJust "max value" "255" 255,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint8 [string x] (Core.termMaybe $ just (uint8 result))
+    testNothing name x = primCase name _literals_readUint8 [string x] (Core.termMaybe nothing)
+
+literalsReadUint16 :: TTerm TestGroup
+literalsReadUint16 = subgroup "readUint16" [
+  testJust "zero" "0" 0,
+  testJust "typical" "1000" 1000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint16 [string x] (Core.termMaybe $ just (uint16 result))
+    testNothing name x = primCase name _literals_readUint16 [string x] (Core.termMaybe nothing)
+
+literalsReadUint32 :: TTerm TestGroup
+literalsReadUint32 = subgroup "readUint32" [
+  testJust "zero" "0" 0,
+  testJust "typical" "100000" 100000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint32 [string x] (Core.termMaybe $ just (uint32 result))
+    testNothing name x = primCase name _literals_readUint32 [string x] (Core.termMaybe nothing)
+
+literalsReadUint64 :: TTerm TestGroup
+literalsReadUint64 = subgroup "readUint64" [
+  testJust "zero" "0" 0,
+  testJust "typical" "1000000" 1000000,
+  testNothing "invalid" "abc",
+  testNothing "negative" "-1"]
+  where
+    testJust name x result = primCase name _literals_readUint64 [string x] (Core.termMaybe $ just (uint64 result))
+    testNothing name x = primCase name _literals_readUint64 [string x] (Core.termMaybe nothing)
+
+literalsReadBigint :: TTerm TestGroup
+literalsReadBigint = subgroup "readBigint" [
+  testJust "positive" "42" 42,
+  testJust "negative" "-42" (-42),
+  testJust "zero" "0" 0,
+  testJust "large" "123456789012345678901234567890" 123456789012345678901234567890,
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readBigint [string x] (Core.termMaybe $ just (bigint result))
+    testNothing name x = primCase name _literals_readBigint [string x] (Core.termMaybe nothing)
 
 -- Binary/String conversion
 -- Note: binaryToStringBS and stringToBinary use base64 encoding
@@ -432,8 +505,15 @@ allTests = definitionInModule module_ "allTests" $
       literalsShowBoolean,
       literalsShowString,
       -- Read functions
+      literalsReadInt8,
+      literalsReadInt16,
       literalsReadInt32,
       literalsReadInt64,
+      literalsReadUint8,
+      literalsReadUint16,
+      literalsReadUint32,
+      literalsReadUint64,
+      literalsReadBigint,
       literalsReadFloat32,
       literalsReadFloat64,
       literalsReadBigfloat,
