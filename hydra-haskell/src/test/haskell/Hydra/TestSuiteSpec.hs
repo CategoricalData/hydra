@@ -68,6 +68,12 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isUsesKern
       H.it "JSON writer" $ H.shouldBe
         (JsonWriter.printJson input)
         expectedOutput
+    TestCaseJsonDecode (JsonDecodeTestCase typ json expected) ->
+      H.it "JSON decode" $ checkJsonDecode typ json expected
+    TestCaseJsonEncode (JsonEncodeTestCase term expected) ->
+      H.it "JSON encode" $ checkJsonEncode term expected
+    TestCaseJsonRoundtrip (JsonRoundtripTestCase typ term) ->
+      H.it "JSON roundtrip" $ checkJsonRoundtrip typ term
     TestCaseTypeChecking (TypeCheckingTestCase input outputTerm outputType) ->
       expectTypeCheckingResult desc input outputTerm outputType
     TestCaseTypeCheckingFailure (TypeCheckingFailureTestCase input) ->
@@ -136,6 +142,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isUsesKern
       H.it "hoist subterms" $ H.shouldBe
         (runHoistSubterms predicate input)
         output
+    TestCaseHoistCaseStatements (HoistCaseStatementsTestCase input output) ->
+      H.it "hoist case statements" $ H.shouldBe
+        (Reduction.hoistCaseStatements emptyTypeContext input)
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
@@ -174,6 +184,51 @@ checkJsonCoder typ term expectedJson = case mstep of
       shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
     FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
+
+-- | Check that JSON decoding produces the expected result (Either String Term)
+checkJsonDecode :: Type -> Json.Value -> Either String Term -> H.Expectation
+checkJsonDecode typ json expected = case mstep of
+    Nothing -> HL.assertFailure (traceSummary trace)
+    Just step -> case expected of
+      Left errMsg -> case runFlow (coderDecode step json) of
+        Nothing -> return ()  -- Expected failure, got failure
+        Just result -> HL.assertFailure $
+          "Expected decode failure with message containing '" ++ errMsg ++
+          "' but got success: " ++ show result
+      Right expectedTerm -> shouldSucceedWith (coderDecode step json) expectedTerm
+  where
+    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
+    runFlow flow = case unFlow flow testGraph emptyTrace of
+      FlowState result _ _ -> result
+
+-- | Check that JSON encoding produces the expected result (Either String Value)
+checkJsonEncode :: Term -> Either String Json.Value -> H.Expectation
+checkJsonEncode term expected = case expected of
+    Left _ ->
+      -- For encode failures, we'd need a type to create a coder
+      -- Since the test case doesn't include a type, skip encoding-only failure tests for now
+      H.pendingWith "Encode failure tests require type information"
+    Right expectedJson ->
+      -- Without a type, we can't create a coder. This test case design may need revision.
+      H.pendingWith "Encode tests require type information to create coder"
+
+-- | Check that a term can be encoded to JSON and decoded back to the same term
+checkJsonRoundtrip :: Type -> Term -> H.Expectation
+checkJsonRoundtrip typ term = case mstep of
+    Nothing -> HL.assertFailure (traceSummary trace)
+    Just step -> do
+      -- Encode the term
+      case runFlow (coderEncode step term) of
+        Nothing -> HL.assertFailure "Failed to encode term to JSON"
+        Just json -> do
+          -- Decode it back
+          case runFlow (coderDecode step json) of
+            Nothing -> HL.assertFailure "Failed to decode JSON back to term"
+            Just decoded -> H.shouldBe decoded term
+  where
+    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
+    runFlow flow = case unFlow flow testGraph emptyTrace of
+      FlowState result _ _ -> result
 
 -- | Run a fold operation over a term
 runFoldOperation :: Coders.TraversalOrder -> FoldOperation -> Term -> Term
@@ -218,23 +273,25 @@ runTypeRewriter TypeRewriterReplaceStringWithInt32 = Rewriting.rewriteType rewri
       _ -> recurse typ
 
 -- | Run hoistSubterms with the given predicate
+-- The predicate receives (path, term) where path is the list of TermAccessors from root
 runHoistSubterms :: HoistPredicate -> Term -> Term
 runHoistSubterms pred term = Reduction.hoistSubterms (predicateFn pred) emptyTypeContext term
   where
-    -- A predicate returns True if the term at the given path should be hoisted.
-    -- The path represents the position within the let body/binding.
-    -- Note: path is from innermost to outermost (reversed from traversal order).
-    predicateFn :: HoistPredicate -> [TermAccessor] -> Term -> Bool
-    predicateFn HoistPredicateNothing _ _ = False
-    predicateFn HoistPredicateLists path term = case term of
-      TermList _ -> not (null path)  -- Only hoist if not at top level
+    -- A predicate returns True if the term should be hoisted.
+    -- The predicate receives (path, term) for path-aware hoisting decisions.
+    predicateFn :: HoistPredicate -> ([TermAccessor], Term) -> Bool
+    predicateFn HoistPredicateNothing _ = False
+    predicateFn HoistPredicateLists (_, t) = case t of
+      TermList _ -> True
       _ -> False
-    predicateFn HoistPredicateApplications path term = case term of
-      TermApplication _ -> not (null path)  -- Only hoist if not at top level
+    predicateFn HoistPredicateApplications (_, t) = case t of
+      TermApplication _ -> True
       _ -> False
-    predicateFn HoistPredicateCaseStatements path term = case term of
-      TermFunction (FunctionElimination _) -> not (null path)  -- Case statements are eliminations
+    predicateFn HoistPredicateCaseStatements (_, t) = case t of
+      TermFunction (FunctionElimination _) -> True  -- Case statements are eliminations
       _ -> False
 
-    emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty emptyInferenceContext
+emptyTypeContext :: TypeContext
+emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty emptyInferenceContext
+  where
     emptyInferenceContext = InferenceContext M.empty M.empty M.empty M.empty False
