@@ -298,6 +298,7 @@ buildPythonTestModule codec testModule testGroup testBody namespaces = header ++
     standardImports = [
       "from __future__ import annotations",
       "from typing import cast",
+      "from decimal import Decimal",
       "from hydra.dsl.python import FrozenDict, frozenlist, Either, Left, Right, Maybe, Just, Nothing"]
 
     allImports = standardImports ++ domainImports

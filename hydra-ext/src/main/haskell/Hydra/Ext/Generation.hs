@@ -79,7 +79,7 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage False False
 -- Third argument: modules to transform and generate
 -- Note: Python uses doHoist=True to hoist case statements to let bindings
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writePython = generateSources moduleToPython pythonLanguage True True  -- hoisting disabled pending inference fix
+writePython = generateSources moduleToPython pythonLanguage True True
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
