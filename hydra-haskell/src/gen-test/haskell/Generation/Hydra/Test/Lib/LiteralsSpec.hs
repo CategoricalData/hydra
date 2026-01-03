@@ -316,6 +316,35 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "empty" $ H.shouldBe
       (Literals.showString "")
       ("\"\"")
+  H.describe "readInt8" $ do
+    H.it "positive" $ H.shouldBe
+      (Literals.readInt8 "42")
+      (Just 42)
+    H.it "negative" $ H.shouldBe
+      (Literals.readInt8 "-42")
+      (Just (-42))
+    H.it "max value" $ H.shouldBe
+      (Literals.readInt8 "127")
+      (Just 127)
+    H.it "min value" $ H.shouldBe
+      (Literals.readInt8 "-128")
+      (Just (-128))
+    H.it "invalid" $ H.shouldBe
+      (Literals.readInt8 "abc")
+      (Nothing)
+    H.it "overflow" $ H.shouldBe
+      (Literals.readInt8 "128")
+      (Nothing)
+  H.describe "readInt16" $ do
+    H.it "positive" $ H.shouldBe
+      (Literals.readInt16 "1000")
+      (Just 1000)
+    H.it "negative" $ H.shouldBe
+      (Literals.readInt16 "-1000")
+      (Just (-1000))
+    H.it "invalid" $ H.shouldBe
+      (Literals.readInt16 "abc")
+      (Nothing)
   H.describe "readInt32" $ do
     H.it "positive" $ H.shouldBe
       (Literals.readInt32 "42")
@@ -335,6 +364,77 @@ spec = H.describe "hydra.lib.literals primitives" $ do
       (Just (-1000000))
     H.it "invalid" $ H.shouldBe
       (Literals.readInt64 "abc")
+      (Nothing)
+  H.describe "readUint8" $ do
+    H.it "zero" $ H.shouldBe
+      (Literals.readUint8 "0")
+      (Just 0)
+    H.it "typical" $ H.shouldBe
+      (Literals.readUint8 "100")
+      (Just 100)
+    H.it "max value" $ H.shouldBe
+      (Literals.readUint8 "255")
+      (Just 255)
+    H.it "invalid" $ H.shouldBe
+      (Literals.readUint8 "abc")
+      (Nothing)
+    H.it "negative" $ H.shouldBe
+      (Literals.readUint8 "-1")
+      (Nothing)
+  H.describe "readUint16" $ do
+    H.it "zero" $ H.shouldBe
+      (Literals.readUint16 "0")
+      (Just 0)
+    H.it "typical" $ H.shouldBe
+      (Literals.readUint16 "1000")
+      (Just 1000)
+    H.it "invalid" $ H.shouldBe
+      (Literals.readUint16 "abc")
+      (Nothing)
+    H.it "negative" $ H.shouldBe
+      (Literals.readUint16 "-1")
+      (Nothing)
+  H.describe "readUint32" $ do
+    H.it "zero" $ H.shouldBe
+      (Literals.readUint32 "0")
+      (Just 0)
+    H.it "typical" $ H.shouldBe
+      (Literals.readUint32 "100000")
+      (Just 100000)
+    H.it "invalid" $ H.shouldBe
+      (Literals.readUint32 "abc")
+      (Nothing)
+    H.it "negative" $ H.shouldBe
+      (Literals.readUint32 "-1")
+      (Nothing)
+  H.describe "readUint64" $ do
+    H.it "zero" $ H.shouldBe
+      (Literals.readUint64 "0")
+      (Just 0)
+    H.it "typical" $ H.shouldBe
+      (Literals.readUint64 "1000000")
+      (Just 1000000)
+    H.it "invalid" $ H.shouldBe
+      (Literals.readUint64 "abc")
+      (Nothing)
+    H.it "negative" $ H.shouldBe
+      (Literals.readUint64 "-1")
+      (Nothing)
+  H.describe "readBigint" $ do
+    H.it "positive" $ H.shouldBe
+      (Literals.readBigint "42")
+      (Just 42)
+    H.it "negative" $ H.shouldBe
+      (Literals.readBigint "-42")
+      (Just (-42))
+    H.it "zero" $ H.shouldBe
+      (Literals.readBigint "0")
+      (Just 0)
+    H.it "large" $ H.shouldBe
+      (Literals.readBigint "123456789012345678901234567890")
+      (Just 123456789012345678901234567890)
+    H.it "invalid" $ H.shouldBe
+      (Literals.readBigint "abc")
       (Nothing)
   H.describe "readFloat32" $ do
     H.it "positive" $ H.shouldBe

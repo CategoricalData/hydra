@@ -11,6 +11,7 @@ import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Inference.All as All_
 import qualified Hydra.Test.Json.Coder as Coder
 import qualified Hydra.Test.Json.Parser as Parser
+import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Lib.Chars as Chars
 import qualified Hydra.Test.Lib.Eithers as Eithers
@@ -64,6 +65,7 @@ allTests = Testing.TestGroup {
     All_.allTests,
     Coder.allTests,
     Parser.allTests,
+    Roundtrip.allTests,
     Writer.allTests,
     Monads.allTests,
     Reduction.allTests,

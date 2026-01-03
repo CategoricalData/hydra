@@ -518,4 +518,5 @@ flowsWithFailureAcrossLetBindingsTests = Testing.TestGroup {
                         Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t2"))}))}))}))}))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = []}]}
+      Testing.testCaseWithMetadataTags = [
+        Testing.Tag "disabledForPython"]}]}
