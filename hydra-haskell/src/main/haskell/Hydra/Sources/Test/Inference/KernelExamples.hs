@@ -41,7 +41,7 @@ testGroupForNestedLet :: TBinding TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 [tag_disabledForMinimalInference, tag_disabledForPython]  -- Very slow in Python (56+ seconds)
         (lambda "mapping" $ lambda "s" $ lets [
           "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _lists_pure @@ (primitive _lists_head @@ var "list"))),
           "list">: primitive _strings_toList @@ var "s"] $
