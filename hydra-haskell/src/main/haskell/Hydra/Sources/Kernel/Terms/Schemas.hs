@@ -273,9 +273,11 @@ extendTypeContextForLambda = define "extendTypeContextForLambda" $
   doc "Extend a type context by descending into a System F lambda body" $
   "tcontext" ~> "lam" ~>
   "var" <~ Core.lambdaParameter (var "lam") $
-  "dom" <~ Maybes.fromJust (Core.lambdaDomain (var "lam")) $
   Typing.typeContext
-    (Maps.insert (var "var") (var "dom") (Typing.typeContextTypes (var "tcontext")))
+    (optCases (Core.lambdaDomain $ var "lam")
+      (Typing.typeContextTypes $ var "tcontext")
+      -- Note: if the domain is missing, we have nothing to add here
+      ("dom" ~> Maps.insert (var "var") (var "dom") $ Typing.typeContextTypes $ var "tcontext"))
     (Maps.delete (var "var") (Typing.typeContextMetadata $ var "tcontext"))
     (Typing.typeContextTypeVariables $ var "tcontext")
     (Sets.insert (var "var") $ Typing.typeContextLambdaVariables $ var "tcontext")
@@ -289,10 +291,9 @@ extendTypeContextForLet = define "extendTypeContextForLet" $
   Typing.typeContext
     (Maps.union
       (Typing.typeContextTypes (var "tcontext"))
-      (Maps.fromList $ Lists.map
-        ("b" ~> pair
-          (Core.bindingName $ var "b")
-          (typeSchemeToFType @@ (Maybes.fromJust $ Core.bindingType $ var "b")))
+      -- Note: if the binding does not have a type scheme, we have nothing to add here
+      (Maps.fromList $ Maybes.cat $ Lists.map
+        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")) $ Core.bindingType $ var "b")
         (var "bindings")))
     (Lists.foldl
       ("m" ~> "b" ~> optCases (var "forBinding" @@ var "tcontext" @@ var "b")
