@@ -17,10 +17,10 @@ main = do
   putStrLn ""
 
   -- Universe provides all modules for dependency resolution
-  -- testModules now includes all test suite modules
+  -- testModules now includes all test suite modules (including Reduction, etc.)
   -- writeHaskell computes transitive closure to include only what's needed
   let allModules = mainModules ++ testModules
-  writeHaskell "src/gen-test/haskell" allModules baseTestModules
+  writeHaskell "src/gen-test/haskell" allModules testModules
 
   putStrLn ""
   putStrLn "=== Done! ==="
