@@ -115,29 +115,25 @@ adaptFloatType = define "adaptFloatType" $
     (just $ var "ft")
     (var "forUnsupported" @@ var "ft")
 
-adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> Bool -> Graph -> Flow s Graph)
+adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph)
 adaptDataGraph = define "adaptDataGraph" $
-  doc ("Adapt a graph and its schema to the given language constraints, prior to inference."
+  doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
-    <> " The doHoist flag controls hoisting of case statements to let bindings.") $
-  "constraints" ~> "doExpand" ~> "doHoist" ~> "graph0" ~>
+    <> " Note: case statement hoisting is done separately, prior to inference.") $
+  "constraints" ~> "doExpand" ~> "graph0" ~>
   "transform" <~ ("graph" ~> "gterm" ~>
     "tx" <<~ Schemas.graphToTypeContext @@ var "graph" $
     -- Order of operations:
     -- 1. Unshadow variables first (prevents capture issues in eta expansion)
     -- 2. Eta expand (needs type annotations; creates fully-applied functions)
-    -- 3. Hoist case statements (if enabled; creates let bindings for case expressions)
-    -- 4. Remove types (cleanup after eta expansion and hoisting)
-    -- 5. Lift lambdas above lets (structural cleanup)
+    -- 3. Remove types (cleanup after eta expansion)
+    -- 4. Lift lambdas above lets (structural cleanup)
     "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm" $
     "gterm2" <<~ Logic.ifElse (var "doExpand")
       (Reduction.etaExpandTypedTerm @@ var "tx" @@ var "gterm1")
       (produce $ var "gterm1") $
-    "gterm3" <~ Logic.ifElse (var "doHoist")
-      (Reduction.hoistCaseStatements @@ var "tx" @@ var "gterm2")
-      (var "gterm2") $
-    "gterm4" <~ Rewriting.removeTypesFromTerm @@ var "gterm3" $
-    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm4") $
+    "gterm3" <~ Rewriting.removeTypesFromTerm @@ var "gterm2" $
+    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm3") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
@@ -153,7 +149,7 @@ adaptDataGraph = define "adaptDataGraph" $
       "emap" <~ Schemas.typesToElements @@ var "tmap1" $
       produce $ just $ Graph.graphWithElements (var "sg") (var "emap")) $
   "gterm0" <~ Schemas.graphAsTerm @@ var "graph0" $
-  "gterm1" <<~ Logic.ifElse (Logic.or (var "doExpand") (var "doHoist"))
+  "gterm1" <<~ Logic.ifElse (var "doExpand")
     (var "transform" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
   "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
@@ -396,17 +392,33 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     <> " The doExpand flag controls eta expansion; doHoist controls case statement hoisting.") $
   "constraints" ~> "doExpand" ~> "doHoist" ~> "graph" ~> "nameLists" ~>
 
-  -- This extra, early inference step is necessary so that elements are annotated with correct types,
-  -- as needed for eta expansion and case hoisting.
-  "graphi" <<~ Logic.ifElse (Logic.or (var "doExpand") (var "doHoist"))
-    (Inference.inferGraphTypes @@ var "graph")
+  -- Step 0: Unshadow variables BEFORE hoisting
+  -- This prevents capture issues where hoisted code references the wrong variable
+  -- after code generators rename shadowed parameters
+  "graphu" <<~ Logic.ifElse (var "doHoist")
+    ("gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
+     "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
+     "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
+     produce $ Graph.graphWithElements (var "graph") (var "newElements"))
     (produce $ var "graph") $
 
-  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "doHoist" @@ var "graphi" $
+  -- Step 1: Hoist case statements BEFORE inference (hoisting doesn't need types)
+  -- This ensures match expressions are applied to arguments before eta expansion
+  "graphh" <<~ Logic.ifElse (var "doHoist")
+    (Reduction.hoistCaseStatementsInGraph @@ var "graphu")
+    (produce $ var "graphu") $
+
+  -- Step 2: If eta expansion is needed, run inference first (eta expansion needs types)
+  "graphi" <<~ Logic.ifElse (var "doExpand")
+    (Inference.inferGraphTypes @@ var "graphh")
+    (produce $ var "graphh") $
+
+  -- Step 3: Adapt the graph (includes eta expansion if enabled)
+  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
 
 --  Flows.fail ("adapted graph: " ++ (ShowGraph.graph @@ var "graph1"))
 
-  -- Perform inference on the adapted graph
+  -- Step 4: Perform final inference on the adapted graph
   "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions
