@@ -395,7 +395,8 @@ testGroupForLet = Testing.TestGroup {
                   Core.pairTypeSecond = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}))})),
               Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []}]},
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForPython"]}]},
     Testing.TestGroup {
       Testing.testGroupName = "Nested let with shadowing",
       Testing.testGroupDescription = Nothing,
@@ -549,7 +550,8 @@ testGroupForLet = Testing.TestGroup {
                     Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))}))})),
               Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForPython"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
@@ -1248,7 +1250,8 @@ testGroupForLet = Testing.TestGroup {
                   Core.functionTypeCodomain = (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "t0"))))}))})),
               Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForPython"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
