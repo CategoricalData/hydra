@@ -1,27 +1,26 @@
-"""Interpreter-friendly implementations for hydra.lib.pairs primitives.
+# Note: this is an automatically generated file. Do not edit.
 
-These functions work with Term values directly, applying function terms
-to construct new term structures for the interpreter.
-"""
+r"""Evaluation-level implementations of Pair functions for the Hydra interpreter."""
 
-from hydra.compute import Flow
-from hydra.core import Application, Term, TermApplication, TermPair
-from hydra.graph import Graph
-from hydra.lib.flows import pure, fail
+from __future__ import annotations
+from typing import TypeVar, cast
+import hydra.compute
+import hydra.core
+import hydra.lib.flows
+import hydra.lib.pairs
+import hydra.monads
+import hydra.show.core
 
+T0 = TypeVar("T0")
 
-def bimap(first_fun: Term, second_fun: Term, pair_term: Term) -> Flow[Graph, Term]:
-    """Apply first_fun to the first element and second_fun to the second element.
-
-    This creates new term structures for the interpreter by wrapping the
-    function applications in TermApplication.
-    """
+def bimap(first_fun: hydra.core.Term, second_fun: hydra.core.Term, pair_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     match pair_term:
-        case TermPair(value=p):
-            fst, snd = p
-            # Apply first_fun to first element and second_fun to second element
-            new_first = TermApplication(Application(first_fun, fst))
-            new_second = TermApplication(Application(second_fun, snd))
-            return pure(TermPair((new_first, new_second)))
+        case hydra.core.TermPair(value=p):
+            def fst() -> hydra.core.Term:
+                return hydra.lib.pairs.first(p)
+            def snd() -> hydra.core.Term:
+                return hydra.lib.pairs.second(p)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermPair(cast(tuple[hydra.core.Term, hydra.core.Term], (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(first_fun, fst()))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(second_fun, snd()))))))))
+        
         case _:
-            return fail(f"expected pair value, got: {pair_term}")
+            return hydra.monads.unexpected("pair value", hydra.show.core.term(pair_term))
