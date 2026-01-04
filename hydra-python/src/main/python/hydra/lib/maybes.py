@@ -53,9 +53,12 @@ def cat(xs: Sequence[Maybe[A]]) -> frozenlist[A]:
     return tuple(result)
 
 
-def compose(f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]]) -> Callable[[A], Maybe[C]]:
-    """Compose two functions."""
-    return lambda x: bind(f(x), g)
+def compose(f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]], x: A) -> Maybe[C]:
+    """Compose two Maybe-returning functions and apply to a value.
+
+    This is Kleisli composition: (f >=> g) x = f x >>= g
+    """
+    return bind(f(x), g)
 
 
 def from_just(x: Maybe[A]) -> A:
