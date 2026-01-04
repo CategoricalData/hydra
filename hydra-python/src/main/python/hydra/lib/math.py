@@ -109,13 +109,16 @@ def succ(x: int) -> int:
     return x + 1
 
 
-# Floating-point constants
+# Floating-point constants (defined as zero-arg functions for consistency with Hydra primitives)
 
-e: float = math.e
-"""Euler's number (e ≈ 2.71828)."""
+def e() -> float:
+    """Euler's number (e ≈ 2.71828)."""
+    return math.e
 
-pi: float = math.pi
-"""Pi (π ≈ 3.14159)."""
+
+def pi() -> float:
+    """Pi (π ≈ 3.14159)."""
+    return math.pi
 
 
 # Trigonometric functions
@@ -208,6 +211,9 @@ def pow_(x: float, y: float) -> float:
     """Return x raised to the power y."""
     return math.pow(x, y)
 
+# Alias for Hydra compatibility (pow is a Python builtin)
+pow = pow_
+
 
 def sqrt(x: float) -> float:
     """Return the square root of x."""
@@ -228,7 +234,10 @@ def floor(x: float) -> int:
 
 def round_(x: float) -> int:
     """Return x rounded to the nearest integer."""
-    return round(x)
+    return _builtins.round(x)
+
+# Alias for Hydra compatibility (round is a Python builtin)
+round = round_
 
 
 def truncate(x: float) -> int:

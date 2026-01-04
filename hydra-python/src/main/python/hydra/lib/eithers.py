@@ -48,6 +48,15 @@ def map_left(f: Callable[[A], C], e: Either[A, B]) -> Either[C, B]:
             return Right(val)
 
 
+def map(f: Callable[[A], B], e: Either[C, A]) -> Either[C, B]:
+    """Map a function over the Right side of an Either (standard functor map)."""
+    match e:
+        case Left(val):
+            return Left(val)
+        case Right(val):
+            return Right(f(val))
+
+
 def map_right(f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
     """Map a function over the Right side of an Either."""
     match e:
@@ -55,6 +64,18 @@ def map_right(f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
             return Left(val)
         case Right(val):
             return Right(f(val))
+
+
+def map_list(f: Callable[[A], Either[C, B]], xs: frozenlist[A]) -> Either[C, frozenlist[B]]:
+    """Map a function returning Either over a list, collecting results or short-circuiting on Left."""
+    results: list[B] = []
+    for x in xs:
+        match f(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                results.append(val)
+    return Right(tuple(results))
 
 
 def from_left(default: A, e: Either[A, B]) -> A:
