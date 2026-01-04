@@ -1,61 +1,79 @@
-"""Interpreter-friendly implementations for hydra.lib.maps primitives.
+# Note: this is an automatically generated file. Do not edit.
 
-These functions work with Term values directly, applying function terms
-to construct new term structures for the interpreter.
-"""
+r"""Evaluation-level implementations of Map functions for the Hydra interpreter."""
 
-from hydra.compute import Flow
-from hydra.core import Application, Term, TermApplication, TermMap
-from hydra.graph import Graph
-from hydra.lib.flows import pure, fail
+from __future__ import annotations
+from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
+from typing import TypeVar, cast
+import hydra.compute
+import hydra.core
+import hydra.lib.flows
+import hydra.lib.lists
+import hydra.lib.maps
+import hydra.lib.pairs
+import hydra.monads
+import hydra.show.core
 
+T0 = TypeVar("T0")
 
-def map_(fun: Term, map_term: Term) -> Flow[Graph, Term]:
-    """Map a function over the values of a map.
-
-    (v1 -> v2) -> Map k v1 -> Map k v2
-    """
+def alter(fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     match map_term:
-        case TermMap(value=entries):
-            # Create new map with function applied to each value
-            new_entries: dict[Term, Term] = {}
-            for k, v in entries.items():
-                new_entries[k] = TermApplication(Application(fun, v))
-            return pure(TermMap(new_entries))
+        case hydra.core.TermMap(value=m):
+            def current_val() -> Maybe[hydra.core.Term]:
+                return hydra.lib.maps.lookup(key_term, m)
+            def new_val() -> hydra.core.Term:
+                return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, cast(hydra.core.Term, hydra.core.TermMaybe(current_val())))))
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.maybe"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.delete"))))), key_term))), map_term)))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("newV"), cast(Maybe[hydra.core.Type], Nothing()), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.insert"))))), key_term))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("newV")))))), map_term))))))))))), new_val()))))
+        
         case _:
-            return fail(f"expected map value, got: {map_term}")
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
-
-def map_keys(fun: Term, map_term: Term) -> Flow[Graph, Term]:
-    """Map a function over the keys of a map.
-
-    (k1 -> k2) -> Map k1 v -> Map k2 v
-    """
+def bimap(key_fun: hydra.core.Term, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     match map_term:
-        case TermMap(value=entries):
-            # Create new map with function applied to each key
-            new_entries: dict[Term, Term] = {}
-            for k, v in entries.items():
-                new_k = TermApplication(Application(fun, k))
-                new_entries[new_k] = v
-            return pure(TermMap(new_entries))
+        case hydra.core.TermMap(value=m):
+            def pairs() -> frozenlist[tuple[hydra.core.Term, hydra.core.Term]]:
+                return hydra.lib.maps.to_list(m)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := (lambda : hydra.lib.pairs.first(p)), v := (lambda : hydra.lib.pairs.second(p)), cast(tuple[hydra.core.Term, hydra.core.Term], (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(key_fun, k()))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_fun, v()))))))[2]), pairs()))))))
+        
         case _:
-            return fail(f"expected map value, got: {map_term}")
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
-
-def bimap(key_fun: Term, val_fun: Term, map_term: Term) -> Flow[Graph, Term]:
-    """Map functions over both keys and values of a map.
-
-    (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-    """
+def filter(val_pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     match map_term:
-        case TermMap(value=entries):
-            # Create new map with functions applied to keys and values
-            new_entries: dict[Term, Term] = {}
-            for k, v in entries.items():
-                new_k = TermApplication(Application(key_fun, k))
-                new_v = TermApplication(Application(val_fun, v))
-                new_entries[new_k] = new_v
-            return pure(TermMap(new_entries))
+        case hydra.core.TermMap(value=m):
+            def pairs() -> frozenlist[tuple[hydra.core.Term, hydra.core.Term]]:
+                return hydra.lib.maps.to_list(m)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.fromList"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda p: (v := (lambda : hydra.lib.pairs.second(p)), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_pred, v())))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.pure(cast(hydra.core.Term, hydra.core.TermPair(cast(tuple[hydra.core.Term, hydra.core.Term], (hydra.lib.pairs.first(p), v())))))))))), cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ())))))))[1]), pairs()))))))))))
+        
         case _:
-            return fail(f"expected map value, got: {map_term}")
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
+
+def filter_with_key(pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    match map_term:
+        case hydra.core.TermMap(value=m):
+            def pairs() -> frozenlist[tuple[hydra.core.Term, hydra.core.Term]]:
+                return hydra.lib.maps.to_list(m)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.fromList"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda p: (k := (lambda : hydra.lib.pairs.first(p)), v := (lambda : hydra.lib.pairs.second(p)), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(pred, k()))), v())))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.pure(cast(hydra.core.Term, hydra.core.TermPair(cast(tuple[hydra.core.Term, hydra.core.Term], (k(), v())))))))))), cast(hydra.core.Term, hydra.core.TermList(cast(frozenlist[hydra.core.Term], ())))))))[2]), pairs()))))))))))
+        
+        case _:
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
+
+def map(val_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    match map_term:
+        case hydra.core.TermMap(value=m):
+            def pairs() -> frozenlist[tuple[hydra.core.Term, hydra.core.Term]]:
+                return hydra.lib.maps.to_list(m)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := (lambda : hydra.lib.pairs.first(p)), v := (lambda : hydra.lib.pairs.second(p)), cast(tuple[hydra.core.Term, hydra.core.Term], (k(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_fun, v()))))))[2]), pairs()))))))
+        
+        case _:
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
+
+def map_keys(key_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    match map_term:
+        case hydra.core.TermMap(value=m):
+            def pairs() -> frozenlist[tuple[hydra.core.Term, hydra.core.Term]]:
+                return hydra.lib.maps.to_list(m)
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMap(cast(FrozenDict[hydra.core.Term, hydra.core.Term], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := (lambda : hydra.lib.pairs.first(p)), v := (lambda : hydra.lib.pairs.second(p)), cast(tuple[hydra.core.Term, hydra.core.Term], (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(key_fun, k()))), v())))[2]), pairs()))))))
+        
+        case _:
+            return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))

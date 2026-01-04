@@ -1,27 +1,18 @@
-"""Interpreter-friendly implementations for hydra.lib.sets primitives.
+# Note: this is an automatically generated file. Do not edit.
 
-These functions work with Term values directly, applying function terms
-to construct new term structures for the interpreter.
-"""
+r"""Evaluation-level implementations of Set functions for the Hydra interpreter."""
 
-from hydra.compute import Flow
-from hydra.core import Application, Term, TermApplication, TermSet
-from hydra.graph import Graph
-from hydra.lib.flows import pure, fail
+from __future__ import annotations
+from typing import cast
+import hydra.compute
+import hydra.core
+import hydra.extract.core
+import hydra.graph
+import hydra.lib.flows
+import hydra.lib.lists
+import hydra.lib.sets
 
-
-def map_(fun: Term, set_term: Term) -> Flow[Graph, Term]:
-    """Map a function over the elements of a set.
-
-    (a -> b) -> Set a -> Set b
-    """
-    match set_term:
-        case TermSet(value=elements):
-            # Create new set with function applied to each element
-            new_elements = frozenset(
-                TermApplication(Application(fun, elem))
-                for elem in elements
-            )
-            return pure(TermSet(new_elements))
-        case _:
-            return fail(f"expected set value, got: {set_term}")
+def map(fun: hydra.core.Term, set_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    r"""Interpreter-friendly map for Set terms."""
+    
+    return hydra.lib.flows.bind(hydra.extract.core.set(set_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.sets.fromList"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun, el)))), hydra.lib.sets.to_list(elements))))))))))
