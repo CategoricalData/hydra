@@ -617,7 +617,8 @@ hoistSubterms = define "hoistSubterms" $
   -- Returns (newCounter, transformedSubterm)
   -- Uses rewriteAndFoldTermWithTypeContextAndPath to track paths and type context
   -- The accumulator is (counter, [Binding])
-  "processImmediateSubterm" <~ ("cx" ~> "counter" ~> "subterm" ~>
+  -- The namePrefix parameter is used to create stable hoisted binding names (e.g., the parent binding's name)
+  "processImmediateSubterm" <~ ("cx" ~> "counter" ~> "namePrefix" ~> "subterm" ~>
     -- Lambda variables that exist at the level of the let (before processing this subterm)
     -- These don't need to be captured since they're in scope at the hoisting site
     "baselineLambdaVars" <~ Typing.typeContextLambdaVariables (var "cx") $
@@ -647,7 +648,8 @@ hoistSubterms = define "hoistSubterms" $
           -- Check if this term should be hoisted, passing the path
           Logic.ifElse (var "shouldHoist" @@ pair (var "path") (var "processedTerm"))
             -- Hoist: add to collected bindings, return reference
-            ("bindingName" <~ Core.name (Strings.cat2 (string "_hoist_") (Literals.showInt32 (var "newCounter"))) $
+            -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
+            ("bindingName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
              -- Find lambda-bound variables that need to be captured
              -- Only capture variables that were added INSIDE this subterm (not at the let level)
              "allLambdaVars" <~ Typing.typeContextLambdaVariables (var "cxInner") $
@@ -699,30 +701,33 @@ hoistSubterms = define "hoistSubterms" $
        pair (var "finalCounter") (var "localLet"))) $
 
   -- Process a let term: apply hoisting to each immediate subterm
-  -- Counter is threaded through to ensure unique names across the entire term
+  -- Each binding uses its own name as the prefix for hoisted bindings, providing stable naming.
+  -- The prefix ensures uniqueness across siblings, so changes to one binding won't affect
+  -- the hoisted names in other bindings.
+  -- Each sibling uses the same starting counter (1), and the prefix prevents collisions.
   "processLetTerm" <~ ("cx" ~> "counter" ~> "lt" ~>
     "bindings" <~ Core.letBindings (var "lt") $
     "body" <~ Core.letBody (var "lt") $
-    -- Process each binding value, threading counter through
-    -- Accumulator is (counter, reversedBindings)
+    -- Process each binding value using its name as the prefix
+    -- Each binding starts with counter 1 (reset for each sibling) for stable naming
+    -- The prefix ensures uniqueness across siblings
     "processBinding" <~ ("acc" ~> "binding" ~>
-      "currentCounter" <~ Pairs.first (var "acc") $
-      "processedBindings" <~ Pairs.second (var "acc") $
-      "result" <~ var "processImmediateSubterm" @@ var "cx" @@ var "currentCounter" @@ (Core.bindingTerm (var "binding")) $
-      "newCounter" <~ Pairs.first (var "result") $
+      -- Use the binding name as the prefix for hoisted binding names
+      -- Replace dots with underscores to avoid creating module-like names
+      "namePrefix" <~ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "binding")))) $
+      -- Each sibling starts fresh with counter 1 - prefix makes names unique
+      "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ (Core.bindingTerm (var "binding")) $
       "newValue" <~ Pairs.second (var "result") $
       "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingType (var "binding")) $
-      pair (var "newCounter") (Lists.cons (var "newBinding") (var "processedBindings"))) $
-    "foldResult" <~ Lists.foldl (var "processBinding") (pair (var "counter") (list ([] :: [TTerm Binding]))) (var "bindings") $
-    "counterAfterBindings" <~ Pairs.first (var "foldResult") $
-    "reversedBindings" <~ Pairs.second (var "foldResult") $
-    "newBindings" <~ Lists.reverse (var "reversedBindings") $
-    -- Process the body with the counter from after bindings
-    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ var "counterAfterBindings" @@ var "body" $
-    "finalCounter" <~ Pairs.first (var "bodyResult") $
+      Lists.cons (var "newBinding") (var "acc")) $
+    -- Fold over bindings, starting with empty list
+    "newBindingsReversed" <~ Lists.foldl (var "processBinding") (list ([] :: [TTerm Binding])) (var "bindings") $
+    "newBindings" <~ Lists.reverse (var "newBindingsReversed") $
+    -- Process the body with "_body" as the prefix, also starting with counter 1
+    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ string "_body" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
-    -- Reconstruct the let term, return final counter
-    pair (var "finalCounter") (Core.termLet (Core.let_ (var "newBindings") (var "newBody")))) $
+    -- Return the original counter (siblings are independent, so counter doesn't propagate)
+    pair (var "counter") (Core.termLet (Core.let_ (var "newBindings") (var "newBody")))) $
 
   -- Main rewrite: find let terms and process them
   "rewrite" <~ ("recurse" ~> "cx" ~> "counter" ~> "term" ~>

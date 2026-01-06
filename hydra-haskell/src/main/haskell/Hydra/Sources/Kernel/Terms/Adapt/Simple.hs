@@ -395,7 +395,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Step 0: Unshadow variables BEFORE hoisting
   -- This prevents capture issues where hoisted code references the wrong variable
   -- after code generators rename shadowed parameters
-  "graphu" <<~ Logic.ifElse (var "doHoist")
+  "graphu0" <<~ Logic.ifElse (var "doHoist")
     ("gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
      "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
      "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
@@ -405,20 +405,29 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Step 1: Hoist case statements BEFORE inference (hoisting doesn't need types)
   -- This ensures match expressions are applied to arguments before eta expansion
   "graphh" <<~ Logic.ifElse (var "doHoist")
-    (Reduction.hoistCaseStatementsInGraph @@ var "graphu")
-    (produce $ var "graphu") $
+    (Reduction.hoistCaseStatementsInGraph @@ var "graphu0")
+    (produce $ var "graphu0") $
 
-  -- Step 2: If eta expansion is needed, run inference first (eta expansion needs types)
-  "graphi" <<~ Logic.ifElse (var "doExpand")
-    (Inference.inferGraphTypes @@ var "graphh")
+  -- Step 2: Unshadow variables AGAIN after hoisting
+  -- Hoisting creates new lambda wrappers for captured variables, which can reintroduce shadowing
+  "graphu" <<~ Logic.ifElse (var "doHoist")
+    ("gterm2" <~ Schemas.graphAsTerm @@ var "graphh" $
+     "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
+     "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
+     produce $ Graph.graphWithElements (var "graphh") (var "newElements2"))
     (produce $ var "graphh") $
 
-  -- Step 3: Adapt the graph (includes eta expansion if enabled)
+  -- Step 3: If eta expansion is needed, run inference first (eta expansion needs types)
+  "graphi" <<~ Logic.ifElse (var "doExpand")
+    (Inference.inferGraphTypes @@ var "graphu")
+    (produce $ var "graphu") $
+
+  -- Step 4: Adapt the graph (includes eta expansion if enabled)
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
 
 --  Flows.fail ("adapted graph: " ++ (ShowGraph.graph @@ var "graph1"))
 
-  -- Step 4: Perform final inference on the adapted graph
+  -- Step 5: Perform final inference on the adapted graph
   "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions
