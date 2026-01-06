@@ -12,10 +12,10 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
-import qualified Hydra.Sources.Decode.Core     as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as ExtractHelpers
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Grammars        as Grammars
@@ -104,10 +104,10 @@ kernelPrimaryTermsModules = [
   Arity.module_,
   Checking.module_,
   Constants.module_,
-  DecodeCore.module_,
   Decoding.module_,
   Encoding.module_,
   ExtractCore.module_,
+  ExtractHelpers.module_,
   ExtractUtil.module_,
   Formatting.module_,
   Grammars.module_,
