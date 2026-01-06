@@ -121,6 +121,43 @@ eithersPartitionEithers = subgroup "partitionEithers" [
     test name input (lefts, rights) = primCase name _eithers_partitionEithers [list input]
       (Core.termPair $ Phantoms.pair (list $ fmap int32 lefts) (list $ fmap string rights))
 
+eithersMap :: TTerm TestGroup
+eithersMap = subgroup "map" [
+  test "map right value" (rightInt32 5) (rightInt32 10),
+  test "preserve left" (leftInt32 99) (leftInt32 99)]
+  where
+    rightInt32 x = right (int32 x)
+    leftInt32 x = left (int32 x)
+    test name input expected = primCase name _eithers_map [
+      lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
+      input] expected
+
+eithersMapList :: TTerm TestGroup
+eithersMapList = subgroup "mapList" [
+  test "all succeed" [1, 2, 3] (right (list [int32 2, int32 4, int32 6])),
+  test "first fails" [1, 0, 3] (left (string "zero")),
+  test "empty list" [] (right (list []))]
+  where
+    test name input expected = primCase name _eithers_mapList [
+      lambda "x" (primitive _logic_ifElse
+        @@ (primitive _equality_equal @@ var "x" @@ int32 0)
+        @@ left (string "zero")
+        @@ right (primitive _math_mul @@ var "x" @@ int32 2)),
+      list $ fmap int32 input] expected
+
+eithersMapMaybe :: TTerm TestGroup
+eithersMapMaybe = subgroup "mapMaybe" [
+  test "just succeeds" (Core.termMaybe $ just (int32 5)) (right (Core.termMaybe $ just (int32 10))),
+  test "just fails" (Core.termMaybe $ just (int32 0)) (left (string "zero")),
+  test "nothing" (Core.termMaybe nothing) (right (Core.termMaybe nothing))]
+  where
+    test name input expected = primCase name _eithers_mapMaybe [
+      lambda "x" (primitive _logic_ifElse
+        @@ (primitive _equality_equal @@ var "x" @@ int32 0)
+        @@ left (string "zero")
+        @@ right (primitive _math_mul @@ var "x" @@ int32 2)),
+      input] expected
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.eithers primitives" $
@@ -134,4 +171,7 @@ allTests = definitionInModule module_ "allTests" $
       eithersEither,
       eithersLefts,
       eithersRights,
-      eithersPartitionEithers]
+      eithersPartitionEithers,
+      eithersMap,
+      eithersMapList,
+      eithersMapMaybe]
