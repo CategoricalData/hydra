@@ -24,7 +24,7 @@ spec = H.describe "sorting" $ do
       (Sorting.topologicalSort [
           (1, [])])
       (Right [
-          1])
+          1] :: Either [[Int]] [Int])
     H.it "discrete set with multiple elements" $ H.shouldBe
       (Sorting.topologicalSort [
           (3, []),
@@ -33,7 +33,7 @@ spec = H.describe "sorting" $ do
       (Right [
           1,
           2,
-          3])
+          3] :: Either [[Int]] [Int])
     H.it "linked list" $ H.shouldBe
       (Sorting.topologicalSort [
           (3, [
@@ -44,7 +44,7 @@ spec = H.describe "sorting" $ do
       (Right [
           1,
           3,
-          2])
+          2] :: Either [[Int]] [Int])
     H.it "binary tree" $ H.shouldBe
       (Sorting.topologicalSort [
           (3, [
@@ -64,7 +64,7 @@ spec = H.describe "sorting" $ do
           2,
           6,
           4,
-          3])
+          3] :: Either [[Int]] [Int])
     H.it "two trees" $ H.shouldBe
       (Sorting.topologicalSort [
           (3, [
@@ -86,7 +86,7 @@ spec = H.describe "sorting" $ do
           4,
           3,
           6,
-          5])
+          5] :: Either [[Int]] [Int])
     H.it "diamond DAG" $ H.shouldBe
       (Sorting.topologicalSort [
           (1, [
@@ -104,7 +104,7 @@ spec = H.describe "sorting" $ do
           2,
           3,
           4,
-          1])
+          1] :: Either [[Int]] [Int])
     H.it "two-node cycle" $ H.shouldBe
       (Sorting.topologicalSort [
           (1, [
@@ -114,7 +114,7 @@ spec = H.describe "sorting" $ do
       (Left [
           [
             1,
-            2]])
+            2]] :: Either [[Int]] [Int])
     H.it "cycle with incoming and outgoing edges" $ H.shouldBe
       (Sorting.topologicalSort [
           (1, [
@@ -130,7 +130,7 @@ spec = H.describe "sorting" $ do
       (Left [
           [
             2,
-            3]])
+            3]] :: Either [[Int]] [Int])
   H.describe "topological sort SCC" $ do
     H.it "empty set" $ H.shouldBe
       (Sorting.topologicalSortComponents [])

@@ -14,7 +14,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core__
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -48,7 +48,7 @@ either leftFun rightFun eitherTerm = ((\x -> case x of
 
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map rightFun eitherTerm = ((\x -> case x of
-  Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermEither (Left val)))) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
+  Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
     Core.applicationFunction = rightFun,
     Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
@@ -85,7 +85,7 @@ mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
         Core.applicationArgument = acc}))})))})),
   Core.applicationArgument = (Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
-    Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) elements)))
+    Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) (Lists.reverse elements))))
 
 mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapMaybe funTerm maybeTerm = ((\x -> case x of

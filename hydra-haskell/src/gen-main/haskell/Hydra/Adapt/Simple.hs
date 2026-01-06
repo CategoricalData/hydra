@@ -26,7 +26,7 @@ import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core_
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -240,14 +240,26 @@ dataGraphToDefinitions constraints doExpand doHoist graph nameLists = (Flows.bin
         Graph.graphTypes = (Graph.graphTypes graph),
         Graph.graphBody = (Graph.graphBody graph),
         Graph.graphPrimitives = (Graph.graphPrimitives graph),
-        Graph.graphSchema = (Graph.graphSchema graph)}))) (Flows.pure graph)) (\graphu -> Flows.bind (Logic.ifElse doHoist (Reduction.hoistCaseStatementsInGraph graphu) (Flows.pure graphu)) (\graphh -> Flows.bind (Logic.ifElse doExpand (Inference.inferGraphTypes graphh) (Flows.pure graphh)) (\graphi -> Flows.bind (adaptDataGraph constraints doExpand graphi) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
+        Graph.graphSchema = (Graph.graphSchema graph)}))) (Flows.pure graph)) (\graphu0 -> Flows.bind (Logic.ifElse doHoist (Reduction.hoistCaseStatementsInGraph graphu0) (Flows.pure graphu0)) (\graphh -> Flows.bind (Logic.ifElse doHoist ( 
+  let gterm2 = (Schemas.graphAsTerm graphh)
+  in  
+    let gterm3 = (Rewriting.unshadowVariables gterm2)
+    in  
+      let newElements2 = (Schemas.termAsGraph gterm3)
+      in (Flows.pure (Graph.Graph {
+        Graph.graphElements = newElements2,
+        Graph.graphEnvironment = (Graph.graphEnvironment graphh),
+        Graph.graphTypes = (Graph.graphTypes graphh),
+        Graph.graphBody = (Graph.graphBody graphh),
+        Graph.graphPrimitives = (Graph.graphPrimitives graphh),
+        Graph.graphSchema = (Graph.graphSchema graphh)}))) (Flows.pure graphh)) (\graphu -> Flows.bind (Logic.ifElse doExpand (Inference.inferGraphTypes graphu) (Flows.pure graphu)) (\graphi -> Flows.bind (adaptDataGraph constraints doExpand graphi) (\graph1 -> Flows.bind (Inference.inferGraphTypes graph1) (\graph2 ->  
   let toDef = (\el ->  
           let ts = (Maybes.fromJust (Core.bindingType el))
           in Module.TermDefinition {
             Module.termDefinitionName = (Core.bindingName el),
             Module.termDefinitionTerm = (Core.bindingTerm el),
             Module.termDefinitionType = ts})
-  in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Maybes.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists)))))))))
+  in (Flows.pure (graph2, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> Maybes.fromJust (Maps.lookup n (Graph.graphElements graph2))) names)) nameLists))))))))))
 
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)

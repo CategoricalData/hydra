@@ -27,7 +27,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Typing as Typing
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -327,7 +327,7 @@ hoistCaseStatementsInGraph graph =
 -- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
 hoistSubterms :: ((([Accessors.TermAccessor], Core.Term) -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)
 hoistSubterms shouldHoist cx0 term0 =  
-  let processImmediateSubterm = (\cx -> \counter -> \subterm ->  
+  let processImmediateSubterm = (\cx -> \counter -> \namePrefix -> \subterm ->  
           let baselineLambdaVars = (Typing.typeContextLambdaVariables cx)
           in  
             let collectAndReplace = (\recurse -> \path -> \cxInner -> \acc -> \term ->  
@@ -348,7 +348,11 @@ hoistSubterms shouldHoist cx0 term0 =
                                 in  
                                   let newBindings = (Pairs.second newAcc)
                                   in (Logic.ifElse (shouldHoist (path, processedTerm)) ( 
-                                    let bindingName = (Core.Name (Strings.cat2 "_hoist_" (Literals.showInt32 newCounter)))
+                                    let bindingName = (Core.Name (Strings.cat [
+                                            "_hoist_",
+                                            namePrefix,
+                                            "_",
+                                            (Literals.showInt32 newCounter)]))
                                     in  
                                       let allLambdaVars = (Typing.typeContextLambdaVariables cxInner)
                                       in  
@@ -394,38 +398,28 @@ hoistSubterms shouldHoist cx0 term0 =
               let body = (Core.letBody lt)
               in  
                 let processBinding = (\acc -> \binding ->  
-                        let currentCounter = (Pairs.first acc)
+                        let namePrefix = (Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName binding))))
                         in  
-                          let processedBindings = (Pairs.second acc)
+                          let result = (processImmediateSubterm cx 1 namePrefix (Core.bindingTerm binding))
                           in  
-                            let result = (processImmediateSubterm cx currentCounter (Core.bindingTerm binding))
+                            let newValue = (Pairs.second result)
                             in  
-                              let newCounter = (Pairs.first result)
-                              in  
-                                let newValue = (Pairs.second result)
-                                in  
-                                  let newBinding = Core.Binding {
-                                          Core.bindingName = (Core.bindingName binding),
-                                          Core.bindingTerm = newValue,
-                                          Core.bindingType = (Core.bindingType binding)}
-                                  in (newCounter, (Lists.cons newBinding processedBindings)))
+                              let newBinding = Core.Binding {
+                                      Core.bindingName = (Core.bindingName binding),
+                                      Core.bindingTerm = newValue,
+                                      Core.bindingType = (Core.bindingType binding)}
+                              in (Lists.cons newBinding acc))
                 in  
-                  let foldResult = (Lists.foldl processBinding (counter, []) bindings)
+                  let newBindingsReversed = (Lists.foldl processBinding [] bindings)
                   in  
-                    let counterAfterBindings = (Pairs.first foldResult)
+                    let newBindings = (Lists.reverse newBindingsReversed)
                     in  
-                      let reversedBindings = (Pairs.second foldResult)
+                      let bodyResult = (processImmediateSubterm cx 1 "_body" body)
                       in  
-                        let newBindings = (Lists.reverse reversedBindings)
-                        in  
-                          let bodyResult = (processImmediateSubterm cx counterAfterBindings body)
-                          in  
-                            let finalCounter = (Pairs.first bodyResult)
-                            in  
-                              let newBody = (Pairs.second bodyResult)
-                              in (finalCounter, (Core.TermLet (Core.Let {
-                                Core.letBindings = newBindings,
-                                Core.letBody = newBody}))))
+                        let newBody = (Pairs.second bodyResult)
+                        in (counter, (Core.TermLet (Core.Let {
+                          Core.letBindings = newBindings,
+                          Core.letBody = newBody}))))
     in  
       let rewrite = (\recurse -> \cx -> \counter -> \term -> (\x -> case x of
               Core.TermLet _ ->  

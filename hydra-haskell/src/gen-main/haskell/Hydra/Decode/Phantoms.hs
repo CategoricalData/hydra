@@ -6,16 +6,13 @@ module Hydra.Decode.Phantoms where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -25,16 +22,10 @@ import qualified Data.Set as S
 tBinding :: (t0 -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Phantoms.TBinding t1))
 tBinding a cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_name -> Eithers.either (\err -> Left err) (\field_term -> Right (Phantoms.TBinding {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
       Phantoms.tBindingName = field_name,
-      Phantoms.tBindingTerm = field_term})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "term",
-      " in record"]))) (\fieldTerm -> tTerm a cx fieldTerm) (Maps.lookup (Core.Name "term") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "name",
-      " in record"]))) (\fieldTerm -> Core_.name cx fieldTerm) (Maps.lookup (Core.Name "name") fieldMap)))
+      Phantoms.tBindingTerm = field_term}))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.phantoms.TBinding"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 tTerm :: (t0 -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Phantoms.TTerm t1))

@@ -7,16 +7,12 @@ module Hydra.Decode.Compute where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -26,59 +22,27 @@ import qualified Data.Set as S
 flowState :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Util.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Compute.FlowState t0 t1))
 flowState s v cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_value -> Eithers.either (\err -> Left err) (\field_state -> Eithers.either (\err -> Left err) (\field_trace -> Right (Compute.FlowState {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "value" (Helpers.decodeMaybe v) fieldMap cx) (\field_value -> Eithers.bind (Helpers.requireField "state" s fieldMap cx) (\field_state -> Eithers.bind (Helpers.requireField "trace" trace fieldMap cx) (\field_trace -> Right (Compute.FlowState {
       Compute.flowStateValue = field_value,
       Compute.flowStateState = field_state,
-      Compute.flowStateTrace = field_trace})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "trace",
-      " in record"]))) (\fieldTerm -> trace cx fieldTerm) (Maps.lookup (Core.Name "trace") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "state",
-      " in record"]))) (\fieldTerm -> s cx fieldTerm) (Maps.lookup (Core.Name "state") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "value",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermMaybe v2 -> (Eithers.mapMaybe (v cx) v2)
-      _ -> (Left (Util.DecodingError "expected optional value"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "value") fieldMap)))
+      Compute.flowStateTrace = field_trace})))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.compute.FlowState"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 trace :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Compute.Trace)
 trace cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_stack -> Eithers.either (\err -> Left err) (\field_messages -> Eithers.either (\err -> Left err) (\field_other -> Right (Compute.Trace {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "stack" (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermLiteral v2 -> ((\x -> case x of
+        Core.LiteralString v3 -> (Right v3)
+        _ -> (Left (Util.DecodingError "expected string literal"))) v2)
+      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_stack -> Eithers.bind (Helpers.requireField "messages" (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermLiteral v2 -> ((\x -> case x of
+        Core.LiteralString v3 -> (Right v3)
+        _ -> (Left (Util.DecodingError "expected string literal"))) v2)
+      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_messages -> Eithers.bind (Helpers.requireField "other" (Helpers.decodeMap Core_.name Core_.term) fieldMap cx) (\field_other -> Right (Compute.Trace {
       Compute.traceStack = field_stack,
       Compute.traceMessages = field_messages,
-      Compute.traceOther = field_other})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "other",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermMap v2 ->  
-        let pairs = (Maps.toList v2) 
-            decodePair = (\kv ->  
-                    let rawKey = (Pairs.first kv) 
-                        rawVal = (Pairs.second kv)
-                    in (Eithers.either (\err -> Left err) (\k2 -> Eithers.either (\err2 -> Left err2) (\v2 -> Right (k2, v2)) (Core_.term cx rawVal)) (Core_.name cx rawKey)))
-        in (Eithers.either (\err -> Left err) (\decodedPairs -> Right (Maps.fromList decodedPairs)) (Eithers.mapList decodePair pairs))
-      _ -> (Left (Util.DecodingError "expected map"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "other") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "messages",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermList v2 -> (Eithers.mapList (\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-        Core.TermLiteral v3 -> ((\x -> case x of
-          Core.LiteralString v4 -> (Right v4)
-          _ -> (Left (Util.DecodingError "expected string literal"))) v3)
-        _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) v2)
-      _ -> (Left (Util.DecodingError "expected list"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "messages") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "stack",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermList v2 -> (Eithers.mapList (\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-        Core.TermLiteral v3 -> ((\x -> case x of
-          Core.LiteralString v4 -> (Right v4)
-          _ -> (Left (Util.DecodingError "expected string literal"))) v3)
-        _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) v2)
-      _ -> (Left (Util.DecodingError "expected list"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "stack") fieldMap)))
+      Compute.traceOther = field_other})))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.compute.Trace"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

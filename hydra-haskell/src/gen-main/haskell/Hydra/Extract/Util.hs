@@ -13,7 +13,7 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Util as Util
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L

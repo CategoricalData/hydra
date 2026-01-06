@@ -9,7 +9,7 @@ import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Encode.Module as Module
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Workflow as Workflow
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L

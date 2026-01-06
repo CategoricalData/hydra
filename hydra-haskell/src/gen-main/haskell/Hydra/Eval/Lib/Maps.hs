@@ -12,7 +12,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core_
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L

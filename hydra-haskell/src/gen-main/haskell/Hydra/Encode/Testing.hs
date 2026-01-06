@@ -18,7 +18,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Testing as Testing
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -173,6 +173,54 @@ freeVariablesTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "output"),
       Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Testing.freeVariablesTestCaseOutput x))}]}))
 
+hoistPredicate :: (Testing.HoistPredicate -> Core.Term)
+hoistPredicate x = case x of
+  Testing.HoistPredicateCaseStatements -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "caseStatements"),
+      Core.fieldTerm = Core.TermUnit}}))
+  Testing.HoistPredicateApplications -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "applications"),
+      Core.fieldTerm = Core.TermUnit}}))
+  Testing.HoistPredicateLists -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "lists"),
+      Core.fieldTerm = Core.TermUnit}}))
+  Testing.HoistPredicateNothing -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.HoistPredicate"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "nothing"),
+      Core.fieldTerm = Core.TermUnit}}))
+
+hoistSubtermsTestCase :: (Testing.HoistSubtermsTestCase -> Core.Term)
+hoistSubtermsTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.HoistSubtermsTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "predicate"),
+      Core.fieldTerm = (hoistPredicate (Testing.hoistSubtermsTestCasePredicate x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "input"),
+      Core.fieldTerm = (Core_.term (Testing.hoistSubtermsTestCaseInput x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "output"),
+      Core.fieldTerm = (Core_.term (Testing.hoistSubtermsTestCaseOutput x))}]}))
+
+hoistCaseStatementsTestCase :: (Testing.HoistCaseStatementsTestCase -> Core.Term)
+hoistCaseStatementsTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.HoistCaseStatementsTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "input"),
+      Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseInput x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "output"),
+      Core.fieldTerm = (Core_.term (Testing.hoistCaseStatementsTestCaseOutput x))}]}))
+
 termRewriter :: (Testing.TermRewriter -> Core.Term)
 termRewriter x = case x of
   Testing.TermRewriterReplaceFooWithBar -> (Core.TermUnion (Core.Injection {
@@ -269,8 +317,44 @@ jsonCoderTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "json"),
       Core.fieldTerm = (Json.value (Testing.jsonCoderTestCaseJson x))}]}))
 
+jsonDecodeTestCase :: (Testing.JsonDecodeTestCase -> Core.Term)
+jsonDecodeTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core_.type_ (Testing.jsonDecodeTestCaseType x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "json"),
+      Core.fieldTerm = (Json.value (Testing.jsonDecodeTestCaseJson x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "expected"),
+      Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Core_.term e)) (Testing.jsonDecodeTestCaseExpected x))}]}))
+
+jsonEncodeTestCase :: (Testing.JsonEncodeTestCase -> Core.Term)
+jsonEncodeTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.JsonEncodeTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "term"),
+      Core.fieldTerm = (Core_.term (Testing.jsonEncodeTestCaseTerm x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "expected"),
+      Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Json.value e)) (Testing.jsonEncodeTestCaseExpected x))}]}))
+
 jsonParserTestCase :: (Testing.ParserTestCase Json_.Value -> Core.Term)
 jsonParserTestCase = (parserTestCase Json.value)
+
+jsonRoundtripTestCase :: (Testing.JsonRoundtripTestCase -> Core.Term)
+jsonRoundtripTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.JsonRoundtripTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core_.type_ (Testing.jsonRoundtripTestCaseType x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "term"),
+      Core.fieldTerm = (Core_.term (Testing.jsonRoundtripTestCaseTerm x))}]}))
 
 liftLambdaAboveLetTestCase :: (Testing.LiftLambdaAboveLetTestCase -> Core.Term)
 liftLambdaAboveLetTestCase x = (Core.TermRecord (Core.Record {
@@ -364,11 +448,26 @@ testCase x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonCoder"),
       Core.fieldTerm = (jsonCoderTestCase v1)}}))
+  Testing.TestCaseJsonDecode v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "jsonDecode"),
+      Core.fieldTerm = (jsonDecodeTestCase v1)}}))
+  Testing.TestCaseJsonEncode v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "jsonEncode"),
+      Core.fieldTerm = (jsonEncodeTestCase v1)}}))
   Testing.TestCaseJsonParser v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonParser"),
       Core.fieldTerm = (jsonParserTestCase v1)}}))
+  Testing.TestCaseJsonRoundtrip v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "jsonRoundtrip"),
+      Core.fieldTerm = (jsonRoundtripTestCase v1)}}))
   Testing.TestCaseJsonWriter v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
@@ -439,6 +538,16 @@ testCase x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "rewriteType"),
       Core.fieldTerm = (rewriteTypeTestCase v1)}}))
+  Testing.TestCaseHoistSubterms v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "hoistSubterms"),
+      Core.fieldTerm = (hoistSubtermsTestCase v1)}}))
+  Testing.TestCaseHoistCaseStatements v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "hoistCaseStatements"),
+      Core.fieldTerm = (hoistCaseStatementsTestCase v1)}}))
 
 testCaseWithMetadata :: (Testing.TestCaseWithMetadata -> Core.Term)
 testCaseWithMetadata x = (Core.TermRecord (Core.Record {
