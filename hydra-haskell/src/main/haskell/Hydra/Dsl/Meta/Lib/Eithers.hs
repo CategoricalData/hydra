@@ -8,6 +8,9 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 
+bind :: TTerm (Either a b) -> TTerm (b -> Either a c) -> TTerm (Either a c)
+bind = primitive2 _eithers_bind
+
 bimap :: TTerm (a -> c) -> TTerm (b -> d) -> TTerm (Either a b) -> TTerm (Either c d)
 bimap = primitive3 _eithers_bimap
 

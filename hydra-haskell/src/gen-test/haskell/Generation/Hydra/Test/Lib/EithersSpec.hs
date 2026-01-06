@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.eithers"},ModuleName {unModuleName = "Eithers"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
+-- [(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.logic"},ModuleName {unModuleName = "Logic"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
 
 module Generation.Hydra.Test.Lib.EithersSpec where
 
@@ -13,11 +13,22 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
 
 spec :: H.Spec
 spec = H.describe "hydra.lib.eithers primitives" $ do
+  H.describe "bind" $ do
+    H.it "bind Right with success" $ H.shouldBe
+      (Eithers.bind (Right "ab") (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))
+      (Right 2)
+    H.it "bind Right with failure" $ H.shouldBe
+      (Eithers.bind (Right "") (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))
+      (Left 0)
+    H.it "bind Left returns Left unchanged" $ H.shouldBe
+      (Eithers.bind (Left 42) (\s -> Logic.ifElse (Strings.null s) (Left 0) (Right (Strings.length s))))
+      (Left 42)
   H.describe "bimap" $ do
     H.it "map left value" $ H.shouldBe
       (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Left 5))

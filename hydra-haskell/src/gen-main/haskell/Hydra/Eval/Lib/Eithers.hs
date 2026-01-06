@@ -21,6 +21,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+bind :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
+bind eitherTerm funTerm = ((\x -> case x of
+  Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
+    Core.applicationFunction = funTerm,
+    Core.applicationArgument = val})) v1))
+  _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
+
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap leftFun rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {

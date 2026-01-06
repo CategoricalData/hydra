@@ -119,6 +119,7 @@ hydraLibChars = standardLibrary _hydra_lib_chars [
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary _hydra_lib_eithers [
+    prim2Eval   _eithers_bind             EvalEithers.bind         [_x, _y, _z]     (Prims.either_ x_ y_) (function y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
     prim3Eval   _eithers_bimap            EvalEithers.bimap        [_x, _y, _z, _w] (function x_ z_) (function y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
     prim3Eval   _eithers_either           EvalEithers.either       [_x, _y, _z]     (function x_ z_) (function y_ z_) (Prims.either_ x_ y_) z_,
     prim2       _eithers_fromLeft         Eithers.fromLeft         [_x, _y]         x_ (Prims.either_ x_ y_) x_,
@@ -129,7 +130,6 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim2Eval   _eithers_map              EvalEithers.map          [_x, _y, _z]     (function x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2Eval   _eithers_mapList          EvalEithers.mapList      [_x, _y, _z]     (function x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
     prim2Eval   _eithers_mapMaybe         EvalEithers.mapMaybe     [_x, _y, _z]     (function x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
-    -- TODO: add mapMap, mapPair, mapSet when their implementations are ready
     prim1       _eithers_partitionEithers Eithers.partitionEithers [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       _eithers_rights           Eithers.rights           [_x, _y]         (list $ Prims.either_ x_ y_) (list y_)]
 
