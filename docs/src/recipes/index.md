@@ -16,6 +16,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 ### Implementations
 
 - **[Creating a new Hydra implementation](new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
+- **[Synchronizing Hydra-Python](syncing-python.md)** - How to regenerate Python artifacts from Hydra-Haskell sources
 
 ### Development Workflow
 
