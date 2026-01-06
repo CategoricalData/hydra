@@ -300,6 +300,7 @@ public class Libraries {
 
     private static List<PrimitiveFunction> pairsPrimitives() {
         return Arrays.asList(
+                new hydra.lib.pairs.Bimap(),
                 new hydra.lib.pairs.First(),
                 new hydra.lib.pairs.Second());
     }

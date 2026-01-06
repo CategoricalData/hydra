@@ -327,7 +327,25 @@ def standard_library() -> dict[Name, Primitive]:
     return primitives
 ```
 
-**Note:** The Python primitive registry is currently being completed and may have a different final structure.
+### Higher-order primitives in Python
+
+For higher-order primitives (those that take function arguments), you need:
+
+1. An implementation in `hydra/lib/<library>.py` for direct Python use
+2. An eval-level implementation in `hydra/eval/lib/<library>.py` that works with Hydra terms
+3. Registration using `prim2_interp` or `prim3_interp` instead of `prim2` or `prim3`
+
+Example registration for a higher-order primitive:
+
+```python
+from hydra.eval.lib import eithers as eval_eithers
+
+# map :: (x -> y) -> Either z x -> Either z y
+primitives[qname(namespace, "map")] = prims.prim2_interp(
+    qname(namespace, "map"), Just(eval_eithers.map), ["x", "y", "z"],
+    prims.function(x, y), prims.either(z, x), prims.either(z, y)
+)
+```
 
 ### 3. Create DSL wrapper
 
