@@ -389,8 +389,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       (letExpr "x" (T.int32 1) (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2, T.int32 3])))
       -- Output: body is wrapped in local let with hoisted list
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.list [T.int32 1, T.int32 2, T.int32 3])
-          (T.apply (T.var "f") (T.var "_hoist_1")))),
+        (letExpr "_hoist__body_1" (T.list [T.int32 1, T.int32 2, T.int32 3])
+          (T.apply (T.var "f") (T.var "_hoist__body_1")))),
 
     hoistCase "hoistLists: multiple lists in body are hoisted together"
       hoistPredicateLists
@@ -401,9 +401,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: body is wrapped in local let with both hoisted lists
       (letExpr "x" (T.int32 1)
         (multiLet [
-          ("_hoist_1", T.list [T.int32 1, T.int32 2]),
-          ("_hoist_2", T.list [T.int32 3, T.int32 4])]
-          (T.apply (T.apply (T.var "pair") (T.var "_hoist_1")) (T.var "_hoist_2")))),
+          ("_hoist__body_1", T.list [T.int32 1, T.int32 2]),
+          ("_hoist__body_2", T.list [T.int32 3, T.int32 4])]
+          (T.apply (T.apply (T.var "pair") (T.var "_hoist__body_1")) (T.var "_hoist__body_2")))),
 
     hoistCase "hoistLists: list in binding value is hoisted into local let"
       hoistPredicateLists
@@ -411,8 +411,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       (letExpr "x" (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2])) (T.var "x"))
       -- Output: binding value is wrapped in local let
       (letExpr "x"
-        (letExpr "_hoist_1" (T.list [T.int32 1, T.int32 2])
-          (T.apply (T.var "f") (T.var "_hoist_1")))
+        (letExpr "_hoist_x_1" (T.list [T.int32 1, T.int32 2])
+          (T.apply (T.var "f") (T.var "_hoist_x_1")))
         (T.var "x")),
 
     hoistCase "hoistLists: nested lists hoisted from inside out"
@@ -423,9 +423,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: inner list hoisted first, then outer list
       (letExpr "x" (T.int32 1)
         (multiLet [
-          ("_hoist_1", T.list [T.int32 1, T.int32 2]),
-          ("_hoist_2", T.list [T.var "_hoist_1", T.int32 3])]
-          (T.apply (T.var "f") (T.var "_hoist_2")))),
+          ("_hoist__body_1", T.list [T.int32 1, T.int32 2]),
+          ("_hoist__body_2", T.list [T.var "_hoist__body_1", T.int32 3])]
+          (T.apply (T.var "f") (T.var "_hoist__body_2")))),
 
     -- ============================================================
     -- Test: hoistApplications predicate
@@ -439,8 +439,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (T.list [T.apply (T.var "f") (T.var "x"), T.var "y"]))
       -- Output: body is wrapped in local let
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.apply (T.var "f") (T.var "x"))
-          (T.list [T.var "_hoist_1", T.var "y"]))),
+        (letExpr "_hoist__body_1" (T.apply (T.var "f") (T.var "x"))
+          (T.list [T.var "_hoist__body_1", T.var "y"]))),
 
     hoistCase "hoistApplications: application in record field is hoisted"
       hoistPredicateApplications
@@ -449,8 +449,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (T.record (nm "Data") [(nm "value", T.apply (T.var "f") (T.var "x"))]))
       -- Output: body is wrapped in local let
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.apply (T.var "f") (T.var "x"))
-          (T.record (nm "Data") [(nm "value", T.var "_hoist_1")]))),
+        (letExpr "_hoist__body_1" (T.apply (T.var "f") (T.var "x"))
+          (T.record (nm "Data") [(nm "value", T.var "_hoist__body_1")]))),
 
     hoistCase "hoistApplications: nested applications hoisted from inside out"
       hoistPredicateApplications
@@ -460,9 +460,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: inner application hoisted first, then outer
       (letExpr "x" (T.int32 1)
         (multiLet [
-          ("_hoist_1", T.apply (T.var "g") (T.var "x")),
-          ("_hoist_2", T.apply (T.var "f") (T.var "_hoist_1"))]
-          (T.list [T.var "_hoist_2"]))),
+          ("_hoist__body_1", T.apply (T.var "g") (T.var "x")),
+          ("_hoist__body_2", T.apply (T.var "f") (T.var "_hoist__body_1"))]
+          (T.list [T.var "_hoist__body_2"]))),
 
     -- ============================================================
     -- Test: hoistCaseStatements predicate
@@ -479,11 +479,11 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
              (nm "nothing", T.int32 0)])))
       -- Output: body is wrapped in local let with hoisted case
       (letExpr "x" (T.optional $ T.just $ T.int32 42)
-        (letExpr "_hoist_1"
+        (letExpr "_hoist__body_1"
           (T.match (nm "Optional") (T.just $ T.var "x")
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.apply (T.var "f") (T.var "_hoist_1")))),
+          (T.apply (T.var "f") (T.var "_hoist__body_1")))),
 
     hoistCase "hoistCaseStatements: case in list element is hoisted"
       hoistPredicateCaseStatements
@@ -494,11 +494,11 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
            (nm "err", T.int32 0)]]))
       -- Output: body is wrapped in local let
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1"
+        (letExpr "_hoist__body_1"
           (T.match (nm "Result") (T.just $ T.var "y")
             [(nm "ok", T.var "x"),
              (nm "err", T.int32 0)])
-          (T.list [T.var "_hoist_1"]))),
+          (T.list [T.var "_hoist__body_1"]))),
 
     -- ============================================================
     -- Test: Nested let expressions
@@ -514,8 +514,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: the list is hoisted in the inner let's body
       (letExpr "x" (T.int32 1)
         (letExpr "y" (T.int32 2)
-          (letExpr "_hoist_1" (T.list [T.var "x", T.var "y"])
-            (T.apply (T.var "f") (T.var "_hoist_1"))))),
+          (letExpr "_hoist__body_1" (T.list [T.var "x", T.var "y"])
+            (T.apply (T.var "f") (T.var "_hoist__body_1"))))),
 
     -- ============================================================
     -- Test: Non-let terms are unchanged
@@ -554,8 +554,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (T.apply (T.var "f") (T.list [T.var "x", T.int32 2])))
       -- Output: list is hoisted without any lambda wrapping
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.list [T.var "x", T.int32 2])
-          (T.apply (T.var "f") (T.var "_hoist_1")))),
+        (letExpr "_hoist__body_1" (T.list [T.var "x", T.int32 2])
+          (T.apply (T.var "f") (T.var "_hoist__body_1")))),
 
     -- Case 2: Hoisted term refers to lambda-bound variable ABOVE the let (no capture needed)
     hoistCase "hoistLists: term referring to lambda above let needs no capture"
@@ -568,8 +568,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: list is hoisted without lambda wrapping (y was bound before let)
       (T.lambda "y"
         (letExpr "x" (T.int32 1)
-          (letExpr "_hoist_1" (T.list [T.var "y", T.var "x"])
-            (T.apply (T.var "f") (T.var "_hoist_1"))))),
+          (letExpr "_hoist__body_1" (T.list [T.var "y", T.var "x"])
+            (T.apply (T.var "f") (T.var "_hoist__body_1"))))),
 
     -- Case 3: Lambda-bound variable between let and hoisted term, but NOT free in hoisted term
     hoistCase "hoistLists: lambda-bound var not free in hoisted term needs no capture"
@@ -581,8 +581,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (T.lambda "y" (T.apply (T.var "f") (T.list [T.var "x", T.int32 2]))))
       -- Output: list [x, 2] is hoisted without lambda wrapping for y (y not free in list)
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.list [T.var "x", T.int32 2])
-          (T.lambda "y" (T.apply (T.var "f") (T.var "_hoist_1"))))),
+        (letExpr "_hoist__body_1" (T.list [T.var "x", T.int32 2])
+          (T.lambda "y" (T.apply (T.var "f") (T.var "_hoist__body_1"))))),
 
     -- Case 4: Lambda-bound variable between let and hoisted term, IS free in hoisted term
     hoistCase "hoistLists: lambda-bound var free in hoisted term requires capture"
@@ -592,10 +592,10 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- So [x, y] should be hoisted with y captured
       (letExpr "x" (T.int32 1)
         (T.lambda "y" (T.apply (T.var "f") (T.list [T.var "x", T.var "y"]))))
-      -- Output: _hoist_1 = \y -> [x, y], reference becomes _hoist_1 y
+      -- Output: _hoist__body_1 = \y -> [x, y], reference becomes _hoist__body_1 y
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.lambda "y" (T.list [T.var "x", T.var "y"]))
-          (T.lambda "y" (T.apply (T.var "f") (T.apply (T.var "_hoist_1") (T.var "y")))))),
+        (letExpr "_hoist__body_1" (T.lambda "y" (T.list [T.var "x", T.var "y"]))
+          (T.lambda "y" (T.apply (T.var "f") (T.apply (T.var "_hoist__body_1") (T.var "y")))))),
 
     -- Case 5: Multiple lambda-bound variables, only some free in hoisted term
     hoistCase "hoistLists: only free lambda-bound vars are captured"
@@ -605,42 +605,43 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- But only b appears in the list [x, b], so only b is captured
       (letExpr "x" (T.int32 1)
         (T.lambda "a" (T.lambda "b" (T.apply (T.var "f") (T.list [T.var "x", T.var "b"])))))
-      -- Output: _hoist_1 = \b -> [x, b], reference becomes _hoist_1 b
+      -- Output: _hoist__body_1 = \b -> [x, b], reference becomes _hoist__body_1 b
       (letExpr "x" (T.int32 1)
-        (letExpr "_hoist_1" (T.lambda "b" (T.list [T.var "x", T.var "b"]))
-          (T.lambda "a" (T.lambda "b" (T.apply (T.var "f") (T.apply (T.var "_hoist_1") (T.var "b"))))))),
+        (letExpr "_hoist__body_1" (T.lambda "b" (T.list [T.var "x", T.var "b"]))
+          (T.lambda "a" (T.lambda "b" (T.apply (T.var "f") (T.apply (T.var "_hoist__body_1") (T.var "b"))))))),
 
     -- ============================================================
-    -- Test: Counter resets between sibling immediate subterms
-    -- Counter is threaded through all bindings and body for unique names
+    -- Test: Stable naming for sibling immediate subterms
+    -- Each sibling uses its parent binding name as a prefix, ensuring
+    -- that changes to one sibling don't affect the names in another.
     -- ============================================================
 
-    hoistCase "hoistLists: counter threads through binding and body"
+    hoistCase "hoistLists: stable naming for binding and body"
       hoistPredicateLists
       -- Input: let x = f [1, 2] in g [3, 4]
       -- Both binding value and body have lists to hoist
       (letExpr "x" (T.apply (T.var "f") (T.list [T.int32 1, T.int32 2]))
                    (T.apply (T.var "g") (T.list [T.int32 3, T.int32 4])))
-      -- Output: counter threads through (binding gets _hoist_1, body gets _hoist_2)
+      -- Output: binding uses _hoist_x_1, body uses _hoist__body_1
       (letExpr "x"
-        (letExpr "_hoist_1" (T.list [T.int32 1, T.int32 2])
-          (T.apply (T.var "f") (T.var "_hoist_1")))
-        (letExpr "_hoist_2" (T.list [T.int32 3, T.int32 4])
-          (T.apply (T.var "g") (T.var "_hoist_2")))),
+        (letExpr "_hoist_x_1" (T.list [T.int32 1, T.int32 2])
+          (T.apply (T.var "f") (T.var "_hoist_x_1")))
+        (letExpr "_hoist__body_1" (T.list [T.int32 3, T.int32 4])
+          (T.apply (T.var "g") (T.var "_hoist__body_1")))),
 
-    hoistCase "hoistLists: counter threads through multiple bindings"
+    hoistCase "hoistLists: stable naming for multiple bindings"
       hoistPredicateLists
       -- Input: let x = f [1]; y = g [2] in x
       (multiLet [
         ("x", T.apply (T.var "f") (T.list [T.int32 1])),
         ("y", T.apply (T.var "g") (T.list [T.int32 2]))]
         (T.var "x"))
-      -- Output: each binding gets sequential hoisted names (_hoist_1, _hoist_2)
+      -- Output: each binding uses its own name as prefix (_hoist_x_1, _hoist_y_1)
       (multiLet [
-        ("x", letExpr "_hoist_1" (T.list [T.int32 1])
-                (T.apply (T.var "f") (T.var "_hoist_1"))),
-        ("y", letExpr "_hoist_2" (T.list [T.int32 2])
-                (T.apply (T.var "g") (T.var "_hoist_2")))]
+        ("x", letExpr "_hoist_x_1" (T.list [T.int32 1])
+                (T.apply (T.var "f") (T.var "_hoist_x_1"))),
+        ("y", letExpr "_hoist_y_1" (T.list [T.int32 2])
+                (T.apply (T.var "g") (T.var "_hoist_y_1")))]
         (T.var "x")),
 
     -- ============================================================
@@ -653,9 +654,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       hoistPredicateLists
       -- Input: let f = \x -> pair (f x) [x, 1] in f 42
       -- f is polymorphic and has a self-reference, with a list below it
-      -- With sibling hoisting, this would create: let f = ...; _hoist_1 = [x, 1] in ...
+      -- With sibling hoisting, this would create: let f = ...; _hoist_f_1 = [x, 1] in ...
       -- which causes polymorphic mutual recursion issues.
-      -- With local hoisting, we get: let f = (let _hoist_1 = ... in ...) in ...
+      -- With local hoisting, we get: let f = (let _hoist_f_1 = ... in ...) in ...
       -- which is polymorphic nesting (OK) rather than mutual recursion.
       (letExpr "f"
         (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.apply (T.var "f") (T.var "x")))
@@ -663,9 +664,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (T.apply (T.var "f") (T.int32 42)))
       -- Output: the list is hoisted into a local let within f's binding value
       (letExpr "f"
-        (letExpr "_hoist_1" (T.lambda "x" (T.list [T.var "x", T.int32 1]))
+        (letExpr "_hoist_f_1" (T.lambda "x" (T.list [T.var "x", T.int32 1]))
           (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.apply (T.var "f") (T.var "x")))
-                                 (T.apply (T.var "_hoist_1") (T.var "x")))))
+                                 (T.apply (T.var "_hoist_f_1") (T.var "x")))))
         (T.apply (T.var "f") (T.int32 42)))]
 
 -- | Test cases for hoistCaseStatements
@@ -816,11 +817,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.apply (T.var "g") (T.var "_hoist_1")))
+          (T.apply (T.var "g") (T.var "_hoist_f_1")))
         (T.var "f")),
 
     hoistCaseStatementsCase "case in nested application LHS IS hoisted"
@@ -838,11 +839,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "z" (T.lambda "w" (T.var "z"))),
              (nm "nothing", T.lambda "w" (T.int32 0))])
-          (T.apply (T.apply (T.var "_hoist_1") (T.var "x")) (T.var "y")))
+          (T.apply (T.apply (T.var "_hoist_f_1") (T.var "x")) (T.var "y")))
         (T.var "f")),
 
     hoistCaseStatementsCase "case inside list element IS hoisted"
@@ -855,11 +856,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.list [T.var "_hoist_1"]))
+          (T.list [T.var "_hoist_f_1"]))
         (T.var "f")),
 
     hoistCaseStatementsCase "case inside lambda inside list IS hoisted"
@@ -874,12 +875,12 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted with 'a' captured
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.lambda "a"
             (T.match (nm "Optional") (T.just $ T.var "a")
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 0)]))
-          (T.list [T.lambda "a" (T.apply (T.var "_hoist_1") (T.var "a"))]))
+          (T.list [T.lambda "a" (T.apply (T.var "_hoist_f_1") (T.var "a"))]))
         (T.var "f")),
 
     -- ============================================================
@@ -917,11 +918,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.match (nm "Optional") (T.just $ T.var "a")
           [(nm "just", T.lambda "z" (T.var "z")),
            (nm "nothing", T.int32 0)])
-        (letExpr "_hoist_1"
+        (letExpr "_hoist__body_1"
           (T.match (nm "Optional") (T.just $ T.var "b")
             [(nm "just", T.lambda "w" (T.var "w")),
              (nm "nothing", T.int32 0)])
-          (T.apply (T.var "f") (T.var "_hoist_1")))),
+          (T.apply (T.var "f") (T.var "_hoist__body_1")))),
 
     -- ============================================================
     -- Test: Mixed let and lambda at top level (no hoisting needed)
@@ -1019,11 +1020,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "a" (T.lambda "b" (T.lambda "c" (T.var "a")))),
              (nm "nothing", T.lambda "b" (T.lambda "c" (T.int32 0)))])
-          (T.apply (T.apply (T.apply (T.var "_hoist_1") (T.var "x")) (T.var "y")) (T.var "z")))
+          (T.apply (T.apply (T.apply (T.var "_hoist_f_1") (T.var "x")) (T.var "y")) (T.var "z")))
         (T.var "f")),
 
     hoistCaseStatementsCase "case as second argument IS hoisted"
@@ -1037,11 +1038,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.apply (T.apply (T.var "g") (T.var "x")) (T.var "_hoist_1")))
+          (T.apply (T.apply (T.var "g") (T.var "x")) (T.var "_hoist_f_1")))
         (T.var "f")),
 
     hoistCaseStatementsCase "case in both arguments - both hoisted"
@@ -1061,15 +1062,15 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- (hoistSubterms collects all hoistable terms from one subterm into one let)
       (letExpr "f"
         (T.lets
-          [(nm "_hoist_1",
+          [(nm "_hoist_f_1",
             T.match (nm "Optional") (T.just $ T.var "a")
               [(nm "just", T.lambda "x" (T.var "x")),
                (nm "nothing", T.int32 0)]),
-           (nm "_hoist_2",
+           (nm "_hoist_f_2",
             T.match (nm "Optional") (T.just $ T.var "b")
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 1)])]
-          (T.apply (T.apply (T.var "g") (T.var "_hoist_1")) (T.var "_hoist_2")))
+          (T.apply (T.apply (T.var "g") (T.var "_hoist_f_1")) (T.var "_hoist_f_2")))
         (T.var "f")),
 
     -- ============================================================
@@ -1086,11 +1087,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.list [T.int32 1, T.var "_hoist_1"]))
+          (T.list [T.int32 1, T.var "_hoist_f_1"]))
         (T.var "f")),
 
     hoistCaseStatementsCase "multiple cases in list - all hoisted"
@@ -1107,15 +1108,15 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Output: both cases hoisted into a SINGLE let with two bindings
       (letExpr "f"
         (T.lets
-          [(nm "_hoist_1",
+          [(nm "_hoist_f_1",
             T.match (nm "Optional") (T.just $ T.var "a")
               [(nm "just", T.lambda "x" (T.var "x")),
                (nm "nothing", T.int32 0)]),
-           (nm "_hoist_2",
+           (nm "_hoist_f_2",
             T.match (nm "Optional") (T.just $ T.var "b")
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 1)])]
-          (T.list [T.var "_hoist_1", T.var "_hoist_2"]))
+          (T.list [T.var "_hoist_f_1", T.var "_hoist_f_2"]))
         (T.var "f")),
 
     hoistCaseStatementsCase "case in pair first element IS hoisted"
@@ -1129,11 +1130,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.pair (T.var "_hoist_1") (T.int32 1)))
+          (T.pair (T.var "_hoist_f_1") (T.int32 1)))
         (T.var "f")),
 
     hoistCaseStatementsCase "case in pair second element IS hoisted"
@@ -1147,11 +1148,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (T.var "f"))
       -- Output: case is hoisted
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           (T.match (nm "Optional") T.nothing
             [(nm "just", T.lambda "y" (T.var "y")),
              (nm "nothing", T.int32 0)])
-          (T.pair (T.int32 1) (T.var "_hoist_1")))
+          (T.pair (T.int32 1) (T.var "_hoist_f_1")))
         (T.var "f")),
 
     -- ============================================================
@@ -1174,11 +1175,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Output: case hoisted into inner let's binding
       (letExpr "outer"
         (letExpr "inner"
-          (letExpr "_hoist_1"
+          (letExpr "_hoist_inner_1"
             (T.match (nm "Optional") T.nothing
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 0)])
-            (T.apply (T.var "g") (T.var "_hoist_1")))
+            (T.apply (T.var "g") (T.var "_hoist_inner_1")))
           (T.var "inner"))
         (T.var "outer")),
 
@@ -1196,11 +1197,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Output: case hoisted into inner let's body
       (letExpr "outer"
         (letExpr "inner" (T.int32 1)
-          (letExpr "_hoist_1"
+          (letExpr "_hoist__body_1"
             (T.match (nm "Optional") T.nothing
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 0)])
-            (T.apply (T.var "g") (T.var "_hoist_1"))))
+            (T.apply (T.var "g") (T.var "_hoist__body_1"))))
         (T.var "outer")),
 
     hoistCaseStatementsCase "case at top level of child let NOT hoisted"
@@ -1226,7 +1227,7 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Input: let outer = f (match a ...) (let inner = g (match b ...) in inner) in outer
       -- First case in outer's body (arg position), second in inner's binding (arg position)
       -- Each should be hoisted into its respective scope
-      -- Counter is threaded through: inner gets _hoist_1, then outer gets _hoist_2
+      -- Each binding uses its name as prefix: inner gets _hoist_inner_1, outer gets _hoist_outer_1
       (letExpr "outer"
         (T.apply
           (T.apply (T.var "f")
@@ -1240,20 +1241,20 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
                  (nm "nothing", T.int32 1)]))
             (T.var "inner")))
         (T.var "outer"))
-      -- Output: nested let is processed first, so inner gets _hoist_1, outer gets _hoist_2
+      -- Output: outer binding gets _hoist_outer_1, inner binding gets _hoist_inner_1
       (letExpr "outer"
-        (letExpr "_hoist_2"
+        (letExpr "_hoist_outer_1"
           (T.match (nm "Optional") (T.just $ T.var "a")
             [(nm "just", T.lambda "x" (T.var "x")),
              (nm "nothing", T.int32 0)])
           (T.apply
-            (T.apply (T.var "f") (T.var "_hoist_2"))
+            (T.apply (T.var "f") (T.var "_hoist_outer_1"))
             (letExpr "inner"
-              (letExpr "_hoist_1"
+              (letExpr "_hoist_inner_1"
                 (T.match (nm "Optional") (T.just $ T.var "b")
                   [(nm "just", T.lambda "y" (T.var "y")),
                    (nm "nothing", T.int32 1)])
-                (T.apply (T.var "g") (T.var "_hoist_1")))
+                (T.apply (T.var "g") (T.var "_hoist_inner_1")))
               (T.var "inner"))))
         (T.var "outer")),
 
@@ -1276,17 +1277,17 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Path to case: letBinding, applicationFunction, lambdaBody
       -- Processing: letBinding (pass), applicationFunction (use app, mark usedApp=true), lambdaBody (usedApp=true, fail)
       -- So case IS hoisted. The case uses 'a' which is lambda-bound, so it's wrapped in a lambda
-      -- and the reference becomes (_hoist_1 a)
+      -- and the reference becomes (_hoist_f_1 a)
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           -- The hoisted case is wrapped in a lambda to capture 'a'
           (T.lambda "a"
             (T.match (nm "Optional") (T.just $ T.var "a")
               [(nm "just", T.lambda "y" (T.var "y")),
                (nm "nothing", T.int32 0)]))
-          -- The original lambda body is replaced with (_hoist_1 a)
+          -- The original lambda body is replaced with (_hoist_f_1 a)
           (T.apply
-            (T.lambda "a" (T.apply (T.var "_hoist_1") (T.var "a")))
+            (T.lambda "a" (T.apply (T.var "_hoist_f_1") (T.var "a")))
             (T.var "x")))
         (T.var "f")),
 
@@ -1352,18 +1353,18 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Output: inner case is hoisted to the OUTER let level (not inside the branch)
       -- because hoistSubterms only creates lets at existing let boundaries.
       -- The inner case uses 'a' which is lambda-bound, so it's wrapped in a lambda
-      -- and the reference becomes (_hoist_1 a)
+      -- and the reference becomes (_hoist_f_1 a)
       (letExpr "f"
-        (letExpr "_hoist_1"
+        (letExpr "_hoist_f_1"
           -- The inner case wrapped in a lambda to capture 'a'
           (T.lambda "a"
             (T.match (nm "Optional") (T.just $ T.var "a")
               [(nm "just", T.lambda "b" (T.var "b")),
                (nm "nothing", T.int32 0)]))
-          -- The outer case with the reference (_hoist_1 a) inside the branch
+          -- The outer case with the reference (_hoist_f_1 a) inside the branch
           (T.match (nm "Optional") (T.just $ T.var "x")
             [(nm "just", T.lambda "a"
-              (T.apply (T.var "g") (T.apply (T.var "_hoist_1") (T.var "a")))),
+              (T.apply (T.var "g") (T.apply (T.var "_hoist_f_1") (T.var "a")))),
              (nm "nothing", T.int32 0)]))
         (T.var "f"))]
 
