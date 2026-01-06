@@ -7,21 +7,35 @@ from hydra.dsl.python import Either, Left, Right
 from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
+import hydra.extract.helpers
 import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
-import hydra.lib.lists
-import hydra.lib.maps
-import hydra.lib.maybes
-import hydra.lib.strings
 import hydra.phantoms
 import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T1]]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T1]], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    def _hoist_hydra_decode_phantoms_t_term_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T2]]:
+        match v1:
+            case hydra.core.TermWrap(value=wrapped_term):
+                return hydra.lib.eithers.map((lambda b: cast(hydra.phantoms.TTerm[T2], hydra.phantoms.TTerm(b))), hydra.decode.core.term(cx, wrapped_term.body))
+            
+            case _:
+                return cast(Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T2]], Left(hydra.util.DecodingError("expected wrapped type hydra.phantoms.TTerm")))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T1]], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T1]]:
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T1]], Left(hydra.util.DecodingError(err)))), (lambda stripped: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    def _hoist_hydra_decode_phantoms_t_binding_1(a: T2, cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T3]]:
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                field_map = hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map, cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v1, v2: t_term(a, v1, v2)), field_map, cx), (lambda field_term: cast(Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T3]], Right(cast(hydra.phantoms.TBinding[T3], hydra.phantoms.TBinding(field_name, field_term))))))))
+            
+            case _:
+                return cast(Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T3]], Left(hydra.util.DecodingError("expected record of type hydra.phantoms.TBinding")))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T1]], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

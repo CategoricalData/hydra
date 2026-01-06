@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 from typing import cast
+from decimal import Decimal
 from hydra.dsl.python import FrozenDict, frozenlist, Either, Left, Right, Maybe, Just, Nothing
 import hydra.accessors
 import hydra.annotations
@@ -162,6 +163,24 @@ def test_union__union_with_empty():
 def test_union__empty_with_non_empty():
 
     assert (hydra.lib.sets.union(frozenset({}), frozenset({1, 2}))) == (frozenset({1, 2}))
+
+# unions
+
+def test_unions__union_of_multiple_sets():
+
+    assert (hydra.lib.sets.unions((frozenset({1, 2}), frozenset({2, 3}), frozenset({3, 4})))) == (frozenset({1, 2, 3, 4}))
+
+def test_unions__union_with_empty_sets():
+
+    assert (hydra.lib.sets.unions((frozenset({1, 2}), frozenset({}), frozenset({3})))) == (frozenset({1, 2, 3}))
+
+def test_unions__empty_list_of_sets():
+
+    assert (hydra.lib.sets.unions(())) == (frozenset({}))
+
+def test_unions__single_set():
+
+    assert (hydra.lib.sets.unions((frozenset({1, 2, 3}),))) == (frozenset({1, 2, 3}))
 
 # intersection
 

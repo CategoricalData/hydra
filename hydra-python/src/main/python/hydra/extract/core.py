@@ -112,19 +112,23 @@ def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[h
     r"""Extract case statement from a term."""
     
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.CaseStatement]:
+        def _hoist_extract_1(term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.CaseStatement]:
+            match v1:
+                case hydra.core.EliminationUnion(value=cs):
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : hydra.lib.flows.pure(cs)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("case statement for type ", name.value), hydra.show.core.term(term))))
+                
+                case _:
+                    return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
+        def _hoist_extract_2(term: hydra.core.Term, v1: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.core.CaseStatement]:
+            match v1:
+                case hydra.core.FunctionElimination(value=elimination):
+                    return _hoist_extract_1(term, elimination)
+                
+                case _:
+                    return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
         match term:
             case hydra.core.TermFunction(value=function):
-                match function:
-                    case hydra.core.FunctionElimination(value=elimination):
-                        match elimination:
-                            case hydra.core.EliminationUnion(value=cs):
-                                return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : hydra.lib.flows.pure(cs)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("case statement for type ", name.value), hydra.show.core.term(term))))
-                            
-                            case _:
-                                return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
-                    
-                    case _:
-                        return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
+                return _hoist_extract_2(term, function)
             
             case _:
                 return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
@@ -273,14 +277,16 @@ def lambda_(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hyd
     r"""Extract a lambda from a term."""
     
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Lambda]:
+        def _hoist_extract_1(term: hydra.core.Term, v1: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.core.Lambda]:
+            match v1:
+                case hydra.core.FunctionLambda(value=l):
+                    return hydra.lib.flows.pure(l)
+                
+                case _:
+                    return hydra.monads.unexpected("lambda", hydra.show.core.term(term))
         match term:
             case hydra.core.TermFunction(value=function):
-                match function:
-                    case hydra.core.FunctionLambda(value=l):
-                        return hydra.lib.flows.pure(l)
-                    
-                    case _:
-                        return hydra.monads.unexpected("lambda", hydra.show.core.term(term))
+                return _hoist_extract_1(term, function)
             
             case _:
                 return hydra.monads.unexpected("lambda", hydra.show.core.term(term))

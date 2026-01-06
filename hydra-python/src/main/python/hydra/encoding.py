@@ -29,14 +29,54 @@ def encode_binding_name(n: hydra.core.Name) -> hydra.core.Type:
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(hydra.lib.strings.split_on(".", n.value)))), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "encode"), hydra.lib.lists.concat2(hydra.lib.lists.tail(hydra.lib.lists.init(hydra.lib.strings.split_on(".", n.value))), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))), (lambda : hydra.core.Name(hydra.formatting.decapitalize(hydra.names.local_name_of(n)))))
 
 def encode_float_value(float_type: hydra.core.FloatType, val_term: hydra.core.Term) -> hydra.core.Type:
-    r"""Encode a float value based on its float type."""
-    
-    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.dsl.python.unsupported("inline match expressions are not yet supported"), val_term))))
+    def _hoist_hydra_encoding_encode_float_value_1(v1: hydra.core.FloatType) -> hydra.core.Type:
+        match v1:
+            case hydra.core.FloatType.BIGFLOAT:
+                return hydra.core.Name("bigfloat")
+            
+            case hydra.core.FloatType.FLOAT32:
+                return hydra.core.Name("float32")
+            
+            case hydra.core.FloatType.FLOAT64:
+                return hydra.core.Name("float64")
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(_hoist_hydra_encoding_encode_float_value_1(float_type), val_term))))
 
 def encode_integer_value(int_type: hydra.core.IntegerType, val_term: hydra.core.Term) -> hydra.core.Type:
-    r"""Encode an integer value based on its integer type."""
-    
-    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.dsl.python.unsupported("inline match expressions are not yet supported"), val_term))))
+    def _hoist_hydra_encoding_encode_integer_value_1(v1: hydra.core.IntegerType) -> hydra.core.Type:
+        match v1:
+            case hydra.core.IntegerType.BIGINT:
+                return hydra.core.Name("bigint")
+            
+            case hydra.core.IntegerType.INT8:
+                return hydra.core.Name("int8")
+            
+            case hydra.core.IntegerType.INT16:
+                return hydra.core.Name("int16")
+            
+            case hydra.core.IntegerType.INT32:
+                return hydra.core.Name("int32")
+            
+            case hydra.core.IntegerType.INT64:
+                return hydra.core.Name("int64")
+            
+            case hydra.core.IntegerType.UINT8:
+                return hydra.core.Name("uint8")
+            
+            case hydra.core.IntegerType.UINT16:
+                return hydra.core.Name("uint16")
+            
+            case hydra.core.IntegerType.UINT32:
+                return hydra.core.Name("uint32")
+            
+            case hydra.core.IntegerType.UINT64:
+                return hydra.core.Name("uint64")
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(_hoist_hydra_encoding_encode_integer_value_1(int_type), val_term))))
 
 def encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Type:
     r"""Generate an encoder for a literal type."""

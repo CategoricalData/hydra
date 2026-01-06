@@ -481,12 +481,15 @@ def no_interpreted_form(name: Name) -> Flow[Graph, Term]:
 
 
 def prim0(
-        name: Name, value: A, variables: list[str], output: TermCoder[A]
+        name: Name, value: Callable[[], A], variables: list[str], output: TermCoder[A]
 ) -> Primitive:
-    """Create a 0-argument primitive function."""
+    """Create a 0-argument primitive function.
+
+    The value parameter is a callable that returns the constant value.
+    """
 
     def impl(args: frozenlist[Term]) -> Flow[Graph, Term]:
-        return output.coder.decode(value)
+        return output.coder.decode(value())
 
     return Primitive(
         name=name, type=types.poly(variables, output.type), implementation=impl

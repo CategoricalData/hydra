@@ -104,9 +104,7 @@ def extend_type_context_for_lambda(tcontext: hydra.typing.TypeContext, lam: hydr
     r"""Extend a type context by descending into a System F lambda body."""
     
     var = lam.parameter
-    def dom() -> hydra.core.Type:
-        return hydra.lib.maybes.from_just(lam.domain)
-    return hydra.typing.TypeContext(hydra.lib.maps.insert(var, dom(), tcontext.types), hydra.lib.maps.delete(var, tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var, tcontext.lambda_variables), tcontext.inference_context)
+    return hydra.typing.TypeContext(hydra.lib.maybes.maybe(tcontext.types, (lambda dom: hydra.lib.maps.insert(var, dom, tcontext.types)), lam.domain), hydra.lib.maps.delete(var, tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var, tcontext.lambda_variables), tcontext.inference_context)
 
 def type_scheme_to_f_type(ts: hydra.core.TypeScheme) -> hydra.core.Type:
     r"""Convert a type scheme to a forall type."""
@@ -119,7 +117,7 @@ def extend_type_context_for_let(for_binding: Callable[[hydra.typing.TypeContext,
     r"""Extend a type context by descending into a let body."""
     
     bindings = letrec.bindings
-    return hydra.typing.TypeContext(hydra.lib.maps.union(tcontext.types, cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: cast(tuple[hydra.core.Name, hydra.core.Type], (b.name, type_scheme_to_f_type(hydra.lib.maybes.from_just(b.type))))), bindings)))), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings), tcontext.inference_context)
+    return hydra.typing.TypeContext(hydra.lib.maps.union(tcontext.types, cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: cast(tuple[hydra.core.Name, hydra.core.Type], (b.name, type_scheme_to_f_type(ts)))), b.type)), bindings))))), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings), tcontext.inference_context)
 
 def extend_type_context_for_type_lambda(tcontext: hydra.typing.TypeContext, tlam: hydra.core.TypeLambda) -> hydra.core.Type:
     r"""Extend a type context by descending into a System F type lambda body."""
@@ -322,7 +320,21 @@ def module_contains_binary_literals(mod: hydra.module.Module) -> bool:
     r"""Check whether a module contains any binary literal values."""
     
     def check_term(found: bool, term: hydra.core.Term) -> bool:
-        return hydra.lib.logic.or_(found, hydra.dsl.python.unsupported("inline match expressions are not yet supported"))
+        def _hoist_check_term_1(v1: hydra.core.Literal) -> bool:
+            match v1:
+                case hydra.core.LiteralBinary():
+                    return True
+                
+                case _:
+                    return False
+        def _hoist_check_term_2(v1: hydra.core.Term) -> bool:
+            match v1:
+                case hydra.core.TermLiteral(value=lit):
+                    return _hoist_check_term_1(lit)
+                
+                case _:
+                    return False
+        return hydra.lib.logic.or_(found, _hoist_check_term_2(term))
     def term_contains_binary(term: hydra.core.Term) -> bool:
         return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, check_term, False, term)
     return hydra.lib.lists.foldl((lambda acc, el: hydra.lib.logic.or_(acc, term_contains_binary(el.term))), False, mod.elements)
@@ -425,9 +437,14 @@ def require_union_field(tname: hydra.core.Name, fname: hydra.core.Name) -> hydra
     return hydra.lib.flows.bind(require_union_type(tname), cast(Callable[[hydra.core.RowType], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]], (lambda x1: with_row_type(x1))))
 
 def resolve_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
-    r"""Resolve a type, dereferencing type variables."""
-    
-    return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state()), (lambda cx: hydra.dsl.python.unsupported("inline match expressions are not yet supported")))
+    def _hoist_hydra_schemas_resolve_type_1(cx: hydra.graph.Graph, typ: hydra.core.Type, v1: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
+        match v1:
+            case hydra.core.TypeVariable(value=name):
+                return hydra.lexical.with_schema_context(hydra.lib.flows.bind(hydra.lexical.resolve_term(name), (lambda mterm: hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[hydra.core.Type], Maybe[hydra.core.Type]], (lambda x1: hydra.lib.maybes.pure(x1))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, t)))), mterm))))
+            
+            case _:
+                return hydra.lib.flows.pure(cast(Maybe[hydra.core.Type], Just(typ)))
+    return hydra.lib.flows.bind(cast(hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Graph], hydra.monads.get_state()), (lambda cx: _hoist_hydra_schemas_resolve_type_1(cx, typ, hydra.rewriting.deannotate_type(typ))))
 
 def term_as_graph(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
     r"""Find the equivalent graph representation of a term."""

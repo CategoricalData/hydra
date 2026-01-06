@@ -21,6 +21,11 @@ T0 = TypeVar("T0")
 def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
     r"""Apply a type substitution to a type."""
     
+    return hydra.lib.logic.if_else(hydra.lib.maps.null(subst.value), (lambda : typ0), (lambda : subst_in_type_non_empty(subst, typ0)))
+
+def subst_in_type_non_empty(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
+    r"""Apply a non-empty type substitution to a type (internal helper)."""
+    
     def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
         match typ:
             case hydra.core.TypeForall(value=lt):
@@ -35,14 +40,19 @@ def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra
         return hydra.typing.TypeSubst(hydra.lib.maps.delete(v, subst.value))
     return hydra.rewriting.rewrite_type(rewrite, typ0)
 
-def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.core.Type:
-    r"""Compose two type substitutions."""
+def compose_type_subst_non_empty(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.core.Type:
+    r"""Compose two non-empty type substitutions (internal helper)."""
     
     def is_extra(k: hydra.core.Name, v: T0) -> bool:
         return hydra.lib.maybes.is_nothing(hydra.lib.maps.lookup(k, s1.value))
     def with_extra() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return hydra.lib.maps.filter_with_key(cast(Callable[[hydra.core.Name, hydra.core.Type], bool], (lambda x1, x2: is_extra(x1, x2))), s2.value)
     return hydra.typing.TypeSubst(hydra.lib.maps.union(with_extra(), hydra.lib.maps.map((lambda v1: subst_in_type(s2, v1)), s1.value)))
+
+def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.core.Type:
+    r"""Compose two type substitutions."""
+    
+    return hydra.lib.logic.if_else(hydra.lib.maps.null(s1.value), (lambda : s2), (lambda : hydra.lib.logic.if_else(hydra.lib.maps.null(s2.value), (lambda : s1), (lambda : compose_type_subst_non_empty(s1, s2)))))
 
 def id_type_subst() -> hydra.core.Type:
     r"""The identity type substitution."""
@@ -155,14 +165,16 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Type:
                 return hydra.core.Binding(b.name, substitute_in_term(subst2(), b.term), b.type)
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map(rewrite_binding, bindings), substitute_in_term(subst2(), lt.body))))
+        def _hoist_body_1(v1: hydra.core.Function) -> hydra.core.Type:
+            match v1:
+                case hydra.core.FunctionLambda(value=l):
+                    return with_lambda(l)
+                
+                case _:
+                    return recurse(term)
         match term:
             case hydra.core.TermFunction(value=fun):
-                match fun:
-                    case hydra.core.FunctionLambda(value=l):
-                        return with_lambda(l)
-                    
-                    case _:
-                        return recurse(term)
+                return _hoist_body_1(fun)
             
             case hydra.core.TermLet(value=l):
                 return with_let(l)

@@ -58,7 +58,8 @@ def float64(value: float) -> Literal:
 
 def bigfloat(value: float) -> Literal:
     """Construct a bigfloat literal."""
-    return float_(FloatValueBigfloat(Decimal(value)))
+    # Use str(value) to avoid full binary precision conversion
+    return float_(FloatValueBigfloat(Decimal(str(value))))
 
 
 def integer(value: IntegerValue) -> Literal:

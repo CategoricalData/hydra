@@ -104,31 +104,35 @@ def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ada
     r"""Convert function types to union types."""
     
     def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term) -> hydra.core.Type:
+        def _hoist_enc_term_1(term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.core.Type:
+            match v1:
+                case hydra.core.EliminationWrap(value=name):
+                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))
+                
+                case hydra.core.EliminationRecord():
+                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
+                
+                case hydra.core.EliminationUnion():
+                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("union"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        def _hoist_enc_term_2(term: hydra.core.Term, v1: hydra.core.Function) -> hydra.core.Type:
+            match v1:
+                case hydra.core.FunctionElimination(value=e):
+                    return _hoist_enc_term_1(term, e)
+                
+                case hydra.core.FunctionLambda():
+                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("lambda"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
+                
+                case hydra.core.FunctionPrimitive(value=name):
+                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("primitive"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         match stripped_term:
             case hydra.core.TermFunction(value=f):
-                match f:
-                    case hydra.core.FunctionElimination(value=e):
-                        match e:
-                            case hydra.core.EliminationWrap(value=name):
-                                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))
-                            
-                            case hydra.core.EliminationRecord():
-                                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
-                            
-                            case hydra.core.EliminationUnion():
-                                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("union"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
-                            
-                            case _:
-                                raise AssertionError("Unreachable: all variants handled")
-                    
-                    case hydra.core.FunctionLambda():
-                        return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("lambda"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.show.core.term(term)))))))))
-                    
-                    case hydra.core.FunctionPrimitive(value=name):
-                        return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("primitive"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))
-                    
-                    case _:
-                        raise AssertionError("Unreachable: all variants handled")
+                return _hoist_enc_term_2(term, f)
             
             case hydra.core.TermVariable(value=name):
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("variable"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 from typing import cast
+from decimal import Decimal
 from hydra.dsl.python import FrozenDict, frozenlist, Either, Left, Right, Maybe, Just, Nothing
 import hydra.accessors
 import hydra.annotations
@@ -114,27 +115,27 @@ def test_arbitrary_annotations__unset_one_of_multiple_annotations__2():
 def test_descriptions__set_description__1():
 
     assert (hydra.annotations.set_term_description(Just("my description"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("foo")))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("foo")))), FrozenDict({
-  hydra.constants.key_description: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("my description"))))})))))
+  hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("my description"))))})))))
 
 def test_descriptions__set_description__2():
 
     assert (hydra.annotations.set_term_description(Just(""), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
-  hydra.constants.key_description: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(""))))})))))
+  hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(""))))})))))
 
 def test_descriptions__set_description__3():
 
     assert (hydra.annotations.set_term_description(Just("A longer description with spaces"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), FrozenDict({
-  hydra.constants.key_description: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("A longer description with spaces"))))})))))
+  hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("A longer description with spaces"))))})))))
 
 def test_descriptions__outer_description_overrides_inner__1():
 
     assert (hydra.annotations.set_term_description(Just("outer"), hydra.annotations.set_term_description(Just("inner"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("bar"))))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("bar")))), FrozenDict({
-  hydra.constants.key_description: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("outer"))))})))))
+  hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("outer"))))})))))
 
 def test_descriptions__outer_description_overrides_inner__2():
 
     assert (hydra.annotations.set_term_description(Just("new"), hydra.annotations.set_term_description(Just("old"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99))))))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99)))))), FrozenDict({
-  hydra.constants.key_description: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("new"))))})))))
+  hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("new"))))})))))
 
 def test_descriptions__unset_description__1():
 

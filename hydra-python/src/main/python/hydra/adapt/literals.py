@@ -38,30 +38,32 @@ T8 = TypeVar("T8")
 T9 = TypeVar("T9")
 
 def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.core.Type:
-    r"""Compare two precision values."""
-    
+    def _hoist_hydra_adapt_literals_compare_precision_1(v1: hydra.util.Precision) -> hydra.core.Type:
+        match v1:
+            case hydra.util.PrecisionArbitrary():
+                return hydra.util.Comparison.EQUAL_TO
+            
+            case hydra.util.PrecisionBits():
+                return hydra.util.Comparison.GREATER_THAN
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def _hoist_hydra_adapt_literals_compare_precision_2(b1: int, v1: hydra.util.Precision) -> hydra.core.Type:
+        match v1:
+            case hydra.util.PrecisionArbitrary():
+                return hydra.util.Comparison.LESS_THAN
+            
+            case hydra.util.PrecisionBits(value=b2):
+                return hydra.lib.logic.if_else(hydra.lib.equality.lt(b1, b2), (lambda : hydra.util.Comparison.LESS_THAN), (lambda : hydra.util.Comparison.GREATER_THAN))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     match p1:
         case hydra.util.PrecisionArbitrary():
-            match p2:
-                case hydra.util.PrecisionArbitrary():
-                    return hydra.util.Comparison.EQUAL_TO
-                
-                case hydra.util.PrecisionBits():
-                    return hydra.util.Comparison.GREATER_THAN
-                
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
+            return _hoist_hydra_adapt_literals_compare_precision_1(p2)
         
         case hydra.util.PrecisionBits(value=b1):
-            match p2:
-                case hydra.util.PrecisionArbitrary():
-                    return hydra.util.Comparison.LESS_THAN
-                
-                case hydra.util.PrecisionBits(value=b2):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.lt(b1, b2), (lambda : hydra.util.Comparison.LESS_THAN), (lambda : hydra.util.Comparison.GREATER_THAN))
-                
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
+            return _hoist_hydra_adapt_literals_compare_precision_2(b1, p2)
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

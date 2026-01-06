@@ -78,6 +78,29 @@ def fold_over_term_test_case(x: hydra.testing.FoldOverTermTestCase) -> hydra.cor
 def free_variables_test_case(x: hydra.testing.FreeVariablesTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.FreeVariablesTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), (lambda s: cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map(hydra.encode.core.name, s))))(x.output))))))
 
+def hoist_case_statements_test_case(x: hydra.testing.HoistCaseStatementsTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
+
+def hoist_predicate(v1: hydra.testing.HoistPredicate) -> hydra.core.Type:
+    match v1:
+        case hydra.testing.HoistPredicate.CASE_STATEMENTS:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.HoistPredicate"), hydra.core.Field(hydra.core.Name("caseStatements"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+        
+        case hydra.testing.HoistPredicate.APPLICATIONS:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.HoistPredicate"), hydra.core.Field(hydra.core.Name("applications"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+        
+        case hydra.testing.HoistPredicate.LISTS:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.HoistPredicate"), hydra.core.Field(hydra.core.Name("lists"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+        
+        case hydra.testing.HoistPredicate.NOTHING:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.HoistPredicate"), hydra.core.Field(hydra.core.Name("nothing"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
+
+def hoist_subterms_test_case(x: hydra.testing.HoistSubtermsTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.HoistSubtermsTestCase"), (hydra.core.Field(hydra.core.Name("predicate"), hoist_predicate(x.predicate)), hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
+
 def inference_failure_test_case(x: hydra.testing.InferenceFailureTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.InferenceFailureTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)),))))
 
@@ -87,11 +110,20 @@ def inference_test_case(x: hydra.testing.InferenceTestCase) -> hydra.core.Type:
 def json_coder_test_case(x: hydra.testing.JsonCoderTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonCoderTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.value(x.json))))))
 
+def json_decode_test_case(x: hydra.testing.JsonDecodeTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonDecodeTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.value(x.json)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.core.term, e))))(x.expected))))))
+
+def json_encode_test_case(x: hydra.testing.JsonEncodeTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonEncodeTestCase"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.json.value, e))))(x.expected))))))
+
 def parser_test_case(a: Callable[[T0], hydra.core.Term], x: hydra.testing.ParserTestCase[T0]) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ParserTestCase"), (hydra.core.Field(hydra.core.Name("input"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.parsing.parse_result(a, x.output))))))
 
 def json_parser_test_case(v1: hydra.testing.ParserTestCase[hydra.json.Value]) -> hydra.core.Type:
     return parser_test_case(hydra.encode.json.value, v1)
+
+def json_roundtrip_test_case(x: hydra.testing.JsonRoundtripTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonRoundtripTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term))))))
 
 def writer_test_case(a: Callable[[T0], hydra.core.Term], x: hydra.testing.WriterTestCase[T0]) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.WriterTestCase"), (hydra.core.Field(hydra.core.Name("input"), a(x.input)), hydra.core.Field(hydra.core.Name("output"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.output))))))
@@ -195,53 +227,68 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Type:
         case hydra.testing.TestCaseJsonCoder(value=v12):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonCoder"), json_coder_test_case(v12)))))
         
-        case hydra.testing.TestCaseJsonParser(value=v13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonParser"), json_parser_test_case(v13)))))
+        case hydra.testing.TestCaseJsonDecode(value=v13):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonDecode"), json_decode_test_case(v13)))))
         
-        case hydra.testing.TestCaseJsonWriter(value=v14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonWriter"), json_writer_test_case(v14)))))
+        case hydra.testing.TestCaseJsonEncode(value=v14):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonEncode"), json_encode_test_case(v14)))))
         
-        case hydra.testing.TestCaseLiftLambdaAboveLet(value=v15):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("liftLambdaAboveLet"), lift_lambda_above_let_test_case(v15)))))
+        case hydra.testing.TestCaseJsonParser(value=v15):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonParser"), json_parser_test_case(v15)))))
         
-        case hydra.testing.TestCaseSerialization(value=v16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("serialization"), serialization_test_case(v16)))))
+        case hydra.testing.TestCaseJsonRoundtrip(value=v16):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonRoundtrip"), json_roundtrip_test_case(v16)))))
         
-        case hydra.testing.TestCaseSimplifyTerm(value=v17):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("simplifyTerm"), simplify_term_test_case(v17)))))
+        case hydra.testing.TestCaseJsonWriter(value=v17):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("jsonWriter"), json_writer_test_case(v17)))))
         
-        case hydra.testing.TestCaseTopologicalSort(value=v18):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSort"), topological_sort_test_case(v18)))))
+        case hydra.testing.TestCaseLiftLambdaAboveLet(value=v18):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("liftLambdaAboveLet"), lift_lambda_above_let_test_case(v18)))))
         
-        case hydra.testing.TestCaseTopologicalSortBindings(value=v19):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSortBindings"), topological_sort_bindings_test_case(v19)))))
+        case hydra.testing.TestCaseSerialization(value=v19):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("serialization"), serialization_test_case(v19)))))
         
-        case hydra.testing.TestCaseTopologicalSortSCC(value=v20):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSortSCC"), topological_sort_s_c_c_test_case(v20)))))
+        case hydra.testing.TestCaseSimplifyTerm(value=v20):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("simplifyTerm"), simplify_term_test_case(v20)))))
         
-        case hydra.testing.TestCaseTypeChecking(value=v21):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeChecking"), type_checking_test_case(v21)))))
+        case hydra.testing.TestCaseTopologicalSort(value=v21):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSort"), topological_sort_test_case(v21)))))
         
-        case hydra.testing.TestCaseTypeCheckingFailure(value=v22):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeCheckingFailure"), type_checking_failure_test_case(v22)))))
+        case hydra.testing.TestCaseTopologicalSortBindings(value=v22):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSortBindings"), topological_sort_bindings_test_case(v22)))))
         
-        case hydra.testing.TestCaseTypeReduction(value=v23):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeReduction"), type_reduction_test_case(v23)))))
+        case hydra.testing.TestCaseTopologicalSortSCC(value=v23):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("topologicalSortSCC"), topological_sort_s_c_c_test_case(v23)))))
         
-        case hydra.testing.TestCaseNormalizeTypeVariables(value=v24):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("normalizeTypeVariables"), normalize_type_variables_test_case(v24)))))
+        case hydra.testing.TestCaseTypeChecking(value=v24):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeChecking"), type_checking_test_case(v24)))))
         
-        case hydra.testing.TestCaseFoldOverTerm(value=v25):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("foldOverTerm"), fold_over_term_test_case(v25)))))
+        case hydra.testing.TestCaseTypeCheckingFailure(value=v25):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeCheckingFailure"), type_checking_failure_test_case(v25)))))
         
-        case hydra.testing.TestCaseRewriteTerm(value=v26):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("rewriteTerm"), rewrite_term_test_case(v26)))))
+        case hydra.testing.TestCaseTypeReduction(value=v26):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("typeReduction"), type_reduction_test_case(v26)))))
         
-        case hydra.testing.TestCaseRewriteType(value=v27):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("rewriteType"), rewrite_type_test_case(v27)))))
+        case hydra.testing.TestCaseNormalizeTypeVariables(value=v27):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("normalizeTypeVariables"), normalize_type_variables_test_case(v27)))))
+        
+        case hydra.testing.TestCaseFoldOverTerm(value=v28):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("foldOverTerm"), fold_over_term_test_case(v28)))))
+        
+        case hydra.testing.TestCaseRewriteTerm(value=v29):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("rewriteTerm"), rewrite_term_test_case(v29)))))
+        
+        case hydra.testing.TestCaseRewriteType(value=v30):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("rewriteType"), rewrite_type_test_case(v30)))))
+        
+        case hydra.testing.TestCaseHoistSubterms(value=v31):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistSubterms"), hoist_subterms_test_case(v31)))))
+        
+        case hydra.testing.TestCaseHoistCaseStatements(value=v32):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistCaseStatements"), hoist_case_statements_test_case(v32)))))
         
         case _:
-            raise TypeError("Unsupported TestCase")
+            raise AssertionError("Unreachable: all variants handled")
 
 def test_case_with_metadata(x: hydra.testing.TestCaseWithMetadata) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.TestCaseWithMetadata"), (hydra.core.Field(hydra.core.Name("name"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.name)), hydra.core.Field(hydra.core.Name("case"), test_case(x.case)), hydra.core.Field(hydra.core.Name("description"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), opt))))(x.description)), hydra.core.Field(hydra.core.Name("tags"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(tag, xs))))(x.tags))))))

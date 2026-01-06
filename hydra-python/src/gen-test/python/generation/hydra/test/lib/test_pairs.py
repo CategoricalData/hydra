@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 from typing import cast
+from decimal import Decimal
 from hydra.dsl.python import FrozenDict, frozenlist, Either, Left, Right, Maybe, Just, Nothing
 import hydra.accessors
 import hydra.annotations
@@ -46,6 +47,16 @@ import hydra.testing
 import hydra.topology
 import hydra.typing
 import hydra.util
+
+# bimap
+
+def test_bimap__transform_both_elements():
+
+    assert (hydra.lib.pairs.bimap((lambda x: hydra.lib.math.mul(x, 2)), (lambda s: hydra.lib.strings.length(s)), (5, "ab"))) == ((10, 2))
+
+def test_bimap__with_zero():
+
+    assert (hydra.lib.pairs.bimap((lambda x: hydra.lib.math.mul(x, 2)), (lambda s: hydra.lib.strings.length(s)), (0, "hello"))) == ((0, 5))
 
 # first
 

@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Callable
 from typing import TypeVar
-from hydra.dsl.python import Either, Left, Right, frozenlist
+from hydra.dsl.python import Either, Left, Right, Maybe, Just, NOTHING, frozenlist
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -140,3 +140,16 @@ def partition_eithers(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A],
             case Right(val):
                 right_vals.append(val)
     return (tuple(left_vals), tuple(right_vals))
+
+
+def map_maybe(f: Callable[[A], Either[C, B]], mx: Maybe[A]) -> Either[C, Maybe[B]]:
+    """Map a function returning Either over a Maybe, or return Right(Nothing) if Nothing."""
+    match mx:
+        case Just(val):
+            match f(val):
+                case Left(err):
+                    return Left(err)
+                case Right(result):
+                    return Right(Just(result))
+        case _:
+            return Right(NOTHING)
