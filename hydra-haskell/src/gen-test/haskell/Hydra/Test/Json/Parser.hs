@@ -7,7 +7,7 @@ module Hydra.Test.Json.Parser where
 import qualified Hydra.Json as Json
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Testing as Testing
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L

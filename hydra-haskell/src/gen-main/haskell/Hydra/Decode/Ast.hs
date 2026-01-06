@@ -6,15 +6,15 @@ module Hydra.Decode.Ast where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Core as Core
+import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -29,18 +29,10 @@ associativity cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
-                (Core.Name "none", (\input -> Eithers.map (\t -> Ast.AssociativityNone) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "left", (\input -> Eithers.map (\t -> Ast.AssociativityLeft) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "right", (\input -> Eithers.map (\t -> Ast.AssociativityRight) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "both", (\input -> Eithers.map (\t -> Ast.AssociativityBoth) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
+                (Core.Name "none", (\input -> Eithers.map (\t -> Ast.AssociativityNone) (Helpers.decodeUnit cx input))),
+                (Core.Name "left", (\input -> Eithers.map (\t -> Ast.AssociativityLeft) (Helpers.decodeUnit cx input))),
+                (Core.Name "right", (\input -> Eithers.map (\t -> Ast.AssociativityRight) (Helpers.decodeUnit cx input))),
+                (Core.Name "both", (\input -> Eithers.map (\t -> Ast.AssociativityBoth) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
       Core.unName fname,
@@ -51,68 +43,42 @@ associativity cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (
 blockStyle :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.BlockStyle)
 blockStyle cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_indent -> Eithers.either (\err -> Left err) (\field_newlineBeforeContent -> Eithers.either (\err -> Left err) (\field_newlineAfterContent -> Right (Ast.BlockStyle {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "indent" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermLiteral v2 -> ((\x -> case x of
+        Core.LiteralString v3 -> (Right v3)
+        _ -> (Left (Util.DecodingError "expected string literal"))) v2)
+      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_indent -> Eithers.bind (Helpers.requireField "newlineBeforeContent" (\cx -> \raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermLiteral v2 -> ((\x -> case x of
+        Core.LiteralBoolean v3 -> (Right v3)
+        _ -> (Left (Util.DecodingError "expected boolean literal"))) v2)
+      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_newlineBeforeContent -> Eithers.bind (Helpers.requireField "newlineAfterContent" (\cx -> \raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+      Core.TermLiteral v2 -> ((\x -> case x of
+        Core.LiteralBoolean v3 -> (Right v3)
+        _ -> (Left (Util.DecodingError "expected boolean literal"))) v2)
+      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_newlineAfterContent -> Right (Ast.BlockStyle {
       Ast.blockStyleIndent = field_indent,
       Ast.blockStyleNewlineBeforeContent = field_newlineBeforeContent,
-      Ast.blockStyleNewlineAfterContent = field_newlineAfterContent})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "newlineAfterContent",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralBoolean v3 -> (Right v3)
-        _ -> (Left (Util.DecodingError "expected boolean literal"))) v2)
-      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "newlineAfterContent") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "newlineBeforeContent",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralBoolean v3 -> (Right v3)
-        _ -> (Left (Util.DecodingError "expected boolean literal"))) v2)
-      _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "newlineBeforeContent") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "indent",
-      " in record"]))) (\fieldTerm -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermMaybe v2 -> (Eithers.mapMaybe (\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-        Core.TermLiteral v3 -> ((\x -> case x of
-          Core.LiteralString v4 -> (Right v4)
-          _ -> (Left (Util.DecodingError "expected string literal"))) v3)
-        _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) v2)
-      _ -> (Left (Util.DecodingError "expected optional value"))) stripped) (Lexical.stripAndDereferenceTermEither cx fieldTerm)) (Maps.lookup (Core.Name "indent") fieldMap)))
+      Ast.blockStyleNewlineAfterContent = field_newlineAfterContent})))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.BlockStyle"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 bracketExpr :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.BracketExpr)
 bracketExpr cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_brackets -> Eithers.either (\err -> Left err) (\field_enclosed -> Eithers.either (\err -> Left err) (\field_style -> Right (Ast.BracketExpr {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "brackets" brackets fieldMap cx) (\field_brackets -> Eithers.bind (Helpers.requireField "enclosed" expr fieldMap cx) (\field_enclosed -> Eithers.bind (Helpers.requireField "style" blockStyle fieldMap cx) (\field_style -> Right (Ast.BracketExpr {
       Ast.bracketExprBrackets = field_brackets,
       Ast.bracketExprEnclosed = field_enclosed,
-      Ast.bracketExprStyle = field_style})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "style",
-      " in record"]))) (\fieldTerm -> blockStyle cx fieldTerm) (Maps.lookup (Core.Name "style") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "enclosed",
-      " in record"]))) (\fieldTerm -> expr cx fieldTerm) (Maps.lookup (Core.Name "enclosed") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "brackets",
-      " in record"]))) (\fieldTerm -> brackets cx fieldTerm) (Maps.lookup (Core.Name "brackets") fieldMap)))
+      Ast.bracketExprStyle = field_style})))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.BracketExpr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 brackets :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.Brackets)
 brackets cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_open -> Eithers.either (\err -> Left err) (\field_close -> Right (Ast.Brackets {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "open" symbol fieldMap cx) (\field_open -> Eithers.bind (Helpers.requireField "close" symbol fieldMap cx) (\field_close -> Right (Ast.Brackets {
       Ast.bracketsOpen = field_open,
-      Ast.bracketsClose = field_close})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "close",
-      " in record"]))) (\fieldTerm -> symbol cx fieldTerm) (Maps.lookup (Core.Name "close") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "open",
-      " in record"]))) (\fieldTerm -> symbol cx fieldTerm) (Maps.lookup (Core.Name "open") fieldMap)))
+      Ast.bracketsClose = field_close}))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.Brackets"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 expr :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.Expr)
@@ -137,16 +103,10 @@ expr cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
 indentedExpression :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.IndentedExpression)
 indentedExpression cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_style -> Eithers.either (\err -> Left err) (\field_expr -> Right (Ast.IndentedExpression {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
       Ast.indentedExpressionStyle = field_style,
-      Ast.indentedExpressionExpr = field_expr})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "expr",
-      " in record"]))) (\fieldTerm -> expr cx fieldTerm) (Maps.lookup (Core.Name "expr") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "style",
-      " in record"]))) (\fieldTerm -> indentStyle cx fieldTerm) (Maps.lookup (Core.Name "style") fieldMap)))
+      Ast.indentedExpressionExpr = field_expr}))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.IndentedExpression"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 indentStyle :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.IndentStyle)
@@ -177,58 +137,31 @@ indentStyle cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
 op :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.Op)
 op cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_symbol -> Eithers.either (\err -> Left err) (\field_padding -> Eithers.either (\err -> Left err) (\field_precedence -> Eithers.either (\err -> Left err) (\field_associativity -> Right (Ast.Op {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "padding" padding fieldMap cx) (\field_padding -> Eithers.bind (Helpers.requireField "precedence" precedence fieldMap cx) (\field_precedence -> Eithers.bind (Helpers.requireField "associativity" associativity fieldMap cx) (\field_associativity -> Right (Ast.Op {
       Ast.opSymbol = field_symbol,
       Ast.opPadding = field_padding,
       Ast.opPrecedence = field_precedence,
-      Ast.opAssociativity = field_associativity})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "associativity",
-      " in record"]))) (\fieldTerm -> associativity cx fieldTerm) (Maps.lookup (Core.Name "associativity") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "precedence",
-      " in record"]))) (\fieldTerm -> precedence cx fieldTerm) (Maps.lookup (Core.Name "precedence") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "padding",
-      " in record"]))) (\fieldTerm -> padding cx fieldTerm) (Maps.lookup (Core.Name "padding") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "symbol",
-      " in record"]))) (\fieldTerm -> symbol cx fieldTerm) (Maps.lookup (Core.Name "symbol") fieldMap)))
+      Ast.opAssociativity = field_associativity}))))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.Op"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 opExpr :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.OpExpr)
 opExpr cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_op -> Eithers.either (\err -> Left err) (\field_lhs -> Eithers.either (\err -> Left err) (\field_rhs -> Right (Ast.OpExpr {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Helpers.requireField "lhs" expr fieldMap cx) (\field_lhs -> Eithers.bind (Helpers.requireField "rhs" expr fieldMap cx) (\field_rhs -> Right (Ast.OpExpr {
       Ast.opExprOp = field_op,
       Ast.opExprLhs = field_lhs,
-      Ast.opExprRhs = field_rhs})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "rhs",
-      " in record"]))) (\fieldTerm -> expr cx fieldTerm) (Maps.lookup (Core.Name "rhs") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "lhs",
-      " in record"]))) (\fieldTerm -> expr cx fieldTerm) (Maps.lookup (Core.Name "lhs") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "op",
-      " in record"]))) (\fieldTerm -> op cx fieldTerm) (Maps.lookup (Core.Name "op") fieldMap)))
+      Ast.opExprRhs = field_rhs})))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.OpExpr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 padding :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.Padding)
 padding cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
-    let fieldMap = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields v1)))
-    in (Eithers.either (\err -> Left err) (\field_left -> Eithers.either (\err -> Left err) (\field_right -> Right (Ast.Padding {
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "left" ws fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" ws fieldMap cx) (\field_right -> Right (Ast.Padding {
       Ast.paddingLeft = field_left,
-      Ast.paddingRight = field_right})) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "right",
-      " in record"]))) (\fieldTerm -> ws cx fieldTerm) (Maps.lookup (Core.Name "right") fieldMap))) (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
-      "missing field ",
-      "left",
-      " in record"]))) (\fieldTerm -> ws cx fieldTerm) (Maps.lookup (Core.Name "left") fieldMap)))
+      Ast.paddingRight = field_right}))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.ast.Padding"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 precedence :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Ast.Precedence)
@@ -259,23 +192,15 @@ ws cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
-                (Core.Name "none", (\input -> Eithers.map (\t -> Ast.WsNone) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "space", (\input -> Eithers.map (\t -> Ast.WsSpace) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "break", (\input -> Eithers.map (\t -> Ast.WsBreak) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
+                (Core.Name "none", (\input -> Eithers.map (\t -> Ast.WsNone) (Helpers.decodeUnit cx input))),
+                (Core.Name "space", (\input -> Eithers.map (\t -> Ast.WsSpace) (Helpers.decodeUnit cx input))),
+                (Core.Name "break", (\input -> Eithers.map (\t -> Ast.WsBreak) (Helpers.decodeUnit cx input))),
                 (Core.Name "breakAndIndent", (\input -> Eithers.map (\t -> Ast.WsBreakAndIndent t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
                   Core.TermLiteral v2 -> ((\x -> case x of
                     Core.LiteralString v3 -> (Right v3)
                     _ -> (Left (Util.DecodingError "expected string literal"))) v2)
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermUnit -> (Right ())
-                  _ -> (Left (Util.DecodingError "expected a unit value"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
+                (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
       Core.unName fname,

@@ -6,7 +6,7 @@ module Hydra.Sources.Decode.Classes where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
@@ -107,44 +107,7 @@ module_ = Module.Module {
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "cx"),
-                                              Core.lambdaDomain = Nothing,
-                                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                Core.lambdaParameter = (Core.Name "raw"),
-                                                Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                                                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                        Core.lambdaParameter = (Core.Name "err"),
-                                                        Core.lambdaDomain = Nothing,
-                                                        Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                                          Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-                                                          Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
-                                                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                      Core.lambdaParameter = (Core.Name "stripped"),
-                                                      Core.lambdaDomain = Nothing,
-                                                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                                                          Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
-                                                          Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                                            Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-                                                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a unit value"))}))))),
-                                                          Core.caseStatementCases = [
-                                                            Core.Field {
-                                                              Core.fieldName = (Core.Name "unit"),
-                                                              Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                                Core.lambdaParameter = (Core.Name "_"),
-                                                                Core.lambdaDomain = Nothing,
-                                                                Core.lambdaBody = (Core.TermEither (Right Core.TermUnit))})))}]})))),
-                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
-                                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
-                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                                    Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -165,44 +128,7 @@ module_ = Module.Module {
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                              Core.lambdaParameter = (Core.Name "cx"),
-                                              Core.lambdaDomain = Nothing,
-                                              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                Core.lambdaParameter = (Core.Name "raw"),
-                                                Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                                                      Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                        Core.lambdaParameter = (Core.Name "err"),
-                                                        Core.lambdaDomain = Nothing,
-                                                        Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                                          Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-                                                          Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
-                                                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                      Core.lambdaParameter = (Core.Name "stripped"),
-                                                      Core.lambdaDomain = Nothing,
-                                                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                                                          Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
-                                                          Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                                            Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-                                                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected a unit value"))}))))),
-                                                          Core.caseStatementCases = [
-                                                            Core.Field {
-                                                              Core.fieldName = (Core.Name "unit"),
-                                                              Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                                Core.lambdaParameter = (Core.Name "_"),
-                                                                Core.lambdaDomain = Nothing,
-                                                                Core.lambdaBody = (Core.TermEither (Right Core.TermUnit))})))}]})))),
-                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
-                                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
-                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                                    Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))))])})),
                                 Core.bindingType = Nothing}],
@@ -251,6 +177,7 @@ module_ = Module.Module {
               Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.classes.TypeClass"))}))}))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
+    Module.Namespace "hydra.extract.helpers",
     Module.Namespace "hydra.lexical",
     Module.Namespace "hydra.rewriting",
     (Module.Namespace "hydra.decode.core")],

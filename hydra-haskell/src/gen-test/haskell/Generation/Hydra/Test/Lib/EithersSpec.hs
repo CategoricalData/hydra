@@ -3,6 +3,7 @@
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.eithers"},ModuleName {unModuleName = "Eithers"})
 -- DEBUG: Namespace mappings:
 -- [(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.logic"},ModuleName {unModuleName = "Logic"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
+-- [(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.lib.logic"},ModuleName {unModuleName = "Logic"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
 
 module Generation.Hydra.Test.Lib.EithersSpec where
 
@@ -13,6 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
@@ -32,10 +34,10 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
   H.describe "bimap" $ do
     H.it "map left value" $ H.shouldBe
       (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Left 5))
-      (Left 10)
+      (Left 10 :: Either Int Int)
     H.it "map right value" $ H.shouldBe
       (Eithers.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (Right "ab"))
-      (Right 2)
+      (Right 2 :: Either Int Int)
   H.describe "isLeft" $ do
     H.it "left value" $ H.shouldBe
       (Eithers.isLeft (Left 42))
@@ -150,3 +152,39 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
     H.it "empty list" $ H.shouldBe
       (Eithers.partitionEithers [])
       (([], []) :: ([Int], [Int]))
+  H.describe "map" $ do
+    H.it "map right value" $ H.shouldBe
+      (Eithers.map (\x -> Math.mul x 2) (Right 5))
+      (Right 10 :: Either Int Int)
+    H.it "preserve left" $ H.shouldBe
+      (Eithers.map (\x -> Math.mul x 2) (Left 99))
+      (Left 99 :: Either Int Int)
+  H.describe "mapList" $ do
+    H.it "all succeed" $ H.shouldBe
+      (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [
+          1,
+          2,
+          3])
+      (Right [
+          2,
+          4,
+          6] :: Either String [Int])
+    H.it "first fails" $ H.shouldBe
+      (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [
+          1,
+          0,
+          3])
+      (Left "zero" :: Either String [Int])
+    H.it "empty list" $ H.shouldBe
+      (Eithers.mapList (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) [])
+      (Right [] :: Either String [Int])
+  H.describe "mapMaybe" $ do
+    H.it "just succeeds" $ H.shouldBe
+      (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 5))
+      (Right (Just 10) :: Either String (Maybe Int))
+    H.it "just fails" $ H.shouldBe
+      (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) (Just 0))
+      (Left "zero" :: Either String (Maybe Int))
+    H.it "nothing" $ H.shouldBe
+      (Eithers.mapMaybe (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) Nothing)
+      (Right Nothing :: Either String (Maybe Int))

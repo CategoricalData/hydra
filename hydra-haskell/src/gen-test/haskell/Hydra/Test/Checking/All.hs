@@ -11,7 +11,7 @@ import qualified Hydra.Test.Checking.Failures as Failures
 import qualified Hydra.Test.Checking.Fundamentals as Fundamentals
 import qualified Hydra.Test.Checking.NominalTypes as NominalTypes
 import qualified Hydra.Testing as Testing
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
