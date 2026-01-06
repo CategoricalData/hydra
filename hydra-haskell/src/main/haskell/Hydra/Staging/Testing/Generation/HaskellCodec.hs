@@ -182,7 +182,7 @@ generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadat
 generateTypeAnnotationFor :: InferenceContext -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
 generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
   -- Only consider annotation if output has no concrete values to guide inference
-  if not (containsTriviallyPolymorphic outputTerm)
+  if not needsAnnotation
     then return Nothing
     else do
       -- Infer the type of the input expression (which gives us the result/output type)
@@ -193,9 +193,10 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
           freeVars = S.toList $ S.difference
             (Rewriting.freeVariablesInType typ)
             schemaVars
-      if null freeVars
-        then return Nothing  -- No free variables, no annotation needed
-        else do
+      -- Either types ALWAYS need annotations (one branch is always unconstrained),
+      -- while other polymorphic types only need annotations if they have free variables.
+      if isEitherTerm outputTerm || not (null freeVars)
+        then do
           -- Replace free type variables with Int32
           let int32Type = TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
               subst = Typing.TypeSubst $ M.fromList [(v, int32Type) | v <- freeVars]
@@ -203,8 +204,12 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
           -- Encode the type as Haskell
           typeStr <- typeToHaskell namespaces groundedType
           return $ Just (" :: " ++ typeStr)
+        else return Nothing
   where
     schemaVars = S.fromList $ M.keys $ inferenceContextSchemaTypes infContext
+    needsAnnotation = containsTriviallyPolymorphic outputTerm
+    isEitherTerm (TermEither _) = True
+    isEitherTerm _ = False
 
 -- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
 -- This recursively searches through the term structure to find any parts that would
@@ -217,8 +222,9 @@ containsTriviallyPolymorphic term = case term of
   TermMap m -> M.null m || any containsTriviallyPolymorphic (M.keys m) || any containsTriviallyPolymorphic (M.elems m)
   TermMaybe Nothing -> True  -- Nothing value
   TermMaybe (Just x) -> containsTriviallyPolymorphic x  -- Check content
-  TermEither (Left l) -> containsTriviallyPolymorphic l
-  TermEither (Right r) -> containsTriviallyPolymorphic r
+  -- Either values ALWAYS need type annotations because one branch is unconstrained.
+  -- Even `Right 5` needs an annotation because the Left type is ambiguous.
+  TermEither _ -> True
   TermUnion inj -> containsTriviallyPolymorphic (fieldTerm $ injectionField inj)
   TermPair (a, b) -> containsTriviallyPolymorphic a || containsTriviallyPolymorphic b
   TermRecord fields -> any (containsTriviallyPolymorphic . fieldTerm) (recordFields fields)
