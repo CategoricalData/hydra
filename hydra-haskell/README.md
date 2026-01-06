@@ -63,8 +63,10 @@ brew install haskell-stack
 Then build and enter the GHCi REPL:
 
 ```bash
-stack ghci
+stack ghci hydra:lib
 ```
+
+Note: The `hydra:lib` target is required to avoid loading test modules. Running `stack ghci` without a target will load all components including test dependencies, which you may not need.
 
 ## Test
 
@@ -309,7 +311,7 @@ Complete self-hosting cycle:
 
 ```bash
 # Generate all kernel code
-stack ghci
+stack ghci hydra:lib
 import Hydra.Sources.All
 import Hydra.Generation
 writeHaskell "src/gen-main/haskell" mainModules mainModules
@@ -328,7 +330,7 @@ stack test
 Alternatively, use GHCi for all generation steps:
 
 ```bash
-stack ghci
+stack ghci hydra:lib
 import Hydra.Sources.All
 import Hydra.Generation
 writeHaskell "src/gen-main/haskell" mainModules mainModules
