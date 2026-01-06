@@ -134,7 +134,7 @@ map_ = define "map" $
     (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
       produce $ Eithers.either_
-        ("val" ~> Core.termEither $ left $ Core.termEither $ left $ var "val")
+        ("val" ~> Core.termEither $ left $ var "val")
         ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
 
@@ -146,8 +146,8 @@ mapList_ = define "mapList" $
   doc "Interpreter-friendly mapList for Either (traverse)." $
   "funTerm" ~> "listTerm" ~>
   "elements" <<~ ExtractCore.list @@ var "listTerm" $
-  -- Fold over elements from right to left, building up Either [results]
-  -- foldr (\x acc -> bind (f x) (\y -> map (cons y) acc)) (Right []) xs
+  -- Fold over reversed elements so that cons builds list in original order
+  -- foldl (\acc el -> bind (f el) (\y -> map (cons y) acc)) (Right []) (reverse xs)
   produce $ Lists.foldl
     -- Accumulator function: acc -> el -> Either err [results]
     ("acc" ~> "el" ~>
@@ -181,7 +181,8 @@ mapList_ = define "mapList" $
         (Core.termApplication $ Core.application (var "funTerm") (var "el")))
     -- Initial accumulator: Right []
     (Core.termEither $ right $ Core.termList $ list ([] :: [TTerm Term]))
-    (var "elements")
+    -- Reverse elements so foldl with cons builds list in original order
+    (Lists.reverse $ var "elements")
 
 -- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
 -- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
