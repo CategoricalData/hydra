@@ -11,6 +11,15 @@ C = TypeVar("C")
 D = TypeVar("D")
 
 
+def bind(e: Either[A, B], f: Callable[[B], Either[A, C]]) -> Either[A, C]:
+    """Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged."""
+    match e:
+        case Left(val):
+            return Left(val)
+        case Right(val):
+            return f(val)
+
+
 def bimap(f: Callable[[A], C], g: Callable[[B], D], e: Either[A, B]) -> Either[C, D]:
     """Map over both sides of an Either value."""
     match e:

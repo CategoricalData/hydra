@@ -7,6 +7,9 @@ import qualified Data.Bifunctor as BF
 import qualified Data.Either as E
 
 
+bind :: Either a b -> (b -> Either a c) -> Either a c
+bind = (>>=)
+
 bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
 bimap = BF.bimap
 

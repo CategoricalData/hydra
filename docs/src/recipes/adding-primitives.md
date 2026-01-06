@@ -276,6 +276,12 @@ private static List<PrimitiveFunction> charsPrimitives() {
 }
 ```
 
+**Important:** Before adding a new primitive, verify that:
+1. The library's primitives method exists (e.g., `charsPrimitives()`)
+2. The library is included in `standardPrimitives()`
+
+If the library's primitives method doesn't exist, you'll need to create it and add it to `standardPrimitives()`.
+
 
 ## Adding a primitive to Python
 

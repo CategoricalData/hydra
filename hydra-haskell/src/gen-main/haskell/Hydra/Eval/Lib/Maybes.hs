@@ -23,9 +23,9 @@ import qualified Data.Set as S
 apply :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 apply funOptTerm argOptTerm = ((\x -> case x of
   Core.TermMaybe v1 -> ((\x -> case x of
-    Core.TermMaybe v2 -> (Flows.pure (Core.TermMaybe (Maybes.apply (Maybes.map (\f -> \x -> Core.TermApplication (Core.Application {
+    Core.TermMaybe v2 -> (Flows.pure (Core.TermMaybe (Maybes.bind v1 (\f -> Maybes.map (\x -> Core.TermApplication (Core.Application {
       Core.applicationFunction = f,
-      Core.applicationArgument = x})) v1) v2)))
+      Core.applicationArgument = x})) v2))))
     _ -> (Monads.unexpected "optional value" (Core__.term argOptTerm))) argOptTerm)
   _ -> (Monads.unexpected "optional function" (Core__.term funOptTerm))) funOptTerm)
 

@@ -19,6 +19,7 @@ _chars_toUpper    = qname _hydra_lib_chars "toUpper" :: Name
 _hydra_lib_eithers :: Namespace
 _hydra_lib_eithers = Namespace "hydra.lib.eithers"
 
+_eithers_bind             = qname _hydra_lib_eithers "bind" :: Name
 _eithers_bimap            = qname _hydra_lib_eithers "bimap" :: Name
 _eithers_either           = qname _hydra_lib_eithers "either" :: Name
 _eithers_fromLeft         = qname _hydra_lib_eithers "fromLeft" :: Name

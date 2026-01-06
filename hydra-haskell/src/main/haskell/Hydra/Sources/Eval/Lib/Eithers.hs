@@ -72,11 +72,29 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
   where
     elements = [
+      toBinding bind_,
       toBinding bimap_,
       toBinding either_,
       toBinding map_,
       toBinding mapList_,
       toBinding mapMaybe_]
+
+-- | Interpreter-friendly bind for Either terms.
+-- Takes an Either term and a function term, applies the function to the Right
+-- value and returns the result (which should be an Either), or returns the Left unchanged.
+bind_ :: TBinding (Term -> Term -> Flow s Term)
+bind_ = define "bind" $
+  doc "Interpreter-friendly bind for Either terms." $
+  "eitherTerm" ~> "funTerm" ~>
+  cases _Term (var "eitherTerm")
+    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    _Term_either>>: "e" ~>
+      produce $ Eithers.either_
+        -- If Left: return the Left unchanged
+        ("val" ~> Core.termEither $ left $ var "val")
+        -- If Right: apply funTerm to the value
+        ("val" ~> Core.termApplication $ Core.application (var "funTerm") (var "val"))
+        (var "e")]
 
 -- | Interpreter-friendly bimap for Either terms.
 -- Takes two function terms (for left and right) and an Either term, applies

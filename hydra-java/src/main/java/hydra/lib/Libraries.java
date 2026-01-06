@@ -38,6 +38,7 @@ public class Libraries {
     public static List<PrimitiveFunction> standardPrimitives() {
         List<PrimitiveFunction> prims = new ArrayList<>();
         prims.addAll(charsPrimitives());
+        prims.addAll(eithersPrimitives());
         prims.addAll(equalityPrimitives());
         prims.addAll(flowsPrimitives());
         prims.addAll(ioPrimitives());
@@ -62,6 +63,20 @@ public class Libraries {
                 new IsUpper(),
                 new hydra.lib.chars.ToLower(),
                 new hydra.lib.chars.ToUpper());
+    }
+
+    private static List<PrimitiveFunction> eithersPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.eithers.Bind(),
+                new hydra.lib.eithers.Bimap(),
+                new hydra.lib.eithers.Either(),
+                new hydra.lib.eithers.FromLeft(),
+                new hydra.lib.eithers.FromRight(),
+                new hydra.lib.eithers.IsLeft(),
+                new hydra.lib.eithers.IsRight(),
+                new hydra.lib.eithers.Lefts(),
+                new hydra.lib.eithers.PartitionEithers(),
+                new hydra.lib.eithers.Rights());
     }
 
     private static List<PrimitiveFunction> equalityPrimitives() {

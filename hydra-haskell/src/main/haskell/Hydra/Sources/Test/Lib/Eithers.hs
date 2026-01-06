@@ -5,6 +5,7 @@ import Hydra.Testing
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core as Core
+import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
@@ -30,6 +31,19 @@ rightString :: String -> TTerm Term
 rightString s = right (string s)
 
 -- Test groups for hydra.lib.eithers primitives
+
+eithersBind :: TTerm TestGroup
+eithersBind = subgroup "bind" [
+  test "bind Right with success" (rightString "ab") (right (int32 2)),
+  test "bind Right with failure" (rightString "") (leftInt32 0),
+  test "bind Left returns Left unchanged" (leftInt32 42) (leftInt32 42)]
+  where
+    -- Function: get length of string, fail with 0 if empty
+    bindFn = lambda "s" (primitive _logic_ifElse
+      @@ (primitive _strings_null @@ var "s")
+      @@ (left (int32 0))
+      @@ (right (primitive _strings_length @@ var "s")))
+    test name input expected = primCase name _eithers_bind [input, bindFn] expected
 
 eithersBimap :: TTerm TestGroup
 eithersBimap = subgroup "bimap" [
@@ -111,6 +125,7 @@ allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.eithers primitives" $
     supergroup "hydra.lib.eithers primitives" [
+      eithersBind,
       eithersBimap,
       eithersIsLeft,
       eithersIsRight,
