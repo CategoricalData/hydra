@@ -193,6 +193,17 @@ HOIST_SUBTERMS_TEST_CASE__PREDICATE__NAME = hydra.core.Name("predicate")
 HOIST_SUBTERMS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 HOIST_SUBTERMS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
+@dataclass(frozen=True)
+class HoistCaseStatementsTestCase:
+    r"""A test case for the hoistCaseStatements function, which hoists case statements into let bindings, but only when they appear inside a lambda body. This is used for targets like Python which don't support inline match expressions."""
+    
+    input: Annotated[hydra.core.Term, "The input term"]
+    output: Annotated[hydra.core.Term, "The expected output term with hoisted case statements"]
+
+HOIST_CASE_STATEMENTS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase")
+HOIST_CASE_STATEMENTS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+HOIST_CASE_STATEMENTS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
 class TermRewriter(Enum):
     r"""A predefined term rewriter for testing rewriteTerm."""
     
@@ -287,10 +298,45 @@ JSON_CODER_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
 JSON_CODER_TEST_CASE__TERM__NAME = hydra.core.Name("term")
 JSON_CODER_TEST_CASE__JSON__NAME = hydra.core.Name("json")
 
+@dataclass(frozen=True)
+class JsonDecodeTestCase:
+    r"""A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term)."""
+    
+    type: Annotated[hydra.core.Type, "The Hydra type to decode into"]
+    json: Annotated[hydra.json.Value, "The input JSON value"]
+    expected: Annotated[Either[str, hydra.core.Term], "The expected result: Left for error, Right for decoded term"]
+
+JSON_DECODE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonDecodeTestCase")
+JSON_DECODE_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
+JSON_DECODE_TEST_CASE__JSON__NAME = hydra.core.Name("json")
+JSON_DECODE_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class JsonEncodeTestCase:
+    r"""A test case for the Either-based JSON encoder. Takes an input term and expected result (Either String Value)."""
+    
+    term: Annotated[hydra.core.Term, "The Hydra term to encode"]
+    expected: Annotated[Either[str, hydra.json.Value], "The expected result: Left for error, Right for encoded JSON"]
+
+JSON_ENCODE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonEncodeTestCase")
+JSON_ENCODE_TEST_CASE__TERM__NAME = hydra.core.Name("term")
+JSON_ENCODE_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
 # A test case which parses a JSON string and compares the result with an expected JSON value.
 JsonParserTestCase: TypeAlias = "ParserTestCase[hydra.json.Value]"
 
 JSON_PARSER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonParserTestCase")
+
+@dataclass(frozen=True)
+class JsonRoundtripTestCase:
+    r"""A test case for round-trip encoding/decoding using the Either-based JSON functions. Encodes a term, then decodes it back, verifying the result equals the original."""
+    
+    type: Annotated[hydra.core.Type, "The Hydra type for encoding/decoding"]
+    term: Annotated[hydra.core.Term, "The Hydra term to round-trip"]
+
+JSON_ROUNDTRIP_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonRoundtripTestCase")
+JSON_ROUNDTRIP_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
+JSON_ROUNDTRIP_TEST_CASE__TERM__NAME = hydra.core.Name("term")
 
 @dataclass(frozen=True)
 class LiftLambdaAboveLetTestCase:
@@ -387,10 +433,19 @@ class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
     r"""A type inference failure test."""
 
 class TestCaseJsonCoder(Node["JsonCoderTestCase"]):
-    r"""A JSON coder (round-trip) test."""
+    r"""A JSON coder (round-trip) test using Flow-based coder."""
+
+class TestCaseJsonDecode(Node["JsonDecodeTestCase"]):
+    r"""A JSON decode test using Either-based decoder."""
+
+class TestCaseJsonEncode(Node["JsonEncodeTestCase"]):
+    r"""A JSON encode test using Either-based encoder."""
 
 class TestCaseJsonParser(Node["JsonParserTestCase"]):
     r"""A JSON parser test."""
+
+class TestCaseJsonRoundtrip(Node["JsonRoundtripTestCase"]):
+    r"""A JSON round-trip test using Either-based encoder/decoder."""
 
 class TestCaseJsonWriter(Node["JsonWriterTestCase"]):
     r"""A JSON writer test."""
@@ -437,13 +492,16 @@ class TestCaseRewriteType(Node["RewriteTypeTestCase"]):
 class TestCaseHoistSubterms(Node["HoistSubtermsTestCase"]):
     r"""A hoist subterms test."""
 
+class TestCaseHoistCaseStatements(Node["HoistCaseStatementsTestCase"]):
+    r"""A hoist case statements test."""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonParser | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements"""
     
     pass
 
@@ -460,7 +518,10 @@ TEST_CASE__EVALUATION__NAME = hydra.core.Name("evaluation")
 TEST_CASE__INFERENCE__NAME = hydra.core.Name("inference")
 TEST_CASE__INFERENCE_FAILURE__NAME = hydra.core.Name("inferenceFailure")
 TEST_CASE__JSON_CODER__NAME = hydra.core.Name("jsonCoder")
+TEST_CASE__JSON_DECODE__NAME = hydra.core.Name("jsonDecode")
+TEST_CASE__JSON_ENCODE__NAME = hydra.core.Name("jsonEncode")
 TEST_CASE__JSON_PARSER__NAME = hydra.core.Name("jsonParser")
+TEST_CASE__JSON_ROUNDTRIP__NAME = hydra.core.Name("jsonRoundtrip")
 TEST_CASE__JSON_WRITER__NAME = hydra.core.Name("jsonWriter")
 TEST_CASE__LIFT_LAMBDA_ABOVE_LET__NAME = hydra.core.Name("liftLambdaAboveLet")
 TEST_CASE__SERIALIZATION__NAME = hydra.core.Name("serialization")
@@ -476,6 +537,7 @@ TEST_CASE__FOLD_OVER_TERM__NAME = hydra.core.Name("foldOverTerm")
 TEST_CASE__REWRITE_TERM__NAME = hydra.core.Name("rewriteTerm")
 TEST_CASE__REWRITE_TYPE__NAME = hydra.core.Name("rewriteType")
 TEST_CASE__HOIST_SUBTERMS__NAME = hydra.core.Name("hoistSubterms")
+TEST_CASE__HOIST_CASE_STATEMENTS__NAME = hydra.core.Name("hoistCaseStatements")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:

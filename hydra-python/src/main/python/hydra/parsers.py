@@ -20,10 +20,16 @@ T2 = TypeVar("T2")
 T3 = TypeVar("T3")
 
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
-    def parse(input: str):
-        return _hoist_1(input, p1.value(input))
-    def _hoist_1(input: str) -> Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T0]]:
-        return cast(Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T0]], hydra.dsl.python.unsupported("case expressions as values are not yet supported"))
+    def parse(input: str) -> hydra.parsing.ParseResult[T0]:
+        match p1.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(s)))
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(e.remainder, input), (lambda : p2.value(input)), (lambda : cast(hydra.parsing.ParseResult[T0], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return cast(hydra.parsing.Parser[T0], hydra.parsing.Parser(parse))
 
 def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
@@ -45,18 +51,38 @@ def any_char() -> hydra.parsing.Parser[int]:
 
 def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
-        return _hoist_2(pf.value(input))
-    def _hoist_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]]) -> Callable[[hydra.parsing.ParseResult[T2]], hydra.parsing.ParseResult[T3]]:
-        return cast(Callable[[hydra.parsing.ParseResult[T2]], hydra.parsing.ParseResult[T3]], hydra.dsl.python.unsupported("case expressions as values are not yet supported"))
-    def _hoist_2():
-        return hydra.dsl.python.unsupported("case expressions as values are not yet supported")
+        def _hoist_parse_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]], v1: hydra.parsing.ParseResult[T2]) -> hydra.parsing.ParseResult[T3]:
+            match v1:
+                case hydra.parsing.ParseResultSuccess(value=sa):
+                    return cast(hydra.parsing.ParseResult[T3], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[T3], hydra.parsing.ParseSuccess(sf.value(sa.value), sa.remainder)))))
+                
+                case hydra.parsing.ParseResultFailure(value=e):
+                    return cast(hydra.parsing.ParseResult[T3], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        match pf.value(input):
+            case hydra.parsing.ParseResultSuccess(value=sf):
+                return _hoist_parse_1(sf, pa.value(sf.remainder))
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def bind(pa: hydra.parsing.Parser[T0], f: Callable[[T0], hydra.parsing.Parser[T1]]) -> hydra.parsing.Parser[T1]:
-    def parse(input: str):
-        return _hoist_1(pa.value(input))
-    def _hoist_1() -> Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T1]]:
-        return cast(Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T1]], hydra.dsl.python.unsupported("case expressions as values are not yet supported"))
+    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+        match pa.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return f(s.value).value(s.remainder)
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def pure(a: T0) -> hydra.parsing.Parser[T0]:
@@ -88,10 +114,16 @@ def some(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]]:
     return bind(p, (lambda x: bind(many(p), (lambda xs: pure(hydra.lib.lists.cons(x, xs))))))
 
 def map(f: Callable[[T0], T1], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
-    def parse(input: str):
-        return _hoist_1(pa.value(input))
-    def _hoist_1() -> Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T1]]:
-        return cast(Callable[[hydra.parsing.ParseResult[T0]], hydra.parsing.ParseResult[T1]], hydra.dsl.python.unsupported("case expressions as values are not yet supported"))
+    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+        match pa.value(input):
+            case hydra.parsing.ParseResultSuccess(value=s):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(cast(hydra.parsing.ParseSuccess[T1], hydra.parsing.ParseSuccess(f(s.value), s.remainder)))))
+            
+            case hydra.parsing.ParseResultFailure(value=e):
+                return cast(hydra.parsing.ParseResult[T1], cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e)))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
     return cast(hydra.parsing.Parser[T1], hydra.parsing.Parser(parse))
 
 def optional(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[Maybe[T0]]:

@@ -85,17 +85,19 @@ def check_for_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: h
             return hydra.lib.flows.bind(hydra.lib.flows.map_maybe(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], (lambda x1: check(x1))), m), (lambda _: hydra.lib.flows.pure(None)))
         def check_optional_list(ml: Maybe[frozenlist[hydra.core.Type]]) -> hydra.compute.Flow[T2, None]:
             return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda l: hydra.lib.flows.map_list(cast(Callable[[hydra.core.Type], hydra.compute.Flow[T2, None]], (lambda x1: check(x1))), l)), ml), (lambda _: hydra.lib.flows.pure(None)))
+        def _hoist_body_1(v1: hydra.core.Function) -> hydra.compute.Flow[T1, None]:
+            match v1:
+                case hydra.core.FunctionElimination():
+                    return dflt()
+                
+                case hydra.core.FunctionLambda(value=l):
+                    return hydra.lib.flows.bind(check_optional(l.domain), (lambda _: recurse(l.body)))
+                
+                case _:
+                    return dflt()
         match term:
             case hydra.core.TermFunction(value=f):
-                match f:
-                    case hydra.core.FunctionElimination():
-                        return dflt()
-                    
-                    case hydra.core.FunctionLambda(value=l):
-                        return hydra.lib.flows.bind(check_optional(l.domain), (lambda _: recurse(l.body)))
-                    
-                    case _:
-                        return dflt()
+                return _hoist_body_1(f)
             
             case hydra.core.TermLet(value=l):
                 def for_binding(b: hydra.core.Binding) -> hydra.compute.Flow[T1, None]:
@@ -176,6 +178,32 @@ def type_of_variable(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.c
 
 def type_of(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
     def check() -> hydra.compute.Flow[T0, hydra.core.Type]:
+        def _hoist_check_1(v1: hydra.core.Elimination) -> hydra.compute.Flow[T0, hydra.core.Type]:
+            match v1:
+                case hydra.core.EliminationRecord(value=v1):
+                    return type_of_projection(tx, type_args, v1)
+                
+                case hydra.core.EliminationUnion(value=v12):
+                    return type_of_case_statement(tx, type_args, v12)
+                
+                case hydra.core.EliminationWrap(value=v13):
+                    return type_of_unwrap(tx, type_args, v13)
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        def _hoist_check_2(v1: hydra.core.Function) -> hydra.compute.Flow[T0, hydra.core.Type]:
+            match v1:
+                case hydra.core.FunctionElimination(value=elm):
+                    return _hoist_check_1(elm)
+                
+                case hydra.core.FunctionLambda(value=v1):
+                    return type_of_lambda(tx, type_args, v1)
+                
+                case hydra.core.FunctionPrimitive(value=v12):
+                    return type_of_primitive(tx, type_args, v12)
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
         match term:
             case hydra.core.TermAnnotated(value=v1):
                 return type_of_annotated_term(tx, type_args, v1)
@@ -187,29 +215,7 @@ def type_of(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type]
                 return type_of_either(tx, type_args, v13)
             
             case hydra.core.TermFunction(value=f):
-                match f:
-                    case hydra.core.FunctionElimination(value=elm):
-                        match elm:
-                            case hydra.core.EliminationRecord(value=v1):
-                                return type_of_projection(tx, type_args, v1)
-                            
-                            case hydra.core.EliminationUnion(value=v12):
-                                return type_of_case_statement(tx, type_args, v12)
-                            
-                            case hydra.core.EliminationWrap(value=v13):
-                                return type_of_unwrap(tx, type_args, v13)
-                            
-                            case _:
-                                raise AssertionError("Unreachable: all variants handled")
-                    
-                    case hydra.core.FunctionLambda(value=v1):
-                        return type_of_lambda(tx, type_args, v1)
-                    
-                    case hydra.core.FunctionPrimitive(value=v12):
-                        return type_of_primitive(tx, type_args, v12)
-                    
-                    case _:
-                        raise AssertionError("Unreachable: all variants handled")
+                return _hoist_check_2(f)
             
             case hydra.core.TermLet(value=v14):
                 return type_of_let(tx, type_args, v14)

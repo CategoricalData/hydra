@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 from typing import cast
+from decimal import Decimal
 from hydra.dsl.python import FrozenDict, frozenlist, Either, Left, Right, Maybe, Just, Nothing
 import hydra.accessors
 import hydra.annotations

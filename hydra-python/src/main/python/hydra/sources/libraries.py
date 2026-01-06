@@ -134,6 +134,21 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         qname(namespace, "lefts"), eithers.lefts, ["x", "y"],
         prims.list_(prims.either(x, y)), prims.list_(x)
     )
+    # map :: (x -> y) -> Either z x -> Either z y
+    primitives[qname(namespace, "map")] = prims.prim2_interp(
+        qname(namespace, "map"), Just(eval_eithers.map), ["x", "y", "z"],
+        prims.function(x, y), prims.either(z, x), prims.either(z, y)
+    )
+    # mapList :: (x -> Either z y) -> [x] -> Either z [y]
+    primitives[qname(namespace, "mapList")] = prims.prim2_interp(
+        qname(namespace, "mapList"), Just(eval_eithers.map_list), ["x", "y", "z"],
+        prims.function(x, prims.either(z, y)), prims.list_(x), prims.either(z, prims.list_(y))
+    )
+    # mapMaybe :: (x -> Either z y) -> Maybe x -> Either z (Maybe y)
+    primitives[qname(namespace, "mapMaybe")] = prims.prim2_interp(
+        qname(namespace, "mapMaybe"), Just(eval_eithers.map_maybe), ["x", "y", "z"],
+        prims.function(x, prims.either(z, y)), prims.optional(x), prims.either(z, prims.optional(y))
+    )
     primitives[qname(namespace, "partitionEithers")] = prims.prim1(
         qname(namespace, "partitionEithers"), eithers.partition_eithers, ["x", "y"],
         prims.list_(prims.either(x, y)), prims.pair(prims.list_(x), prims.list_(y))
@@ -231,7 +246,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
 
     # prim2: apply :: [a -> b] -> [a] -> [b]
     primitives[qname(namespace, "apply")] = prims.prim2_interp(
-        qname(namespace, "apply"), Just(eval_lists.apply_), ["a", "b"],
+        qname(namespace, "apply"), Just(eval_lists.apply), ["a", "b"],
         prims.list_(prims.function(a, b)), prims.list_(a), prims.list_(b)
     )
     # prim2: at :: Int32 -> [a] -> a
@@ -240,8 +255,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         prims.int32(), prims.list_(a), a
     )
     # prim2: bind :: [a] -> (a -> [b]) -> [b]
-    primitives[qname(namespace, "bind")] = prims.prim2(
-        qname(namespace, "bind"), lists.bind, ["a", "b"],
+    primitives[qname(namespace, "bind")] = prims.prim2_interp(
+        qname(namespace, "bind"), Just(eval_lists.bind), ["a", "b"],
         prims.list_(a), prims.function(a, prims.list_(b)), prims.list_(b)
     )
     # prim1: concat :: [[a]] -> [a]
@@ -266,7 +281,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     )
     # prim2: dropWhile :: (a -> Bool) -> [a] -> [a]
     primitives[qname(namespace, "dropWhile")] = prims.prim2_interp(
-        qname(namespace, "dropWhile"), Nothing(), ["a"],
+        qname(namespace, "dropWhile"), Just(eval_lists.drop_while), ["a"],
         prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
     # prim2: elem :: a -> [a] -> Bool
@@ -275,13 +290,13 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         a, prims.list_(a), prims.boolean()
     )
     # prim2: filter :: (a -> Bool) -> [a] -> [a]
-    primitives[qname(namespace, "filter")] = prims.prim2(
-        qname(namespace, "filter"), lists.filter, ["a"],
+    primitives[qname(namespace, "filter")] = prims.prim2_interp(
+        qname(namespace, "filter"), Just(eval_lists.filter), ["a"],
         prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
     # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
     primitives[qname(namespace, "foldl")] = prims.prim3_interp(
-        qname(namespace, "foldl"), Just(eval_lists.foldl_), ["b", "a"],
+        qname(namespace, "foldl"), Just(eval_lists.foldl), ["b", "a"],
         prims.function(b, prims.function(a, b)), b, prims.list_(a), b
     )
     # prim1: group :: [a] -> [[a]]
@@ -317,7 +332,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     )
     # prim2: map :: (a -> b) -> [a] -> [b]
     primitives[qname(namespace, "map")] = prims.prim2_interp(
-        qname(namespace, "map"), Just(eval_lists.map_), ["a", "b"],
+        qname(namespace, "map"), Just(eval_lists.map), ["a", "b"],
         prims.function(a, b), prims.list_(a), prims.list_(b)
     )
     # prim1: nub :: [a] -> [a]
@@ -361,12 +376,12 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     )
     # prim2: sortOn :: (a -> b) -> [a] -> [a]
     primitives[qname(namespace, "sortOn")] = prims.prim2_interp(
-        qname(namespace, "sortOn"), Nothing(), ["a", "b"],
+        qname(namespace, "sortOn"), Just(eval_lists.sort_on), ["a", "b"],
         prims.function(a, b), prims.list_(a), prims.list_(a)
     )
     # prim2: span :: (a -> Bool) -> [a] -> ([a], [a])
     primitives[qname(namespace, "span")] = prims.prim2_interp(
-        qname(namespace, "span"), Nothing(), ["a"],
+        qname(namespace, "span"), Just(eval_lists.span), ["a"],
         prims.function(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
     )
     # prim1: tail :: [a] -> [a]
@@ -390,7 +405,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     )
     # prim3: zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
     primitives[qname(namespace, "zipWith")] = prims.prim3_interp(
-        qname(namespace, "zipWith"), Just(eval_lists.zipWith_), ["a", "b", "c"],
+        qname(namespace, "zipWith"), Just(eval_lists.zip_with), ["a", "b", "c"],
         prims.function(a, prims.function(b, c)), prims.list_(a), prims.list_(b), prims.list_(c)
     )
 
@@ -441,8 +456,8 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     map_kv = prims.map_(k, v)
 
     # prim3: alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-    primitives[qname(namespace, "alter")] = prims.prim3(
-        qname(namespace, "alter"), maps.alter, ["v", "k"],
+    primitives[qname(namespace, "alter")] = prims.prim3_interp(
+        qname(namespace, "alter"), Just(eval_maps.alter), ["v", "k"],
         prims.function(prims.optional(v), prims.optional(v)), k, map_kv, map_kv
     )
     # prim3: bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
@@ -462,17 +477,17 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     )
     # prim0: empty :: Map k v
     primitives[qname(namespace, "empty")] = prims.prim0(
-        qname(namespace, "empty"), maps.empty(), ["k", "v"],
+        qname(namespace, "empty"), maps.empty, ["k", "v"],
         map_kv
     )
     # prim2: filter :: (v -> Bool) -> Map k v -> Map k v
-    primitives[qname(namespace, "filter")] = prims.prim2(
-        qname(namespace, "filter"), maps.filter, ["v", "k"],
+    primitives[qname(namespace, "filter")] = prims.prim2_interp(
+        qname(namespace, "filter"), Just(eval_maps.filter), ["v", "k"],
         prims.function(v, prims.boolean()), map_kv, map_kv
     )
     # prim2: filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v
-    primitives[qname(namespace, "filterWithKey")] = prims.prim2(
-        qname(namespace, "filterWithKey"), maps.filter_with_key, ["k", "v"],
+    primitives[qname(namespace, "filterWithKey")] = prims.prim2_interp(
+        qname(namespace, "filterWithKey"), Just(eval_maps.filter_with_key), ["k", "v"],
         prims.function(k, prims.function(v, prims.boolean())), map_kv, map_kv
     )
     # prim3: findWithDefault :: v -> k -> Map k v -> v
@@ -502,7 +517,7 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     )
     # prim2: map :: (v1 -> v2) -> Map k v1 -> Map k v2
     primitives[qname(namespace, "map")] = prims.prim2_interp(
-        qname(namespace, "map"), Just(eval_maps.map_), ["v1", "v2", "k"],
+        qname(namespace, "map"), Just(eval_maps.map), ["v1", "v2", "k"],
         prims.function(v1, v2), prims.map_(k, v1), prims.map_(k, v2)
     )
     # prim2: mapKeys :: (k1 -> k2) -> Map k1 v -> Map k2 v
@@ -593,6 +608,12 @@ def register_math_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "succ")] = prims.prim1(
         qname(namespace, "succ"), math.succ, [], prims.int32(), prims.int32()
+    )
+    primitives[qname(namespace, "max")] = prims.prim2(
+        qname(namespace, "max"), math.max, [], prims.int32(), prims.int32(), prims.int32()
+    )
+    primitives[qname(namespace, "min")] = prims.prim2(
+        qname(namespace, "min"), math.min, [], prims.int32(), prims.int32(), prims.int32()
     )
 
     # Float64 primitives
@@ -706,11 +727,10 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
         prims.list_(prims.optional(a)), prims.list_(a)
     )
     # compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
-    # Note: compose returns a function, which is complex to implement in interpreted form
-    primitives[qname(namespace, "compose")] = prims.prim2_interp(
-        qname(namespace, "compose"), Nothing(), ["a", "b", "c"],
+    primitives[qname(namespace, "compose")] = prims.prim3_interp(
+        qname(namespace, "compose"), Just(eval_maybes.compose), ["a", "b", "c"],
         prims.function(a, prims.optional(b)), prims.function(b, prims.optional(c)),
-        prims.function(a, prims.optional(c))
+        a, prims.optional(c)
     )
     # fromJust :: Maybe a -> a
     primitives[qname(namespace, "fromJust")] = prims.prim1(
@@ -731,18 +751,18 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
     )
     # map :: (a -> b) -> Maybe a -> Maybe b
     primitives[qname(namespace, "map")] = prims.prim2_interp(
-        qname(namespace, "map"), Just(eval_maybes.map_), ["a", "b"],
+        qname(namespace, "map"), Just(eval_maybes.map), ["a", "b"],
         prims.function(a, b), prims.optional(a), prims.optional(b)
     )
     # mapMaybe :: (a -> Maybe b) -> [a] -> [b]
-    # Note: mapMaybe requires evaluating the function on each element, complex for interpreter
     primitives[qname(namespace, "mapMaybe")] = prims.prim2_interp(
-        qname(namespace, "mapMaybe"), Nothing(), ["a", "b"],
+        qname(namespace, "mapMaybe"), Just(eval_maybes.map_maybe), ["a", "b"],
         prims.function(a, prims.optional(b)), prims.list_(a), prims.list_(b)
     )
     # maybe: b -> (a -> b) -> Maybe a -> b
+    # Note: type variables are ordered [b, a] to match Haskell's [_y, _x] order
     primitives[qname(namespace, "maybe")] = prims.prim3_interp(
-        qname(namespace, "maybe"), Just(eval_maybes.maybe), ["a", "b"],
+        qname(namespace, "maybe"), Just(eval_maybes.maybe), ["b", "a"],
         b, prims.function(a, b), prims.optional(a), b
     )
     primitives[qname(namespace, "pure")] = prims.prim1(
@@ -774,7 +794,7 @@ def register_sets_primitives() -> dict[Name, Primitive]:
     )
     # prim0: empty :: Set a
     primitives[qname(namespace, "empty")] = prims.prim0(
-        qname(namespace, "empty"), sets.empty(), ["a"],
+        qname(namespace, "empty"), sets.empty, ["a"],
         prims.set_(a)
     )
     primitives[qname(namespace, "fromList")] = prims.prim1(
@@ -790,7 +810,7 @@ def register_sets_primitives() -> dict[Name, Primitive]:
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
     primitives[qname(namespace, "map")] = prims.prim2_interp(
-        qname(namespace, "map"), Just(eval_sets.map_), ["a", "b"],
+        qname(namespace, "map"), Just(eval_sets.map), ["a", "b"],
         prims.function(a, prims.variable("b")), prims.set_(a), prims.set_(prims.variable("b"))
     )
     primitives[qname(namespace, "member")] = prims.prim2(
@@ -966,6 +986,10 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "readBigfloat"), literals.read_bigfloat, [],
         prims.string(), prims.optional(prims.bigfloat())
     )
+    primitives[qname(namespace, "readBigint")] = prims.prim1(
+        qname(namespace, "readBigint"), literals.read_bigint, [],
+        prims.string(), prims.optional(prims.bigint())
+    )
     primitives[qname(namespace, "readBoolean")] = prims.prim1(
         qname(namespace, "readBoolean"), literals.read_boolean, [],
         prims.string(), prims.optional(prims.boolean())
@@ -978,6 +1002,14 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "readFloat64"), literals.read_float64, [],
         prims.string(), prims.optional(prims.float64())
     )
+    primitives[qname(namespace, "readInt8")] = prims.prim1(
+        qname(namespace, "readInt8"), literals.read_int8, [],
+        prims.string(), prims.optional(prims.int8())
+    )
+    primitives[qname(namespace, "readInt16")] = prims.prim1(
+        qname(namespace, "readInt16"), literals.read_int16, [],
+        prims.string(), prims.optional(prims.int16())
+    )
     primitives[qname(namespace, "readInt32")] = prims.prim1(
         qname(namespace, "readInt32"), literals.read_int32, [],
         prims.string(), prims.optional(prims.int32())
@@ -989,6 +1021,22 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "readString")] = prims.prim1(
         qname(namespace, "readString"), literals.read_string, [],
         prims.string(), prims.optional(prims.string())
+    )
+    primitives[qname(namespace, "readUint8")] = prims.prim1(
+        qname(namespace, "readUint8"), literals.read_uint8, [],
+        prims.string(), prims.optional(prims.uint8())
+    )
+    primitives[qname(namespace, "readUint16")] = prims.prim1(
+        qname(namespace, "readUint16"), literals.read_uint16, [],
+        prims.string(), prims.optional(prims.uint16())
+    )
+    primitives[qname(namespace, "readUint32")] = prims.prim1(
+        qname(namespace, "readUint32"), literals.read_uint32, [],
+        prims.string(), prims.optional(prims.uint32())
+    )
+    primitives[qname(namespace, "readUint64")] = prims.prim1(
+        qname(namespace, "readUint64"), literals.read_uint64, [],
+        prims.string(), prims.optional(prims.uint64())
     )
 
     # Show primitives
