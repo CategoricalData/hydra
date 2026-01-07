@@ -343,5 +343,5 @@ pythonTestGenerator = TestGenerator {
 }
 
 -- | Main entry point for generating Python generation tests
-generatePythonGenerationTests :: FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO ()
+generatePythonGenerationTests :: FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO Bool
 generatePythonGenerationTests = generateGenerationTestSuite pythonTestGenerator
