@@ -1,0 +1,1363 @@
+{
+  "description": ["Additional adapter utilities, above and beyond the generated ones."],
+  "elements": [
+    {
+      "name": "hydra.adapt.utils.bidirectional",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Create a bidirectional coder from a direction-aware function"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "encode",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "union": {
+                                "field": {"name": "encode", "term": {"unit": {}}},
+                                "typeName": "hydra.coders.CoderDirection"}},
+                            "function": {"variable": "f"}}}},
+                      {
+                        "name": "decode",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "union": {
+                                "field": {"name": "decode", "term": {"unit": {}}},
+                                "typeName": "hydra.coders.CoderDirection"}},
+                            "function": {"variable": "f"}}}}],
+                    "typeName": "hydra.compute.Coder"}},
+                "domain": null,
+                "parameter": "f"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.chooseAdapter",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Choose an appropriate adapter for a type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "candidates",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "raw"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "adapter"},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "target", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                                                "function": {"variable": "supported"}}},
+                                                                            "domain": null,
+                                                                            "parameter": "adapter"}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.lists.filter"}}}}}},
+                                                              "type": null}],
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "candidates"},
+                                                                      "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "list": [
+                                                                              {"literal": {"string": "no adapters found for "}},
+                                                                              {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "typ"},
+                                                                                  "function": {"variable": "describe"}}},
+                                                                              {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "list": [
+                                                                                          {"literal": {"string": " (discarded "}},
+                                                                                          {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "raw"},
+                                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
+                                                                                              "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
+                                                                                          {"literal": {"string": " unsupported candidate types: "}},
+                                                                                          {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "raw"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "elimination": {"record": {"field": "target", "typeName": "hydra.compute.Adapter"}}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "show"},
+                                                                                                  "function": {"variable": "hydra.show.core.list"}}}}},
+                                                                                          {"literal": {"string": ")"}}]},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"string": ""}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "raw"},
+                                                                                              "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                                              {"literal": {"string": ". Original type: "}},
+                                                                              {
+                                                                                "application": {"argument": {"variable": "typ"}, "function": {"variable": "show"}}}]},
+                                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "candidates"},
+                                                                          "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
+                                                      "domain": null,
+                                                      "parameter": "raw"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {"argument": {"variable": "typ"}, "function": {"variable": "alts"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {"name": "isLossy", "term": {"literal": {"boolean": false}}},
+                                                          {"name": "source", "term": {"variable": "typ"}},
+                                                          {"name": "target", "term": {"variable": "typ"}},
+                                                          {"name": "coder", "term": {"variable": "hydra.adapt.utils.idCoder"}}],
+                                                        "typeName": "hydra.compute.Adapter"}},
+                                                    "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "typ"},
+                                                        "function": {"variable": "supported"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                        "domain": null,
+                                        "parameter": "typ"}}},
+                                  "domain": null,
+                                  "parameter": "describe"}}},
+                            "domain": null,
+                            "parameter": "show"}}},
+                      "domain": null,
+                      "parameter": "supported"}}},
+                "domain": null,
+                "parameter": "alts"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.composeCoders",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Compose two coders"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "encode",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "b1"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "c2"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                              "domain": null,
+                                              "parameter": "b1"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "a"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "c1"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                    "domain": null,
+                                    "parameter": "a"}}}},
+                            {
+                              "name": "decode",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "b2"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "c1"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                              "domain": null,
+                                              "parameter": "b2"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "c"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "c2"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                    "domain": null,
+                                    "parameter": "c"}}}}],
+                          "typeName": "hydra.compute.Coder"}},
+                      "domain": null,
+                      "parameter": "c2"}}},
+                "domain": null,
+                "parameter": "c1"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.encodeDecode",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Apply coder in the specified direction"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "dir"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "union": {
+                                        "cases": [
+                                          {
+                                            "name": "encode",
+                                            "term": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {"variable": "term"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "coder"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "_"}}}},
+                                          {
+                                            "name": "decode",
+                                            "term": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {"variable": "term"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "coder"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "_"}}}}],
+                                        "default": null,
+                                        "typeName": "hydra.coders.CoderDirection"}}}}}},
+                            "domain": null,
+                            "parameter": "term"}}},
+                      "domain": null,
+                      "parameter": "coder"}}},
+                "domain": null,
+                "parameter": "dir"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.floatTypeIsSupported",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Check if float type is supported by language constraints"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"variable": "constraints"},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "record": {
+                                      "field": "floatTypes",
+                                      "typeName": "hydra.coders.LanguageConstraints"}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "ft"},
+                              "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
+                      "domain": null,
+                      "parameter": "ft"}}},
+                "domain": null,
+                "parameter": "constraints"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.idAdapter",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Identity adapter"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "record": {
+                    "fields": [
+                      {"name": "isLossy", "term": {"literal": {"boolean": false}}},
+                      {"name": "source", "term": {"variable": "t"}},
+                      {"name": "target", "term": {"variable": "t"}},
+                      {"name": "coder", "term": {"variable": "hydra.adapt.utils.idCoder"}}],
+                    "typeName": "hydra.compute.Adapter"}},
+                "domain": null,
+                "parameter": "t"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.idCoder",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Identity coder"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {
+                  "name": "encode",
+                  "term": {"function": {"primitive": "hydra.lib.flows.pure"}}},
+                {
+                  "name": "decode",
+                  "term": {"function": {"primitive": "hydra.lib.flows.pure"}}}],
+              "typeName": "hydra.compute.Coder"}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.integerTypeIsSupported",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Check if integer type is supported by language constraints"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"variable": "constraints"},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "record": {
+                                      "field": "integerTypes",
+                                      "typeName": "hydra.coders.LanguageConstraints"}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "it"},
+                              "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
+                      "domain": null,
+                      "parameter": "it"}}},
+                "domain": null,
+                "parameter": "constraints"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.literalTypeIsSupported",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Check if literal type is supported by language constraints"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "isSupported",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "lt"},
+                                        "function": {
+                                          "function": {
+                                            "elimination": {
+                                              "union": {
+                                                "cases": [
+                                                  {
+                                                    "name": "float",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {"variable": "ft"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "constraints"},
+                                                                  "function": {"variable": "hydra.adapt.utils.floatTypeIsSupported"}}}}},
+                                                          "domain": null,
+                                                          "parameter": "ft"}}}},
+                                                  {
+                                                    "name": "integer",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {"variable": "it"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "constraints"},
+                                                                  "function": {"variable": "hydra.adapt.utils.integerTypeIsSupported"}}}}},
+                                                          "domain": null,
+                                                          "parameter": "it"}}}}],
+                                                "default": [{"literal": {"boolean": true}}],
+                                                "typeName": "hydra.core.LiteralType"}}}}}},
+                                    "domain": null,
+                                    "parameter": "lt"}}},
+                              "type": null}],
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "lt"},
+                                  "function": {"variable": "isSupported"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "constraints"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "record": {
+                                                  "field": "literalVariants",
+                                                  "typeName": "hydra.coders.LanguageConstraints"}}}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "lt"},
+                                              "function": {"variable": "hydra.reflect.literalTypeVariant"}}},
+                                          "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
+                                  "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}}}},
+                      "domain": null,
+                      "parameter": "lt"}}},
+                "domain": null,
+                "parameter": "constraints"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.nameToFilePath",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "qualName",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "name"},
+                                              "function": {"variable": "hydra.names.qualifyName"}}},
+                                          "type": null}],
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "ns",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "qualName"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "local",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "qualName"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {
+                                                            "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                                  "type": null}],
+                                              "body": {
+                                                "let": {
+                                                  "bindings": [
+                                                    {
+                                                      "name": "nsToFilePath",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "ns"},
+                                                                            "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "."}},
+                                                                            "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "part"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "nsConv"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {"name": "camel", "term": {"unit": {}}},
+                                                                                              "typeName": "hydra.util.CaseConvention"}},
+                                                                                          "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+                                                                              "domain": null,
+                                                                              "parameter": "part"}}},
+                                                                        "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "/"}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "ns"}}},
+                                                      "type": null}],
+                                                  "body": {
+                                                    "let": {
+                                                      "bindings": [
+                                                        {
+                                                          "name": "prefix",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "ns"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "/"}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "n"},
+                                                                                    "function": {"variable": "nsToFilePath"}}},
+                                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                        "domain": null,
+                                                                        "parameter": "n"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"literal": {"string": ""}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                          "type": null}],
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "suffix",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "local"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "localConv"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "union": {
+                                                                              "field": {"name": "pascal", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.util.CaseConvention"}},
+                                                                          "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+                                                              "type": null}],
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "list": [
+                                                                  {"variable": "prefix"},
+                                                                  {"variable": "suffix"},
+                                                                  {"literal": {"string": "."}},
+                                                                  {
+                                                                    "application": {
+                                                                      "argument": {"variable": "ext"},
+                                                                      "function": {"function": {"elimination": {"wrap": "hydra.module.FileExtension"}}}}}]},
+                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}}}}}}}}}},
+                                  "domain": null,
+                                  "parameter": "name"}}},
+                            "domain": null,
+                            "parameter": "ext"}}},
+                      "domain": null,
+                      "parameter": "localConv"}}},
+                "domain": null,
+                "parameter": "nsConv"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.typeIsSupported",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Check if type is supported by language constraints"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "base",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "t"},
+                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "isVariable",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "v"},
+                                            "function": {
+                                              "function": {
+                                                "elimination": {
+                                                  "union": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "variable",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"boolean": true}},
+                                                              "domain": null,
+                                                              "parameter": "_"}}}}],
+                                                    "default": [{"literal": {"boolean": false}}],
+                                                    "typeName": "hydra.variants.TypeVariant"}}}}}},
+                                        "domain": null,
+                                        "parameter": "v"}}},
+                                  "type": null}],
+                              "body": {
+                                "let": {
+                                  "bindings": [
+                                    {
+                                      "name": "isSupportedVariant",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "constraints"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {
+                                                              "record": {
+                                                                "field": "typeVariants",
+                                                                "typeName": "hydra.coders.LanguageConstraints"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "v"},
+                                                        "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "v"},
+                                                        "function": {"variable": "isVariable"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                            "domain": null,
+                                            "parameter": "v"}}},
+                                      "type": null}],
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "isSupported",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "base"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {
+                                                          "union": {
+                                                            "cases": [
+                                                              {
+                                                                "name": "annotated",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "at"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.AnnotatedType"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "at"}}}},
+                                                              {
+                                                                "name": "application",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "app"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {
+                                                                                        "record": {"field": "argument", "typeName": "hydra.core.ApplicationType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "constraints"},
+                                                                                  "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "app"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {
+                                                                                            "record": {"field": "function", "typeName": "hydra.core.ApplicationType"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "constraints"},
+                                                                                      "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "app"}}}},
+                                                              {
+                                                                "name": "either",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "et"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "right", "typeName": "hydra.core.EitherType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "constraints"},
+                                                                                  "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "et"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "left", "typeName": "hydra.core.EitherType"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "constraints"},
+                                                                                      "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "et"}}}},
+                                                              {
+                                                                "name": "forall",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "ft"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "ft"}}}},
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "ft"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {
+                                                                                        "record": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "constraints"},
+                                                                                  "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "ft"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "constraints"},
+                                                                                      "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "ft"}}}},
+                                                              {
+                                                                "name": "list",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "lt"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "lt"}}}},
+                                                              {
+                                                                "name": "literal",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "at"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.literalTypeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "at"}}}},
+                                                              {
+                                                                "name": "map",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "mt"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "constraints"},
+                                                                                  "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "mt"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "keys", "typeName": "hydra.core.MapType"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "constraints"},
+                                                                                      "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "mt"}}}},
+                                                              {
+                                                                "name": "maybe",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "ot"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "ot"}}}},
+                                                              {
+                                                                "name": "pair",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "pt"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "second", "typeName": "hydra.core.PairType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "constraints"},
+                                                                                  "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pt"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "first", "typeName": "hydra.core.PairType"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "constraints"},
+                                                                                      "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "pt"}}}},
+                                                              {
+                                                                "name": "record",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "rt"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "field"},
+                                                                                                "function": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "constraints"},
+                                                                                                "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                                        "domain": null,
+                                                                                        "parameter": "field"}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"literal": {"boolean": true}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"function": {"primitive": "hydra.lib.logic.and"}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "rt"}}}},
+                                                              {
+                                                                "name": "set",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "st"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "st"}}}},
+                                                              {
+                                                                "name": "union",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "rt"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "field"},
+                                                                                                "function": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "constraints"},
+                                                                                                "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                                        "domain": null,
+                                                                                        "parameter": "field"}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"literal": {"boolean": true}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"function": {"primitive": "hydra.lib.logic.and"}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "rt"}}}},
+                                                              {
+                                                                "name": "unit",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {"literal": {"boolean": true}},
+                                                                      "domain": null,
+                                                                      "parameter": "_"}}}},
+                                                              {
+                                                                "name": "wrap",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "wt"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "constraints"},
+                                                                              "function": {"variable": "hydra.adapt.utils.typeIsSupported"}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "wt"}}}},
+                                                              {
+                                                                "name": "variable",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {"literal": {"boolean": true}},
+                                                                      "domain": null,
+                                                                      "parameter": "_"}}}}],
+                                                            "default": null,
+                                                            "typeName": "hydra.core.Type"}}}}}},
+                                                "domain": null,
+                                                "parameter": "base"}}},
+                                          "type": null}],
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "base"},
+                                                  "function": {"variable": "isSupported"}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "base"},
+                                                          "function": {"variable": "hydra.reflect.typeVariant"}}},
+                                                      "function": {"variable": "isSupportedVariant"}}},
+                                                  "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "base"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "constraints"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {
+                                                            "record": {"field": "types", "typeName": "hydra.coders.LanguageConstraints"}}}}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}}}}}}}}}},
+                      "domain": null,
+                      "parameter": "t"}}},
+                "domain": null,
+                "parameter": "constraints"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.utils.unidirectionalCoder",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Create a unidirectional coder"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "record": {
+                    "fields": [
+                      {"name": "encode", "term": {"variable": "m"}},
+                      {
+                        "name": "decode",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"literal": {"string": "inbound mapping is unsupported"}},
+                                  "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
+                              "domain": null,
+                              "parameter": "_"}}}}],
+                    "typeName": "hydra.compute.Coder"}},
+                "domain": null,
+                "parameter": "m"}}}}},
+      "type": null}],
+  "namespace": "hydra.adapt.utils",
+  "termDependencies": [
+    "hydra.formatting",
+    "hydra.names",
+    "hydra.reflect",
+    "hydra.rewriting",
+    "hydra.show.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

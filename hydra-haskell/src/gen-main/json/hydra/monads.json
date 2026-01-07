@@ -1,0 +1,1732 @@
+{
+  "description": ["Functions for working with Hydra's 'flow' and other monads."],
+  "elements": [
+    {
+      "name": "hydra.monads.bind",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Monadic bind for flows"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "q",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "fs1",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "t0"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "s0"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "l"},
+                                                              "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                                  "type": null}],
+                                              "body": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "fs1"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "fs1"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "fs1"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {"argument": {"variable": "v"}, "function": {"variable": "r"}}},
+                                                                        "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "v"}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "record": {
+                                                              "fields": [
+                                                                {"name": "value", "term": {"maybe": null}},
+                                                                {
+                                                                  "name": "state",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "fs1"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                                {
+                                                                  "name": "trace",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "fs1"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}}}],
+                                                              "typeName": "hydra.compute.FlowState"}},
+                                                          "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}}}},
+                                          "domain": null,
+                                          "parameter": "t0"}}},
+                                    "domain": null,
+                                    "parameter": "s0"}}},
+                              "type": null}],
+                          "body": {
+                            "wrap": {"body": {"variable": "q"}, "typeName": "hydra.compute.Flow"}}}},
+                      "domain": null,
+                      "parameter": "r"}}},
+                "domain": null,
+                "parameter": "l"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.eitherToFlow",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Adapt an either to a flow; a left value is mapped to a failure using the provided function"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "e"},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "r"},
+                                        "function": {"variable": "hydra.monads.pure"}}},
+                                    "domain": null,
+                                    "parameter": "r"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "l"},
+                                                "function": {"variable": "formatError"}}},
+                                            "function": {"variable": "hydra.monads.fail"}}},
+                                        "domain": null,
+                                        "parameter": "l"}}},
+                                  "function": {"function": {"primitive": "hydra.lib.eithers.either"}}}}}}}},
+                      "domain": null,
+                      "parameter": "e"}}},
+                "domain": null,
+                "parameter": "formatError"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.emptyTrace",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "An empty trace with no stack, messages, or other attributes"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "stack", "term": {"list": []}},
+                {"name": "messages", "term": {"list": []}},
+                {
+                  "name": "other",
+                  "term": {"function": {"primitive": "hydra.lib.maps.empty"}}}],
+              "typeName": "hydra.compute.Trace"}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.exec",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Execute a flow and return the final state"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"variable": "hydra.monads.emptyTrace"},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "s0"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "f"},
+                                      "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                          "function": {
+                            "function": {
+                              "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}},
+                      "domain": null,
+                      "parameter": "s0"}}},
+                "domain": null,
+                "parameter": "f"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.fail",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Fail a flow with an error message"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "record": {
+                                    "fields": [
+                                      {"name": "value", "term": {"maybe": null}},
+                                      {"name": "state", "term": {"variable": "s"}},
+                                      {
+                                        "name": "trace",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "t"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "msg"},
+                                                "function": {"variable": "hydra.monads.pushError"}}}}}}],
+                                    "typeName": "hydra.compute.FlowState"}},
+                                "domain": null,
+                                "parameter": "t"}}},
+                          "domain": null,
+                          "parameter": "s"}}},
+                    "typeName": "hydra.compute.Flow"}},
+                "domain": null,
+                "parameter": "msg"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.flowSucceeds",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Check whether a flow succeeds"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "hydra.monads.emptyTrace"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "s"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "f"},
+                                          "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                              "function": {
+                                "function": {
+                                  "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}},
+                          "function": {"function": {"primitive": "hydra.lib.maybes.isJust"}}}},
+                      "domain": null,
+                      "parameter": "f"}}},
+                "domain": null,
+                "parameter": "s"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.fromFlow",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Get the value of a flow, or a default value if the flow fails"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.monads.emptyTrace"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "cx"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "f"},
+                                                "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {"body": {"variable": "xmo"}, "domain": null, "parameter": "xmo"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "def"},
+                                        "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                            "domain": null,
+                            "parameter": "f"}}},
+                      "domain": null,
+                      "parameter": "cx"}}},
+                "domain": null,
+                "parameter": "def"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.getState",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Get the state of the current flow"}}}],
+          "body": {
+            "wrap": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "fs1",
+                                  "term": {
+                                    "application": {
+                                      "argument": {"variable": "t0"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "s0"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"unit": {}},
+                                                  "function": {"variable": "hydra.monads.pure"}}},
+                                              "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                  "type": null}],
+                              "body": {
+                                "let": {
+                                  "bindings": [
+                                    {
+                                      "name": "v",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "fs1"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}},
+                                      "type": null}],
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "s",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "fs1"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}},
+                                          "type": null}],
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "t",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "fs1"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "v"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {"name": "value", "term": {"maybe": [{"variable": "s"}]}},
+                                                              {"name": "state", "term": {"variable": "s"}},
+                                                              {"name": "trace", "term": {"variable": "t"}}],
+                                                            "typeName": "hydra.compute.FlowState"}},
+                                                        "domain": null,
+                                                        "parameter": "_"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {"name": "value", "term": {"maybe": null}},
+                                                            {"name": "state", "term": {"variable": "s"}},
+                                                            {"name": "trace", "term": {"variable": "t"}}],
+                                                          "typeName": "hydra.compute.FlowState"}},
+                                                      "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}}}}}}}}}},
+                          "domain": null,
+                          "parameter": "t0"}}},
+                    "domain": null,
+                    "parameter": "s0"}}},
+              "typeName": "hydra.compute.Flow"}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.map",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Map a function over a flow"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "wrap": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "f2",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "t0"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "s0"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "f1"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "value",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "f2"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "f"},
+                                                          "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}}},
+                                                {
+                                                  "name": "state",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "f2"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                {
+                                                  "name": "trace",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "f2"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}}}],
+                                              "typeName": "hydra.compute.FlowState"}}}},
+                                      "domain": null,
+                                      "parameter": "t0"}}},
+                                "domain": null,
+                                "parameter": "s0"}}},
+                          "typeName": "hydra.compute.Flow"}},
+                      "domain": null,
+                      "parameter": "f1"}}},
+                "domain": null,
+                "parameter": "f"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.modify",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Modify the state of a flow using a given function"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {"argument": {"variable": "s"}, "function": {"variable": "f"}}},
+                              "function": {"variable": "hydra.monads.putState"}}},
+                          "domain": null,
+                          "parameter": "s"}}},
+                    "function": {
+                      "application": {
+                        "argument": {"variable": "hydra.monads.getState"},
+                        "function": {"variable": "hydra.monads.bind"}}}}},
+                "domain": null,
+                "parameter": "f"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.mutateTrace",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Temporarily mutate the trace for the duration of a flow"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "choose",
+                                    "term": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {"argument": {"variable": "r"}, "function": {"variable": "forRight"}}},
+                                                                    "domain": null,
+                                                                    "parameter": "r"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {"argument": {"variable": "l"}, "function": {"variable": "forLeft"}}},
+                                                                        "domain": null,
+                                                                        "parameter": "l"}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.eithers.either"}}}}}}}},
+                                                      "domain": null,
+                                                      "parameter": "e"}}},
+                                                "domain": null,
+                                                "parameter": "forRight"}}},
+                                          "domain": null,
+                                          "parameter": "forLeft"}}},
+                                    "type": null}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "flowFun",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "forLeft",
+                                                            "term": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {"name": "value", "term": {"maybe": null}},
+                                                                        {"name": "state", "term": {"variable": "s0"}},
+                                                                        {
+                                                                          "name": "trace",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "t0"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "msg"},
+                                                                                  "function": {"variable": "hydra.monads.pushError"}}}}}}],
+                                                                      "typeName": "hydra.compute.FlowState"}},
+                                                                  "domain": null,
+                                                                  "parameter": "msg"}}},
+                                                            "type": null}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "forRight",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "f2",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "t1"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "s0"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "f"},
+                                                                                          "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                                                              "type": null}],
+                                                                          "body": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "value",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "f2"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                                                {
+                                                                                  "name": "state",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "f2"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                                                {
+                                                                                  "name": "trace",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "f2"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {"argument": {"variable": "t0"}, "function": {"variable": "restore"}}}}}}],
+                                                                              "typeName": "hydra.compute.FlowState"}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "t1"}}},
+                                                                "type": null}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {"argument": {"variable": "t0"}, "function": {"variable": "mutate"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "forRight"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "forLeft"},
+                                                                        "function": {"variable": "choose"}}}}}}}}}}},
+                                                    "domain": null,
+                                                    "parameter": "t0"}}},
+                                              "domain": null,
+                                              "parameter": "s0"}}},
+                                        "type": null}],
+                                    "body": {
+                                      "wrap": {"body": {"variable": "flowFun"}, "typeName": "hydra.compute.Flow"}}}}}},
+                            "domain": null,
+                            "parameter": "f"}}},
+                      "domain": null,
+                      "parameter": "restore"}}},
+                "domain": null,
+                "parameter": "mutate"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.maybeToList",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Converts an optional value either to an empty list (if nothing) or a singleton list (if just)."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "mx"},
+                    "function": {
+                      "application": {
+                        "argument": {"function": {"primitive": "hydra.lib.lists.pure"}},
+                        "function": {
+                          "application": {
+                            "argument": {"list": []},
+                            "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                "domain": null,
+                "parameter": "mx"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.pure",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Lift a value into a flow"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "record": {
+                                    "fields": [
+                                      {"name": "value", "term": {"maybe": [{"variable": "xp"}]}},
+                                      {"name": "state", "term": {"variable": "s"}},
+                                      {"name": "trace", "term": {"variable": "t"}}],
+                                    "typeName": "hydra.compute.FlowState"}},
+                                "domain": null,
+                                "parameter": "t"}}},
+                          "domain": null,
+                          "parameter": "s"}}},
+                    "typeName": "hydra.compute.Flow"}},
+                "domain": null,
+                "parameter": "xp"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.pushError",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Push an error message"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "condenseRepeats",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "condenseGroup",
+                                            "term": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "let": {
+                                                      "bindings": [
+                                                        {
+                                                          "name": "x",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "xs"},
+                                                              "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                          "type": null}],
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "n",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "xs"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
+                                                              "type": null}],
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {"variable": "x"},
+                                                                      {"literal": {"string": " (x"}},
+                                                                      {
+                                                                        "application": {
+                                                                          "argument": {"variable": "n"},
+                                                                          "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
+                                                                      {"literal": {"string": ")"}}]},
+                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "x"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "n"},
+                                                                              "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "xs"}}},
+                                            "type": null}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "ys"},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.group"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "condenseGroup"},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}},
+                                    "domain": null,
+                                    "parameter": "ys"}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "errorMsg",
+                                  "term": {
+                                    "application": {
+                                      "argument": {
+                                        "list": [
+                                          {"literal": {"string": "Error: "}},
+                                          {"variable": "msg"},
+                                          {"literal": {"string": " ("}},
+                                          {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "t"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.lists.reverse"}}}},
+                                                  "function": {"variable": "condenseRepeats"}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"literal": {"string": " > "}},
+                                                  "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                          {"literal": {"string": ")"}}]},
+                                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                  "type": null}],
+                              "body": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "stack",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "t"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}}},
+                                    {
+                                      "name": "messages",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "t"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "errorMsg"},
+                                              "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}}},
+                                    {
+                                      "name": "other",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "t"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}}}],
+                                  "typeName": "hydra.compute.Trace"}}}}}},
+                      "domain": null,
+                      "parameter": "t"}}},
+                "domain": null,
+                "parameter": "msg"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.putState",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Set the state of a flow"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "f1",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "s0"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"unit": {}},
+                                                        "function": {"variable": "hydra.monads.pure"}}},
+                                                    "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                        "type": null}],
+                                    "body": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "value",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "f1"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                          {"name": "state", "term": {"variable": "cx"}},
+                                          {
+                                            "name": "trace",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "f1"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}}}],
+                                        "typeName": "hydra.compute.FlowState"}}}},
+                                "domain": null,
+                                "parameter": "t0"}}},
+                          "domain": null,
+                          "parameter": "s0"}}},
+                    "typeName": "hydra.compute.Flow"}},
+                "domain": null,
+                "parameter": "cx"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.traceSummary",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Summarize a trace as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "messageLines",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "t"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}},
+                            "function": {"function": {"primitive": "hydra.lib.lists.nub"}}}},
+                        "type": null}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "toLine",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "pair"},
+                                              "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                          "function": {"variable": "hydra.show.core.term"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"string": ": "}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "pair"},
+                                                              "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "\t"}},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                  "domain": null,
+                                  "parameter": "pair"}}},
+                            "type": null}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "keyvalLines",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "t"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.maps.toList"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "toLine"},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "key/value pairs: "}},
+                                            "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"list": []},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "t"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.maps.null"}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                "type": null}],
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "keyvalLines"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "messageLines"},
+                                        "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\n"}},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}}}}}}}},
+                "domain": null,
+                "parameter": "t"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.unexpected",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Fail if an actual value does not match an expected value"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"variable": "actual"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"literal": {"string": " but found "}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "expected"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "expected "}},
+                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                          "function": {"variable": "hydra.monads.fail"}}},
+                      "domain": null,
+                      "parameter": "actual"}}},
+                "domain": null,
+                "parameter": "expected"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.warn",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Continue the current flow after adding a warning message"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "wrap": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "f1",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "t0"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "s0"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "b"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "addMessage",
+                                                  "term": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "stack",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                              {
+                                                                "name": "messages",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "t"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "msg"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "Warning: "}},
+                                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                        "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}}},
+                                                              {
+                                                                "name": "other",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}}}],
+                                                            "typeName": "hydra.compute.Trace"}},
+                                                        "domain": null,
+                                                        "parameter": "t"}}},
+                                                  "type": null}],
+                                              "body": {
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "value",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "f1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                    {
+                                                      "name": "state",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "f1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "state", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                    {
+                                                      "name": "trace",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "f1"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}},
+                                                          "function": {"variable": "addMessage"}}}}],
+                                                  "typeName": "hydra.compute.FlowState"}}}}}},
+                                      "domain": null,
+                                      "parameter": "t0"}}},
+                                "domain": null,
+                                "parameter": "s0"}}},
+                          "typeName": "hydra.compute.Flow"}},
+                      "domain": null,
+                      "parameter": "b"}}},
+                "domain": null,
+                "parameter": "msg"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.withFlag",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Continue the current flow after setting a flag"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "mutate",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "either": {
+                                            "@right": {
+                                              "record": {
+                                                "fields": [
+                                                  {
+                                                    "name": "stack",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "t"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                  {
+                                                    "name": "messages",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "t"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                  {
+                                                    "name": "other",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "t"},
+                                                            "function": {
+                                                              "function": {
+                                                                "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "literal",
+                                                                  "term": {
+                                                                    "union": {
+                                                                      "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
+                                                                      "typeName": "hydra.core.Literal"}}},
+                                                                "typeName": "hydra.core.Term"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "flag"},
+                                                                "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}}}],
+                                                "typeName": "hydra.compute.Trace"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"either": {"@left": {"literal": {"string": "never happens"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"literal": {"boolean": false}},
+                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                    "domain": null,
+                                    "parameter": "t"}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "restore",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "stack",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "t1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                    {
+                                                      "name": "messages",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "t1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                    {
+                                                      "name": "other",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "t1"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "flag"},
+                                                              "function": {"function": {"primitive": "hydra.lib.maps.delete"}}}}}}}],
+                                                  "typeName": "hydra.compute.Trace"}},
+                                              "domain": null,
+                                              "parameter": "t1"}}},
+                                        "domain": null,
+                                        "parameter": "ignored"}}},
+                                  "type": null}],
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "f"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "restore"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "mutate"},
+                                          "function": {"variable": "hydra.monads.mutateTrace"}}}}}}}}}}},
+                      "domain": null,
+                      "parameter": "f"}}},
+                "domain": null,
+                "parameter": "flag"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.withState",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Continue a flow using a given state"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "wrap": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "f1",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "t1"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "cx0"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "f"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.compute.Flow"}}}}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "value",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "f1"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "value", "typeName": "hydra.compute.FlowState"}}}}}}},
+                                                {"name": "state", "term": {"variable": "cx1"}},
+                                                {
+                                                  "name": "trace",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "f1"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "trace", "typeName": "hydra.compute.FlowState"}}}}}}}],
+                                              "typeName": "hydra.compute.FlowState"}}}},
+                                      "domain": null,
+                                      "parameter": "t1"}}},
+                                "domain": null,
+                                "parameter": "cx1"}}},
+                          "typeName": "hydra.compute.Flow"}},
+                      "domain": null,
+                      "parameter": "f"}}},
+                "domain": null,
+                "parameter": "cx0"}}}}},
+      "type": null},
+    {
+      "name": "hydra.monads.withTrace",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Continue the current flow after augmenting the trace"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "mutate",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "either": {
+                                            "@right": {
+                                              "record": {
+                                                "fields": [
+                                                  {
+                                                    "name": "stack",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "t"},
+                                                            "function": {
+                                                              "function": {
+                                                                "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "msg"},
+                                                            "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}}},
+                                                  {
+                                                    "name": "messages",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "t"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                  {
+                                                    "name": "other",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "t"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}}}],
+                                                "typeName": "hydra.compute.Trace"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "either": {
+                                                "@left": {
+                                                  "literal": {
+                                                    "string": "maximum trace depth exceeded. This may indicate an infinite loop"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "hydra.constants.maxTraceDepth"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "t"},
+                                                                "function": {
+                                                                  "function": {
+                                                                    "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}},
+                                                            "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
+                                                        "function": {"function": {"primitive": "hydra.lib.equality.gte"}}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                    "domain": null,
+                                    "parameter": "t"}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "restore",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "stack",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "stack", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                    {
+                                                      "name": "messages",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "t1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "messages", "typeName": "hydra.compute.Trace"}}}}}}},
+                                                    {
+                                                      "name": "other",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "t1"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "other", "typeName": "hydra.compute.Trace"}}}}}}}],
+                                                  "typeName": "hydra.compute.Trace"}},
+                                              "domain": null,
+                                              "parameter": "t1"}}},
+                                        "domain": null,
+                                        "parameter": "t0"}}},
+                                  "type": null}],
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "f"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "restore"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "mutate"},
+                                          "function": {"variable": "hydra.monads.mutateTrace"}}}}}}}}}}},
+                      "domain": null,
+                      "parameter": "f"}}},
+                "domain": null,
+                "parameter": "msg"}}}}},
+      "type": null}],
+  "namespace": "hydra.monads",
+  "termDependencies": ["hydra.constants", "hydra.show.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

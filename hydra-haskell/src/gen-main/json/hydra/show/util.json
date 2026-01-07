@@ -1,0 +1,84 @@
+{
+  "description": ["String representations of hydra.util types"],
+  "elements": [
+    {
+      "name": "hydra.show.util.caseConvention",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Show a case convention as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "c"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "lowerSnake",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "lower_snake_case"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "upperSnake",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "UPPER_SNAKE_CASE"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "camel",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "camelCase"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "pascal",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "PascalCase"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}}],
+                            "default": null,
+                            "typeName": "hydra.util.CaseConvention"}}}}}},
+                "domain": null,
+                "parameter": "c"}}}}},
+      "type": null}],
+  "namespace": "hydra.show.util",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

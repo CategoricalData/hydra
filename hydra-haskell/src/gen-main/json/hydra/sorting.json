@@ -1,0 +1,560 @@
+{
+  "description": ["Utilities for sorting."],
+  "elements": [
+    {
+      "name": "hydra.sorting.createOrderingIsomorphism",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "classes",
+              "@value": {
+                "map": [
+                  {
+                    "@key": {
+                      "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                    "@value": {
+                      "set": [
+                        {
+                          "union": {
+                            "field": {"name": "ordering", "term": {"unit": {}}},
+                            "typeName": "hydra.classes.TypeClass"}}]}}]}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "sourceToTargetMapping",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "mp",
+                                            "term": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "els"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "sourceOrd"},
+                                                        "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                                            "type": null}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "targetOrd"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {"variable": "mp"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "n"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                          "domain": null,
+                                                          "parameter": "n"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}}}},
+                                    "domain": null,
+                                    "parameter": "els"}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "targetToSourceMapping",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "mp",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "els"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "targetOrd"},
+                                                            "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                                                "type": null}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "sourceOrd"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"variable": "mp"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                              "domain": null,
+                                                              "parameter": "n"}}},
+                                                        "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}}}},
+                                        "domain": null,
+                                        "parameter": "els"}}},
+                                  "type": null}],
+                              "body": {
+                                "record": {
+                                  "fields": [
+                                    {"name": "encode", "term": {"variable": "sourceToTargetMapping"}},
+                                    {"name": "decode", "term": {"variable": "targetToSourceMapping"}}],
+                                  "typeName": "hydra.topology.OrderingIsomorphism"}}}}}},
+                      "domain": null,
+                      "parameter": "targetOrd"}}},
+                "domain": null,
+                "parameter": "sourceOrd"}}}}},
+      "type": null},
+    {
+      "name": "hydra.sorting.findReachableNodes",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "visit",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "toVisit",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "visited"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {"argument": {"variable": "node"}, "function": {"variable": "adj"}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.sets.difference"}}}}}},
+                                                  "type": null}],
+                                              "body": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "toVisit"},
+                                                          "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "visited"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "n"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "v"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "n"},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.insert"}}}}}},
+                                                                                  "function": {"variable": "visit"}}}}},
+                                                                          "domain": null,
+                                                                          "parameter": "n"}}},
+                                                                    "domain": null,
+                                                                    "parameter": "v"}}},
+                                                              "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "visited"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "toVisit"},
+                                                              "function": {"function": {"primitive": "hydra.lib.sets.null"}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
+                                          "domain": null,
+                                          "parameter": "node"}}},
+                                    "domain": null,
+                                    "parameter": "visited"}}},
+                              "type": null}],
+                          "body": {
+                            "application": {
+                              "argument": {"variable": "root"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "root"},
+                                      "function": {"function": {"primitive": "hydra.lib.sets.singleton"}}}},
+                                  "function": {"variable": "visit"}}}}}}},
+                      "domain": null,
+                      "parameter": "root"}}},
+                "domain": null,
+                "parameter": "adj"}}}}},
+      "type": null},
+    {
+      "name": "hydra.sorting.topologicalSort",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "classes",
+              "@value": {
+                "map": [
+                  {
+                    "@key": {
+                      "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                    "@value": {
+                      "set": [
+                        {
+                          "union": {
+                            "field": {"name": "ordering", "term": {"unit": {}}},
+                            "typeName": "hydra.classes.TypeClass"}}]}}]}},
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "sccs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pairs"},
+                            "function": {"variable": "hydra.sorting.topologicalSortComponents"}}},
+                        "type": null}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "isCycle",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "scc"},
+                                              "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                      "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                  "domain": null,
+                                  "parameter": "scc"}}},
+                            "type": null}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "withCycles",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "sccs"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "isCycle"},
+                                        "function": {"function": {"primitive": "hydra.lib.lists.filter"}}}}}},
+                                "type": null}],
+                            "body": {
+                              "application": {
+                                "argument": {"either": {"@left": {"variable": "withCycles"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "either": {
+                                        "@right": {
+                                          "application": {
+                                            "argument": {"variable": "sccs"},
+                                            "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "withCycles"},
+                                            "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                        "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}},
+                "domain": null,
+                "parameter": "pairs"}}}}},
+      "type": null},
+    {
+      "name": "hydra.sorting.topologicalSortComponents",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "classes",
+              "@value": {
+                "map": [
+                  {
+                    "@key": {
+                      "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                    "@value": {
+                      "set": [
+                        {
+                          "union": {
+                            "field": {"name": "ordering", "term": {"unit": {}}},
+                            "typeName": "hydra.classes.TypeClass"}}]}}]}},
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "graphResult",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pairs"},
+                            "function": {"variable": "hydra.tarjan.adjacencyListsToGraph"}}},
+                        "type": null}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "g",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "graphResult"},
+                                "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                            "type": null}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "g"},
+                                "function": {"variable": "hydra.tarjan.stronglyConnectedComponents"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "comp"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "graphResult"},
+                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                      "domain": null,
+                                      "parameter": "comp"}}},
+                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}}}},
+                "domain": null,
+                "parameter": "pairs"}}}}},
+      "type": null},
+    {
+      "name": "hydra.sorting.topologicalSortNodes",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "classes",
+              "@value": {
+                "map": [
+                  {
+                    "@key": {
+                      "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
+                    "@value": {
+                      "set": [
+                        {
+                          "union": {
+                            "field": {"name": "ordering", "term": {"unit": {}}},
+                            "typeName": "hydra.classes.TypeClass"}}]}}]}},
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "nodesByKey",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "nodes"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "pair": {
+                                                          "@first": {
+                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
+                                                          "@second": {"variable": "n"}}},
+                                                      "domain": null,
+                                                      "parameter": "n"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                        "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                                    "type": null}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "pairs",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "nodes"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "pair": {
+                                                          "@first": {
+                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
+                                                          "@second": {
+                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getAdj"}}}}},
+                                                      "domain": null,
+                                                      "parameter": "n"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                        "type": null}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "comps",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "pairs"},
+                                                "function": {"variable": "hydra.sorting.topologicalSortComponents"}}},
+                                            "type": null}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "comps"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "c"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "nodesByKey"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "k"},
+                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                        "domain": null,
+                                                                        "parameter": "k"}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}},
+                                                      "domain": null,
+                                                      "parameter": "c"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}}}}}},
+                            "domain": null,
+                            "parameter": "nodes"}}},
+                      "domain": null,
+                      "parameter": "getAdj"}}},
+                "domain": null,
+                "parameter": "getKey"}}}}},
+      "type": null}],
+  "namespace": "hydra.sorting",
+  "termDependencies": ["hydra.tarjan"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

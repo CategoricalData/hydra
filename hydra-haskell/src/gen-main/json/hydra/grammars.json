@@ -1,0 +1,1555 @@
+{
+  "description": ["A utility for converting a BNF grammar to a Hydra module."],
+  "elements": [
+    {
+      "name": "hydra.grammars.childName",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Generate child name"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "list": [
+                              {"variable": "lname"},
+                              {"literal": {"string": "_"}},
+                              {
+                                "application": {
+                                  "argument": {"variable": "n"},
+                                  "function": {"variable": "hydra.formatting.capitalize"}}}]},
+                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "domain": null,
+                      "parameter": "n"}}},
+                "domain": null,
+                "parameter": "lname"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.findNames",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Find unique names for patterns"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "nextName",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "names",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "acc"},
+                                                "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                            "type": null}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "nameMap",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "acc"},
+                                                    "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                "type": null}],
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "rn",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "pat"},
+                                                        "function": {"variable": "hydra.grammars.rawName"}}},
+                                                    "type": null}],
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "nameAndIndex",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "nameMap"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "rn"},
+                                                                    "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "pair": {
+                                                                          "@first": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "i"},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "rn"},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                          "@second": {
+                                                                            "application": {
+                                                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "i"},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "i"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "pair": {
+                                                                        "@first": {"variable": "rn"},
+                                                                        "@second": {"literal": {"integer": {"int32": 1.0}}}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                        "type": null}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "nn",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "nameAndIndex"},
+                                                                "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                            "type": null}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "ni",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "nameAndIndex"},
+                                                                    "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                "type": null}],
+                                                            "body": {
+                                                              "pair": {
+                                                                "@first": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "names"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "nn"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                "@second": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "nameMap"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "ni"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "rn"},
+                                                                            "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}}}}}}}}}}}}}}}},
+                                    "domain": null,
+                                    "parameter": "pat"}}},
+                              "domain": null,
+                              "parameter": "acc"}}},
+                        "type": null}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "pats"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "pair": {
+                                        "@first": {"list": []},
+                                        "@second": {"function": {"primitive": "hydra.lib.maps.empty"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "nextName"},
+                                        "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                            "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                        "function": {"function": {"primitive": "hydra.lib.lists.reverse"}}}}}},
+                "domain": null,
+                "parameter": "pats"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.grammarToModule",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Convert a BNF grammar to a Hydra module"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "prodPairs",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "grammar"},
+                                            "function": {"function": {"elimination": {"wrap": "hydra.grammar.Grammar"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "pair": {
+                                                      "@first": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "prod"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {
+                                                                    "record": {"field": "symbol", "typeName": "hydra.grammar.Production"}}}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.grammar.Symbol"}}}}},
+                                                      "@second": {
+                                                        "application": {
+                                                          "argument": {"variable": "prod"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {
+                                                                "record": {"field": "pattern", "typeName": "hydra.grammar.Production"}}}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "prod"}}},
+                                            "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                    "type": null}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "capitalizedNames",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "prodPairs"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "pair"},
+                                                              "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                          "function": {"variable": "hydra.formatting.capitalize"}}},
+                                                      "domain": null,
+                                                      "parameter": "pair"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                        "type": null}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "patterns",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "prodPairs"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {"variable": "pair"},
+                                                              "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                          "domain": null,
+                                                          "parameter": "pair"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                            "type": null}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "elementPairs",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "patterns"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "capitalizedNames"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "ns"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"boolean": false}},
+                                                                        "function": {"variable": "hydra.grammars.makeElements"}}}}},
+                                                                "function": {"function": {"primitive": "hydra.lib.lists.zipWith"}}}}}}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}},
+                                                "type": null}],
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "elements",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "elementPairs"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "let": {
+                                                                      "bindings": [
+                                                                        {
+                                                                          "name": "lname",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "pair"},
+                                                                              "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                          "type": null}],
+                                                                      "body": {
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "typ",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pair"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                  "function": {"variable": "hydra.grammars.wrapType"}}},
+                                                                              "type": null}],
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "typ"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "lname"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "ns"},
+                                                                                          "function": {"variable": "hydra.grammars.toName"}}}}},
+                                                                                  "function": {"variable": "hydra.annotations.typeElement"}}}}}}}}},
+                                                                  "domain": null,
+                                                                  "parameter": "pair"}}},
+                                                            "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                    "type": null}],
+                                                "body": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {"name": "namespace", "term": {"variable": "ns"}},
+                                                      {"name": "elements", "term": {"variable": "elements"}},
+                                                      {"name": "termDependencies", "term": {"list": []}},
+                                                      {"name": "typeDependencies", "term": {"list": []}},
+                                                      {"name": "description", "term": {"variable": "desc"}}],
+                                                    "typeName": "hydra.module.Module"}}}}}}}}}}}},
+                            "domain": null,
+                            "parameter": "desc"}}},
+                      "domain": null,
+                      "parameter": "grammar"}}},
+                "domain": null,
+                "parameter": "ns"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.isComplex",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Check if pattern is complex"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "pat"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "labeled",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "lp"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "pattern", "typeName": "hydra.grammar.LabeledPattern"}}}}}},
+                                          "function": {"variable": "hydra.grammars.isComplex"}}},
+                                      "domain": null,
+                                      "parameter": "lp"}}}},
+                              {
+                                "name": "sequence",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "pats"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"boolean": true}},
+                                              "function": {"variable": "hydra.grammars.isNontrivial"}}}}},
+                                      "domain": null,
+                                      "parameter": "pats"}}}},
+                              {
+                                "name": "alternatives",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "pats"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"boolean": false}},
+                                              "function": {"variable": "hydra.grammars.isNontrivial"}}}}},
+                                      "domain": null,
+                                      "parameter": "pats"}}}}],
+                            "default": [{"literal": {"boolean": false}}],
+                            "typeName": "hydra.grammar.Pattern"}}}}}},
+                "domain": null,
+                "parameter": "pat"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.isNontrivial",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Check if patterns are nontrivial"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "minPats",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "pats"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "isRecord"},
+                                      "function": {"variable": "hydra.grammars.simplify"}}}}},
+                              "type": null}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "isLabeled",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "p"},
+                                            "function": {
+                                              "function": {
+                                                "elimination": {
+                                                  "union": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "labeled",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"boolean": true}},
+                                                              "domain": null,
+                                                              "parameter": "_"}}}}],
+                                                    "default": [{"literal": {"boolean": false}}],
+                                                    "typeName": "hydra.grammar.Pattern"}}}}}},
+                                        "domain": null,
+                                        "parameter": "p"}}},
+                                  "type": null}],
+                              "body": {
+                                "application": {
+                                  "argument": {"literal": {"boolean": true}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "minPats"},
+                                              "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                          "function": {"variable": "isLabeled"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "minPats"},
+                                                      "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
+                                                  "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}},
+                      "domain": null,
+                      "parameter": "pats"}}},
+                "domain": null,
+                "parameter": "isRecord"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.makeElements",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Create elements from pattern"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "trivial",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "list": [
+                                                  {
+                                                    "pair": {
+                                                      "@first": {"variable": "lname"},
+                                                      "@second": {
+                                                        "union": {
+                                                          "field": {"name": "unit", "term": {"unit": {}}},
+                                                          "typeName": "hydra.core.Type"}}}}]},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"list": []},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "omitTrivial"},
+                                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                          "type": null}],
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "descend",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "cpairs",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "n"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "lname"},
+                                                                                        "function": {"variable": "hydra.grammars.childName"}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "ns"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"boolean": false}},
+                                                                                        "function": {"variable": "hydra.grammars.makeElements"}}}}}}}}},
+                                                                        "type": null}],
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "cpairs"},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "pair": {
+                                                                                            "@first": {"variable": "lname"},
+                                                                                            "@second": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "cpairs"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "list": [
+                                                                                        {
+                                                                                          "pair": {
+                                                                                            "@first": {"variable": "lname"},
+                                                                                            "@second": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "unit", "term": {"unit": {}}},
+                                                                                                "typeName": "hydra.core.Type"}}}}]},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "cpairs"},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "cpairs"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "pair": {
+                                                                                            "@first": {"variable": "lname"},
+                                                                                            "@second": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "variable",
+                                                                                                  "term": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "cpairs"},
+                                                                                                              "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "ns"},
+                                                                                                          "function": {"variable": "hydra.grammars.toName"}}}}}},
+                                                                                                "typeName": "hydra.core.Type"}}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "p"},
+                                                                                        "function": {"variable": "hydra.grammars.isComplex"}}},
+                                                                                    "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                                        "function": {"variable": "f"}}}}},
+                                                                "domain": null,
+                                                                "parameter": "p"}}},
+                                                          "domain": null,
+                                                          "parameter": "f"}}},
+                                                    "domain": null,
+                                                    "parameter": "n"}}},
+                                              "type": null}],
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "mod",
+                                                  "term": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "p"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "pairs"},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "pair": {
+                                                                                              "@first": {"variable": "lname"},
+                                                                                              "@second": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "pairs"},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                  "function": {"variable": "f"}}}}},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "pairs"}}},
+                                                                            "function": {
+                                                                              "application": {"argument": {"variable": "n"}, "function": {"variable": "descend"}}}}}}},
+                                                                    "domain": null,
+                                                                    "parameter": "p"}}},
+                                                              "domain": null,
+                                                              "parameter": "f"}}},
+                                                        "domain": null,
+                                                        "parameter": "n"}}},
+                                                  "type": null}],
+                                              "body": {
+                                                "let": {
+                                                  "bindings": [
+                                                    {
+                                                      "name": "forPat",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "pat"},
+                                                                "function": {
+                                                                  "function": {
+                                                                    "elimination": {
+                                                                      "union": {
+                                                                        "cases": [
+                                                                          {
+                                                                            "name": "alternatives",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pats"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "union": {
+                                                                                                    "field": {
+                                                                                                      "name": "union",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "fields": [
+                                                                                                            {
+                                                                                                              "name": "typeName",
+                                                                                                              "term": {"variable": "hydra.constants.placeholderName"}},
+                                                                                                            {"name": "fields", "term": {"variable": "fields"}}],
+                                                                                                          "typeName": "hydra.core.RowType"}}},
+                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                "domain": null,
+                                                                                                "parameter": "fields"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"boolean": false}},
+                                                                                              "function": {"variable": "forRecordOrUnion"}}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "pats"}}}},
+                                                                          {
+                                                                            "name": "constant",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {"body": {"variable": "trivial"}, "domain": null, "parameter": "_"}}}},
+                                                                          {
+                                                                            "name": "ignored",
+                                                                            "term": {
+                                                                              "function": {"lambda": {"body": {"list": []}, "domain": null, "parameter": "_"}}}},
+                                                                          {
+                                                                            "name": "labeled",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "lp"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {
+                                                                                                "record": {"field": "pattern", "typeName": "hydra.grammar.LabeledPattern"}}}}}},
+                                                                                      "function": {"variable": "forPat"}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "lp"}}}},
+                                                                          {
+                                                                            "name": "nil",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {"body": {"variable": "trivial"}, "domain": null, "parameter": "_"}}}},
+                                                                          {
+                                                                            "name": "nonterminal",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "pair": {
+                                                                                          "@first": {"variable": "lname"},
+                                                                                          "@second": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "variable",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "s"},
+                                                                                                        "function": {"function": {"elimination": {"wrap": "hydra.grammar.Symbol"}}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "ns"},
+                                                                                                        "function": {"variable": "hydra.grammars.toName"}}}}}},
+                                                                                              "typeName": "hydra.core.Type"}}}}]},
+                                                                                  "domain": null,
+                                                                                  "parameter": "s"}}}},
+                                                                          {
+                                                                            "name": "option",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "p"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "maybe", "term": {"variable": "x"}},
+                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                "domain": null,
+                                                                                                "parameter": "x"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"string": "Option"}},
+                                                                                              "function": {"variable": "mod"}}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "p"}}}},
+                                                                          {
+                                                                            "name": "plus",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "p"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "list", "term": {"variable": "x"}},
+                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                "domain": null,
+                                                                                                "parameter": "x"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"string": "Elmt"}},
+                                                                                              "function": {"variable": "mod"}}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "p"}}}},
+                                                                          {
+                                                                            "name": "regex",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "list": [
+                                                                                      {
+                                                                                        "pair": {
+                                                                                          "@first": {"variable": "lname"},
+                                                                                          "@second": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.LiteralType"}}},
+                                                                                              "typeName": "hydra.core.Type"}}}}]},
+                                                                                  "domain": null,
+                                                                                  "parameter": "_"}}}},
+                                                                          {
+                                                                            "name": "sequence",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pats"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "union": {
+                                                                                                    "field": {
+                                                                                                      "name": "record",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "fields": [
+                                                                                                            {
+                                                                                                              "name": "typeName",
+                                                                                                              "term": {"variable": "hydra.constants.placeholderName"}},
+                                                                                                            {"name": "fields", "term": {"variable": "fields"}}],
+                                                                                                          "typeName": "hydra.core.RowType"}}},
+                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                "domain": null,
+                                                                                                "parameter": "fields"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"boolean": true}},
+                                                                                              "function": {"variable": "forRecordOrUnion"}}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "pats"}}}},
+                                                                          {
+                                                                            "name": "star",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "p"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "list", "term": {"variable": "x"}},
+                                                                                                    "typeName": "hydra.core.Type"}},
+                                                                                                "domain": null,
+                                                                                                "parameter": "x"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"string": "Elmt"}},
+                                                                                              "function": {"variable": "mod"}}}}}}},
+                                                                                  "domain": null,
+                                                                                  "parameter": "p"}}}}],
+                                                                        "default": null,
+                                                                        "typeName": "hydra.grammar.Pattern"}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "pat"}}},
+                                                      "type": null},
+                                                    {
+                                                      "name": "forRecordOrUnion",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "minPats",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pats"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "isRecord"},
+                                                                                        "function": {"variable": "hydra.grammars.simplify"}}}}},
+                                                                                "type": null}],
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "fieldNames",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "minPats"},
+                                                                                        "function": {"variable": "hydra.grammars.findNames"}}},
+                                                                                    "type": null}],
+                                                                                "body": {
+                                                                                  "let": {
+                                                                                    "bindings": [
+                                                                                      {
+                                                                                        "name": "toField",
+                                                                                        "term": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "p"},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "function": {
+                                                                                                                "lambda": {
+                                                                                                                  "body": {
+                                                                                                                    "pair": {
+                                                                                                                      "@first": {
+                                                                                                                        "record": {
+                                                                                                                          "fields": [
+                                                                                                                            {
+                                                                                                                              "name": "name",
+                                                                                                                              "term": {"wrap": {"body": {"variable": "n"}, "typeName": "hydra.core.Name"}}},
+                                                                                                                            {
+                                                                                                                              "name": "type",
+                                                                                                                              "term": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {"variable": "pairs"},
+                                                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}}}],
+                                                                                                                          "typeName": "hydra.core.FieldType"}},
+                                                                                                                      "@second": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "pairs"},
+                                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}}}},
+                                                                                                                  "domain": null,
+                                                                                                                  "parameter": "pairs"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {"argument": {"variable": "n"}, "function": {"variable": "descend"}}}}}}},
+                                                                                                    "domain": null,
+                                                                                                    "parameter": "p"}}},
+                                                                                              "domain": null,
+                                                                                              "parameter": "n"}}},
+                                                                                        "type": null}],
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "fieldPairs",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "minPats"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "fieldNames"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "toField"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.zipWith"}}}}}}}},
+                                                                                            "type": null}],
+                                                                                        "body": {
+                                                                                          "let": {
+                                                                                            "bindings": [
+                                                                                              {
+                                                                                                "name": "fields",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "fieldPairs"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                                                "type": null}],
+                                                                                            "body": {
+                                                                                              "let": {
+                                                                                                "bindings": [
+                                                                                                  {
+                                                                                                    "name": "els",
+                                                                                                    "term": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "fieldPairs"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}},
+                                                                                                    "type": null}],
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "minPats"},
+                                                                                                            "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
+                                                                                                        "function": {"variable": "forPat"}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "els"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "pair": {
+                                                                                                                    "@first": {"variable": "lname"},
+                                                                                                                    "@second": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "fields"},
+                                                                                                                        "function": {"variable": "construct"}}}}},
+                                                                                                                "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "pats"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "isRecord"},
+                                                                                                                    "function": {"variable": "hydra.grammars.isNontrivial"}}}}},
+                                                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}}}}}}}},
+                                                                        "domain": null,
+                                                                        "parameter": "pats"}}},
+                                                                  "domain": null,
+                                                                  "parameter": "construct"}}},
+                                                            "domain": null,
+                                                            "parameter": "isRecord"}}},
+                                                      "type": null}],
+                                                  "body": {
+                                                    "application": {"argument": {"variable": "pat"}, "function": {"variable": "forPat"}}}}}}}}}}},
+                                  "domain": null,
+                                  "parameter": "pat"}}},
+                            "domain": null,
+                            "parameter": "lname"}}},
+                      "domain": null,
+                      "parameter": "ns"}}},
+                "domain": null,
+                "parameter": "omitTrivial"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.rawName",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Get raw name from pattern"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "pat"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "alternatives",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "alts"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "constant",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "c"},
+                                                  "function": {"function": {"elimination": {"wrap": "hydra.grammar.Constant"}}}}},
+                                              "function": {"variable": "hydra.formatting.withCharacterAliases"}}},
+                                          "function": {"variable": "hydra.formatting.capitalize"}}},
+                                      "domain": null,
+                                      "parameter": "c"}}}},
+                              {
+                                "name": "ignored",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "ignored"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "labeled",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "lp"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "label", "typeName": "hydra.grammar.LabeledPattern"}}}}}},
+                                          "function": {"function": {"elimination": {"wrap": "hydra.grammar.Label"}}}}},
+                                      "domain": null,
+                                      "parameter": "lp"}}}},
+                              {
+                                "name": "nil",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "none"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "nonterminal",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "s"},
+                                              "function": {"function": {"elimination": {"wrap": "hydra.grammar.Symbol"}}}}},
+                                          "function": {"variable": "hydra.formatting.capitalize"}}},
+                                      "domain": null,
+                                      "parameter": "s"}}}},
+                              {
+                                "name": "option",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "p"},
+                                              "function": {"variable": "hydra.grammars.rawName"}}},
+                                          "function": {"variable": "hydra.formatting.capitalize"}}},
+                                      "domain": null,
+                                      "parameter": "p"}}}},
+                              {
+                                "name": "plus",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "p"},
+                                                  "function": {"variable": "hydra.grammars.rawName"}}},
+                                              "function": {"variable": "hydra.formatting.capitalize"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "listOf"}},
+                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                      "domain": null,
+                                      "parameter": "p"}}}},
+                              {
+                                "name": "regex",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "regex"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "sequence",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"literal": {"string": "sequence"}},
+                                      "domain": null,
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "star",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "p"},
+                                                  "function": {"variable": "hydra.grammars.rawName"}}},
+                                              "function": {"variable": "hydra.formatting.capitalize"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "listOf"}},
+                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                      "domain": null,
+                                      "parameter": "p"}}}}],
+                            "default": null,
+                            "typeName": "hydra.grammar.Pattern"}}}}}},
+                "domain": null,
+                "parameter": "pat"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.simplify",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Remove trivial patterns from records"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "isConstant",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "p"},
+                                        "function": {
+                                          "function": {
+                                            "elimination": {
+                                              "union": {
+                                                "cases": [
+                                                  {
+                                                    "name": "constant",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"literal": {"boolean": true}},
+                                                          "domain": null,
+                                                          "parameter": "_"}}}}],
+                                                "default": [{"literal": {"boolean": false}}],
+                                                "typeName": "hydra.grammar.Pattern"}}}}}},
+                                    "domain": null,
+                                    "parameter": "p"}}},
+                              "type": null}],
+                          "body": {
+                            "application": {
+                              "argument": {"variable": "pats"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "pats"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "p"},
+                                                        "function": {"variable": "isConstant"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                                "domain": null,
+                                                "parameter": "p"}}},
+                                          "function": {"function": {"primitive": "hydra.lib.lists.filter"}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "isRecord"},
+                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
+                      "domain": null,
+                      "parameter": "pats"}}},
+                "domain": null,
+                "parameter": "isRecord"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.toName",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Convert local name to qualified name"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "record": {
+                              "fields": [
+                                {"name": "namespace", "term": {"maybe": [{"variable": "ns"}]}},
+                                {"name": "local", "term": {"variable": "local"}}],
+                              "typeName": "hydra.module.QualifiedName"}},
+                          "function": {"variable": "hydra.names.unqualifyName"}}},
+                      "domain": null,
+                      "parameter": "local"}}},
+                "domain": null,
+                "parameter": "ns"}}}}},
+      "type": null},
+    {
+      "name": "hydra.grammars.wrapType",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "t"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "record",
+                                "term": {
+                                  "function": {
+                                    "lambda": {"body": {"variable": "t"}, "domain": null, "parameter": "_"}}}},
+                              {
+                                "name": "union",
+                                "term": {
+                                  "function": {
+                                    "lambda": {"body": {"variable": "t"}, "domain": null, "parameter": "_"}}}},
+                              {
+                                "name": "wrap",
+                                "term": {
+                                  "function": {
+                                    "lambda": {"body": {"variable": "t"}, "domain": null, "parameter": "_"}}}}],
+                            "default": [
+                              {
+                                "union": {
+                                  "field": {
+                                    "name": "wrap",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "typeName",
+                                            "term": {
+                                              "wrap": {
+                                                "body": {"literal": {"string": "Placeholder"}},
+                                                "typeName": "hydra.core.Name"}}},
+                                          {"name": "body", "term": {"variable": "t"}}],
+                                        "typeName": "hydra.core.WrappedType"}}},
+                                  "typeName": "hydra.core.Type"}}],
+                            "typeName": "hydra.core.Type"}}}}}},
+                "domain": null,
+                "parameter": "t"}}}}},
+      "type": null}],
+  "namespace": "hydra.grammars",
+  "termDependencies": ["hydra.annotations", "hydra.formatting", "hydra.names"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

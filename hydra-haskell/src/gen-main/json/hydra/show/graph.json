@@ -1,0 +1,81 @@
+{
+  "description": ["String representations of hydra.graph types"],
+  "elements": [
+    {
+      "name": "hydra.show.graph.graph",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Show a graph as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "elements",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "graph"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
+                            "function": {"function": {"primitive": "hydra.lib.maps.elems"}}}},
+                        "type": null},
+                      {
+                        "name": "elementStrs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "elements"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.show.core.binding"},
+                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                        "type": null}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "argument": {"variable": "elementStrs"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ", "}},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                            {"literal": {"string": "}"}}]},
+                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                "domain": null,
+                "parameter": "graph"}}}}},
+      "type": null}],
+  "namespace": "hydra.show.graph",
+  "termDependencies": ["hydra.show.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

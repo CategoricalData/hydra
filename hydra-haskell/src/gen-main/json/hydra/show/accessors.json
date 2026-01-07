@@ -1,0 +1,870 @@
+{
+  "description": ["Utilities for working with term accessors."],
+  "elements": [
+    {
+      "name": "hydra.show.accessors.termAccessor",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Convert a term accessor to a string representation"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "idx",
+                        "term": {
+                          "function": {
+                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "i"}}},
+                        "type": null}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "idxSuff",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "suffix"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "s"},
+                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                      "domain": null,
+                                                      "parameter": "s"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}},
+                                        "domain": null,
+                                        "parameter": "i"}}},
+                                  "domain": null,
+                                  "parameter": "suffix"}}},
+                            "type": null}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "accessor"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [
+                                      {
+                                        "name": "annotatedBody",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                      {
+                                        "name": "applicationFunction",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "fun"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "applicationArgument",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "arg"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "lambdaBody",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "body"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "unionCasesDefault",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "default"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "unionCasesBranch",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "maybe": [
+                                                  {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "name"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "."}},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
+                                              "domain": null,
+                                              "parameter": "name"}}}},
+                                      {
+                                        "name": "letBody",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "in"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "letBinding",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "maybe": [
+                                                  {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": "="}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "name"},
+                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
+                                              "domain": null,
+                                              "parameter": "name"}}}},
+                                      {
+                                        "name": "listElement",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
+                                              "domain": null,
+                                              "parameter": "i"}}}},
+                                      {
+                                        "name": "mapKey",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": ".key"}},
+                                                      "function": {"variable": "idxSuff"}}}}},
+                                              "domain": null,
+                                              "parameter": "i"}}}},
+                                      {
+                                        "name": "mapValue",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": ".value"}},
+                                                      "function": {"variable": "idxSuff"}}}}},
+                                              "domain": null,
+                                              "parameter": "i"}}}},
+                                      {
+                                        "name": "maybeTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {"maybe": [{"literal": {"string": "just"}}]},
+                                              "domain": null,
+                                              "parameter": "_"}}}},
+                                      {
+                                        "name": "productTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
+                                              "domain": null,
+                                              "parameter": "i"}}}},
+                                      {
+                                        "name": "recordField",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "maybe": [
+                                                  {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "name"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "."}},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
+                                              "domain": null,
+                                              "parameter": "name"}}}},
+                                      {
+                                        "name": "setElement",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
+                                              "domain": null,
+                                              "parameter": "i"}}}},
+                                      {
+                                        "name": "sumTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                      {
+                                        "name": "typeLambdaBody",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                      {
+                                        "name": "typeApplicationTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                      {
+                                        "name": "injectionTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                      {
+                                        "name": "wrappedTerm",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}}],
+                                    "default": null,
+                                    "typeName": "hydra.accessors.TermAccessor"}}}}}}}}}},
+                "domain": null,
+                "parameter": "accessor"}}}}},
+      "type": null},
+    {
+      "name": "hydra.show.accessors.termToAccessorGraph",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Build an accessor graph from a term"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "dontCareAccessor",
+                              "term": {
+                                "union": {
+                                  "field": {"name": "annotatedBody", "term": {"unit": {}}},
+                                  "typeName": "hydra.accessors.TermAccessor"}},
+                              "type": null},
+                            {
+                              "name": "helper",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "accessor",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "accessorTerm"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "currentTerm",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "accessorTerm"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "nodesEdges",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "state"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "visited",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "state"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "nodes",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "nodesEdges"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "edges",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "nodesEdges"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                    "type": null},
+                                                                  {
+                                                                    "name": "nextPath",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "path"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "accessor"},
+                                                                            "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                    "type": null}],
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "currentTerm"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {
+                                                                          "union": {
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "let",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "let": {
+                                                                                          "bindings": [
+                                                                                            {
+                                                                                              "name": "bindings",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "letExpr"},
+                                                                                                  "function": {
+                                                                                                    "function": {
+                                                                                                      "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "env",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "letExpr"},
+                                                                                                  "function": {
+                                                                                                    "function": {
+                                                                                                      "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "bindingNames",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "bindings"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "addBindingName",
+                                                                                              "term": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "let": {
+                                                                                                              "bindings": [
+                                                                                                                {
+                                                                                                                  "name": "currentNodesVisited",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "nodesVisitedIds"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "currentIds",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "nodesVisitedIds"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "currentNodes",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentNodesVisited"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "currentVisited",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentNodesVisited"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "rawLabel",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "name"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "namespaces"},
+                                                                                                                          "function": {"variable": "hydra.names.compactName"}}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "uniqueLabel",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "rawLabel"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "currentVisited"},
+                                                                                                                          "function": {"variable": "hydra.names.uniqueLabel"}}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "node",
+                                                                                                                  "term": {
+                                                                                                                    "record": {
+                                                                                                                      "fields": [
+                                                                                                                        {"name": "name", "term": {"variable": "name"}},
+                                                                                                                        {"name": "label", "term": {"variable": "rawLabel"}},
+                                                                                                                        {"name": "id", "term": {"variable": "uniqueLabel"}}],
+                                                                                                                      "typeName": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "newVisited",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentVisited"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "uniqueLabel"},
+                                                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.insert"}}}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "newNodes",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentNodes"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "node"},
+                                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "newIds",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentIds"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "node"},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "name"},
+                                                                                                                              "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}},
+                                                                                                                  "type": null}],
+                                                                                                              "body": {
+                                                                                                                "pair": {
+                                                                                                                  "@first": {
+                                                                                                                    "pair": {
+                                                                                                                      "@first": {"variable": "newNodes"},
+                                                                                                                      "@second": {"variable": "newVisited"}}},
+                                                                                                                  "@second": {"variable": "newIds"}}}}},
+                                                                                                          "domain": null,
+                                                                                                          "parameter": "name"}}},
+                                                                                                    "domain": null,
+                                                                                                    "parameter": "nodesVisitedIds"}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "nodesVisitedIds1",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "bindingNames"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "pair": {
+                                                                                                          "@first": {"pair": {"@first": {"list": []}, "@second": {"variable": "visited"}}},
+                                                                                                          "@second": {"variable": "ids"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "addBindingName"},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "nodes1",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "nodesVisitedIds1"},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "visited1",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "nodesVisitedIds1"},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "ids1",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "nodesVisitedIds1"},
+                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "addBindingTerm",
+                                                                                              "term": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "let": {
+                                                                                                              "bindings": [
+                                                                                                                {
+                                                                                                                  "name": "root",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "nodeBinding"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "binding",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "nodeBinding"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                                  "type": null},
+                                                                                                                {
+                                                                                                                  "name": "term1",
+                                                                                                                  "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "binding"},
+                                                                                                                      "function": {
+                                                                                                                        "function": {
+                                                                                                                          "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                                                  "type": null}],
+                                                                                                              "body": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {
+                                                                                                                    "pair": {
+                                                                                                                      "@first": {"variable": "dontCareAccessor"},
+                                                                                                                      "@second": {"variable": "term1"}}},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "currentState"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"list": []},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"maybe": [{"variable": "root"}]},
+                                                                                                                              "function": {
+                                                                                                                                "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
+                                                                                                          "domain": null,
+                                                                                                          "parameter": "nodeBinding"}}},
+                                                                                                    "domain": null,
+                                                                                                    "parameter": "currentState"}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "nodeBindingPairs",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "bindings"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "nodes1"},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                                                              "type": null},
+                                                                                            {
+                                                                                              "name": "stateAfterBindings",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "nodeBindingPairs"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "pair": {
+                                                                                                          "@first": {
+                                                                                                            "pair": {
+                                                                                                              "@first": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "nodes"},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "nodes1"},
+                                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
+                                                                                                              "@second": {"variable": "edges"}}},
+                                                                                                          "@second": {"variable": "visited1"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "addBindingTerm"},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
+                                                                                              "type": null}],
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "pair": {
+                                                                                                  "@first": {
+                                                                                                    "union": {
+                                                                                                      "field": {"name": "letBody", "term": {"unit": {}}},
+                                                                                                      "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                  "@second": {"variable": "env"}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "stateAfterBindings"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "nextPath"},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "mroot"},
+                                                                                                          "function": {
+                                                                                                            "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
+                                                                                      "domain": null,
+                                                                                      "parameter": "letExpr"}}}},
+                                                                              {
+                                                                                "name": "variable",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "mroot"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "ids"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "name"},
+                                                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "function": {
+                                                                                                                "lambda": {
+                                                                                                                  "body": {
+                                                                                                                    "let": {
+                                                                                                                      "bindings": [
+                                                                                                                        {
+                                                                                                                          "name": "edge",
+                                                                                                                          "term": {
+                                                                                                                            "record": {
+                                                                                                                              "fields": [
+                                                                                                                                {"name": "source", "term": {"variable": "root"}},
+                                                                                                                                {
+                                                                                                                                  "name": "path",
+                                                                                                                                  "term": {
+                                                                                                                                    "wrap": {
+                                                                                                                                      "body": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "nextPath"},
+                                                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.reverse"}}}},
+                                                                                                                                      "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                                                                {"name": "target", "term": {"variable": "node"}}],
+                                                                                                                              "typeName": "hydra.accessors.AccessorEdge"}},
+                                                                                                                          "type": null},
+                                                                                                                        {
+                                                                                                                          "name": "newEdges",
+                                                                                                                          "term": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "edges"},
+                                                                                                                              "function": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {"variable": "edge"},
+                                                                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                                                          "type": null}],
+                                                                                                                      "body": {
+                                                                                                                        "pair": {
+                                                                                                                          "@first": {
+                                                                                                                            "pair": {"@first": {"variable": "nodes"}, "@second": {"variable": "newEdges"}}},
+                                                                                                                          "@second": {"variable": "visited"}}}}},
+                                                                                                                  "domain": null,
+                                                                                                                  "parameter": "node"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "state"},
+                                                                                                                "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                                                                    "domain": null,
+                                                                                                    "parameter": "root"}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "state"},
+                                                                                                  "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                                                      "domain": null,
+                                                                                      "parameter": "name"}}}}],
+                                                                            "default": [
+                                                                              {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "currentTerm"},
+                                                                                      "function": {"variable": "hydra.rewriting.subtermsWithAccessors"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "state"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "nextPath"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "mroot"},
+                                                                                                  "function": {
+                                                                                                    "application": {"argument": {"variable": "ids"}, "function": {"variable": "helper"}}}}}}},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}}],
+                                                                            "typeName": "hydra.core.Term"}}}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "accessorTerm"}}},
+                                                      "domain": null,
+                                                      "parameter": "state"}}},
+                                                "domain": null,
+                                                "parameter": "path"}}},
+                                          "domain": null,
+                                          "parameter": "mroot"}}},
+                                    "domain": null,
+                                    "parameter": "ids"}}},
+                              "type": null},
+                            {
+                              "name": "initialState",
+                              "term": {
+                                "pair": {
+                                  "@first": {"pair": {"@first": {"list": []}, "@second": {"list": []}}},
+                                  "@second": {"function": {"primitive": "hydra.lib.sets.empty"}}}},
+                              "type": null},
+                            {
+                              "name": "result",
+                              "term": {
+                                "application": {
+                                  "argument": {
+                                    "pair": {
+                                      "@first": {"variable": "dontCareAccessor"},
+                                      "@second": {"variable": "term"}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "initialState"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"list": []},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"maybe": null},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                                  "function": {"variable": "helper"}}}}}}}}}}},
+                              "type": null},
+                            {
+                              "name": "finalNodesEdges",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "result"},
+                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                              "type": null},
+                            {
+                              "name": "finalNodes",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "finalNodesEdges"},
+                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                              "type": null},
+                            {
+                              "name": "finalEdges",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "finalNodesEdges"},
+                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                              "type": null}],
+                          "body": {
+                            "record": {
+                              "fields": [
+                                {"name": "nodes", "term": {"variable": "finalNodes"}},
+                                {"name": "edges", "term": {"variable": "finalEdges"}}],
+                              "typeName": "hydra.accessors.AccessorGraph"}}}},
+                      "domain": null,
+                      "parameter": "term"}}},
+                "domain": null,
+                "parameter": "namespaces"}}}}},
+      "type": null}],
+  "namespace": "hydra.show.accessors",
+  "termDependencies": ["hydra.names", "hydra.rewriting"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
