@@ -5,6 +5,7 @@ import Hydra.Staging.Testing.Generation.Generate
 import Hydra.Staging.Testing.Generation.HaskellCodec (haskellTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
+import System.Exit (exitFailure)
 
 
 updateGenerationTestsHaskell :: IO ()
@@ -27,13 +28,19 @@ updateGenerationTestsHaskell = do
   putStrLn $ "Generating tests into: " ++ outputDir
   putStrLn ""
 
-  generateGenerationTestSuite haskellTestGenerator outputDir testModules lookupFn
+  success <- generateGenerationTestSuite haskellTestGenerator outputDir testModules lookupFn
 
-  putStrLn ""
-  putStrLn "=== Done! ==="
-  putStrLn ""
-  putStrLn "To view the generated tests:"
-  putStrLn $ "  ls -R " ++ outputDir
-  putStrLn ""
-  putStrLn "To run the generated tests:"
-  putStrLn "  stack test"
+  if success
+    then do
+      putStrLn ""
+      putStrLn "=== Done! ==="
+      putStrLn ""
+      putStrLn "To view the generated tests:"
+      putStrLn $ "  ls -R " ++ outputDir
+      putStrLn ""
+      putStrLn "To run the generated tests:"
+      putStrLn "  stack test"
+    else do
+      putStrLn ""
+      putStrLn "=== FAILED ==="
+      exitFailure

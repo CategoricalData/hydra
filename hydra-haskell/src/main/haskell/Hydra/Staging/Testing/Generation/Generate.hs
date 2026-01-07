@@ -120,7 +120,7 @@ createTestGroupLookup subModuleNamespaces rootTestGroup =
 -- | Main entry point: generate generation test suite from test modules
 -- Takes a test generator, output directory, test modules, and a lookup function for test groups
 -- Note: testModules must be provided explicitly since Module dependencies are now Namespaces
-generateGenerationTestSuite :: TestGenerator a -> FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO ()
+generateGenerationTestSuite :: TestGenerator a -> FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO Bool
 generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
   putStrLn "Processing test modules..."
 
@@ -134,7 +134,9 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
         Just transformed <- [transformToCompiledTests testGroup]]
 
   if null moduleTestPairs
-    then putStrLn "No generation tests to generate"
+    then do
+      putStrLn "No generation tests to generate"
+      return True
     else do
       putStrLn $ "Found " ++ show (length moduleTestPairs) ++ " module(s) with generation tests, generating to " ++ outDir
 
@@ -147,9 +149,12 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       result <- runFlowWithGraph graph $ generateAllModuleTestsIncremental testGen outDir moduleTestPairs writeFilePair
 
       case result of
-        Left trace -> putStrLn $ "✗ Generation failed: " ++ traceSummary trace
+        Left trace -> do
+          putStrLn $ "✗ Generation failed: " ++ traceSummary trace
+          return False
         Right count -> do
           putStrLn $ "✓ Successfully generated " ++ show count ++ " test file(s)"
+          return True
   where
     writeFilePair (fullPath, content) = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
