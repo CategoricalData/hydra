@@ -1,0 +1,1020 @@
+{
+  "description": ["Helper functions for decoding terms to domain types"],
+  "elements": [
+    {
+      "name": "hydra.extract.helpers.decodeEither",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Decode an Either value using the provided left and right decoders"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "stripped"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "union": {
+                                                        "cases": [
+                                                          {
+                                                            "name": "either",
+                                                            "term": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "e"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "function": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "rv"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "g"},
+                                                                                            "function": {"variable": "rightDecoder"}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {"either": {"@right": {"variable": "x"}}},
+                                                                                              "domain": null,
+                                                                                              "parameter": "x"}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                                                "domain": null,
+                                                                                "parameter": "rv"}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "lv"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "g"},
+                                                                                                "function": {"variable": "leftDecoder"}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {"either": {"@left": {"variable": "x"}}},
+                                                                                                  "domain": null,
+                                                                                                  "parameter": "x"}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                                                    "domain": null,
+                                                                                    "parameter": "lv"}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.eithers.either"}}}}}}}},
+                                                                  "domain": null,
+                                                                  "parameter": "e"}}}}],
+                                                        "default": [
+                                                          {
+                                                            "either": {
+                                                              "@left": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "expected either value"}},
+                                                                  "typeName": "hydra.util.DecodingError"}}}}],
+                                                        "typeName": "hydra.core.Term"}}}}}},
+                                            "domain": null,
+                                            "parameter": "stripped"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "term"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "g"},
+                                                      "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                            "domain": null,
+                                                            "parameter": "x"}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                                  "domain": null,
+                                  "parameter": "term"}}},
+                            "domain": null,
+                            "parameter": "g"}}},
+                      "domain": null,
+                      "parameter": "rightDecoder"}}},
+                "domain": null,
+                "parameter": "leftDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeList",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Decode a list of elements using the provided element decoder"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "stripped"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "list",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "els"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "g"},
+                                                                        "function": {"variable": "elemDecoder"}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.eithers.mapList"}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "els"}}}}],
+                                                  "default": [
+                                                    {
+                                                      "either": {
+                                                        "@left": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "expected list"}},
+                                                            "typeName": "hydra.util.DecodingError"}}}}],
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": null,
+                                      "parameter": "stripped"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "term"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                      "domain": null,
+                                                      "parameter": "x"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                            "domain": null,
+                            "parameter": "term"}}},
+                      "domain": null,
+                      "parameter": "g"}}},
+                "domain": null,
+                "parameter": "elemDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeMap",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Decode a Map using the provided key and value decoders"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "stripped"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "union": {
+                                                        "cases": [
+                                                          {
+                                                            "name": "map",
+                                                            "term": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "m"},
+                                                                              "function": {"function": {"primitive": "hydra.lib.maps.toList"}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "kv"},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "g"},
+                                                                                                          "function": {"variable": "valDecoder"}}}}},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {"pair": {"@first": {"variable": "k"}, "@second": {"variable": "v"}}},
+                                                                                                            "domain": null,
+                                                                                                            "parameter": "v"}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                                                              "domain": null,
+                                                                                              "parameter": "k"}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "kv"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "g"},
+                                                                                                    "function": {"variable": "keyDecoder"}}}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                                                                                    "domain": null,
+                                                                                    "parameter": "kv"}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.eithers.mapList"}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                                          "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                                  "domain": null,
+                                                                  "parameter": "m"}}}}],
+                                                        "default": [
+                                                          {
+                                                            "either": {
+                                                              "@left": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "expected map"}},
+                                                                  "typeName": "hydra.util.DecodingError"}}}}],
+                                                        "typeName": "hydra.core.Term"}}}}}},
+                                            "domain": null,
+                                            "parameter": "stripped"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "term"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "g"},
+                                                      "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                            "domain": null,
+                                                            "parameter": "x"}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                                  "domain": null,
+                                  "parameter": "term"}}},
+                            "domain": null,
+                            "parameter": "g"}}},
+                      "domain": null,
+                      "parameter": "valDecoder"}}},
+                "domain": null,
+                "parameter": "keyDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeMaybe",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Decode a Maybe value using the provided element decoder"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "stripped"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "maybe",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "opt"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "g"},
+                                                                        "function": {"variable": "elemDecoder"}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.eithers.mapMaybe"}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "opt"}}}}],
+                                                  "default": [
+                                                    {
+                                                      "either": {
+                                                        "@left": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "expected optional value"}},
+                                                            "typeName": "hydra.util.DecodingError"}}}}],
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": null,
+                                      "parameter": "stripped"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "term"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                      "domain": null,
+                                                      "parameter": "x"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                            "domain": null,
+                            "parameter": "term"}}},
+                      "domain": null,
+                      "parameter": "g"}}},
+                "domain": null,
+                "parameter": "elemDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodePair",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Decode a Pair using the provided first and second decoders"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "stripped"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "union": {
+                                                        "cases": [
+                                                          {
+                                                            "name": "pair",
+                                                            "term": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "p"},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "g"},
+                                                                                        "function": {"variable": "secondDecoder"}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"pair": {"@first": {"variable": "f"}, "@second": {"variable": "s"}}},
+                                                                                          "domain": null,
+                                                                                          "parameter": "s"}}},
+                                                                                    "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                                            "domain": null,
+                                                                            "parameter": "f"}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "g"},
+                                                                                  "function": {"variable": "firstDecoder"}}}}},
+                                                                          "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                                                                  "domain": null,
+                                                                  "parameter": "p"}}}}],
+                                                        "default": [
+                                                          {
+                                                            "either": {
+                                                              "@left": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "expected pair"}},
+                                                                  "typeName": "hydra.util.DecodingError"}}}}],
+                                                        "typeName": "hydra.core.Term"}}}}}},
+                                            "domain": null,
+                                            "parameter": "stripped"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "term"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "g"},
+                                                      "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                            "domain": null,
+                                                            "parameter": "x"}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                                  "domain": null,
+                                  "parameter": "term"}}},
+                            "domain": null,
+                            "parameter": "g"}}},
+                      "domain": null,
+                      "parameter": "secondDecoder"}}},
+                "domain": null,
+                "parameter": "firstDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeSet",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Decode a Set using the provided element decoder"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "stripped"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "set",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "s"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "g"},
+                                                                            "function": {"variable": "elemDecoder"}}},
+                                                                        "function": {"function": {"primitive": "hydra.lib.eithers.mapList"}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "s"}}}}],
+                                                  "default": [
+                                                    {
+                                                      "either": {
+                                                        "@left": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "expected set"}},
+                                                            "typeName": "hydra.util.DecodingError"}}}}],
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": null,
+                                      "parameter": "stripped"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "term"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                      "domain": null,
+                                                      "parameter": "x"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                            "domain": null,
+                            "parameter": "term"}}},
+                      "domain": null,
+                      "parameter": "g"}}},
+                "domain": null,
+                "parameter": "elemDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeUnit",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Decode a unit value"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "stripped"},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "union": {
+                                            "cases": [
+                                              {
+                                                "name": "unit",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"either": {"@right": {"unit": {}}}},
+                                                      "domain": null,
+                                                      "parameter": "_"}}}}],
+                                            "default": [
+                                              {
+                                                "either": {
+                                                  "@left": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "expected a unit value"}},
+                                                      "typeName": "hydra.util.DecodingError"}}}}],
+                                            "typeName": "hydra.core.Term"}}}}}},
+                                "domain": null,
+                                "parameter": "stripped"}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "term"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "g"},
+                                          "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                "domain": null,
+                                                "parameter": "x"}}},
+                                          "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                              "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                      "domain": null,
+                      "parameter": "term"}}},
+                "domain": null,
+                "parameter": "g"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.decodeWrapped",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Decode a wrapped value using the provided body decoder"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "stripped"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "wrap",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "wt"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "g"},
+                                                                    "function": {"variable": "bodyDecoder"}}}}},
+                                                            "domain": null,
+                                                            "parameter": "wt"}}}}],
+                                                  "default": [
+                                                    {
+                                                      "either": {
+                                                        "@left": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "expected wrapped value"}},
+                                                            "typeName": "hydra.util.DecodingError"}}}}],
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": null,
+                                      "parameter": "stripped"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "term"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {"body": {"variable": "x"}, "domain": null, "parameter": "x"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "wrap": {"body": {"variable": "x"}, "typeName": "hydra.util.DecodingError"}},
+                                                      "domain": null,
+                                                      "parameter": "x"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.eithers.bimap"}}}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
+                            "domain": null,
+                            "parameter": "term"}}},
+                      "domain": null,
+                      "parameter": "g"}}},
+                "domain": null,
+                "parameter": "bodyDecoder"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.requireField",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Require a field from a record's field map and decode it"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "fieldMap"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "wrap": {"body": {"variable": "fieldName"}, "typeName": "hydra.core.Name"}},
+                                              "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "fieldTerm"},
+                                                    "function": {
+                                                      "application": {"argument": {"variable": "g"}, "function": {"variable": "decoder"}}}}},
+                                                "domain": null,
+                                                "parameter": "fieldTerm"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "either": {
+                                                  "@left": {
+                                                    "wrap": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "list": [
+                                                              {"literal": {"string": "missing field "}},
+                                                              {"variable": "fieldName"},
+                                                              {"literal": {"string": " in record"}}]},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                      "typeName": "hydra.util.DecodingError"}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                  "domain": null,
+                                  "parameter": "g"}}},
+                            "domain": null,
+                            "parameter": "fieldMap"}}},
+                      "domain": null,
+                      "parameter": "decoder"}}},
+                "domain": null,
+                "parameter": "fieldName"}}}}},
+      "type": null},
+    {
+      "name": "hydra.extract.helpers.toFieldMap",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Convert a Record's fields to a Map from Name to Term"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "record"},
+                            "function": {
+                              "function": {
+                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.Record"}}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "pair": {
+                                      "@first": {
+                                        "application": {
+                                          "argument": {"variable": "f"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}}}},
+                                      "@second": {
+                                        "application": {
+                                          "argument": {"variable": "f"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
+                                  "domain": null,
+                                  "parameter": "f"}}},
+                            "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                    "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                "domain": null,
+                "parameter": "record"}}}}},
+      "type": null}],
+  "namespace": "hydra.extract.helpers",
+  "termDependencies": ["hydra.lexical"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

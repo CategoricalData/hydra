@@ -1,0 +1,387 @@
+{
+  "description": ["A simple, untyped tabular data model, suitable for CSVs and TSVs"],
+  "elements": [
+    {
+      "name": "hydra.tabular.DataRow",
+      "term": {
+        "annotated": {
+          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
+          "body": {
+            "union": {
+              "field": {
+                "name": "annotated",
+                "term": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "body",
+                        "term": {
+                          "union": {
+                            "field": {
+                              "name": "forall",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "parameter",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "body",
+                                      "term": {
+                                        "union": {
+                                          "field": {
+                                            "name": "wrap",
+                                            "term": {
+                                              "record": {
+                                                "fields": [
+                                                  {
+                                                    "name": "typeName",
+                                                    "term": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "hydra.tabular.DataRow"}},
+                                                        "typeName": "hydra.core.Name"}}},
+                                                  {
+                                                    "name": "body",
+                                                    "term": {
+                                                      "union": {
+                                                        "field": {
+                                                          "name": "list",
+                                                          "term": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "maybe",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "variable",
+                                                                      "term": {
+                                                                        "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                                    "typeName": "hydra.core.Type"}}},
+                                                              "typeName": "hydra.core.Type"}}},
+                                                        "typeName": "hydra.core.Type"}}}],
+                                                "typeName": "hydra.core.WrappedType"}}},
+                                          "typeName": "hydra.core.Type"}}}],
+                                  "typeName": "hydra.core.ForallType"}}},
+                            "typeName": "hydra.core.Type"}}},
+                      {
+                        "name": "annotation",
+                        "term": {
+                          "map": [
+                            {
+                              "@key": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "description"}},
+                                  "typeName": "hydra.core.Name"}},
+                              "@value": {
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "string",
+                                          "term": {
+                                            "literal": {
+                                              "string": "A data row, containing optional-valued cells; one per column"}}},
+                                        "typeName": "hydra.core.Literal"}}},
+                                  "typeName": "hydra.core.Term"}}}]}}],
+                    "typeName": "hydra.core.AnnotatedType"}}},
+              "typeName": "hydra.core.Type"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Type"},
+          "variables": []}]},
+    {
+      "name": "hydra.tabular.HeaderRow",
+      "term": {
+        "annotated": {
+          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
+          "body": {
+            "union": {
+              "field": {
+                "name": "annotated",
+                "term": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "body",
+                        "term": {
+                          "union": {
+                            "field": {
+                              "name": "wrap",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.tabular.HeaderRow"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "body",
+                                      "term": {
+                                        "union": {
+                                          "field": {
+                                            "name": "list",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "literal",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {"name": "string", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                "typeName": "hydra.core.Type"}}},
+                                          "typeName": "hydra.core.Type"}}}],
+                                  "typeName": "hydra.core.WrappedType"}}},
+                            "typeName": "hydra.core.Type"}}},
+                      {
+                        "name": "annotation",
+                        "term": {
+                          "map": [
+                            {
+                              "@key": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "description"}},
+                                  "typeName": "hydra.core.Name"}},
+                              "@value": {
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "string",
+                                          "term": {
+                                            "literal": {
+                                              "string": "A header row, containing column names (but no types or data)"}}},
+                                        "typeName": "hydra.core.Literal"}}},
+                                  "typeName": "hydra.core.Term"}}}]}}],
+                    "typeName": "hydra.core.AnnotatedType"}}},
+              "typeName": "hydra.core.Type"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Type"},
+          "variables": []}]},
+    {
+      "name": "hydra.tabular.Table",
+      "term": {
+        "annotated": {
+          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
+          "body": {
+            "union": {
+              "field": {
+                "name": "annotated",
+                "term": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "body",
+                        "term": {
+                          "union": {
+                            "field": {
+                              "name": "forall",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "parameter",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "body",
+                                      "term": {
+                                        "union": {
+                                          "field": {
+                                            "name": "record",
+                                            "term": {
+                                              "record": {
+                                                "fields": [
+                                                  {
+                                                    "name": "typeName",
+                                                    "term": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "hydra.tabular.Table"}},
+                                                        "typeName": "hydra.core.Name"}}},
+                                                  {
+                                                    "name": "fields",
+                                                    "term": {
+                                                      "list": [
+                                                        {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "name",
+                                                                "term": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "header"}},
+                                                                    "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "type",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "annotated",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "maybe",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "variable",
+                                                                                          "term": {
+                                                                                            "wrap": {
+                                                                                              "body": {"literal": {"string": "hydra.tabular.HeaderRow"}},
+                                                                                              "typeName": "hydra.core.Name"}}},
+                                                                                        "typeName": "hydra.core.Type"}}},
+                                                                                  "typeName": "hydra.core.Type"}}},
+                                                                            {
+                                                                              "name": "annotation",
+                                                                              "term": {
+                                                                                "map": [
+                                                                                  {
+                                                                                    "@key": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "description"}},
+                                                                                        "typeName": "hydra.core.Name"}},
+                                                                                    "@value": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "string",
+                                                                                                "term": {
+                                                                                                  "literal": {
+                                                                                                    "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}]}}],
+                                                                          "typeName": "hydra.core.AnnotatedType"}}},
+                                                                    "typeName": "hydra.core.Type"}}}],
+                                                            "typeName": "hydra.core.FieldType"}},
+                                                        {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "name",
+                                                                "term": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "data"}},
+                                                                    "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "type",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "annotated",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "list",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "variable",
+                                                                                                        "term": {
+                                                                                                          "wrap": {
+                                                                                                            "body": {"literal": {"string": "hydra.tabular.DataRow"}},
+                                                                                                            "typeName": "hydra.core.Name"}}},
+                                                                                                      "typeName": "hydra.core.Type"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "variable",
+                                                                                                        "term": {
+                                                                                                          "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      "typeName": "hydra.core.Type"}}}],
+                                                                                              "typeName": "hydra.core.ApplicationType"}}},
+                                                                                        "typeName": "hydra.core.Type"}}},
+                                                                                  "typeName": "hydra.core.Type"}}},
+                                                                            {
+                                                                              "name": "annotation",
+                                                                              "term": {
+                                                                                "map": [
+                                                                                  {
+                                                                                    "@key": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "description"}},
+                                                                                        "typeName": "hydra.core.Name"}},
+                                                                                    "@value": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "string",
+                                                                                                "term": {
+                                                                                                  "literal": {
+                                                                                                    "string": "The data rows of the table. Each row must have the same number of cells."}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}]}}],
+                                                                          "typeName": "hydra.core.AnnotatedType"}}},
+                                                                    "typeName": "hydra.core.Type"}}}],
+                                                            "typeName": "hydra.core.FieldType"}}]}}],
+                                                "typeName": "hydra.core.RowType"}}},
+                                          "typeName": "hydra.core.Type"}}}],
+                                  "typeName": "hydra.core.ForallType"}}},
+                            "typeName": "hydra.core.Type"}}},
+                      {
+                        "name": "annotation",
+                        "term": {
+                          "map": [
+                            {
+                              "@key": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "description"}},
+                                  "typeName": "hydra.core.Name"}},
+                              "@value": {
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "string",
+                                          "term": {
+                                            "literal": {
+                                              "string": "A simple table as in a CSV file, having an optional header row and any number of data rows"}}},
+                                        "typeName": "hydra.core.Literal"}}},
+                                  "typeName": "hydra.core.Term"}}}]}}],
+                    "typeName": "hydra.core.AnnotatedType"}}},
+              "typeName": "hydra.core.Type"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Type"},
+          "variables": []}]}],
+  "namespace": "hydra.tabular",
+  "termDependencies": [],
+  "typeDependencies": ["hydra.core"]}

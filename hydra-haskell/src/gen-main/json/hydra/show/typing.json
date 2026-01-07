@@ -1,0 +1,173 @@
+{
+  "description": ["String representations of hydra.typing types"],
+  "elements": [
+    {
+      "name": "hydra.show.typing.typeConstraint",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Show a type constraint as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ltyp",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "tc"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}}}},
+                        "type": null},
+                      {
+                        "name": "rtyp",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "tc"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}}}},
+                        "type": null}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "argument": {"variable": "ltyp"},
+                                "function": {"variable": "hydra.show.core.type"}}},
+                            {"literal": {"string": "≡"}},
+                            {
+                              "application": {
+                                "argument": {"variable": "rtyp"},
+                                "function": {"variable": "hydra.show.core.type"}}}]},
+                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                "domain": null,
+                "parameter": "tc"}}}}},
+      "type": null},
+    {
+      "name": "hydra.show.typing.typeSubst",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Show a type substitution as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "subst",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "ts"},
+                            "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
+                        "type": null},
+                      {
+                        "name": "pairs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "subst"},
+                            "function": {"function": {"primitive": "hydra.lib.maps.toList"}}}},
+                        "type": null},
+                      {
+                        "name": "showPair",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "let": {
+                                  "bindings": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "pair"},
+                                              "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                      "type": null},
+                                    {
+                                      "name": "typ",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "pair"},
+                                          "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                      "type": null}],
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "list": [
+                                          {"variable": "name"},
+                                          {"literal": {"string": "↦"}},
+                                          {
+                                            "application": {
+                                              "argument": {"variable": "typ"},
+                                              "function": {"variable": "hydra.show.core.type"}}}]},
+                                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                              "domain": null,
+                              "parameter": "pair"}}},
+                        "type": null},
+                      {
+                        "name": "pairStrs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pairs"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "showPair"},
+                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                        "type": null}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "argument": {"variable": "pairStrs"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ","}},
+                                    "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                            {"literal": {"string": "}"}}]},
+                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                "domain": null,
+                "parameter": "ts"}}}}},
+      "type": null}],
+  "namespace": "hydra.show.typing",
+  "termDependencies": ["hydra.show.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

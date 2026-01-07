@@ -1,0 +1,99 @@
+{
+  "description": ["Type classes"],
+  "elements": [
+    {
+      "name": "hydra.classes.TypeClass",
+      "term": {
+        "annotated": {
+          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
+          "body": {
+            "union": {
+              "field": {
+                "name": "annotated",
+                "term": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "body",
+                        "term": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.classes.TypeClass"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "equality"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "type",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.Type"}}}],
+                                              "typeName": "hydra.core.FieldType"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "ordering"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "type",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.Type"}}}],
+                                              "typeName": "hydra.core.FieldType"}}]}}],
+                                  "typeName": "hydra.core.RowType"}}},
+                            "typeName": "hydra.core.Type"}}},
+                      {
+                        "name": "annotation",
+                        "term": {
+                          "map": [
+                            {
+                              "@key": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "description"}},
+                                  "typeName": "hydra.core.Name"}},
+                              "@value": {
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "string",
+                                          "term": {
+                                            "literal": {"string": "Any of a small number of built-in type classes"}}},
+                                        "typeName": "hydra.core.Literal"}}},
+                                  "typeName": "hydra.core.Term"}}}]}}],
+                    "typeName": "hydra.core.AnnotatedType"}}},
+              "typeName": "hydra.core.Type"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Type"},
+          "variables": []}]}],
+  "namespace": "hydra.classes",
+  "termDependencies": ["hydra.core"],
+  "typeDependencies": ["hydra.core"]}

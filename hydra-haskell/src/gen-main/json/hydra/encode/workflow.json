@@ -1,0 +1,400 @@
+{
+  "description": ["Term encoders for hydra.workflow"],
+  "elements": [
+    {
+      "name": "hydra.encode.workflow.hydraSchemaSpec",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.workflow.HydraSchemaSpec"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "fields",
+                          "term": {
+                            "list": [
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "modules"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "modules", "typeName": "hydra.workflow.HydraSchemaSpec"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "list",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "xs"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.encode.module.module"},
+                                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": null,
+                                                "parameter": "xs"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "typeName"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "typeName", "typeName": "hydra.workflow.HydraSchemaSpec"}}}}}},
+                                          "function": {"variable": "hydra.encode.core.name"}}}}],
+                                  "typeName": "hydra.core.Field"}}]}}],
+                      "typeName": "hydra.core.Record"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": null,
+            "parameter": "x"}}},
+      "type": null},
+    {
+      "name": "hydra.encode.workflow.schemaSpec",
+      "term": {
+        "function": {
+          "elimination": {
+            "union": {
+              "cases": [
+                {
+                  "name": "hydra",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "hydra"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "v"},
+                                                  "function": {"variable": "hydra.encode.workflow.hydraSchemaSpec"}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": null,
+                        "parameter": "v"}}}},
+                {
+                  "name": "file",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "file"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "v"},
+                                                  "function": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"variable": "x"}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "domain": null,
+                                                        "parameter": "x"}}}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": null,
+                        "parameter": "v"}}}},
+                {
+                  "name": "provided",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "provided"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "v"},
+                                                  "function": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "union": {
+                                                            "field": {"name": "unit", "term": {"unit": {}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "domain": null,
+                                                        "parameter": "_"}}}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": null,
+                        "parameter": "v"}}}}],
+              "default": null,
+              "typeName": "hydra.workflow.SchemaSpec"}}}},
+      "type": null},
+    {
+      "name": "hydra.encode.workflow.transformWorkflow",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.workflow.TransformWorkflow"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "fields",
+                          "term": {
+                            "list": [
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "name"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "name", "typeName": "hydra.workflow.TransformWorkflow"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "union": {
+                                                          "field": {"name": "string", "term": {"variable": "x"}},
+                                                          "typeName": "hydra.core.Literal"}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": null,
+                                                "parameter": "x"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "schemaSpec"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {
+                                                      "field": "schemaSpec",
+                                                      "typeName": "hydra.workflow.TransformWorkflow"}}}}}},
+                                          "function": {"variable": "hydra.encode.workflow.schemaSpec"}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "srcDir"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "srcDir", "typeName": "hydra.workflow.TransformWorkflow"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "union": {
+                                                          "field": {"name": "string", "term": {"variable": "x"}},
+                                                          "typeName": "hydra.core.Literal"}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": null,
+                                                "parameter": "x"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "destDir"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "destDir", "typeName": "hydra.workflow.TransformWorkflow"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "union": {
+                                                          "field": {"name": "string", "term": {"variable": "x"}},
+                                                          "typeName": "hydra.core.Literal"}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": null,
+                                                "parameter": "x"}}}}}}],
+                                  "typeName": "hydra.core.Field"}}]}}],
+                      "typeName": "hydra.core.Record"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": null,
+            "parameter": "x"}}},
+      "type": null}],
+  "namespace": "hydra.encode.workflow",
+  "termDependencies": ["hydra.encode.core"],
+  "typeDependencies": ["hydra.workflow"]}

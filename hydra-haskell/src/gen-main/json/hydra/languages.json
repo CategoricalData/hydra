@@ -1,0 +1,135 @@
+{
+  "description": ["Language constraints for Hydra Core"],
+  "elements": [
+    {
+      "name": "hydra.languages.hydraLanguage",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Language constraints for Hydra Core, i.e. no constraints."}}}],
+          "body": {
+            "let": {
+              "bindings": [
+                {
+                  "name": "eliminationVariants",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.eliminationVariants"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "literalVariants",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.literalVariants"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "floatTypes",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.floatTypes"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "functionVariants",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.functionVariants"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "integerTypes",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.integerTypes"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "termVariants",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.termVariants"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "typeVariants",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "hydra.reflect.typeVariants"},
+                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                  "type": null},
+                {
+                  "name": "types",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [],
+                                    "default": [{"literal": {"boolean": true}}],
+                                    "typeName": "hydra.core.Type"}}}}}},
+                        "domain": null,
+                        "parameter": "t"}}},
+                  "type": null}],
+              "body": {
+                "record": {
+                  "fields": [
+                    {
+                      "name": "name",
+                      "term": {
+                        "wrap": {
+                          "body": {"literal": {"string": "hydra.core"}},
+                          "typeName": "hydra.coders.LanguageName"}}},
+                    {
+                      "name": "constraints",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "eliminationVariants",
+                              "term": {"variable": "eliminationVariants"}},
+                            {"name": "literalVariants", "term": {"variable": "literalVariants"}},
+                            {"name": "floatTypes", "term": {"variable": "floatTypes"}},
+                            {"name": "functionVariants", "term": {"variable": "functionVariants"}},
+                            {"name": "integerTypes", "term": {"variable": "integerTypes"}},
+                            {"name": "termVariants", "term": {"variable": "termVariants"}},
+                            {"name": "typeVariants", "term": {"variable": "typeVariants"}},
+                            {"name": "types", "term": {"variable": "types"}}],
+                          "typeName": "hydra.coders.LanguageConstraints"}}}],
+                  "typeName": "hydra.coders.Language"}}}}}},
+      "type": null}],
+  "namespace": "hydra.languages",
+  "termDependencies": ["hydra.reflect"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

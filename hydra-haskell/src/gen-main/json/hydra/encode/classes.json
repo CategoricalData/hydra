@@ -1,0 +1,112 @@
+{
+  "description": ["Term encoders for hydra.classes"],
+  "elements": [
+    {
+      "name": "hydra.encode.classes.typeClass",
+      "term": {
+        "function": {
+          "elimination": {
+            "union": {
+              "cases": [
+                {
+                  "name": "equality",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.classes.TypeClass"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "equality"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "v"},
+                                                  "function": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "union": {
+                                                            "field": {"name": "unit", "term": {"unit": {}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "domain": null,
+                                                        "parameter": "_"}}}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": null,
+                        "parameter": "v"}}}},
+                {
+                  "name": "ordering",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.classes.TypeClass"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "ordering"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "v"},
+                                                  "function": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "union": {
+                                                            "field": {"name": "unit", "term": {"unit": {}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "domain": null,
+                                                        "parameter": "_"}}}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": null,
+                        "parameter": "v"}}}}],
+              "default": null,
+              "typeName": "hydra.classes.TypeClass"}}}},
+      "type": null}],
+  "namespace": "hydra.encode.classes",
+  "termDependencies": ["hydra.encode.core"],
+  "typeDependencies": ["hydra.classes"]}

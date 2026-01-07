@@ -1,0 +1,144 @@
+{
+  "description": ["Extraction and validation for hydra.util types"],
+  "elements": [
+    {
+      "name": "hydra.extract.util.comparison",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Extract a comparison from a term"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "fname"},
+                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "comparison"}},
+                                              "function": {"variable": "hydra.monads.unexpected"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "union": {
+                                                  "field": {"name": "greaterThan", "term": {"unit": {}}},
+                                                  "typeName": "hydra.util.Comparison"}},
+                                              "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "greaterThan"}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "fname"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "union": {
+                                              "field": {"name": "lessThan", "term": {"unit": {}}},
+                                              "typeName": "hydra.util.Comparison"}},
+                                          "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "lessThan"}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "fname"},
+                                                      "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                  "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {
+                                        "union": {
+                                          "field": {"name": "equalTo", "term": {"unit": {}}},
+                                          "typeName": "hydra.util.Comparison"}},
+                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "equalTo"}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "fname"},
+                                                  "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                          "domain": null,
+                          "parameter": "fname"}}},
+                    "function": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "wrap": {
+                                    "body": {"literal": {"string": "hydra.util.Comparison"}},
+                                    "typeName": "hydra.core.Name"}},
+                                "function": {"variable": "hydra.extract.core.unitVariant"}}}}},
+                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                "domain": null,
+                "parameter": "term"}}}}},
+      "type": null}],
+  "namespace": "hydra.extract.util",
+  "termDependencies": ["hydra.extract.core", "hydra.monads"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

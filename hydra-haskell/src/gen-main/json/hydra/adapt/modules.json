@@ -1,0 +1,1022 @@
+{
+  "description": ["Entry point for Hydra's adapter (type/term rewriting) framework"],
+  "elements": [
+    {
+      "name": "hydra.adapt.modules.adaptTypeToLanguageAndEncode",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given a target language, an encoding function, and a type, adapt and encode the type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "dflt",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "adaptedType"},
+                                                  "function": {"variable": "enc"}}},
+                                              "domain": null,
+                                              "parameter": "adaptedType"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "typ"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "lang"},
+                                                    "function": {"variable": "hydra.adapt.modules.adaptTypeToLanguage"}}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                    "type": null}],
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "typ"},
+                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "union": {
+                                            "cases": [
+                                              {
+                                                "name": "variable",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {"argument": {"variable": "typ"}, "function": {"variable": "enc"}}},
+                                                      "domain": null,
+                                                      "parameter": "_"}}}}],
+                                            "default": [{"variable": "dflt"}],
+                                            "typeName": "hydra.core.Type"}}}}}}}},
+                            "domain": null,
+                            "parameter": "typ"}}},
+                      "domain": null,
+                      "parameter": "enc"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.modules.adaptTypeToLanguage",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given a target language and a source type, find the target type to which the latter will be adapted"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "adapter"},
+                                        "function": {
+                                          "function": {
+                                            "elimination": {"record": {"field": "target", "typeName": "hydra.compute.Adapter"}}}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                "domain": null,
+                                "parameter": "adapter"}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "typ"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "lang"},
+                                      "function": {"variable": "hydra.adapt.modules.languageAdapter"}}}}},
+                              "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                      "domain": null,
+                      "parameter": "typ"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.modules.adaptedModuleDefinitions",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "els",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {
+                                              "function": {
+                                                "elimination": {"record": {"field": "elements", "typeName": "hydra.module.Module"}}}}}},
+                                        "type": null}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "adaptersFor",
+                                            "term": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "adapters"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "types"},
+                                                                            "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                                                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                            "domain": null,
+                                                            "parameter": "adapters"}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "types"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "lang"},
+                                                                      "function": {"variable": "hydra.adapt.modules.languageAdapter"}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "types"}}},
+                                            "type": null}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "classify",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "el",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "pair"},
+                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                    "type": null}],
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "tt",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "pair"},
+                                                                            "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                        "type": null}],
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "term",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "tt"},
+                                                                                "function": {
+                                                                                  "function": {
+                                                                                    "elimination": {
+                                                                                      "record": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                                            "type": null}],
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "typ",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "tt"},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {
+                                                                                          "record": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                                                "type": null}],
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "name",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "el"},
+                                                                                        "function": {
+                                                                                          "function": {
+                                                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                    "type": null}],
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "adapters"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "typ"},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "union": {
+                                                                                                                    "field": {
+                                                                                                                      "name": "term",
+                                                                                                                      "term": {
+                                                                                                                        "record": {
+                                                                                                                          "fields": [
+                                                                                                                            {"name": "name", "term": {"variable": "name"}},
+                                                                                                                            {"name": "term", "term": {"variable": "adapted"}},
+                                                                                                                            {
+                                                                                                                              "name": "type",
+                                                                                                                              "term": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {"variable": "adapter"},
+                                                                                                                                      "function": {
+                                                                                                                                        "function": {
+                                                                                                                                          "elimination": {"record": {"field": "target", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                                                                                                  "function": {"variable": "hydra.schemas.typeToTypeScheme"}}}}],
+                                                                                                                          "typeName": "hydra.module.TermDefinition"}}},
+                                                                                                                    "typeName": "hydra.module.Definition"}},
+                                                                                                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                                                                            "domain": null,
+                                                                                                            "parameter": "adapted"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "term"},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "adapter"},
+                                                                                                                      "function": {
+                                                                                                                        "function": {
+                                                                                                                          "elimination": {"record": {"field": "coder", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                                                                                  "function": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                                  "domain": null,
+                                                                                                  "parameter": "adapter"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "name"},
+                                                                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"literal": {"string": "no adapter for element "}},
+                                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "type",
+                                                                                                            "term": {
+                                                                                                              "record": {
+                                                                                                                "fields": [
+                                                                                                                  {"name": "name", "term": {"variable": "name"}},
+                                                                                                                  {"name": "type", "term": {"variable": "adaptedTyp"}}],
+                                                                                                                "typeName": "hydra.module.TypeDefinition"}}},
+                                                                                                          "typeName": "hydra.module.Definition"}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                                                                  "domain": null,
+                                                                                                  "parameter": "adaptedTyp"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "coreTyp"},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "lang"},
+                                                                                                                  "function": {"variable": "hydra.adapt.modules.adaptTypeToLanguage"}}}}},
+                                                                                                          "domain": null,
+                                                                                                          "parameter": "coreTyp"}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "term"},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "cx"},
+                                                                                                                        "function": {"variable": "hydra.decode.core.type"}}}}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"function": {"elimination": {"wrap": "hydra.util.DecodingError"}}},
+                                                                                                                    "function": {"variable": "hydra.monads.eitherToFlow"}}}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"literal": {"string": "adapt module definitions"}},
+                                                                                                                "function": {"variable": "hydra.monads.withTrace"}}}}},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "el"},
+                                                                                                "function": {"variable": "hydra.annotations.isNativeType"}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}}}}}},
+                                                            "domain": null,
+                                                            "parameter": "pair"}}},
+                                                      "domain": null,
+                                                      "parameter": "adapters"}}},
+                                                "type": null}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "types",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "tterms"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "arg_"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {
+                                                                                                  "record": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                                    "domain": null,
+                                                                                    "parameter": "arg_"}}},
+                                                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
+                                                              "type": null}],
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "tterms"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "els"},
+                                                                                "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "adapters"},
+                                                                                "function": {"variable": "classify"}}},
+                                                                            "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                                    "domain": null,
+                                                                    "parameter": "adapters"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "types"},
+                                                                      "function": {"variable": "adaptersFor"}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
+                                                      "domain": null,
+                                                      "parameter": "tterms"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "els"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
+                                                                "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                        "function": {"variable": "hydra.lexical.withSchemaContext"}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}}}}}},
+                                "domain": null,
+                                "parameter": "cx"}}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "hydra.monads.getState"},
+                              "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                      "domain": null,
+                      "parameter": "mod"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.modules.constructCoder",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "encodeTerm"},
+                                                      "function": {"variable": "hydra.adapt.utils.unidirectionalCoder"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "adapter"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {"record": {"field": "coder", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                      "function": {"variable": "hydra.adapt.utils.composeCoders"}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                          "domain": null,
+                                          "parameter": "adapter"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "typ"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "lang"},
+                                                "function": {"variable": "hydra.adapt.modules.languageAdapter"}}}}},
+                                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "typ"},
+                                            "function": {"variable": "hydra.show.core.type"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "coder for "}},
+                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                    "function": {"variable": "hydra.monads.withTrace"}}}}},
+                            "domain": null,
+                            "parameter": "typ"}}},
+                      "domain": null,
+                      "parameter": "encodeTerm"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.modules.languageAdapter",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "getPair",
+                              "term": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "pair": {"@first": {"variable": "ad"}, "@second": {"variable": "cx"}}},
+                                                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                        "domain": null,
+                                                        "parameter": "cx"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "hydra.monads.getState"},
+                                                      "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                              "domain": null,
+                                              "parameter": "ad"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "typ"},
+                                                "function": {"variable": "hydra.adapt.terms.termAdapter"}}},
+                                            "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                    "domain": null,
+                                    "parameter": "typ"}}},
+                              "type": null}],
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "cx0",
+                                            "term": {
+                                              "record": {
+                                                "fields": [
+                                                  {"name": "graph", "term": {"variable": "g"}},
+                                                  {"name": "language", "term": {"variable": "lang"}},
+                                                  {
+                                                    "name": "adapters",
+                                                    "term": {"function": {"primitive": "hydra.lib.maps.empty"}}}],
+                                                "typeName": "hydra.coders.AdapterContext"}},
+                                            "type": null}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "let": {
+                                                      "bindings": [
+                                                        {
+                                                          "name": "adapter",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "result"},
+                                                              "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                          "type": null}],
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "cx",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "result"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                              "type": null}],
+                                                          "body": {
+                                                            "let": {
+                                                              "bindings": [
+                                                                {
+                                                                  "name": "encode",
+                                                                  "term": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "term"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "adapter"},
+                                                                                        "function": {
+                                                                                          "function": {
+                                                                                            "elimination": {"record": {"field": "coder", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "cx"},
+                                                                                "function": {"variable": "hydra.monads.withState"}}}}},
+                                                                        "domain": null,
+                                                                        "parameter": "term"}}},
+                                                                  "type": null}],
+                                                              "body": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "decode",
+                                                                      "term": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "term"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "adapter"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "coder", "typeName": "hydra.compute.Adapter"}}}}}},
+                                                                                        "function": {
+                                                                                          "function": {
+                                                                                            "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "cx"},
+                                                                                    "function": {"variable": "hydra.monads.withState"}}}}},
+                                                                            "domain": null,
+                                                                            "parameter": "term"}}},
+                                                                      "type": null}],
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "isLossy",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "adapter"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "isLossy", "typeName": "hydra.compute.Adapter"}}}}}}},
+                                                                            {
+                                                                              "name": "source",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "adapter"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "source", "typeName": "hydra.compute.Adapter"}}}}}}},
+                                                                            {
+                                                                              "name": "target",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "adapter"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "target", "typeName": "hydra.compute.Adapter"}}}}}}},
+                                                                            {
+                                                                              "name": "coder",
+                                                                              "term": {
+                                                                                "record": {
+                                                                                  "fields": [
+                                                                                    {"name": "encode", "term": {"variable": "encode"}},
+                                                                                    {"name": "decode", "term": {"variable": "decode"}}],
+                                                                                  "typeName": "hydra.compute.Coder"}}}],
+                                                                          "typeName": "hydra.compute.Adapter"}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}}}}}}}}}},
+                                                  "domain": null,
+                                                  "parameter": "result"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {"argument": {"variable": "typ"}, "function": {"variable": "getPair"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx0"},
+                                                        "function": {"variable": "hydra.monads.withState"}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
+                                    "domain": null,
+                                    "parameter": "g"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "hydra.monads.getState"},
+                                  "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
+                      "domain": null,
+                      "parameter": "typ"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null},
+    {
+      "name": "hydra.adapt.modules.transformModule",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "els",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "mod"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "elements", "typeName": "hydra.module.Module"}}}}}},
+                                          "type": null}],
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "transform",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "types",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "tterms"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "record": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                                                            "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.lists.nub"}}}},
+                                                                "type": null}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "coders",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "cdrs"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "types"},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
+                                                                              "type": null}],
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "tterms"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "els"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "coders"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "mod"},
+                                                                                      "function": {"variable": "createModule"}}}}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "cdrs"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "types"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "encodeTerm"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "lang"},
+                                                                                    "function": {"variable": "hydra.adapt.modules.constructCoder"}}}}},
+                                                                            "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
+                                                        "domain": null,
+                                                        "parameter": "tterms"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "els"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                          "function": {"variable": "hydra.lexical.withSchemaContext"}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                              "type": null}],
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "transform"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "mod"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "transform module "}},
+                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                  "function": {"variable": "hydra.monads.withTrace"}}}}}}}}},
+                                  "domain": null,
+                                  "parameter": "mod"}}},
+                            "domain": null,
+                            "parameter": "createModule"}}},
+                      "domain": null,
+                      "parameter": "encodeTerm"}}},
+                "domain": null,
+                "parameter": "lang"}}}}},
+      "type": null}],
+  "namespace": "hydra.adapt.modules",
+  "termDependencies": [
+    "hydra.adapt.terms",
+    "hydra.adapt.utils",
+    "hydra.annotations",
+    "hydra.decode.core",
+    "hydra.lexical",
+    "hydra.monads",
+    "hydra.rewriting",
+    "hydra.schemas"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
