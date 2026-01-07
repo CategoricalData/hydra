@@ -11,6 +11,7 @@ import Hydra.Staging.Testing.Generation.Generate
 import Hydra.Ext.Staging.Python.TestCodec (pythonTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
+import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 
 
@@ -36,13 +37,19 @@ main = do
   putStrLn $ "Generating tests into: " ++ outputDir
   putStrLn ""
 
-  generateGenerationTestSuite pythonTestGenerator outputDir testModules lookupFn
+  success <- generateGenerationTestSuite pythonTestGenerator outputDir testModules lookupFn
 
-  putStrLn ""
-  putStrLn "=== Done! ==="
-  putStrLn ""
-  putStrLn "To view the generated tests:"
-  putStrLn $ "  ls -R " ++ outputDir
-  putStrLn ""
-  putStrLn "To run the generated tests:"
-  putStrLn "  cd ../hydra-python && pytest src/gen-test/python -v"
+  if success
+    then do
+      putStrLn ""
+      putStrLn "=== Done! ==="
+      putStrLn ""
+      putStrLn "To view the generated tests:"
+      putStrLn $ "  ls -R " ++ outputDir
+      putStrLn ""
+      putStrLn "To run the generated tests:"
+      putStrLn "  cd ../hydra-python && pytest src/gen-test/python -v"
+    else do
+      putStrLn ""
+      putStrLn "=== FAILED ==="
+      exitFailure
