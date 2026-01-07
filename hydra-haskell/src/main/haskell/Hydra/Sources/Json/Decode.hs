@@ -192,19 +192,22 @@ fromJson = define "fromJson" $
       "objResult" <~ (expectObject @@ var "value") $
       Eithers.map (constant Core.termUnit) (var "objResult"),
 
-    -- Wrapped types (look up in type table)
+    -- Wrapped types (look up in type table and extract inner type if needed)
     _Type_wrap>>: "wn" ~>
-      "innerType" <~ (Maps.lookup (Core.wrappedTypeTypeName $ var "wn") (var "types")) $
+      "lookedUp" <~ (Maps.lookup (Core.wrappedTypeTypeName $ var "wn") (var "types")) $
       Maybes.maybe
         (left $ Strings.cat $ list [
           string "unknown wrapped type: ",
           Core.unName $ Core.wrappedTypeTypeName $ var "wn"])
-        ("it" ~>
-          "decoded" <~ (fromJson @@ var "types" @@ var "it" @@ var "value") $
+        ("lt" ~>
+          -- If the looked-up type is itself a TypeWrap, extract its inner type
+          "innerType" <~ (cases _Type (var "lt") (Just $ var "lt") [
+            _Type_wrap>>: "wt" ~> Core.wrappedTypeBody $ var "wt"]) $
+          "decoded" <~ (fromJson @@ var "types" @@ var "innerType" @@ var "value") $
           Eithers.map
             ("v" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTypeTypeName $ var "wn") (var "v"))
             (var "decoded"))
-        (var "innerType"),
+        (var "lookedUp"),
 
     -- Map -> array of {@key, @value}
     _Type_map>>: "mt" ~>
@@ -285,7 +288,17 @@ fromJson = define "fromJson" $
               "decoded" <~ (fromJson @@ var "types" @@ var "leftType" @@ var "lj") $
               Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "decoded"))
             (var "leftJson"))
-        (var "objResult")]
+        (var "objResult"),
+
+    -- Type variables (look up in type table and recurse)
+    _Type_variable>>: "name" ~>
+      "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
+      Maybes.maybe
+        (left $ Strings.cat $ list [
+          string "unknown type variable: ",
+          Core.unName $ var "name"])
+        ("resolvedType" ~> fromJson @@ var "types" @@ var "resolvedType" @@ var "value")
+        (var "lookedUp")]
 
 -- | Decode a JSON value to a literal term given a literal type
 decodeLiteral :: TBinding (LiteralType -> Value -> Either String Term)

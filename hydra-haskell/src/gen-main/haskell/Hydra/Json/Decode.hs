@@ -106,14 +106,18 @@ fromJson types typ value =
       let objResult = (expectObject value)
       in (Eithers.map (\_ -> Core.TermUnit) objResult)
     Core.TypeWrap v1 ->  
-      let innerType = (Maps.lookup (Core.wrappedTypeTypeName v1) types)
+      let lookedUp = (Maps.lookup (Core.wrappedTypeTypeName v1) types)
       in (Maybes.maybe (Left (Strings.cat [
         "unknown wrapped type: ",
-        (Core.unName (Core.wrappedTypeTypeName v1))])) (\it ->  
-        let decoded = (fromJson types it value)
-        in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
-          Core.wrappedTermTypeName = (Core.wrappedTypeTypeName v1),
-          Core.wrappedTermBody = v})) decoded)) innerType)
+        (Core.unName (Core.wrappedTypeTypeName v1))])) (\lt ->  
+        let innerType = ((\x -> case x of
+                Core.TypeWrap v2 -> (Core.wrappedTypeBody v2)
+                _ -> lt) lt)
+        in  
+          let decoded = (fromJson types innerType value)
+          in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
+            Core.wrappedTermTypeName = (Core.wrappedTypeTypeName v1),
+            Core.wrappedTermBody = v})) decoded)) lookedUp)
     Core.TypeMap v1 ->  
       let keyType = (Core.mapTypeKeys v1)
       in  
@@ -165,6 +169,11 @@ fromJson types typ value =
                 in (Eithers.map (\v -> Core.TermEither (Right v)) decoded)) rightJson) (\lj ->  
                 let decoded = (fromJson types leftType lj)
                 in (Eithers.map (\v -> Core.TermEither (Left v)) decoded)) leftJson)) objResult)
+    Core.TypeVariable v1 ->  
+      let lookedUp = (Maps.lookup v1 types)
+      in (Maybes.maybe (Left (Strings.cat [
+        "unknown type variable: ",
+        (Core.unName v1)])) (\resolvedType -> fromJson types resolvedType value) lookedUp)
     _ -> (Left (Strings.cat [
       "unsupported type for JSON decoding: ",
       (Core_.type_ typ)]))) stripped)
