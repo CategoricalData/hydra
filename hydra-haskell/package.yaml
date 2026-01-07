@@ -56,6 +56,13 @@ executables:
       - hydra
       - hspec
 
+  update-json-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-kernel
+    dependencies:
+      - hydra
+
 tests:
   hydra-test:
     main: Spec.hs

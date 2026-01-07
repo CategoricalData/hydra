@@ -7,7 +7,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
-import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
+import qualified Hydra.Json.Encode as JsonEncode
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
@@ -421,21 +421,21 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 
 -- | Convert a Module to a JSON string.
 -- This encodes the Module as a Term using EncodeModule.module_, then converts
--- the Term to JSON using untypedTermToJson, and finally serializes to a string.
-moduleToJson :: Module -> Flow Graph String
-moduleToJson mod = do
+-- the Term to JSON using hydra.json.encode.toJson, and finally serializes to a string.
+moduleToJson :: Module -> Either String String
+moduleToJson mod =
     let term = EncodeModule.module_ mod
-    json <- JsonCoder.untypedTermToJson term
-    return $ JsonWriter.printJson json
+    in case JsonEncode.toJson term of
+      Left err -> Left err
+      Right json -> Right $ JsonWriter.printJson json
 
 -- | Write a single module to a JSON file.
 -- The file path is derived from the module namespace.
 writeModuleJson :: FilePath -> Module -> IO ()
 writeModuleJson basePath mod = do
-    mjson <- runFlow bootstrapGraph (moduleToJson mod)
-    case mjson of
-      Nothing -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod)
-      Just jsonStr -> do
+    case moduleToJson mod of
+      Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ err
+      Right jsonStr -> do
         let filePath = basePath FP.</> namespaceToPath (moduleNamespace mod) ++ ".json"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
         writeFile filePath (jsonStr ++ "\n")
