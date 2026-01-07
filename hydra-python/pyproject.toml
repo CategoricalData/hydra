@@ -108,7 +108,8 @@ pythonpath = [
     "src/test/python"
 ]
 testpaths = [
-    "src/test/python"
+    "src/test/python",
+    "src/gen-test/python/generation"
 ]
 # Suppress warnings about TestCase* and TestGroup classes in hydra.testing
 # (these are data classes, not pytest test classes)
