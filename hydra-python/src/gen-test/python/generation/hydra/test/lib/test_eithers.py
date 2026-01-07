@@ -17,6 +17,7 @@ import hydra.decode.core
 import hydra.encode.core
 import hydra.ext.haskell.operators
 import hydra.extract.core
+import hydra.extract.helpers
 import hydra.formatting
 import hydra.graph
 import hydra.json
@@ -47,6 +48,20 @@ import hydra.testing
 import hydra.topology
 import hydra.typing
 import hydra.util
+
+# bind
+
+def test_bind__bind_right_with_success():
+
+    assert (hydra.lib.eithers.bind(Right("ab"), (lambda s: hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : Left(0)), (lambda : Right(hydra.lib.strings.length(s))))))) == (Right(2))
+
+def test_bind__bind_right_with_failure():
+
+    assert (hydra.lib.eithers.bind(Right(""), (lambda s: hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : Left(0)), (lambda : Right(hydra.lib.strings.length(s))))))) == (Left(0))
+
+def test_bind__bind_left_returns_left_unchanged():
+
+    assert (hydra.lib.eithers.bind(Left(42), (lambda s: hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : Left(0)), (lambda : Right(hydra.lib.strings.length(s))))))) == (Left(42))
 
 # bimap
 
@@ -161,3 +176,41 @@ def test_partitioneithers__all_rights():
 def test_partitioneithers__empty_list():
 
     assert (hydra.lib.eithers.partition_eithers(())) == (((), ()))
+
+# map
+
+def test_map__map_right_value():
+
+    assert (hydra.lib.eithers.map((lambda x: hydra.lib.math.mul(x, 2)), Right(5))) == (Right(10))
+
+def test_map__preserve_left():
+
+    assert (hydra.lib.eithers.map((lambda x: hydra.lib.math.mul(x, 2)), Left(99))) == (Left(99))
+
+# mapList
+
+def test_maplist__all_succeed():
+
+    assert (hydra.lib.eithers.map_list((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), (1, 2, 3))) == (Right((2, 4, 6)))
+
+def test_maplist__first_fails():
+
+    assert (hydra.lib.eithers.map_list((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), (1, 0, 3))) == (Left("zero"))
+
+def test_maplist__empty_list():
+
+    assert (hydra.lib.eithers.map_list((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), ())) == (Right(()))
+
+# mapMaybe
+
+def test_mapmaybe__just_succeeds():
+
+    assert (hydra.lib.eithers.map_maybe((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), Just(5))) == (Right(Just(10)))
+
+def test_mapmaybe__just_fails():
+
+    assert (hydra.lib.eithers.map_maybe((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), Just(0))) == (Left("zero"))
+
+def test_mapmaybe__nothing():
+
+    assert (hydra.lib.eithers.map_maybe((lambda x: hydra.lib.logic.if_else(hydra.lib.equality.equal(x, 0), (lambda : Left("zero")), (lambda : Right(hydra.lib.math.mul(x, 2))))), Nothing())) == (Right(Nothing()))

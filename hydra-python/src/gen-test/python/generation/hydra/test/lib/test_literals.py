@@ -17,6 +17,7 @@ import hydra.decode.core
 import hydra.encode.core
 import hydra.ext.haskell.operators
 import hydra.extract.core
+import hydra.extract.helpers
 import hydra.formatting
 import hydra.graph
 import hydra.json
@@ -472,6 +473,46 @@ def test_showstring__empty():
 
     assert (hydra.lib.literals.show_string("")) == ("\"\"")
 
+# readInt8
+
+def test_readint8__positive():
+
+    assert (hydra.lib.literals.read_int8("42")) == (Just(42))
+
+def test_readint8__negative():
+
+    assert (hydra.lib.literals.read_int8("-42")) == (Just(-42))
+
+def test_readint8__max_value():
+
+    assert (hydra.lib.literals.read_int8("127")) == (Just(127))
+
+def test_readint8__min_value():
+
+    assert (hydra.lib.literals.read_int8("-128")) == (Just(-128))
+
+def test_readint8__invalid():
+
+    assert (hydra.lib.literals.read_int8("abc")) == (Nothing())
+
+def test_readint8__overflow():
+
+    assert (hydra.lib.literals.read_int8("128")) == (Nothing())
+
+# readInt16
+
+def test_readint16__positive():
+
+    assert (hydra.lib.literals.read_int16("1000")) == (Just(1000))
+
+def test_readint16__negative():
+
+    assert (hydra.lib.literals.read_int16("-1000")) == (Just(-1000))
+
+def test_readint16__invalid():
+
+    assert (hydra.lib.literals.read_int16("abc")) == (Nothing())
+
 # readInt32
 
 def test_readint32__positive():
@@ -499,6 +540,104 @@ def test_readint64__negative():
 def test_readint64__invalid():
 
     assert (hydra.lib.literals.read_int64("abc")) == (Nothing())
+
+# readUint8
+
+def test_readuint8__zero():
+
+    assert (hydra.lib.literals.read_uint8("0")) == (Just(0))
+
+def test_readuint8__typical():
+
+    assert (hydra.lib.literals.read_uint8("100")) == (Just(100))
+
+def test_readuint8__max_value():
+
+    assert (hydra.lib.literals.read_uint8("255")) == (Just(255))
+
+def test_readuint8__invalid():
+
+    assert (hydra.lib.literals.read_uint8("abc")) == (Nothing())
+
+def test_readuint8__negative():
+
+    assert (hydra.lib.literals.read_uint8("-1")) == (Nothing())
+
+# readUint16
+
+def test_readuint16__zero():
+
+    assert (hydra.lib.literals.read_uint16("0")) == (Just(0))
+
+def test_readuint16__typical():
+
+    assert (hydra.lib.literals.read_uint16("1000")) == (Just(1000))
+
+def test_readuint16__invalid():
+
+    assert (hydra.lib.literals.read_uint16("abc")) == (Nothing())
+
+def test_readuint16__negative():
+
+    assert (hydra.lib.literals.read_uint16("-1")) == (Nothing())
+
+# readUint32
+
+def test_readuint32__zero():
+
+    assert (hydra.lib.literals.read_uint32("0")) == (Just(0))
+
+def test_readuint32__typical():
+
+    assert (hydra.lib.literals.read_uint32("100000")) == (Just(100000))
+
+def test_readuint32__invalid():
+
+    assert (hydra.lib.literals.read_uint32("abc")) == (Nothing())
+
+def test_readuint32__negative():
+
+    assert (hydra.lib.literals.read_uint32("-1")) == (Nothing())
+
+# readUint64
+
+def test_readuint64__zero():
+
+    assert (hydra.lib.literals.read_uint64("0")) == (Just(0))
+
+def test_readuint64__typical():
+
+    assert (hydra.lib.literals.read_uint64("1000000")) == (Just(1000000))
+
+def test_readuint64__invalid():
+
+    assert (hydra.lib.literals.read_uint64("abc")) == (Nothing())
+
+def test_readuint64__negative():
+
+    assert (hydra.lib.literals.read_uint64("-1")) == (Nothing())
+
+# readBigint
+
+def test_readbigint__positive():
+
+    assert (hydra.lib.literals.read_bigint("42")) == (Just(42))
+
+def test_readbigint__negative():
+
+    assert (hydra.lib.literals.read_bigint("-42")) == (Just(-42))
+
+def test_readbigint__zero():
+
+    assert (hydra.lib.literals.read_bigint("0")) == (Just(0))
+
+def test_readbigint__large():
+
+    assert (hydra.lib.literals.read_bigint("123456789012345678901234567890")) == (Just(123456789012345678901234567890))
+
+def test_readbigint__invalid():
+
+    assert (hydra.lib.literals.read_bigint("abc")) == (Nothing())
 
 # readFloat32
 

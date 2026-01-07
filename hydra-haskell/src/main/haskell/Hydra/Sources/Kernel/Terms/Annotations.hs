@@ -66,6 +66,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Decode.Core            as DecodeCore
 import qualified Hydra.Sources.Encode.Core            as EncodeCore
 import Hydra.Encoding (encodeBindingName)
 
@@ -75,7 +76,7 @@ ns = Namespace "hydra.annotations"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
+    [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
       Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"

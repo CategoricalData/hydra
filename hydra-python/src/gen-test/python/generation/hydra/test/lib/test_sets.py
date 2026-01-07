@@ -17,6 +17,7 @@ import hydra.decode.core
 import hydra.encode.core
 import hydra.ext.haskell.operators
 import hydra.extract.core
+import hydra.extract.helpers
 import hydra.formatting
 import hydra.graph
 import hydra.json
