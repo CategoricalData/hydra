@@ -63,6 +63,15 @@ executables:
     dependencies:
       - hydra
 
+  verify-json-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/verify-json-kernel
+    dependencies:
+      - hydra
+      - aeson                         >= 2.2.0 && < 2.3
+      - scientific                    >= 0.3.7 && < 0.4
+
 tests:
   hydra-test:
     main: Spec.hs
