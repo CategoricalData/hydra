@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.json
 import hydra.lib.equality
@@ -18,6 +18,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.parsers
 import hydra.parsing
+
+T0 = TypeVar("T0")
 
 def digit() -> hydra.parsing.Parser[int]:
     r"""Parse a single digit (0-9)."""
@@ -34,7 +36,7 @@ def whitespace() -> hydra.parsing.Parser[None]:
     
     return hydra.parsers.map((lambda _: None), hydra.parsers.many(hydra.parsers.satisfy((lambda c: hydra.lib.lists.foldl(hydra.lib.logic.or_, False, (hydra.lib.equality.equal(c, 32), hydra.lib.equality.equal(c, 9), hydra.lib.equality.equal(c, 10), hydra.lib.equality.equal(c, 13)))))))
 
-def token[T0](p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
+def token(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     return hydra.parsers.bind(p, (lambda x: hydra.parsers.bind(whitespace(), (lambda _: hydra.parsers.pure(x)))))
 
 def json_bool() -> hydra.parsing.Parser[hydra.json.Value]:

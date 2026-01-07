@@ -30,16 +30,16 @@ def json_string(s: str) -> str:
         return hydra.lib.strings.cat(hydra.lib.lists.map(escape, hydra.lib.strings.to_list(s)))
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"", escaped()), "\"")
 
-def key_value_to_expr(pair: tuple[str, hydra.json.Value]) -> hydra.ast.Expr:
+def key_value_to_expr(pair: tuple[str, hydra.json.Value]) -> hydra.core.Type:
     r"""Convert a key-value pair to an AST expression."""
     
     def key() -> str:
         return hydra.lib.pairs.first(pair)
-    def value() -> hydra.json.Value:
+    def value() -> hydra.core.Type:
         return hydra.lib.pairs.second(pair)
     return hydra.serialization.ifx(colon_op, hydra.serialization.cst(json_string(key())), value_to_expr(value()))
 
-def value_to_expr(value: hydra.json.Value) -> hydra.ast.Expr:
+def value_to_expr(value: hydra.json.Value) -> hydra.core.Type:
     r"""Convert a JSON value to an AST expression for serialization."""
     
     match value:
