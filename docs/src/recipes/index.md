@@ -17,6 +17,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 - **[Creating a new Hydra implementation](new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
 - **[Synchronizing Hydra-Python](syncing-python.md)** - How to regenerate Python artifacts from Hydra-Haskell sources
+- **[Exporting the kernel to JSON](json-kernel.md)** - How to export and verify the Hydra kernel as JSON for cross-language access
 
 ### Development Workflow
 
