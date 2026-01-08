@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-r"""Term decoders for hydra.json."""
+r"""Term decoders for hydra.json.model."""
 
 from __future__ import annotations
 from collections.abc import Callable
@@ -19,7 +19,7 @@ import hydra.lib.strings
 import hydra.util
 
 def value(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
-    def _hoist_hydra_decode_json_value_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
+    def _hoist_hydra_decode_json_model_value_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 tname = inj.type_name
@@ -95,4 +95,4 @@ def value(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
             
             case _:
                 return cast(Either[hydra.util.DecodingError, hydra.json.model.Value], Left(hydra.util.DecodingError("expected union of type hydra.json.model.Value")))
-    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.json.model.Value], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_json_value_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.json.model.Value], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_json_model_value_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

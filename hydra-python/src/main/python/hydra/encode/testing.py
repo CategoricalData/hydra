@@ -10,10 +10,10 @@ import hydra.core
 import hydra.encode.ast
 import hydra.encode.coders
 import hydra.encode.core
-import hydra.encode.json
+import hydra.encode.json.model
 import hydra.encode.parsing
 import hydra.encode.util
-import hydra.json
+import hydra.json.model
 import hydra.lib.eithers
 import hydra.lib.lists
 import hydra.lib.maybes
@@ -108,19 +108,19 @@ def inference_test_case(x: hydra.testing.InferenceTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.InferenceTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.type_scheme(x.output))))))
 
 def json_coder_test_case(x: hydra.testing.JsonCoderTestCase) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonCoderTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.value(x.json))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonCoderTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.model.value(x.json))))))
 
 def json_decode_test_case(x: hydra.testing.JsonDecodeTestCase) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonDecodeTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.value(x.json)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.core.term, e))))(x.expected))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonDecodeTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.model.value(x.json)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.core.term, e))))(x.expected))))))
 
 def json_encode_test_case(x: hydra.testing.JsonEncodeTestCase) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonEncodeTestCase"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.json.value, e))))(x.expected))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonEncodeTestCase"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("expected"), (lambda e: cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.json.model.value, e))))(x.expected))))))
 
 def parser_test_case(a: Callable[[T0], hydra.core.Term], x: hydra.testing.ParserTestCase[T0]) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ParserTestCase"), (hydra.core.Field(hydra.core.Name("input"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.parsing.parse_result(a, x.output))))))
 
-def json_parser_test_case(v1: hydra.testing.ParserTestCase[hydra.json.Value]) -> hydra.core.Type:
-    return parser_test_case(hydra.encode.json.value, v1)
+def json_parser_test_case(v1: hydra.testing.ParserTestCase[hydra.json.model.Value]) -> hydra.core.Type:
+    return parser_test_case(hydra.encode.json.model.value, v1)
 
 def json_roundtrip_test_case(x: hydra.testing.JsonRoundtripTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonRoundtripTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term))))))
@@ -128,8 +128,8 @@ def json_roundtrip_test_case(x: hydra.testing.JsonRoundtripTestCase) -> hydra.co
 def writer_test_case(a: Callable[[T0], hydra.core.Term], x: hydra.testing.WriterTestCase[T0]) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.WriterTestCase"), (hydra.core.Field(hydra.core.Name("input"), a(x.input)), hydra.core.Field(hydra.core.Name("output"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.output))))))
 
-def json_writer_test_case(v1: hydra.testing.WriterTestCase[hydra.json.Value]) -> hydra.core.Type:
-    return writer_test_case(hydra.encode.json.value, v1)
+def json_writer_test_case(v1: hydra.testing.WriterTestCase[hydra.json.model.Value]) -> hydra.core.Type:
+    return writer_test_case(hydra.encode.json.model.value, v1)
 
 def lift_lambda_above_let_test_case(x: hydra.testing.LiftLambdaAboveLetTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.LiftLambdaAboveLetTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
