@@ -13,7 +13,7 @@ import hydra.coders
 import hydra.compute
 import hydra.core
 import hydra.graph
-import hydra.json
+import hydra.json.model
 import hydra.module
 import hydra.parsing
 import hydra.util
@@ -291,7 +291,7 @@ class JsonCoderTestCase:
     
     type: Annotated[hydra.core.Type, "The Hydra type that determines how the term is encoded/decoded"]
     term: Annotated[hydra.core.Term, "The Hydra term to encode"]
-    json: Annotated[hydra.json.Value, "The expected JSON value"]
+    json: Annotated[hydra.json.model.Value, "The expected JSON value"]
 
 JSON_CODER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonCoderTestCase")
 JSON_CODER_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
@@ -303,7 +303,7 @@ class JsonDecodeTestCase:
     r"""A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term)."""
     
     type: Annotated[hydra.core.Type, "The Hydra type to decode into"]
-    json: Annotated[hydra.json.Value, "The input JSON value"]
+    json: Annotated[hydra.json.model.Value, "The input JSON value"]
     expected: Annotated[Either[str, hydra.core.Term], "The expected result: Left for error, Right for decoded term"]
 
 JSON_DECODE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonDecodeTestCase")
@@ -316,14 +316,14 @@ class JsonEncodeTestCase:
     r"""A test case for the Either-based JSON encoder. Takes an input term and expected result (Either String Value)."""
     
     term: Annotated[hydra.core.Term, "The Hydra term to encode"]
-    expected: Annotated[Either[str, hydra.json.Value], "The expected result: Left for error, Right for encoded JSON"]
+    expected: Annotated[Either[str, hydra.json.model.Value], "The expected result: Left for error, Right for encoded JSON"]
 
 JSON_ENCODE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonEncodeTestCase")
 JSON_ENCODE_TEST_CASE__TERM__NAME = hydra.core.Name("term")
 JSON_ENCODE_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
 
 # A test case which parses a JSON string and compares the result with an expected JSON value.
-JsonParserTestCase: TypeAlias = "ParserTestCase[hydra.json.Value]"
+JsonParserTestCase: TypeAlias = "ParserTestCase[hydra.json.model.Value]"
 
 JSON_PARSER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonParserTestCase")
 
@@ -350,7 +350,7 @@ LIFT_LAMBDA_ABOVE_LET_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 LIFT_LAMBDA_ABOVE_LET_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
 
 # A test case which serializes a JSON value to a string and compares it to the expected string.
-JsonWriterTestCase: TypeAlias = "WriterTestCase[hydra.json.Value]"
+JsonWriterTestCase: TypeAlias = "WriterTestCase[hydra.json.model.Value]"
 
 JSON_WRITER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JsonWriterTestCase")
 

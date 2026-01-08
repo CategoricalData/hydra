@@ -6,11 +6,12 @@ This guide explains how to keep Hydra-Python synchronized with the source of tru
 
 Hydra-Haskell is the bootstrapping implementation and source of truth for Hydra. When you make changes to the Hydra kernel, test suite, or eval lib in Hydra-Haskell, you need to regenerate the corresponding Python artifacts.
 
-The synchronization process generates four categories of Python code:
+The synchronization process generates five categories of Python code:
 
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
 | Kernel modules | `Hydra.Sources.All.kernelModules` | `hydra-python/src/main/python/hydra/` | Core Hydra types and functions |
+| Kernel sources | `Hydra.Sources.All.kernelModules` | `hydra-python/src/main/python/hydra/sources/` | Module AST as Python data (for tests) |
 | Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `hydra-python/src/main/python/hydra/eval/` | Interpreter-level primitives |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `hydra-python/src/gen-test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `hydra-python/src/gen-test/python/generation/` | Executable pytest tests |
@@ -45,11 +46,12 @@ cd hydra-ext
 This script:
 1. Builds all required executables
 2. Generates kernel modules
-3. Generates eval lib modules
-4. Generates kernel tests
-5. Generates generation tests
-6. Runs Python tests to verify
-7. Reports new files to git add
+3. Generates kernel sources modules
+4. Generates eval lib modules
+5. Generates kernel tests
+6. Generates generation tests
+7. Runs Python tests to verify
+8. Reports new files to git add
 
 For faster iteration during development, skip tests:
 
@@ -66,6 +68,7 @@ If you prefer to run steps individually, or need to regenerate only specific par
 ```bash
 cd hydra-ext
 stack build hydra-ext:exe:update-python-kernel \
+            hydra-ext:exe:update-python-kernel-sources \
             hydra-ext:exe:update-python-eval-lib \
             hydra-ext:exe:update-python-kernel-tests \
             hydra-ext:exe:update-python-generation-tests
@@ -85,7 +88,15 @@ stack ghci hydra-ext:lib hydra:hydra-test
 writePython "../hydra-python/src/main/python" kernelModules kernelModules
 ```
 
-### Step 3: Generate eval lib modules
+### Step 3: Generate kernel sources modules
+
+These are "source-level" representations of the kernel modules, containing the Module AST as Python data structures. They're needed for Python tests that evaluate Hydra terms referencing kernel functions.
+
+```bash
+stack exec update-python-kernel-sources -- +RTS -K256M -A32M -RTS
+```
+
+### Step 4: Generate eval lib modules
 
 ```bash
 stack exec update-python-eval-lib -- +RTS -K256M -A32M -RTS
@@ -96,7 +107,7 @@ Or in GHCi:
 writePython "../hydra-python/src/main/python" mainModules evalLibModules
 ```
 
-### Step 4: Generate kernel tests
+### Step 5: Generate kernel tests
 
 ```bash
 stack exec update-python-kernel-tests -- +RTS -K256M -A32M -RTS
@@ -107,7 +118,7 @@ Or in GHCi:
 writePython "../hydra-python/src/gen-test/python" mainModules testModules
 ```
 
-### Step 5: Generate generation tests
+### Step 6: Generate generation tests
 
 ```bash
 ./bin/update-python-generation-tests.sh
@@ -118,7 +129,7 @@ Or using the executable directly:
 stack exec update-python-generation-tests -- +RTS -K256M -A32M -RTS
 ```
 
-### Step 6: Run Python tests
+### Step 7: Run Python tests
 
 ```bash
 cd ../hydra-python
@@ -126,7 +137,7 @@ source .venv/bin/activate
 PYTHONPATH=src/main/python:src/gen-test/python pytest src/gen-test/python/generation -q
 ```
 
-### Step 7: Add new files to git
+### Step 8: Add new files to git
 
 ```bash
 git add src/main/python src/gen-test/python
