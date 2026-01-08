@@ -10,12 +10,12 @@ import hydra.core
 import hydra.decode.ast
 import hydra.decode.coders
 import hydra.decode.core
-import hydra.decode.json
+import hydra.decode.json.model
 import hydra.decode.parsing
 import hydra.decode.util
 import hydra.extract.helpers
 import hydra.graph
-import hydra.json
+import hydra.json.model
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -262,7 +262,7 @@ def json_coder_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[
         match v1:
             case hydra.core.TermRecord(value=record):
                 field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map, cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map, cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("json", hydra.decode.json.value, field_map, cx), (lambda field_json: cast(Either[hydra.util.DecodingError, hydra.testing.JsonCoderTestCase], Right(hydra.testing.JsonCoderTestCase(field_type, field_term, field_json)))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map, cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map, cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("json", hydra.decode.json.model.value, field_map, cx), (lambda field_json: cast(Either[hydra.util.DecodingError, hydra.testing.JsonCoderTestCase], Right(hydra.testing.JsonCoderTestCase(field_type, field_term, field_json)))))))))
             
             case _:
                 return cast(Either[hydra.util.DecodingError, hydra.testing.JsonCoderTestCase], Left(hydra.util.DecodingError("expected record of type hydra.testing.JsonCoderTestCase")))
@@ -287,7 +287,7 @@ def json_decode_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either
                         
                         case _:
                             return cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError("expected literal")))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map, cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("json", hydra.decode.json.value, field_map, cx), (lambda field_json: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expected", (lambda v1, v2: hydra.extract.helpers.decode_either((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError(err)))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), hydra.decode.core.term, v1, v2)), field_map, cx), (lambda field_expected: cast(Either[hydra.util.DecodingError, hydra.testing.JsonDecodeTestCase], Right(hydra.testing.JsonDecodeTestCase(field_type, field_json, field_expected)))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map, cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("json", hydra.decode.json.model.value, field_map, cx), (lambda field_json: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expected", (lambda v1, v2: hydra.extract.helpers.decode_either((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError(err)))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), hydra.decode.core.term, v1, v2)), field_map, cx), (lambda field_expected: cast(Either[hydra.util.DecodingError, hydra.testing.JsonDecodeTestCase], Right(hydra.testing.JsonDecodeTestCase(field_type, field_json, field_expected)))))))))
             
             case _:
                 return cast(Either[hydra.util.DecodingError, hydra.testing.JsonDecodeTestCase], Left(hydra.util.DecodingError("expected record of type hydra.testing.JsonDecodeTestCase")))
@@ -312,7 +312,7 @@ def json_encode_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either
                         
                         case _:
                             return cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError("expected literal")))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map, cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expected", (lambda v1, v2: hydra.extract.helpers.decode_either((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError(err)))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), hydra.decode.json.value, v1, v2)), field_map, cx), (lambda field_expected: cast(Either[hydra.util.DecodingError, hydra.testing.JsonEncodeTestCase], Right(hydra.testing.JsonEncodeTestCase(field_term, field_expected)))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map, cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expected", (lambda v1, v2: hydra.extract.helpers.decode_either((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, str], Left(hydra.util.DecodingError(err)))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), hydra.decode.json.model.value, v1, v2)), field_map, cx), (lambda field_expected: cast(Either[hydra.util.DecodingError, hydra.testing.JsonEncodeTestCase], Right(hydra.testing.JsonEncodeTestCase(field_term, field_expected)))))))
             
             case _:
                 return cast(Either[hydra.util.DecodingError, hydra.testing.JsonEncodeTestCase], Left(hydra.util.DecodingError("expected record of type hydra.testing.JsonEncodeTestCase")))
@@ -343,8 +343,8 @@ def parser_test_case(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hy
                 return cast(Either[hydra.util.DecodingError, hydra.testing.ParserTestCase[T1]], Left(hydra.util.DecodingError("expected record of type hydra.testing.ParserTestCase")))
     return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.testing.ParserTestCase[T0]], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_testing_parser_test_case_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def json_parser_test_case(v1: hydra.graph.Graph, v2: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.ParserTestCase[hydra.json.Value]]:
-    return parser_test_case(hydra.decode.json.value, v1, v2)
+def json_parser_test_case(v1: hydra.graph.Graph, v2: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.ParserTestCase[hydra.json.model.Value]]:
+    return parser_test_case(hydra.decode.json.model.value, v1, v2)
 
 def json_roundtrip_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.JsonRoundtripTestCase]:
     def _hoist_hydra_decode_testing_json_roundtrip_test_case_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.JsonRoundtripTestCase]:
@@ -382,8 +382,8 @@ def writer_test_case(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hy
                 return cast(Either[hydra.util.DecodingError, hydra.testing.WriterTestCase[T1]], Left(hydra.util.DecodingError("expected record of type hydra.testing.WriterTestCase")))
     return hydra.lib.eithers.either((lambda err: cast(Either[hydra.util.DecodingError, hydra.testing.WriterTestCase[T0]], Left(hydra.util.DecodingError(err)))), (lambda stripped: _hoist_hydra_decode_testing_writer_test_case_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def json_writer_test_case(v1: hydra.graph.Graph, v2: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.WriterTestCase[hydra.json.Value]]:
-    return writer_test_case(hydra.decode.json.value, v1, v2)
+def json_writer_test_case(v1: hydra.graph.Graph, v2: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.WriterTestCase[hydra.json.model.Value]]:
+    return writer_test_case(hydra.decode.json.model.value, v1, v2)
 
 def lift_lambda_above_let_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.LiftLambdaAboveLetTestCase]:
     def _hoist_hydra_decode_testing_lift_lambda_above_let_test_case_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.testing.LiftLambdaAboveLetTestCase]:

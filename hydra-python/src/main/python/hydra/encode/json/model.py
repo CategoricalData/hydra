@@ -1,6 +1,6 @@
 # Note: this is an automatically generated file. Do not edit.
 
-r"""Term encoders for hydra.json."""
+r"""Term encoders for hydra.json.model."""
 
 from __future__ import annotations
 from decimal import Decimal
