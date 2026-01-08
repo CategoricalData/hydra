@@ -2,7 +2,7 @@
 
 -- | A JSON syntax model. See the BNF at https://www.json.org
 
-module Hydra.Json where
+module Hydra.Json.Model where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -28,7 +28,7 @@ data Value =
   ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra.json.Value")
+_Value = (Core.Name "hydra.json.model.Value")
 
 _Value_array = (Core.Name "array")
 

@@ -4,7 +4,7 @@
 
 module Hydra.Json.Parser where
 
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -33,12 +33,12 @@ token :: (Parsing.Parser t0 -> Parsing.Parser t0)
 token p = (Parsers.bind p (\x -> Parsers.bind whitespace (\_ -> Parsers.pure x)))
 
 -- | Parse JSON null value
-jsonNull :: (Parsing.Parser Json.Value)
-jsonNull = (Parsers.map (\_ -> Json.ValueNull) (token (Parsers.string "null")))
+jsonNull :: (Parsing.Parser Model.Value)
+jsonNull = (Parsers.map (\_ -> Model.ValueNull) (token (Parsers.string "null")))
 
 -- | Parse JSON boolean (true or false)
-jsonBool :: (Parsing.Parser Json.Value)
-jsonBool = (Parsers.alt (Parsers.map (\_ -> Json.ValueBoolean True) (token (Parsers.string "true"))) (Parsers.map (\_ -> Json.ValueBoolean False) (token (Parsers.string "false"))))
+jsonBool :: (Parsing.Parser Model.Value)
+jsonBool = (Parsers.alt (Parsers.map (\_ -> Model.ValueBoolean True) (token (Parsers.string "true"))) (Parsers.map (\_ -> Model.ValueBoolean False) (token (Parsers.string "false"))))
 
 -- | Parse a single digit (0-9)
 digit :: (Parsing.Parser Int)
@@ -61,10 +61,10 @@ jsonExponentPart :: (Parsing.Parser (Maybe String))
 jsonExponentPart = (Parsers.optional (Parsers.bind (Parsers.satisfy (\c -> Logic.or (Equality.equal c 101) (Equality.equal c 69))) (\_ -> Parsers.bind (Parsers.optional (Parsers.satisfy (\c -> Logic.or (Equality.equal c 43) (Equality.equal c 45)))) (\sign -> Parsers.map (\digits -> Strings.cat2 (Strings.cat2 "e" (Maybes.maybe "" (\arg_ -> Strings.fromList (Lists.pure arg_)) sign)) digits) digits))))
 
 -- | Parse a JSON number (integer, decimal, or scientific notation)
-jsonNumber :: (Parsing.Parser Json.Value)
+jsonNumber :: (Parsing.Parser Model.Value)
 jsonNumber = (token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->  
   let numStr = (Strings.cat2 (Strings.cat2 intPart (Maybes.maybe "" Equality.identity fracPart)) (Maybes.maybe "" Equality.identity expPart))
-  in (Parsers.pure (Json.ValueNumber (Maybes.maybe 0.0 Equality.identity (Literals.readBigfloat numStr)))))))))
+  in (Parsers.pure (Model.ValueNumber (Maybes.maybe 0.0 Equality.identity (Literals.readBigfloat numStr)))))))))
 
 -- | Parse a JSON escape sequence after the backslash
 jsonEscapeChar :: (Parsing.Parser Int)
@@ -83,23 +83,23 @@ jsonStringChar :: (Parsing.Parser Int)
 jsonStringChar = (Parsers.alt (Parsers.bind (Parsers.char 92) (\_ -> jsonEscapeChar)) (Parsers.satisfy (\c -> Logic.and (Logic.not (Equality.equal c 34)) (Logic.not (Equality.equal c 92)))))
 
 -- | Parse a JSON string value
-jsonString :: (Parsing.Parser Json.Value)
-jsonString = (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Json.ValueString (Strings.fromList chars)))))))
+jsonString :: (Parsing.Parser Model.Value)
+jsonString = (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Model.ValueString (Strings.fromList chars)))))))
 
 -- | Parse a JSON array
-jsonArray :: (Parsing.Parser Json.Value)
-jsonArray = (Parsers.map (\x -> Json.ValueArray x) (Parsers.between (token (Parsers.char 91)) (token (Parsers.char 93)) (Parsers.sepBy jsonValue (token (Parsers.char 44)))))
+jsonArray :: (Parsing.Parser Model.Value)
+jsonArray = (Parsers.map (\x -> Model.ValueArray x) (Parsers.between (token (Parsers.char 91)) (token (Parsers.char 93)) (Parsers.sepBy jsonValue (token (Parsers.char 44)))))
 
 -- | Parse a JSON object key-value pair
-jsonKeyValue :: (Parsing.Parser (String, Json.Value))
+jsonKeyValue :: (Parsing.Parser (String, Model.Value))
 jsonKeyValue = (Parsers.bind (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Strings.fromList chars)))))) (\key -> Parsers.bind (token (Parsers.char 58)) (\_ -> Parsers.map (\v -> (key, v)) jsonValue)))
 
 -- | Parse a JSON object
-jsonObject :: (Parsing.Parser Json.Value)
-jsonObject = (Parsers.map (\arg_ -> (\x -> Json.ValueObject x) (Maps.fromList arg_)) (Parsers.between (token (Parsers.char 123)) (token (Parsers.char 125)) (Parsers.sepBy jsonKeyValue (token (Parsers.char 44)))))
+jsonObject :: (Parsing.Parser Model.Value)
+jsonObject = (Parsers.map (\arg_ -> (\x -> Model.ValueObject x) (Maps.fromList arg_)) (Parsers.between (token (Parsers.char 123)) (token (Parsers.char 125)) (Parsers.sepBy jsonKeyValue (token (Parsers.char 44)))))
 
 -- | Parse any JSON value
-jsonValue :: (Parsing.Parser Json.Value)
+jsonValue :: (Parsing.Parser Model.Value)
 jsonValue = (Parsers.choice [
   jsonNull,
   jsonBool,
@@ -109,5 +109,5 @@ jsonValue = (Parsers.choice [
   jsonObject])
 
 -- | Parse a JSON document from a string
-parseJson :: (String -> Parsing.ParseResult Json.Value)
+parseJson :: (String -> Parsing.ParseResult Model.Value)
 parseJson input = (Parsing.unParser (Parsers.bind whitespace (\_ -> Parsers.bind jsonValue (\v -> Parsers.bind whitespace (\_ -> Parsers.bind Parsers.eof (\_ -> Parsers.pure v))))) input)

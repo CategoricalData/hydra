@@ -5,7 +5,7 @@
 module Hydra.Json.Writer where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -40,7 +40,7 @@ jsonString s =
     in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
 
 -- | Convert a key-value pair to an AST expression
-keyValueToExpr :: ((String, Json.Value) -> Ast.Expr)
+keyValueToExpr :: ((String, Model.Value) -> Ast.Expr)
 keyValueToExpr pair =  
   let key = (Pairs.first pair)
   in  
@@ -48,15 +48,15 @@ keyValueToExpr pair =
     in (Serialization.ifx colonOp (Serialization.cst (jsonString key)) (valueToExpr value))
 
 -- | Serialize a JSON value to a string
-printJson :: (Json.Value -> String)
+printJson :: (Model.Value -> String)
 printJson value = (Serialization.printExpr (valueToExpr value))
 
 -- | Convert a JSON value to an AST expression for serialization
-valueToExpr :: (Json.Value -> Ast.Expr)
+valueToExpr :: (Model.Value -> Ast.Expr)
 valueToExpr value = ((\x -> case x of
-  Json.ValueArray v1 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v1))
-  Json.ValueBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
-  Json.ValueNull -> (Serialization.cst "null")
-  Json.ValueNumber v1 -> (Serialization.cst (Literals.showBigfloat v1))
-  Json.ValueObject v1 -> (Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v1)))
-  Json.ValueString v1 -> (Serialization.cst (jsonString v1))) value)
+  Model.ValueArray v1 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v1))
+  Model.ValueBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
+  Model.ValueNull -> (Serialization.cst "null")
+  Model.ValueNumber v1 -> (Serialization.cst (Literals.showBigfloat v1))
+  Model.ValueObject v1 -> (Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v1)))
+  Model.ValueString v1 -> (Serialization.cst (jsonString v1))) value)

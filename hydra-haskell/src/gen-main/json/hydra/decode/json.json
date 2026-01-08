@@ -110,7 +110,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "array", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -226,7 +226,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "boolean", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -258,7 +258,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "null", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -389,7 +389,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "number", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -511,7 +511,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "object", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -627,7 +627,7 @@
                                                                                               "body": {
                                                                                                 "union": {
                                                                                                   "field": {"name": "string", "term": {"variable": "t"}},
-                                                                                                  "typeName": "hydra.json.Value"}},
+                                                                                                  "typeName": "hydra.json.model.Value"}},
                                                                                               "domain": null,
                                                                                               "parameter": "t"}}},
                                                                                         "function": {"function": {"primitive": "hydra.lib.eithers.map"}}}}}},
@@ -683,7 +683,8 @@
                                                 "either": {
                                                   "@left": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "expected union of type hydra.json.Value"}},
+                                                      "body": {
+                                                        "literal": {"string": "expected union of type hydra.json.model.Value"}},
                                                       "typeName": "hydra.util.DecodingError"}}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": null,
@@ -714,7 +715,7 @@
                   "codomain": {
                     "either": {
                       "left": {"variable": "hydra.util.DecodingError"},
-                      "right": {"variable": "hydra.json.Value"}}},
+                      "right": {"variable": "hydra.json.model.Value"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]}],

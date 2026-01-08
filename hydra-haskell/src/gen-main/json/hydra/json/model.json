@@ -2,7 +2,7 @@
   "description": ["A JSON syntax model. See the BNF at https://www.json.org"],
   "elements": [
     {
-      "name": "hydra.json.Value",
+      "name": "hydra.json.model.Value",
       "term": {
         "annotated": {
           "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
@@ -26,7 +26,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
@@ -62,7 +62,7 @@
                                                                             "name": "variable",
                                                                             "term": {
                                                                               "wrap": {
-                                                                                "body": {"literal": {"string": "hydra.json.Value"}},
+                                                                                "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                                                 "typeName": "hydra.core.Name"}}},
                                                                           "typeName": "hydra.core.Type"}}},
                                                                     "typeName": "hydra.core.Type"}}},
@@ -285,7 +285,7 @@
                                                                                     "name": "variable",
                                                                                     "term": {
                                                                                       "wrap": {
-                                                                                        "body": {"literal": {"string": "hydra.json.Value"}},
+                                                                                        "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                           "typeName": "hydra.core.MapType"}}},
@@ -390,6 +390,6 @@
           "constraints": null,
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]}],
-  "namespace": "hydra.json",
+  "namespace": "hydra.json.model",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

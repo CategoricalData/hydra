@@ -2734,7 +2734,7 @@ module_ = Module.Module {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
                                                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "json"))})),
-                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -2833,7 +2833,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
                                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "json"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3055,7 +3055,7 @@ module_ = Module.Module {
                                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                                                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))})),
-                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))}))})),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))}))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -3090,7 +3090,7 @@ module_ = Module.Module {
       Core.bindingName = (Core.Name "hydra.decode.testing.jsonParserTestCase"),
       Core.bindingTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.testing.parserTestCase")),
-        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -3101,7 +3101,7 @@ module_ = Module.Module {
               Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
               Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.ParserTestCase")),
-                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.Value"))}))}))}))})),
+                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.model.Value"))}))}))}))})),
         Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.decode.testing.jsonRoundtripTestCase"),
@@ -3299,7 +3299,7 @@ module_ = Module.Module {
       Core.bindingName = (Core.Name "hydra.decode.testing.jsonWriterTestCase"),
       Core.bindingTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.testing.writerTestCase")),
-        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -3310,7 +3310,7 @@ module_ = Module.Module {
               Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
               Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.WriterTestCase")),
-                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.Value"))}))}))}))})),
+                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.model.Value"))}))}))}))})),
         Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.decode.testing.parserTestCase"),
@@ -6387,7 +6387,7 @@ module_ = Module.Module {
     Module.Namespace "hydra.decode.coders",
     Module.Namespace "hydra.decode.compute",
     Module.Namespace "hydra.decode.graph",
-    Module.Namespace "hydra.decode.json",
+    Module.Namespace "hydra.decode.json.model",
     Module.Namespace "hydra.decode.module",
     Module.Namespace "hydra.decode.parsing",
     (Module.Namespace "hydra.decode.util")],

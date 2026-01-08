@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Module      as Module
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
@@ -38,7 +38,7 @@ kernelTypesModules = [
   Core.module_,
   Grammar.module_,
   Graph.module_,
-  Json.module_,
+  JsonModel.module_,
   Module.module_,
   Parsing.module_,
   Phantoms.module_,

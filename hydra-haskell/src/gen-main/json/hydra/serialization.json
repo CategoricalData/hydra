@@ -3657,7 +3657,7 @@
     "hydra.core",
     "hydra.grammar",
     "hydra.graph",
-    "hydra.json",
+    "hydra.json.model",
     "hydra.module",
     "hydra.parsing",
     "hydra.phantoms",

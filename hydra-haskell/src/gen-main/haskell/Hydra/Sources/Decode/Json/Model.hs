@@ -1,8 +1,8 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Source module for hydra.decode.json
+-- | Source module for hydra.decode.json.model
 
-module Hydra.Sources.Decode.Json where
+module Hydra.Sources.Decode.Json.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
@@ -15,10 +15,10 @@ import qualified Data.Set as S
 
 module_ :: Module.Module
 module_ = Module.Module {
-  Module.moduleNamespace = (Module.Namespace "hydra.decode.json"),
+  Module.moduleNamespace = (Module.Namespace "hydra.decode.json.model"),
   Module.moduleElements = [
     Core.Binding {
-      Core.bindingName = (Core.Name "hydra.decode.json.value"),
+      Core.bindingName = (Core.Name "hydra.decode.json.model.value"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
         Core.lambdaDomain = Nothing,
@@ -43,7 +43,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.json.Value"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.json.model.Value"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -101,7 +101,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "array"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -109,7 +109,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
-                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                     Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -124,7 +124,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "boolean"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -195,7 +195,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "null"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -216,7 +216,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "number"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -295,7 +295,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "object"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -355,7 +355,7 @@ module_ = Module.Module {
                                                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                                                           Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                                         Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))})),
-                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.value"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.json.model.value"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -370,7 +370,7 @@ module_ = Module.Module {
                                             Core.lambdaParameter = (Core.Name "t"),
                                             Core.lambdaDomain = Nothing,
                                             Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                                              Core.injectionTypeName = (Core.Name "hydra.json.Value"),
+                                              Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
                                               Core.injectionField = Core.Field {
                                                 Core.fieldName = (Core.Name "string"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
@@ -472,7 +472,7 @@ module_ = Module.Module {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
             Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
               Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.util.DecodingError")),
-              Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.json.Value"))}))}))})),
+              Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.json.model.Value"))}))}))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.extract.helpers",
@@ -480,6 +480,6 @@ module_ = Module.Module {
     Module.Namespace "hydra.rewriting",
     (Module.Namespace "hydra.decode.core")],
   Module.moduleTypeDependencies = [
-    Module.Namespace "hydra.json",
+    Module.Namespace "hydra.json.model",
     (Module.Namespace "hydra.util")],
-  Module.moduleDescription = (Just "Term decoders for hydra.json")}
+  Module.moduleDescription = (Just "Term decoders for hydra.json.model")}

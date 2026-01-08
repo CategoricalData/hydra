@@ -8,12 +8,12 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Ast as Ast
 import qualified Hydra.Decode.Coders as Coders
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Decode.Json as Json
+import qualified Hydra.Decode.Json.Model as Model
 import qualified Hydra.Decode.Parsing as Parsing
 import qualified Hydra.Decode.Util as Util
 import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Json as Json_
+import qualified Hydra.Json.Model as Model_
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
@@ -280,7 +280,7 @@ jsonCoderTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Tes
 jsonCoderTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Helpers.toFieldMap v1)
-    in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "json" Json.value fieldMap cx) (\field_json -> Right (Testing.JsonCoderTestCase {
+    in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "json" Model.value fieldMap cx) (\field_json -> Right (Testing.JsonCoderTestCase {
       Testing.jsonCoderTestCaseType = field_type,
       Testing.jsonCoderTestCaseTerm = field_term,
       Testing.jsonCoderTestCaseJson = field_json})))))
@@ -290,7 +290,7 @@ jsonDecodeTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Te
 jsonDecodeTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Helpers.toFieldMap v1)
-    in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "json" Json.value fieldMap cx) (\field_json -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (\cx -> \raw -> Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
+    in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "json" Model.value fieldMap cx) (\field_json -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (\cx -> \raw -> Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
       Core.TermLiteral v2 -> ((\x -> case x of
         Core.LiteralString v3 -> (Right v3)
         _ -> (Left (Util_.DecodingError "expected string literal"))) v2)
@@ -308,13 +308,13 @@ jsonEncodeTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError e
       Core.TermLiteral v2 -> ((\x -> case x of
         Core.LiteralString v3 -> (Right v3)
         _ -> (Left (Util_.DecodingError "expected string literal"))) v2)
-      _ -> (Left (Util_.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) Json.value) fieldMap cx) (\field_expected -> Right (Testing.JsonEncodeTestCase {
+      _ -> (Left (Util_.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) Model.value) fieldMap cx) (\field_expected -> Right (Testing.JsonEncodeTestCase {
       Testing.jsonEncodeTestCaseTerm = field_term,
       Testing.jsonEncodeTestCaseExpected = field_expected}))))
   _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.JsonEncodeTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-jsonParserTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError (Testing.ParserTestCase Json_.Value))
-jsonParserTestCase = (parserTestCase Json.value)
+jsonParserTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError (Testing.ParserTestCase Model_.Value))
+jsonParserTestCase = (parserTestCase Model.value)
 
 jsonRoundtripTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.JsonRoundtripTestCase)
 jsonRoundtripTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
@@ -334,8 +334,8 @@ liftLambdaAboveLetTestCase cx raw = (Eithers.either (\err -> Left (Util_.Decodin
       Testing.liftLambdaAboveLetTestCaseOutput = field_output}))))
   _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.LiftLambdaAboveLetTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-jsonWriterTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError (Testing.WriterTestCase Json_.Value))
-jsonWriterTestCase = (writerTestCase Json.value)
+jsonWriterTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError (Testing.WriterTestCase Model_.Value))
+jsonWriterTestCase = (writerTestCase Model.value)
 
 parserTestCase :: ((Graph.Graph -> Core.Term -> Either Util_.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util_.DecodingError (Testing.ParserTestCase t0))
 parserTestCase a cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of

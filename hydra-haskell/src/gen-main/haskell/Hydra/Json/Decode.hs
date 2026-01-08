@@ -5,7 +5,7 @@
 module Hydra.Json.Decode where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -25,7 +25,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches.
-fromJson :: (M.Map Core.Name Core.Type -> Core.Type -> Json.Value -> Either String Core.Term)
+fromJson :: (M.Map Core.Name Core.Type -> Core.Type -> Model.Value -> Either String Core.Term)
 fromJson types typ value =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
@@ -44,12 +44,16 @@ fromJson types typ value =
         in (Eithers.either (\err -> Left err) (\arr ->  
           let decoded = (Eithers.mapList decodeElem arr)
           in (Eithers.map (\elems -> Core.TermSet (Sets.fromList elems)) decoded)) arrResult)
-    Core.TypeMaybe v1 -> ((\x -> case x of
-      Json.ValueNull -> (Right (Core.TermMaybe Nothing))
-      Json.ValueArray v2 -> (Logic.ifElse (Equality.equal (Lists.length v2) 0) (Right (Core.TermMaybe Nothing)) (Logic.ifElse (Equality.equal (Lists.length v2) 1) ( 
-        let decoded = (fromJson types v1 (Lists.head v2))
-        in (Eithers.map (\v -> Core.TermMaybe (Just v)) decoded)) (Left "expected single-element array for Just")))
-      _ -> (Left "expected null or single-element array for Maybe")) value)
+    Core.TypeMaybe v1 ->  
+      let decodeJust = (\arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types v1 (Lists.head arr)))
+      in  
+        let decodeMaybeArray = (\arr ->  
+                let len = (Lists.length arr)
+                in (Logic.ifElse (Equality.equal len 0) (Right (Core.TermMaybe Nothing)) (Logic.ifElse (Equality.equal len 1) (decodeJust arr) (Left "expected single-element array for Just"))))
+        in ((\x -> case x of
+          Model.ValueNull -> (Right (Core.TermMaybe Nothing))
+          Model.ValueArray v2 -> (decodeMaybeArray v2)
+          _ -> (Left "expected null or single-element array for Maybe")) value)
     Core.TypeRecord v1 ->  
       let objResult = (expectObject value)
       in (Eithers.either (\err -> Left err) (\obj ->  
@@ -60,7 +64,7 @@ fromJson types typ value =
                   in  
                     let mval = (Maps.lookup (Core.unName fname) obj)
                     in  
-                      let defaultVal = Json.ValueNull
+                      let defaultVal = Model.ValueNull
                       in  
                         let jsonVal = (Maybes.fromMaybe defaultVal mval)
                         in  
@@ -76,48 +80,48 @@ fromJson types typ value =
               Core.recordTypeName = (Core.rowTypeTypeName v1),
               Core.recordFields = fs})) decodedFields)) objResult)
     Core.TypeUnion v1 ->  
-      let objResult = (expectObject value)
-      in (Eithers.either (\err -> Left err) (\obj ->  
-        let keys = (Maps.keys obj)
-        in (Logic.ifElse (Equality.equal (Lists.length keys) 1) ( 
-          let key = (Lists.head keys)
-          in  
-            let val = (Maps.lookup key obj)
-            in  
-              let fields = (Core.rowTypeFields v1)
+      let decodeVariant = (\key -> \val -> \ftype ->  
+              let jsonVal = (Maybes.fromMaybe Model.ValueNull val)
               in  
-                let findField = (\fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
-                        "unknown variant: ",
-                        key])) ( 
-                        let ft = (Lists.head fts)
-                        in (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) key) ( 
-                          let ftype = (Core.fieldTypeType ft)
-                          in  
-                            let jsonVal = (Maybes.fromMaybe Json.ValueNull val)
-                            in  
-                              let decoded = (fromJson types ftype jsonVal)
-                              in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
-                                Core.injectionTypeName = (Core.rowTypeTypeName v1),
-                                Core.injectionField = Core.Field {
-                                  Core.fieldName = (Core.Name key),
-                                  Core.fieldTerm = v}})) decoded)) (findField (Lists.tail fts)))))
-                in (findField fields)) (Left "expected single-key object for union"))) objResult)
+                let decoded = (fromJson types ftype jsonVal)
+                in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
+                  Core.injectionTypeName = (Core.rowTypeTypeName v1),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name key),
+                    Core.fieldTerm = v}})) decoded))
+      in  
+        let tryField = (\key -> \val -> \ft -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) key) (Just (decodeVariant key val (Core.fieldTypeType ft))) Nothing)
+        in  
+          let findAndDecode = (\key -> \val -> \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                  "unknown variant: ",
+                  key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts))))
+          in  
+            let decodeSingleKey = (\obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) (Core.rowTypeFields v1))
+            in  
+              let processUnion = (\obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union"))
+              in  
+                let objResult = (expectObject value)
+                in (Eithers.either (\err -> Left err) (\obj -> processUnion obj) objResult)
     Core.TypeUnit ->  
       let objResult = (expectObject value)
       in (Eithers.map (\_ -> Core.TermUnit) objResult)
     Core.TypeWrap v1 ->  
-      let lookedUp = (Maps.lookup (Core.wrappedTypeTypeName v1) types)
-      in (Maybes.maybe (Left (Strings.cat [
-        "unknown wrapped type: ",
-        (Core.unName (Core.wrappedTypeTypeName v1))])) (\lt ->  
-        let innerType = ((\x -> case x of
-                Core.TypeWrap v2 -> (Core.wrappedTypeBody v2)
-                _ -> lt) lt)
+      let extractInnerType = (\lt -> (\x -> case x of
+              Core.TypeWrap v2 -> (Core.wrappedTypeBody v2)
+              _ -> lt) lt)
+      in  
+        let decodeAndWrap = (\lt ->  
+                let innerType = (extractInnerType lt)
+                in  
+                  let decoded = (fromJson types innerType value)
+                  in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.wrappedTypeTypeName v1),
+                    Core.wrappedTermBody = v})) decoded))
         in  
-          let decoded = (fromJson types innerType value)
-          in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
-            Core.wrappedTermTypeName = (Core.wrappedTypeTypeName v1),
-            Core.wrappedTermBody = v})) decoded)) lookedUp)
+          let lookedUp = (Maps.lookup (Core.wrappedTypeTypeName v1) types)
+          in (Maybes.maybe (Left (Strings.cat [
+            "unknown wrapped type: ",
+            (Core.unName (Core.wrappedTypeTypeName v1))])) (\lt -> decodeAndWrap lt) lookedUp)
     Core.TypeMap v1 ->  
       let keyType = (Core.mapTypeKeys v1)
       in  
@@ -179,13 +183,13 @@ fromJson types typ value =
       (Core_.type_ typ)]))) stripped)
 
 -- | Decode a JSON value to a literal term
-decodeLiteral :: (Core.LiteralType -> Json.Value -> Either String Core.Term)
+decodeLiteral :: (Core.LiteralType -> Model.Value -> Either String Core.Term)
 decodeLiteral lt value = ((\x -> case x of
   Core.LiteralTypeBinary ->  
     let strResult = (expectString value)
     in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary s))) strResult)
   Core.LiteralTypeBoolean -> ((\x -> case x of
-    Json.ValueBoolean v2 -> (Right (Core.TermLiteral (Core.LiteralBoolean v2)))
+    Model.ValueBoolean v2 -> (Right (Core.TermLiteral (Core.LiteralBoolean v2)))
     _ -> (Left "expected boolean")) value)
   Core.LiteralTypeFloat v1 -> (decodeFloat v1 value)
   Core.LiteralTypeInteger v1 -> (decodeInteger v1 value)
@@ -194,7 +198,7 @@ decodeLiteral lt value = ((\x -> case x of
     in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)) lt)
 
 -- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
-decodeFloat :: (Core.FloatType -> Json.Value -> Either String Core.Term)
+decodeFloat :: (Core.FloatType -> Model.Value -> Either String Core.Term)
 decodeFloat ft value = ((\x -> case x of
   Core.FloatTypeBigfloat ->  
     let numResult = (expectNumber value)
@@ -211,7 +215,7 @@ decodeFloat ft value = ((\x -> case x of
     in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 n)))) numResult)) ft)
 
 -- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
-decodeInteger :: (Core.IntegerType -> Json.Value -> Either String Core.Term)
+decodeInteger :: (Core.IntegerType -> Model.Value -> Either String Core.Term)
 decodeInteger it value = ((\x -> case x of
   Core.IntegerTypeBigint ->  
     let strResult = (expectString value)
@@ -258,25 +262,25 @@ decodeInteger it value = ((\x -> case x of
     in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)) it)
 
 -- | Extract a string from a JSON value
-expectString :: (Json.Value -> Either String String)
+expectString :: (Model.Value -> Either String String)
 expectString value = ((\x -> case x of
-  Json.ValueString v1 -> (Right v1)
+  Model.ValueString v1 -> (Right v1)
   _ -> (Left "expected string")) value)
 
 -- | Extract an array from a JSON value
-expectArray :: (Json.Value -> Either String [Json.Value])
+expectArray :: (Model.Value -> Either String [Model.Value])
 expectArray value = ((\x -> case x of
-  Json.ValueArray v1 -> (Right v1)
+  Model.ValueArray v1 -> (Right v1)
   _ -> (Left "expected array")) value)
 
 -- | Extract an object from a JSON value
-expectObject :: (Json.Value -> Either String (M.Map String Json.Value))
+expectObject :: (Model.Value -> Either String (M.Map String Model.Value))
 expectObject value = ((\x -> case x of
-  Json.ValueObject v1 -> (Right v1)
+  Model.ValueObject v1 -> (Right v1)
   _ -> (Left "expected object")) value)
 
 -- | Extract a number from a JSON value
-expectNumber :: (Json.Value -> Either String Double)
+expectNumber :: (Model.Value -> Either String Double)
 expectNumber value = ((\x -> case x of
-  Json.ValueNumber v1 -> (Right v1)
+  Model.ValueNumber v1 -> (Right v1)
   _ -> (Left "expected number")) value)

@@ -92,8 +92,8 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 -- Additional imports
-import Hydra.Json
-import qualified Hydra.Sources.Kernel.Types.Json as Json
+import Hydra.Json.Model
+import qualified Hydra.Sources.Json.Model as JsonModel
 
 
 ns :: Namespace

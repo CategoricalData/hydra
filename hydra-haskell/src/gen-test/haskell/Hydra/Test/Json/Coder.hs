@@ -5,7 +5,7 @@
 module Hydra.Test.Json.Coder where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -30,7 +30,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral Core.LiteralTypeBoolean),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralBoolean True)),
-            Testing.jsonCoderTestCaseJson = (Json.ValueBoolean True)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueBoolean True)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -38,7 +38,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral Core.LiteralTypeBoolean),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralBoolean False)),
-            Testing.jsonCoderTestCaseJson = (Json.ValueBoolean False)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueBoolean False)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -46,7 +46,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber 42.0)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 42.0)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -54,7 +54,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-17)))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber (-17.0))})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber (-17.0))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -62,7 +62,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber 0.0)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 0.0)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -70,7 +70,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 1.5))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber 1.5)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 1.5)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -78,7 +78,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 2.718))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber 2.718)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 2.718)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -86,7 +86,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral Core.LiteralTypeString),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralString "hello")),
-            Testing.jsonCoderTestCaseJson = (Json.ValueString "hello")})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueString "hello")})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -94,7 +94,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral Core.LiteralTypeString),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralString "")),
-            Testing.jsonCoderTestCaseJson = (Json.ValueString "")})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueString "")})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -102,7 +102,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeLiteral Core.LiteralTypeString),
             Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralString "hello world")),
-            Testing.jsonCoderTestCaseJson = (Json.ValueString "hello world")})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueString "hello world")})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -118,10 +118,10 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
-            Testing.jsonCoderTestCaseJson = (Json.ValueArray [
-              Json.ValueNumber 1.0,
-              Json.ValueNumber 2.0,
-              (Json.ValueNumber 3.0)])})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueArray [
+              Model.ValueNumber 1.0,
+              Model.ValueNumber 2.0,
+              (Model.ValueNumber 3.0)])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -131,9 +131,9 @@ allTests = Testing.TestGroup {
             Testing.jsonCoderTestCaseTerm = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
               (Core.TermLiteral (Core.LiteralString "b"))]),
-            Testing.jsonCoderTestCaseJson = (Json.ValueArray [
-              Json.ValueString "a",
-              (Json.ValueString "b")])})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueArray [
+              Model.ValueString "a",
+              (Model.ValueString "b")])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -141,7 +141,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
             Testing.jsonCoderTestCaseTerm = (Core.TermList []),
-            Testing.jsonCoderTestCaseJson = (Json.ValueArray [])})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueArray [])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -154,7 +154,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
             Testing.jsonCoderTestCaseTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueString "hello")})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueString "hello")})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -162,7 +162,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)),
             Testing.jsonCoderTestCaseTerm = (Core.TermMaybe Nothing),
-            Testing.jsonCoderTestCaseJson = Json.ValueNull})),
+            Testing.jsonCoderTestCaseJson = Model.ValueNull})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -170,7 +170,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
             Testing.jsonCoderTestCaseTerm = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-            Testing.jsonCoderTestCaseJson = (Json.ValueNumber 42.0)})),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 42.0)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -178,7 +178,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
             Testing.jsonCoderTestCaseType = (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
             Testing.jsonCoderTestCaseTerm = (Core.TermMaybe Nothing),
-            Testing.jsonCoderTestCaseJson = Json.ValueNull})),
+            Testing.jsonCoderTestCaseJson = Model.ValueNull})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

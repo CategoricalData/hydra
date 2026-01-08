@@ -1,7 +1,7 @@
 module Hydra.Sources.Test.Json.Parser where
 
 import Hydra.Kernel
-import Hydra.Json (Value)
+import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries

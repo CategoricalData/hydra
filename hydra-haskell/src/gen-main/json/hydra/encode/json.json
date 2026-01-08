@@ -24,7 +24,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -80,7 +80,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -133,7 +133,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -181,7 +181,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -239,7 +239,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -311,7 +311,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "field",
@@ -349,7 +349,7 @@
                         "domain": null,
                         "parameter": "v"}}}}],
               "default": null,
-              "typeName": "hydra.json.Value"}}}},
+              "typeName": "hydra.json.model.Value"}}}},
       "type": null}],
   "namespace": "hydra.encode.json",
   "termDependencies": ["hydra.encode.core"],
