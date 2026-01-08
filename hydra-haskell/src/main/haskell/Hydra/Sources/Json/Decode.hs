@@ -60,7 +60,7 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 -- Additional imports
-import Hydra.Json
+import Hydra.Json.Model
 
 
 ns :: Namespace
@@ -124,16 +124,22 @@ fromJson = define "fromJson" $
 
     -- Maybe (null -> Nothing, [v] -> Just v)
     _Type_maybe>>: "innerType" ~>
+      -- Helper to decode Just case (single element array)
+      "decodeJust" <~ ("arr" ~>
+        Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+          (fromJson @@ var "types" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
+      -- Decode array based on length: 0 -> Nothing, 1 -> Just, else error
+      "decodeMaybeArray" <~ ("arr" ~>
+        "len" <~ (Lists.length $ var "arr") $
+        Logic.ifElse (Equality.equal (var "len") (int32 0))
+          (right $ Core.termMaybe nothing)
+          (Logic.ifElse (Equality.equal (var "len") (int32 1))
+            (var "decodeJust" @@ var "arr")
+            (left $ string "expected single-element array for Just"))) $
       cases _Value (var "value")
         (Just $ left $ string "expected null or single-element array for Maybe") [
         _Value_null>>: constant $ right $ Core.termMaybe nothing,
-        _Value_array>>: "arr" ~>
-          Logic.ifElse (Equality.equal (Lists.length $ var "arr") (int32 0))
-            (right $ Core.termMaybe nothing)
-            (Logic.ifElse (Equality.equal (Lists.length $ var "arr") (int32 1))
-              ("decoded" <~ (fromJson @@ var "types" @@ var "innerType" @@ (Lists.head $ var "arr")) $
-                Eithers.map ("v" ~> Core.termMaybe $ just $ var "v") (var "decoded"))
-              (left $ string "expected single-element array for Just"))],
+        _Value_array>>: "arr" ~> var "decodeMaybeArray" @@ var "arr"],
 
     -- Records
     _Type_record>>: "rt" ~>
@@ -159,32 +165,43 @@ fromJson = define "fromJson" $
 
     -- Unions (single-key object)
     _Type_union>>: "rt" ~>
+      -- Helper to decode a field once found
+      "decodeVariant" <~ ("key" ~> "val" ~> "ftype" ~>
+        "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
+        "decoded" <~ (fromJson @@ var "types" @@ var "ftype" @@ var "jsonVal") $
+        Eithers.map
+          ("v" ~> Core.termUnion $ Core.injection
+            (Core.rowTypeTypeName $ var "rt")
+            (Core.field (Core.name $ var "key") (var "v")))
+          (var "decoded")) $
+      -- Helper to check if a field matches and decode it
+      "tryField" <~ ("key" ~> "val" ~> "ft" ~>
+        Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
+          (just $ var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))
+          nothing) $
+      -- Find matching field and decode (uses tryField which returns Maybe, then either unwraps or recurses)
+      "findAndDecode" <~ ("key" ~> "val" ~> "fts" ~>
+        Logic.ifElse (Lists.null $ var "fts")
+          (left $ Strings.cat $ list [string "unknown variant: ", var "key"])
+          (Maybes.maybe
+            (var "findAndDecode" @@ var "key" @@ var "val" @@ (Lists.tail $ var "fts"))
+            ("r" ~> var "r")
+            (var "tryField" @@ var "key" @@ var "val" @@ (Lists.head $ var "fts")))) $
+      -- Helper to decode a single-key object
+      "decodeSingleKey" <~ ("obj" ~>
+        var "findAndDecode"
+          @@ (Lists.head $ Maps.keys $ var "obj")
+          @@ (Maps.lookup (Lists.head $ Maps.keys $ var "obj") (var "obj"))
+          @@ (Core.rowTypeFields $ var "rt")) $
+      -- Process the union object
+      "processUnion" <~ ("obj" ~>
+        Logic.ifElse (Equality.equal (Lists.length $ Maps.keys $ var "obj") (int32 1))
+          (var "decodeSingleKey" @@ var "obj")
+          (left $ string "expected single-key object for union")) $
       "objResult" <~ (expectObject @@ var "value") $
       Eithers.either_
         ("err" ~> left $ var "err")
-        ("obj" ~>
-          "keys" <~ (Maps.keys $ var "obj") $
-          Logic.ifElse (Equality.equal (Lists.length $ var "keys") (int32 1))
-            ("key" <~ (Lists.head $ var "keys") $
-              "val" <~ (Maps.lookup (var "key") (var "obj")) $
-              "fields" <~ (Core.rowTypeFields $ var "rt") $
-              -- Find the matching field type
-              "findField" <~ ("fts" ~>
-                Logic.ifElse (Lists.null $ var "fts")
-                  (left $ Strings.cat $ list [string "unknown variant: ", var "key"])
-                  ("ft" <~ (Lists.head $ var "fts") $
-                    Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
-                      ("ftype" <~ (Core.fieldTypeType $ var "ft") $
-                        "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
-                        "decoded" <~ (fromJson @@ var "types" @@ var "ftype" @@ var "jsonVal") $
-                        Eithers.map
-                          ("v" ~> Core.termUnion $ Core.injection
-                            (Core.rowTypeTypeName $ var "rt")
-                            (Core.field (Core.name $ var "key") (var "v")))
-                          (var "decoded"))
-                      (var "findField" @@ (Lists.tail $ var "fts")))) $
-              var "findField" @@ var "fields")
-            (left $ string "expected single-key object for union"))
+        ("obj" ~> var "processUnion" @@ var "obj")
         (var "objResult"),
 
     -- Unit (empty object)
@@ -194,19 +211,23 @@ fromJson = define "fromJson" $
 
     -- Wrapped types (look up in type table and extract inner type if needed)
     _Type_wrap>>: "wn" ~>
+      -- Extract inner type from a looked-up type (handles nested wraps)
+      "extractInnerType" <~ ("lt" ~>
+        cases _Type (var "lt") (Just $ var "lt") [
+          _Type_wrap>>: "wt" ~> Core.wrappedTypeBody $ var "wt"]) $
+      -- Decode using the inner type and wrap the result
+      "decodeAndWrap" <~ ("lt" ~>
+        "innerType" <~ (var "extractInnerType" @@ var "lt") $
+        "decoded" <~ (fromJson @@ var "types" @@ var "innerType" @@ var "value") $
+        Eithers.map
+          ("v" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTypeTypeName $ var "wn") (var "v"))
+          (var "decoded")) $
       "lookedUp" <~ (Maps.lookup (Core.wrappedTypeTypeName $ var "wn") (var "types")) $
       Maybes.maybe
         (left $ Strings.cat $ list [
           string "unknown wrapped type: ",
           Core.unName $ Core.wrappedTypeTypeName $ var "wn"])
-        ("lt" ~>
-          -- If the looked-up type is itself a TypeWrap, extract its inner type
-          "innerType" <~ (cases _Type (var "lt") (Just $ var "lt") [
-            _Type_wrap>>: "wt" ~> Core.wrappedTypeBody $ var "wt"]) $
-          "decoded" <~ (fromJson @@ var "types" @@ var "innerType" @@ var "value") $
-          Eithers.map
-            ("v" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTypeTypeName $ var "wn") (var "v"))
-            (var "decoded"))
+        ("lt" ~> var "decodeAndWrap" @@ var "lt")
         (var "lookedUp"),
 
     -- Map -> array of {@key, @value}

@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Testing as Testing
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Rewriting as Rewriting

@@ -9,7 +9,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
 import qualified Hydra.Tools.Bytestrings as Bytestrings
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Control.Monad as CM

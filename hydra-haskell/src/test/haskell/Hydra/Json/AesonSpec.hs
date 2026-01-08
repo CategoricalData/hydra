@@ -10,7 +10,7 @@ Test.Hspec.hspec Hydra.Json.AesonSpec.spec
 
 module Hydra.Json.AesonSpec where
 
-import Hydra.Json (Value)
+import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Writer as NewSerde

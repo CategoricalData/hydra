@@ -12,7 +12,7 @@ import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Ext.Org.Json.Language as Language
 import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -34,45 +34,45 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-jsonCoder :: (Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph t0 Core.Term Json.Value))
+jsonCoder :: (Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph t0 Core.Term Model.Value))
 jsonCoder typ = (Flows.bind (Modules.languageAdapter Language.jsonLanguage typ) (\adapter -> Flows.bind (termCoder (Compute.adapterTarget adapter)) (\coder -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) coder))))
 
-literalJsonCoder :: (Core.LiteralType -> Compute.Flow t0 (Compute.Coder t1 t2 Core.Literal Json.Value))
+literalJsonCoder :: (Core.LiteralType -> Compute.Flow t0 (Compute.Coder t1 t2 Core.Literal Model.Value))
 literalJsonCoder lt =  
   let decodeBool = (\s -> (\x -> case x of
-          Json.ValueBoolean v1 -> (Flows.pure (Core.LiteralBoolean v1))
+          Model.ValueBoolean v1 -> (Flows.pure (Core.LiteralBoolean v1))
           _ -> (Monads.unexpected "boolean" (showValue s))) s)
   in  
     let decodeFloat = (\s -> (\x -> case x of
-            Json.ValueNumber v1 -> (Flows.pure (Core.LiteralFloat (Core.FloatValueBigfloat v1)))
+            Model.ValueNumber v1 -> (Flows.pure (Core.LiteralFloat (Core.FloatValueBigfloat v1)))
             _ -> (Monads.unexpected "number" (showValue s))) s)
     in  
       let decodeInteger = (\s -> (\x -> case x of
-              Json.ValueNumber v1 ->  
+              Model.ValueNumber v1 ->  
                 let bi = (Literals.bigfloatToBigint v1)
                 in (Flows.pure (Core.LiteralInteger (Core.IntegerValueBigint bi)))
               _ -> (Monads.unexpected "number" (showValue s))) s)
       in  
         let decodeString = (\s -> (\x -> case x of
-                Json.ValueString v1 -> (Flows.pure (Core.LiteralString v1))
+                Model.ValueString v1 -> (Flows.pure (Core.LiteralString v1))
                 _ -> (Monads.unexpected "string" (showValue s))) s)
         in  
           let encoded = ((\x -> case x of
                   Core.LiteralTypeBoolean -> Compute.Coder {
-                    Compute.coderEncode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Json.ValueBoolean b))),
+                    Compute.coderEncode = (\lit -> Flows.bind (Core__.booleanLiteral lit) (\b -> Flows.pure (Model.ValueBoolean b))),
                     Compute.coderDecode = decodeBool}
                   Core.LiteralTypeFloat _ -> Compute.Coder {
-                    Compute.coderEncode = (\lit -> Flows.bind (Core__.floatLiteral lit) (\f -> Flows.bind (Core__.bigfloatValue f) (\bf -> Flows.pure (Json.ValueNumber bf)))),
+                    Compute.coderEncode = (\lit -> Flows.bind (Core__.floatLiteral lit) (\f -> Flows.bind (Core__.bigfloatValue f) (\bf -> Flows.pure (Model.ValueNumber bf)))),
                     Compute.coderDecode = decodeFloat}
                   Core.LiteralTypeInteger _ -> Compute.Coder {
-                    Compute.coderEncode = (\lit -> Flows.bind (Core__.integerLiteral lit) (\i -> Flows.bind (Core__.bigintValue i) (\bi -> Flows.pure (Json.ValueNumber (Literals.bigintToBigfloat bi))))),
+                    Compute.coderEncode = (\lit -> Flows.bind (Core__.integerLiteral lit) (\i -> Flows.bind (Core__.bigintValue i) (\bi -> Flows.pure (Model.ValueNumber (Literals.bigintToBigfloat bi))))),
                     Compute.coderDecode = decodeInteger}
                   Core.LiteralTypeString -> Compute.Coder {
-                    Compute.coderEncode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Flows.pure (Json.ValueString s))),
+                    Compute.coderEncode = (\lit -> Flows.bind (Core__.stringLiteral lit) (\s -> Flows.pure (Model.ValueString s))),
                     Compute.coderDecode = decodeString}) lt)
           in (Flows.pure encoded)
 
-recordCoder :: (Core.RowType -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Json.Value))
+recordCoder :: (Core.RowType -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Model.Value))
 recordCoder rt =  
   let fields = (Core.rowTypeFields rt)
   in  
@@ -81,7 +81,7 @@ recordCoder rt =
       Compute.coderEncode = (encodeRecord coders),
       Compute.coderDecode = (decodeRecord rt coders)})))
 
-encodeRecord :: ([(Core.FieldType, (Compute.Coder Graph.Graph t0 Core.Term Json.Value))] -> Core.Term -> Compute.Flow Graph.Graph Json.Value)
+encodeRecord :: ([(Core.FieldType, (Compute.Coder Graph.Graph t0 Core.Term Model.Value))] -> Core.Term -> Compute.Flow Graph.Graph Model.Value)
 encodeRecord coders term =  
   let stripped = (Rewriting.deannotateTerm term)
   in  
@@ -114,9 +114,9 @@ encodeRecord coders term =
                               in (matchTypeForMaybe ft forMaybe dflt))
         in (Flows.bind (Core__.termRecord stripped) (\record ->  
           let fields = (Core.recordFields record)
-          in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat maybeFields)))))))
+          in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Model.ValueObject (Maps.fromList (Maybes.cat maybeFields)))))))
 
-decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder t0 t1 Core.Term Json.Value))] -> Json.Value -> Compute.Flow t1 Core.Term)
+decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder t0 t1 Core.Term Model.Value))] -> Model.Value -> Compute.Flow t1 Core.Term)
 decodeRecord rt coders n =  
   let decodeObjectBody = (\m ->  
           let decodeField = (\coder ->  
@@ -126,7 +126,7 @@ decodeRecord rt coders n =
                     in  
                       let fname = (Core.fieldTypeName ft)
                       in  
-                        let defaultValue = Json.ValueNull
+                        let defaultValue = Model.ValueNull
                         in  
                           let jsonValue = (Maybes.fromMaybe defaultValue (Maps.lookup (Core.unName fname) m))
                           in (Flows.bind (Compute.coderDecode coder_ jsonValue) (\v -> Flows.pure (Core.Field {
@@ -137,11 +137,11 @@ decodeRecord rt coders n =
             Core.recordFields = fields})))))
   in  
     let result = ((\x -> case x of
-            Json.ValueObject v1 -> (decodeObjectBody v1)
+            Model.ValueObject v1 -> (decodeObjectBody v1)
             _ -> (Monads.unexpected "object" (showValue n))) n)
     in result
 
-termCoder :: (Core.Type -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Json.Value))
+termCoder :: (Core.Type -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Model.Value))
 termCoder typ =  
   let stripped = (Rewriting.deannotateType typ)
   in  
@@ -150,11 +150,11 @@ termCoder typ =
             _ -> (Monads.unexpected "literal term" (Core___.term term))) term)
     in  
       let encodeList = (\lc -> \term -> (\x -> case x of
-              Core.TermList v1 -> (Flows.bind (Flows.mapList (Compute.coderEncode lc) v1) (\encodedEls -> Flows.pure (Json.ValueArray encodedEls)))
+              Core.TermList v1 -> (Flows.bind (Flows.mapList (Compute.coderEncode lc) v1) (\encodedEls -> Flows.pure (Model.ValueArray encodedEls)))
               _ -> (Monads.unexpected "list term" (Core___.term term))) term)
       in  
         let decodeList = (\lc -> \n -> (\x -> case x of
-                Json.ValueArray v1 -> (Flows.bind (Flows.mapList (Compute.coderDecode lc) v1) (\decodedNodes -> Flows.pure (Core.TermList decodedNodes)))
+                Model.ValueArray v1 -> (Flows.bind (Flows.mapList (Compute.coderDecode lc) v1) (\decodedNodes -> Flows.pure (Core.TermList decodedNodes)))
                 _ -> (Monads.unexpected "sequence" (showValue n))) n)
         in  
           let matchLiteralString = (\v -> \lit -> (\x -> case x of
@@ -166,21 +166,21 @@ termCoder typ =
                     _ -> (Core___.term v)) (Rewriting.deannotateTerm v))
             in  
               let encodeMap = (\encodeEntry -> \term -> (\x -> case x of
-                      Core.TermMap v1 -> (Flows.bind (Flows.mapList encodeEntry (Maps.toList v1)) (\entries -> Flows.pure (Json.ValueObject (Maps.fromList entries))))
+                      Core.TermMap v1 -> (Flows.bind (Flows.mapList encodeEntry (Maps.toList v1)) (\entries -> Flows.pure (Model.ValueObject (Maps.fromList entries))))
                       _ -> (Monads.unexpected "map term" (Core___.term term))) term)
               in  
                 let decodeMap = (\decodeEntry -> \n -> (\x -> case x of
-                        Json.ValueObject v1 -> (Flows.bind (Flows.mapList decodeEntry (Maps.toList v1)) (\entries -> Flows.pure (Core.TermMap (Maps.fromList entries))))
+                        Model.ValueObject v1 -> (Flows.bind (Flows.mapList decodeEntry (Maps.toList v1)) (\entries -> Flows.pure (Core.TermMap (Maps.fromList entries))))
                         _ -> (Monads.unexpected "mapping" (showValue n))) n)
                 in  
                   let encodeMaybe = (\maybeElementCoder -> \maybeTerm ->  
                           let strippedMaybeTerm = (Rewriting.deannotateTerm maybeTerm)
                           in ((\x -> case x of
-                            Core.TermMaybe v1 -> (Logic.ifElse (Maybes.isNothing v1) (Flows.pure Json.ValueNull) (Flows.bind (Compute.coderEncode maybeElementCoder (Maybes.fromJust v1)) (\encodedInner -> Flows.pure encodedInner)))
+                            Core.TermMaybe v1 -> (Logic.ifElse (Maybes.isNothing v1) (Flows.pure Model.ValueNull) (Flows.bind (Compute.coderEncode maybeElementCoder (Maybes.fromJust v1)) (\encodedInner -> Flows.pure encodedInner)))
                             _ -> (Monads.unexpected "optional term" (Core___.term maybeTerm))) strippedMaybeTerm))
                   in  
                     let decodeMaybe = (\maybeElementCoder -> \jsonVal -> (\x -> case x of
-                            Json.ValueNull -> (Flows.pure (Core.TermMaybe Nothing))
+                            Model.ValueNull -> (Flows.pure (Core.TermMaybe Nothing))
                             _ -> (Flows.bind (Compute.coderDecode maybeElementCoder jsonVal) (\decodedInner -> Flows.pure (Core.TermMaybe (Just decodedInner))))) jsonVal)
                     in  
                       let result = ((\x -> case x of
@@ -221,7 +221,7 @@ termCoder typ =
                               Core.TypeRecord v1 -> (recordCoder v1)
                               Core.TypeUnit -> (Flows.pure unitCoder)
                               Core.TypeVariable v1 -> (Flows.pure (Compute.Coder {
-                                Compute.coderEncode = (\term -> Flows.pure (Json.ValueString (Strings.cat [
+                                Compute.coderEncode = (\term -> Flows.pure (Model.ValueString (Strings.cat [
                                   "variable '",
                                   Core.unName v1,
                                   "' for: ",
@@ -235,22 +235,22 @@ termCoder typ =
                                 (Core___.type_ typ)]))) stripped)
                       in result
 
-unitCoder :: (Compute.Coder t0 t1 Core.Term Json.Value)
+unitCoder :: (Compute.Coder t0 t1 Core.Term Model.Value)
 unitCoder =  
   let encodeUnit = (\term -> (\x -> case x of
-          Core.TermUnit -> (Flows.pure Json.ValueNull)
+          Core.TermUnit -> (Flows.pure Model.ValueNull)
           _ -> (Monads.unexpected "unit" (Core___.term term))) (Rewriting.deannotateTerm term))
   in  
     let decodeUnit = (\n -> (\x -> case x of
-            Json.ValueNull -> (Flows.pure Core.TermUnit)
+            Model.ValueNull -> (Flows.pure Core.TermUnit)
             _ -> (Monads.unexpected "null" (showValue n))) n)
     in Compute.Coder {
       Compute.coderEncode = encodeUnit,
       Compute.coderDecode = decodeUnit}
 
-untypedTermToJson :: (Core.Term -> Compute.Flow t0 Json.Value)
+untypedTermToJson :: (Core.Term -> Compute.Flow t0 Model.Value)
 untypedTermToJson term =  
-  let unexp = (\msg -> Flows.pure (Json.ValueString (Strings.cat2 "FAIL: " msg)))
+  let unexp = (\msg -> Flows.pure (Model.ValueString (Strings.cat2 "FAIL: " msg)))
   in  
     let asRecord = (\fields -> untypedTermToJson (Core.TermRecord (Core.Record {
             Core.recordTypeName = (Core.Name ""),
@@ -284,18 +284,18 @@ untypedTermToJson term =
                       Core.Field {
                         Core.fieldName = (Core.Name "body"),
                         Core.fieldTerm = (Core.lambdaBody v1)}])
-                    Core.FunctionPrimitive v1 -> (Flows.pure (Json.ValueString (Core.unName v1)))) f)
+                    Core.FunctionPrimitive v1 -> (Flows.pure (Model.ValueString (Core.unName v1)))) f)
             in  
               let matchLiteral = (\lit -> (\x -> case x of
-                      Core.LiteralBinary v1 -> (Json.ValueString (Literals.binaryToString v1))
-                      Core.LiteralBoolean v1 -> (Json.ValueBoolean v1)
-                      Core.LiteralFloat v1 -> (Json.ValueNumber (Literals_.floatValueToBigfloat v1))
+                      Core.LiteralBinary v1 -> (Model.ValueString (Literals.binaryToString v1))
+                      Core.LiteralBoolean v1 -> (Model.ValueBoolean v1)
+                      Core.LiteralFloat v1 -> (Model.ValueNumber (Literals_.floatValueToBigfloat v1))
                       Core.LiteralInteger v1 ->  
                         let bf = (Literals_.integerValueToBigint v1)
                         in  
                           let f = (Literals.bigintToBigfloat bf)
-                          in (Json.ValueNumber f)
-                      Core.LiteralString v1 -> (Json.ValueString v1)) lit)
+                          in (Model.ValueNumber f)
+                      Core.LiteralString v1 -> (Model.ValueString v1)) lit)
               in  
                 let fieldToKeyval = (\f ->  
                         let forTerm = (\t -> matchTermMaybe forTerm t)
@@ -312,9 +312,9 @@ untypedTermToJson term =
                                         in  
                                           let v = (Pairs.second kv)
                                           in (Flows.bind (untypedTermToJson v) (\json -> Flows.pure (k, json))))
-                                in (Flows.bind (untypedTermToJson term1) (\json -> Flows.bind (Flows.mapList encodePair (Maps.toList ann)) (\pairs -> Flows.pure (Json.ValueObject (Maps.fromList [
+                                in (Flows.bind (untypedTermToJson term1) (\json -> Flows.bind (Flows.mapList encodePair (Maps.toList ann)) (\pairs -> Flows.pure (Model.ValueObject (Maps.fromList [
                                   ("term", json),
-                                  ("annotations", (Json.ValueObject (Maps.fromList pairs)))])))))
+                                  ("annotations", (Model.ValueObject (Maps.fromList pairs)))])))))
                           Core.TermApplication v1 -> (asRecord [
                             Core.Field {
                               Core.fieldName = (Core.Name "function"),
@@ -340,12 +340,12 @@ untypedTermToJson term =
                                   Core.Field {
                                     Core.fieldName = (Core.Name "environment"),
                                     Core.fieldTerm = env}])
-                          Core.TermList v1 -> (Flows.bind (Flows.mapList untypedTermToJson v1) (\jsonTerms -> Flows.pure (Json.ValueArray jsonTerms)))
+                          Core.TermList v1 -> (Flows.bind (Flows.mapList untypedTermToJson v1) (\jsonTerms -> Flows.pure (Model.ValueArray jsonTerms)))
                           Core.TermLiteral v1 -> (Flows.pure (matchLiteral v1))
-                          Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Json.ValueNull) untypedTermToJson v1)
+                          Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Model.ValueNull) untypedTermToJson v1)
                           Core.TermRecord v1 ->  
                             let fields = (Core.recordFields v1)
-                            in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.cat keyvals)))))
+                            in (Flows.bind (Flows.mapList fieldToKeyval fields) (\keyvals -> Flows.pure (Model.ValueObject (Maps.fromList (Maybes.cat keyvals)))))
                           Core.TermSet v1 -> (untypedTermToJson (Core.TermList (Sets.toList v1)))
                           Core.TermTypeLambda v1 -> (asRecord [
                             Core.Field {
@@ -363,9 +363,9 @@ untypedTermToJson term =
                               Core.fieldTerm = (Core_.type_ (Core.typeApplicationTermType v1))}])
                           Core.TermUnion v1 ->  
                             let field = (Core.injectionField v1)
-                            in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Json.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Json.ValueObject (Maps.fromList (Maybes.maybe [] (\keyval -> [
+                            in (Logic.ifElse (Equality.equal (Core.fieldTerm field) Core.TermUnit) (Flows.pure (Model.ValueString (Core.unName (Core.fieldName field)))) (Flows.bind (fieldToKeyval field) (\mkeyval -> Flows.pure (Model.ValueObject (Maps.fromList (Maybes.maybe [] (\keyval -> [
                               keyval]) mkeyval))))))
-                          Core.TermVariable v1 -> (Flows.pure (Json.ValueString (Core.unName v1)))
+                          Core.TermVariable v1 -> (Flows.pure (Model.ValueString (Core.unName v1)))
                           Core.TermWrap v1 -> (untypedTermToJson (Core.wrappedTermBody v1))
                           _ -> (unexp (Strings.cat [
                             "unsupported term variant: ",

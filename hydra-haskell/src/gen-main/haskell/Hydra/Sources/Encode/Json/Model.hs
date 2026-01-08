@@ -1,8 +1,8 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Source module for hydra.encode.json
+-- | Source module for hydra.encode.json.model
 
-module Hydra.Sources.Encode.Json where
+module Hydra.Sources.Encode.Json.Model where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
@@ -15,12 +15,12 @@ import qualified Data.Set as S
 
 module_ :: Module.Module
 module_ = Module.Module {
-  Module.moduleNamespace = (Module.Namespace "hydra.encode.json"),
+  Module.moduleNamespace = (Module.Namespace "hydra.encode.json.model"),
   Module.moduleElements = [
     Core.Binding {
-      Core.bindingName = (Core.Name "hydra.encode.json.value"),
+      Core.bindingName = (Core.Name "hydra.encode.json.model.value"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-        Core.caseStatementTypeName = (Core.Name "hydra.json.Value"),
+        Core.caseStatementTypeName = (Core.Name "hydra.json.model.Value"),
         Core.caseStatementDefault = Nothing,
         Core.caseStatementCases = [
           Core.Field {
@@ -39,7 +39,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -63,7 +63,7 @@ module_ = Module.Module {
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.value"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
           Core.Field {
@@ -82,7 +82,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -125,7 +125,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -164,7 +164,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -211,7 +211,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -248,7 +248,7 @@ module_ = Module.Module {
                                                     Core.injectionField = Core.Field {
                                                       Core.fieldName = (Core.Name "string"),
                                                       Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.value"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
           Core.Field {
@@ -267,7 +267,7 @@ module_ = Module.Module {
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.Value"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.json.model.Value"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "field"),
                         Core.fieldTerm = (Core.TermRecord (Core.Record {
@@ -298,5 +298,5 @@ module_ = Module.Module {
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core"],
   Module.moduleTypeDependencies = [
-    Module.Namespace "hydra.json"],
-  Module.moduleDescription = (Just "Term encoders for hydra.json")}
+    Module.Namespace "hydra.json.model"],
+  Module.moduleDescription = (Just "Term encoders for hydra.json.model")}

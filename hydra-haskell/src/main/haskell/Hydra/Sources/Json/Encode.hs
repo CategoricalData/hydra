@@ -60,7 +60,7 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 -- Additional imports
-import Hydra.Json
+import Hydra.Json.Model
 
 
 ns :: Namespace

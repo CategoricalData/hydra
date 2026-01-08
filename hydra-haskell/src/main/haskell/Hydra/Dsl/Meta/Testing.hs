@@ -5,7 +5,7 @@ module Hydra.Dsl.Meta.Testing where
 
 import Hydra.Kernel
 import Hydra.Ast (Expr)
-import Hydra.Json (Value)
+import Hydra.Json.Model (Value)
 import Hydra.Parsing (ParseResult)
 import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))

@@ -57,7 +57,7 @@ import qualified Data.Map                                   as M
 import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
-import qualified Hydra.Json as J
+import qualified Hydra.Json.Model as J
 
 
 jsonParserDefinition :: String -> TTerm a -> TBinding a

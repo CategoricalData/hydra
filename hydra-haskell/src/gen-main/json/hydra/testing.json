@@ -4123,7 +4123,7 @@
                                                                       "name": "variable",
                                                                       "term": {
                                                                         "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                                           "typeName": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
@@ -4289,7 +4289,7 @@
                                                                       "name": "variable",
                                                                       "term": {
                                                                         "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.json.Value"}},
+                                                                          "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                                           "typeName": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
@@ -4551,7 +4551,7 @@
                                                                                     "name": "variable",
                                                                                     "term": {
                                                                                       "wrap": {
-                                                                                        "body": {"literal": {"string": "hydra.json.Value"}},
+                                                                                        "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                           "typeName": "hydra.core.EitherType"}}},
@@ -4652,7 +4652,7 @@
                                             "name": "variable",
                                             "term": {
                                               "wrap": {
-                                                "body": {"literal": {"string": "hydra.json.Value"}},
+                                                "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                 "typeName": "hydra.core.Name"}}},
                                           "typeName": "hydra.core.Type"}}}],
                                   "typeName": "hydra.core.ApplicationType"}}},
@@ -5058,7 +5058,7 @@
                                             "name": "variable",
                                             "term": {
                                               "wrap": {
-                                                "body": {"literal": {"string": "hydra.json.Value"}},
+                                                "body": {"literal": {"string": "hydra.json.model.Value"}},
                                                 "typeName": "hydra.core.Name"}}},
                                           "typeName": "hydra.core.Type"}}}],
                                   "typeName": "hydra.core.ApplicationType"}}},
@@ -10416,7 +10416,7 @@
     "hydra.coders",
     "hydra.compute",
     "hydra.graph",
-    "hydra.json",
+    "hydra.json.model",
     "hydra.module",
     "hydra.parsing",
     "hydra.util"],

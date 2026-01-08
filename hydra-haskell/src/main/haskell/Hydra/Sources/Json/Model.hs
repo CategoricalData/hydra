@@ -1,6 +1,6 @@
 -- | A simple JSON model. This model is part of the Hydra kernel, despite JSON being an external language; JSON support is built in to Hydra
 
-module Hydra.Sources.Kernel.Types.Json where
+module Hydra.Sources.Json.Model where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: Namespace
-ns = Namespace "hydra.json"
+ns = Namespace "hydra.json.model"
 
 define :: String -> Type -> Binding
 define = defineType ns

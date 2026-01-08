@@ -3974,7 +3974,7 @@
                                                                                               "argument": {"variable": "fieldMap"},
                                                                                               "function": {
                                                                                                 "application": {
-                                                                                                  "argument": {"variable": "hydra.decode.json.value"},
+                                                                                                  "argument": {"variable": "hydra.decode.json.model.value"},
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"literal": {"string": "json"}},
@@ -4248,7 +4248,7 @@
                                                                                     "argument": {"variable": "fieldMap"},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.decode.json.value"},
+                                                                                        "argument": {"variable": "hydra.decode.json.model.value"},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "json"}},
@@ -4392,7 +4392,7 @@
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "hydra.decode.json.value"},
+                                                                                            "argument": {"variable": "hydra.decode.json.model.value"},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
@@ -4551,7 +4551,7 @@
       "name": "hydra.decode.testing.jsonParserTestCase",
       "term": {
         "application": {
-          "argument": {"variable": "hydra.decode.json.value"},
+          "argument": {"variable": "hydra.decode.json.model.value"},
           "function": {"variable": "hydra.decode.testing.parserTestCase"}}},
       "type": [
         {
@@ -4565,7 +4565,7 @@
                       "left": {"variable": "hydra.util.DecodingError"},
                       "right": {
                         "application": {
-                          "argument": {"variable": "hydra.json.Value"},
+                          "argument": {"variable": "hydra.json.model.Value"},
                           "function": {"variable": "hydra.testing.ParserTestCase"}}}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -4860,7 +4860,7 @@
       "name": "hydra.decode.testing.jsonWriterTestCase",
       "term": {
         "application": {
-          "argument": {"variable": "hydra.decode.json.value"},
+          "argument": {"variable": "hydra.decode.json.model.value"},
           "function": {"variable": "hydra.decode.testing.writerTestCase"}}},
       "type": [
         {
@@ -4874,7 +4874,7 @@
                       "left": {"variable": "hydra.util.DecodingError"},
                       "right": {
                         "application": {
-                          "argument": {"variable": "hydra.json.Value"},
+                          "argument": {"variable": "hydra.json.model.Value"},
                           "function": {"variable": "hydra.testing.WriterTestCase"}}}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -9619,7 +9619,7 @@
     "hydra.decode.coders",
     "hydra.decode.compute",
     "hydra.decode.graph",
-    "hydra.decode.json",
+    "hydra.decode.json.model",
     "hydra.decode.module",
     "hydra.decode.parsing",
     "hydra.decode.util"],

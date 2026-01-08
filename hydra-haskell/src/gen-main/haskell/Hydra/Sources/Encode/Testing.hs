@@ -1651,7 +1651,7 @@ module_ = Module.Module {
                         Core.Field {
                           Core.fieldName = (Core.Name "term"),
                           Core.fieldTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.json.value")),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.json.model.value")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
@@ -1706,7 +1706,7 @@ module_ = Module.Module {
                         Core.Field {
                           Core.fieldName = (Core.Name "term"),
                           Core.fieldTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.json.value")),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.json.model.value")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
@@ -1825,7 +1825,7 @@ module_ = Module.Module {
                                                 Core.injectionField = Core.Field {
                                                   Core.fieldName = (Core.Name "string"),
                                                   Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.value"))})),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}}))}))),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1837,7 +1837,7 @@ module_ = Module.Module {
       Core.bindingName = (Core.Name "hydra.encode.testing.jsonParserTestCase"),
       Core.bindingTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.parserTestCase")),
-        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.value"))})),
+        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
       Core.bindingType = Nothing},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.testing.jsonRoundtripTestCase"),
@@ -1953,7 +1953,7 @@ module_ = Module.Module {
       Core.bindingName = (Core.Name "hydra.encode.testing.jsonWriterTestCase"),
       Core.bindingTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.writerTestCase")),
-        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.value"))})),
+        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
       Core.bindingType = Nothing},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.testing.parserTestCase"),

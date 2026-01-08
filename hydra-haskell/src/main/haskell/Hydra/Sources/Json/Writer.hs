@@ -58,7 +58,7 @@ import qualified Data.Maybe                                 as Y
 
 -- Additional imports
 import Hydra.Ast
-import qualified Hydra.Json as J
+import qualified Hydra.Json.Model as J
 
 
 jsonSerdeDefinition :: String -> TTerm a -> TBinding a

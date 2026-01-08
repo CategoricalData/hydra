@@ -8,10 +8,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Ast as Ast
 import qualified Hydra.Encode.Coders as Coders
 import qualified Hydra.Encode.Core as Core_
-import qualified Hydra.Encode.Json as Json
+import qualified Hydra.Encode.Json.Model as Model
 import qualified Hydra.Encode.Parsing as Parsing
 import qualified Hydra.Encode.Util as Util
-import qualified Hydra.Json as Json_
+import qualified Hydra.Json.Model as Model_
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
@@ -315,7 +315,7 @@ jsonCoderTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core_.term (Testing.jsonCoderTestCaseTerm x))},
     Core.Field {
       Core.fieldName = (Core.Name "json"),
-      Core.fieldTerm = (Json.value (Testing.jsonCoderTestCaseJson x))}]}))
+      Core.fieldTerm = (Model.value (Testing.jsonCoderTestCaseJson x))}]}))
 
 jsonDecodeTestCase :: (Testing.JsonDecodeTestCase -> Core.Term)
 jsonDecodeTestCase x = (Core.TermRecord (Core.Record {
@@ -326,7 +326,7 @@ jsonDecodeTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core_.type_ (Testing.jsonDecodeTestCaseType x))},
     Core.Field {
       Core.fieldName = (Core.Name "json"),
-      Core.fieldTerm = (Json.value (Testing.jsonDecodeTestCaseJson x))},
+      Core.fieldTerm = (Model.value (Testing.jsonDecodeTestCaseJson x))},
     Core.Field {
       Core.fieldName = (Core.Name "expected"),
       Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Core_.term e)) (Testing.jsonDecodeTestCaseExpected x))}]}))
@@ -340,10 +340,10 @@ jsonEncodeTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (Core_.term (Testing.jsonEncodeTestCaseTerm x))},
     Core.Field {
       Core.fieldName = (Core.Name "expected"),
-      Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Json.value e)) (Testing.jsonEncodeTestCaseExpected x))}]}))
+      Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\x -> Core.TermLiteral (Core.LiteralString x)) Model.value e)) (Testing.jsonEncodeTestCaseExpected x))}]}))
 
-jsonParserTestCase :: (Testing.ParserTestCase Json_.Value -> Core.Term)
-jsonParserTestCase = (parserTestCase Json.value)
+jsonParserTestCase :: (Testing.ParserTestCase Model_.Value -> Core.Term)
+jsonParserTestCase = (parserTestCase Model.value)
 
 jsonRoundtripTestCase :: (Testing.JsonRoundtripTestCase -> Core.Term)
 jsonRoundtripTestCase x = (Core.TermRecord (Core.Record {
@@ -367,8 +367,8 @@ liftLambdaAboveLetTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "output"),
       Core.fieldTerm = (Core_.term (Testing.liftLambdaAboveLetTestCaseOutput x))}]}))
 
-jsonWriterTestCase :: (Testing.WriterTestCase Json_.Value -> Core.Term)
-jsonWriterTestCase = (writerTestCase Json.value)
+jsonWriterTestCase :: (Testing.WriterTestCase Model_.Value -> Core.Term)
+jsonWriterTestCase = (writerTestCase Model.value)
 
 parserTestCase :: ((t0 -> Core.Term) -> Testing.ParserTestCase t0 -> Core.Term)
 parserTestCase a x = (Core.TermRecord (Core.Record {

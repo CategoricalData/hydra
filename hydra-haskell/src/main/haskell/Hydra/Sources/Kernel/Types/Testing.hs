@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Ast as Ast
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
-import qualified Hydra.Sources.Kernel.Types.Json as Json
+import qualified Hydra.Sources.Json.Model as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Types.Util as Util
@@ -25,7 +25,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, Json.ns, Module.ns, Parsing.ns, Util.ns] [Core.ns] $
+module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Util.ns] [Core.ns] $
     Just "A model for unit testing"
   where
     elements = [
@@ -353,7 +353,7 @@ jsonCoderTestCase = define "JsonCoderTestCase" $
       Core.term,
     "json">:
       doc "The expected JSON value"
-      Json.value]
+      JsonModel.value]
 
 jsonDecodeTestCase :: Binding
 jsonDecodeTestCase = define "JsonDecodeTestCase" $
@@ -365,7 +365,7 @@ jsonDecodeTestCase = define "JsonDecodeTestCase" $
       Core.type_,
     "json">:
       doc "The input JSON value"
-      Json.value,
+      JsonModel.value,
     "expected">:
       doc "The expected result: Left for error, Right for decoded term" $
       T.either_ T.string Core.term]
@@ -380,7 +380,7 @@ jsonEncodeTestCase = define "JsonEncodeTestCase" $
       Core.term,
     "expected">:
       doc "The expected result: Left for error, Right for encoded JSON" $
-      T.either_ T.string Json.value]
+      T.either_ T.string JsonModel.value]
 
 jsonRoundtripTestCase :: Binding
 jsonRoundtripTestCase = define "JsonRoundtripTestCase" $
@@ -397,7 +397,7 @@ jsonRoundtripTestCase = define "JsonRoundtripTestCase" $
 jsonParserTestCase :: Binding
 jsonParserTestCase = define "JsonParserTestCase" $
   doc "A test case which parses a JSON string and compares the result with an expected JSON value" $
-  parserTestCase @@ Json.value
+  parserTestCase @@ JsonModel.value
 
 liftLambdaAboveLetTestCase :: Binding
 liftLambdaAboveLetTestCase = define "LiftLambdaAboveLetTestCase" $
@@ -414,7 +414,7 @@ liftLambdaAboveLetTestCase = define "LiftLambdaAboveLetTestCase" $
 jsonWriterTestCase :: Binding
 jsonWriterTestCase = define "JsonWriterTestCase" $
   doc "A test case which serializes a JSON value to a string and compares it to the expected string" $
-  writerTestCase @@ Json.value
+  writerTestCase @@ JsonModel.value
 
 parserTestCase :: Binding
 parserTestCase = define "ParserTestCase" $

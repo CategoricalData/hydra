@@ -9,7 +9,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Model
 import qualified Hydra.Module as Module
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Util as Util
@@ -380,7 +380,7 @@ data JsonCoderTestCase =
     -- | The Hydra term to encode
     jsonCoderTestCaseTerm :: Core.Term,
     -- | The expected JSON value
-    jsonCoderTestCaseJson :: Json.Value}
+    jsonCoderTestCaseJson :: Model.Value}
   deriving (Eq, Ord, Read, Show)
 
 _JsonCoderTestCase = (Core.Name "hydra.testing.JsonCoderTestCase")
@@ -397,7 +397,7 @@ data JsonDecodeTestCase =
     -- | The Hydra type to decode into
     jsonDecodeTestCaseType :: Core.Type,
     -- | The input JSON value
-    jsonDecodeTestCaseJson :: Json.Value,
+    jsonDecodeTestCaseJson :: Model.Value,
     -- | The expected result: Left for error, Right for decoded term
     jsonDecodeTestCaseExpected :: (Either String Core.Term)}
   deriving (Eq, Ord, Read, Show)
@@ -416,7 +416,7 @@ data JsonEncodeTestCase =
     -- | The Hydra term to encode
     jsonEncodeTestCaseTerm :: Core.Term,
     -- | The expected result: Left for error, Right for encoded JSON
-    jsonEncodeTestCaseExpected :: (Either String Json.Value)}
+    jsonEncodeTestCaseExpected :: (Either String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _JsonEncodeTestCase = (Core.Name "hydra.testing.JsonEncodeTestCase")
@@ -426,7 +426,7 @@ _JsonEncodeTestCase_term = (Core.Name "term")
 _JsonEncodeTestCase_expected = (Core.Name "expected")
 
 -- | A test case which parses a JSON string and compares the result with an expected JSON value
-type JsonParserTestCase = (ParserTestCase Json.Value)
+type JsonParserTestCase = (ParserTestCase Model.Value)
 
 _JsonParserTestCase = (Core.Name "hydra.testing.JsonParserTestCase")
 
@@ -461,7 +461,7 @@ _LiftLambdaAboveLetTestCase_input = (Core.Name "input")
 _LiftLambdaAboveLetTestCase_output = (Core.Name "output")
 
 -- | A test case which serializes a JSON value to a string and compares it to the expected string
-type JsonWriterTestCase = (WriterTestCase Json.Value)
+type JsonWriterTestCase = (WriterTestCase Model.Value)
 
 _JsonWriterTestCase = (Core.Name "hydra.testing.JsonWriterTestCase")
 

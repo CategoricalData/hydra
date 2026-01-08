@@ -52,7 +52,7 @@ import qualified Hydra.Sources.Decode.Compute       as DecodeCompute
 import qualified Hydra.Sources.Decode.Constraints   as DecodeConstraints
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
 import qualified Hydra.Sources.Decode.Grammar       as DecodeGrammar
-import qualified Hydra.Sources.Decode.Json          as DecodeJson
+import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
 import qualified Hydra.Sources.Decode.Module        as DecodeModule
 import qualified Hydra.Sources.Decode.Parsing       as DecodeParsing
 import qualified Hydra.Sources.Decode.Phantoms      as DecodePhantoms
@@ -75,7 +75,7 @@ import qualified Hydra.Sources.Encode.Compute       as EncodeCompute
 import qualified Hydra.Sources.Encode.Constraints   as EncodeConstraints
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
 import qualified Hydra.Sources.Encode.Grammar       as EncodeGrammar
-import qualified Hydra.Sources.Encode.Json          as EncodeJson
+import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
 import qualified Hydra.Sources.Encode.Module        as EncodeModule
 import qualified Hydra.Sources.Encode.Parsing       as EncodeParsing
 import qualified Hydra.Sources.Encode.Phantoms      as EncodePhantoms

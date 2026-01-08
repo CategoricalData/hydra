@@ -1,0 +1,249 @@
+{
+  "description": ["Decoding functions for JSON data"],
+  "elements": [
+    {
+      "name": "hydra.ext.org.json.decoding.decodeArray",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "elimination": {
+                  "union": {
+                    "cases": [
+                      {
+                        "name": "array",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "a"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "decodeElem"},
+                                      "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                              "domain": null,
+                              "parameter": "a"}}}}],
+                    "default": [
+                      {
+                        "application": {
+                          "argument": {"literal": {"string": "expected an array"}},
+                          "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
+                    "typeName": "hydra.json.model.Value"}}}},
+            "domain": null,
+            "parameter": "decodeElem"}}},
+      "type": null},
+    {
+      "name": "hydra.ext.org.json.decoding.decodeBoolean",
+      "term": {
+        "function": {
+          "elimination": {
+            "union": {
+              "cases": [
+                {
+                  "name": "boolean",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                        "domain": null,
+                        "parameter": "b"}}}}],
+              "default": [
+                {
+                  "application": {
+                    "argument": {"literal": {"string": "expected a boolean"}},
+                    "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
+              "typeName": "hydra.json.model.Value"}}}},
+      "type": null},
+    {
+      "name": "hydra.ext.org.json.decoding.decodeField",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "f"},
+                                          "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                      "domain": null,
+                                      "parameter": "f"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "name"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "missing field: "}},
+                                                "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "m"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "name"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "decodeValue"},
+                                            "function": {"variable": "hydra.ext.org.json.decoding.decodeOptionalField"}}}}}}},
+                                "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                        "domain": null,
+                        "parameter": "m"}}},
+                  "domain": null,
+                  "parameter": "name"}}},
+            "domain": null,
+            "parameter": "decodeValue"}}},
+      "type": null},
+    {
+      "name": "hydra.ext.org.json.decoding.decodeObject",
+      "term": {
+        "function": {
+          "elimination": {
+            "union": {
+              "cases": [
+                {
+                  "name": "object",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "o"},
+                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                        "domain": null,
+                        "parameter": "o"}}}}],
+              "default": [
+                {
+                  "application": {
+                    "argument": {"literal": {"string": "expected an object"}},
+                    "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
+              "typeName": "hydra.json.model.Value"}}}},
+      "type": null},
+    {
+      "name": "hydra.ext.org.json.decoding.decodeOptionalField",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "name"},
+                                    "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "v"},
+                                              "function": {"variable": "decodeValue"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {"maybe": [{"variable": "x"}]},
+                                                    "domain": null,
+                                                    "parameter": "x"}}},
+                                              "function": {"function": {"primitive": "hydra.lib.flows.map"}}}}}},
+                                      "domain": null,
+                                      "parameter": "v"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"maybe": null},
+                                        "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                    "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                        "domain": null,
+                        "parameter": "m"}}},
+                  "domain": null,
+                  "parameter": "name"}}},
+            "domain": null,
+            "parameter": "decodeValue"}}},
+      "type": null},
+    {
+      "name": "hydra.ext.org.json.decoding.decodeString",
+      "term": {
+        "function": {
+          "elimination": {
+            "union": {
+              "cases": [
+                {
+                  "name": "string",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                        "domain": null,
+                        "parameter": "s"}}}}],
+              "default": [
+                {
+                  "application": {
+                    "argument": {"literal": {"string": "expected a string"}},
+                    "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
+              "typeName": "hydra.json.model.Value"}}}},
+      "type": null}],
+  "namespace": "hydra.ext.org.json.decoding",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

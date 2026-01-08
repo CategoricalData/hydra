@@ -92,7 +92,7 @@ import qualified Data.Set                                   as S
 import qualified Data.Maybe                                 as Y
 
 -- Additional imports
-import Hydra.Json
+import Hydra.Json.Model
 import qualified Hydra.Sources.Json.Language as JsonLanguage
 import qualified Hydra.Sources.Kernel.Terms.Literals as HydraLiterals
 

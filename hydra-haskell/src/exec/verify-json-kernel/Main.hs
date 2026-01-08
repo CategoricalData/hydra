@@ -9,7 +9,7 @@ import Hydra.Kernel
 import Hydra.Module (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (namespaceToPath, modulesToGraph)
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
 import qualified Hydra.Decode.Module as DecodeModule
 import qualified Hydra.Decode.Core as DecodeCore

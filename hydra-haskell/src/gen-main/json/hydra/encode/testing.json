@@ -2129,7 +2129,7 @@
                                                 "function": {
                                                   "elimination": {
                                                     "record": {"field": "json", "typeName": "hydra.testing.JsonCoderTestCase"}}}}}},
-                                          "function": {"variable": "hydra.encode.json.value"}}}}],
+                                          "function": {"variable": "hydra.encode.json.model.value"}}}}],
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
@@ -2200,7 +2200,7 @@
                                                 "function": {
                                                   "elimination": {
                                                     "record": {"field": "json", "typeName": "hydra.testing.JsonDecodeTestCase"}}}}}},
-                                          "function": {"variable": "hydra.encode.json.value"}}}}],
+                                          "function": {"variable": "hydra.encode.json.model.value"}}}}],
                                   "typeName": "hydra.core.Field"}},
                               {
                                 "record": {
@@ -2337,7 +2337,7 @@
                                                           "argument": {"variable": "e"},
                                                           "function": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.encode.json.value"},
+                                                              "argument": {"variable": "hydra.encode.json.model.value"},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -2368,7 +2368,7 @@
       "name": "hydra.encode.testing.jsonParserTestCase",
       "term": {
         "application": {
-          "argument": {"variable": "hydra.encode.json.value"},
+          "argument": {"variable": "hydra.encode.json.model.value"},
           "function": {"variable": "hydra.encode.testing.parserTestCase"}}},
       "type": null},
     {
@@ -2521,7 +2521,7 @@
       "name": "hydra.encode.testing.jsonWriterTestCase",
       "term": {
         "application": {
-          "argument": {"variable": "hydra.encode.json.value"},
+          "argument": {"variable": "hydra.encode.json.model.value"},
           "function": {"variable": "hydra.encode.testing.writerTestCase"}}},
       "type": null},
     {
