@@ -10,9 +10,9 @@ public class JsonParserTestCase {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final hydra.testing.ParserTestCase<hydra.json.Value> value;
+  public final hydra.testing.ParserTestCase<hydra.json.model.Value> value;
   
-  public JsonParserTestCase (hydra.testing.ParserTestCase<hydra.json.Value> value) {
+  public JsonParserTestCase (hydra.testing.ParserTestCase<hydra.json.model.Value> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

@@ -1,7 +1,7 @@
 package hydra.json;
 
 import hydra.core.Name;
-import hydra.json.Value;
+import hydra.json.model.Value;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;

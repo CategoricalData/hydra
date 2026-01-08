@@ -10,9 +10,9 @@ public class JsonWriterTestCase {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final hydra.testing.WriterTestCase<hydra.json.Value> value;
+  public final hydra.testing.WriterTestCase<hydra.json.model.Value> value;
   
-  public JsonWriterTestCase (hydra.testing.WriterTestCase<hydra.json.Value> value) {
+  public JsonWriterTestCase (hydra.testing.WriterTestCase<hydra.json.model.Value> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

@@ -33,19 +33,19 @@ public class Module implements Serializable {
   /**
    * Any modules which the term expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Module> termDependencies;
+  public final java.util.List<hydra.module.Namespace> termDependencies;
   
   /**
    * Any modules which the type expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Module> typeDependencies;
+  public final java.util.List<hydra.module.Namespace> typeDependencies;
   
   /**
    * An optional human-readable description of the module
    */
   public final hydra.util.Maybe<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Module> termDependencies, java.util.List<hydra.module.Module> typeDependencies, hydra.util.Maybe<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Namespace> termDependencies, java.util.List<hydra.module.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
     java.util.Objects.requireNonNull((namespace));
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((termDependencies));
@@ -82,12 +82,12 @@ public class Module implements Serializable {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTermDependencies(java.util.List<hydra.module.Module> termDependencies) {
+  public Module withTermDependencies(java.util.List<hydra.module.Namespace> termDependencies) {
     java.util.Objects.requireNonNull((termDependencies));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTypeDependencies(java.util.List<hydra.module.Module> typeDependencies) {
+  public Module withTypeDependencies(java.util.List<hydra.module.Namespace> typeDependencies) {
     java.util.Objects.requireNonNull((typeDependencies));
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }

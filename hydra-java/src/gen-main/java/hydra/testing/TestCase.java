@@ -34,7 +34,13 @@ public abstract class TestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_JSON_CODER = new hydra.core.Name("jsonCoder");
   
+  public static final hydra.core.Name FIELD_NAME_JSON_DECODE = new hydra.core.Name("jsonDecode");
+  
+  public static final hydra.core.Name FIELD_NAME_JSON_ENCODE = new hydra.core.Name("jsonEncode");
+  
   public static final hydra.core.Name FIELD_NAME_JSON_PARSER = new hydra.core.Name("jsonParser");
+  
+  public static final hydra.core.Name FIELD_NAME_JSON_ROUNDTRIP = new hydra.core.Name("jsonRoundtrip");
   
   public static final hydra.core.Name FIELD_NAME_JSON_WRITER = new hydra.core.Name("jsonWriter");
   
@@ -63,6 +69,10 @@ public abstract class TestCase implements Serializable {
   public static final hydra.core.Name FIELD_NAME_REWRITE_TERM = new hydra.core.Name("rewriteTerm");
   
   public static final hydra.core.Name FIELD_NAME_REWRITE_TYPE = new hydra.core.Name("rewriteType");
+  
+  public static final hydra.core.Name FIELD_NAME_HOIST_SUBTERMS = new hydra.core.Name("hoistSubterms");
+  
+  public static final hydra.core.Name FIELD_NAME_HOIST_CASE_STATEMENTS = new hydra.core.Name("hoistCaseStatements");
   
   private TestCase () {
   
@@ -95,7 +105,13 @@ public abstract class TestCase implements Serializable {
     
     R visit(JsonCoder instance) ;
     
+    R visit(JsonDecode instance) ;
+    
+    R visit(JsonEncode instance) ;
+    
     R visit(JsonParser instance) ;
+    
+    R visit(JsonRoundtrip instance) ;
     
     R visit(JsonWriter instance) ;
     
@@ -124,6 +140,10 @@ public abstract class TestCase implements Serializable {
     R visit(RewriteTerm instance) ;
     
     R visit(RewriteType instance) ;
+    
+    R visit(HoistSubterms instance) ;
+    
+    R visit(HoistCaseStatements instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -179,7 +199,19 @@ public abstract class TestCase implements Serializable {
       return otherwise((instance));
     }
     
+    default R visit(JsonDecode instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(JsonEncode instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(JsonParser instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(JsonRoundtrip instance) {
       return otherwise((instance));
     }
     
@@ -236,6 +268,14 @@ public abstract class TestCase implements Serializable {
     }
     
     default R visit(RewriteType instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(HoistSubterms instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(HoistCaseStatements instance) {
       return otherwise((instance));
     }
   }
@@ -582,7 +622,7 @@ public abstract class TestCase implements Serializable {
   }
   
   /**
-   * A JSON coder (round-trip) test
+   * A JSON coder (round-trip) test using Flow-based coder
    */
   public static final class JsonCoder extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JsonCoderTestCase value;
@@ -598,6 +638,68 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       JsonCoder o = (JsonCoder) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A JSON decode test using Either-based decoder
+   */
+  public static final class JsonDecode extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.JsonDecodeTestCase value;
+    
+    public JsonDecode (hydra.testing.JsonDecodeTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof JsonDecode)) {
+        return false;
+      }
+      JsonDecode o = (JsonDecode) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A JSON encode test using Either-based encoder
+   */
+  public static final class JsonEncode extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.JsonEncodeTestCase value;
+    
+    public JsonEncode (hydra.testing.JsonEncodeTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof JsonEncode)) {
+        return false;
+      }
+      JsonEncode o = (JsonEncode) (other);
       return value.equals(o.value);
     }
     
@@ -629,6 +731,37 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       JsonParser o = (JsonParser) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A JSON round-trip test using Either-based encoder/decoder
+   */
+  public static final class JsonRoundtrip extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.JsonRoundtripTestCase value;
+    
+    public JsonRoundtrip (hydra.testing.JsonRoundtripTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof JsonRoundtrip)) {
+        return false;
+      }
+      JsonRoundtrip o = (JsonRoundtrip) (other);
       return value.equals(o.value);
     }
     
@@ -1063,6 +1196,68 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       RewriteType o = (RewriteType) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A hoist subterms test
+   */
+  public static final class HoistSubterms extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.HoistSubtermsTestCase value;
+    
+    public HoistSubterms (hydra.testing.HoistSubtermsTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof HoistSubterms)) {
+        return false;
+      }
+      HoistSubterms o = (HoistSubterms) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A hoist case statements test
+   */
+  public static final class HoistCaseStatements extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.HoistCaseStatementsTestCase value;
+    
+    public HoistCaseStatements (hydra.testing.HoistCaseStatementsTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof HoistCaseStatements)) {
+        return false;
+      }
+      HoistCaseStatements o = (HoistCaseStatements) (other);
       return value.equals(o.value);
     }
     

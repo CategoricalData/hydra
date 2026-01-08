@@ -1,7 +1,7 @@
 package hydra.json;
 
 import hydra.core.Name;
-import hydra.json.Value;
+import hydra.json.model.Value;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

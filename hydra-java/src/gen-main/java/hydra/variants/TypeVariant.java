@@ -30,13 +30,9 @@ public abstract class TypeVariant implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
   
-  public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
-  
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
   
   public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
-  
-  public static final hydra.core.Name FIELD_NAME_SUM = new hydra.core.Name("sum");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
   
@@ -73,13 +69,9 @@ public abstract class TypeVariant implements Serializable {
     
     R visit(Pair instance) ;
     
-    R visit(Product instance) ;
-    
     R visit(Record instance) ;
     
     R visit(Set instance) ;
-    
-    R visit(Sum instance) ;
     
     R visit(Union instance) ;
     
@@ -135,19 +127,11 @@ public abstract class TypeVariant implements Serializable {
       return otherwise((instance));
     }
     
-    default R visit(Product instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Record instance) {
       return otherwise((instance));
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Sum instance) {
       return otherwise((instance));
     }
     
@@ -448,34 +432,6 @@ public abstract class TypeVariant implements Serializable {
     }
   }
   
-  public static final class Product extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
-    
-    public Product (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Product)) {
-        return false;
-      }
-      Product o = (Product) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
   public static final class Record extends hydra.variants.TypeVariant implements Serializable {
     public final Boolean value;
     
@@ -518,34 +474,6 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Sum extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
-    
-    public Sum (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Sum)) {
-        return false;
-      }
-      Sum o = (Sum) (other);
       return value.equals(o.value);
     }
     
