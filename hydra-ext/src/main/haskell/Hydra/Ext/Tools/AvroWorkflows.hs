@@ -21,7 +21,7 @@ import Hydra.Kernel
 import Hydra.Tools.Monads
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Extract.Json
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))

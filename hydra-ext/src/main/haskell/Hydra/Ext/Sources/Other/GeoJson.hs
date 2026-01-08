@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Json as Json
+import qualified Hydra.Sources.Json.Model as JsonModel
 
 
 ns :: Namespace
@@ -20,10 +20,10 @@ geoj :: String -> Type
 geoj = typeref ns
 
 json :: String -> Type
-json = typeref $ Json.ns
+json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.ns] [] $
+module_ = Module ns elements [JsonModel.ns] [] $
     Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++
           "This model provides some additional structure beyond the JSON encoding described in the specification; " ++
           "For example, it provides MultiPoint not as an object with an array of coordinates which encode points, " ++

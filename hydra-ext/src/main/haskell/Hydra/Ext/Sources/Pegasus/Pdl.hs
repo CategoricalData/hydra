@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Json.Model               as JsonModel
 
 
 ns :: Namespace
@@ -20,10 +20,10 @@ pdl :: String -> Type
 pdl = typeref ns
 
 json :: String -> Type
-json = typeref $ Json.ns
+json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.ns] [Core.ns] $
+module_ = Module ns elements [JsonModel.ns] [Core.ns] $
     Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
       "  https://linkedin.github.io/rest.li/pdl_schema")
   where

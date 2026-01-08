@@ -4,7 +4,7 @@ module Hydra.Ext.Staging.Json.Schema.Serde(
 ) where
 
 import qualified Hydra.Ext.Org.Json.Schema as JS
-import qualified Hydra.Json as J
+import qualified Hydra.Json.Model as J
 import qualified Hydra.Json.Writer as JsonWriter
 
 import qualified Data.List as L

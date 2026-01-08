@@ -15,7 +15,7 @@ import qualified Hydra.Sources.Kernel.Types.Constraints as Constraints
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
-import qualified Hydra.Sources.Kernel.Types.Json        as Json
+import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Module      as Module
 import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
@@ -35,13 +35,13 @@ import qualified Data.Maybe                             as Y
 
 
 module_ :: Module
-module_ = Module ns elements [Json.ns] [Core.ns] $
+module_ = Module ns elements [JsonModel.ns] [Core.ns] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"
     def = datatype ns
     js = typeref ns
-    json = typeref $ Json.ns
+    json = typeref $ JsonModel.ns
 
     keywordSchemaMap = T.map (js "Keyword") (js "Schema")
     keywordSchemaOrArrayMap = T.map (js "Keyword") (js "SchemaOrArray")
