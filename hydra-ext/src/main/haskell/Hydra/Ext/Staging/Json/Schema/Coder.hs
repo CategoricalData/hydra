@@ -20,7 +20,7 @@ import qualified Hydra.Ext.Staging.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Org.Json.Schema as JS
-import qualified Hydra.Json as J
+import qualified Hydra.Json.Model as J
 import qualified Hydra.Reflect as Reflect
 
 import qualified Control.Monad as CM

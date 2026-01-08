@@ -14,7 +14,7 @@ import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 
 import qualified Text.Read as TR
 import qualified Control.Monad as CM

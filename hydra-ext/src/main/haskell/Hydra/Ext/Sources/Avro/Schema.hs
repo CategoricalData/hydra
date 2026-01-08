@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Json as Json
+import qualified Hydra.Sources.Json.Model as JsonModel
 
 
 ns :: Namespace
@@ -20,10 +20,10 @@ avro :: String -> Type
 avro = typeref ns
 
 json :: String -> Type
-json = typeref $ Json.ns
+json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns elements [Json.ns] [Core.ns] $
+module_ = Module ns elements [JsonModel.ns] [Core.ns] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")
   where

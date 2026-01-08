@@ -52,7 +52,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Meta as ShowMeta
 import qualified Hydra.Pg.Model as PG
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Util as Util
 import Hydra.Ext.Staging.Pg.Utils

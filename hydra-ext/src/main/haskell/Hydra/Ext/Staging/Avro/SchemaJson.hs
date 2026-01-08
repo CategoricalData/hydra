@@ -6,7 +6,7 @@ import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Extract.Json
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

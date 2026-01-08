@@ -8,7 +8,7 @@ where
 import Hydra.Kernel
 import Hydra.Pg.Model as PG
 import Hydra.Pg.Graphson.Syntax as G
-import Hydra.Json as Json
+import Hydra.Json.Model as Json
 
 import qualified Data.Char as C
 import qualified Control.Monad as CM

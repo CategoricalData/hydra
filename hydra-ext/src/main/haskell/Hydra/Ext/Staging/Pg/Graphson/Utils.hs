@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Ext.Staging.Pg.Graphson.Coder
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Ext.Dsl.Pg.Mappings
-import qualified Hydra.Json as Json
+import qualified Hydra.Json.Model as Json
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
