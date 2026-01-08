@@ -5,7 +5,7 @@ package hydra.module;
 import java.io.Serializable;
 
 /**
- * A term-level definition, including a name, a term, and the type of the term
+ * A term-level definition, including a name, a term, and the type scheme of the term
  */
 public class TermDefinition implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.TermDefinition");
@@ -27,11 +27,11 @@ public class TermDefinition implements Serializable {
   public final hydra.core.Term term;
   
   /**
-   * The type of the term
+   * The type scheme of the term, including any class constraints
    */
-  public final hydra.core.Type type;
+  public final hydra.core.TypeScheme type;
   
-  public TermDefinition (hydra.core.Name name, hydra.core.Term term, hydra.core.Type type) {
+  public TermDefinition (hydra.core.Name name, hydra.core.Term term, hydra.core.TypeScheme type) {
     java.util.Objects.requireNonNull((name));
     java.util.Objects.requireNonNull((term));
     java.util.Objects.requireNonNull((type));
@@ -64,7 +64,7 @@ public class TermDefinition implements Serializable {
     return new TermDefinition(name, term, type);
   }
   
-  public TermDefinition withType(hydra.core.Type type) {
+  public TermDefinition withType(hydra.core.TypeScheme type) {
     java.util.Objects.requireNonNull((type));
     return new TermDefinition(name, term, type);
   }

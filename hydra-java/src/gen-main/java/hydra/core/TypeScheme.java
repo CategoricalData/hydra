@@ -14,6 +14,8 @@ public class TypeScheme implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
   
+  public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
+  
   /**
    * The free type variables
    */
@@ -24,11 +26,18 @@ public class TypeScheme implements Serializable {
    */
   public final hydra.core.Type type;
   
-  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type type) {
+  /**
+   * Optional metadata for type variables, including typeclass constraints. The map keys are type variable names.
+   */
+  public final hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints;
+  
+  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type type, hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints) {
     java.util.Objects.requireNonNull((variables));
     java.util.Objects.requireNonNull((type));
+    java.util.Objects.requireNonNull((constraints));
     this.variables = variables;
     this.type = type;
+    this.constraints = constraints;
   }
   
   @Override
@@ -37,21 +46,26 @@ public class TypeScheme implements Serializable {
       return false;
     }
     TypeScheme o = (TypeScheme) (other);
-    return variables.equals(o.variables) && type.equals(o.type);
+    return variables.equals(o.variables) && type.equals(o.type) && constraints.equals(o.constraints);
   }
   
   @Override
   public int hashCode() {
-    return 2 * variables.hashCode() + 3 * type.hashCode();
+    return 2 * variables.hashCode() + 3 * type.hashCode() + 5 * constraints.hashCode();
   }
   
   public TypeScheme withVariables(java.util.List<hydra.core.Name> variables) {
     java.util.Objects.requireNonNull((variables));
-    return new TypeScheme(variables, type);
+    return new TypeScheme(variables, type, constraints);
   }
   
   public TypeScheme withType(hydra.core.Type type) {
     java.util.Objects.requireNonNull((type));
-    return new TypeScheme(variables, type);
+    return new TypeScheme(variables, type, constraints);
+  }
+  
+  public TypeScheme withConstraints(hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints) {
+    java.util.Objects.requireNonNull((constraints));
+    return new TypeScheme(variables, type, constraints);
   }
 }

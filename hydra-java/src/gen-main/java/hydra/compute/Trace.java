@@ -22,7 +22,7 @@ public class Trace implements Serializable {
   public final java.util.List<String> stack;
   
   /**
-   * A log of informational messages
+   * A log of warnings and/or info messages
    */
   public final java.util.List<String> messages;
   

@@ -10,8 +10,6 @@ import java.io.Serializable;
 public abstract class Elimination implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Elimination");
   
-  public static final hydra.core.Name FIELD_NAME_PRODUCT = new hydra.core.Name("product");
-  
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
   
   public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
@@ -25,8 +23,6 @@ public abstract class Elimination implements Serializable {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Product instance) ;
-    
     R visit(Record instance) ;
     
     R visit(Union instance) ;
@@ -39,10 +35,6 @@ public abstract class Elimination implements Serializable {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Product instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Record instance) {
       return otherwise((instance));
     }
@@ -53,37 +45,6 @@ public abstract class Elimination implements Serializable {
     
     default R visit(Wrap instance) {
       return otherwise((instance));
-    }
-  }
-  
-  /**
-   * Eliminates a tuple by projecting the component at a given 0-indexed offset
-   */
-  public static final class Product extends hydra.core.Elimination implements Serializable {
-    public final hydra.core.TupleProjection value;
-    
-    public Product (hydra.core.TupleProjection value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Product)) {
-        return false;
-      }
-      Product o = (Product) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
   }
   

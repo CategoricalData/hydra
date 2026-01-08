@@ -29,9 +29,9 @@ public class JsonCoderTestCase implements Serializable {
   /**
    * The expected JSON value
    */
-  public final hydra.json.Value json;
+  public final hydra.json.model.Value json;
   
-  public JsonCoderTestCase (hydra.core.Type type, hydra.core.Term term, hydra.json.Value json) {
+  public JsonCoderTestCase (hydra.core.Type type, hydra.core.Term term, hydra.json.model.Value json) {
     java.util.Objects.requireNonNull((type));
     java.util.Objects.requireNonNull((term));
     java.util.Objects.requireNonNull((json));
@@ -64,7 +64,7 @@ public class JsonCoderTestCase implements Serializable {
     return new JsonCoderTestCase(type, term, json);
   }
   
-  public JsonCoderTestCase withJson(hydra.json.Value json) {
+  public JsonCoderTestCase withJson(hydra.json.model.Value json) {
     java.util.Objects.requireNonNull((json));
     return new JsonCoderTestCase(type, term, json);
   }
