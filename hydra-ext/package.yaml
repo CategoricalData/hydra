@@ -86,3 +86,11 @@ executables:
     dependencies:
       - hydra-ext
       - hspec
+
+  update-python-kernel-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-python-kernel-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
