@@ -76,6 +76,51 @@ import hydra.test.test_graph as test_graph
 TestRunner = Callable[[str, hydra.testing.TestCaseWithMetadata], Optional[Callable[[], None]]]
 
 
+def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
+    """
+    Load kernel term bindings from the generated sources modules.
+
+    This loads bindings from hydra.sources.* modules which contain term-encoded
+    Module objects. These are the kernel term modules (hydra.monads, hydra.annotations,
+    etc.) that are needed for evaluation tests.
+
+    Returns:
+        Dictionary mapping binding names to Binding objects
+    """
+    bindings = {}
+
+    # Import the kernel term sources modules
+    # These match kernelPrimaryTermsModules in Hydra.Sources.Kernel.Terms.All
+    kernel_term_source_modules = [
+        "hydra.sources.monads",
+        "hydra.sources.annotations",
+        # Add more as needed - start with the most critical ones
+    ]
+
+    for module_name in kernel_term_source_modules:
+        try:
+            # Dynamically import the module
+            import importlib
+            source_module = importlib.import_module(module_name)
+
+            # Call module() to get the Module object
+            mod = source_module.module()
+
+            # Extract bindings from the module
+            for binding in mod.elements:
+                bindings[binding.name] = binding
+
+        except ImportError as e:
+            # Module not yet generated - skip silently
+            pass
+        except Exception as e:
+            # Log but don't fail - allows tests to run with partial kernel
+            import sys
+            print(f"Warning: Failed to load {module_name}: {e}", file=sys.stderr)
+
+    return bindings
+
+
 def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case is marked as disabled."""
     disabled_tag = hydra.testing.Tag("disabled")
@@ -246,6 +291,12 @@ def build_test_graph() -> hydra.graph.Graph:
             term=term,
             type=Nothing()
         )
+
+    # Add kernel term bindings (hydra.monads.*, hydra.annotations.*, etc.)
+    # This mirrors how Haskell includes kernelTermsModules in testGraph
+    # Load from generated sources modules (hydra/sources/*.py)
+    kernel_terms = _load_kernel_term_bindings()
+    term_bindings.update(kernel_terms)
 
     # Get standard library primitives (hydra.lib.*)
     # This mirrors how Haskell includes kernelTermsModules in testGraph

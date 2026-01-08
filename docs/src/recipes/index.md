@@ -19,6 +19,10 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 - **[Synchronizing Hydra-Python](syncing-python.md)** - How to regenerate Python artifacts from Hydra-Haskell sources
 - **[Exporting the kernel to JSON](json-kernel.md)** - How to export and verify the Hydra kernel as JSON for cross-language access
 
+### Refactoring
+
+- **[Refactoring Hydra namespaces](refactoring-namespaces.md)** - How to rename or move a Hydra namespace across all implementations
+
 ### Development Workflow
 
 - **[LLM-assisted development](llm-assisted-development.md)** - Best practices for using AI assistants when working with Hydra

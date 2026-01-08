@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-from hydra.json import (
+from hydra.json.model import (
     Value,
     ValueArray,
     ValueBoolean,
