@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.eithers"},ModuleName {unModuleName = "Eithers"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.lib.logic"},ModuleName {unModuleName = "Logic"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
+-- [(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.lib.eithers"},ModuleName {unModuleName = "Eithers"}),(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.lib.logic"},ModuleName {unModuleName = "Logic"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
 
 module Generation.Hydra.Test.Lib.EithersSpec where
 
@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Logic as Logic

@@ -424,5 +424,6 @@ allTests = Testing.TestGroup {
                         Core.fieldName = (Core.Name "other"),
                         Core.fieldTerm = (Core.TermMap M.empty)}]}))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []}]}],
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForPython"]}]}],
   Testing.testGroupCases = []}

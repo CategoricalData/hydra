@@ -448,7 +448,7 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
       (lets [
         "weird">: lambda "f" $ lambda "x" $ var "f" @@ (var "f" @@ var "x"),
         "bad">: var "weird" @@ (lambda "y" $ pair (var "y") (int32 42))] $ var "bad"),
-    expectFailure 3 [tag_disabledForPython]  -- Very slow in Python (36+ seconds)
+    expectFailure 3 []
       (lets [
         "nested">: lambda "f" $ lambda "g" $ lambda "x" $
           var "f" @@ (var "g" @@ (var "f" @@ (var "g" @@ var "x"))),
@@ -457,7 +457,7 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
         "bad">: var "nested" @@ var "int_f" @@ var "str_g"] $ var "bad")],
 
   subgroup "Function composition failures" [
-    expectFailure 1 [tag_disabledForPython]  -- Very slow in Python (14+ seconds)
+    expectFailure 1 []
       (lets [
         "triple">: lambda "f" $ lambda "x" $ var "f" @@ (var "f" @@ (var "f" @@ var "x")),
         "increment">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,

@@ -24,14 +24,100 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
-import Debug.Trace
+import qualified Hydra.Decode.Core as DecodeCore
 import Data.Char (toUpper)
 import qualified System.FilePath as FP
 
 
+-- | Extract all variable names from term-encoded terms in a given term.
+-- This recursively decodes encoded terms and extracts the variable names.
+extractEncodedTermVariableNames :: Graph -> Term -> S.Set Name
+extractEncodedTermVariableNames graph term =
+  Rewriting.foldOverTerm TraversalOrderPre collectNames S.empty term
+  where
+    collectNames :: S.Set Name -> Term -> S.Set Name
+    collectNames names t
+      | isEncodedTerm (Rewriting.deannotateTerm t) =
+          case DecodeCore.term graph t of
+            Right decodedTerm ->
+              -- Recursively extract variable names from the decoded term
+              S.union names (Rewriting.termDependencyNames True True True decodedTerm)
+            Left _ -> names
+      | otherwise = names
+
+-- | Add namespaces from a set of names to existing namespaces
+addNamespacesToNamespaces :: Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName
+addNamespacesToNamespaces ns0 names =
+  let newNamespaces = S.fromList $ mapMaybe Names.namespaceOf $ S.toList names
+      toModuleName namespace =
+        let parts = Strings.splitOn "." (unNamespace namespace)
+            lastPart = L.last parts
+        in H.ModuleName (Formatting.capitalize lastPart)
+      toPair ns = (ns, toModuleName ns)
+      newMappings = M.fromList $ map toPair $ S.toList newNamespaces
+  in ns0 { namespacesMapping = M.union (namespacesMapping ns0) newMappings }
+  where
+    mapMaybe f = foldr (\x acc -> maybe acc (:acc) (f x)) []
+
+-- | Check if a term is a FlowState record.
+-- Returns Just (value, state, trace) if it is a FlowState record, Nothing otherwise.
+isFlowStateRecord :: Term -> Maybe (Term, Term, Term)
+isFlowStateRecord term = case Rewriting.deannotateTerm term of
+  TermRecord rec | unName (recordTypeName rec) == "hydra.compute.FlowState" ->
+    let fields = recordFields rec
+        getValue = findField "value" fields
+        getState = findField "state" fields
+        getTrace = findField "trace" fields
+    in case (getValue, getState, getTrace) of
+         (Just v, Just s, Just t) -> Just (v, s, t)
+         _ -> Nothing
+  _ -> Nothing
+  where
+    findField :: String -> [Field] -> Maybe Term
+    findField name = L.foldr (\f acc -> if unName (fieldName f) == name then Just (fieldTerm f) else acc) Nothing
+
+-- | Preprocess input term to replace TermUnit state with emptyGraph in Flow unrolling patterns.
+-- The kernel test generation converts the Flow state argument (e.g. emptyGraph) to TermUnit
+-- due to type erasure, but some functions (like annotation functions) specifically require Graph state.
+preprocessFlowInput :: Term -> Term
+preprocessFlowInput = Rewriting.rewriteTerm rewrite
+  where
+    emptyGraphVar = TermVariable (Name "hydra.lexical.emptyGraph")
+
+    rewrite :: (Term -> Term) -> Term -> Term
+    rewrite recurse t = case Rewriting.deannotateTerm t of
+      -- Pattern: (((unFlow flowExpr) state) trace)
+      -- Structure: Application { function = Application { function = Application { function = Eliminator, arg = flowExpr }, arg = state }, arg = trace }
+      -- We want to replace state=TermUnit with emptyGraph
+      TermApplication app ->
+        let func = applicationFunction app     -- Application { function = Application { ... }, arg = state }
+            traceArg = applicationArgument app -- trace
+        in case Rewriting.deannotateTerm func of
+          TermApplication stateApp ->
+            let unFlowApp = applicationFunction stateApp  -- Application { function = Eliminator, arg = flowExpr }
+                stateArg = applicationArgument stateApp   -- state (might be TermUnit)
+            in case Rewriting.deannotateTerm unFlowApp of
+              TermApplication elimApp ->
+                let elimFunc = applicationFunction elimApp  -- Eliminator
+                in case Rewriting.deannotateTerm elimFunc of
+                  TermFunction (FunctionElimination (EliminationWrap wrapName))
+                    | unName wrapName == "hydra.compute.Flow" ->
+                      -- Found the pattern! Check if stateArg is TermUnit
+                      let newState = case Rewriting.deannotateTerm stateArg of
+                            TermUnit -> emptyGraphVar
+                            _ -> recurse stateArg
+                          -- Rebuild: ((unFlowApp newState) trace)
+                          newStateApp = TermApplication $ Application (recurse unFlowApp) newState
+                      in TermApplication $ Application newStateApp (recurse traceArg)
+                  _ -> recurse t
+              _ -> recurse t
+          _ -> recurse t
+      _ -> recurse t
+
 termToHaskell :: Namespaces H.ModuleName -> Term -> Flow Graph String
-termToHaskell namespaces term = (printExpr . parenthesize . HaskellSerde.expressionToExpr) <$>
-  HaskellCoder.encodeTerm namespaces term
+termToHaskell namespaces term = do
+  result <- HaskellCoder.encodeTerm namespaces term
+  return $ printExpr . parenthesize . HaskellSerde.expressionToExpr $ result
 
 typeToHaskell :: Namespaces H.ModuleName -> Type -> Flow Graph String
 typeToHaskell namespaces typ = (printExpr . parenthesize . HaskellSerde.typeToExpr) <$>
@@ -143,33 +229,116 @@ generateTestFileWithCodec codec testModule testGroup namespaces = do
 -- | Generate a single test case using a TestCodec
 generateTestCaseWithCodec :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Flow Graph [String]
 generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadata name tcase _ _) = case tcase of
-  TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
+  TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase inputRaw output) -> do
+    -- Preprocess input to replace TermUnit state with emptyGraph in Flow patterns
+    let input = preprocessFlowInput inputRaw
 
-    inputCode <- testCodecEncodeTerm codec input
-    outputCode <- testCodecEncodeTerm codec output
+    -- Check if output is a FlowState record - if so, we compare only the flowStateValue
+    -- because FlowState Graph a cannot be compared with shouldBe (Graph has no Show instance)
+    case isFlowStateRecord output of
+      Just (expectedValue, _, _) -> do
+        -- Generate test that extracts flowStateValue from the result and compares it
+        inputCode <- testCodecEncodeTerm codec input
+        expectedValueCode <- testCodecEncodeTerm codec expectedValue
 
-    -- Format the test name using the codec
-    let formattedName = testCodecFormatTestName codec name
-        -- Helper to indent continuation lines to maintain alignment with opening paren
-        indentLines n s = L.intercalate ("\n" ++ replicate n ' ') (L.lines s)
-        -- Continuation lines need: depth*2 (base indent) + 2 ("  (" prefix) + 2 (alignment)
-        continuationIndent = depth * 2 + 4
-        indentedInputCode = indentLines continuationIndent inputCode
-        indentedOutputCode = indentLines continuationIndent outputCode
+        let formattedName = testCodecFormatTestName codec name
+            indentLines n s = L.intercalate ("\n" ++ replicate n ' ') (L.lines s)
+            continuationIndent = depth * 2 + 4
+            indentedInputCode = indentLines continuationIndent inputCode
+            indentedExpectedCode = indentLines continuationIndent expectedValueCode
 
-    -- Check if output needs a type annotation (only when BOTH input and output are polymorphic)
-    graph <- getState
-    typeAnnotation <- generateTypeAnnotationFor infContext namespaces input output
-    let (finalInputCode, finalOutputCode) = case typeAnnotation of
-          Just anno -> (indentedInputCode, indentedOutputCode ++ anno)
-          Nothing -> (indentedInputCode, indentedOutputCode)
+        -- Check if we need a type annotation for the expected value
+        -- Use expectedValue (the unwrapped flowStateValue) for inference, not full FlowState output
+        typeAnnotation <- generateTypeAnnotationForFlowStateValue infContext namespaces input expectedValue
+        let finalExpectedCode = case typeAnnotation of
+              Just anno -> indentedExpectedCode ++ anno
+              Nothing -> indentedExpectedCode
 
-    return [
-      "H.it " ++ show formattedName ++ " $ H.shouldBe",
-      "  (" ++ finalInputCode ++ ")",
-      "  (" ++ finalOutputCode ++ ")"]
+        return [
+          "H.it " ++ show formattedName ++ " $ H.shouldBe",
+          "  (Compute.flowStateValue (" ++ indentedInputCode ++ "))",
+          "  (" ++ finalExpectedCode ++ ")"]
+
+      Nothing -> do
+        -- Standard comparison - output is not a FlowState
+        inputCode <- testCodecEncodeTerm codec input
+        outputCode <- testCodecEncodeTerm codec output
+
+        let formattedName = testCodecFormatTestName codec name
+            indentLines n s = L.intercalate ("\n" ++ replicate n ' ') (L.lines s)
+            continuationIndent = depth * 2 + 4
+            indentedInputCode = indentLines continuationIndent inputCode
+            indentedOutputCode = indentLines continuationIndent outputCode
+
+        typeAnnotation <- generateTypeAnnotationFor infContext namespaces input output
+        let (finalInputCode, finalOutputCode) = case typeAnnotation of
+              Just anno -> (indentedInputCode, indentedOutputCode ++ anno)
+              Nothing -> (indentedInputCode, indentedOutputCode)
+
+        return [
+          "H.it " ++ show formattedName ++ " $ H.shouldBe",
+          "  (" ++ finalInputCode ++ ")",
+          "  (" ++ finalOutputCode ++ ")"]
 
   _ -> return []  -- Skip non-delegated tests (shouldn't happen after transform)
+
+-- | Generate a type annotation for FlowState value extraction.
+-- Adds annotation when:
+-- 1. Bare `Nothing` (always ambiguous) -> `Maybe Int`
+-- 2. `Just Nothing` when INPUT also contains bare `Nothing` (polymorphic) -> `Maybe (Maybe Int)`
+-- For (2), if input is concrete (like getTermDescription), GHC infers from input.
+generateTypeAnnotationForFlowStateValue :: InferenceContext -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
+generateTypeAnnotationForFlowStateValue _ _ inputTerm expectedValue =
+  case Rewriting.deannotateTerm expectedValue of
+    TermMaybe Nothing -> return $ Just " :: Maybe Int"
+    TermMaybe (Just inner) ->
+      case Rewriting.deannotateTerm inner of
+        TermMaybe Nothing ->
+          -- Check if INPUT is polymorphic (contains bare Nothing)
+          if inputContainsNothing inputTerm
+            then return $ Just " :: Maybe (Maybe Int)"
+            else return Nothing  -- Input is concrete, GHC can infer
+        _ -> return Nothing
+    _ -> return Nothing
+  where
+    -- Check if input term contains bare Nothing (indicates polymorphism)
+    inputContainsNothing :: Term -> Bool
+    inputContainsNothing term = case Rewriting.deannotateTerm term of
+      TermMaybe Nothing -> True
+      TermMaybe (Just inner) -> inputContainsNothing inner
+      TermApplication app ->
+        inputContainsNothing (applicationFunction app) ||
+        inputContainsNothing (applicationArgument app)
+      TermFunction (FunctionLambda lam) -> inputContainsNothing (lambdaBody lam)
+      TermRecord rec -> any (inputContainsNothing . fieldTerm) (recordFields rec)
+      TermList xs -> any inputContainsNothing xs
+      _ -> False
+
+-- | Extract the value type from a FlowState type.
+-- FlowState s a has flowStateValue :: Maybe a, so we extract the `Maybe a` type.
+-- The type structure is: TypeApplication (ApplicationType (TypeApplication (ApplicationType (TypeRecord "FlowState") s)) a)
+extractFlowStateValueType :: Type -> Flow Graph (Maybe Type)
+extractFlowStateValueType typ = case Rewriting.deannotateType typ of
+  -- FlowState s a -> extract Maybe a
+  -- Structure: TypeApplication (TypeApplication FlowState s) a
+  TypeApplication (ApplicationType (TypeApplication (ApplicationType base sType)) aType)
+    | isFlowStateType base -> return $ Just $ TypeMaybe aType
+  -- Check for TypeRecord with FlowState name
+  TypeRecord rowType | unName (rowTypeTypeName rowType) == "hydra.compute.FlowState" ->
+    -- FlowState as a record - extract the value field type
+    let valueField = L.find (\f -> unName (fieldTypeName f) == "value") (rowTypeFields rowType)
+    in case valueField of
+         Just ft -> return $ Just $ fieldTypeType ft  -- Already Maybe a
+         Nothing -> return Nothing
+  -- If it's wrapped in Maybe already (shouldn't happen), just return it
+  TypeMaybe inner -> return $ Just typ
+  -- Otherwise, return Nothing to indicate we couldn't extract the type
+  _ -> return Nothing
+  where
+    isFlowStateType t = case Rewriting.deannotateType t of
+      TypeWrap wt -> unName (wrappedTypeTypeName wt) == "hydra.compute.FlowState"
+      TypeRecord rt -> unName (rowTypeTypeName rt) == "hydra.compute.FlowState"
+      _ -> False
 
 -- | Generate a type annotation for polymorphic output values
 -- Adds annotations when BOTH:
@@ -186,30 +355,42 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
     then return Nothing
     else do
       -- Infer the type of the input expression (which gives us the result/output type)
-      result <- Inference.inferTypeOf infContext inputTerm
-      let (_, typeScheme) = result
-          typ = typeSchemeType typeScheme
-          -- Check if there are any free type variables that need grounding
-          freeVars = S.toList $ S.difference
-            (Rewriting.freeVariablesInType typ)
-            schemaVars
-      -- Either types ALWAYS need annotations (one branch is always unconstrained),
-      -- while other polymorphic types only need annotations if they have free variables.
-      if isEitherTerm outputTerm || not (null freeVars)
-        then do
-          -- Replace free type variables with Int32
-          let int32Type = TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
-              subst = Typing.TypeSubst $ M.fromList [(v, int32Type) | v <- freeVars]
-              groundedType = Substitution.substInType subst typ
-          -- Encode the type as Haskell
-          typeStr <- typeToHaskell namespaces groundedType
-          return $ Just (" :: " ++ typeStr)
-        else return Nothing
+      -- Use tryInferTypeOf to gracefully handle inference failures (e.g., when schema types
+      -- like Graph conflict with polymorphic type variables)
+      mresult <- tryInferTypeOf infContext inputTerm
+      case mresult of
+        Nothing -> return Nothing  -- Inference failed; skip annotation
+        Just (_, typeScheme) -> do
+          let typ = typeSchemeType typeScheme
+              -- Check if there are any free type variables that need grounding
+              freeVars = S.toList $ S.difference
+                (Rewriting.freeVariablesInType typ)
+                schemaVars
+          -- Either types ALWAYS need annotations (one branch is always unconstrained),
+          -- while other polymorphic types only need annotations if they have free variables.
+          if isEitherTerm outputTerm || not (null freeVars)
+            then do
+              -- Replace free type variables with Int32
+              let int32Type = TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
+                  subst = Typing.TypeSubst $ M.fromList [(v, int32Type) | v <- freeVars]
+                  groundedType = Substitution.substInType subst typ
+              -- Encode the type as Haskell
+              typeStr <- typeToHaskell namespaces groundedType
+              return $ Just (" :: " ++ typeStr)
+            else return Nothing
   where
     schemaVars = S.fromList $ M.keys $ inferenceContextSchemaTypes infContext
     needsAnnotation = containsTriviallyPolymorphic outputTerm
     isEitherTerm (TermEither _) = True
     isEitherTerm _ = False
+
+-- | Try to infer the type of a term, returning Nothing if inference fails
+-- This allows graceful degradation when type inference encounters issues
+-- (e.g., schema types being unified with polymorphic type variables)
+tryInferTypeOf :: InferenceContext -> Term -> Flow Graph (Maybe (Term, TypeScheme))
+tryInferTypeOf infContext term = Flow $ \s t ->
+  let FlowState mval s' t' = unFlow (Inference.inferTypeOf infContext term) s t
+  in FlowState (Just mval) s' t'
 
 -- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
 -- This recursively searches through the term structure to find any parts that would
@@ -298,7 +479,15 @@ generateHaskellTestFile testModule testGroup = do
           testTerms = concatMap extractTestTerms testCases
           testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
           tempModule = mod { moduleElements = testBindings }
-      namespacesForModule tempModule
+      -- Get initial namespaces from the module
+      baseNamespaces <- namespacesForModule tempModule
+      -- Extract additional namespaces from term-encoded variable references
+      graph <- getState
+      let encodedNames = S.unions $ map (extractEncodedTermVariableNames graph) testTerms
+      -- Add the encoded term namespaces to the base namespaces
+      -- Also add hydra.lexical explicitly since it's needed for Flow tests (emptyGraph)
+      let extraNamespaces = S.fromList [Name "hydra.lexical.emptyGraph"]
+      return $ addNamespacesToNamespaces baseNamespaces (S.union encodedNames extraNamespaces)
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
       TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
       _ -> []

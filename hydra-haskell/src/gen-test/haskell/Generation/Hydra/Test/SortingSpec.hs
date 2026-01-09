@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.sorting"},ModuleName {unModuleName = "Sorting"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.sorting"},ModuleName {unModuleName = "Sorting"})]
+-- [(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.sorting"},ModuleName {unModuleName = "Sorting"})]
 
 module Generation.Hydra.Test.SortingSpec where
 
@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Sorting as Sorting
 
 spec :: H.Spec

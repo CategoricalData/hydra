@@ -9,6 +9,7 @@ import qualified Hydra.Inference as Inference
 import Hydra.Sources.All
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Lib.Strings as Strings
@@ -162,7 +163,8 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       putStrLn $ "  Generated: " ++ fullPath
     -- Core.module_ is required for schema types like Either, Maybe, etc.
     -- Monads.module_ is required for primitives like hydra.monads.pure
-    extraModules = [Formatting.module_, Monads.module_, Core.module_]
+    -- Lexical.module_ is required for hydra.lexical.emptyGraph used in Flow tests
+    extraModules = [Formatting.module_, Lexical.module_, Monads.module_, Core.module_]
 
 -- Note: collectModules removed since Module dependencies are now Namespaces.
 -- Callers should provide explicit module lists instead of relying on traversal.
@@ -229,8 +231,8 @@ generateModulesWithContinueOnError testGen baseDir writeFile ((idx, pair):rest) 
       ns = moduleNamespace sourceModule
   trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
 
-  -- Try to generate this module using tryFlow, which catches errors and returns Maybe
-  mresult <- tryFlow (generateModuleTest testGen baseDir pair)
+  -- Try to generate this module using tryFlowWithTrace, which catches errors and returns Maybe with trace
+  (mresult, errTrace) <- tryFlowWithTrace (generateModuleTest testGen baseDir pair)
 
   -- Handle result
   newCount <- case mresult of
@@ -239,8 +241,8 @@ generateModulesWithContinueOnError testGen baseDir writeFile ((idx, pair):rest) 
       unsafePerformIO (writeFile result) `seq` return ()
       return (count + 1)
     Nothing -> do
-      -- Failure: log and continue
-      trace ("  ✗ Generation failed for " ++ show ns ++ " (continuing...)") $ return ()
+      -- Failure: log error details and continue
+      trace ("  ✗ Generation failed for " ++ show ns ++ ": " ++ errTrace ++ " (continuing...)") $ return ()
       return count
 
   -- Continue with remaining modules
@@ -251,6 +253,15 @@ tryFlow :: Flow s a -> Flow s (Maybe a)
 tryFlow f = Flow $ \s t ->
   let FlowState mval s' t' = unFlow f s t
   in FlowState (Just mval) s' t'
+
+-- | Try to run a Flow, returning (Maybe result, error trace summary)
+tryFlowWithTrace :: Flow s a -> Flow s (Maybe a, String)
+tryFlowWithTrace f = Flow $ \s t ->
+  let FlowState mval s' t' = unFlow f s t
+      errMsg = case mval of
+        Just _ -> ""
+        Nothing -> traceSummary t'
+  in FlowState (Just (mval, errMsg)) s' t'
 
 -- | Generate a single module test and write it immediately
 generateAndWriteModule :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> (Int, (Module, TestGroup)) -> Flow Graph ()

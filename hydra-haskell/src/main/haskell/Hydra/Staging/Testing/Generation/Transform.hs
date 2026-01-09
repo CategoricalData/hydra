@@ -8,9 +8,9 @@ import qualified Data.Map as M
 import qualified Data.List as L
 
 
--- | Tag for tests that use references to kernel definitions
-tag_usesKernelRefs :: Tag
-tag_usesKernelRefs = Tag "usesKernelRefs"
+-- | Tag for tests that require decoding Flow values back to Terms (unsupported in generation tests)
+tag_requiresFlowDecoding :: Tag
+tag_requiresFlowDecoding = Tag "requiresFlowDecoding"
 
 -- | Transform test group hierarchy to only include delegated evaluation tests
 -- Returns Nothing if the group becomes empty after filtering
@@ -23,12 +23,9 @@ transformToCompiledTests (TestGroup name desc subgroups cases) =
      else Just $ TestGroup name desc transformedSubgroups transformedCases
 
 -- | Transform a test case to DelegatedEvaluationTestCase if applicable
--- Returns Nothing if the test case type cannot be translated or uses kernel references
+-- Returns Nothing if the test case type cannot be translated
 transformTestCase :: TestCaseWithMetadata -> Maybe TestCaseWithMetadata
-transformTestCase tcase@(TestCaseWithMetadata name tc desc tags)
-  -- Filter out tests that use references to kernel definitions (these can't be compiled)
-  | tag_usesKernelRefs `L.elem` tags = Nothing
-  | otherwise = case tc of
+transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) = case tc of
     -- Case conversion: create delegated evaluation with convertCase call
     TestCaseCaseConversion (CaseConversionTestCase fromConv toConv fromStr toStr) ->
       Just $ TestCaseWithMetadata name delegated desc tags

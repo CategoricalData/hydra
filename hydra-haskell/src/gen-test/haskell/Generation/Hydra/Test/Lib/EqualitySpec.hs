@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.equality"},ModuleName {unModuleName = "Equality"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.util"},ModuleName {unModuleName = "Util"})]
+-- [(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.util"},ModuleName {unModuleName = "Util"})]
 
 module Generation.Hydra.Test.Lib.EqualitySpec where
 
@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Util as Util
 

@@ -90,6 +90,5 @@ testGroupForNestedLet = Testing.TestGroup {
               Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForMinimalInference",
-            (Testing.Tag "disabledForPython")]}]}],
+            Testing.Tag "disabledForMinimalInference"]}]}],
   Testing.testGroupCases = []}
