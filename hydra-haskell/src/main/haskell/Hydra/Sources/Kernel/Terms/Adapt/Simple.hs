@@ -57,6 +57,7 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Hoisting    as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Inference   as Inference
 import qualified Hydra.Sources.Kernel.Terms.Literals    as Literals
 import qualified Hydra.Sources.Kernel.Terms.Reduction   as Reduction
@@ -72,7 +73,7 @@ ns = Namespace "hydra.adapt.simple"
 
 module_ :: Module
 module_ = Module ns elements
-    [Inference.ns, Literals.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
+    [Hoisting.ns, Inference.ns, Literals.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
       ShowCore.ns, ShowGraph.ns]
     kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"
@@ -405,7 +406,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Step 1: Hoist case statements BEFORE inference (hoisting doesn't need types)
   -- This ensures match expressions are applied to arguments before eta expansion
   "graphh" <<~ Logic.ifElse (var "doHoist")
-    (Reduction.hoistCaseStatementsInGraph @@ var "graphu0")
+    (Hoisting.hoistCaseStatementsInGraph @@ var "graphu0")
     (produce $ var "graphu0") $
 
   -- Step 2: Unshadow variables AGAIN after hoisting

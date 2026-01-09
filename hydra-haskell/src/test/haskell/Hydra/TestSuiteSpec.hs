@@ -22,6 +22,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Reduction as Reduction
+import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Coders as Coders
 
 import qualified Control.Monad as CM
@@ -144,7 +145,11 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
         output
     TestCaseHoistCaseStatements (HoistCaseStatementsTestCase input output) ->
       H.it "hoist case statements" $ H.shouldBe
-        (Reduction.hoistCaseStatements emptyTypeContext input)
+        (Hoisting.hoistCaseStatements emptyTypeContext input)
+        output
+    TestCaseHoistPolymorphicLetBindings (HoistPolymorphicLetBindingsTestCase input output) ->
+      H.it "hoist polymorphic let bindings" $ H.shouldBe
+        (Hoisting.hoistPolymorphicLetBindings input)
         output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
@@ -275,7 +280,7 @@ runTypeRewriter TypeRewriterReplaceStringWithInt32 = Rewriting.rewriteType rewri
 -- | Run hoistSubterms with the given predicate
 -- The predicate receives (path, term) where path is the list of TermAccessors from root
 runHoistSubterms :: HoistPredicate -> Term -> Term
-runHoistSubterms pred term = Reduction.hoistSubterms (predicateFn pred) emptyTypeContext term
+runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyTypeContext term
   where
     -- A predicate returns True if the term should be hoisted.
     -- The predicate receives (path, term) for path-aware hoisting decisions.

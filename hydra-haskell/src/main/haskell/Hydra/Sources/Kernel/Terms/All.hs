@@ -19,6 +19,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as ExtractHelpers
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Grammars        as Grammars
+import qualified Hydra.Sources.Kernel.Terms.Hoisting        as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
@@ -111,6 +112,7 @@ kernelPrimaryTermsModules = [
   ExtractUtil.module_,
   Formatting.module_,
   Grammars.module_,
+  Hoisting.module_,
   Inference.module_,
   Languages.module_,
   Lexical.module_,

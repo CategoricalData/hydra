@@ -9,11 +9,6 @@ public interface Reflect {
   static hydra.variants.EliminationVariant eliminationVariant(hydra.core.Elimination v1) {
     return ((v1)).accept(new hydra.core.Elimination.Visitor<>() {
       @Override
-      public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Product ignored) {
-        return new hydra.variants.EliminationVariant.Product(true);
-      }
-      
-      @Override
       public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Record ignored) {
         return new hydra.variants.EliminationVariant.Record(true);
       }
@@ -31,7 +26,6 @@ public interface Reflect {
   }
   
   java.util.List<hydra.variants.EliminationVariant> eliminationVariants = java.util.List.of(
-    new hydra.variants.EliminationVariant.Product(true),
     new hydra.variants.EliminationVariant.Record(true),
     new hydra.variants.EliminationVariant.Union(true),
     new hydra.variants.EliminationVariant.Wrap(true));
@@ -395,11 +389,6 @@ public interface Reflect {
       }
       
       @Override
-      public hydra.variants.TermVariant visit(hydra.core.Term.Product ignored) {
-        return new hydra.variants.TermVariant.Product(true);
-      }
-      
-      @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Record ignored) {
         return new hydra.variants.TermVariant.Record(true);
       }
@@ -407,11 +396,6 @@ public interface Reflect {
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Set ignored) {
         return new hydra.variants.TermVariant.Set(true);
-      }
-      
-      @Override
-      public hydra.variants.TermVariant visit(hydra.core.Term.Sum ignored) {
-        return new hydra.variants.TermVariant.Sum(true);
       }
       
       @Override
@@ -456,10 +440,8 @@ public interface Reflect {
     new hydra.variants.TermVariant.Map(true),
     new hydra.variants.TermVariant.Maybe(true),
     new hydra.variants.TermVariant.Pair(true),
-    new hydra.variants.TermVariant.Product(true),
     new hydra.variants.TermVariant.Record(true),
     new hydra.variants.TermVariant.Set(true),
-    new hydra.variants.TermVariant.Sum(true),
     new hydra.variants.TermVariant.TypeLambda(true),
     new hydra.variants.TermVariant.TypeApplication(true),
     new hydra.variants.TermVariant.Union(true),
@@ -520,11 +502,6 @@ public interface Reflect {
       }
       
       @Override
-      public hydra.variants.TypeVariant visit(hydra.core.Type.Product ignored) {
-        return new hydra.variants.TypeVariant.Product(true);
-      }
-      
-      @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Record ignored) {
         return new hydra.variants.TypeVariant.Record(true);
       }
@@ -532,11 +509,6 @@ public interface Reflect {
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Set ignored) {
         return new hydra.variants.TypeVariant.Set(true);
-      }
-      
-      @Override
-      public hydra.variants.TypeVariant visit(hydra.core.Type.Sum ignored) {
-        return new hydra.variants.TypeVariant.Sum(true);
       }
       
       @Override
@@ -573,10 +545,8 @@ public interface Reflect {
     new hydra.variants.TypeVariant.Wrap(true),
     new hydra.variants.TypeVariant.Maybe(true),
     new hydra.variants.TypeVariant.Pair(true),
-    new hydra.variants.TypeVariant.Product(true),
     new hydra.variants.TypeVariant.Record(true),
     new hydra.variants.TypeVariant.Set(true),
-    new hydra.variants.TypeVariant.Sum(true),
     new hydra.variants.TypeVariant.Union(true),
     new hydra.variants.TypeVariant.Unit(true),
     new hydra.variants.TypeVariant.Variable(true));

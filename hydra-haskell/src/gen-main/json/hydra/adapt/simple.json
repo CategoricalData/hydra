@@ -2716,7 +2716,7 @@
                                                                   "argument": {
                                                                     "application": {
                                                                       "argument": {"variable": "graphu0"},
-                                                                      "function": {"variable": "hydra.reduction.hoistCaseStatementsInGraph"}}},
+                                                                      "function": {"variable": "hydra.hoisting.hoistCaseStatementsInGraph"}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "doHoist"},
@@ -3534,6 +3534,7 @@
       "type": null}],
   "namespace": "hydra.adapt.simple",
   "termDependencies": [
+    "hydra.hoisting",
     "hydra.inference",
     "hydra.literals",
     "hydra.reduction",

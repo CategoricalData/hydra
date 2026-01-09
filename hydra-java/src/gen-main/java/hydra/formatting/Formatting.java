@@ -120,29 +120,29 @@ public interface Formatting {
       hydra.lib.sets.Member.apply(
         (s),
         (reserved)),
-      hydra.lib.strings.Cat.apply(java.util.List.of(
+      hydra.lib.strings.Cat2.apply(
         (s),
-        "_")),
+        "_"),
       (s));
   }
   
   static String indentLines(String s) {
-    java.util.function.Function<String, String> indent = (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat.apply(java.util.List.of(
+    java.util.function.Function<String, String> indent = (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat2.apply(
       "    ",
-      (l))));
+      (l)));
     return hydra.lib.strings.Unlines.apply(hydra.lib.lists.Map.apply(
       (indent),
       hydra.lib.strings.Lines.apply((s))));
   }
   
   static String javaStyleComment(String s) {
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
-      hydra.lib.strings.Cat.apply(java.util.List.of(
-        hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat2.apply(
+      hydra.lib.strings.Cat2.apply(
+        hydra.lib.strings.Cat2.apply(
           "/**\n",
-          " * ")),
-        (s))),
-      "\n */"));
+          " * "),
+        (s)),
+      "\n */");
   }
   
   static String mapFirstLetter(java.util.function.Function<String, String> mapping, String s) {
