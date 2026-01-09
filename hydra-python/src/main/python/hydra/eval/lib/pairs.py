@@ -20,7 +20,7 @@ def bimap(first_fun: hydra.core.Term, second_fun: hydra.core.Term, pair_term: hy
                 return hydra.lib.pairs.first(p)
             def snd() -> hydra.core.Term:
                 return hydra.lib.pairs.second(p)
-            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermPair(cast(tuple[hydra.core.Term, hydra.core.Term], (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(first_fun, fst()))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(second_fun, snd()))))))))
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermPair((cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(first_fun, fst()))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(second_fun, snd())))))))
         
         case _:
             return hydra.monads.unexpected("pair value", hydra.show.core.term(pair_term))

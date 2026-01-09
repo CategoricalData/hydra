@@ -23,13 +23,13 @@ T0 = TypeVar("T0")
 def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value]:
     match fv:
         case hydra.core.FloatValueBigfloat(value=bf):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf)))
         
         case hydra.core.FloatValueFloat32(value=f):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_float32(f)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_float32(f))))
         
         case hydra.core.FloatValueFloat64(value=f2):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(f2)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(f2))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -37,31 +37,31 @@ def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value
 def encode_integer(iv: hydra.core.IntegerValue) -> Either[T0, hydra.json.model.Value]:
     match iv:
         case hydra.core.IntegerValueBigint(value=bi):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_bigint(bi)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_bigint(bi))))
         
         case hydra.core.IntegerValueInt64(value=i):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_int64(i)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_int64(i))))
         
         case hydra.core.IntegerValueUint32(value=i2):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_uint32(i2)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_uint32(i2))))
         
         case hydra.core.IntegerValueUint64(value=i3):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_uint64(i3)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_uint64(i3))))
         
         case hydra.core.IntegerValueInt8(value=i4):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int8_to_bigint(i4))))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int8_to_bigint(i4)))))
         
         case hydra.core.IntegerValueInt16(value=i5):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int16_to_bigint(i5))))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int16_to_bigint(i5)))))
         
         case hydra.core.IntegerValueInt32(value=i6):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int32_to_bigint(i6))))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int32_to_bigint(i6)))))
         
         case hydra.core.IntegerValueUint8(value=i7):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint8_to_bigint(i7))))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint8_to_bigint(i7)))))
         
         case hydra.core.IntegerValueUint16(value=i8):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint16_to_bigint(i8))))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint16_to_bigint(i8)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -69,10 +69,10 @@ def encode_integer(iv: hydra.core.IntegerValue) -> Either[T0, hydra.json.model.V
 def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value]:
     match lit:
         case hydra.core.LiteralBinary(value=b):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.binary_to_string(b)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.binary_to_string(b))))
         
         case hydra.core.LiteralBoolean(value=b2):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b2))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b2)))
         
         case hydra.core.LiteralFloat(value=f):
             return encode_float(f)
@@ -81,7 +81,7 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value
             return encode_integer(i)
         
         case hydra.core.LiteralString(value=s):
-            return cast(Either[T0, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s)))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -107,7 +107,7 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
             return hydra.lib.eithers.map((lambda vs: cast(hydra.json.model.Value, hydra.json.model.ValueArray(vs))), results())
         
         case hydra.core.TermMaybe(value=opt):
-            return hydra.lib.maybes.maybe(cast(Either[str, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda v: (encoded_maybe := (lambda : to_json(v)), hydra.lib.eithers.map((lambda encoded: cast(hydra.json.model.Value, hydra.json.model.ValueArray((encoded,)))), encoded_maybe()))[1]), opt)
+            return hydra.lib.maybes.maybe(Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull())), (lambda v: (encoded_maybe := (lambda : to_json(v)), hydra.lib.eithers.map((lambda encoded: cast(hydra.json.model.Value, hydra.json.model.ValueArray((encoded,)))), encoded_maybe()))[1]), opt)
         
         case hydra.core.TermRecord(value=r):
             def encode_field(f: hydra.core.Field) -> Either[str, tuple[str, hydra.json.model.Value]]:
@@ -115,11 +115,11 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
                 fterm = f.term
                 def encoded_field() -> Either[str, hydra.json.model.Value]:
                     return to_json(fterm)
-                return hydra.lib.eithers.map((lambda v: cast(tuple[str, hydra.json.model.Value], (fname, v))), encoded_field())
+                return hydra.lib.eithers.map((lambda v: (fname, v)), encoded_field())
             fields = r.fields
             def encoded_fields() -> Either[str, frozenlist[tuple[str, hydra.json.model.Value]]]:
                 return hydra.lib.eithers.map_list(encode_field, fields)
-            return hydra.lib.eithers.map((lambda fs: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list(fs))))), encoded_fields())
+            return hydra.lib.eithers.map((lambda fs: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(fs)))), encoded_fields())
         
         case hydra.core.TermUnion(value=inj):
             field = inj.field
@@ -127,10 +127,10 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
             fterm = field.term
             def encoded_union() -> Either[str, hydra.json.model.Value]:
                 return to_json(fterm)
-            return hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list((cast(tuple[str, hydra.json.model.Value], (fname, v)),)))))), encoded_union())
+            return hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname, v),))))), encoded_union())
         
         case hydra.core.TermUnit():
-            return cast(Either[str, hydra.json.model.Value], Right(cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.empty())))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.empty())))
         
         case hydra.core.TermWrap(value=wt):
             return to_json(wt.body)
@@ -145,7 +145,7 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
                     return to_json(k())
                 def encoded_v() -> Either[str, hydra.json.model.Value]:
                     return to_json(v())
-                return hydra.lib.eithers.either((lambda err: cast(Either[str, hydra.json.model.Value], Left(err))), (lambda ek: hydra.lib.eithers.map((lambda ev: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list((cast(tuple[str, hydra.json.model.Value], ("@key", ek)), cast(tuple[str, hydra.json.model.Value], ("@value", ev)))))))), encoded_v())), encoded_k())
+                return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ek: hydra.lib.eithers.map((lambda ev: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@key", ek), ("@value", ev)))))), encoded_v())), encoded_k())
             def entries() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return hydra.lib.eithers.map_list(encode_entry, hydra.lib.maps.to_list(m))
             return hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueArray(es))), entries())
@@ -159,10 +159,10 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
                 return to_json(first())
             def encoded_second() -> Either[str, hydra.json.model.Value]:
                 return to_json(second())
-            return hydra.lib.eithers.either((lambda err: cast(Either[str, hydra.json.model.Value], Left(err))), (lambda ef: hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list((cast(tuple[str, hydra.json.model.Value], ("@first", ef)), cast(tuple[str, hydra.json.model.Value], ("@second", es)))))))), encoded_second())), encoded_first())
+            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ef: hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@first", ef), ("@second", es)))))), encoded_second())), encoded_first())
         
         case hydra.core.TermEither(value=e):
-            return hydra.lib.eithers.either((lambda l: (encoded_l := (lambda : to_json(l)), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list((cast(tuple[str, hydra.json.model.Value], ("@left", v)),)))))), encoded_l()))[1]), (lambda r: (encoded_r := (lambda : to_json(r)), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list((cast(tuple[str, hydra.json.model.Value], ("@right", v)),)))))), encoded_r()))[1]), e)
+            return hydra.lib.eithers.either((lambda l: (encoded_l := (lambda : to_json(l)), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@left", v),))))), encoded_l()))[1]), (lambda r: (encoded_r := (lambda : to_json(r)), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@right", v),))))), encoded_r()))[1]), e)
         
         case _:
-            return cast(Either[str, hydra.json.model.Value], Left(hydra.lib.strings.cat(("unsupported term variant for JSON encoding: ", hydra.show.core.term(term)))))
+            return Left(hydra.lib.strings.cat(("unsupported term variant for JSON encoding: ", hydra.show.core.term(term))))

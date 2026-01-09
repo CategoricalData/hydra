@@ -3,10 +3,9 @@
 r"""Utilities for extracting values from JSON objects."""
 
 from __future__ import annotations
-from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.compute
 import hydra.core
 import hydra.json.model
@@ -59,19 +58,19 @@ def opt(fname: T0, m: FrozenDict[T0, T1]) -> Maybe[T1]:
     return hydra.lib.maps.lookup(fname, m)
 
 def opt_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Maybe[frozenlist[hydra.json.model.Value]]]:
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[frozenlist[hydra.json.model.Value]], Nothing())), (lambda a: hydra.lib.flows.map(cast(Callable[[frozenlist[hydra.json.model.Value]], Maybe[frozenlist[hydra.json.model.Value]]], (lambda x1: hydra.lib.maybes.pure(x1))), expect_array(a))), opt(fname, m))
+    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda a: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), expect_array(a))), opt(fname, m))
 
 def opt_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Maybe[str]]:
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[str], Nothing())), (lambda s: hydra.lib.flows.map(cast(Callable[[str], Maybe[str]], (lambda x1: hydra.lib.maybes.pure(x1))), expect_string(s))), opt(fname, m))
+    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda s: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), expect_string(s))), opt(fname, m))
 
 def require(fname: T0, m: FrozenDict[T0, T1]) -> hydra.compute.Flow[T2, T1]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("required attribute ", show_value(fname), " not found"))), (lambda value: hydra.lib.flows.pure(value)), hydra.lib.maps.lookup(fname, m))
 
 def require_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, frozenlist[hydra.json.model.Value]]:
-    return hydra.lib.flows.bind(require(fname, m), cast(Callable[[hydra.json.model.Value], hydra.compute.Flow[T1, frozenlist[hydra.json.model.Value]]], (lambda x1: expect_array(x1))))
+    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_array(x1)))
 
 def require_number(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Decimal]:
-    return hydra.lib.flows.bind(require(fname, m), cast(Callable[[hydra.json.model.Value], hydra.compute.Flow[T1, Decimal]], (lambda x1: expect_number(x1))))
+    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_number(x1)))
 
 def require_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, str]:
-    return hydra.lib.flows.bind(require(fname, m), cast(Callable[[hydra.json.model.Value], hydra.compute.Flow[T1, str]], (lambda x1: expect_string(x1))))
+    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_string(x1)))

@@ -5,7 +5,7 @@ r"""String formatting types and functions."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality
@@ -44,8 +44,8 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
     def parts() -> frozenlist[str]:
         def by_caps() -> frozenlist[str]:
             def split_on_uppercase(acc: frozenlist[frozenlist[int]], c: int) -> frozenlist[frozenlist[int]]:
-                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (lambda : (cast(frozenlist[int], ()),)), (lambda : cast(frozenlist[frozenlist[int]], ()))), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
-            return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, (cast(frozenlist[int], ()),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
+                return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (lambda : ((),)), (lambda : ())), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
+            return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, ((),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
         by_underscores = hydra.lib.strings.split_on("_", original)
         match from_:
             case hydra.util.CaseConvention.CAMEL:
@@ -120,9 +120,9 @@ def non_alnum_to_underscores(input: str) -> str:
             return hydra.lib.pairs.first(p)
         def b() -> bool:
             return hydra.lib.pairs.second(p)
-        return hydra.lib.logic.if_else(is_alnum(c), (lambda : cast(tuple[frozenlist[int], bool], (hydra.lib.lists.cons(c, s()), False))), (lambda : hydra.lib.logic.if_else(b(), (lambda : cast(tuple[frozenlist[int], bool], (s(), True))), (lambda : cast(tuple[frozenlist[int], bool], (hydra.lib.lists.cons(95, s()), True))))))
+        return hydra.lib.logic.if_else(is_alnum(c), (lambda : (hydra.lib.lists.cons(c, s()), False)), (lambda : hydra.lib.logic.if_else(b(), (lambda : (s(), True)), (lambda : (hydra.lib.lists.cons(95, s()), True)))))
     def result() -> tuple[frozenlist[int], bool]:
-        return hydra.lib.lists.foldl(replace, cast(tuple[frozenlist[int], bool], (cast(frozenlist[int], ()), False)), hydra.lib.strings.to_list(input))
+        return hydra.lib.lists.foldl(replace, ((), False), hydra.lib.strings.to_list(input))
     return hydra.lib.strings.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.first(result())))
 
 def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
@@ -142,7 +142,7 @@ def with_character_aliases(original: str) -> str:
     r"""Replace special characters with their alphanumeric aliases."""
     
     def aliases() -> FrozenDict[int, str]:
-        return cast(FrozenDict[int, str], hydra.lib.maps.from_list((cast(tuple[int, str], (32, "sp")), cast(tuple[int, str], (33, "excl")), cast(tuple[int, str], (34, "quot")), cast(tuple[int, str], (35, "num")), cast(tuple[int, str], (36, "dollar")), cast(tuple[int, str], (37, "percnt")), cast(tuple[int, str], (38, "amp")), cast(tuple[int, str], (39, "apos")), cast(tuple[int, str], (40, "lpar")), cast(tuple[int, str], (41, "rpar")), cast(tuple[int, str], (42, "ast")), cast(tuple[int, str], (43, "plus")), cast(tuple[int, str], (44, "comma")), cast(tuple[int, str], (45, "minus")), cast(tuple[int, str], (46, "period")), cast(tuple[int, str], (47, "sol")), cast(tuple[int, str], (58, "colon")), cast(tuple[int, str], (59, "semi")), cast(tuple[int, str], (60, "lt")), cast(tuple[int, str], (61, "equals")), cast(tuple[int, str], (62, "gt")), cast(tuple[int, str], (63, "quest")), cast(tuple[int, str], (64, "commat")), cast(tuple[int, str], (91, "lsqb")), cast(tuple[int, str], (92, "bsol")), cast(tuple[int, str], (93, "rsqb")), cast(tuple[int, str], (94, "circ")), cast(tuple[int, str], (95, "lowbar")), cast(tuple[int, str], (96, "grave")), cast(tuple[int, str], (123, "lcub")), cast(tuple[int, str], (124, "verbar")), cast(tuple[int, str], (125, "rcub")), cast(tuple[int, str], (126, "tilde")))))
+        return hydra.lib.maps.from_list(((32, "sp"), (33, "excl"), (34, "quot"), (35, "num"), (36, "dollar"), (37, "percnt"), (38, "amp"), (39, "apos"), (40, "lpar"), (41, "rpar"), (42, "ast"), (43, "plus"), (44, "comma"), (45, "minus"), (46, "period"), (47, "sol"), (58, "colon"), (59, "semi"), (60, "lt"), (61, "equals"), (62, "gt"), (63, "quest"), (64, "commat"), (91, "lsqb"), (92, "bsol"), (93, "rsqb"), (94, "circ"), (95, "lowbar"), (96, "grave"), (123, "lcub"), (124, "verbar"), (125, "rcub"), (126, "tilde")))
     def alias(c: int) -> frozenlist[int]:
         return hydra.lib.maybes.from_maybe(hydra.lib.lists.pure(c), hydra.lib.maybes.map(hydra.lib.strings.to_list, hydra.lib.maps.lookup(c, aliases())))
     return hydra.lib.strings.from_list(hydra.lib.lists.filter(hydra.lib.chars.is_alpha_num, hydra.lib.lists.concat(hydra.lib.lists.map(alias, hydra.lib.strings.to_list(original)))))
@@ -160,4 +160,4 @@ def wrap_line(maxlen: int, input: str) -> str:
         def suffix() -> frozenlist[int]:
             return hydra.lib.lists.reverse(hydra.lib.pairs.first(span_result()))
         return hydra.lib.logic.if_else(hydra.lib.equality.lte(hydra.lib.lists.length(rem), maxlen), (lambda : hydra.lib.lists.reverse(hydra.lib.lists.cons(rem, prev))), (lambda : hydra.lib.logic.if_else(hydra.lib.lists.null(prefix()), (lambda : helper(hydra.lib.lists.cons(trunc(), prev), hydra.lib.lists.drop(maxlen, rem))), (lambda : helper(hydra.lib.lists.cons(hydra.lib.lists.init(prefix()), prev), hydra.lib.lists.concat2(suffix(), hydra.lib.lists.drop(maxlen, rem)))))))
-    return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper(cast(frozenlist[frozenlist[int]], ()), hydra.lib.strings.to_list(input))))
+    return hydra.lib.strings.from_list(hydra.lib.lists.intercalate((10,), helper((), hydra.lib.strings.to_list(input))))

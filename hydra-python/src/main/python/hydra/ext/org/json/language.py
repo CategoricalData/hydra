@@ -3,7 +3,7 @@
 r"""Language constraints for JSON."""
 
 from __future__ import annotations
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.coders
 import hydra.core
 import hydra.lib.sets
@@ -16,13 +16,13 @@ def json_language() -> hydra.core.Type:
     r"""Language constraints for JSON."""
     
     def elimination_variants() -> frozenset[T0]:
-        return cast(frozenset[T0], hydra.lib.sets.empty())
+        return hydra.lib.sets.empty()
     def literal_variants() -> frozenset[hydra.variants.LiteralVariant]:
         return hydra.lib.sets.from_list((hydra.variants.LiteralVariant.BOOLEAN, hydra.variants.LiteralVariant.FLOAT, hydra.variants.LiteralVariant.INTEGER, hydra.variants.LiteralVariant.STRING))
     def float_types() -> frozenset[hydra.core.FloatType]:
         return hydra.lib.sets.from_list((hydra.core.FloatType.BIGFLOAT,))
     def function_variants() -> frozenset[T0]:
-        return cast(frozenset[T0], hydra.lib.sets.empty())
+        return hydra.lib.sets.empty()
     def integer_types() -> frozenset[hydra.core.IntegerType]:
         return hydra.lib.sets.from_list((hydra.core.IntegerType.BIGINT,))
     def term_variants() -> frozenset[hydra.variants.TermVariant]:
@@ -43,4 +43,4 @@ def json_language() -> hydra.core.Type:
             
             case _:
                 return True
-    return hydra.coders.Language(hydra.coders.LanguageName("hydra.ext.org.json"), hydra.coders.LanguageConstraints(cast(frozenset[hydra.variants.EliminationVariant], elimination_variants()), literal_variants(), float_types(), cast(frozenset[hydra.variants.FunctionVariant], function_variants()), integer_types(), term_variants(), type_variants(), type_predicate))
+    return hydra.coders.Language(hydra.coders.LanguageName("hydra.ext.org.json"), hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), type_predicate))

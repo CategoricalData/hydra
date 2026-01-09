@@ -46,7 +46,7 @@ def compose_type_subst_non_empty(s1: hydra.typing.TypeSubst, s2: hydra.typing.Ty
     def is_extra(k: hydra.core.Name, v: T0) -> bool:
         return hydra.lib.maybes.is_nothing(hydra.lib.maps.lookup(k, s1.value))
     def with_extra() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return hydra.lib.maps.filter_with_key(cast(Callable[[hydra.core.Name, hydra.core.Type], bool], (lambda x1, x2: is_extra(x1, x2))), s2.value)
+        return hydra.lib.maps.filter_with_key((lambda x1, x2: is_extra(x1, x2)), s2.value)
     return hydra.typing.TypeSubst(hydra.lib.maps.union(with_extra(), hydra.lib.maps.map((lambda v1: subst_in_type(s2, v1)), s1.value)))
 
 def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.core.Type:
@@ -57,7 +57,7 @@ def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -
 def id_type_subst() -> hydra.core.Type:
     r"""The identity type substitution."""
     
-    return hydra.typing.TypeSubst(cast(FrozenDict[hydra.core.Name, hydra.core.Type], hydra.lib.maps.empty()))
+    return hydra.typing.TypeSubst(hydra.lib.maps.empty())
 
 def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.core.Type:
     r"""Compose a list of type substitutions."""
@@ -75,7 +75,7 @@ def subst_in_class_constraints(subst: hydra.typing.TypeSubst, constraints: Froze
     subst_map = subst.value
     def insert_or_merge(var_name: T0, metadata: hydra.core.TypeVariableMetadata, acc: FrozenDict[T0, hydra.core.TypeVariableMetadata]) -> FrozenDict[T0, hydra.core.TypeVariableMetadata]:
         return hydra.lib.maybes.maybe(hydra.lib.maps.insert(var_name, metadata, acc), (lambda existing: (merged := (lambda : hydra.core.TypeVariableMetadata(hydra.lib.sets.union(existing.classes, metadata.classes))), hydra.lib.maps.insert(var_name, merged(), acc))[1]), hydra.lib.maps.lookup(var_name, acc))
-    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := (lambda : hydra.lib.pairs.first(pair)), metadata := (lambda : hydra.lib.pairs.second(pair)), hydra.lib.maybes.maybe(insert_or_merge(var_name(), metadata(), acc), (lambda target_type: (free_vars := (lambda : hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type))), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata(), acc2)), acc, free_vars()))[1]), hydra.lib.maps.lookup(var_name(), subst_map)))[2]), cast(FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.lib.maps.empty()), hydra.lib.maps.to_list(constraints))
+    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := (lambda : hydra.lib.pairs.first(pair)), metadata := (lambda : hydra.lib.pairs.second(pair)), hydra.lib.maybes.maybe(insert_or_merge(var_name(), metadata(), acc), (lambda target_type: (free_vars := (lambda : hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type))), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata(), acc2)), acc, free_vars()))[1]), hydra.lib.maps.lookup(var_name(), subst_map)))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
 
 def subst_in_type_scheme(subst: hydra.typing.TypeSubst, ts: hydra.core.TypeScheme) -> hydra.core.Type:
     r"""Apply a type substitution to a type scheme."""
