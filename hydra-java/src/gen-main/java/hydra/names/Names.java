@@ -41,13 +41,13 @@ public interface Names {
       hydra.lib.strings.SplitOn.apply(
         ".",
         ((ns)).value));
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
-      hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat2.apply(
+      hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Intercalate.apply(
           "/",
           (parts)),
-        ".")),
-      ((ext)).value));
+        "."),
+      ((ext)).value);
   }
   
   static hydra.core.Name qname(hydra.module.Namespace ns, String name) {
@@ -87,12 +87,12 @@ public interface Names {
   static hydra.core.Name unqualifyName(hydra.module.QualifiedName qname) {
     String prefix = hydra.lib.maybes.Maybe.apply(
       "",
-      (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat.apply(java.util.List.of(
+      (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         ((n)).value,
-        "."))),
+        ".")),
       ((qname)).namespace);
-    return new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.List.of(
+    return new hydra.core.Name(hydra.lib.strings.Cat2.apply(
       (prefix),
-      ((qname)).local)));
+      ((qname)).local));
   }
 }

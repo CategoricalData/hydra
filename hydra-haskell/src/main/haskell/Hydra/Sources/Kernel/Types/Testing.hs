@@ -41,6 +41,7 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel
       foldOverTermTestCase,
       freeVariablesTestCase,
       hoistPredicate,
+      hoistPolymorphicLetBindingsTestCase,
       hoistSubtermsTestCase,
       hoistCaseStatementsTestCase,
       termRewriter,
@@ -259,6 +260,19 @@ hoistCaseStatementsTestCase = define "HoistCaseStatementsTestCase" $
     "output">:
       doc "The expected output term with hoisted case statements"
       Core.term]
+
+hoistPolymorphicLetBindingsTestCase :: Binding
+hoistPolymorphicLetBindingsTestCase = define "HoistPolymorphicLetBindingsTestCase" $
+  doc ("A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic"
+    <> " let bindings to the top level of a let term."
+    <> " This is used for targets like Java which don't support polymorphic lambdas.") $
+  T.record [
+    "input">:
+      doc "The input let term"
+      Core.let_,
+    "output">:
+      doc "The expected output let term with polymorphic bindings hoisted to top"
+      Core.let_]
 
 termRewriter :: Binding
 termRewriter = define "TermRewriter" $
@@ -569,7 +583,10 @@ testCase = define "TestCase" $
       hoistSubtermsTestCase,
     "hoistCaseStatements">:
       doc "A hoist case statements test"
-      hoistCaseStatementsTestCase]
+      hoistCaseStatementsTestCase,
+    "hoistPolymorphicLetBindings">:
+      doc "A hoist polymorphic let bindings test"
+      hoistPolymorphicLetBindingsTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $

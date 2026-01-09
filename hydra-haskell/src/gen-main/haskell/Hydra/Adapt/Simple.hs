@@ -8,6 +8,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
@@ -240,7 +241,7 @@ dataGraphToDefinitions constraints doExpand doHoist graph nameLists = (Flows.bin
         Graph.graphTypes = (Graph.graphTypes graph),
         Graph.graphBody = (Graph.graphBody graph),
         Graph.graphPrimitives = (Graph.graphPrimitives graph),
-        Graph.graphSchema = (Graph.graphSchema graph)}))) (Flows.pure graph)) (\graphu0 -> Flows.bind (Logic.ifElse doHoist (Reduction.hoistCaseStatementsInGraph graphu0) (Flows.pure graphu0)) (\graphh -> Flows.bind (Logic.ifElse doHoist ( 
+        Graph.graphSchema = (Graph.graphSchema graph)}))) (Flows.pure graph)) (\graphu0 -> Flows.bind (Logic.ifElse doHoist (Hoisting.hoistCaseStatementsInGraph graphu0) (Flows.pure graphu0)) (\graphh -> Flows.bind (Logic.ifElse doHoist ( 
   let gterm2 = (Schemas.graphAsTerm graphh)
   in  
     let gterm3 = (Rewriting.unshadowVariables gterm2)

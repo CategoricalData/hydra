@@ -231,6 +231,21 @@ _HoistPredicate_lists = (Core.Name "lists")
 
 _HoistPredicate_nothing = (Core.Name "nothing")
 
+-- | A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic let bindings to the top level of a let term. This is used for targets like Java which don't support polymorphic lambdas.
+data HoistPolymorphicLetBindingsTestCase = 
+  HoistPolymorphicLetBindingsTestCase {
+    -- | The input let term
+    hoistPolymorphicLetBindingsTestCaseInput :: Core.Let,
+    -- | The expected output let term with polymorphic bindings hoisted to top
+    hoistPolymorphicLetBindingsTestCaseOutput :: Core.Let}
+  deriving (Eq, Ord, Read, Show)
+
+_HoistPolymorphicLetBindingsTestCase = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase")
+
+_HoistPolymorphicLetBindingsTestCase_input = (Core.Name "input")
+
+_HoistPolymorphicLetBindingsTestCase_output = (Core.Name "output")
+
 -- | A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings.
 data HoistSubtermsTestCase = 
   HoistSubtermsTestCase {
@@ -603,7 +618,9 @@ data TestCase =
   -- | A hoist subterms test
   TestCaseHoistSubterms HoistSubtermsTestCase |
   -- | A hoist case statements test
-  TestCaseHoistCaseStatements HoistCaseStatementsTestCase
+  TestCaseHoistCaseStatements HoistCaseStatementsTestCase |
+  -- | A hoist polymorphic let bindings test
+  TestCaseHoistPolymorphicLetBindings HoistPolymorphicLetBindingsTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -671,6 +688,8 @@ _TestCase_rewriteType = (Core.Name "rewriteType")
 _TestCase_hoistSubterms = (Core.Name "hoistSubterms")
 
 _TestCase_hoistCaseStatements = (Core.Name "hoistCaseStatements")
+
+_TestCase_hoistPolymorphicLetBindings = (Core.Name "hoistPolymorphicLetBindings")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 

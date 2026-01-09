@@ -631,3 +631,20 @@ hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseW
 hoistCaseStatementsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseHoistCaseStatements $ hoistCaseStatementsTestCase input output)
   nothing noTags
+
+-----------------------------------------
+-- Hoist polymorphic let bindings test case helpers
+
+testCaseHoistPolymorphicLetBindings :: TTerm HoistPolymorphicLetBindingsTestCase -> TTerm TestCase
+testCaseHoistPolymorphicLetBindings = inject _TestCase _TestCase_hoistPolymorphicLetBindings
+
+hoistPolymorphicLetBindingsTestCase :: TTerm Let -> TTerm Let -> TTerm HoistPolymorphicLetBindingsTestCase
+hoistPolymorphicLetBindingsTestCase input output = Phantoms.record _HoistPolymorphicLetBindingsTestCase [
+  _HoistPolymorphicLetBindingsTestCase_input>>: input,
+  _HoistPolymorphicLetBindingsTestCase_output>>: output]
+
+-- | Convenience function for creating hoist polymorphic let bindings test cases
+hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
+hoistPolymorphicLetBindingsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseHoistPolymorphicLetBindings $ hoistPolymorphicLetBindingsTestCase input output)
+  nothing noTags

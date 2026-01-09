@@ -270,40 +270,91 @@
                                                                       "let": {
                                                                         "bindings": [
                                                                           {
-                                                                            "name": "dataNames",
+                                                                            "name": "deannotatedTerm",
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "term"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "withNoms"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "withPrims"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "binds"},
-                                                                                            "function": {"variable": "hydra.rewriting.termDependencyNames"}}}}}}}}},
+                                                                                "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
                                                                             "type": null}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
                                                                               {
-                                                                                "name": "schemaNames",
+                                                                                "name": "dataNames",
                                                                                 "term": {
                                                                                   "application": {
-                                                                                    "argument": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                    "argument": {"variable": "term"},
                                                                                     "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "withNoms"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "withPrims"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "binds"},
+                                                                                                "function": {"variable": "hydra.rewriting.termDependencyNames"}}}}}}}}},
+                                                                                "type": null}],
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "schemaNames",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "el"},
+                                                                                                    "function": {
+                                                                                                      "function": {
+                                                                                                        "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "ts"},
+                                                                                                                  "function": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"literal": {"boolean": true}},
+                                                                                                                  "function": {"variable": "hydra.rewriting.typeDependencyNames"}}}}},
+                                                                                                          "domain": null,
+                                                                                                          "parameter": "ts"}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "withSchema"},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                                                    "type": null}],
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "argument": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "el"},
-                                                                                                "function": {
-                                                                                                  "function": {
-                                                                                                    "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                            "function": {
+                                                                                                "argument": {"list": [{"variable": "dataNames"}, {"variable": "schemaNames"}]},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "function": {
@@ -312,92 +363,111 @@
                                                                                                         "application": {
                                                                                                           "argument": {
                                                                                                             "application": {
-                                                                                                              "argument": {"variable": "ts"},
-                                                                                                              "function": {
-                                                                                                                "function": {
-                                                                                                                  "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
-                                                                                                          "function": {
-                                                                                                            "application": {
-                                                                                                              "argument": {"literal": {"boolean": true}},
-                                                                                                              "function": {"variable": "hydra.rewriting.typeDependencyNames"}}}}},
+                                                                                                              "argument": {
+                                                                                                                "list": [
+                                                                                                                  {"variable": "dataNames"},
+                                                                                                                  {"variable": "schemaNames"},
+                                                                                                                  {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "decodedTerm"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "withNoms"},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "withPrims"},
+                                                                                                                              "function": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {"variable": "binds"},
+                                                                                                                                  "function": {"variable": "hydra.rewriting.termDependencyNames"}}}}}}}}}]},
+                                                                                                              "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
                                                                                                       "domain": null,
-                                                                                                      "parameter": "ts"}}},
+                                                                                                      "parameter": "decodedTerm"}}},
                                                                                                 "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"function": {"primitive": "hydra.lib.sets.empty"}},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "withSchema"},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                                                                "type": null}],
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"list": [{"variable": "dataNames"}, {"variable": "schemaNames"}]},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}},
-                                                                                    "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "function": {
-                                                                                            "lambda": {
-                                                                                              "body": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {
-                                                                                                        "list": [
-                                                                                                          {"variable": "dataNames"},
-                                                                                                          {"variable": "schemaNames"},
-                                                                                                          {
-                                                                                                            "application": {
-                                                                                                              "argument": {"variable": "typ"},
-                                                                                                              "function": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"literal": {"boolean": true}},
-                                                                                                                  "function": {"variable": "hydra.rewriting.typeDependencyNames"}}}}}]},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                                                              "domain": null,
-                                                                                              "parameter": "typ"}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "term"},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "term"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "cx"},
+                                                                                                                    "function": {"variable": "hydra.decode.core.term"}}}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"function": {"elimination": {"wrap": "hydra.util.DecodingError"}}},
+                                                                                                                "function": {"variable": "hydra.monads.eitherToFlow"}}}}},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "cx"},
-                                                                                                            "function": {"variable": "hydra.decode.core.type"}}}}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"function": {"elimination": {"wrap": "hydra.util.DecodingError"}}},
-                                                                                                        "function": {"variable": "hydra.monads.eitherToFlow"}}}}},
-                                                                                                "function": {
+                                                                                                            "argument": {"literal": {"string": "dependency namespace (term)"}},
+                                                                                                            "function": {"variable": "hydra.monads.withTrace"}}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {"literal": {"string": "dependency namespace"}},
-                                                                                                    "function": {"variable": "hydra.monads.withTrace"}}}}},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                                    "argument": {"variable": "deannotatedTerm"},
+                                                                                                    "function": {"variable": "hydra.schemas.isEncodedTerm"}}},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "list": [
+                                                                                                              {"variable": "dataNames"},
+                                                                                                              {"variable": "schemaNames"},
+                                                                                                              {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "typ"},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"literal": {"boolean": true}},
+                                                                                                                      "function": {"variable": "hydra.rewriting.typeDependencyNames"}}}}}]},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                                                                  "domain": null,
+                                                                                                  "parameter": "typ"}}},
+                                                                                            "function": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "term"},
-                                                                                                "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
-                                                                                            "function": {"variable": "hydra.schemas.isEncodedType"}}},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "term"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "cx"},
+                                                                                                                "function": {"variable": "hydra.decode.core.type"}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"function": {"elimination": {"wrap": "hydra.util.DecodingError"}}},
+                                                                                                            "function": {"variable": "hydra.monads.eitherToFlow"}}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"literal": {"string": "dependency namespace (type)"}},
+                                                                                                        "function": {"variable": "hydra.monads.withTrace"}}}}},
+                                                                                                "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "deannotatedTerm"},
+                                                                                                "function": {"variable": "hydra.schemas.isEncodedType"}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}}}},
                                                                 "domain": null,
                                                                 "parameter": "el"}}},
                                                           "type": null}],
@@ -2398,6 +2468,74 @@
                             "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
                 "domain": null,
                 "parameter": "scheme"}}}}},
+      "type": null},
+    {
+      "name": "hydra.schemas.isEncodedTerm",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Determines whether a given term is an encoded term (meta-level term)"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "t"},
+                        "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "application",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "a"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "function", "typeName": "hydra.core.Application"}}}}}},
+                                          "function": {"variable": "hydra.schemas.isEncodedTerm"}}},
+                                      "domain": null,
+                                      "parameter": "a"}}}},
+                              {
+                                "name": "union",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.Injection"}}}}}},
+                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "hydra.core.Term"}},
+                                              "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                      "domain": null,
+                                      "parameter": "i"}}}}],
+                            "default": [{"literal": {"boolean": false}}],
+                            "typeName": "hydra.core.Term"}}}}}},
+                "domain": null,
+                "parameter": "t"}}}}},
       "type": null},
     {
       "name": "hydra.schemas.isEncodedType",

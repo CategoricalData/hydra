@@ -49,6 +49,7 @@ import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Test.Hoisting as Hoisting
 import qualified Hydra.Sources.Test.Reduction as Reduction
 import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
@@ -95,6 +96,7 @@ otherPairs = [
   (CheckingAll.ns, CheckingAll.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
+  (Hoisting.ns, Hoisting.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
   (JsonCoder.ns, JsonCoder.allTests),
   (JsonParser.ns, JsonParser.allTests),
@@ -117,7 +119,7 @@ testSuiteModules =
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
    Math.module_, Maybes.module_, Pairs.module_, Sets.module_, Strings.module_,
    -- Other tests
-   Annotations.module_, EtaExpansion.module_, Formatting.module_,
+   Annotations.module_, EtaExpansion.module_, Formatting.module_, Hoisting.module_,
    JsonCoder.module_, JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_,
    Monads.module_, Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    -- Checking tests (including sub-modules)

@@ -21,7 +21,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 ### Refactoring
 
-- **[Refactoring Hydra namespaces](refactoring-namespaces.md)** - How to rename or move a Hydra namespace across all implementations
+- **[Refactoring the Hydra kernel](refactoring.md)** - How to create, rename, or delete kernel elements or modules, and propagate the change across all implementations
 
 ### Development Workflow
 

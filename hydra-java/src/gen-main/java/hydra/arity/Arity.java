@@ -46,8 +46,8 @@ public interface Arity {
       }
       
       @Override
-      public Integer visit(hydra.core.Term.Function v12) {
-        return hydra.arity.Arity.functionArity(((v12)).value);
+      public Integer visit(hydra.core.Term.Function v1) {
+        return hydra.arity.Arity.functionArity(((v1)).value);
       }
     });
   }
@@ -78,13 +78,13 @@ public interface Arity {
       public Integer visit(hydra.core.Type.Function f) {
         return hydra.lib.math.Add.apply(
           1,
-          hydra.arity.Arity.typeArity((((f)).value).codomain));
+          ((java.util.function.Function<hydra.core.FunctionType, Integer>) (arg_ -> hydra.arity.Arity.typeArity(((arg_)).codomain))).apply(((f)).value));
       }
     });
   }
   
-  static Integer typeSchemeArity(hydra.core.TypeScheme ts) {
-    return hydra.arity.Arity.typeArity(((ts)).type);
+  static Integer typeSchemeArity(hydra.core.TypeScheme arg_) {
+    return hydra.arity.Arity.typeArity(((arg_)).type);
   }
   
   static java.util.List<hydra.core.Type> uncurryType(hydra.core.Type t) {
@@ -113,7 +113,7 @@ public interface Arity {
       public java.util.List<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.lists.Cons.apply(
           (((ft)).value).domain,
-          hydra.arity.Arity.uncurryType((((ft)).value).codomain));
+          ((java.util.function.Function<hydra.core.FunctionType, java.util.List<hydra.core.Type>>) (arg_ -> hydra.arity.Arity.uncurryType(((arg_)).codomain))).apply(((ft)).value));
       }
     });
   }
