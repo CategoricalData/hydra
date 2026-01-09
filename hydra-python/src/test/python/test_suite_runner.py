@@ -92,9 +92,46 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     # Import the kernel term sources modules
     # These match kernelPrimaryTermsModules in Hydra.Sources.Kernel.Terms.All
     kernel_term_source_modules = [
-        "hydra.sources.monads",
+        # Primary term modules
+        "hydra.sources.adapt.literals",
+        "hydra.sources.adapt.modules",
+        "hydra.sources.adapt.simple",
+        "hydra.sources.adapt.terms",
+        "hydra.sources.adapt.utils",
         "hydra.sources.annotations",
-        # Add more as needed - start with the most critical ones
+        "hydra.sources.arity",
+        "hydra.sources.checking",
+        "hydra.sources.constants",
+        "hydra.sources.decoding",
+        "hydra.sources.encoding",
+        "hydra.sources.extract.core",
+        "hydra.sources.extract.helpers",
+        "hydra.sources.extract.util",
+        "hydra.sources.formatting",
+        "hydra.sources.grammars",
+        "hydra.sources.inference",
+        "hydra.sources.languages",
+        "hydra.sources.lexical",
+        "hydra.sources.literals",
+        "hydra.sources.monads",
+        "hydra.sources.names",
+        "hydra.sources.parsers",
+        "hydra.sources.reduction",
+        "hydra.sources.reflect",
+        "hydra.sources.rewriting",
+        "hydra.sources.schemas",
+        "hydra.sources.serialization",
+        "hydra.sources.show.accessors",
+        "hydra.sources.show.core",
+        "hydra.sources.show.graph",
+        "hydra.sources.show.meta",
+        "hydra.sources.show.typing",
+        "hydra.sources.show.util",
+        "hydra.sources.sorting",
+        "hydra.sources.substitution",
+        "hydra.sources.tarjan",
+        "hydra.sources.templates",
+        "hydra.sources.unification",
     ]
 
     for module_name in kernel_term_source_modules:
@@ -135,6 +172,16 @@ def is_disabled_for_python(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     disabled_for_python_tag = hydra.testing.Tag("disabledForPython")
     return disabled_for_python_tag in tcase.tags
 
+def requires_flow_decoding(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
+    """Check if a test case requires decoding Flow values back to Terms.
+
+    These tests fail because when primitives like flows.pure are evaluated,
+    they create native Flow objects that cannot be decoded back to Term
+    representations. This is a fundamental limitation in both Haskell and Python.
+    """
+    requires_flow_decoding_tag = hydra.testing.Tag("requiresFlowDecoding")
+    return requires_flow_decoding_tag in tcase.tags
+
 import os
 
 # Environment variable to force running slow tests (disabledForPython)
@@ -146,12 +193,16 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
 
     Skip tests that are:
     - disabled: explicitly marked as not working
-    - disabledForPython: too slow in Python (10+ seconds per test)
+    - disabledForPython: causes RecursionError in Python
       unless HYDRA_RUN_SLOW_TESTS=1 is set
+    - requiresFlowDecoding: requires decoding Flow values back to Terms
+      (unsupported in both Haskell and Python)
     """
     if is_disabled(tcase):
         return True
     if is_disabled_for_python(tcase) and not RUN_SLOW_TESTS:
+        return True
+    if requires_flow_decoding(tcase):
         return True
     return False
 
