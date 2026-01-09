@@ -20,7 +20,7 @@ import hydra.extract.core
 import hydra.extract.helpers
 import hydra.formatting
 import hydra.graph
-import hydra.json
+import hydra.json.model
 import hydra.lexical
 import hydra.lib.chars
 import hydra.lib.eithers

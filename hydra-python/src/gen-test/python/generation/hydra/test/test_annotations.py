@@ -20,7 +20,7 @@ import hydra.extract.core
 import hydra.extract.helpers
 import hydra.formatting
 import hydra.graph
-import hydra.json
+import hydra.json.model
 import hydra.lexical
 import hydra.lib.chars
 import hydra.lib.eithers
@@ -65,6 +65,30 @@ def test_arbitrary_annotations__set_single_annotation__3():
 
     assert (hydra.annotations.set_term_annotation(hydra.core.Name("x"), Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("hello"))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))), FrozenDict({
   hydra.core.Name("x"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("hello"))))})))))
+
+def test_arbitrary_annotations__get_existing_annotation__1():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("k1"), hydra.annotations.set_term_annotation(hydra.core.Name("k1"), Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("value"))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42))))))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("value"))))))
+
+def test_arbitrary_annotations__get_existing_annotation__2():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("foo"), hydra.annotations.set_term_annotation(hydra.core.Name("foo"), Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(""))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99))))))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(""))))))
+
+def test_arbitrary_annotations__get_existing_annotation__3():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("key"), hydra.annotations.set_term_annotation(hydra.core.Name("key"), Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(123))))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test"))))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(123))))))))
+
+def test_arbitrary_annotations__get_missing_annotation__1():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("k1"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(42)))))))) == (Nothing())
+
+def test_arbitrary_annotations__get_missing_annotation__2():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("nonexistent"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("hello")))))) == (Nothing())
+
+def test_arbitrary_annotations__get_missing_annotation__3():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("k1"), hydra.annotations.set_term_annotation(hydra.core.Name("k2"), Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42))))))))) == (Nothing())
 
 def test_arbitrary_annotations__set_multiple_annotations__1():
 
@@ -128,6 +152,30 @@ def test_descriptions__set_description__3():
     assert (hydra.annotations.set_term_description(Just("A longer description with spaces"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), FrozenDict({
   hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("A longer description with spaces"))))})))))
 
+def test_descriptions__get_existing_description__1():
+
+    assert (hydra.annotations.get_term_description(hydra.annotations.set_term_description(Just("hello"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Just("hello")), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
+def test_descriptions__get_existing_description__2():
+
+    assert (hydra.annotations.get_term_description(hydra.annotations.set_term_description(Just(""), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test")))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Just("")), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
+def test_descriptions__get_existing_description__3():
+
+    assert (hydra.annotations.get_term_description(hydra.annotations.set_term_description(Just("desc"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False)))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Just("desc")), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
+def test_descriptions__get_missing_description__1():
+
+    assert (hydra.annotations.get_term_description(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(42))))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Nothing()), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
+def test_descriptions__get_missing_description__2():
+
+    assert (hydra.annotations.get_term_description(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("no description here"))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Nothing()), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
+def test_descriptions__get_missing_description__3():
+
+    assert (hydra.annotations.get_term_description(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0))))))).value(hydra.lexical.empty_graph, hydra.monads.empty_trace)) == (hydra.compute.FlowState(Just(Nothing()), hydra.lexical.empty_graph, hydra.monads.empty_trace))
+
 def test_descriptions__outer_description_overrides_inner__1():
 
     assert (hydra.annotations.set_term_description(Just("outer"), hydra.annotations.set_term_description(Just("inner"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("bar"))))))) == (cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("bar")))), FrozenDict({
@@ -145,3 +193,40 @@ def test_descriptions__unset_description__1():
 def test_descriptions__unset_description__2():
 
     assert (hydra.annotations.set_term_description(Nothing(), hydra.annotations.set_term_description(Just("to be removed"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test"))))))) == (cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test")))))
+
+# layered annotations
+
+def test_layered_annotations__get_annotation_from_unannotated_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("one"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))))) == (Nothing())
+
+def test_layered_annotations__get_annotation_from_singly_annotated_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("one"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))})))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))))
+
+def test_layered_annotations__get_inner_annotation_from_doubly_annotated_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("one"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))})))), FrozenDict({
+  hydra.core.Name("two"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))})))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))))
+
+def test_layered_annotations__get_outer_annotation_from_doubly_annotated_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("two"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))})))), FrozenDict({
+  hydra.core.Name("two"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))})))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))))
+
+def test_layered_annotations__get_non_overridden_annotation_from_triply_annotated_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("two"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))})))), FrozenDict({
+  hydra.core.Name("two"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))})))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99))))))})))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))))
+
+def test_layered_annotations__outer_annotation_overrides_inner_in_layered_term():
+
+    assert (hydra.annotations.get_term_annotation(hydra.core.Name("one"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42)))))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(1))))))})))), FrozenDict({
+  hydra.core.Name("two"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(2))))))})))), FrozenDict({
+  hydra.core.Name("one"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99))))))})))))) == (Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(99))))))))
