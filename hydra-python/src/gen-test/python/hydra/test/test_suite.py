@@ -3,8 +3,7 @@
 r"""Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass."""
 
 from __future__ import annotations
-from hydra.dsl.python import Maybe, Nothing, frozenlist
-from typing import cast
+from hydra.dsl.python import Nothing
 import hydra.core
 import hydra.test.annotations
 import hydra.test.checking.all
@@ -13,6 +12,7 @@ import hydra.test.formatting
 import hydra.test.inference.all
 import hydra.test.json.coder
 import hydra.test.json.parser
+import hydra.test.json.roundtrip
 import hydra.test.json.writer
 import hydra.test.lib.chars
 import hydra.test.lib.eithers
@@ -37,4 +37,4 @@ import hydra.testing
 def all_tests() -> hydra.testing.TestGroup:
     r"""The group of all common tests."""
     
-    return hydra.testing.TestGroup("common", cast(Maybe[str], Nothing()), (hydra.test.lib.chars.all_tests(), hydra.test.lib.eithers.all_tests(), hydra.test.lib.equality.all_tests(), hydra.test.lib.flows.all_tests(), hydra.test.lib.lists.all_tests(), hydra.test.lib.literals.all_tests(), hydra.test.lib.logic.all_tests(), hydra.test.lib.maps.all_tests(), hydra.test.lib.math.all_tests(), hydra.test.lib.maybes.all_tests(), hydra.test.lib.pairs.all_tests(), hydra.test.lib.sets.all_tests(), hydra.test.lib.strings.all_tests(), hydra.test.annotations.all_tests(), hydra.test.checking.all.all_tests(), hydra.test.eta_expansion.all_tests(), hydra.test.formatting.all_tests(), hydra.test.inference.all.all_tests(), hydra.test.json.coder.all_tests(), hydra.test.json.parser.all_tests(), hydra.test.json.writer.all_tests(), hydra.test.monads.all_tests(), hydra.test.reduction.all_tests(), hydra.test.rewriting.all_tests(), hydra.test.serialization.all_tests(), hydra.test.sorting.all_tests()), cast(frozenlist[hydra.testing.TestCaseWithMetadata], ()))
+    return hydra.testing.TestGroup("common", Nothing(), (hydra.test.lib.chars.all_tests(), hydra.test.lib.eithers.all_tests(), hydra.test.lib.equality.all_tests(), hydra.test.lib.flows.all_tests(), hydra.test.lib.lists.all_tests(), hydra.test.lib.literals.all_tests(), hydra.test.lib.logic.all_tests(), hydra.test.lib.maps.all_tests(), hydra.test.lib.math.all_tests(), hydra.test.lib.maybes.all_tests(), hydra.test.lib.pairs.all_tests(), hydra.test.lib.sets.all_tests(), hydra.test.lib.strings.all_tests(), hydra.test.annotations.all_tests(), hydra.test.checking.all.all_tests(), hydra.test.eta_expansion.all_tests(), hydra.test.formatting.all_tests(), hydra.test.inference.all.all_tests(), hydra.test.json.coder.all_tests(), hydra.test.json.parser.all_tests(), hydra.test.json.roundtrip.all_tests(), hydra.test.json.writer.all_tests(), hydra.test.monads.all_tests(), hydra.test.reduction.all_tests(), hydra.test.rewriting.all_tests(), hydra.test.serialization.all_tests(), hydra.test.sorting.all_tests()), ())

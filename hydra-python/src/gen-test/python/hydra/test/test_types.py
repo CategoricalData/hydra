@@ -3,7 +3,6 @@
 r"""Type definitions for the test suite."""
 
 from __future__ import annotations
-from hydra.dsl.python import frozenlist
 from typing import cast
 import hydra.core
 
@@ -142,4 +141,4 @@ test_type_union_polymorphic_recursive = cast(hydra.core.Type, hydra.core.TypeFor
 test_type_unit_name = hydra.core.Name("Unit")
 
 def test_type_unit() -> hydra.core.Type:
-    return cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_unit_name, cast(frozenlist[hydra.core.FieldType], ()))))
+    return cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_unit_name, ())))
