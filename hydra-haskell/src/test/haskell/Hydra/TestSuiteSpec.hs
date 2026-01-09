@@ -37,7 +37,7 @@ import qualified Data.Maybe as Y
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
 
 defaultTestRunner :: TestRunner
-defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isUsesKernelRefs tcase
+defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequiresFlowDecoding tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseAlphaConversion (AlphaConversionTestCase term oldVar newVar result) ->

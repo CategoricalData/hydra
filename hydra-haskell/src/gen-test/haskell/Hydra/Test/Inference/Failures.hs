@@ -2067,8 +2067,7 @@ complexConstraintFailureTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForPython"]}]},
+          Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "Function composition failures",
       Testing.testGroupDescription = Nothing,
@@ -2127,8 +2126,7 @@ complexConstraintFailureTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "bad"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabledForPython"]},
+          Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "#2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInferenceFailure (Testing.InferenceFailureTestCase {

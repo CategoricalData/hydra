@@ -26,6 +26,7 @@ import Hydra.Kernel hiding (
   graphToTypeContext,
   instantiateType,
   instantiateTypeScheme,
+  isEncodedTerm,
   isEncodedType,
   isEnumRowType,
   isEnumType,
@@ -160,6 +161,7 @@ module_ = Module ns elements
       toBinding graphToTypeContext,
       toBinding instantiateType,
       toBinding instantiateTypeScheme,
+      toBinding isEncodedTerm,
       toBinding isEncodedType,
       toBinding isEnumRowType,
       toBinding isEnumType,
@@ -224,18 +226,26 @@ dependencyNamespaces = define "dependencyNamespaces" $
   "cx" <<~ Monads.getState $
   "depNames" <~ ("el" ~>
     "term" <~ Core.bindingTerm (var "el") $
+    "deannotatedTerm" <~ Rewriting.deannotateTerm @@ var "term" $
     "dataNames" <~ Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
       (Maybes.maybe Sets.empty
         ("ts" ~> Rewriting.typeDependencyNames @@ true @@ Core.typeSchemeType (var "ts"))
         (Core.bindingType (var "el")))
       Sets.empty $
-    Logic.ifElse (isEncodedType @@ (Rewriting.deannotateTerm @@ var "term"))
-      (Flows.bind (trace (string "dependency namespace") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "term")) (
+    -- Handle encoded types: decode as Type and extract type dependency names
+    Logic.ifElse (isEncodedType @@ var "deannotatedTerm")
+      (Flows.bind (trace (string "dependency namespace (type)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "term")) (
         "typ" ~> Flows.pure (Sets.unions (list [
           var "dataNames", var "schemaNames",
           Rewriting.typeDependencyNames @@ true @@ var "typ"]))))
-      (Flows.pure (Sets.unions (list [var "dataNames", var "schemaNames"])))) $
+      -- Handle encoded terms: decode as Term and extract term dependency names
+      (Logic.ifElse (isEncodedTerm @@ var "deannotatedTerm")
+        (Flows.bind (trace (string "dependency namespace (term)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Term @@ var "cx" @@ var "term")) (
+          "decodedTerm" ~> Flows.pure (Sets.unions (list [
+            var "dataNames", var "schemaNames",
+            Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))))
+        (Flows.pure (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
   Flows.bind (Flows.mapList (var "depNames") (var "els")) (
     "namesList" ~> Flows.pure (Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
       Sets.toList (Sets.delete (Constants.placeholderName) (Sets.unions (var "namesList"))))))))
@@ -480,6 +490,15 @@ isEncodedType = define "isEncodedType" $
       isEncodedType @@ (Core.applicationFunction (var "a")),
     _Term_union>>: "i" ~>
       Equality.equal (string (unName _Type)) (Core.unName (Core.injectionTypeName (var "i")))]
+
+isEncodedTerm :: TBinding (Term -> Bool)
+isEncodedTerm = define "isEncodedTerm" $
+  doc "Determines whether a given term is an encoded term (meta-level term)" $
+  "t" ~> cases _Term (Rewriting.deannotateTerm @@ var "t") (Just false) [
+    _Term_application>>: "a" ~>
+      isEncodedTerm @@ (Core.applicationFunction (var "a")),
+    _Term_union>>: "i" ~>
+      Equality.equal (string (unName _Term)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEnumType :: TBinding (Type -> Bool)
 isEnumType = define "isEnumType" $

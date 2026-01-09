@@ -1994,8 +1994,7 @@ recordProjectionsWithMutualRecursionTests = Testing.TestGroup {
               Core.applicationTypeFunction = (Core.TypeVariable TestTypes.testTypeBuddyListBName),
               Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = [
-        Testing.Tag "disabledForPython"]}]}
+      Testing.testCaseWithMetadataTags = []}]}
 
 unionsTests :: Testing.TestGroup
 unionsTests = Testing.TestGroup {
@@ -4654,8 +4653,7 @@ multiParameterPolymorphicCaseStatementsTests = Testing.TestGroup {
               Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
             Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = [
-        Testing.Tag "disabledForPython"]}]}
+      Testing.testCaseWithMetadataTags = []}]}
 
 higherOrderUnionEliminationsTests :: Testing.TestGroup
 higherOrderUnionEliminationsTests = Testing.TestGroup {
@@ -5570,8 +5568,7 @@ multiParameterPolymorphicWrappersTests = Testing.TestGroup {
                 Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
               Core.applicationTypeArgument = (Core.TypeList (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = [
-        Testing.Tag "disabledForPython"]}]}
+      Testing.testCaseWithMetadataTags = []}]}
 
 wrapEliminationsTests :: Testing.TestGroup
 wrapEliminationsTests = Testing.TestGroup {
@@ -6049,8 +6046,7 @@ multiParameterPolymorphicUnwrappersTests = Testing.TestGroup {
                 Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))}))),
               Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t1")))}))}))}))})),
       Testing.testCaseWithMetadataDescription = Nothing,
-      Testing.testCaseWithMetadataTags = [
-        Testing.Tag "disabledForPython"]}]}
+      Testing.testCaseWithMetadataTags = []}]}
 
 chainedUnwrappingTests :: Testing.TestGroup
 chainedUnwrappingTests = Testing.TestGroup {

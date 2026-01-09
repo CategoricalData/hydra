@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Meta.Core as Core
 import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 import qualified Data.Map as M
@@ -21,16 +22,18 @@ import qualified Data.Map as M
 testTrace :: TTerm Term
 testTrace = metaref Monads.emptyTrace
 
--- | Test state for Flow-based tests (using unit for Show instance compatibility)
+-- | Test state for Flow-based tests (using Graph as the state type, since
+-- functions like getTermDescription return Flow Graph ...)
+-- Note: the type is TTerm Term because at the meta level, everything is a Term
 testState :: TTerm Term
-testState = unit
+testState = metaref Lexical.emptyGraph
 
 
 ns :: Namespace
 ns = Namespace "hydra.test.annotations"
 
 module_ :: Module
-module_ = Module ns elements [Annotations.ns] [] $
+module_ = Module ns elements [Annotations.ns, Lexical.ns] [] $
     Just "Test cases for hydra.annotations functions"
   where
     elements = [Phantoms.toBinding allTests]
@@ -53,27 +56,27 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
 
   -- Retrieve a single value (multiple cases)
   -- Note: These tests require the interpreter because getTermAnnotation uses pattern matching on Term
-  evalCaseWithTags "get existing annotation #1" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing annotation #1" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "value") @@ int32Term 42))
     (optional $ just $ stringTerm "value"),
-  evalCaseWithTags "get existing annotation #2" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing annotation #2" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "foo"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "foo" @@ (optional $ just $ stringTerm "") @@ int32Term 99))
     (optional $ just $ stringTerm ""),
-  evalCaseWithTags "get existing annotation #3" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing annotation #3" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "key"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 123) @@ stringTerm "test"))
     (optional $ just $ int32Term 123),
 
   -- Retrieve a null value (annotation not present) - multiple cases
-  evalCaseWithTags "get missing annotation #1" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing annotation #1" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1" @@ int16Term 42)
     (optional nothing),
-  evalCaseWithTags "get missing annotation #2" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing annotation #2" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "nonexistent" @@ stringTerm "hello")
     (optional nothing),
-  evalCaseWithTags "get missing annotation #3" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing annotation #3" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "k1"
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 1) @@ int32Term 42))
     (optional nothing),
@@ -145,32 +148,32 @@ descriptionTests = subgroup "descriptions" [
 
   -- Get existing description (returns Flow Graph (Maybe String))
   -- Note: These tests require the interpreter because getTermDescription uses Flow and pattern matching
-  evalCaseWithTags "get existing description #1" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing description #1" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "hello") @@ int32Term 42))
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional $ just $ string "hello")) testState testTrace),
-  evalCaseWithTags "get existing description #2" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing description #2" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ stringTerm "test"))
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional $ just $ string "")) testState testTrace),
-  evalCaseWithTags "get existing description #3" [tag_usesKernelRefs]
+  evalCaseWithTags "get existing description #3" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "desc") @@ booleanTerm False))
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional $ just $ string "desc")) testState testTrace),
 
   -- Get missing description (no description annotation present)
-  evalCaseWithTags "get missing description #1" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing description #1" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription @@ int16Term 42)
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional nothing)) testState testTrace),
-  evalCaseWithTags "get missing description #2" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing description #2" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription @@ stringTerm "no description here")
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional nothing)) testState testTrace),
-  evalCaseWithTags "get missing description #3" [tag_usesKernelRefs]
+  evalCaseWithTags "get missing description #3" [tag_requiresFlowDecoding]
     (unFlowTerm @@ (metaref Annotations.getTermDescription @@ int32Term 0)
       @@ testState @@ testTrace)
     (flowStateTerm (optional $ just $ (optional nothing)) testState testTrace),
@@ -200,23 +203,23 @@ descriptionTests = subgroup "descriptions" [
 layeredAnnotationTests :: TTerm TestGroup
 layeredAnnotationTests = subgroup "layered annotations" [
   -- Annotations at different levels, with different keys, are all available
-  evalCaseWithTags "get annotation from unannotated term" [tag_usesKernelRefs]
+  evalCaseWithTags "get annotation from unannotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one" @@ int32Term 42)
     (optional nothing),
 
-  evalCaseWithTags "get annotation from singly annotated term" [tag_usesKernelRefs]
+  evalCaseWithTags "get annotation from singly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1)))
     (optional $ just $ int32Term 1),
 
-  evalCaseWithTags "get inner annotation from doubly annotated term" [tag_usesKernelRefs]
+  evalCaseWithTags "get inner annotation from doubly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
            (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
            $ MetaTerms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
     (optional $ just $ int32Term 1),
 
-  evalCaseWithTags "get outer annotation from doubly annotated term" [tag_usesKernelRefs]
+  evalCaseWithTags "get outer annotation from doubly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
            (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
@@ -224,7 +227,7 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (optional $ just $ int32Term 2),
 
   -- Non-overridden annotation still accessible in triply annotated term
-  evalCaseWithTags "get non-overridden annotation from triply annotated term" [tag_usesKernelRefs]
+  evalCaseWithTags "get non-overridden annotation from triply annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
            (annotatedTerm
@@ -234,7 +237,7 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (optional $ just $ int32Term 2),
 
   -- Outer annotations override inner ones
-  evalCaseWithTags "outer annotation overrides inner in layered term" [tag_usesKernelRefs]
+  evalCaseWithTags "outer annotation overrides inner in layered term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
            (annotatedTerm

@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.literals"},ModuleName {unModuleName = "Literals"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.literals"},ModuleName {unModuleName = "Literals"})]
+-- [(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.lib.literals"},ModuleName {unModuleName = "Literals"})]
 
 module Generation.Hydra.Test.Lib.LiteralsSpec where
 
@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Literals as Literals
 
 spec :: H.Spec

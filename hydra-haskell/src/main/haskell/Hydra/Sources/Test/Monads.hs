@@ -67,7 +67,7 @@ traceWithMessages msgs = traceTerm
 -- Tests that withTrace annotations are properly recorded and errors include the trace context
 errorTraceTests :: TTerm TestGroup
 errorTraceTests = subgroup "error traces" [
-  evalCase "Error traces are in the right order"
+  evalCaseWithTags "Error traces are in the right order" [tag_disabledForPython]  -- Causes RecursionError in Python due to term explosion during beta reduction
     -- Input: withTrace "one" $ withTrace "two" $ fail "oops"
     (unFlowTerm
       @@ (metaref Monads.withTrace @@ string "one"

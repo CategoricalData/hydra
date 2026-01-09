@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.formatting"},ModuleName {unModuleName = "Formatting"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.formatting"},ModuleName {unModuleName = "Formatting"}),(Namespace {unNamespace = "hydra.util"},ModuleName {unModuleName = "Util"})]
+-- [(Namespace {unNamespace = "hydra.formatting"},ModuleName {unModuleName = "Formatting"}),(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.util"},ModuleName {unModuleName = "Util"})]
 
 module Generation.Hydra.Test.FormattingSpec where
 
@@ -13,6 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Util as Util
 
 spec :: H.Spec

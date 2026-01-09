@@ -66,15 +66,20 @@ dependencyNamespaces binds withPrims withNoms withSchema els = (Flows.bind Monad
   let depNames = (\el ->  
           let term = (Core.bindingTerm el)
           in  
-            let dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
+            let deannotatedTerm = (Rewriting.deannotateTerm term)
             in  
-              let schemaNames = (Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Core.bindingType el)) Sets.empty)
-              in (Logic.ifElse (isEncodedType (Rewriting.deannotateTerm term)) (Flows.bind (Monads.withTrace "dependency namespace" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx term))) (\typ -> Flows.pure (Sets.unions [
-                dataNames,
-                schemaNames,
-                (Rewriting.typeDependencyNames True typ)]))) (Flows.pure (Sets.unions [
-                dataNames,
-                schemaNames]))))
+              let dataNames = (Rewriting.termDependencyNames binds withPrims withNoms term)
+              in  
+                let schemaNames = (Logic.ifElse withSchema (Maybes.maybe Sets.empty (\ts -> Rewriting.typeDependencyNames True (Core.typeSchemeType ts)) (Core.bindingType el)) Sets.empty)
+                in (Logic.ifElse (isEncodedType deannotatedTerm) (Flows.bind (Monads.withTrace "dependency namespace (type)" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx term))) (\typ -> Flows.pure (Sets.unions [
+                  dataNames,
+                  schemaNames,
+                  (Rewriting.typeDependencyNames True typ)]))) (Logic.ifElse (isEncodedTerm deannotatedTerm) (Flows.bind (Monads.withTrace "dependency namespace (term)" (Monads.eitherToFlow Util.unDecodingError (Core_.term cx term))) (\decodedTerm -> Flows.pure (Sets.unions [
+                  dataNames,
+                  schemaNames,
+                  (Rewriting.termDependencyNames binds withPrims withNoms decodedTerm)]))) (Flows.pure (Sets.unions [
+                  dataNames,
+                  schemaNames])))))
   in (Flows.bind (Flows.mapList depNames els) (\namesList -> Flows.pure (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList))))))))))
 
 -- | Dereference a type name to get the actual type
@@ -239,6 +244,13 @@ instantiateTypeScheme scheme =
           Core.typeSchemeVariables = newVars,
           Core.typeSchemeType = (Substitution.substInType subst (Core.typeSchemeType scheme)),
           Core.typeSchemeConstraints = renamedConstraints}))))
+
+-- | Determines whether a given term is an encoded term (meta-level term)
+isEncodedTerm :: (Core.Term -> Bool)
+isEncodedTerm t = ((\x -> case x of
+  Core.TermApplication v1 -> (isEncodedTerm (Core.applicationFunction v1))
+  Core.TermUnion v1 -> (Equality.equal "hydra.core.Term" (Core.unName (Core.injectionTypeName v1)))
+  _ -> False) (Rewriting.deannotateTerm t))
 
 -- | Determines whether a given term is an encoded type
 isEncodedType :: (Core.Term -> Bool)

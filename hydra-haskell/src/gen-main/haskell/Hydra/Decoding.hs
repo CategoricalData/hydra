@@ -8,6 +8,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows

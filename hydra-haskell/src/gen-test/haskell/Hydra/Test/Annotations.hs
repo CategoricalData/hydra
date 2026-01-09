@@ -285,7 +285,7 @@ allTests = Testing.TestGroup {
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "value"))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing annotation #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -336,7 +336,7 @@ allTests = Testing.TestGroup {
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString ""))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing annotation #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -391,7 +391,7 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 123)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing annotation #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -418,7 +418,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing annotation #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -441,7 +441,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing annotation #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -488,7 +488,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set multiple annotations #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1445,7 +1445,7 @@ allTests = Testing.TestGroup {
                                 Core.injectionField = Core.Field {
                                   Core.fieldName = (Core.Name "int32"),
                                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}}))}}))}}))}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1455,13 +1455,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello"))))))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing description #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1485,7 +1485,7 @@ allTests = Testing.TestGroup {
                             Core.injectionField = Core.Field {
                               Core.fieldName = (Core.Name "string"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "test"))}}))}}))}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1495,13 +1495,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString ""))))))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get existing description #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1525,7 +1525,7 @@ allTests = Testing.TestGroup {
                             Core.injectionField = Core.Field {
                               Core.fieldName = (Core.Name "boolean"),
                               Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean False))}}))}}))}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1535,13 +1535,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "desc"))))))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing description #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1565,7 +1565,7 @@ allTests = Testing.TestGroup {
                               Core.injectionField = Core.Field {
                                 Core.fieldName = (Core.Name "int16"),
                                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 42)))}}))}}))}}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1575,13 +1575,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe Nothing)))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing description #2",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1601,7 +1601,7 @@ allTests = Testing.TestGroup {
                           Core.injectionField = Core.Field {
                             Core.fieldName = (Core.Name "string"),
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "no description here"))}}))}}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1611,13 +1611,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe Nothing)))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get missing description #3",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1641,7 +1641,7 @@ allTests = Testing.TestGroup {
                               Core.injectionField = Core.Field {
                                 Core.fieldName = (Core.Name "int32"),
                                 Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}}))}}))}}))}))})),
-                Core.applicationArgument = Core.TermUnit})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))})),
             Testing.evaluationTestCaseOutput = (Core.TermRecord (Core.Record {
               Core.recordTypeName = (Core.Name "hydra.compute.FlowState"),
@@ -1651,13 +1651,13 @@ allTests = Testing.TestGroup {
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermMaybe Nothing)))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
-                  Core.fieldTerm = Core.TermUnit},
+                  Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.lexical.emptyGraph"))},
                 Core.Field {
                   Core.fieldName = (Core.Name "trace"),
                   Core.fieldTerm = (Core.TermVariable (Core.Name "hydra.monads.emptyTrace"))}]}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer description overrides inner #1",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1877,7 +1877,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get annotation from singly annotated term",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -1942,7 +1942,7 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get inner annotation from doubly annotated term",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2033,7 +2033,7 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get outer annotation from doubly annotated term",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2124,7 +2124,7 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "get non-overridden annotation from triply annotated term",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2241,7 +2241,7 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]},
+            Testing.Tag "requiresFlowDecoding"]},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "outer annotation overrides inner in layered term",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
@@ -2358,5 +2358,5 @@ allTests = Testing.TestGroup {
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 99)))}}))}}))}}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
-            Testing.Tag "usesKernelRefs"]}]}],
+            Testing.Tag "requiresFlowDecoding"]}]}],
   Testing.testGroupCases = []}
