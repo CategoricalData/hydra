@@ -5,7 +5,7 @@ r"""Utilities for sorting."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.logic
@@ -23,13 +23,13 @@ T2 = TypeVar("T2")
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
     def source_to_target_mapping(els: frozenlist[T2]) -> frozenlist[T2]:
         def mp() -> FrozenDict[T0, T2]:
-            return cast(FrozenDict[T0, T2], hydra.lib.maps.from_list(hydra.lib.lists.zip(source_ord, els)))
+            return hydra.lib.maps.from_list(hydra.lib.lists.zip(source_ord, els))
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, mp())), target_ord))
     def target_to_source_mapping(els: frozenlist[T2]) -> frozenlist[T2]:
         def mp() -> FrozenDict[T0, T2]:
-            return cast(FrozenDict[T0, T2], hydra.lib.maps.from_list(hydra.lib.lists.zip(target_ord, els)))
+            return hydra.lib.maps.from_list(hydra.lib.lists.zip(target_ord, els))
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, mp())), source_ord))
-    return cast(hydra.topology.OrderingIsomorphism[T1], hydra.topology.OrderingIsomorphism(cast(Callable[[frozenlist[T1]], frozenlist[T1]], (lambda x1: source_to_target_mapping(x1))), cast(Callable[[frozenlist[T1]], frozenlist[T1]], (lambda x1: target_to_source_mapping(x1)))))
+    return hydra.topology.OrderingIsomorphism((lambda x1: source_to_target_mapping(x1)), (lambda x1: target_to_source_mapping(x1)))
 
 def find_reachable_nodes(adj: Callable[[T0], frozenset[T0]], root: T0) -> frozenset[T0]:
     def visit(visited: frozenset[T0], node: T0) -> frozenset[T0]:
@@ -51,14 +51,14 @@ def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[fro
     def is_cycle(scc: frozenlist[T1]) -> bool:
         return hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(scc)))
     def with_cycles() -> frozenlist[frozenlist[T0]]:
-        return hydra.lib.lists.filter(cast(Callable[[frozenlist[T0]], bool], (lambda x1: is_cycle(x1))), sccs())
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles()), (lambda : cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Right(hydra.lib.lists.concat(sccs())))), (lambda : cast(Either[frozenlist[frozenlist[T0]], frozenlist[T0]], Left(with_cycles()))))
+        return hydra.lib.lists.filter((lambda x1: is_cycle(x1)), sccs())
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles()), (lambda : Right(hydra.lib.lists.concat(sccs()))), (lambda : Left(with_cycles())))
 
 def topological_sort_nodes(get_key: Callable[[T0], T1], get_adj: Callable[[T0], frozenlist[T1]], nodes: frozenlist[T0]) -> frozenlist[frozenlist[T0]]:
     def nodes_by_key() -> FrozenDict[T1, T0]:
-        return cast(FrozenDict[T1, T0], hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: cast(tuple[T1, T0], (get_key(n), n))), nodes)))
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: (get_key(n), n)), nodes))
     def pairs() -> frozenlist[tuple[T1, frozenlist[T1]]]:
-        return hydra.lib.lists.map((lambda n: cast(tuple[T1, frozenlist[T1]], (get_key(n), get_adj(n)))), nodes)
+        return hydra.lib.lists.map((lambda n: (get_key(n), get_adj(n))), nodes)
     def comps() -> frozenlist[frozenlist[T1]]:
         return topological_sort_components(pairs())
     return hydra.lib.lists.map((lambda c: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda k: hydra.lib.maps.lookup(k, nodes_by_key())), c))), comps())

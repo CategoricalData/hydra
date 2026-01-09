@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.compute
 import hydra.core
 import hydra.graph
@@ -144,7 +144,7 @@ def either_term(left_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.g
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
         match term:
             case hydra.core.TermEither(value=et):
-                return hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: cast(Either[T0, T1], Left(x))), left_fun(l))), (lambda r: hydra.lib.flows.map((lambda x: cast(Either[T0, T1], Right(x))), right_fun(r))), et)
+                return hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: Left(x)), left_fun(l))), (lambda r: hydra.lib.flows.map((lambda x: Right(x)), right_fun(r))), et)
             
             case _:
                 return hydra.monads.unexpected("either value", hydra.show.core.term(term))
@@ -350,11 +350,11 @@ def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0
             return hydra.lib.pairs.first(kv_pair)
         def vterm() -> hydra.core.Type:
             return hydra.lib.pairs.second(kv_pair)
-        return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure(cast(tuple[T0, T1], (kval, vval)))))))
+        return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure((kval, vval))))))
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
         match term:
             case hydra.core.TermMap(value=m):
-                return hydra.lib.flows.map(cast(Callable[[frozenlist[tuple[T0, T1]]], FrozenDict[T0, T1]], (lambda x1: hydra.lib.maps.from_list(x1))), hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
+                return hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
             
             case _:
                 return hydra.monads.unexpected("map", hydra.show.core.term(term))
@@ -373,7 +373,7 @@ def maybe_term(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Gra
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
         match term:
             case hydra.core.TermMaybe(value=mt):
-                return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[T0], Nothing())), (lambda t: hydra.lib.flows.map(cast(Callable[[T0], Maybe[T0]], (lambda x1: hydra.lib.maybes.pure(x1))), f(t))), mt)
+                return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), f(t))), mt)
             
             case _:
                 return hydra.monads.unexpected("maybe value", hydra.show.core.term(term))
@@ -395,7 +395,7 @@ def pair(kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
         match term:
             case hydra.core.TermPair(value=p):
-                return hydra.lib.flows.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: hydra.lib.flows.pure(cast(tuple[T0, T1], (k_val, v_val)))))))
+                return hydra.lib.flows.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
             
             case _:
                 return hydra.monads.unexpected("pair", hydra.show.core.term(term))

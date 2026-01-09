@@ -5,7 +5,7 @@ r"""Decoding functions for JSON data."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
-from typing import TypeVar, cast
+from typing import TypeVar
 import hydra.compute
 import hydra.core
 import hydra.json.model
@@ -36,7 +36,7 @@ def decode_boolean(v1: hydra.json.model.Value) -> hydra.compute.Flow[T0, bool]:
             return hydra.lib.flows.fail("expected a boolean")
 
 def decode_optional_field(decode_value: Callable[[T0], hydra.compute.Flow[T1, T2]], name: T3, m: FrozenDict[T3, T0]) -> hydra.compute.Flow[T1, Maybe[T2]]:
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(Maybe[T2], Nothing())), (lambda v: hydra.lib.flows.map((lambda x: cast(Maybe[T2], Just(x))), decode_value(v))), hydra.lib.maps.lookup(name, m))
+    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda v: hydra.lib.flows.map((lambda x: Just(x)), decode_value(v))), hydra.lib.maps.lookup(name, m))
 
 def decode_field(decode_value: Callable[[T0], hydra.compute.Flow[T1, T2]], name: str, m: FrozenDict[str, T0]) -> hydra.compute.Flow[T1, T2]:
     return hydra.lib.flows.bind(decode_optional_field(decode_value, name, m), (lambda v1: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("missing field: ", name)), (lambda f: hydra.lib.flows.pure(f)), v1)))

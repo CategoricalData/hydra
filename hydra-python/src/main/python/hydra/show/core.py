@@ -129,7 +129,7 @@ def type(typ: hydra.core.Type) -> str:
         
         case hydra.core.TypeApplication(value=app):
             def types() -> frozenlist[hydra.core.Type]:
-                return gather_types(cast(frozenlist[hydra.core.Type], ()), app)
+                return gather_types((), app)
             def type_strs() -> frozenlist[str]:
                 return hydra.lib.lists.map(type, types())
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", type_strs()), ")"))
@@ -146,7 +146,7 @@ def type(typ: hydra.core.Type) -> str:
         
         case hydra.core.TypeFunction():
             def types() -> frozenlist[hydra.core.Type]:
-                return gather_function_types(cast(frozenlist[hydra.core.Type], ()), typ)
+                return gather_function_types((), typ)
             def type_strs() -> frozenlist[str]:
                 return hydra.lib.lists.map(type, types())
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" → ", type_strs()), ")"))
@@ -299,7 +299,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             mdef = cs.default
             cases = cs.cases
             def default_field() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.maybes.maybe(cast(frozenlist[hydra.core.Field], ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
+                return hydra.lib.maybes.maybe((), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
             def all_fields() -> frozenlist[hydra.core.Field]:
                 return hydra.lib.lists.concat((cases, default_field()))
             return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields())))
@@ -373,7 +373,7 @@ def term(t: hydra.core.Term) -> str:
         
         case hydra.core.TermApplication(value=app):
             def terms() -> frozenlist[hydra.core.Term]:
-                return gather_terms(cast(frozenlist[hydra.core.Term], ()), app)
+                return gather_terms((), app)
             def term_strs() -> frozenlist[str]:
                 return hydra.lib.lists.map(term, terms())
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", term_strs()), ")"))
@@ -453,4 +453,4 @@ def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
 def read_term(s: str) -> Maybe[hydra.core.Term]:
     r"""A placeholder for reading terms from their serialized form. Not implemented."""
     
-    return cast(Maybe[hydra.core.Term], Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))
+    return Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s)))))

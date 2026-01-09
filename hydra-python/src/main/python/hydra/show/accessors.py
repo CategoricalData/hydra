@@ -25,33 +25,33 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
     r"""Convert a term accessor to a string representation."""
     
     def idx(i: T0) -> Maybe[T1]:
-        return cast(Maybe[T1], Nothing())
+        return Nothing()
     def idx_suff(suffix: str, i: T0) -> Maybe[str]:
         return hydra.lib.maybes.map((lambda s: hydra.lib.strings.cat2(s, suffix)), idx(i))
     match accessor:
         case hydra.accessors.TermAccessorAnnotatedBody():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case hydra.accessors.TermAccessorApplicationFunction():
-            return cast(Maybe[str], Just("fun"))
+            return Just("fun")
         
         case hydra.accessors.TermAccessorApplicationArgument():
-            return cast(Maybe[str], Just("arg"))
+            return Just("arg")
         
         case hydra.accessors.TermAccessorLambdaBody():
-            return cast(Maybe[str], Just("body"))
+            return Just("body")
         
         case hydra.accessors.TermAccessorUnionCasesDefault():
-            return cast(Maybe[str], Just("default"))
+            return Just("default")
         
         case hydra.accessors.TermAccessorUnionCasesBranch(value=name):
-            return cast(Maybe[str], Just(hydra.lib.strings.cat2(".", name.value)))
+            return Just(hydra.lib.strings.cat2(".", name.value))
         
         case hydra.accessors.TermAccessorLetBody():
-            return cast(Maybe[str], Just("in"))
+            return Just("in")
         
         case hydra.accessors.TermAccessorLetBinding(value=name2):
-            return cast(Maybe[str], Just(hydra.lib.strings.cat2(name2.value, "=")))
+            return Just(hydra.lib.strings.cat2(name2.value, "="))
         
         case hydra.accessors.TermAccessorListElement(value=i):
             return idx(i)
@@ -63,31 +63,31 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
             return idx_suff(".value", i3)
         
         case hydra.accessors.TermAccessorMaybeTerm():
-            return cast(Maybe[str], Just("just"))
+            return Just("just")
         
         case hydra.accessors.TermAccessorProductTerm(value=i4):
             return idx(i4)
         
         case hydra.accessors.TermAccessorRecordField(value=name3):
-            return cast(Maybe[str], Just(hydra.lib.strings.cat2(".", name3.value)))
+            return Just(hydra.lib.strings.cat2(".", name3.value))
         
         case hydra.accessors.TermAccessorSetElement(value=i5):
             return idx(i5)
         
         case hydra.accessors.TermAccessorSumTerm():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case hydra.accessors.TermAccessorTypeLambdaBody():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case hydra.accessors.TermAccessorTypeApplicationTerm():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case hydra.accessors.TermAccessorInjectionTerm():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case hydra.accessors.TermAccessorWrappedTerm():
-            return cast(Maybe[str], Nothing())
+            return Nothing()
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -137,9 +137,9 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                         return hydra.lib.lists.cons(node(), current_nodes())
                     def new_ids() -> FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]:
                         return hydra.lib.maps.insert(name, node(), current_ids())
-                    return cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]], (cast(tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], (new_nodes(), new_visited())), new_ids()))
+                    return ((new_nodes(), new_visited()), new_ids())
                 def nodes_visited_ids1() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]]:
-                    return hydra.lib.lists.foldl(add_binding_name, cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]], (cast(tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], (cast(frozenlist[hydra.accessors.AccessorNode], ()), visited())), ids)), binding_names())
+                    return hydra.lib.lists.foldl(add_binding_name, (((), visited()), ids), binding_names())
                 def nodes1() -> frozenlist[hydra.accessors.AccessorNode]:
                     return hydra.lib.pairs.first(hydra.lib.pairs.first(nodes_visited_ids1()))
                 def visited1() -> frozenset[str]:
@@ -153,22 +153,22 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                         return hydra.lib.pairs.second(node_binding)
                     def term1() -> hydra.core.Type:
                         return binding().term
-                    return helper(ids1(), cast(Maybe[hydra.accessors.AccessorNode], Just(root())), cast(frozenlist[hydra.accessors.TermAccessor], ()), current_state, cast(tuple[hydra.accessors.TermAccessor, hydra.core.Term], (dont_care_accessor, term1())))
+                    return helper(ids1(), Just(root()), (), current_state, (dont_care_accessor, term1()))
                 def node_binding_pairs() -> frozenlist[tuple[hydra.accessors.AccessorNode, hydra.core.Binding]]:
                     return hydra.lib.lists.zip(nodes1(), bindings)
                 def state_after_bindings() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
-                    return hydra.lib.lists.foldl(add_binding_term, cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], (cast(tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], (hydra.lib.lists.concat2(nodes1(), nodes()), edges())), visited1())), node_binding_pairs())
-                return helper(ids1(), mroot, next_path(), state_after_bindings(), cast(tuple[hydra.accessors.TermAccessor, hydra.core.Term], (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env)))
+                    return hydra.lib.lists.foldl(add_binding_term, ((hydra.lib.lists.concat2(nodes1(), nodes()), edges()), visited1()), node_binding_pairs())
+                return helper(ids1(), mroot, next_path(), state_after_bindings(), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env))
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := (lambda : hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path())), node)), new_edges := (lambda : hydra.lib.lists.cons(edge(), edges())), cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], (cast(tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], (nodes(), new_edges())), visited())))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
+                return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := (lambda : hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path())), node)), new_edges := (lambda : hydra.lib.lists.cons(edge(), edges())), ((nodes(), new_edges()), visited()))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
             
             case _:
                 return hydra.lib.lists.foldl((lambda v1, v2: helper(ids, mroot, next_path(), v1, v2)), state, hydra.rewriting.subterms_with_accessors(current_term()))
     def initial_state() -> tuple[tuple[frozenlist[T0], frozenlist[T1]], frozenset[T2]]:
-        return cast(tuple[tuple[frozenlist[T0], frozenlist[T1]], frozenset[T2]], (cast(tuple[frozenlist[T0], frozenlist[T1]], (cast(frozenlist[T0], ()), cast(frozenlist[T1], ()))), cast(frozenset[T2], hydra.lib.sets.empty())))
+        return (((), ()), hydra.lib.sets.empty())
     def result() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
-        return helper(cast(FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], hydra.lib.maps.empty()), cast(Maybe[hydra.accessors.AccessorNode], Nothing()), cast(frozenlist[hydra.accessors.TermAccessor], ()), cast(tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], initial_state()), cast(tuple[hydra.accessors.TermAccessor, hydra.core.Term], (dont_care_accessor, term)))
+        return helper(hydra.lib.maps.empty(), Nothing(), (), initial_state(), (dont_care_accessor, term))
     def final_nodes_edges() -> tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]]:
         return hydra.lib.pairs.first(result())
     def final_nodes() -> frozenlist[hydra.accessors.AccessorNode]:

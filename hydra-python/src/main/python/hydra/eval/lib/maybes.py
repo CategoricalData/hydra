@@ -19,7 +19,7 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
 def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-    def _hoist_15(arg_opt_term: hydra.core.Term, mf: Maybe[hydra.core.Term], v1: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
+    def _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term: hydra.core.Term, mf: Maybe[hydra.core.Term], v1: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
         match v1:
             case hydra.core.TermMaybe(value=mx):
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.bind(mf, (lambda f: hydra.lib.maybes.map((lambda x: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(f, x)))), mx))))))
@@ -28,7 +28,7 @@ def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra
                 return hydra.monads.unexpected("optional value", hydra.show.core.term(arg_opt_term))
     match fun_opt_term:
         case hydra.core.TermMaybe(value=mf):
-            return _hoist_15(arg_opt_term, mf, arg_opt_term)
+            return _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term, mf, arg_opt_term)
         
         case _:
             return hydra.monads.unexpected("optional function", hydra.show.core.term(fun_opt_term))
@@ -36,7 +36,7 @@ def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra
 def bind(opt_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     match opt_term:
         case hydra.core.TermMaybe(value=m):
-            return hydra.lib.flows.pure(hydra.lib.maybes.maybe(cast(hydra.core.Term, hydra.core.TermMaybe(cast(Maybe[hydra.core.Term], Nothing()))), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
+            return hydra.lib.flows.pure(hydra.lib.maybes.maybe(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
         
         case _:
             return hydra.monads.unexpected("optional value", hydra.show.core.term(opt_term))

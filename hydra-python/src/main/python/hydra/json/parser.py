@@ -3,7 +3,6 @@
 r"""JSON parser using Hydra parser combinators."""
 
 from __future__ import annotations
-from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, frozenlist
 from typing import TypeVar, cast
@@ -67,7 +66,7 @@ def json_integer_part() -> hydra.parsing.Parser[str]:
 def json_number() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON number (integer, decimal, or scientific notation)."""
     
-    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe("", cast(Callable[[str], str], (lambda x1: hydra.lib.equality.identity(x1))), frac_part)), hydra.lib.maybes.maybe("", cast(Callable[[str], str], (lambda x1: hydra.lib.equality.identity(x1))), exp_part))), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe(Decimal('0.0'), cast(Callable[[Decimal], Decimal], (lambda x1: hydra.lib.equality.identity(x1))), hydra.lib.literals.read_bigfloat(num_str()))))))[1])))))))
+    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), frac_part)), hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), exp_part))), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe(Decimal('0.0'), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.literals.read_bigfloat(num_str()))))))[1])))))))
 
 def json_escape_char() -> hydra.parsing.Parser[int]:
     r"""Parse a JSON escape sequence after the backslash."""
@@ -92,12 +91,12 @@ def json_array() -> hydra.parsing.Parser[hydra.json.model.Value]:
 def json_key_value() -> hydra.parsing.Parser[tuple[str, hydra.json.model.Value]]:
     r"""Parse a JSON object key-value pair."""
     
-    return hydra.parsers.bind(token(hydra.parsers.bind(hydra.parsers.char(34), (lambda _: hydra.parsers.bind(hydra.parsers.many(json_string_char()), (lambda chars: hydra.parsers.bind(hydra.parsers.char(34), (lambda _2: hydra.parsers.pure(hydra.lib.strings.from_list(chars))))))))), (lambda key: hydra.parsers.bind(token(hydra.parsers.char(58)), (lambda _: hydra.parsers.map((lambda v: cast(tuple[str, hydra.json.model.Value], (key, v))), json_value())))))
+    return hydra.parsers.bind(token(hydra.parsers.bind(hydra.parsers.char(34), (lambda _: hydra.parsers.bind(hydra.parsers.many(json_string_char()), (lambda chars: hydra.parsers.bind(hydra.parsers.char(34), (lambda _2: hydra.parsers.pure(hydra.lib.strings.from_list(chars))))))))), (lambda key: hydra.parsers.bind(token(hydra.parsers.char(58)), (lambda _: hydra.parsers.map((lambda v: (key, v)), json_value())))))
 
 def json_object() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON object."""
     
-    return hydra.parsers.map((lambda arg_: (lambda x: cast(hydra.json.model.Value, hydra.json.model.ValueObject(x)))(cast(FrozenDict[str, hydra.json.model.Value], hydra.lib.maps.from_list(arg_)))), hydra.parsers.between(token(hydra.parsers.char(123)), token(hydra.parsers.char(125)), hydra.parsers.sep_by(json_key_value(), token(hydra.parsers.char(44)))))
+    return hydra.parsers.map((lambda arg_: (lambda x: cast(hydra.json.model.Value, hydra.json.model.ValueObject(x)))(hydra.lib.maps.from_list(arg_))), hydra.parsers.between(token(hydra.parsers.char(123)), token(hydra.parsers.char(125)), hydra.parsers.sep_by(json_key_value(), token(hydra.parsers.char(44)))))
 
 def json_value() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse any JSON value."""
