@@ -326,13 +326,13 @@ encodeApplication env app = do
     PyGraph g _ <- getState
     -- Try to get arity from type; fall back to term-based arity if typeOf fails
     -- (typeOf can fail for types like Either that require type arguments)
-    -- When skipCasts is enabled, skip the expensive typeOf call entirely
-    arity <- if pythonEnvironmentSkipCasts env
-      then pure $ Arity.termArity fun
-      else tryFlowWithFallback (Arity.termArity fun) $ typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
+    -- Note: We always need type inference for arity calculation to handle variables correctly,
+    -- but we can skip cast generation when skipCasts is enabled.
+    -- termArityWithPrimitives handles primitives correctly by looking up their types in the graph.
+    arity <- tryFlowWithFallback (termArityWithPrimitives g fun) $ typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
     let term = TermApplication app
     -- Try to get the term's type; if it fails, we'll skip casting
-    -- When skipCasts is enabled, skip the expensive typeOf call entirely
+    -- When skipCasts is enabled, skip the expensive typeOf call for the cast type
     mtyp <- if pythonEnvironmentSkipCasts env
       then pure Nothing
       else tryFlowWithFallback Nothing $ Just <$> typeOf (pythonEnvironmentTypeContext env) [] term
@@ -742,7 +742,7 @@ encodeModule mod defs0 = do
                   pythonEnvironmentTypeContext = tcontext,
                   pythonEnvironmentNUllaryBindings = S.empty,
                   pythonEnvironmentVersion = targetPythonVersion,
-                  pythonEnvironmentSkipCasts = False}
+                  pythonEnvironmentSkipCasts = True}
       withDefinitions env0 defs $ \env -> do
         defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
         PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
@@ -1287,12 +1287,11 @@ encodeWrappedType env name typ comment = do
 -- | Analyze a function term with Python-specific TypeContext management.
 -- This is a thin wrapper around 'analyzeFunctionTerm' that provides the Python-specific
 -- TypeContext getter and setter functions, reducing boilerplate at call sites.
--- | Analyze Python function term. When skipCasts is enabled, uses the faster variant
--- that skips type inference (useful for test generation).
+-- Note: We always use analyzeFunctionTerm (with type inference) to preserve function
+-- return type annotations in generated code, even when skipCasts is enabled.
+-- The skipCasts flag only affects cast() calls, not function signatures.
 analyzePythonFunction :: PythonEnvironment -> Term -> Flow PyGraph (FunctionStructure PythonEnvironment)
-analyzePythonFunction env = if pythonEnvironmentSkipCasts env
-  then analyzeFunctionTermNoInfer getTC setTC env
-  else analyzeFunctionTerm getTC setTC env
+analyzePythonFunction env = analyzeFunctionTerm getTC setTC env
   where
     getTC = pythonEnvironmentTypeContext
     setTC tc e = e { pythonEnvironmentTypeContext = tc }
@@ -1516,3 +1515,21 @@ withUpdatedGraph = withUpdatedCoderGraph pyGraphGraph pyGraphMetadata PyGraph
 
 inGraphContext :: Flow Graph a -> Flow PyGraph a
 inGraphContext = inCoderGraphContext pyGraphGraph pyGraphMetadata PyGraph
+
+-- | Calculate the arity of a term, with proper handling of primitives.
+--   Unlike Arity.termArity, this looks up primitive arities from the graph
+--   rather than returning a placeholder value.
+termArityWithPrimitives :: Graph -> Term -> Int
+termArityWithPrimitives g term = case term of
+  TermApplication app -> max 0 (termArityWithPrimitives g (applicationFunction app) - 1)
+  TermFunction f -> functionArityWithPrimitives g f
+  _ -> 0
+
+-- | Calculate the arity of a function, with proper handling of primitives.
+functionArityWithPrimitives :: Graph -> Function -> Int
+functionArityWithPrimitives g f = case f of
+  FunctionElimination _ -> 1
+  FunctionLambda lam -> 1 + termArityWithPrimitives g (lambdaBody lam)
+  FunctionPrimitive name -> case M.lookup name (graphPrimitives g) of
+    Just prim -> Arity.primitiveArity prim
+    Nothing -> 0  -- Unknown primitive, return 0 rather than placeholder
