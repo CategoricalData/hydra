@@ -74,6 +74,10 @@ public abstract class TestCase implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_HOIST_CASE_STATEMENTS = new hydra.core.Name("hoistCaseStatements");
   
+  public static final hydra.core.Name FIELD_NAME_HOIST_LET_BINDINGS = new hydra.core.Name("hoistLetBindings");
+  
+  public static final hydra.core.Name FIELD_NAME_HOIST_POLYMORPHIC_LET_BINDINGS = new hydra.core.Name("hoistPolymorphicLetBindings");
+  
   private TestCase () {
   
   }
@@ -144,6 +148,10 @@ public abstract class TestCase implements Serializable {
     R visit(HoistSubterms instance) ;
     
     R visit(HoistCaseStatements instance) ;
+    
+    R visit(HoistLetBindings instance) ;
+    
+    R visit(HoistPolymorphicLetBindings instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -276,6 +284,14 @@ public abstract class TestCase implements Serializable {
     }
     
     default R visit(HoistCaseStatements instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(HoistLetBindings instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(HoistPolymorphicLetBindings instance) {
       return otherwise((instance));
     }
   }
@@ -1258,6 +1274,68 @@ public abstract class TestCase implements Serializable {
         return false;
       }
       HoistCaseStatements o = (HoistCaseStatements) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A hoist all let bindings test (hoistAll=True, for Java)
+   */
+  public static final class HoistLetBindings extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.HoistLetBindingsTestCase value;
+    
+    public HoistLetBindings (hydra.testing.HoistLetBindingsTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof HoistLetBindings)) {
+        return false;
+      }
+      HoistLetBindings o = (HoistLetBindings) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A hoist polymorphic let bindings test
+   */
+  public static final class HoistPolymorphicLetBindings extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.HoistPolymorphicLetBindingsTestCase value;
+    
+    public HoistPolymorphicLetBindings (hydra.testing.HoistPolymorphicLetBindingsTestCase value) {
+      java.util.Objects.requireNonNull((value));
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof HoistPolymorphicLetBindings)) {
+        return false;
+      }
+      HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) (other);
       return value.equals(o.value);
     }
     

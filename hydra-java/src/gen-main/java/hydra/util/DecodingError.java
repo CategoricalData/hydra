@@ -1,0 +1,35 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.util;
+
+import java.io.Serializable;
+
+/**
+ * An error that occurred during decoding of a term
+ */
+public class DecodingError implements Serializable {
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.DecodingError");
+  
+  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  
+  public final String value;
+  
+  public DecodingError (String value) {
+    java.util.Objects.requireNonNull((value));
+    this.value = value;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof DecodingError)) {
+      return false;
+    }
+    DecodingError o = (DecodingError) (other);
+    return value.equals(o.value);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * value.hashCode();
+  }
+}
