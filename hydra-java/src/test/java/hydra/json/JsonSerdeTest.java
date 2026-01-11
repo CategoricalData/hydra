@@ -2,6 +2,7 @@ package hydra.json;
 
 import hydra.HydraTestBase;
 import hydra.util.Unit;
+import hydra.json.model.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
