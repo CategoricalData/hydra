@@ -421,6 +421,36 @@ public class Expect {
     }
 
     /**
+     * Decode a pair value.
+     * @param <S> the state type
+     * @param <A> the first element type
+     * @param <B> the second element type
+     * @param first the function to decode the first element
+     * @param second the function to decode the second element
+     * @param term the term to decode
+     * @return a Flow containing the decoded Tuple2
+     */
+    public static <S, A, B> Flow<S, Tuple.Tuple2<A, B>> pair(
+            final Function<Term, Flow<S, A>> first,
+            final Function<Term, Flow<S, B>> second,
+            final Term term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, Tuple.Tuple2<A, B>>>() {
+            @Override
+            public Flow<S, Tuple.Tuple2<A, B>> otherwise(Term instance) {
+                return wrongType("pair", term);
+            }
+
+            @Override
+            public Flow<S, Tuple.Tuple2<A, B>> visit(Term.Pair instance) {
+                return Flows.map2(
+                        first.apply(instance.value.object1),
+                        second.apply(instance.value.object2),
+                        Tuple.Tuple2::new);
+            }
+        });
+    }
+
+    /**
      * Decode an optional value.
      * @param <S> the state type
      * @param <X> the element type
@@ -440,37 +470,6 @@ public class Expect {
             public Flow<S, Maybe<X>> visit(Term.Maybe instance) {
                 return instance.value.isJust() ? Flows.map(elems.apply(instance.value.fromJust()), Maybe::just)
                         : pure(Maybe.nothing());
-            }
-        });
-    }
-
-    /**
-     * Decode a pair of values.
-     * @param <S> the state type
-     * @param <T1> the first element type
-     * @param <T2> the second element type
-     * @param first the function to decode the first element
-     * @param second the function to decode the second element
-     * @param term the term to decode
-     * @return a Flow of the decoded pair
-     */
-    public static <S, T1, T2> Flow<S, Tuple.Tuple2<T1, T2>> pair(
-            final Function<Term, Flow<S, T1>> first,
-            final Function<Term, Flow<S, T2>> second,
-            final Term term) {
-        return term.accept(new Term.PartialVisitor<Flow<S, Tuple.Tuple2<T1, T2>>>() {
-            @Override
-            public Flow<S, Tuple.Tuple2<T1, T2>> otherwise(Term instance) {
-                return wrongType("tuple", term);
-            }
-
-            @Override
-            public Flow<S, Tuple.Tuple2<T1, T2>> visit(Term.Product instance) {
-                List<Term> values = instance.value;
-                if (values.size() != 2) {
-                    return fail("Expected a tuple of size 2, but found " + values.size());
-                }
-                return Flows.map2(first.apply(values.get(0)), second.apply(values.get(1)), Tuple.Tuple2::new);
             }
         });
     }
@@ -661,6 +660,26 @@ public class Expect {
                         return pure(instance.value);
                     }
                 }));
+    }
+
+    /**
+     * Decode a unit value.
+     * @param <S> the state type
+     * @param term the term to decode
+     * @return a Flow containing true if the term is a unit value
+     */
+    public static <S> Flow<S, Boolean> unit(final Term term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, Boolean>>() {
+            @Override
+            public Flow<S, Boolean> otherwise(Term instance) {
+                return wrongType("unit", term);
+            }
+
+            @Override
+            public Flow<S, Boolean> visit(Term.Unit instance) {
+                return pure(true);
+            }
+        });
     }
 
     /**

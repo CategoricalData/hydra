@@ -149,7 +149,22 @@ public class TestSuiteRunner extends HydraTestBase {
             }
 
             @Override
+            public Object visit(TestCase.JsonDecode instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.JsonEncode instance) {
+                return null;
+            }
+
+            @Override
             public Object visit(TestCase.JsonParser instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.JsonRoundtrip instance) {
                 return null;
             }
 
@@ -222,6 +237,26 @@ public class TestSuiteRunner extends HydraTestBase {
 
             @Override
             public Object visit(TestCase.RewriteType instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.HoistSubterms instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.HoistCaseStatements instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.HoistLetBindings instance) {
+                return null;
+            }
+
+            @Override
+            public Object visit(TestCase.HoistPolymorphicLetBindings instance) {
                 return null;
             }
         });

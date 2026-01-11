@@ -10,6 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Maybe;
 import hydra.util.Tuple;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class Zip extends PrimitiveFunction {
     public TypeScheme type() {
         return new hydra.core.TypeScheme(
                 Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b")),
-                function(list("a"), list("b"), list(Types.pair(Types.variable("a"), Types.variable("b")))));
+                function(list("a"), list("b"), list(Types.pair(Types.variable("a"), Types.variable("b")))),
+                Maybe.nothing());
     }
 
     @Override

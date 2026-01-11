@@ -17,15 +17,15 @@ import hydra.core.Literal;
 import hydra.core.Name;
 import hydra.core.Projection;
 import hydra.core.Record;
-import hydra.core.Sum;
 import hydra.core.Term;
-import hydra.core.TupleProjection;
 import hydra.core.Type;
 import hydra.core.TypeApplicationTerm;
 import hydra.core.TypeLambda;
 import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
+import hydra.util.Either;
 import hydra.util.Maybe;
+import hydra.util.Tuple;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -577,33 +577,11 @@ public interface Terms {
     // }
 
     /**
-     * Create a tuple projection function.
-     * Example: untuple(3, 1) extracts the second element of a 3-tuple
-     * @param arity the tuple arity
-     * @param idx the element index
-     * @return the tuple projection term
-     */
-    static Term untuple(int arity, int idx) {
-        return elimination(new Elimination.Product(new TupleProjection(arity, idx, Maybe.nothing())));
-    }
-
-    /**
-     * Create a tuple projection function with explicit types.
-     * @param arity the tuple arity
-     * @param idx the element index
-     * @param types the optional list of element types
-     * @return the tuple projection term
-     */
-    static Term untuple(int arity, int idx, Maybe<List<Type>> types) {
-        return elimination(new Elimination.Product(new TupleProjection(arity, idx, types)));
-    }
-
-    /**
      * First element projection function for pairs.
      * @return the first element projection term
      */
     static Term first() {
-        return untuple(2, 0);
+        return primitive(name("hydra.lib.pairs.first"));
     }
 
     /**
@@ -611,7 +589,7 @@ public interface Terms {
      * @return the second element projection term
      */
     static Term second() {
-        return untuple(2, 1);
+        return primitive(name("hydra.lib.pairs.second"));
     }
 
     /**
@@ -815,7 +793,7 @@ public interface Terms {
         return just(var(varName));
     }
 
-    // ===== Product terms =====
+    // ===== Pair terms =====
 
     /**
      * Create a pair.
@@ -825,7 +803,7 @@ public interface Terms {
      * @return the pair term
      */
     static Term pair(Term a, Term b) {
-        return new Term.Product(Arrays.asList(a, b));
+        return new Term.Pair(new Tuple.Tuple2<>(a, b));
     }
 
     /**
@@ -835,95 +813,103 @@ public interface Terms {
      * @return the tuple term
      */
     static Term tuple2(Term a, Term b) {
-        return new Term.Product(Arrays.asList(a, b));
+        return pair(a, b);
     }
 
     /**
-     * Create a product (tuple) with multiple components.
-     * Example: tuple(string("name"), int32(42), true_())
+     * Create a tuple using nested pairs.
+     * Example: tuple(a, b, c) creates pair(a, pair(b, c))
      * @param elements the tuple elements
-     * @return the tuple term
+     * @return the tuple term as nested pairs
      */
     static Term tuple(Term... elements) {
-        return new Term.Product(Arrays.asList(elements));
+        return tuple(Arrays.asList(elements));
     }
 
     /**
-     * Create a product term.
+     * Create a tuple using nested pairs.
      * @param elements the tuple elements
-     * @return the tuple term
+     * @return the tuple term as nested pairs
      */
     static Term tuple(List<Term> elements) {
-        return new Term.Product(elements);
+        if (elements.isEmpty()) {
+            return unit();
+        }
+        if (elements.size() == 1) {
+            return elements.get(0);
+        }
+        if (elements.size() == 2) {
+            return pair(elements.get(0), elements.get(1));
+        }
+        return pair(elements.get(0), tuple(elements.subList(1, elements.size())));
     }
 
     /**
-     * Create a product term.
+     * Create a product term using nested pairs (alias for tuple).
      * @param elements the product elements
-     * @return the product term
+     * @return the product term as nested pairs
      */
     static Term product(Term... elements) {
         return tuple(elements);
     }
 
     /**
-     * Create a product term.
+     * Create a product term using nested pairs (alias for tuple).
      * @param elements the product elements
-     * @return the product term
+     * @return the product term as nested pairs
      */
     static Term product(List<Term> elements) {
         return tuple(elements);
     }
 
     /**
-     * Create a triple.
+     * Create a triple using nested pairs.
      * @param a the first element
      * @param b the second element
      * @param c the third element
-     * @return the triple term
+     * @return the triple term as pair(a, pair(b, c))
      */
     static Term triple(Term a, Term b, Term c) {
-        return tuple(a, b, c);
+        return pair(a, pair(b, c));
     }
 
     /**
-     * Create a 4-tuple.
+     * Create a 3-tuple (alias for triple).
+     * @param a the first element
+     * @param b the second element
+     * @param c the third element
+     * @return the tuple term
+     */
+    static Term tuple3(Term a, Term b, Term c) {
+        return triple(a, b, c);
+    }
+
+    /**
+     * Create a 4-tuple using nested pairs.
      * @param a the first element
      * @param b the second element
      * @param c the third element
      * @param d the fourth element
-     * @return the 4-tuple term
+     * @return the 4-tuple term as nested pairs
      */
     static Term tuple4(Term a, Term b, Term c, Term d) {
-        return tuple(a, b, c, d);
+        return pair(a, pair(b, pair(c, d)));
     }
 
     /**
-     * Create a 5-tuple.
+     * Create a 5-tuple using nested pairs.
      * @param a the first element
      * @param b the second element
      * @param c the third element
      * @param d the fourth element
      * @param e the fifth element
-     * @return the 5-tuple term
+     * @return the 5-tuple term as nested pairs
      */
     static Term tuple5(Term a, Term b, Term c, Term d, Term e) {
-        return tuple(a, b, c, d, e);
+        return pair(a, pair(b, pair(c, pair(d, e))));
     }
 
-    // ===== Sum terms =====
-
-    /**
-     * Create a sum term.
-     * Example: sum(0, 3, int32(1)) represents the first element of a 3-element sum
-     * @param idx the sum index
-     * @param arity the sum arity
-     * @param term the term value
-     * @return the sum term
-     */
-    static Term sum(int idx, int arity, Term term) {
-        return new Term.Sum(new Sum(idx, arity, term));
-    }
+    // ===== Either terms =====
 
     /**
      * Create a 'Left' either value.
@@ -932,7 +918,7 @@ public interface Terms {
      * @return the left term
      */
     static Term left(Term term) {
-        return sum(0, 2, term);
+        return new Term.Either(Either.left(term));
     }
 
     /**
@@ -942,7 +928,7 @@ public interface Terms {
      * @return the right term
      */
     static Term right(Term term) {
-        return sum(1, 2, term);
+        return new Term.Either(Either.right(term));
     }
 
     // ===== Record terms =====
@@ -981,11 +967,11 @@ public interface Terms {
     }
 
     /**
-     * Unit value (empty record).
+     * Unit value.
      * @return the unit term
      */
     static Term unit() {
-        return record(name("_Unit"));
+        return new Term.Unit(true);
     }
 
     // ===== Union terms =====

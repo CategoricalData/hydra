@@ -320,18 +320,13 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Pair instance) {
-                    return notImplemented("pair");
-                }
-
-                @Override
                 public Consumer<StringBuilder> visit(Term.Either instance) {
                     return notImplemented("either");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Product instance) {
-                    return notImplemented("product");
+                public Consumer<StringBuilder> visit(Term.Pair instance) {
+                    return notImplemented("pair");
                 }
 
                 @Override
@@ -342,11 +337,6 @@ public class PrettyPrinter {
                 @Override
                 public Consumer<StringBuilder> visit(Term.Set instance) {
                     return notImplemented("set");
-                }
-
-                @Override
-                public Consumer<StringBuilder> visit(Term.Sum instance) {
-                    return notImplemented("sum");
                 }
 
                 @Override
