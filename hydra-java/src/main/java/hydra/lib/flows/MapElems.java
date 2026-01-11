@@ -10,6 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Maybe;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,7 +37,8 @@ public class MapElems extends PrimitiveFunction {
                 Types.function(
                         Types.function("v1", Types.flow("s", "v2")),
                         Types.map("k", "v1"),
-                        Types.flow("s", Types.map("k", "v2"))));
+                        Types.flow("s", Types.map("k", "v2"))),
+                Maybe.nothing());
     }
 
     @Override

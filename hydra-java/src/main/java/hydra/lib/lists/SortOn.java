@@ -10,6 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Maybe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +35,8 @@ public class SortOn extends PrimitiveFunction {
     public TypeScheme type() {
         return new hydra.core.TypeScheme(
                 Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b")),
-                function(function("a", "b"), list("a"), list("a")));
+                function(function("a", "b"), list("a"), list("a")),
+                Maybe.nothing());
     }
 
     @Override

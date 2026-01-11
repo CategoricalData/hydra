@@ -9,6 +9,7 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Maybe;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +43,8 @@ public class Bimap extends PrimitiveFunction {
     public TypeScheme type() {
         return new TypeScheme(
                 Arrays.asList(new Name("k1"), new Name("k2"), new Name("v1"), new Name("v2")),
-                function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")));
+                function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")),
+                Maybe.nothing());
     }
 
     /**

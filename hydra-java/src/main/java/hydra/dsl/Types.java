@@ -2,6 +2,7 @@ package hydra.dsl;
 
 import hydra.core.AnnotatedType;
 import hydra.core.ApplicationType;
+import hydra.core.EitherType;
 import hydra.core.FieldType;
 import hydra.core.FloatType;
 import hydra.core.ForallType;
@@ -10,18 +11,23 @@ import hydra.core.IntegerType;
 import hydra.core.LiteralType;
 import hydra.core.MapType;
 import hydra.core.Name;
+import hydra.core.PairType;
 import hydra.core.RowType;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
+import hydra.core.TypeVariableMetadata;
 import hydra.core.WrappedType;
+import hydra.util.Maybe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static hydra.dsl.Core.name;
 
@@ -424,7 +430,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme mono(Type body) {
-        return new TypeScheme(Collections.emptyList(), body);
+        return new TypeScheme(Collections.emptyList(), body, Maybe.nothing());
     }
 
     /**
@@ -439,7 +445,28 @@ public interface Types {
         for (String v : vs) {
             names.add(name(v));
         }
-        return new TypeScheme(names, body);
+        return new TypeScheme(names, body, Maybe.nothing());
+    }
+
+    /**
+     * Create a polymorphic type scheme with explicit type variables and constraints.
+     * Example: polyConstrained(Map.of("a", Set.of(name("hydra.core.Eq"))), function(var("a"), var("a"), boolean_()))
+     * This represents a type forall a. (Eq a) => a -> a -> Boolean
+     * @param vsWithConstraints a map from type variable names to sets of typeclass constraint names
+     * @param body the body type
+     * @return the type scheme
+     */
+    static TypeScheme polyConstrained(Map<String, Set<Name>> vsWithConstraints, Type body) {
+        List<Name> vars = new ArrayList<>();
+        Map<Name, TypeVariableMetadata> constraintMap = new HashMap<>();
+        for (Map.Entry<String, Set<Name>> entry : vsWithConstraints.entrySet()) {
+            Name varName = name(entry.getKey());
+            vars.add(varName);
+            if (!entry.getValue().isEmpty()) {
+                constraintMap.put(varName, new TypeVariableMetadata(entry.getValue()));
+            }
+        }
+        return new TypeScheme(vars, body, Maybe.just(constraintMap));
     }
 
     /**
@@ -449,7 +476,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var, Type body) {
-        return new TypeScheme(Collections.singletonList(name(var)), body);
+        return new TypeScheme(Collections.singletonList(name(var)), body, Maybe.nothing());
     }
 
     /**
@@ -460,7 +487,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body);
+        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body, Maybe.nothing());
     }
 
     /**
@@ -472,11 +499,11 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body);
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body, Maybe.nothing());
     }
 
     /**
-     * Create a type scheme with three type variables.
+     * Create a type scheme with four type variables.
      * @param var1 the first type variable name
      * @param var2 the second type variable name
      * @param var3 the third type variable name
@@ -485,7 +512,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, String var4, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body);
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body, Maybe.nothing());
     }
 
     /**
@@ -540,13 +567,32 @@ public interface Types {
     }
 
     /**
-     * Optional (nullable) type.
+     * Maybe (optional/nullable) type.
+     * Example: maybe(string())
+     * @param elements the element type
+     * @return the maybe type
+     */
+    static Type maybe(Type elements) {
+        return new Type.Maybe(elements);
+    }
+
+    /**
+     * Maybe type (with string variable name).
+     * @param elements the element type variable name
+     * @return the maybe type
+     */
+    static Type maybe(String elements) {
+        return maybe(var(elements));
+    }
+
+    /**
+     * Optional (nullable) type (alias for 'maybe').
      * Example: optional(string())
      * @param elements the element type
      * @return the optional type
      */
     static Type optional(Type elements) {
-        return new Type.Maybe(elements);
+        return maybe(elements);
     }
 
     /**
@@ -609,7 +655,7 @@ public interface Types {
         return flow(var(state), value);
     }
 
-    // ===== Product types =====
+    // ===== Pair types =====
 
     /**
      * Create a pair type.
@@ -619,39 +665,38 @@ public interface Types {
      * @return the pair type
      */
     static Type pair(Type first, Type second) {
-        return new Type.Product(Arrays.asList(first, second));
+        return new Type.Pair(new PairType(first, second));
     }
 
     /**
-     * Create a 2-tuple type (alias for pair).
-     * @param a the first element type
-     * @param b the second element type
-     * @return the tuple type
-     */
-    static Type tuple2(Type a, Type b) {
-        return new Type.Product(Arrays.asList(a, b));
-    }
-
-    /**
-     * Create a product type (tuple) with multiple components.
-     * Example: product(Arrays.asList(string(), int32(), boolean()))
+     * Create a product type using nested pairs.
+     * Example: product(Arrays.asList(string(), int32(), boolean())) creates pair(string(), pair(int32(), boolean()))
      * @param types the list of element types
-     * @return the product type
+     * @return the product type as nested pairs
      */
     static Type product(List<Type> types) {
-        return new Type.Product(types);
+        if (types.isEmpty()) {
+            return unit();
+        }
+        if (types.size() == 1) {
+            return types.get(0);
+        }
+        if (types.size() == 2) {
+            return pair(types.get(0), types.get(1));
+        }
+        return pair(types.get(0), product(types.subList(1, types.size())));
     }
 
     /**
      * Create a product type from varargs.
      * @param types the element types
-     * @return the product type
+     * @return the product type as nested pairs
      */
     static Type product(Type... types) {
-        return new Type.Product(Arrays.asList(types));
+        return product(Arrays.asList(types));
     }
 
-    // ===== Sum types =====
+    // ===== Either types =====
 
     /**
      * Create an either type (a choice between two types).
@@ -661,26 +706,18 @@ public interface Types {
      * @return the either type
      */
     static Type either(Type left, Type right) {
-        return new Type.Sum(Arrays.asList(left, right));
+        return new Type.Either(new EitherType(left, right));
     }
 
     /**
-     * Create a sum type (disjoint union) with multiple variants.
-     * Example: sum(Arrays.asList(string(), int32(), boolean()))
-     * @param types the list of variant types
-     * @return the sum type
+     * Create an either type (alias for 'either' with underscore for Haskell naming convention).
+     * Example: either_(string(), int32())
+     * @param left the left type
+     * @param right the right type
+     * @return the either type
      */
-    static Type sum(List<Type> types) {
-        return new Type.Sum(types);
-    }
-
-    /**
-     * Create a sum type from varargs.
-     * @param types the variant types
-     * @return the sum type
-     */
-    static Type sum(Type... types) {
-        return new Type.Sum(Arrays.asList(types));
+    static Type either_(Type left, Type right) {
+        return either(left, right);
     }
 
     // ===== Record and union types =====
@@ -767,11 +804,11 @@ public interface Types {
     }
 
     /**
-     * Unit type (empty record type).
+     * Unit type.
      * @return the unit type
      */
     static Type unit() {
-        return new Type.Record(row(name("_Unit"), Collections.emptyList()));
+        return new Type.Unit(true);
     }
 
     /**
