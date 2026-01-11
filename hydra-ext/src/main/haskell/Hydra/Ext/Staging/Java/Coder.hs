@@ -466,101 +466,103 @@ encodeDefinitions mod defs = do
 
 encodeElimination :: JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Flow Graph Java.Expression
 encodeElimination env marg dom cod elm = case elm of
-  EliminationRecord (Projection _ fname) -> do
-    jdomr <- encodeType aliases S.empty dom >>= javaTypeToJavaReferenceType
-    jexp <- case marg of
-      Nothing -> pure $ javaLambda var jbody
-        where
-          var = Name "r"
-          jbody = javaExpressionNameToJavaExpression $
-            fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unName fname)
-      Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
-        where
-          qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
-    return jexp
-  EliminationUnion (CaseStatement tname def fields) -> do
-     case marg of
-      Nothing -> do
-        g <- getState
-        let lhs = TermFunction $ FunctionElimination elm
-        let var = "u"
-        encodeTerm env $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
-        -- TODO: default value
-      Just jarg -> applyElimination jarg
-    where
-      applyElimination jarg = do
-          let prim = javaExpressionToJavaPrimary jarg
-          let consId = innerClassRef aliases tname $ case def of
-                Nothing -> visitorName
-                Just _ -> partialVisitorName
-          jcod <- encodeType aliases S.empty cod
-          rt <- javaTypeToJavaReferenceType jcod
-          let targs = typeArgsOrDiamond $ javaTypeArgumentsForType dom ++ [Java.TypeArgumentReference rt]
-          otherwiseBranches <- case def of
-            Nothing -> pure []
-            Just d -> do
-              b <- otherwiseBranch jcod d
-              return [b]
-          visitBranches <- CM.mapM (visitBranch jcod) fields
-          let body = Java.ClassBody $ otherwiseBranches ++ visitBranches
-          let visitor = javaConstructorCall (javaConstructorName consId $ Just targs) [] (Just body)
-          return $ javaMethodInvocationToJavaExpression $
-            methodInvocation (Just $ Right prim) (Java.Identifier acceptMethodName) [visitor]
-        where
-          otherwiseBranch jcod d = do
-            targs <- javaTypeArgumentsForNamedType tname
-            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname Nothing
-            let mods = [Java.MethodModifierPublic]
-            let anns = [overrideAnnotation]
-            let param = javaTypeToJavaFormalParameter jdom $ Name instanceName
-            let result = Java.ResultType $ Java.UnannType jcod
-            -- Analyze the term for bindings (handles nested lets)
-            fs <- analyzeJavaFunction env d
-            let bindings = functionStructureBindings fs
-                innerBody = functionStructureBody fs
-                env2 = functionStructureEnvironment fs
-            -- Convert bindings to Java block statements
-            (bindingStmts, env3) <- bindingsToStatements env2 bindings
-            -- Encode the body (now without nested lets)
-            jret <- encodeTerm env3 innerBody
-            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
-            let allStmts = bindingStmts ++ [returnStmt]
-            return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just allStmts)
-
-          visitBranch jcod field = do
-            targs <- javaTypeArgumentsForNamedType tname
-            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname (Just $ capitalize $ unName $ fieldName field)
-            let mods = [Java.MethodModifierPublic]
-            let anns = [overrideAnnotation]
-            let result = Java.ResultType $ Java.UnannType jcod
-
-            -- Field terms are lambdas; apply to special var that encodes to instance.value
-            case deannotateTerm (fieldTerm field) of
-              TermFunction (FunctionLambda lam@(Lambda lambdaParam mdom body)) -> withLambda env lam $ \env2 -> do
-                let env3 = insertBranchVar lambdaParam env2
-
-                fs <- analyzeJavaFunction env3 body
-                let bindings = functionStructureBindings fs
-                    innerBody = functionStructureBody fs
-                    env4 = functionStructureEnvironment fs
-
-                (bindingStmts, env5) <- bindingsToStatements env4 bindings
-                jret <- encodeTerm env5 innerBody
-
-                let param = javaTypeToJavaFormalParameter jdom lambdaParam
-                let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
-                let allStmts = bindingStmts ++ [returnStmt]
-                return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just allStmts)
-              _ -> fail $ "visitBranch: field term is not a lambda: " ++ ShowCore.term (fieldTerm field)
-  EliminationWrap name -> case marg of
-    Nothing -> pure $ javaLambda var jbody
+    EliminationRecord (Projection _ fname) -> do
+      jdomr <- encodeType aliases S.empty dom >>= javaTypeToJavaReferenceType
+      jexp <- case marg of
+        Nothing -> pure $ javaLambda var jbody
+          where
+            var = Name "rec"
+            jbody = javaExpressionNameToJavaExpression $
+              fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unName fname)
+        Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
+          where
+            qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+      return jexp
+    EliminationUnion (CaseStatement tname def fields) -> do
+       case marg of
+        Nothing -> do
+          g <- getState
+          let lhs = TermFunction $ FunctionElimination elm
+          let var = "u"
+          encodeTerm env $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
+          -- TODO: default value
+        Just jarg -> applyElimination jarg
       where
-        var = Name "w"
-        arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
-        jbody = javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [arg] Nothing
-    Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
+        applyElimination jarg = do
+            let prim = javaExpressionToJavaPrimary jarg
+            let consId = innerClassRef aliases tname $ case def of
+                  Nothing -> visitorName
+                  Just _ -> partialVisitorName
+            jcod <- encodeType aliases S.empty cod
+            rt <- javaTypeToJavaReferenceType jcod
+            let targs = typeArgsOrDiamond $ javaTypeArgumentsForType dom ++ [Java.TypeArgumentReference rt]
+            otherwiseBranches <- case def of
+              Nothing -> pure []
+              Just d -> do
+                b <- otherwiseBranch jcod d
+                return [b]
+            visitBranches <- CM.mapM (visitBranch jcod) fields
+            let body = Java.ClassBody $ otherwiseBranches ++ visitBranches
+            let visitor = javaConstructorCall (javaConstructorName consId $ Just targs) [] (Just body)
+            return $ javaMethodInvocationToJavaExpression $
+              methodInvocation (Just $ Right prim) (Java.Identifier acceptMethodName) [visitor]
+          where
+            otherwiseBranch jcod d = do
+              targs <- javaTypeArgumentsForNamedType tname
+              let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname Nothing
+              let mods = [Java.MethodModifierPublic]
+              let anns = [overrideAnnotation]
+              let param = javaTypeToJavaFormalParameter jdom $ Name instanceName
+              let result = Java.ResultType $ Java.UnannType jcod
+              -- Analyze the term for bindings (handles nested lets)
+              fs <- analyzeJavaFunction env d
+              let bindings = functionStructureBindings fs
+                  innerBody = functionStructureBody fs
+                  env2 = functionStructureEnvironment fs
+              -- Convert bindings to Java block statements
+              (bindingStmts, env3) <- bindingsToStatements env2 bindings
+              -- Encode the body (now without nested lets)
+              jret <- encodeTerm env3 innerBody
+              let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
+              let allStmts = bindingStmts ++ [returnStmt]
+              return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just allStmts)
+
+            visitBranch jcod field = do
+              targs <- javaTypeArgumentsForNamedType tname
+              let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname (Just $ capitalize $ unName $ fieldName field)
+              let mods = [Java.MethodModifierPublic]
+              let anns = [overrideAnnotation]
+              let result = Java.ResultType $ Java.UnannType jcod
+
+              -- Field terms are lambdas; apply to special var that encodes to instance.value
+              case deannotateTerm (fieldTerm field) of
+                TermFunction (FunctionLambda lam@(Lambda lambdaParam mdom body)) -> withLambda env lam $ \env2 -> do
+                  let env3 = insertBranchVar lambdaParam env2
+
+                  fs <- analyzeJavaFunction env3 body
+                  let bindings = functionStructureBindings fs
+                      innerBody = functionStructureBody fs
+                      env4 = functionStructureEnvironment fs
+
+                  (bindingStmts, env5) <- bindingsToStatements env4 bindings
+                  jret <- encodeTerm env5 innerBody
+
+                  let param = javaTypeToJavaFormalParameter jdom lambdaParam
+                  let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
+                  let allStmts = bindingStmts ++ [returnStmt]
+                  return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just allStmts)
+                _ -> fail $ "visitBranch: field term is not a lambda: " ++ ShowCore.term (fieldTerm field)
+    EliminationWrap name -> pure $ case marg of
+        Nothing -> javaLambda var jbody
+          where
+            var = Name "wrapped"
+            arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
+            jbody = withArg arg
+        Just jarg -> withArg jarg
       where
-        qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+        withArg jarg = javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
+          where
+            qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
   where
     aliases = javaEnvironmentAliases env
 
