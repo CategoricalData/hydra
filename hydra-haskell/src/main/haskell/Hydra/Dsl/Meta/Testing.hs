@@ -633,6 +633,23 @@ hoistCaseStatementsCase cname input output = testCaseWithMetadata (Phantoms.stri
   nothing noTags
 
 -----------------------------------------
+-- Hoist let bindings test case helpers (hoistAll=True, for Java)
+
+testCaseHoistLetBindings :: TTerm HoistLetBindingsTestCase -> TTerm TestCase
+testCaseHoistLetBindings = inject _TestCase _TestCase_hoistLetBindings
+
+hoistLetBindingsTestCase :: TTerm Let -> TTerm Let -> TTerm HoistLetBindingsTestCase
+hoistLetBindingsTestCase input output = Phantoms.record _HoistLetBindingsTestCase [
+  _HoistLetBindingsTestCase_input>>: input,
+  _HoistLetBindingsTestCase_output>>: output]
+
+-- | Convenience function for creating hoist let bindings test cases
+hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
+hoistLetBindingsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseHoistLetBindings $ hoistLetBindingsTestCase input output)
+  nothing noTags
+
+-----------------------------------------
 -- Hoist polymorphic let bindings test case helpers
 
 testCaseHoistPolymorphicLetBindings :: TTerm HoistPolymorphicLetBindingsTestCase -> TTerm TestCase

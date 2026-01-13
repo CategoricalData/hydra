@@ -40,12 +40,13 @@ generateSources
   :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doExpand: eta expand partial applications
-  -> Bool  -- ^ doHoist: hoist case statements to let bindings
+  -> Bool  -- ^ doHoistCaseStatements: hoist case statements to let bindings (for Python)
+  -> Bool  -- ^ doHoistPolymorphicLetBindings: hoist polymorphic let bindings to top level (for Java)
   -> FilePath
   -> [Module]  -- ^ Universe: all modules for type/term resolution
   -> [Module]  -- ^ Modules to transform and generate
   -> IO ()
-generateSources printDefinitions lang doExpand doHoist basePath universeModules modulesToGenerate =
+generateSources printDefinitions lang doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate =
     generateSourcesFor modulesToGenerate
   where
     -- Build namespace -> module map from universe and modules to generate
@@ -108,7 +109,7 @@ generateSources printDefinitions lang doExpand doHoist basePath universeModules 
           then pure []
           else withTrace "generate term modules" $ do
             let nameLists = fmap (fmap bindingName . moduleElements) termModulesToGenerate
-            (g1, defLists) <- dataGraphToDefinitions constraints doExpand doHoist dataGraph nameLists
+            (g1, defLists) <- dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph nameLists
             withState g1 $ do
               -- Refresh modules with elements from the inferred graph (which have type annotations)
               let refreshedMods = refreshModule (graphElements g1) <$> termModulesToGenerate
@@ -187,7 +188,7 @@ transitiveClosure getDeps namespaceMap startMods = go initialDeps S.empty
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO ()
-writeHaskell = generateSources moduleToHaskell haskellLanguage False False
+writeHaskell = generateSources moduleToHaskell haskellLanguage False False False
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
@@ -235,7 +236,7 @@ writeYaml basePath universeModules modulesToGenerate = do
           else withTrace "generate YAML files" $ do
             let g0 = modulesToGraph completeUniverse completeUniverse  -- Use complete universe for full dependency resolution
                 nameLists = fmap (fmap bindingName . moduleElements) dataModules
-            (g1, defLists) <- dataGraphToDefinitions constraints True False g0 nameLists
+            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0 nameLists
             withState g1 $ do
               maps <- CM.zipWithM forEachModule dataModules defLists
               return $ L.concat (M.toList <$> maps)

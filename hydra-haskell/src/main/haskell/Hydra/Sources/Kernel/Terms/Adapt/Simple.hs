@@ -385,50 +385,91 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   produce $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
-dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Graph -> [[Name]] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints, perform inference,"
     <> " then return a corresponding term definition for each element name."
-    <> " The doExpand flag controls eta expansion; doHoist controls case statement hoisting.") $
-  "constraints" ~> "doExpand" ~> "doHoist" ~> "graph" ~> "nameLists" ~>
+    <> " The doExpand flag controls eta expansion."
+    <> " The doHoistCaseStatements flag controls case statement hoisting (needed for Python)."
+    <> " The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).") $
+  "constraints" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~> "graph" ~> "nameLists" ~>
 
-  -- Step 0: Unshadow variables BEFORE hoisting
+  -- Step 0: Unshadow variables BEFORE case statement hoisting
   -- This prevents capture issues where hoisted code references the wrong variable
   -- after code generators rename shadowed parameters
-  "graphu0" <<~ Logic.ifElse (var "doHoist")
+  "graphu0" <<~ Logic.ifElse (var "doHoistCaseStatements")
     ("gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
      "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
      "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
      produce $ Graph.graphWithElements (var "graph") (var "newElements"))
     (produce $ var "graph") $
 
-  -- Step 1: Hoist case statements BEFORE inference (hoisting doesn't need types)
+  -- Step 1: Hoist case statements BEFORE inference (case hoisting doesn't need types)
   -- This ensures match expressions are applied to arguments before eta expansion
-  "graphh" <<~ Logic.ifElse (var "doHoist")
+  "graphh1" <<~ Logic.ifElse (var "doHoistCaseStatements")
     (Hoisting.hoistCaseStatementsInGraph @@ var "graphu0")
     (produce $ var "graphu0") $
 
-  -- Step 2: Unshadow variables AGAIN after hoisting
+  -- Step 2: Unshadow variables AGAIN after case statement hoisting
   -- Hoisting creates new lambda wrappers for captured variables, which can reintroduce shadowing
-  "graphu" <<~ Logic.ifElse (var "doHoist")
-    ("gterm2" <~ Schemas.graphAsTerm @@ var "graphh" $
+  "graphu1" <<~ Logic.ifElse (var "doHoistCaseStatements")
+    ("gterm2" <~ Schemas.graphAsTerm @@ var "graphh1" $
      "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
      "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
-     produce $ Graph.graphWithElements (var "graphh") (var "newElements2"))
-    (produce $ var "graphh") $
+     produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
+    (produce $ var "graphh1") $
 
-  -- Step 3: If eta expansion is needed, run inference first (eta expansion needs types)
-  "graphi" <<~ Logic.ifElse (var "doExpand")
-    (Inference.inferGraphTypes @@ var "graphu")
-    (produce $ var "graphu") $
+  -- Step 3: If eta expansion OR polymorphic let hoisting is needed, run inference first
+  -- (eta expansion needs types; polymorphic let hoisting needs to know which bindings are polymorphic)
+  "needFirstInference" <~ Logic.or (var "doExpand") (var "doHoistPolymorphicLetBindings") $
+  "graphi1" <<~ Logic.ifElse (var "needFirstInference")
+    (Inference.inferGraphTypes @@ var "graphu1")
+    (produce $ var "graphu1") $
 
-  -- Step 4: Adapt the graph (includes eta expansion if enabled)
-  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi" $
+  -- Step 4: Hoist polymorphic let bindings AFTER first inference
+  -- If doHoistPolymorphicLetBindings is True, polymorphic bindings are hoisted to top level (for Java)
+  -- Non-polymorphic bindings are kept as inner let terms (local variables)
+  -- Note: We wrap non-let terms in a dummy let, process them, then unwrap
+  "graphh2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    (-- Process each binding's term through hoistPolymorphicLetBindings
+     "processBinding" <~ ("binding" ~>
+       "term" <~ Core.bindingTerm (var "binding") $
+       -- Wrap term in a let if it's not already a let
+       "wrappedLet" <~ cases _Term (var "term")
+         -- If not a let, wrap it in a dummy let with no bindings
+         (Just $ Core.let_ (list ([] :: [TTerm Binding])) (var "term")) [
+         -- If already a let, use it directly
+         _Term_let>>: "lt" ~> var "lt"] $
+       -- Apply hoisting to only hoist polymorphic bindings
+       "hoistedLet" <~ Hoisting.hoistPolymorphicLetBindings @@ var "wrappedLet" $
+       -- Unwrap: if there are no bindings, just use the body; otherwise keep the let
+       "resultTerm" <~ Logic.ifElse (Lists.null $ Core.letBindings $ var "hoistedLet")
+         (Core.letBody $ var "hoistedLet")
+         (Core.termLet $ var "hoistedLet") $
+       Core.binding
+         (Core.bindingName $ var "binding")
+         (var "resultTerm")
+         (Core.bindingType $ var "binding")) $
+     "newBindings" <~ Lists.map (var "processBinding") (Maps.elems $ Graph.graphElements $ var "graphi1") $
+     "newElements3" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "newBindings")) $
+     produce $ Graph.graphWithElements (var "graphi1") (var "newElements3"))
+    (produce $ var "graphi1") $
+
+  -- Step 5: Unshadow variables after polymorphic let hoisting (if it was done)
+  "graphu2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    ("gterm4" <~ Schemas.graphAsTerm @@ var "graphh2" $
+     "gterm5" <~ Rewriting.unshadowVariables @@ var "gterm4" $
+     "newElements4" <~ Schemas.termAsGraph @@ var "gterm5" $
+     produce $ Graph.graphWithElements (var "graphh2") (var "newElements4"))
+    (produce $ var "graphh2") $
+
+  -- Step 6: Adapt the graph (includes eta expansion if enabled)
+  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphu2" $
 
 --  Flows.fail ("adapted graph: " ++ (ShowGraph.graph @@ var "graph1"))
 
-  -- Step 5: Perform final inference on the adapted graph
+  -- Step 7: Perform final inference on the adapted graph
   "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions

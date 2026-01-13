@@ -103,6 +103,7 @@ termAccessor = define "termAccessor" $
     _TermAccessor_injectionTerm>>: constant nothing,
     _TermAccessor_wrappedTerm>>: constant nothing]
 
+-- TODO: move out of hydra.show.accessors; this is not strictly a "show" function
 termToAccessorGraph :: TBinding (M.Map Namespace String -> Term -> AccessorGraph)
 termToAccessorGraph = define "termToAccessorGraph" $
   doc "Build an accessor graph from a term" $

@@ -30,6 +30,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hoisting" [
       hoistSubtermsGroup,
       hoistCaseStatementsGroup,
+      hoistLetBindingsGroup,
       hoistPolymorphicLetBindingsGroup]
 
 -- Helper to build names
@@ -1280,6 +1281,115 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       (mkLetUntyped [(nm "x", T.int32 1)]
         (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
           (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))]
+
+-- | Test cases for hoistLetBindings with hoistAll=True
+-- This function hoists ALL let bindings (not just polymorphic ones) to the top level.
+-- This is used for Java which cannot have let expressions in arbitrary positions.
+-- Key behavior: type lambdas are boundaries - we don't hoist bindings OUT of type lambdas
+-- because doing so could move code that references type variables outside their scope.
+hoistLetBindingsGroup :: TTerm TestGroup
+hoistLetBindingsGroup = subgroup "hoistLetBindings" [
+    -- ============================================================
+    -- Test: Basic nested let hoisting (no type lambdas)
+    -- ============================================================
+
+    hoistAllCase "simple nested let: inner binding hoisted"
+      -- Input: let x = 1 in (let y = 2 in x + y)
+      (mkLetUntyped [(nm "x", T.int32 1)]
+        (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
+          (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))
+      -- Output: both bindings at top level (hoisted binding comes after original)
+      (mkLetUntyped [
+        (nm "x", T.int32 1),
+        (nm "y", T.int32 2)]
+        (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))),
+
+    hoistAllCase "nested let inside lambda: binding hoisted with lambda capture"
+      -- Input: let f = \a -> (let g = a + 1 in g * 2) in f 10
+      (mkLetUntyped [(nm "f",
+        T.lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", T.apply (T.apply (primitive _math_add) (T.var "a")) (T.int32 1))]
+          (T.apply (T.apply (primitive _math_mul) (T.var "g")) (T.int32 2))))]
+        (T.apply (T.var "f") (T.int32 10)))
+      -- Output: g is hoisted but wrapped with lambda to capture 'a', reference becomes (g a)
+      (mkLetUntyped [
+        (nm "g", T.lambda "a" (T.apply (T.apply (primitive _math_add) (T.var "a")) (T.int32 1))),
+        (nm "f",
+          T.lambda "a" (T.apply (T.apply (primitive _math_mul) (T.apply (T.var "g") (T.var "a"))) (T.int32 2)))]
+        (T.apply (T.var "f") (T.int32 10))),
+
+    -- ============================================================
+    -- Test: Type lambdas are BOUNDARIES for hoisting
+    -- We do NOT hoist bindings out of type lambdas because the binding
+    -- may reference type variables introduced by the type lambda.
+    -- ============================================================
+
+    hoistAllCase "type lambda: nested let NOT hoisted out"
+      -- Input: let f = Λt. (let g = \(x:t) -> x in g) in f
+      -- The inner let 'g' is inside a type lambda, so it should NOT be hoisted out
+      -- because 'g' references type variable 't' in its type annotation
+      (mkLetUntyped [(nm "f",
+        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "g", T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x"))]
+          (T.var "g")))]
+        (T.var "f"))
+      -- Output: unchanged - bindings inside type lambda are not hoisted out
+      (mkLetUntyped [(nm "f",
+        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "g", T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x"))]
+          (T.var "g")))]
+        (T.var "f")),
+
+    hoistAllCase "type lambda: multiple nested lets NOT hoisted out"
+      -- Input: let f = Λt. (let x = 1 in let y = 2 in x + y) in f
+      -- Both nested lets are inside type lambda, should not be hoisted
+      (mkLetUntyped [(nm "f",
+        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "x", T.int32 1)]
+          (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
+            (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))))]
+        (T.var "f"))
+      -- Output: unchanged
+      (mkLetUntyped [(nm "f",
+        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "x", T.int32 1)]
+          (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
+            (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))))]
+        (T.var "f")),
+
+    -- ============================================================
+    -- Test: Type applications are processed normally (they don't introduce type variables)
+    -- But the inner lambda still has nested let that gets hoisted
+    -- ============================================================
+
+    hoistAllCase "type application: nested let outside lambda CAN be hoisted"
+      -- Input: let f = (let y = 1 in \x -> x + y) @Int32 in f 10
+      -- The let is OUTSIDE the lambda, so y can be hoisted without capture
+      (mkLetUntyped [(nm "f",
+        T.tyapp (Core.termLet $ mkLetUntyped [(nm "y", T.int32 1)]
+          (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))) MetaTypes.int32)]
+        (T.apply (T.var "f") (T.int32 10)))
+      -- Output: y is hoisted to top level (hoisted binding comes first)
+      (mkLetUntyped [
+        (nm "y", T.int32 1),
+        (nm "f",
+          T.tyapp (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))) MetaTypes.int32)]
+        (T.apply (T.var "f") (T.int32 10))),
+
+    -- ============================================================
+    -- Test: Mixed scenarios - type lambda inside regular lambda
+    -- ============================================================
+
+    hoistAllCase "mixed: let before type lambda can be hoisted"
+      -- Input: let outer = 1 in (let inner = Λt. \(x:t) -> x in inner @Int32 outer)
+      -- 'inner' is not inside a type lambda at the point where it's bound
+      (mkLetUntyped [(nm "outer", T.int32 1)]
+        (Core.termLet $ mkLetUntyped [(nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
+          (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer"))))
+      -- Output: inner is hoisted after outer (hoisted bindings come after original)
+      (mkLetUntyped [
+        (nm "outer", T.int32 1),
+        (nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
+        (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer")))]
+
+-- | Convenience function for creating hoist let bindings test cases (hoistAll=True)
+hoistAllCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
+hoistAllCase cname input output = hoistLetBindingsCase cname input output
 
 -- | Helper for creating a Let term with typed bindings
 mkLet :: [(TTerm Name, TTerm Term, TTerm (Maybe TypeScheme))] -> TTerm Term -> TTerm Let
