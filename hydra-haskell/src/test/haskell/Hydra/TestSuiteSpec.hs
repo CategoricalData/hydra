@@ -151,6 +151,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "hoist polymorphic let bindings" $ H.shouldBe
         (Hoisting.hoistPolymorphicLetBindings input)
         output
+    TestCaseHoistLetBindings (HoistLetBindingsTestCase input output) ->
+      H.it "hoist all let bindings" $ H.shouldBe
+        (Hoisting.hoistLetBindings True input)
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
