@@ -3,6 +3,7 @@
 r"""Term decoders for hydra.constraints."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right
 import hydra.constraints
 import hydra.core
@@ -17,6 +18,7 @@ def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
     def _hoist_hydra_decode_constraints_path_equation_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PathEquation]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", hydra.decode.query.path, field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", hydra.decode.query.path, field_map(), cx), (lambda field_right: Right(hydra.constraints.PathEquation(field_left, field_right))))))
@@ -29,6 +31,7 @@ def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[h
     def _hoist_hydra_decode_constraints_pattern_implication_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PatternImplication]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("antecedent", hydra.decode.query.pattern, field_map(), cx), (lambda field_antecedent: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("consequent", hydra.decode.query.pattern, field_map(), cx), (lambda field_consequent: Right(hydra.constraints.PatternImplication(field_antecedent, field_consequent))))))

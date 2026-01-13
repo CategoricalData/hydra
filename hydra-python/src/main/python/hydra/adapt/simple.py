@@ -4,6 +4,7 @@ r"""Simple, one-way adapters for types and terms."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.coders
@@ -55,6 +56,7 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     
     match type:
         case hydra.core.TypeAnnotated(value=at):
+            @lru_cache(1)
             def type2() -> hydra.core.Type:
                 return at.body
             return (type2(),)
@@ -63,12 +65,15 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return (cast(hydra.core.Type, hydra.core.TypeList(ot)),)
         
         case hydra.core.TypeUnion(value=rt):
+            @lru_cache(1)
             def tname() -> hydra.core.Type:
                 return rt.type_name
+            @lru_cache(1)
             def fields() -> frozenlist[hydra.core.FieldType]:
                 return rt.fields
             def to_opt_field(f: hydra.core.FieldType) -> hydra.core.Type:
                 return hydra.core.FieldType(f.name, cast(hydra.core.Type, hydra.core.TypeMaybe(f.type)))
+            @lru_cache(1)
             def opt_fields() -> frozenlist[hydra.core.FieldType]:
                 return hydra.lib.lists.map(to_opt_field, fields())
             return (cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname(), opt_fields()))),)
@@ -90,10 +95,12 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
     def for_unsupported(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
         def try_alts(alts: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
             return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe(try_alts(hydra.lib.lists.tail(alts)), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))
+        @lru_cache(1)
         def alts() -> frozenlist[hydra.core.Type]:
             return type_alternatives(typ)
         return try_alts(alts())
     def try_type(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
+        @lru_cache(1)
         def supported_variant() -> bool:
             return hydra.lib.sets.member(hydra.reflect.type_variant(typ), constraints.type_variants)
         return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(typ)), (lambda : for_unsupported(typ)))
@@ -103,8 +110,10 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
 
 def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], types0: FrozenDict[T0, hydra.core.Type]) -> hydra.compute.Flow[T1, FrozenDict[T0, hydra.core.Type]]:
     def map_pair(pair: tuple[T2, hydra.core.Type]) -> hydra.compute.Flow[T3, tuple[T2, hydra.core.Type]]:
+        @lru_cache(1)
         def name() -> T2:
             return hydra.lib.pairs.first(pair)
+        @lru_cache(1)
         def typ() -> hydra.core.Type:
             return hydra.lib.pairs.second(pair)
         return hydra.lib.flows.bind(adapt_type(constraints, litmap, typ()), (lambda typ1: hydra.lib.flows.pure((name(), typ1))))
@@ -113,6 +122,7 @@ def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: Fr
 def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> Maybe[hydra.core.FloatType]:
     r"""Attempt to adapt a floating-point type using the given language constraints."""
     
+    @lru_cache(1)
     def supported() -> bool:
         return hydra.lib.sets.member(ft, constraints.float_types)
     def alt(v1: hydra.core.FloatType) -> Maybe[hydra.core.FloatType]:
@@ -135,6 +145,7 @@ def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.co
 def adapt_integer_type(constraints: hydra.coders.LanguageConstraints, it: hydra.core.IntegerType) -> Maybe[hydra.core.IntegerType]:
     r"""Attempt to adapt an integer type using the given language constraints."""
     
+    @lru_cache(1)
     def supported() -> bool:
         return hydra.lib.sets.member(it, constraints.integer_types)
     def alt(v1: hydra.core.IntegerType) -> Maybe[hydra.core.IntegerType]:
@@ -201,13 +212,16 @@ def adapt_literal_types_map(constraints: hydra.coders.LanguageConstraints) -> Fr
     return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map(try_type, hydra.reflect.literal_types())))
 
 def adapt_type_scheme(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], ts0: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
+    @lru_cache(1)
     def vars0() -> frozenlist[hydra.core.Name]:
         return ts0.variables
+    @lru_cache(1)
     def t0() -> hydra.core.Type:
         return ts0.type
     return hydra.lib.flows.bind(adapt_type(constraints, litmap, t0()), (lambda t1: hydra.lib.flows.pure(hydra.core.TypeScheme(vars0(), t1, ts0.constraints))))
 
 def adapt_primitive(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], prim0: hydra.graph.Primitive) -> hydra.compute.Flow[T0, hydra.graph.Primitive]:
+    @lru_cache(1)
     def ts0() -> hydra.core.Type:
         return prim0.type
     return hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts0()), (lambda ts1: hydra.lib.flows.pure(hydra.graph.Primitive(prim0.name, ts1, prim0.implementation))))
@@ -265,6 +279,7 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
     
     match term:
         case hydra.core.TermAnnotated(value=at):
+            @lru_cache(1)
             def term2() -> hydra.core.Type:
                 return at.body
             return hydra.lib.flows.pure((term2(),))
@@ -273,15 +288,20 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
             return hydra.lib.flows.pure((cast(hydra.core.Term, hydra.core.TermList(hydra.lib.maybes.maybe((), (lambda term2: (term2,)), ot))),))
         
         case hydra.core.TermUnion(value=inj):
+            @lru_cache(1)
             def tname() -> hydra.core.Type:
                 return inj.type_name
+            @lru_cache(1)
             def field() -> hydra.core.Type:
                 return inj.field
+            @lru_cache(1)
             def fname() -> hydra.core.Type:
                 return field().name
+            @lru_cache(1)
             def fterm() -> hydra.core.Type:
                 return field().term
             def for_field_type(ft: hydra.core.FieldType) -> hydra.core.Type:
+                @lru_cache(1)
                 def ftname() -> hydra.core.Type:
                     return ft.name
                 return hydra.core.Field(fname(), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(ftname(), fname()), (lambda : Just(fterm())), (lambda : Nothing())))))
@@ -291,6 +311,7 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
             return hydra.lib.flows.pure((cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))),))
         
         case hydra.core.TermWrap(value=wt):
+            @lru_cache(1)
             def term2() -> hydra.core.Type:
                 return wt.body
             return hydra.lib.flows.pure((term2(),))
@@ -305,6 +326,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
         def for_supported(term: hydra.core.Term) -> hydra.compute.Flow[T1, Maybe[hydra.core.Term]]:
             match term:
                 case hydra.core.TermLiteral(value=l):
+                    @lru_cache(1)
                     def lt() -> hydra.core.Type:
                         return hydra.reflect.literal_type(l)
                     return hydra.lib.flows.pure(Just(hydra.lib.logic.if_else(literal_type_supported(constraints, lt()), (lambda : term), (lambda : cast(hydra.core.Term, hydra.core.TermLiteral(adapt_literal_value(litmap, lt(), l)))))))
@@ -318,6 +340,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : for_non_null(alts)))
             return hydra.lib.flows.bind(term_alternatives(term), (lambda alts: try_alts(alts)))
         def try_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
+            @lru_cache(1)
             def supported_variant() -> bool:
                 return hydra.lib.sets.member(hydra.reflect.term_variant(term), constraints.term_variants)
             return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(term)), (lambda : for_unsupported(term)))
@@ -329,16 +352,22 @@ def adapt_data_graph(constraints: hydra.coders.LanguageConstraints, do_expand: b
     
     def transform(graph: hydra.graph.Graph, gterm: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         return hydra.lib.flows.bind(hydra.schemas.graph_to_type_context(graph), (lambda tx: (gterm1 := hydra.rewriting.unshadow_variables(gterm), hydra.lib.flows.bind(hydra.lib.logic.if_else(do_expand, (lambda : hydra.reduction.eta_expand_typed_term(tx, gterm1)), (lambda : hydra.lib.flows.pure(gterm1))), (lambda gterm2: (gterm3 := hydra.rewriting.remove_types_from_term(gterm2), hydra.lib.flows.pure(hydra.rewriting.lift_lambda_above_let(gterm3)))[1])))[1]))
+    @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
+    @lru_cache(1)
     def els0() -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
         return graph0.elements
+    @lru_cache(1)
     def env0() -> FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]]:
         return graph0.environment
+    @lru_cache(1)
     def body0() -> hydra.core.Type:
         return graph0.body
+    @lru_cache(1)
     def prims0() -> FrozenDict[hydra.core.Name, hydra.graph.Primitive]:
         return graph0.primitives
+    @lru_cache(1)
     def schema0() -> Maybe[hydra.graph.Graph]:
         return graph0.schema
     return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda sg: hydra.lib.flows.bind(hydra.schemas.graph_as_types(sg), (lambda tmap0: hydra.lib.flows.bind(adapt_graph_schema(constraints, litmap(), tmap0), (lambda tmap1: (emap := hydra.schemas.types_to_elements(tmap1), hydra.lib.flows.pure(Just(hydra.graph.Graph(emap, sg.environment, sg.types, sg.body, sg.primitives, sg.schema))))[1]))))), schema0()), (lambda schema1: (gterm0 := hydra.schemas.graph_as_term(graph0), hydra.lib.flows.bind(hydra.lib.logic.if_else(do_expand, (lambda : transform(graph0, gterm0)), (lambda : hydra.lib.flows.pure(gterm0))), (lambda gterm1: hydra.lib.flows.bind(adapt_term(constraints, litmap(), gterm1), (lambda gterm2: (els1_raw := hydra.schemas.term_as_graph(gterm2), hydra.lib.flows.bind(hydra.lib.flows.map_elems((lambda v1: adapt_primitive(constraints, litmap(), v1)), prims0()), (lambda prims1: (original_constraints := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda el: hydra.lib.maybes.bind(el.type, (lambda ts: hydra.lib.maybes.map((lambda c: (el.name, c)), ts.constraints)))), hydra.lib.maps.elems(els0())))), merge_constraints := (lambda el: (bname := el.name, orig_constraints := hydra.lib.maps.lookup(bname, original_constraints), hydra.lib.maybes.maybe(el, (lambda orig_c: hydra.lib.maybes.maybe(hydra.core.Binding(bname, el.term, Just(hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("a"))), Just(orig_c)))), (lambda ts: (inferred_c := ts.constraints, merged_c := hydra.lib.maybes.maybe(Just(orig_c), (lambda inf_c: Just(hydra.lib.maps.union(orig_c, inf_c))), inferred_c), hydra.core.Binding(bname, el.term, Just(hydra.core.TypeScheme(ts.variables, ts.type, merged_c))))[2]), el.type)), orig_constraints))[2]), els1 := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda el: (el.name, merge_constraints(el))), hydra.lib.maps.elems(els1_raw))), hydra.lib.flows.pure(hydra.graph.Graph(els1, env0(), hydra.lib.maps.empty(), cast(hydra.core.Term, hydra.core.TermUnit()), prims1, schema1)))[3])))[1])))))[1]))
@@ -351,6 +380,7 @@ def data_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, do_
 def schema_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, graph: hydra.graph.Graph, name_lists: frozenlist[frozenlist[hydra.core.Name]]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[FrozenDict[hydra.core.Name, hydra.core.Type], frozenlist[frozenlist[hydra.module.TypeDefinition]]]]:
     r"""Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name."""
     
+    @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
     return hydra.lib.flows.bind(hydra.schemas.graph_as_types(graph), (lambda tmap0: hydra.lib.flows.bind(adapt_graph_schema(constraints, litmap(), tmap0), (lambda tmap1: (to_def := (lambda pair: hydra.module.TypeDefinition(hydra.lib.pairs.first(pair), hydra.lib.pairs.second(pair))), hydra.lib.flows.pure((tmap1, hydra.lib.lists.map((lambda names: hydra.lib.lists.map(to_def, hydra.lib.lists.map((lambda n: (n, hydra.lib.maybes.from_just(hydra.lib.maps.lookup(n, tmap1)))), names))), name_lists))))[1]))))

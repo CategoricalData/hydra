@@ -4,6 +4,7 @@ r"""Reflection functions for working with term, type, and literal type variants,
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Maybe, frozenlist
 from typing import cast
 import hydra.core
@@ -233,6 +234,7 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+@lru_cache(1)
 def literal_types() -> frozenlist[hydra.core.LiteralType]:
     r"""All literal types, in a canonical order."""
     

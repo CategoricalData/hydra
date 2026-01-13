@@ -4,6 +4,7 @@ r"""Additional adapter utilities, above and beyond the generated ones."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Maybe, frozenlist
 from typing import TypeVar
 import hydra.coders
@@ -34,6 +35,7 @@ T4 = TypeVar("T4")
 def bidirectional(f: Callable[[hydra.coders.CoderDirection, T0], hydra.compute.Flow[T1, T0]]) -> hydra.compute.Coder[T1, T1, T0, T0]:
     return hydra.compute.Coder((lambda v1: f(hydra.coders.CoderDirection.ENCODE, v1)), (lambda v1: f(hydra.coders.CoderDirection.DECODE, v1)))
 
+@lru_cache(1)
 def id_coder() -> hydra.compute.Coder[T0, T1, T2, T2]:
     return hydra.compute.Coder((lambda x1: hydra.lib.flows.pure(x1)), (lambda x1: hydra.lib.flows.pure(x1)))
 
@@ -85,16 +87,21 @@ def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt:
 def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
     r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
     
+    @lru_cache(1)
     def qual_name() -> hydra.core.Type:
         return hydra.names.qualify_name(name)
+    @lru_cache(1)
     def ns() -> Maybe[hydra.module.Namespace]:
         return qual_name().namespace
+    @lru_cache(1)
     def local() -> str:
         return qual_name().local
     def ns_to_file_path(ns: hydra.module.Namespace) -> str:
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns.value)))
+    @lru_cache(1)
     def prefix() -> str:
         return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns())
+    @lru_cache(1)
     def suffix() -> str:
         return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local())
     return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
@@ -102,6 +109,7 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:
     r"""Check if type is supported by language constraints."""
     
+    @lru_cache(1)
     def base() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(t)
     def is_variable(v: hydra.variants.TypeVariant) -> bool:

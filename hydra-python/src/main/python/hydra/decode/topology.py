@@ -3,6 +3,7 @@
 r"""Term decoders for hydra.topology."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 import hydra.core
 import hydra.extract.helpers
@@ -43,6 +44,7 @@ def tarjan_state(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
     def _hoist_hydra_decode_topology_tarjan_state_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.topology.TarjanState]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:

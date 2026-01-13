@@ -4,6 +4,7 @@ r"""Term decoders for hydra.accessors."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import cast
 import hydra.accessors
@@ -22,6 +23,7 @@ def accessor_node(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
     def _hoist_hydra_decode_accessors_accessor_node_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.accessors.AccessorNode]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -62,14 +64,19 @@ def term_accessor(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
     def _hoist_hydra_decode_accessors_term_accessor_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.accessors.TermAccessor]:
         match v1:
             case hydra.core.TermUnion(value=inj):
+                @lru_cache(1)
                 def tname() -> hydra.core.Type:
                     return inj.type_name
+                @lru_cache(1)
                 def field() -> hydra.core.Type:
                     return inj.field
+                @lru_cache(1)
                 def fname() -> hydra.core.Type:
                     return field().name
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return field().term
+                @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.accessors.TermAccessor]]]:
                     def _hoist_variant_map_1(v1: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
                         match v1:
@@ -197,6 +204,7 @@ def accessor_edge(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
     def _hoist_hydra_decode_accessors_accessor_edge_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.accessors.AccessorEdge]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("source", accessor_node, field_map(), cx), (lambda field_source: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("path", accessor_path, field_map(), cx), (lambda field_path: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("target", accessor_node, field_map(), cx), (lambda field_target: Right(hydra.accessors.AccessorEdge(field_source, field_path, field_target))))))))
@@ -209,6 +217,7 @@ def accessor_graph(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
     def _hoist_hydra_decode_accessors_accessor_graph_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.accessors.AccessorGraph]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("nodes", (lambda v1, v2: hydra.extract.helpers.decode_list(accessor_node, v1, v2)), field_map(), cx), (lambda field_nodes: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v1, v2: hydra.extract.helpers.decode_list(accessor_edge, v1, v2)), field_map(), cx), (lambda field_edges: Right(hydra.accessors.AccessorGraph(field_nodes, field_edges))))))

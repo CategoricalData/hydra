@@ -3,6 +3,7 @@
 r"""Term decoders for hydra.phantoms."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right
 from typing import TypeVar
 import hydra.core
@@ -33,6 +34,7 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydr
     def _hoist_hydra_decode_phantoms_t_binding_1(a: T2, cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T3]]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v1, v2: t_term(a, v1, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))

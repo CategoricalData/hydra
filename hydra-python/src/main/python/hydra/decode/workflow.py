@@ -4,6 +4,7 @@ r"""Term decoders for hydra.workflow."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import cast
 import hydra.core
@@ -23,6 +24,7 @@ def hydra_schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hyd
     def _hoist_hydra_decode_workflow_hydra_schema_spec_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.workflow.HydraSchemaSpec]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("modules", (lambda v1, v2: hydra.extract.helpers.decode_list(hydra.decode.module.module, v1, v2)), field_map(), cx), (lambda field_modules: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", hydra.decode.core.name, field_map(), cx), (lambda field_type_name: Right(hydra.workflow.HydraSchemaSpec(field_modules, field_type_name))))))
@@ -35,14 +37,19 @@ def schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
     def _hoist_hydra_decode_workflow_schema_spec_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.workflow.SchemaSpec]:
         match v1:
             case hydra.core.TermUnion(value=inj):
+                @lru_cache(1)
                 def tname() -> hydra.core.Type:
                     return inj.type_name
+                @lru_cache(1)
                 def field() -> hydra.core.Type:
                     return inj.field
+                @lru_cache(1)
                 def fname() -> hydra.core.Type:
                     return field().name
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return field().term
+                @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.workflow.SchemaSpec]]]:
                     def _hoist_variant_map_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
                         match v1:
@@ -69,6 +76,7 @@ def transform_workflow(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hy
     def _hoist_hydra_decode_workflow_transform_workflow_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.workflow.TransformWorkflow]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:

@@ -4,6 +4,7 @@ r"""This implementation of Tarjan's algorithm was originally based on GraphSCC b
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import TypeVar
 import hydra.compute
@@ -24,20 +25,26 @@ import hydra.topology
 T0 = TypeVar("T0")
 
 def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
+    @lru_cache(1)
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:
         return hydra.lib.lists.sort_on((lambda x1: hydra.lib.pairs.first(x1)), edges0)
+    @lru_cache(1)
     def indexed_edges() -> frozenlist[tuple[int, tuple[T0, frozenlist[T0]]]]:
         return hydra.lib.lists.zip(hydra.lib.math.range_(0, hydra.lib.lists.length(sorted_edges())), sorted_edges())
+    @lru_cache(1)
     def key_to_vertex() -> FrozenDict[T0, int]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), k := hydra.lib.pairs.first(k_neighbors), (k, v))[3]), indexed_edges()))
+    @lru_cache(1)
     def vertex_map() -> FrozenDict[int, T0]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), k := hydra.lib.pairs.first(k_neighbors), (v, k))[3]), indexed_edges()))
+    @lru_cache(1)
     def graph() -> FrozenDict[int, frozenlist[int]]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), neighbors := hydra.lib.pairs.second(k_neighbors), (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex())), neighbors)))[3]), indexed_edges()))
     def vertex_to_key(v: int) -> T0:
         return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map()))
     return (graph(), vertex_to_key)
 
+@lru_cache(1)
 def initial_state() -> hydra.core.Type:
     r"""Initial state for Tarjan's algorithm."""
     
@@ -48,14 +55,19 @@ def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, fr
     
     def go(acc: frozenlist[int]) -> hydra.compute.Flow[hydra.topology.TarjanState, frozenlist[int]]:
         def succeed(st: hydra.topology.TarjanState) -> hydra.compute.Flow[hydra.topology.TarjanState, frozenlist[int]]:
+            @lru_cache(1)
             def x() -> int:
                 return hydra.lib.lists.head(st.stack)
+            @lru_cache(1)
             def xs() -> frozenlist[int]:
                 return hydra.lib.lists.tail(st.stack)
+            @lru_cache(1)
             def new_st() -> hydra.core.Type:
                 return hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
+            @lru_cache(1)
             def new_st2() -> hydra.core.Type:
                 return hydra.topology.TarjanState(new_st().counter, new_st().indices, new_st().low_links, new_st().stack, hydra.lib.sets.delete(x(), st.on_stack), new_st().sccs)
+            @lru_cache(1)
             def acc_() -> frozenlist[int]:
                 return hydra.lib.lists.cons(x(), acc)
             return hydra.lib.flows.bind(hydra.monads.put_state(new_st2()), (lambda _: hydra.lib.logic.if_else(hydra.lib.equality.equal(x(), v), (lambda : hydra.lib.flows.pure(hydra.lib.lists.reverse(acc_()))), (lambda : go(acc_())))))
@@ -70,10 +82,12 @@ def strong_connect(graph: FrozenDict[int, frozenlist[int]], v: int) -> hydra.com
 def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> frozenlist[frozenlist[int]]:
     r"""Compute the strongly connected components of the given graph. The components are returned in reverse topological order."""
     
+    @lru_cache(1)
     def verts() -> frozenlist[int]:
         return hydra.lib.maps.keys(graph)
     def process_vertex(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:
         return hydra.lib.flows.bind(hydra.lib.flows.map((lambda st: hydra.lib.maps.member(v, st.indices)), hydra.monads.get_state()), (lambda visited: hydra.lib.logic.if_else(hydra.lib.logic.not_(visited), (lambda : strong_connect(graph, v)), (lambda : hydra.lib.flows.pure(None)))))
+    @lru_cache(1)
     def final_state() -> hydra.core.Type:
         return hydra.monads.exec(hydra.lib.flows.map_list(process_vertex, verts()), initial_state())
     return hydra.lib.lists.reverse(hydra.lib.lists.map((lambda x1: hydra.lib.lists.sort(x1)), final_state().sccs))

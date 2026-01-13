@@ -3,6 +3,7 @@
 r"""Term decoders for hydra.typing."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right
 import hydra.core
 import hydra.decode.core
@@ -17,6 +18,7 @@ def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hyd
     def _hoist_hydra_decode_typing_inference_context_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
@@ -53,6 +55,7 @@ def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydr
     def _hoist_hydra_decode_typing_inference_result_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceResult]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map(), cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map(), cx), (lambda field_type: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("subst", type_subst, field_map(), cx), (lambda field_subst: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("classConstraints", (lambda v1, v2: hydra.extract.helpers.decode_map(hydra.decode.core.name, hydra.decode.core.type_variable_metadata, v1, v2)), field_map(), cx), (lambda field_class_constraints: Right(hydra.typing.InferenceResult(field_term, field_type, field_subst, field_class_constraints))))))))))
@@ -75,6 +78,7 @@ def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_typing_type_constraint_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeConstraint]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -101,6 +105,7 @@ def type_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
     def _hoist_hydra_decode_typing_type_context_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeContext]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("types", (lambda v1, v2: hydra.extract.helpers.decode_map(hydra.decode.core.name, hydra.decode.core.type, v1, v2)), field_map(), cx), (lambda field_types: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("metadata", (lambda v1, v2: hydra.extract.helpers.decode_map(hydra.decode.core.name, hydra.decode.core.term, v1, v2)), field_map(), cx), (lambda field_metadata: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeVariables", (lambda v1, v2: hydra.extract.helpers.decode_set(hydra.decode.core.name, v1, v2)), field_map(), cx), (lambda field_type_variables: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("lambdaVariables", (lambda v1, v2: hydra.extract.helpers.decode_set(hydra.decode.core.name, v1, v2)), field_map(), cx), (lambda field_lambda_variables: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("inferenceContext", inference_context, field_map(), cx), (lambda field_inference_context: Right(hydra.typing.TypeContext(field_types, field_metadata, field_type_variables, field_lambda_variables, field_inference_context))))))))))))
