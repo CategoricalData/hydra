@@ -613,9 +613,9 @@ encodeFunction env dom cod fun = case fun of
       -- For function primitives, generate a method reference like ClassName::apply
       let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
       -- elementJavaIdentifier with isPrim=True adds ".apply", but we want "::apply" for method references
-      let suffix = ".apply"
+      let suffix = "." ++ applyMethodName
       let className = take (length classWithApply - length suffix) classWithApply
-      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::apply"
+      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
     _ -> pure $ encodeLiteral $ LiteralString $
       "Unimplemented function variant: " ++ show (functionVariant fun)
   where
@@ -1059,9 +1059,9 @@ functionCall env isPrim name args = do
     then do
       -- Generate method reference like ClassName::apply
       let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
-      let suffix = ".apply"
+      let suffix = "." ++ applyMethodName
       let className = take (length classWithApply - length suffix) classWithApply
-      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::apply"
+      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
     else do
       jargs <- CM.mapM (encodeTerm env) args
       if isLocalVariable name
