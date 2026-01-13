@@ -20,13 +20,17 @@ def coder_direction(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_coders_coder_direction_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.CoderDirection]:
         match v1:
             case hydra.core.TermUnion(value=inj):
-                tname = inj.type_name
-                field = inj.field
-                fname = field.name
-                fterm = field.term
+                def tname() -> hydra.core.Type:
+                    return inj.type_name
+                def field() -> hydra.core.Type:
+                    return inj.field
+                def fname() -> hydra.core.Type:
+                    return field().name
+                def fterm() -> hydra.core.Type:
+                    return field().term
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.coders.CoderDirection]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("encode"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.coders.CoderDirection.ENCODE), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("decode"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.coders.CoderDirection.DECODE), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.coders.CoderDirection"))
@@ -60,13 +64,17 @@ def traversal_order(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_coders_traversal_order_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.TraversalOrder]:
         match v1:
             case hydra.core.TermUnion(value=inj):
-                tname = inj.type_name
-                field = inj.field
-                fname = field.name
-                fterm = field.term
+                def tname() -> hydra.core.Type:
+                    return inj.type_name
+                def field() -> hydra.core.Type:
+                    return inj.field
+                def fname() -> hydra.core.Type:
+                    return field().name
+                def fterm() -> hydra.core.Type:
+                    return field().term
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.coders.TraversalOrder]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("pre"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.coders.TraversalOrder.PRE), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("post"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.coders.TraversalOrder.POST), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.coders.TraversalOrder"))

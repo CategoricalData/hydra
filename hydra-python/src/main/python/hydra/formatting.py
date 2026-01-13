@@ -23,10 +23,11 @@ T0 = TypeVar("T0")
 def map_first_letter(mapping: Callable[[str], str], s: str) -> str:
     r"""A helper which maps the first letter of a string to another string."""
     
-    list = hydra.lib.strings.to_list(s)
+    def list() -> frozenlist[int]:
+        return hydra.lib.strings.to_list(s)
     def first_letter() -> str:
-        return mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list))))
-    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : s), (lambda : hydra.lib.strings.cat2(first_letter(), hydra.lib.strings.from_list(hydra.lib.lists.tail(list)))))
+        return mapping(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.lists.head(list()))))
+    return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : s), (lambda : hydra.lib.strings.cat2(first_letter(), hydra.lib.strings.from_list(hydra.lib.lists.tail(list())))))
 
 def capitalize(v1: str) -> str:
     r"""Capitalize the first letter of a string."""
@@ -46,7 +47,8 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
             def split_on_uppercase(acc: frozenlist[frozenlist[int]], c: int) -> frozenlist[frozenlist[int]]:
                 return hydra.lib.lists.concat2(hydra.lib.logic.if_else(hydra.lib.chars.is_upper(c), (lambda : ((),)), (lambda : ())), hydra.lib.lists.cons(hydra.lib.lists.cons(c, hydra.lib.lists.head(acc)), hydra.lib.lists.tail(acc)))
             return hydra.lib.lists.map(hydra.lib.strings.from_list, hydra.lib.lists.foldl(split_on_uppercase, ((),), hydra.lib.lists.reverse(hydra.lib.strings.to_list(decapitalize(original)))))
-        by_underscores = hydra.lib.strings.split_on("_", original)
+        def by_underscores() -> frozenlist[str]:
+            return hydra.lib.strings.split_on("_", original)
         match from_:
             case hydra.util.CaseConvention.CAMEL:
                 return by_caps()
@@ -55,10 +57,10 @@ def convert_case(from_: hydra.util.CaseConvention, to: hydra.util.CaseConvention
                 return by_caps()
             
             case hydra.util.CaseConvention.LOWER_SNAKE:
-                return by_underscores
+                return by_underscores()
             
             case hydra.util.CaseConvention.UPPER_SNAKE:
-                return by_underscores
+                return by_underscores()
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")

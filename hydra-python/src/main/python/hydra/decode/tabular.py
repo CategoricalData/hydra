@@ -4,7 +4,7 @@ r"""Term decoders for hydra.tabular."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import Either, Left, Maybe, Right, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar
 import hydra.core
 import hydra.extract.helpers
@@ -55,8 +55,9 @@ def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.De
     def _hoist_hydra_decode_tabular_table_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.Table[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("header", (lambda v1, v2: hydra.extract.helpers.decode_maybe(header_row, v1, v2)), field_map, cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("data", (lambda v1, v2: hydra.extract.helpers.decode_list((lambda v1, v2: data_row(v, v1, v2)), v1, v2)), field_map, cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("header", (lambda v1, v2: hydra.extract.helpers.decode_maybe(header_row, v1, v2)), field_map(), cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("data", (lambda v1, v2: hydra.extract.helpers.decode_list((lambda v1, v2: data_row(v, v1, v2)), v1, v2)), field_map(), cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.Table"))

@@ -109,11 +109,12 @@ def expression_length(e: hydra.ast.Expr) -> int:
     def op_length(op: hydra.ast.Op) -> int:
         def sym_len() -> int:
             return symbol_length(op.symbol)
-        padding = op.padding
+        def padding() -> hydra.core.Type:
+            return op.padding
         def left_len() -> int:
-            return ws_length(padding.left)
+            return ws_length(padding().left)
         def right_len() -> int:
-            return ws_length(padding.right)
+            return ws_length(padding().right)
         return hydra.lib.math.add(sym_len(), hydra.lib.math.add(left_len(), right_len()))
     def op_expr_length(oe: hydra.ast.OpExpr) -> int:
         def op_len() -> int:
@@ -240,8 +241,9 @@ def or_sep(style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.
         return hydra.lib.lists.head(l)
     def r() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.lists.tail(l)
-    newlines = style.newline_before_content
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(l), 1), (lambda : hydra.lib.lists.head(l)), (lambda : ifx(or_op(newlines), h(), or_sep(style, r()))))))
+    def newlines() -> bool:
+        return style.newline_before_content
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(l), 1), (lambda : hydra.lib.lists.head(l)), (lambda : ifx(or_op(newlines()), h(), or_sep(style, r()))))))
 
 def parentheses() -> hydra.core.Type:
     return hydra.ast.Brackets(sym("("), sym(")"))
@@ -280,23 +282,31 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
             return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(indent_expr.style, parenthesize(indent_expr.expr))))
         
         case hydra.ast.ExprOp(value=op_expr):
-            op = op_expr.op
-            prec = op.precedence.value
-            assoc = op.associativity
-            lhs = op_expr.lhs
-            rhs = op_expr.rhs
+            def op() -> hydra.core.Type:
+                return op_expr.op
+            def prec() -> int:
+                return op().precedence.value
+            def assoc() -> hydra.core.Type:
+                return op().associativity
+            def lhs() -> hydra.core.Type:
+                return op_expr.lhs
+            def rhs() -> hydra.core.Type:
+                return op_expr.rhs
             def lhs_() -> hydra.core.Type:
-                return parenthesize(lhs)
+                return parenthesize(lhs())
             def rhs_() -> hydra.core.Type:
-                return parenthesize(rhs)
+                return parenthesize(rhs())
             def lhs2() -> hydra.core.Type:
                 match lhs_():
                     case hydra.ast.ExprOp(value=lop_expr):
-                        lop = lop_expr.op
-                        lprec = lop.precedence.value
-                        lassoc = lop.associativity
+                        def lop() -> hydra.core.Type:
+                            return lop_expr.op
+                        def lprec() -> int:
+                            return lop().precedence.value
+                        def lassoc() -> hydra.core.Type:
+                            return lop().associativity
                         def comparison() -> hydra.core.Type:
-                            return hydra.lib.equality.compare(prec, lprec)
+                            return hydra.lib.equality.compare(prec(), lprec())
                         match comparison():
                             case hydra.util.Comparison.LESS_THAN:
                                 return lhs_()
@@ -305,7 +315,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
                                 return parens(lhs_())
                             
                             case hydra.util.Comparison.EQUAL_TO:
-                                return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_left(assoc), assoc_left(lassoc)), (lambda : lhs_()), (lambda : parens(lhs_())))
+                                return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_left(assoc()), assoc_left(lassoc())), (lambda : lhs_()), (lambda : parens(lhs_())))
                             
                             case _:
                                 raise AssertionError("Unreachable: all variants handled")
@@ -315,11 +325,14 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
             def rhs2() -> hydra.core.Type:
                 match rhs_():
                     case hydra.ast.ExprOp(value=rop_expr):
-                        rop = rop_expr.op
-                        rprec = rop.precedence.value
-                        rassoc = rop.associativity
+                        def rop() -> hydra.core.Type:
+                            return rop_expr.op
+                        def rprec() -> int:
+                            return rop().precedence.value
+                        def rassoc() -> hydra.core.Type:
+                            return rop().associativity
                         def comparison() -> hydra.core.Type:
-                            return hydra.lib.equality.compare(prec, rprec)
+                            return hydra.lib.equality.compare(prec(), rprec())
                         match comparison():
                             case hydra.util.Comparison.LESS_THAN:
                                 return rhs_()
@@ -328,14 +341,14 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
                                 return parens(rhs_())
                             
                             case hydra.util.Comparison.EQUAL_TO:
-                                return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_right(assoc), assoc_right(rassoc)), (lambda : rhs_()), (lambda : parens(rhs_())))
+                                return hydra.lib.logic.if_else(hydra.lib.logic.and_(assoc_right(assoc()), assoc_right(rassoc())), (lambda : rhs_()), (lambda : parens(rhs_())))
                             
                             case _:
                                 raise AssertionError("Unreachable: all variants handled")
                     
                     case _:
                         return rhs_()
-            return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2(), rhs2())))
+            return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op(), lhs2(), rhs2())))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -377,12 +390,14 @@ def print_expr(e: hydra.ast.Expr) -> str:
             return symbol.value
         
         case hydra.ast.ExprIndent(value=indent_expr):
-            style = indent_expr.style
-            expr = indent_expr.expr
+            def style() -> hydra.core.Type:
+                return indent_expr.style
+            def expr() -> hydra.core.Type:
+                return indent_expr.expr
             def lns() -> frozenlist[str]:
-                return hydra.lib.strings.lines(print_expr(expr))
+                return hydra.lib.strings.lines(print_expr(expr()))
             def ilns() -> frozenlist[str]:
-                match style:
+                match style():
                     case hydra.ast.IndentStyleAllLines(value=idt):
                         return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), lns())
                     
@@ -394,37 +409,52 @@ def print_expr(e: hydra.ast.Expr) -> str:
             return hydra.lib.strings.intercalate("\n", ilns())
         
         case hydra.ast.ExprOp(value=op_expr):
-            op = op_expr.op
-            sym = op.symbol.value
-            padding = op.padding
-            padl = padding.left
-            padr = padding.right
-            l = op_expr.lhs
-            r = op_expr.rhs
+            def op() -> hydra.core.Type:
+                return op_expr.op
+            def sym() -> str:
+                return op().symbol.value
+            def padding() -> hydra.core.Type:
+                return op().padding
+            def padl() -> hydra.core.Type:
+                return padding().left
+            def padr() -> hydra.core.Type:
+                return padding().right
+            def l() -> hydra.core.Type:
+                return op_expr.lhs
+            def r() -> hydra.core.Type:
+                return op_expr.rhs
             def lhs() -> str:
-                return idt(padl, print_expr(l))
+                return idt(padl(), print_expr(l()))
             def rhs() -> str:
-                return idt(padr, print_expr(r))
-            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(lhs(), pad(padl)), sym), pad(padr)), rhs())
+                return idt(padr(), print_expr(r()))
+            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(lhs(), pad(padl())), sym()), pad(padr())), rhs())
         
         case hydra.ast.ExprBrackets(value=bracket_expr):
-            brackets = bracket_expr.brackets
-            l = brackets.open.value
-            r = brackets.close.value
-            e = bracket_expr.enclosed
-            style = bracket_expr.style
+            def brackets() -> hydra.core.Type:
+                return bracket_expr.brackets
+            def l() -> str:
+                return brackets().open.value
+            def r() -> str:
+                return brackets().close.value
+            def e() -> hydra.core.Type:
+                return bracket_expr.enclosed
+            def style() -> hydra.core.Type:
+                return bracket_expr.style
             def body() -> str:
-                return print_expr(e)
-            do_indent = style.indent
-            nl_before = style.newline_before_content
-            nl_after = style.newline_after_content
+                return print_expr(e())
+            def do_indent() -> Maybe[str]:
+                return style().indent
+            def nl_before() -> bool:
+                return style().newline_before_content
+            def nl_after() -> bool:
+                return style().newline_after_content
             def ibody() -> str:
-                return hydra.lib.maybes.maybe(body(), (lambda idt: custom_indent(idt, body())), do_indent)
+                return hydra.lib.maybes.maybe(body(), (lambda idt: custom_indent(idt, body())), do_indent())
             def pre() -> str:
-                return hydra.lib.logic.if_else(nl_before, (lambda : "\n"), (lambda : ""))
+                return hydra.lib.logic.if_else(nl_before(), (lambda : "\n"), (lambda : ""))
             def suf() -> str:
-                return hydra.lib.logic.if_else(nl_after, (lambda : "\n"), (lambda : ""))
-            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(l, pre()), ibody()), suf()), r)
+                return hydra.lib.logic.if_else(nl_after(), (lambda : "\n"), (lambda : ""))
+            return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(l(), pre()), ibody()), suf()), r())
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

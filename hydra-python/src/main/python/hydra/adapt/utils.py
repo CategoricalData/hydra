@@ -4,7 +4,7 @@ r"""Additional adapter utilities, above and beyond the generated ones."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import Maybe, frozenlist
 from typing import TypeVar
 import hydra.coders
 import hydra.compute
@@ -38,7 +38,7 @@ def id_coder() -> hydra.compute.Coder[T0, T1, T2, T2]:
     return hydra.compute.Coder((lambda x1: hydra.lib.flows.pure(x1)), (lambda x1: hydra.lib.flows.pure(x1)))
 
 def choose_adapter(alts: Callable[[T0], hydra.compute.Flow[T1, frozenlist[hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]]], supported: Callable[[T0], bool], show: Callable[[T0], str], describe: Callable[[T0], str], typ: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]:
-    return hydra.lib.logic.if_else(supported(typ), (lambda : hydra.lib.flows.pure(hydra.compute.Adapter(False, typ, typ, id_coder()))), (lambda : hydra.lib.flows.bind(alts(typ), (lambda raw: (candidates := (lambda : hydra.lib.lists.filter((lambda adapter: supported(adapter.target)), raw)), hydra.lib.logic.if_else(hydra.lib.lists.null(candidates()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no adapters found for ", describe(typ), hydra.lib.logic.if_else(hydra.lib.lists.null(raw), (lambda : ""), (lambda : hydra.lib.strings.cat((" (discarded ", hydra.lib.literals.show_int32(hydra.lib.lists.length(raw)), " unsupported candidate types: ", hydra.show.core.list(show, hydra.lib.lists.map((lambda v1: v1.target), raw)), ")")))), ". Original type: ", show(typ))))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(candidates())))))[1]))))
+    return hydra.lib.logic.if_else(supported(typ), (lambda : hydra.lib.flows.pure(hydra.compute.Adapter(False, typ, typ, id_coder()))), (lambda : hydra.lib.flows.bind(alts(typ), (lambda raw: (candidates := hydra.lib.lists.filter((lambda adapter: supported(adapter.target)), raw), hydra.lib.logic.if_else(hydra.lib.lists.null(candidates), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no adapters found for ", describe(typ), hydra.lib.logic.if_else(hydra.lib.lists.null(raw), (lambda : ""), (lambda : hydra.lib.strings.cat((" (discarded ", hydra.lib.literals.show_int32(hydra.lib.lists.length(raw)), " unsupported candidate types: ", hydra.show.core.list(show, hydra.lib.lists.map((lambda v1: v1.target), raw)), ")")))), ". Original type: ", show(typ))))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(candidates)))))[1]))))
 
 def compose_coders(c1: hydra.compute.Coder[T0, T1, T2, T3], c2: hydra.compute.Coder[T0, T1, T3, T4]) -> hydra.compute.Coder[T0, T1, T2, T4]:
     return hydra.compute.Coder((lambda a: hydra.lib.flows.bind(c1.encode(a), (lambda b1: c2.encode(b1)))), (lambda c: hydra.lib.flows.bind(c2.decode(c), (lambda b2: c1.decode(b2)))))
@@ -85,20 +85,25 @@ def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt:
 def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
     r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
     
-    qual_name = hydra.names.qualify_name(name)
-    ns = qual_name.namespace
-    local = qual_name.local
+    def qual_name() -> hydra.core.Type:
+        return hydra.names.qualify_name(name)
+    def ns() -> Maybe[hydra.module.Namespace]:
+        return qual_name().namespace
+    def local() -> str:
+        return qual_name().local
     def ns_to_file_path(ns: hydra.module.Namespace) -> str:
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns.value)))
     def prefix() -> str:
-        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
-    suffix = hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
-    return hydra.lib.strings.cat((prefix(), suffix, ".", ext.value))
+        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns())
+    def suffix() -> str:
+        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local())
+    return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
 
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:
     r"""Check if type is supported by language constraints."""
     
-    base = hydra.rewriting.deannotate_type(t)
+    def base() -> hydra.core.Type:
+        return hydra.rewriting.deannotate_type(t)
     def is_variable(v: hydra.variants.TypeVariant) -> bool:
         match v:
             case hydra.variants.TypeVariant.VARIABLE:
@@ -160,7 +165,7 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.lib.logic.and_(constraints.types(base), hydra.lib.logic.and_(is_supported_variant(hydra.reflect.type_variant(base)), is_supported(base)))
+    return hydra.lib.logic.and_(constraints.types(base()), hydra.lib.logic.and_(is_supported_variant(hydra.reflect.type_variant(base())), is_supported(base())))
 
 def unidirectional_coder(m: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Coder[T1, T3, T0, T2]:
     return hydra.compute.Coder(m, (lambda _: hydra.lib.flows.fail("inbound mapping is unsupported")))

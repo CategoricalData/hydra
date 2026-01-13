@@ -20,13 +20,17 @@ def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
     def _hoist_hydra_decode_classes_type_class_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.classes.TypeClass]:
         match v1:
             case hydra.core.TermUnion(value=inj):
-                tname = inj.type_name
-                field = inj.field
-                fname = field.name
-                fterm = field.term
+                def tname() -> hydra.core.Type:
+                    return inj.type_name
+                def field() -> hydra.core.Type:
+                    return inj.field
+                def fname() -> hydra.core.Type:
+                    return field().name
+                def fterm() -> hydra.core.Type:
+                    return field().term
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.classes.TypeClass]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("equality"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.classes.TypeClass.EQUALITY), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("ordering"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.classes.TypeClass.ORDERING), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.classes.TypeClass"))

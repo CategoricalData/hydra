@@ -66,7 +66,7 @@ def json_integer_part() -> hydra.parsing.Parser[str]:
 def json_number() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON number (integer, decimal, or scientific notation)."""
     
-    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), frac_part)), hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), exp_part))), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe(Decimal('0.0'), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.literals.read_bigfloat(num_str()))))))[1])))))))
+    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), frac_part)), hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), exp_part)), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe(Decimal('0.0'), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.literals.read_bigfloat(num_str))))))[1])))))))
 
 def json_escape_char() -> hydra.parsing.Parser[int]:
     r"""Parse a JSON escape sequence after the backslash."""

@@ -64,7 +64,8 @@ def decode_record(rt: hydra.core.RowType, coders: frozenlist[tuple[hydra.core.Fi
     return result()
 
 def encode_record(coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.Coder[hydra.graph.Graph, T0, hydra.core.Term, hydra.json.model.Value]]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.json.model.Value]:
-    stripped = hydra.rewriting.deannotate_term(term)
+    def stripped() -> hydra.core.Type:
+        return hydra.rewriting.deannotate_term(term)
     def match_maybe_term(fvalue: hydra.core.Term, coder_: hydra.compute.Coder[T1, T2, hydra.core.Term, T3], fname: hydra.core.Name, dflt: hydra.compute.Flow[T1, Maybe[tuple[str, T3]]]) -> hydra.compute.Flow[T1, Maybe[tuple[str, T3]]]:
         match fvalue:
             case hydra.core.TermMaybe(value=opt):
@@ -99,7 +100,7 @@ def encode_record(coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.C
         def dflt() -> hydra.compute.Flow[T1, Maybe[tuple[str, T3]]]:
             return hydra.lib.flows.bind(coder_().encode(fvalue()), (lambda encoded: hydra.lib.flows.pure(Just((fname().value, encoded)))))
         return match_type_for_maybe(ft(), (lambda x1: for_maybe(x1)), dflt())
-    return hydra.lib.flows.bind(hydra.extract.core.term_record(stripped), (lambda record: (fields := record.fields, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: encode_field(x1)), hydra.lib.lists.zip(coders, fields)), (lambda maybe_fields: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.cat(maybe_fields))))))))[1]))
+    return hydra.lib.flows.bind(hydra.extract.core.term_record(stripped()), (lambda record: (fields := record.fields, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: encode_field(x1)), hydra.lib.lists.zip(coders, fields)), (lambda maybe_fields: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.cat(maybe_fields))))))))[1]))
 
 def literal_json_coder(lt: hydra.core.LiteralType) -> hydra.compute.Flow[T0, hydra.compute.Coder[T1, T2, hydra.core.Literal, hydra.json.model.Value]]:
     def decode_bool(s: hydra.json.model.Value) -> hydra.compute.Flow[T3, hydra.core.Literal]:
@@ -119,8 +120,9 @@ def literal_json_coder(lt: hydra.core.LiteralType) -> hydra.compute.Flow[T0, hyd
     def decode_integer(s: hydra.json.model.Value) -> hydra.compute.Flow[T3, hydra.core.Literal]:
         match s:
             case hydra.json.model.ValueNumber(value=f):
-                bi = hydra.lib.literals.bigfloat_to_bigint(f)
-                return hydra.lib.flows.pure(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(bi)))))
+                def bi() -> int:
+                    return hydra.lib.literals.bigfloat_to_bigint(f)
+                return hydra.lib.flows.pure(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(bi())))))
             
             case _:
                 return hydra.monads.unexpected("number", show_value(s))
@@ -172,13 +174,15 @@ def unit_coder() -> hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.json.mode
     return hydra.compute.Coder((lambda x1: encode_unit(x1)), (lambda x1: decode_unit(x1)))
 
 def record_coder(rt: hydra.core.RowType) -> hydra.compute.Flow[T0, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]:
-    fields = rt.fields
+    def fields() -> frozenlist[hydra.core.FieldType]:
+        return rt.fields
     def get_coder(f: hydra.core.FieldType) -> hydra.compute.Flow[T0, tuple[hydra.core.FieldType, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]]:
         return hydra.lib.flows.bind(term_coder(f.type), (lambda coder: hydra.lib.flows.pure((f, coder))))
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list(get_coder, fields), (lambda coders: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_record(coders, v1)), (lambda v1: decode_record(rt, coders, v1))))))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list(get_coder, fields()), (lambda coders: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_record(coders, v1)), (lambda v1: decode_record(rt, coders, v1))))))
 
 def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]:
-    stripped = hydra.rewriting.deannotate_type(typ)
+    def stripped() -> hydra.core.Type:
+        return hydra.rewriting.deannotate_type(typ)
     def encode_literal(ac: hydra.compute.Coder[T2, T3, hydra.core.Literal, T4], term: hydra.core.Term) -> hydra.compute.Flow[T2, T4]:
         match term:
             case hydra.core.TermLiteral(value=av):
@@ -229,8 +233,9 @@ def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Cod
             case _:
                 return hydra.monads.unexpected("mapping", show_value(n))
     def encode_maybe(maybe_element_coder: hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.json.model.Value], maybe_term: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.json.model.Value]:
-        stripped_maybe_term = hydra.rewriting.deannotate_term(maybe_term)
-        match stripped_maybe_term:
+        def stripped_maybe_term() -> hydra.core.Type:
+            return hydra.rewriting.deannotate_term(maybe_term)
+        match stripped_maybe_term():
             case hydra.core.TermMaybe(value=maybe_contents):
                 return hydra.lib.logic.if_else(hydra.lib.maybes.is_nothing(maybe_contents), (lambda : hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda : hydra.lib.flows.bind(maybe_element_coder.encode(hydra.lib.maybes.from_just(maybe_contents)), (lambda encoded_inner: hydra.lib.flows.pure(encoded_inner)))))
             
@@ -244,7 +249,7 @@ def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Cod
             case _:
                 return hydra.lib.flows.bind(maybe_element_coder.decode(json_val), (lambda decoded_inner: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(Just(decoded_inner))))))
     def result() -> hydra.compute.Flow[T0, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]:
-        match stripped:
+        match stripped():
             case hydra.core.TypeLiteral(value=at):
                 return hydra.lib.flows.bind(literal_json_coder(at), (lambda ac: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_literal(ac, v1)), (lambda n: hydra.lib.flows.bind(ac.decode(n), (lambda lit: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermLiteral(lit))))))))))
             
@@ -252,9 +257,11 @@ def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Cod
                 return hydra.lib.flows.bind(term_coder(lt), (lambda lc: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_list(lc, v1)), (lambda v1: decode_list(lc, v1))))))
             
             case hydra.core.TypeMap(value=mt):
-                kt = mt.keys
-                vt = mt.values
-                return hydra.lib.flows.bind(term_coder(kt), (lambda kc: hydra.lib.flows.bind(term_coder(vt), (lambda vc: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (is_string_key := (lambda : hydra.lib.equality.equal(hydra.rewriting.deannotate_type(kt), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))), to_string := (lambda v: hydra.lib.logic.if_else(is_string_key(), (lambda : match_term_literal(v)), (lambda : hydra.show.core.term(v)))), from_string := (lambda s: hydra.lib.logic.if_else(is_string_key(), (lambda : cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))), (lambda : read_string_stub(s)))), encode_entry := (lambda kv: (k := (lambda : hydra.lib.pairs.first(kv)), v := (lambda : hydra.lib.pairs.second(kv)), hydra.lib.flows.bind(vc.encode(v()), (lambda encoded_v: hydra.lib.flows.pure((to_string(k()), encoded_v)))))[2]), decode_entry := (lambda kv: (k := (lambda : hydra.lib.pairs.first(kv)), v := (lambda : hydra.lib.pairs.second(kv)), hydra.lib.flows.bind(vc.decode(v()), (lambda decoded_v: hydra.lib.flows.pure((from_string(k()), decoded_v)))))[2]), hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_map(encode_entry, v1)), (lambda v1: decode_map(decode_entry, v1)))))[5]))))))
+                def kt() -> hydra.core.Type:
+                    return mt.keys
+                def vt() -> hydra.core.Type:
+                    return mt.values
+                return hydra.lib.flows.bind(term_coder(kt()), (lambda kc: hydra.lib.flows.bind(term_coder(vt()), (lambda vc: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (is_string_key := hydra.lib.equality.equal(hydra.rewriting.deannotate_type(kt()), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), to_string := (lambda v: hydra.lib.logic.if_else(is_string_key, (lambda : match_term_literal(v)), (lambda : hydra.show.core.term(v)))), from_string := (lambda s: hydra.lib.logic.if_else(is_string_key, (lambda : cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))), (lambda : read_string_stub(s)))), encode_entry := (lambda kv: (k := hydra.lib.pairs.first(kv), v := hydra.lib.pairs.second(kv), hydra.lib.flows.bind(vc.encode(v), (lambda encoded_v: hydra.lib.flows.pure((to_string(k), encoded_v)))))[2]), decode_entry := (lambda kv: (k := hydra.lib.pairs.first(kv), v := hydra.lib.pairs.second(kv), hydra.lib.flows.bind(vc.decode(v), (lambda decoded_v: hydra.lib.flows.pure((from_string(k), decoded_v)))))[2]), hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_map(encode_entry, v1)), (lambda v1: decode_map(decode_entry, v1)))))[5]))))))
             
             case hydra.core.TypeMaybe(value=maybe_element_type):
                 return hydra.lib.flows.bind(term_coder(maybe_element_type), (lambda maybe_element_coder: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_maybe(maybe_element_coder, v1)), (lambda v1: decode_maybe(maybe_element_coder, v1))))))
@@ -321,9 +328,11 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
                 return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.literals.float_value_to_bigfloat(f)))
             
             case hydra.core.LiteralInteger(value=i):
-                bf = hydra.literals.integer_value_to_bigint(i)
-                f = hydra.lib.literals.bigint_to_bigfloat(bf)
-                return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(f))
+                def bf() -> int:
+                    return hydra.literals.integer_value_to_bigint(i)
+                def f() -> Decimal:
+                    return hydra.lib.literals.bigint_to_bigfloat(bf())
+                return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(f()))
             
             case hydra.core.LiteralString(value=s):
                 return cast(hydra.json.model.Value, hydra.json.model.ValueString(s))
@@ -337,15 +346,17 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
     def result() -> hydra.compute.Flow[T0, hydra.json.model.Value]:
         match term:
             case hydra.core.TermAnnotated(value=at):
-                term1 = at.body
-                ann = at.annotation
+                def term1() -> hydra.core.Type:
+                    return at.body
+                def ann() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return at.annotation
                 def encode_pair(kv: tuple[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[T0, tuple[str, hydra.json.model.Value]]:
                     def k() -> str:
                         return hydra.lib.pairs.first(kv).value
                     def v() -> hydra.core.Type:
                         return hydra.lib.pairs.second(kv)
                     return hydra.lib.flows.bind(untyped_term_to_json(v()), (lambda json: hydra.lib.flows.pure((k(), json))))
-                return hydra.lib.flows.bind(untyped_term_to_json(term1), (lambda json: hydra.lib.flows.bind(hydra.lib.flows.map_list(encode_pair, hydra.lib.maps.to_list(ann)), (lambda pairs: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("term", json), ("annotations", cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(pairs)))))))))))))
+                return hydra.lib.flows.bind(untyped_term_to_json(term1()), (lambda json: hydra.lib.flows.bind(hydra.lib.flows.map_list(encode_pair, hydra.lib.maps.to_list(ann())), (lambda pairs: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("term", json), ("annotations", cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(pairs)))))))))))))
             
             case hydra.core.TermApplication(value=app):
                 return as_record((hydra.core.Field(hydra.core.Name("function"), app.function), hydra.core.Field(hydra.core.Name("argument"), app.argument)))
@@ -354,11 +365,13 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
                 return match_function((lambda x1: unexp(x1)), as_record, as_variant, f)
             
             case hydra.core.TermLet(value=lt):
-                bindings = lt.bindings
-                env = lt.body
+                def bindings() -> frozenlist[hydra.core.Binding]:
+                    return lt.bindings
+                def env() -> hydra.core.Type:
+                    return lt.body
                 def from_binding(b: hydra.core.Binding) -> hydra.core.Type:
                     return hydra.core.Field(b.name, b.term)
-                return as_record((hydra.core.Field(hydra.core.Name("bindings"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name(""), hydra.lib.lists.map(from_binding, bindings))))), hydra.core.Field(hydra.core.Name("environment"), env)))
+                return as_record((hydra.core.Field(hydra.core.Name("bindings"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name(""), hydra.lib.lists.map(from_binding, bindings()))))), hydra.core.Field(hydra.core.Name("environment"), env())))
             
             case hydra.core.TermList(value=terms):
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: untyped_term_to_json(x1)), terms), (lambda json_terms: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueArray(json_terms)))))
@@ -370,8 +383,9 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
                 return hydra.lib.maybes.maybe(hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNull())), (lambda x1: untyped_term_to_json(x1)), mt)
             
             case hydra.core.TermRecord(value=r):
-                fields = r.fields
-                return hydra.lib.flows.bind(hydra.lib.flows.map_list(field_to_keyval, fields), (lambda keyvals: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.cat(keyvals)))))))
+                def fields() -> frozenlist[hydra.core.Field]:
+                    return r.fields
+                return hydra.lib.flows.bind(hydra.lib.flows.map_list(field_to_keyval, fields()), (lambda keyvals: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.cat(keyvals)))))))
             
             case hydra.core.TermSet(value=vals):
                 return untyped_term_to_json(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.sets.to_list(vals))))
@@ -383,8 +397,9 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
                 return as_record((hydra.core.Field(hydra.core.Name("term"), tt.body), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(tt.type))))
             
             case hydra.core.TermUnion(value=i):
-                field = i.field
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(field.term, cast(hydra.core.Term, hydra.core.TermUnit())), (lambda : hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueString(field.name.value)))), (lambda : hydra.lib.flows.bind(field_to_keyval(field), (lambda mkeyval: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.maybe((), (lambda keyval: (keyval,)), mkeyval)))))))))
+                def field() -> hydra.core.Type:
+                    return i.field
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(field().term, cast(hydra.core.Term, hydra.core.TermUnit())), (lambda : hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueString(field().name.value)))), (lambda : hydra.lib.flows.bind(field_to_keyval(field()), (lambda mkeyval: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.maybe((), (lambda keyval: (keyval,)), mkeyval)))))))))
             
             case hydra.core.TermVariable(value=v):
                 return hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueString(v.value)))

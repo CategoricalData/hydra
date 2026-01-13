@@ -36,11 +36,12 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
     r"""Parse a character (codepoint) that satisfies the given predicate."""
     
     def parse(input: str) -> hydra.parsing.ParseResult[int]:
-        codes = hydra.lib.strings.to_list(input)
+        def codes() -> frozenlist[int]:
+            return hydra.lib.strings.to_list(input)
         def c() -> int:
-            return hydra.lib.lists.head(codes)
+            return hydra.lib.lists.head(codes())
         def rest() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.tail(codes))
+            return hydra.lib.strings.from_list(hydra.lib.lists.tail(codes()))
         return hydra.lib.logic.if_else(hydra.lib.strings.null(input), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input)))), (lambda : hydra.lib.logic.if_else(pred(c()), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c(), rest())))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input)))))))
     return hydra.parsing.Parser(parse)
 
@@ -141,4 +142,4 @@ def sep_by(p: hydra.parsing.Parser[T0], sep: hydra.parsing.Parser[T1]) -> hydra.
 def string(str: str) -> hydra.parsing.Parser[str]:
     r"""Parse a specific string."""
     
-    return hydra.parsing.Parser((lambda input: (str_codes := hydra.lib.strings.to_list(str), input_codes := hydra.lib.strings.to_list(input), str_len := (lambda : hydra.lib.lists.length(str_codes)), input_prefix := (lambda : hydra.lib.lists.take(str_len(), input_codes)), hydra.lib.logic.if_else(hydra.lib.equality.equal(str_codes, input_prefix()), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(str, hydra.lib.strings.from_list(hydra.lib.lists.drop(str_len(), input_codes)))))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError(hydra.lib.strings.cat2("expected: ", str), input))))))[4]))
+    return hydra.parsing.Parser((lambda input: (str_codes := hydra.lib.strings.to_list(str), input_codes := hydra.lib.strings.to_list(input), str_len := hydra.lib.lists.length(str_codes), input_prefix := hydra.lib.lists.take(str_len, input_codes), hydra.lib.logic.if_else(hydra.lib.equality.equal(str_codes, input_prefix), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(str, hydra.lib.strings.from_list(hydra.lib.lists.drop(str_len, input_codes)))))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError(hydra.lib.strings.cat2("expected: ", str), input))))))[4]))
