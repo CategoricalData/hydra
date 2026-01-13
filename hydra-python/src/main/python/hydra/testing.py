@@ -181,6 +181,28 @@ HOIST_PREDICATE__LISTS__NAME = hydra.core.Name("lists")
 HOIST_PREDICATE__NOTHING__NAME = hydra.core.Name("nothing")
 
 @dataclass(frozen=True)
+class HoistLetBindingsTestCase:
+    r"""A test case for hoistLetBindings with hoistAll=True, which hoists ALL nested let bindings to the top level of a let term, not just polymorphic ones. This is used for targets like Java that cannot have let expressions in arbitrary positions."""
+    
+    input: Annotated[hydra.core.Let, "The input let term"]
+    output: Annotated[hydra.core.Let, "The expected output let term with all nested bindings hoisted to top"]
+
+HOIST_LET_BINDINGS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.HoistLetBindingsTestCase")
+HOIST_LET_BINDINGS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+HOIST_LET_BINDINGS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class HoistPolymorphicLetBindingsTestCase:
+    r"""A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic let bindings to the top level of a let term. This is used for targets like Java which don't support polymorphic lambdas."""
+    
+    input: Annotated[hydra.core.Let, "The input let term"]
+    output: Annotated[hydra.core.Let, "The expected output let term with polymorphic bindings hoisted to top"]
+
+HOIST_POLYMORPHIC_LET_BINDINGS_TEST_CASE__NAME = hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase")
+HOIST_POLYMORPHIC_LET_BINDINGS_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+HOIST_POLYMORPHIC_LET_BINDINGS_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
 class HoistSubtermsTestCase:
     r"""A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings."""
     
@@ -495,13 +517,19 @@ class TestCaseHoistSubterms(Node["HoistSubtermsTestCase"]):
 class TestCaseHoistCaseStatements(Node["HoistCaseStatementsTestCase"]):
     r"""A hoist case statements test."""
 
+class TestCaseHoistLetBindings(Node["HoistLetBindingsTestCase"]):
+    r"""A hoist all let bindings test (hoistAll=True, for Java)."""
+
+class TestCaseHoistPolymorphicLetBindings(Node["HoistPolymorphicLetBindingsTestCase"]):
+    r"""A hoist polymorphic let bindings test."""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings"""
     
     pass
 
@@ -538,6 +566,8 @@ TEST_CASE__REWRITE_TERM__NAME = hydra.core.Name("rewriteTerm")
 TEST_CASE__REWRITE_TYPE__NAME = hydra.core.Name("rewriteType")
 TEST_CASE__HOIST_SUBTERMS__NAME = hydra.core.Name("hoistSubterms")
 TEST_CASE__HOIST_CASE_STATEMENTS__NAME = hydra.core.Name("hoistCaseStatements")
+TEST_CASE__HOIST_LET_BINDINGS__NAME = hydra.core.Name("hoistLetBindings")
+TEST_CASE__HOIST_POLYMORPHIC_LET_BINDINGS__NAME = hydra.core.Name("hoistPolymorphicLetBindings")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
