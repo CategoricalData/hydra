@@ -81,6 +81,12 @@ def free_variables_test_case(x: hydra.testing.FreeVariablesTestCase) -> hydra.co
 def hoist_case_statements_test_case(x: hydra.testing.HoistCaseStatementsTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
 
+def hoist_let_bindings_test_case(x: hydra.testing.HoistLetBindingsTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.HoistLetBindingsTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.let(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.let(x.output))))))
+
+def hoist_polymorphic_let_bindings_test_case(x: hydra.testing.HoistPolymorphicLetBindingsTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.let(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.let(x.output))))))
+
 def hoist_predicate(v1: hydra.testing.HoistPredicate) -> hydra.core.Type:
     match v1:
         case hydra.testing.HoistPredicate.CASE_STATEMENTS:
@@ -286,6 +292,12 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Type:
         
         case hydra.testing.TestCaseHoistCaseStatements(value=v32):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistCaseStatements"), hoist_case_statements_test_case(v32)))))
+        
+        case hydra.testing.TestCaseHoistLetBindings(value=v33):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistLetBindings"), hoist_let_bindings_test_case(v33)))))
+        
+        case hydra.testing.TestCaseHoistPolymorphicLetBindings(value=v34):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistPolymorphicLetBindings"), hoist_polymorphic_let_bindings_test_case(v34)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
