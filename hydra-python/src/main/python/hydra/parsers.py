@@ -4,6 +4,7 @@ r"""General-purpose parser combinators."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.core
@@ -36,15 +37,19 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
     r"""Parse a character (codepoint) that satisfies the given predicate."""
     
     def parse(input: str) -> hydra.parsing.ParseResult[int]:
+        @lru_cache(1)
         def codes() -> frozenlist[int]:
             return hydra.lib.strings.to_list(input)
+        @lru_cache(1)
         def c() -> int:
             return hydra.lib.lists.head(codes())
+        @lru_cache(1)
         def rest() -> str:
             return hydra.lib.strings.from_list(hydra.lib.lists.tail(codes()))
         return hydra.lib.logic.if_else(hydra.lib.strings.null(input), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input)))), (lambda : hydra.lib.logic.if_else(pred(c()), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c(), rest())))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input)))))))
     return hydra.parsing.Parser(parse)
 
+@lru_cache(1)
 def any_char() -> hydra.parsing.Parser[int]:
     r"""Parse any single character (codepoint)."""
     
@@ -103,6 +108,7 @@ def fail(msg: str) -> hydra.parsing.Parser[T0]:
 def choice(ps: frozenlist[hydra.parsing.Parser[T0]]) -> hydra.parsing.Parser[T0]:
     return hydra.lib.lists.foldl((lambda x1, x2: alt(x1, x2)), fail("no choice matched"), ps)
 
+@lru_cache(1)
 def eof() -> hydra.parsing.Parser[None]:
     r"""A parser that succeeds only at the end of input."""
     

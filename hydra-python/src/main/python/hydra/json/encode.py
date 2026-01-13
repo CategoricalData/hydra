@@ -4,6 +4,7 @@ r"""JSON encoding for Hydra terms. Converts Terms to JSON Values using Either fo
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.core
@@ -89,6 +90,7 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value
 def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
     r"""Encode a Hydra term to a JSON value. Returns Left for unsupported constructs."""
     
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_term(term)
     match stripped():
@@ -96,13 +98,16 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
             return encode_literal(lit)
         
         case hydra.core.TermList(value=terms):
+            @lru_cache(1)
             def results() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return hydra.lib.eithers.map_list((lambda t: to_json(t)), terms)
             return hydra.lib.eithers.map((lambda vs: cast(hydra.json.model.Value, hydra.json.model.ValueArray(vs))), results())
         
         case hydra.core.TermSet(value=vals):
+            @lru_cache(1)
             def terms() -> frozenlist[hydra.core.Term]:
                 return hydra.lib.sets.to_list(vals)
+            @lru_cache(1)
             def results() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return hydra.lib.eithers.map_list((lambda t: to_json(t)), terms())
             return hydra.lib.eithers.map((lambda vs: cast(hydra.json.model.Value, hydra.json.model.ValueArray(vs))), results())
@@ -112,26 +117,35 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
         
         case hydra.core.TermRecord(value=r):
             def encode_field(f: hydra.core.Field) -> Either[str, tuple[str, hydra.json.model.Value]]:
+                @lru_cache(1)
                 def fname() -> str:
                     return f.name.value
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return f.term
+                @lru_cache(1)
                 def encoded_field() -> Either[str, hydra.json.model.Value]:
                     return to_json(fterm())
                 return hydra.lib.eithers.map((lambda v: (fname(), v)), encoded_field())
+            @lru_cache(1)
             def fields() -> frozenlist[hydra.core.Field]:
                 return r.fields
+            @lru_cache(1)
             def encoded_fields() -> Either[str, frozenlist[tuple[str, hydra.json.model.Value]]]:
                 return hydra.lib.eithers.map_list(encode_field, fields())
             return hydra.lib.eithers.map((lambda fs: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(fs)))), encoded_fields())
         
         case hydra.core.TermUnion(value=inj):
+            @lru_cache(1)
             def field() -> hydra.core.Type:
                 return inj.field
+            @lru_cache(1)
             def fname() -> str:
                 return field().name.value
+            @lru_cache(1)
             def fterm() -> hydra.core.Type:
                 return field().term
+            @lru_cache(1)
             def encoded_union() -> Either[str, hydra.json.model.Value]:
                 return to_json(fterm())
             return hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname(), v),))))), encoded_union())
@@ -144,26 +158,35 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
         
         case hydra.core.TermMap(value=m):
             def encode_entry(kv: tuple[hydra.core.Term, hydra.core.Term]) -> Either[str, hydra.json.model.Value]:
+                @lru_cache(1)
                 def k() -> hydra.core.Type:
                     return hydra.lib.pairs.first(kv)
+                @lru_cache(1)
                 def v() -> hydra.core.Type:
                     return hydra.lib.pairs.second(kv)
+                @lru_cache(1)
                 def encoded_k() -> Either[str, hydra.json.model.Value]:
                     return to_json(k())
+                @lru_cache(1)
                 def encoded_v() -> Either[str, hydra.json.model.Value]:
                     return to_json(v())
                 return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ek: hydra.lib.eithers.map((lambda ev: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@key", ek), ("@value", ev)))))), encoded_v())), encoded_k())
+            @lru_cache(1)
             def entries() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return hydra.lib.eithers.map_list(encode_entry, hydra.lib.maps.to_list(m))
             return hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueArray(es))), entries())
         
         case hydra.core.TermPair(value=p):
+            @lru_cache(1)
             def first() -> hydra.core.Type:
                 return hydra.lib.pairs.first(p)
+            @lru_cache(1)
             def second() -> hydra.core.Type:
                 return hydra.lib.pairs.second(p)
+            @lru_cache(1)
             def encoded_first() -> Either[str, hydra.json.model.Value]:
                 return to_json(first())
+            @lru_cache(1)
             def encoded_second() -> Either[str, hydra.json.model.Value]:
                 return to_json(second())
             return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ef: hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list((("@first", ef), ("@second", es)))))), encoded_second())), encoded_first())

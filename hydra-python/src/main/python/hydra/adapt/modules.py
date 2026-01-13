@@ -4,6 +4,7 @@ r"""Entry point for Hydra's adapter (type/term rewriting) framework."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import TypeVar, cast
 import hydra.adapt.terms
@@ -44,6 +45,7 @@ def adapt_type_to_language(lang: hydra.coders.Language, typ: hydra.core.Type) ->
     return hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(adapter.target)))
 
 def adapt_type_to_language_and_encode(lang: hydra.coders.Language, enc: Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, T0]], typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
+    @lru_cache(1)
     def dflt() -> hydra.compute.Flow[hydra.graph.Graph, T0]:
         return hydra.lib.flows.bind(adapt_type_to_language(lang, typ), (lambda adapted_type: enc(adapted_type)))
     match hydra.rewriting.deannotate_type(typ):
@@ -63,8 +65,10 @@ def transform_module(lang: hydra.coders.Language, encode_term: Callable[[hydra.c
   hydra.module.Module,
   FrozenDict[hydra.core.Type, hydra.compute.Coder[T0, T2, hydra.core.Term, T1]],
   frozenlist[tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]]], hydra.compute.Flow[hydra.graph.Graph, T3]], mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, T3]:
+    @lru_cache(1)
     def els() -> frozenlist[hydra.core.Binding]:
         return mod.elements
+    @lru_cache(1)
     def transform() -> hydra.compute.Flow[hydra.graph.Graph, T3]:
         return hydra.lib.flows.bind(hydra.lexical.with_schema_context(hydra.lib.flows.map_list((lambda x1: hydra.schemas.element_as_type_application_term(x1)), els())), (lambda tterms: (types := hydra.lib.lists.nub(hydra.lib.lists.map((lambda v1: v1.type), tterms)), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: construct_coder(lang, encode_term, v1)), types), (lambda cdrs: (coders := hydra.lib.maps.from_list(hydra.lib.lists.zip(types, cdrs)), create_module(mod, coders, hydra.lib.lists.zip(els(), tterms)))[1])))[1]))
     return hydra.monads.with_trace(hydra.lib.strings.cat2("transform module ", mod.namespace.value), transform())

@@ -4,6 +4,7 @@ r"""JSON serialization functions using the Hydra AST."""
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import cast
 import hydra.ast
@@ -26,6 +27,7 @@ def json_string(s: str) -> str:
     
     def escape(c: int) -> str:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))
+    @lru_cache(1)
     def escaped() -> str:
         return hydra.lib.strings.cat(hydra.lib.lists.map(escape, hydra.lib.strings.to_list(s)))
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"", escaped()), "\"")
@@ -33,8 +35,10 @@ def json_string(s: str) -> str:
 def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.core.Type:
     r"""Convert a key-value pair to an AST expression."""
     
+    @lru_cache(1)
     def key() -> str:
         return hydra.lib.pairs.first(pair)
+    @lru_cache(1)
     def value() -> hydra.core.Type:
         return hydra.lib.pairs.second(pair)
     return hydra.serialization.ifx(colon_op, hydra.serialization.cst(json_string(key())), value_to_expr(value()))

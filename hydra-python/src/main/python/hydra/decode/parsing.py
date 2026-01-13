@@ -4,6 +4,7 @@ r"""Term decoders for hydra.parsing."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right
 from typing import TypeVar, cast
 import hydra.core
@@ -24,6 +25,7 @@ def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
     def _hoist_hydra_decode_parsing_parse_error_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseError]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -64,6 +66,7 @@ def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
     def _hoist_hydra_decode_parsing_parse_success_1(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseSuccess[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -90,14 +93,19 @@ def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
     def _hoist_hydra_decode_parsing_parse_result_1(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T1]]:
         match v1:
             case hydra.core.TermUnion(value=inj):
+                @lru_cache(1)
                 def tname() -> hydra.core.Type:
                     return inj.type_name
+                @lru_cache(1)
                 def field() -> hydra.core.Type:
                     return inj.field
+                @lru_cache(1)
                 def fname() -> hydra.core.Type:
                     return field().name
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return field().term
+                @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T1]]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("success"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(t))), parse_success(a, cx, input)))), (hydra.core.Name("failure"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(t))), parse_error(cx, input))))))
                 return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))

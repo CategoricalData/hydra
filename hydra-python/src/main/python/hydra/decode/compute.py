@@ -4,6 +4,7 @@ r"""Term decoders for hydra.compute."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar
 import hydra.compute
@@ -24,6 +25,7 @@ def trace(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
     def _hoist_hydra_decode_compute_trace_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.Trace]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -64,6 +66,7 @@ def flow_state(s: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.ut
     def _hoist_hydra_decode_compute_flow_state_1(cx: hydra.graph.Graph, s: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T2]], v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T3]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.FlowState[T2, T3]]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", (lambda v1, v2: hydra.extract.helpers.decode_maybe(v, v1, v2)), field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("state", s, field_map(), cx), (lambda field_state: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("trace", trace, field_map(), cx), (lambda field_trace: Right(hydra.compute.FlowState(field_value, field_state, field_trace))))))))

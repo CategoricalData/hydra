@@ -4,6 +4,7 @@ r"""Term decoders for hydra.module."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.core
@@ -25,6 +26,7 @@ def term_definition(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_module_term_definition_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.TermDefinition]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", hydra.decode.core.term, field_map(), cx), (lambda field_term: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type_scheme, field_map(), cx), (lambda field_type: Right(hydra.module.TermDefinition(field_name, field_term, field_type))))))))
@@ -37,6 +39,7 @@ def type_definition(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_module_type_definition_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.TypeDefinition]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map(), cx), (lambda field_type: Right(hydra.module.TypeDefinition(field_name, field_type))))))
@@ -49,14 +52,19 @@ def definition(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
     def _hoist_hydra_decode_module_definition_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.Definition]:
         match v1:
             case hydra.core.TermUnion(value=inj):
+                @lru_cache(1)
                 def tname() -> hydra.core.Type:
                     return inj.type_name
+                @lru_cache(1)
                 def field() -> hydra.core.Type:
                     return inj.field
+                @lru_cache(1)
                 def fname() -> hydra.core.Type:
                     return field().name
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return field().term
+                @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.module.Definition]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("term"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.module.Definition, hydra.module.DefinitionTerm(t))), term_definition(cx, input)))), (hydra.core.Name("type"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.module.Definition, hydra.module.DefinitionType(t))), type_definition(cx, input))))))
                 return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
@@ -117,6 +125,7 @@ def module(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Dec
     def _hoist_hydra_decode_module_module_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.Module]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
@@ -143,6 +152,7 @@ def namespaces(n: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.ut
     def _hoist_hydra_decode_module_namespaces_1(cx: hydra.graph.Graph, n: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.Namespaces[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("focus", (lambda v1, v2: hydra.extract.helpers.decode_pair(namespace, n, v1, v2)), field_map(), cx), (lambda field_focus: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("mapping", (lambda v1, v2: hydra.extract.helpers.decode_map(namespace, n, v1, v2)), field_map(), cx), (lambda field_mapping: Right(hydra.module.Namespaces(field_focus, field_mapping))))))
@@ -155,6 +165,7 @@ def qualified_name(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
     def _hoist_hydra_decode_module_qualified_name_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.QualifiedName]:
         match v1:
             case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:

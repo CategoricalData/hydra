@@ -5,6 +5,7 @@ r"""Extraction and validation for hydra.core types."""
 from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar
 import hydra.compute
@@ -137,6 +138,7 @@ def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[h
 def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Field]:
     r"""Extract a specific case handler from a case statement term."""
     
+    @lru_cache(1)
     def field_name() -> hydra.core.Type:
         return hydra.core.Name(n)
     return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : hydra.lib.flows.fail("not enough cases")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching)))))[1]))
@@ -152,6 +154,7 @@ def either_term(left_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.g
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def either_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.EitherType]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -162,6 +165,7 @@ def either_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Eithe
             return hydra.monads.unexpected("either type", hydra.show.core.type(typ))
 
 def field(fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fields: frozenlist[hydra.core.Field]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
+    @lru_cache(1)
     def matching_fields() -> frozenlist[hydra.core.Field]:
         return hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, fname.value)), fields)
     return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("field ", fname.value), " not found"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(hydra.lib.lists.head(matching_fields()).term), (lambda stripped: mapping(stripped)))), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple fields named ", fname.value))))))
@@ -198,6 +202,7 @@ def float_value(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hyd
     return hydra.lib.flows.bind(literal(t), (lambda l: float_literal(l)))
 
 def function_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.FunctionType]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -315,6 +320,7 @@ def let(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.c
 def let_binding(n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Extract a binding with the given name from a let term."""
     
+    @lru_cache(1)
     def name() -> hydra.core.Type:
         return hydra.core.Name(n)
     return hydra.lib.flows.bind(let(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("no such binding: ", n))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple bindings named ", n)))))))[1]))
@@ -340,6 +346,7 @@ def list_of(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph,
     return hydra.lib.flows.bind(list(term), (lambda els: hydra.lib.flows.map_list(f, els)))
 
 def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -351,8 +358,10 @@ def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
 
 def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fv: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
     def pair(kv_pair: tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
+        @lru_cache(1)
         def kterm() -> hydra.core.Type:
             return hydra.lib.pairs.first(kv_pair)
+        @lru_cache(1)
         def vterm() -> hydra.core.Type:
             return hydra.lib.pairs.second(kv_pair)
         return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure((kval, vval))))))
@@ -366,6 +375,7 @@ def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def map_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.MapType]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -386,6 +396,7 @@ def maybe_term(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Gra
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def maybe_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -426,6 +437,7 @@ def record(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.F
     return hydra.lib.flows.bind(term_record(term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : hydra.lib.flows.pure(record.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("record of type ", expected.value), record.type_name.value)))))
 
 def record_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -451,6 +463,7 @@ def set_of(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, 
     return hydra.lib.flows.bind(set(term), (lambda els: hydra.lib.flows.map_set(f, els)))
 
 def set_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -526,6 +539,7 @@ def uint8(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint8_value(i)))))
 
 def union_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
@@ -561,6 +575,7 @@ def wrap(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flo
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def wrapped_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():

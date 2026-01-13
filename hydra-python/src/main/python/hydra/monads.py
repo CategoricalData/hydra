@@ -4,6 +4,7 @@ r"""Functions for working with Hydra's 'flow' and other monads."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import Either, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.compute
@@ -28,6 +29,7 @@ T4 = TypeVar("T4")
 
 def bind(l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.compute.Flow[T0, T2]]) -> hydra.compute.Flow[T0, T2]:
     def q(s0: T0, t0: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T2]:
+        @lru_cache(1)
         def fs1() -> hydra.compute.FlowState[T0, T1]:
             return l.value(s0, t0)
         return hydra.lib.maybes.maybe(hydra.compute.FlowState(Nothing(), fs1().state, fs1().trace), (lambda v: r(v).value(fs1().state, fs1().trace)), fs1().value)
@@ -38,12 +40,15 @@ def push_error(msg: str, t: hydra.compute.Trace) -> hydra.core.Type:
     
     def condense_repeats(ys: frozenlist[str]) -> frozenlist[str]:
         def condense_group(xs: frozenlist[str]) -> str:
+            @lru_cache(1)
             def x() -> str:
                 return hydra.lib.lists.head(xs)
+            @lru_cache(1)
             def n() -> int:
                 return hydra.lib.lists.length(xs)
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(n(), 1), (lambda : x()), (lambda : hydra.lib.strings.cat((x(), " (x", hydra.lib.literals.show_int32(n()), ")"))))
         return hydra.lib.lists.map(condense_group, hydra.lib.lists.group(ys))
+    @lru_cache(1)
     def error_msg() -> str:
         return hydra.lib.strings.cat(("Error: ", msg, " (", hydra.lib.strings.intercalate(" > ", condense_repeats(hydra.lib.lists.reverse(t.stack))), ")"))
     return hydra.compute.Trace(t.stack, hydra.lib.lists.cons(error_msg(), t.messages), t.other)
@@ -57,6 +62,7 @@ def pure(xp: T0) -> hydra.compute.Flow[T1, T0]:
 def either_to_flow(format_error: Callable[[T0], str], e: Either[T0, T1]) -> hydra.compute.Flow[T2, T1]:
     return hydra.lib.eithers.either((lambda l: fail(format_error(l))), (lambda r: pure(r)), e)
 
+@lru_cache(1)
 def empty_trace() -> hydra.core.Type:
     r"""An empty trace with no stack, messages, or other attributes."""
     
@@ -71,6 +77,7 @@ def flow_succeeds(s: T0, f: hydra.compute.Flow[T0, T1]) -> bool:
 def from_flow(def_: T0, cx: T1, f: hydra.compute.Flow[T1, T0]) -> T0:
     return hydra.lib.maybes.maybe(def_, (lambda xmo: xmo), f.value(cx, empty_trace()).value)
 
+@lru_cache(1)
 def get_state() -> hydra.compute.Flow[T0, T0]:
     return hydra.compute.Flow((lambda s0, t0: (fs1 := pure(None).value(s0, t0), v := fs1.value, s := fs1.state, t := fs1.trace, hydra.lib.maybes.maybe(hydra.compute.FlowState(Nothing(), s, t), (lambda _: hydra.compute.FlowState(Just(s), s, t)), v))[4]))
 
@@ -93,6 +100,7 @@ def mutate_trace(mutate: Callable[[hydra.compute.Trace], Either[str, hydra.compu
         def for_left(msg: str) -> hydra.compute.FlowState[T0, T2]:
             return hydra.compute.FlowState(Nothing(), s0, push_error(msg, t0))
         def for_right(t1: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T1]:
+            @lru_cache(1)
             def f2() -> hydra.compute.FlowState[T0, T1]:
                 return f.value(s0, t1)
             return hydra.compute.FlowState(f2().value, f2().state, restore(t0, f2().trace))
@@ -102,10 +110,12 @@ def mutate_trace(mutate: Callable[[hydra.compute.Trace], Either[str, hydra.compu
 def trace_summary(t: hydra.compute.Trace) -> str:
     r"""Summarize a trace as a string."""
     
+    @lru_cache(1)
     def message_lines() -> frozenlist[str]:
         return hydra.lib.lists.nub(t.messages)
     def to_line(pair: tuple[hydra.core.Name, hydra.core.Term]) -> str:
         return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("\t", hydra.lib.pairs.first(pair).value), ": "), hydra.show.core.term(hydra.lib.pairs.second(pair)))
+    @lru_cache(1)
     def keyval_lines() -> frozenlist[str]:
         return hydra.lib.logic.if_else(hydra.lib.maps.null(t.other), (lambda : ()), (lambda : hydra.lib.lists.cons("key/value pairs: ", hydra.lib.lists.map(to_line, hydra.lib.maps.to_list(t.other)))))
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.concat2(message_lines(), keyval_lines()))

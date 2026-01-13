@@ -5,6 +5,7 @@ r"""Term decoders for hydra.json.model."""
 from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import cast
 import hydra.core
@@ -22,14 +23,19 @@ def value(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
     def _hoist_hydra_decode_json_model_value_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
         match v1:
             case hydra.core.TermUnion(value=inj):
+                @lru_cache(1)
                 def tname() -> hydra.core.Type:
                     return inj.type_name
+                @lru_cache(1)
                 def field() -> hydra.core.Type:
                     return inj.field
+                @lru_cache(1)
                 def fname() -> hydra.core.Type:
                     return field().name
+                @lru_cache(1)
                 def fterm() -> hydra.core.Type:
                     return field().term
+                @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.json.model.Value]]]:
                     def _hoist_variant_map_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
                         match v1:
