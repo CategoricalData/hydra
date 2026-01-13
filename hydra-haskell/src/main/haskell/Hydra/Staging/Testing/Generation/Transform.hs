@@ -12,7 +12,12 @@ import qualified Data.List as L
 tag_requiresFlowDecoding :: Tag
 tag_requiresFlowDecoding = Tag "requiresFlowDecoding"
 
--- | Transform test group hierarchy to only include delegated evaluation tests
+-- | Transform test group hierarchy to only include delegated evaluation tests.
+-- These are the test cases which can be meaningfully transformed into executable code.
+-- For example, a test case like `add 1 2 == 3` can be transformed into application-level code which is evaluated in
+-- the runtime environment of the target language.
+-- A test case like `freeVariablesInTerm (\x.y) == [y]` cannot be further transformed, except by term-encoding
+-- the arguments.
 -- Returns Nothing if the group becomes empty after filtering
 transformToCompiledTests :: TestGroup -> Maybe TestGroup
 transformToCompiledTests (TestGroup name desc subgroups cases) =
@@ -66,30 +71,34 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) = case tc of
 
     -- Other test types: exclude (not applicable for compiled tests)
     TestCaseAlphaConversion _ -> Nothing
+    TestCaseDeannotateTerm _ -> Nothing
+    TestCaseDeannotateType _ -> Nothing
+    TestCaseEtaExpansion _ -> Nothing
+    TestCaseFlattenLetTerms _ -> Nothing
+    TestCaseFoldOverTerm _ -> Nothing
+    TestCaseFreeVariables _ -> Nothing
+    TestCaseHoistCaseStatements _ -> Nothing
+    TestCaseHoistLetBindings _ -> Nothing
+    TestCaseHoistPolymorphicLetBindings _ -> Nothing
+    TestCaseHoistSubterms _ -> Nothing
     TestCaseInference _ -> Nothing
     TestCaseInferenceFailure _ -> Nothing
+    TestCaseJsonCoder _ -> Nothing
+    TestCaseJsonDecode _ -> Nothing
+    TestCaseJsonEncode _ -> Nothing
+    TestCaseJsonParser _ -> Nothing
+    TestCaseJsonRoundtrip _ -> Nothing
+    TestCaseJsonWriter _ -> Nothing
+    TestCaseLiftLambdaAboveLet _ -> Nothing
+    TestCaseNormalizeTypeVariables _ -> Nothing
+    TestCaseRewriteTerm _ -> Nothing
+    TestCaseRewriteType _ -> Nothing
+    TestCaseSerialization _ -> Nothing
+    TestCaseSimplifyTerm _ -> Nothing
+    TestCaseTopologicalSortBindings _ -> Nothing
     TestCaseTypeChecking _ -> Nothing
     TestCaseTypeCheckingFailure _ -> Nothing
     TestCaseTypeReduction _ -> Nothing
-    TestCaseEtaExpansion _ -> Nothing
-    TestCaseJsonCoder _ -> Nothing
-    TestCaseJsonWriter _ -> Nothing
-    TestCaseJsonParser _ -> Nothing
-    TestCaseSerialization _ -> Nothing
-    TestCaseFlattenLetTerms _ -> Nothing
-    TestCaseFreeVariables _ -> Nothing
-    TestCaseLiftLambdaAboveLet _ -> Nothing
-    TestCaseSimplifyTerm _ -> Nothing
-    TestCaseDeannotateTerm _ -> Nothing
-    TestCaseDeannotateType _ -> Nothing
-    TestCaseTopologicalSortBindings _ -> Nothing
-    TestCaseNormalizeTypeVariables _ -> Nothing
-    TestCaseFoldOverTerm _ -> Nothing
-    TestCaseRewriteTerm _ -> Nothing
-    TestCaseRewriteType _ -> Nothing
-    TestCaseHoistSubterms _ -> Nothing
-    TestCaseHoistCaseStatements _ -> Nothing
-    TestCaseHoistPolymorphicLetBindings _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term

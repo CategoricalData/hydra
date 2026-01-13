@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.Hoisting where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   bindingIsPolymorphic,
-  hoistCaseStatements, hoistCaseStatementsInGraph, hoistPolymorphicLetBindings, hoistSubterms,
+  hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindings, hoistPolymorphicLetBindings, hoistSubterms,
   isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination,
   normalizePathForHoisting,
   rewriteAndFoldTermWithTypeContext, rewriteAndFoldTermWithTypeContextAndPath, rewriteTermWithTypeContext,
@@ -80,6 +80,7 @@ module_ = Module ns elements
      toBinding bindingIsPolymorphic,
      toBinding hoistCaseStatements,
      toBinding hoistCaseStatementsInGraph,
+     toBinding hoistLetBindings,
      toBinding hoistPolymorphicLetBindings,
      toBinding hoistSubterms,
      toBinding isApplicationFunction,
@@ -102,24 +103,26 @@ bindingIsPolymorphic = define "bindingIsPolymorphic" $
     false  -- No type scheme means monomorphic (or untyped)
     ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
 
--- | Transform a let-term by pulling all polymorphic let bindings to the top level
-hoistPolymorphicLetBindings :: TBinding (Let -> Let)
-hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
-  doc ("Transform a let-term by pulling all polymorphic let bindings to the top level."
-    <> " This is useful to ensure that polymorphic bindings are not nested within other terms,"
-    <> " which is unsupported by certain targets such as Java."
+-- | Transform a let-term by pulling let bindings to the top level.
+-- The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False).
+-- This is useful for targets like Java that cannot have let-expressions in arbitrary positions.
+hoistLetBindings :: TBinding (Bool -> Let -> Let)
+hoistLetBindings = define "hoistLetBindings" $
+  doc ("Transform a let-term by pulling let bindings to the top level."
+    <> " The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False)."
+    <> " This is useful for targets like Java that cannot have let-expressions in arbitrary positions."
     <> " Polymorphic bindings are those with a non-empty list of type scheme variables."
     <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
     <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
-  "let0" ~>
+  "hoistAll" ~> "let0" ~>
   -- Collect all binding names from the original let (to avoid name collisions)
   "topLevelNames" <~ Sets.fromList (Lists.map ("b" ~> Core.bindingName $ var "b") $ Core.letBindings $ var "let0") $
 
   -- Define mutually recursive helper functions together using lets
   lets [
-    -- Process a term to find and hoist nested polymorphic let bindings
+    -- Process a term to find and hoist nested let bindings
     -- lambdaVars: list of (Name, Maybe Type) for lambda-bound variables in scope (in order from outermost to innermost)
     -- reserved: set of reserved names
     -- Returns (hoistedBindings, reservedNames, processedTerm)
@@ -197,15 +200,11 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
           "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
           pair (var "hoisted") (pair (var "newReserved")
             (Core.termAnnotated $ Core.annotatedTerm (var "newBody") (Core.annotatedTermAnnotation $ var "ann"))),
-        -- Type lambda: recurse into body
-        _Term_typeLambda>>: "tl" ~>
-          "bodyResult" <~ var "processTermForHoisting" @@ var "lambdaVars" @@ var "reserved" @@ (Core.typeLambdaBody $ var "tl") $
-          "hoisted" <~ Pairs.first (var "bodyResult") $
-          "newReserved" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-          "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-          pair (var "hoisted") (pair (var "newReserved")
-            (Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "newBody"))),
-        -- Type application: recurse into body
+        -- Type lambda: DON'T recurse at all - type lambdas are boundaries for let hoisting
+        -- This means nested lets inside type lambdas won't be hoisted.
+        -- The Java coder will need to handle any nested lets differently.
+        _Term_typeLambda>>: constant $ pair (list ([] :: [TTerm (Name, Term, [Name], Y.Maybe TypeScheme)])) (pair (var "reserved") (var "term")),
+        -- Type application: recurse into body (type applications don't introduce new type variables)
         _Term_typeApplication>>: "ta" ~>
           "bodyResult" <~ var "processTermForHoisting" @@ var "lambdaVars" @@ var "reserved" @@ (Core.typeApplicationTermBody $ var "ta") $
           "hoisted" <~ Pairs.first (var "bodyResult") $
@@ -214,21 +213,22 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
           pair (var "hoisted") (pair (var "newReserved")
             (Core.termTypeApplication $ Core.typeApplicationTerm (var "newBody") (Core.typeApplicationTermType $ var "ta")))]),
 
-    -- Process a single binding: if polymorphic, add to hoisted list; otherwise keep in place
+    -- Process a single binding: if hoistAll is True or binding is polymorphic, add to hoisted list; otherwise keep in place
     -- lambdaVars: list of (Name, Maybe Type) for lambda-bound variables in scope
     -- State is (hoistedBindings, reservedNames, keptBindings)
     "processBinding">: ("lambdaVars" ~> "state" ~> "binding" ~>
       "hoisted" <~ Pairs.first (var "state") $
       "reserved" <~ Pairs.first (Pairs.second $ var "state") $
       "kept" <~ Pairs.second (Pairs.second $ var "state") $
-      -- Process the binding's term to hoist nested polymorphic bindings
+      -- Process the binding's term to hoist nested bindings
       "processedTerm" <~ var "processTermForHoisting" @@ var "lambdaVars" @@ var "reserved" @@ (Core.bindingTerm $ var "binding") $
       "innerHoisted" <~ Pairs.first (var "processedTerm") $
       "newReserved" <~ Pairs.first (Pairs.second $ var "processedTerm") $
       "newTerm" <~ Pairs.second (Pairs.second $ var "processedTerm") $
-      -- Check if this binding itself is polymorphic
-      Logic.ifElse (bindingIsPolymorphic @@ var "binding")
-        -- Polymorphic: compute captured variables and add to hoisted list
+      -- Check if this binding should be hoisted: either hoistAll is True, or binding is polymorphic
+      "shouldHoist" <~ Logic.or (var "hoistAll") (bindingIsPolymorphic @@ var "binding") $
+      Logic.ifElse (var "shouldHoist")
+        -- Hoist: compute captured variables and add to hoisted list
         ("bindingName" <~ Core.bindingName (var "binding") $
          "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "newTerm" $
          "lambdaVarNames" <~ Sets.fromList (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "lambdaVars")) $
@@ -263,7 +263,7 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
          pair
            (Lists.cons (var "hoistedInfo") (Lists.concat2 (var "innerHoisted") (var "hoisted")))
            (pair (var "newReserved") (var "kept")))
-        -- Monomorphic: keep in place, but still add inner hoisted bindings
+        -- Don't hoist: keep in place, but still add inner hoisted bindings
         ("processedBinding" <~ Core.binding (Core.bindingName $ var "binding") (var "newTerm") (Core.bindingType $ var "binding") $
          pair
            (Lists.concat2 (var "innerHoisted") (var "hoisted"))
@@ -333,6 +333,19 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
   "allBindings" <~ Lists.concat2 (var "hoistedBindings") (var "keptBindings") $
 
   Core.let_ (var "allBindings") (var "processedBody")
+
+-- | Transform a let-term by pulling all polymorphic let bindings to the top level
+hoistPolymorphicLetBindings :: TBinding (Let -> Let)
+hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
+  doc ("Transform a let-term by pulling all polymorphic let bindings to the top level."
+    <> " This is useful to ensure that polymorphic bindings are not nested within other terms,"
+    <> " which is unsupported by certain targets such as Java."
+    <> " Polymorphic bindings are those with a non-empty list of type scheme variables."
+    <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
+    <> " the binding is wrapped in lambdas for those variables, and references are replaced"
+    <> " with applications."
+    <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+  hoistLetBindings @@ false
 
 hoistCaseStatements :: TBinding (TypeContext -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
