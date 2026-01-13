@@ -177,6 +177,24 @@ hoistPredicate cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err))
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.HoistPredicate"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
+hoistLetBindingsTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.HoistLetBindingsTestCase)
+hoistLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v1 ->  
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "input" Core_.let_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.let_ fieldMap cx) (\field_output -> Right (Testing.HoistLetBindingsTestCase {
+      Testing.hoistLetBindingsTestCaseInput = field_input,
+      Testing.hoistLetBindingsTestCaseOutput = field_output}))))
+  _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.HoistLetBindingsTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
+hoistPolymorphicLetBindingsTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.HoistPolymorphicLetBindingsTestCase)
+hoistPolymorphicLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v1 ->  
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "input" Core_.let_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.let_ fieldMap cx) (\field_output -> Right (Testing.HoistPolymorphicLetBindingsTestCase {
+      Testing.hoistPolymorphicLetBindingsTestCaseInput = field_input,
+      Testing.hoistPolymorphicLetBindingsTestCaseOutput = field_output}))))
+  _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.HoistPolymorphicLetBindingsTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
 hoistSubtermsTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.HoistSubtermsTestCase)
 hoistSubtermsTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
@@ -398,7 +416,9 @@ testCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\str
                 (Core.Name "rewriteTerm", (\input -> Eithers.map (\t -> Testing.TestCaseRewriteTerm t) (rewriteTermTestCase cx input))),
                 (Core.Name "rewriteType", (\input -> Eithers.map (\t -> Testing.TestCaseRewriteType t) (rewriteTypeTestCase cx input))),
                 (Core.Name "hoistSubterms", (\input -> Eithers.map (\t -> Testing.TestCaseHoistSubterms t) (hoistSubtermsTestCase cx input))),
-                (Core.Name "hoistCaseStatements", (\input -> Eithers.map (\t -> Testing.TestCaseHoistCaseStatements t) (hoistCaseStatementsTestCase cx input)))])
+                (Core.Name "hoistCaseStatements", (\input -> Eithers.map (\t -> Testing.TestCaseHoistCaseStatements t) (hoistCaseStatementsTestCase cx input))),
+                (Core.Name "hoistLetBindings", (\input -> Eithers.map (\t -> Testing.TestCaseHoistLetBindings t) (hoistLetBindingsTestCase cx input))),
+                (Core.Name "hoistPolymorphicLetBindings", (\input -> Eithers.map (\t -> Testing.TestCaseHoistPolymorphicLetBindings t) (hoistPolymorphicLetBindingsTestCase cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
       Core.unName fname,

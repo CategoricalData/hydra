@@ -115,7 +115,7 @@ extendTypeContextForLet :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Te
 extendTypeContextForLet forBinding tcontext letrec =  
   let bindings = (Core.letBindings letrec)
   in Typing.TypeContext {
-    Typing.typeContextTypes = (Maps.union (Typing.typeContextTypes tcontext) (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, (typeSchemeToFType ts))) (Core.bindingType b)) bindings)))),
+    Typing.typeContextTypes = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\ts -> typeSchemeToFType ts) (Core.bindingType b)))) bindings)) (Typing.typeContextTypes tcontext)),
     Typing.typeContextMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding tcontext b)) (Typing.typeContextMetadata tcontext) bindings),
     Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tcontext),
     Typing.typeContextLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Typing.typeContextLambdaVariables tcontext) bindings),

@@ -196,6 +196,28 @@ hoistPredicate x = case x of
       Core.fieldName = (Core.Name "nothing"),
       Core.fieldTerm = Core.TermUnit}}))
 
+hoistLetBindingsTestCase :: (Testing.HoistLetBindingsTestCase -> Core.Term)
+hoistLetBindingsTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.HoistLetBindingsTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "input"),
+      Core.fieldTerm = (Core_.let_ (Testing.hoistLetBindingsTestCaseInput x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "output"),
+      Core.fieldTerm = (Core_.let_ (Testing.hoistLetBindingsTestCaseOutput x))}]}))
+
+hoistPolymorphicLetBindingsTestCase :: (Testing.HoistPolymorphicLetBindingsTestCase -> Core.Term)
+hoistPolymorphicLetBindingsTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "input"),
+      Core.fieldTerm = (Core_.let_ (Testing.hoistPolymorphicLetBindingsTestCaseInput x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "output"),
+      Core.fieldTerm = (Core_.let_ (Testing.hoistPolymorphicLetBindingsTestCaseOutput x))}]}))
+
 hoistSubtermsTestCase :: (Testing.HoistSubtermsTestCase -> Core.Term)
 hoistSubtermsTestCase x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.testing.HoistSubtermsTestCase"),
@@ -548,6 +570,16 @@ testCase x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hoistCaseStatements"),
       Core.fieldTerm = (hoistCaseStatementsTestCase v1)}}))
+  Testing.TestCaseHoistLetBindings v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "hoistLetBindings"),
+      Core.fieldTerm = (hoistLetBindingsTestCase v1)}}))
+  Testing.TestCaseHoistPolymorphicLetBindings v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "hoistPolymorphicLetBindings"),
+      Core.fieldTerm = (hoistPolymorphicLetBindingsTestCase v1)}}))
 
 testCaseWithMetadata :: (Testing.TestCaseWithMetadata -> Core.Term)
 testCaseWithMetadata x = (Core.TermRecord (Core.Record {

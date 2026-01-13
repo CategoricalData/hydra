@@ -930,6 +930,12 @@
                                           "application": {
                                             "argument": {
                                               "application": {
+                                                "argument": {"variable": "tcontext"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "types", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                            "function": {
+                                              "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {
@@ -941,46 +947,46 @@
                                                               "function": {
                                                                 "lambda": {
                                                                   "body": {
-                                                                    "application": {
-                                                                      "argument": {
+                                                                    "pair": {
+                                                                      "@first": {
                                                                         "application": {
                                                                           "argument": {"variable": "b"},
                                                                           "function": {
                                                                             "function": {
-                                                                              "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}},
-                                                                      "function": {
+                                                                              "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                      "@second": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "pair": {
-                                                                                    "@first": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "b"},
-                                                                                        "function": {
-                                                                                          "function": {
-                                                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                    "@second": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "b"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "ts"},
-                                                                                        "function": {"variable": "hydra.schemas.typeSchemeToFType"}}}}},
-                                                                                "domain": null,
-                                                                                "parameter": "ts"}}},
-                                                                          "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}},
+                                                                                        "function": {"variable": "hydra.schemas.typeSchemeToFType"}}},
+                                                                                    "domain": null,
+                                                                                    "parameter": "ts"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {
+                                                                                          "wrap": {"body": {"literal": {"string": "_"}}, "typeName": "hydra.core.Name"}}},
+                                                                                      "typeName": "hydra.core.Type"}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}}}},
                                                                   "domain": null,
                                                                   "parameter": "b"}}},
                                                             "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                    "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}},
-                                                "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "tcontext"},
-                                                    "function": {
-                                                      "function": {
-                                                        "elimination": {"record": {"field": "types", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                                    "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
                                                 "function": {"function": {"primitive": "hydra.lib.maps.union"}}}}}}},
                                       {
                                         "name": "metadata",
