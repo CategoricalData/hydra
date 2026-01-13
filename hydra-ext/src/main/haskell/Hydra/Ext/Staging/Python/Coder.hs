@@ -43,6 +43,7 @@ data PythonModuleMetadata = PythonModuleMetadata {
   pythonModuleMetadataUsesAnnotated :: Bool,
   pythonModuleMetadataUsesCallable :: Bool,
   pythonModuleMetadataUsesCast :: Bool,
+  pythonModuleMetadataUsesLruCache :: Bool,
   pythonModuleMetadataUsesTypeAlias :: Bool,
   pythonModuleMetadataUsesDataclass :: Bool,
   pythonModuleMetadataUsesDecimal :: Bool,
@@ -460,6 +461,7 @@ encodeBindingAsAssignment allowThunking env (Binding name term (Just ts)) = do
   -- returns False due to TypeContext state, but the term should still be thunked
   let termIsComplex = isComplexTerm tc term
   let needsThunk = allowThunking && typeSchemeArity ts == 0 && (isComplexVar || termIsComplex)
+  CM.when needsThunk $ updateMeta $ \m -> m { pythonModuleMetadataUsesLruCache = True }
   let pterm = if needsThunk
         then makeThunk pbody
         else pbody
@@ -473,6 +475,7 @@ encodeBindingAsAssignment allowThunking env (Binding name term Nothing) = do
   let isComplexVar = isComplexVariable tc name
   let termIsComplex = isComplexTerm tc term
   let needsThunk = allowThunking && (isComplexVar || termIsComplex)
+  CM.when needsThunk $ updateMeta $ \m -> m { pythonModuleMetadataUsesLruCache = True }
   let pterm = if needsThunk
         then makeThunk pbody
         else pbody
@@ -669,16 +672,15 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
 
     updateMeta $ extendMetaForTypes (Y.maybeToList mcod ++ doms)
 
---    if name == Name "toType"
---    then fail $ "body: " ++ ShowCore.term body
---      ++ "\ntparams: " ++ L.intercalate ", " (fmap unName tparams)
---      ++ "\nargs: " ++ L.intercalate ", " (fmap unName args)
---      ++ "\ndoms: " ++ L.intercalate ", " (fmap ShowCore.type_ doms)
---      ++ "\ncod: " ++ fmap ShowCore.type_ mcod
---      -- ++ "\npyParams: " ++ show pyParams
---    else return ()
+    -- For zero-argument functions (thunks), add @lru_cache(1) decorator to ensure
+    -- the result is computed at most once, matching Haskell's lazy evaluation with sharing.
+    let isThunk = L.null args
+    let mDecorators = if isThunk
+          then Just $ Py.Decorators [lruCacheDecorator]
+          else Nothing
+    CM.when isThunk $ updateMeta $ \m -> m { pythonModuleMetadataUsesLruCache = True }
 
-    return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
+    return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition mDecorators $
       Py.FunctionDefRaw False (encodeName False CaseConventionLowerSnake env name) pyTparams (Just pyParams) mreturnType Nothing block
   where
     toParam name typ = do
@@ -837,6 +839,8 @@ encodeModule mod defs0 = do
                   cond "Decimal" $ pythonModuleMetadataUsesDecimal meta]),
                 ("enum", [
                   cond "Enum" $ pythonModuleMetadataUsesEnum meta]),
+                ("functools", [
+                  cond "lru_cache" $ pythonModuleMetadataUsesLruCache meta]),
                 ("hydra.dsl.python", [
                   cond "Either" $ pythonModuleMetadataUsesEither meta,
                   cond "FrozenDict" $ pythonModuleMetadataUsesFrozenDict meta,
@@ -1492,6 +1496,7 @@ gatherMetadata focusNs defs = checkTvars $ L.foldl add start defs
       pythonModuleMetadataUsesAnnotated = False,
       pythonModuleMetadataUsesCallable = False,
       pythonModuleMetadataUsesCast = False,
+      pythonModuleMetadataUsesLruCache = False,
       pythonModuleMetadataUsesTypeAlias = False,
       pythonModuleMetadataUsesDataclass = False,
       pythonModuleMetadataUsesDecimal = False,
@@ -1534,8 +1539,26 @@ makeSimpleLambda arity lhs = if arity == 0
   where
     args = fmap (\i -> Py.Name $ "x" ++ show i) [1..arity]
 
+-- | Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization.
+--   This ensures the thunk is evaluated at most once, matching Haskell's lazy evaluation with sharing.
+--   Generates: lru_cache(1)(lambda: expr)
 makeThunk :: Py.Expression -> Py.Expression
-makeThunk pbody =  Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] Nothing) pbody
+makeThunk pbody = functionCall lruCachePrimary [thunkLambda]
+  where
+    -- lru_cache(1)
+    lruCachePrimary = pyExpressionToPyPrimary $ functionCall (pyNameToPyPrimary $ Py.Name "lru_cache") [pyInt 1]
+    -- lambda: expr
+    thunkLambda = Py.ExpressionLambda $ Py.Lambda (Py.LambdaParameters Nothing [] [] Nothing) pbody
+    -- Integer literal
+    pyInt n = pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger n
+
+-- | Decorator for @lru_cache(1) to memoize zero-argument function results.
+--   This is used to ensure thunked bindings are evaluated at most once.
+lruCacheDecorator :: Py.NamedExpression
+lruCacheDecorator = Py.NamedExpressionSimple lruCacheCall
+  where
+    lruCacheCall = functionCall (pyNameToPyPrimary $ Py.Name "lru_cache") [pyInt 1]
+    pyInt n = pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger n
 
 -- | Create a curried lambda chain from a list of parameter names and a body
 -- | e.g., makeCurriedLambda [p1, p2, p3] body => lambda p1: lambda p2: lambda p3: body

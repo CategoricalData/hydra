@@ -199,7 +199,8 @@ encodeFunctionDefRaw (Py.FunctionDefRaw async name tparams params retType ftc bl
     retExpr = fmap (\t -> spaceSep[cst "->", encodeExpression t]) retType
 
 encodeFunctionDefinition :: Py.FunctionDefinition -> A.Expr
-encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) = encodeFunctionDefRaw raw
+encodeFunctionDefinition (Py.FunctionDefinition mdecs raw) =
+  newlineSep $ Y.catMaybes [encodeDecorators <$> mdecs, Just $ encodeFunctionDefRaw raw]
 
 encodeGroup :: Py.Group -> A.Expr
 encodeGroup g = case g of
