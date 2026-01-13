@@ -440,19 +440,45 @@ encodeApplicationType env at = do
       TypeApplication (ApplicationType lhs rhs) -> gatherParams lhs (rhs:ps)
       _ -> (t, ps)
 
-encodeBindingAsAssignment :: PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
-encodeBindingAsAssignment env (Binding name term (Just ts)) = do
+-- | Encode a binding for inline assignment (walrus operator).
+-- Zero-arity bindings need thunking if they are "complex" - i.e., they are expected to be
+-- called as functions (result()) rather than used directly.
+-- A binding is complex if:
+--   1. It's in the TypeContext metadata (isComplexVariable), OR
+--   2. Its term contains complex constructs (isComplexTerm) like let, type application,
+--      type lambda, or references to complex variables
+-- | Encode a binding as a walrus-operator assignment expression.
+--   The allowThunking parameter controls whether complex bindings are wrapped in lambdas.
+--   For inline let expressions (walrus operators in tuples), thunking should be disabled
+--   because the expressions are evaluated immediately and shared.
+encodeBindingAsAssignment :: Bool -> PythonEnvironment -> Binding -> Flow PyGraph Py.NamedExpression
+encodeBindingAsAssignment allowThunking env (Binding name term (Just ts)) = do
   let pyName = encodeName False CaseConventionLowerSnake env name
   pbody <- encodeTermInline env False term
-  let pterm = if isComplexVariable (pythonEnvironmentTypeContext env) name && typeSchemeArity ts == 0
+  let isComplexVar = isComplexVariable tc name
+  -- Also check if the term itself is complex - this catches cases where isComplexVariable
+  -- returns False due to TypeContext state, but the term should still be thunked
+  let termIsComplex = isComplexTerm tc term
+  let needsThunk = allowThunking && typeSchemeArity ts == 0 && (isComplexVar || termIsComplex)
+  let pterm = if needsThunk
         then makeThunk pbody
         else pbody
   return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
--- Bindings without type schemes (e.g., lifted case expressions) use simple assignment
-encodeBindingAsAssignment env (Binding name term Nothing) = do
+  where
+    tc = pythonEnvironmentTypeContext env
+-- Bindings without type schemes need thunking if complex
+encodeBindingAsAssignment allowThunking env (Binding name term Nothing) = do
   let pyName = encodeName False CaseConventionLowerSnake env name
   pbody <- encodeTermInline env False term
-  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pbody
+  let isComplexVar = isComplexVariable tc name
+  let termIsComplex = isComplexTerm tc term
+  let needsThunk = allowThunking && (isComplexVar || termIsComplex)
+  let pterm = if needsThunk
+        then makeThunk pbody
+        else pbody
+  return $ Py.NamedExpressionAssignment $ Py.AssignmentExpression pyName pterm
+  where
+    tc = pythonEnvironmentTypeContext env
 
 encodeBindingAs :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
 encodeBindingAs env (Binding name1 term1 mts) = do
@@ -576,9 +602,10 @@ encodeForallType env lt = do
 encodeFunction :: PythonEnvironment -> Function -> Flow PyGraph Py.Expression
 encodeFunction env f = case f of
   FunctionLambda lam -> do
-    fs <- withTrace "analyze function term for lambda" $
---    fs <- withTrace ("analyze function term for lambda: " ++ ShowCore.function f) $
-      analyzePythonFunction env (TermFunction $ FunctionLambda lam)
+    -- Use analyzePythonFunctionInline for inline lambda expressions where let bindings
+    -- become walrus operators (which evaluate immediately and share values)
+    fs <- withTrace "analyze function term for lambda (inline)" $
+      analyzePythonFunctionInline env (TermFunction $ FunctionLambda lam)
     let params = functionStructureParams fs
         bindings = functionStructureBindings fs
         innerBody = functionStructureBody fs
@@ -593,7 +620,8 @@ encodeFunction env f = case f of
              pbody
       else do
         -- Create walrus operator expressions for each binding
-        pbindingExprs <- CM.mapM (encodeBindingAsAssignment innerEnv) bindings
+        -- Thunking is disabled because walrus operators evaluate immediately
+        pbindingExprs <- CM.mapM (encodeBindingAsAssignment False innerEnv) bindings
 
         -- Convert NamedExpressions to StarNamedExpressions for the tuple
         let pbindingStarExprs = fmap Py.StarNamedExpressionSimple pbindingExprs
@@ -742,7 +770,8 @@ encodeModule mod defs0 = do
                   pythonEnvironmentTypeContext = tcontext,
                   pythonEnvironmentNUllaryBindings = S.empty,
                   pythonEnvironmentVersion = targetPythonVersion,
-                  pythonEnvironmentSkipCasts = True}
+                  pythonEnvironmentSkipCasts = True,
+                  pythonEnvironmentInlineVariables = S.empty}
       withDefinitions env0 defs $ \env -> do
         defStmts <- L.concat <$> (CM.mapM (encodeDefinition env) defs)
         PyGraph _ meta1 <- getState -- get metadata after definitions, which may have altered it
@@ -916,7 +945,27 @@ encodeTermInline env noCast term = case deannotateTerm term of
         pyexp <- encode term1
         withCast $ functionCall (pyNameToPyPrimary $ Py.Name "Right") [pyexp]
     TermFunction f -> encodeFunction env f
-    TermLet _ -> pure $ stringToPyExpression Py.QuoteStyleDouble "let terms are not supported here"
+    TermLet lt@(Let bindings body) -> do
+      -- Encode let expressions using walrus operators in a tuple, similar to how lambdas
+      -- with bindings are encoded. The pattern is:
+      --   (x := expr1, y := expr2, ..., body)[N]
+      -- where N is the number of bindings, so the result is the body expression.
+      if L.null bindings
+        then encodeTermInline env False body
+        else withLetInline env lt $ \innerEnv -> do
+          -- Use withLetInline and no thunking because walrus operators evaluate immediately
+          pbindingExprs <- CM.mapM (encodeBindingAsAssignment False innerEnv) bindings
+          pbody <- encodeTermInline innerEnv False body
+          let pbindingStarExprs = fmap Py.StarNamedExpressionSimple pbindingExprs
+          let pbodyStarExpr = pyExpressionToPyStarNamedExpression pbody
+          let tupleElements = pbindingStarExprs ++ [pbodyStarExpr]
+          let tupleExpr = pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple tupleElements
+          let indexValue = pyAtomToPyExpression $ Py.AtomNumber $ Py.NumberInteger $
+                             fromIntegral $ L.length bindings
+          let indexedExpr = primaryWithExpressionSlices
+                              (pyExpressionToPyPrimary tupleExpr)
+                              [indexValue]
+          return $ pyPrimaryToPyExpression indexedExpr
     TermList terms -> do
       pyExprs <- CM.mapM encode terms
       return $ pyAtomToPyExpression $ Py.AtomTuple $ Py.Tuple (pyExpressionToPyStarNamedExpression <$> pyExprs)
@@ -1210,18 +1259,33 @@ encodeVariable env name args = do
       Nothing -> return $ asFunctionCallTmp "one"
     -- Try let- and lambda variables before primitives; the former can shadow the latter.
     else case M.lookup name (typeContextTypes $ pythonEnvironmentTypeContext env) of
-      Just typ -> if S.member name (typeContextLambdaVariables tc)
+      Just typ ->
+        if S.member name (typeContextLambdaVariables tc)
         then return asVariable
-        else case M.lookup name (graphElements g) of
-          -- This branch is a hack which accounts for the fact that bindings outside of the current module have not been processed.
-          -- In the future, it might be best to construct the initial TypeContext such that it does have metadata for those bindings.
-          Just el -> return $ if isNullary typ && isComplexBinding (pythonEnvironmentTypeContext env) el
-            then asFunctionCallTmp "two"
-            else asFunctionReference (fTypeToTypeScheme typ)
-          -- Local let binding
-          Nothing -> return $ if isNullary typ && isComplexVariable (pythonEnvironmentTypeContext env) name
-            then asFunctionCallTmp "three"
-            else asFunctionReference (fTypeToTypeScheme typ)
+        -- Check if this is an inline variable (added by withLetInline).
+        -- Inline variables should NEVER get call syntax, regardless of what's in graphElements.
+        else if S.member name (pythonEnvironmentInlineVariables env)
+          then return $ asFunctionReference (fTypeToTypeScheme typ)
+        -- Check if this is a local binding (in typeContextTypes but NOT in typeContextMetadata)
+        -- These are either external module bindings or regular inline bindings.
+        else if not (M.member name (typeContextMetadata tc))
+          then case M.lookup name (graphElements g) of
+            -- External binding (in graphElements) - check if needs ()
+            Just el -> case bindingType el of
+              Just ts -> return $ if isNullary typ && isComplexBinding tc el
+                  then asFunctionCallTmp "external-complex"
+                  else asFunctionReference (fTypeToTypeScheme typ)
+              Nothing -> return $ if isNullary typ
+                  then asFunctionCallTmp "external-untyped"
+                  else asFunctionReference (fTypeToTypeScheme typ)
+            -- True inline let binding (not in graphElements) - no ()
+            Nothing -> return $ asFunctionReference (fTypeToTypeScheme typ)
+        -- Name IS in typeContextMetadata - it's a regular let binding (not inline).
+        -- For local bindings, use isComplexVariable to determine if call syntax is needed.
+        -- We should NOT check graphElements here because a local binding may shadow a graph element.
+          else return $ if isNullary typ && isComplexVariable (pythonEnvironmentTypeContext env) name
+              then asFunctionCallTmp "three"
+              else asFunctionReference (fTypeToTypeScheme typ)
       -- Check for untyped lambda variables (lambda has no domain annotation)
       -- These are in typeContextLambdaVariables but NOT in typeContextTypes
       Nothing -> if S.member name (typeContextLambdaVariables tc)
@@ -1235,7 +1299,9 @@ encodeVariable env name args = do
           -- Check if the variable is a graph element (external binding)
           Nothing -> case M.lookup name (graphElements g) of
             Just el -> case bindingType el of
-              Just ts -> return $ asFunctionReference ts
+              Just ts -> return $ if typeSchemeArity ts == 0 && isComplexBinding tc el
+                then asFunctionCallTmp "six"
+                else asFunctionReference ts
               Nothing -> return asVariable
             -- Check if the variable is a local let binding without a type (e.g., lifted case expression)
             -- These bindings are in typeContextMetadata but not in typeContextTypes
@@ -1292,6 +1358,14 @@ encodeWrappedType env name typ comment = do
 -- The skipCasts flag only affects cast() calls, not function signatures.
 analyzePythonFunction :: PythonEnvironment -> Term -> Flow PyGraph (FunctionStructure PythonEnvironment)
 analyzePythonFunction env = analyzeFunctionTerm getTC setTC env
+  where
+    getTC = pythonEnvironmentTypeContext
+    setTC tc e = e { pythonEnvironmentTypeContext = tc }
+
+-- | Like analyzePythonFunction but without recording binding metadata.
+--   Used for inline lambda expressions where let bindings become walrus operators.
+analyzePythonFunctionInline :: PythonEnvironment -> Term -> Flow PyGraph (FunctionStructure PythonEnvironment)
+analyzePythonFunctionInline env = analyzeFunctionTermInline getTC setTC env
   where
     getTC = pythonEnvironmentTypeContext
     setTC tc e = e { pythonEnvironmentTypeContext = tc }
@@ -1506,6 +1580,23 @@ withLambda = withLambdaContext pythonEnvironmentTypeContext (\tc e -> e { python
 
 withLet :: PythonEnvironment -> Let -> (PythonEnvironment -> Flow s a) -> Flow s a
 withLet = withLetContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc }) bindingMetadata
+
+-- | Like withLet, but without recording binding metadata. This is used for inline let expressions
+--   (walrus operators) where bindings are evaluated immediately and shared, so they don't need
+--   thunking or call syntax for references.
+--   Also adds binding names to pythonEnvironmentInlineVariables so that encodeVariable knows
+--   these are inline bindings that should NOT get call syntax.
+withLetInline :: PythonEnvironment -> Let -> (PythonEnvironment -> Flow s a) -> Flow s a
+withLetInline env lt body =
+  let bindingNamesList = fmap bindingName (letBindings lt)
+      inlineVars = S.fromList bindingNamesList
+  in withLetContext pythonEnvironmentTypeContext setContext (\_ _ -> Nothing) env lt $ \innerEnv ->
+       -- Add the binding names to the inline variables set
+       let envWithInline = innerEnv { pythonEnvironmentInlineVariables =
+             S.union (pythonEnvironmentInlineVariables innerEnv) inlineVars }
+       in body envWithInline
+  where
+    setContext tc e = e { pythonEnvironmentTypeContext = tc }
 
 withTypeLambda :: PythonEnvironment -> TypeLambda -> (PythonEnvironment -> Flow s a) -> Flow s a
 withTypeLambda = withTypeLambdaContext pythonEnvironmentTypeContext (\tc e -> e { pythonEnvironmentTypeContext = tc })

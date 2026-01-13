@@ -9,6 +9,7 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 -- | A structured representation of a function term's components, replacing ad-hoc tuples.
@@ -50,7 +51,17 @@ data FunctionStructure env = FunctionStructure {
 -- - env: The initial environment
 -- - term: The term to analyze
 analyzeFunctionTerm :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
-analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
+analyzeFunctionTerm = analyzeFunctionTermWith bindingMetadata
+
+-- | Like analyzeFunctionTerm, but without recording binding metadata. This is used for inline
+--   lambda expressions where let bindings are encoded as walrus operators (which evaluate
+--   immediately and share values, so don't need thunking or function call syntax).
+analyzeFunctionTermInline :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
+analyzeFunctionTermInline = analyzeFunctionTermWith (\_ _ -> Nothing)
+
+-- | Internal helper: analyze a function term with a configurable binding metadata function.
+analyzeFunctionTermWith :: (TypeContext -> Binding -> Maybe Term) -> (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
+analyzeFunctionTermWith forBinding getTC setTC env term = gather True env [] [] [] [] [] term
   where
     gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
         -- Lambda with typed domain: collect parameter and domain, extend environment
@@ -71,7 +82,7 @@ analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
         -- Let: accumulate bindings, extend environment
         TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
           where
-            env2 = setTC (extendTypeContextForLet bindingMetadata (getTC env) lt) env
+            env2 = setTC (extendTypeContextForLet forBinding (getTC env) lt) env
 
         -- Type application: accumulate type arguments
         TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
@@ -104,7 +115,16 @@ analyzeFunctionTerm getTC setTC env term = gather True env [] [] [] [] [] term
 -- where the codomain type is not needed and type inference is expensive.
 -- Use this variant when generating test code or when types are not required.
 analyzeFunctionTermNoInfer :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
-analyzeFunctionTermNoInfer getTC setTC env term = gather True env [] [] [] [] [] term
+analyzeFunctionTermNoInfer = analyzeFunctionTermNoInferWith bindingMetadata
+
+-- | Like analyzeFunctionTermNoInfer, but without recording binding metadata. This is used for
+--   inline lambda expressions where let bindings are encoded as walrus operators.
+analyzeFunctionTermNoInferInline :: (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
+analyzeFunctionTermNoInferInline = analyzeFunctionTermNoInferWith (\_ _ -> Nothing)
+
+-- | Internal helper: analyze a function term without type inference, with configurable binding metadata.
+analyzeFunctionTermNoInferWith :: (TypeContext -> Binding -> Maybe Term) -> (env -> TypeContext) -> (TypeContext -> env -> env) -> env -> Term -> Flow s (FunctionStructure env)
+analyzeFunctionTermNoInferWith forBinding getTC setTC env term = gather True env [] [] [] [] [] term
   where
     gather argMode env tparams args bindings doms tapps term = case deannotateTerm term of
         -- Lambda with typed domain
@@ -121,7 +141,7 @@ analyzeFunctionTermNoInfer getTC setTC env term = gather True env [] [] [] [] []
             env2 = setTC (extendTypeContextForLambda (getTC env) lam) env
         TermLet lt@(Let bindings2 body) -> gather False env2 tparams args (bindings ++ bindings2) doms tapps body
           where
-            env2 = setTC (extendTypeContextForLet bindingMetadata (getTC env) lt) env
+            env2 = setTC (extendTypeContextForLet forBinding (getTC env) lt) env
         TermTypeApplication (TypeApplicationTerm e t) -> gather argMode env tparams args bindings doms (t:tapps) e
         TermTypeLambda tlam@(TypeLambda tvar body) -> gather argMode env2 (tvar:tparams) args bindings doms tapps body
           where
@@ -211,10 +231,15 @@ isComplexTerm tc t = case t of
 isComplexVariable :: TypeContext -> Name -> Bool
 isComplexVariable tc name = case M.lookup name (typeContextMetadata tc) of
   Just _ -> True
-  -- If a variable is not defined in the type context, assume mutual recursion, therefore complex
-  _ -> case M.lookup name (typeContextTypes tc) of
-    Nothing -> True
-    _ -> False
+  _ ->
+    -- Lambda-bound variables are complex because they might be thunked in the
+    -- calling context (e.g., when passing a recursive function as a parameter)
+    if S.member name (typeContextLambdaVariables tc)
+    then True
+    -- If a variable is not defined in the type context, assume mutual recursion, therefore complex
+    else case M.lookup name (typeContextTypes tc) of
+      Nothing -> True
+      _ -> False
 
 -- | Determines whether a binding represents a function call that needs to be invoked.
 -- This heuristic is used to decide whether to use function call syntax in the target language.
