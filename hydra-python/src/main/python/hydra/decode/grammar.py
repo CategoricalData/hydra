@@ -117,8 +117,9 @@ def labeled_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
     def _hoist_hydra_decode_grammar_labeled_pattern_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.LabeledPattern]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", label, field_map, cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("pattern", pattern, field_map, cx), (lambda field_pattern: Right(hydra.grammar.LabeledPattern(field_label, field_pattern))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", label, field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("pattern", pattern, field_map(), cx), (lambda field_pattern: Right(hydra.grammar.LabeledPattern(field_label, field_pattern))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.grammar.LabeledPattern"))
@@ -128,13 +129,17 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.De
     def _hoist_hydra_decode_grammar_pattern_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Pattern]:
         match v1:
             case hydra.core.TermUnion(value=inj):
-                tname = inj.type_name
-                field = inj.field
-                fname = field.name
-                fterm = field.term
+                def tname() -> hydra.core.Type:
+                    return inj.type_name
+                def field() -> hydra.core.Type:
+                    return inj.field
+                def fname() -> hydra.core.Type:
+                    return field().name
+                def fterm() -> hydra.core.Type:
+                    return field().term
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.grammar.Pattern]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("alternatives"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternAlternatives(t))), hydra.extract.helpers.decode_list(pattern, cx, input)))), (hydra.core.Name("constant"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternConstant(t))), constant(cx, input)))), (hydra.core.Name("ignored"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternIgnored(t))), pattern(cx, input)))), (hydra.core.Name("labeled"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternLabeled(t))), labeled_pattern(cx, input)))), (hydra.core.Name("nil"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternNil())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("nonterminal"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternNonterminal(t))), symbol(cx, input)))), (hydra.core.Name("option"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternOption(t))), pattern(cx, input)))), (hydra.core.Name("plus"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternPlus(t))), pattern(cx, input)))), (hydra.core.Name("regex"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternRegex(t))), regex(cx, input)))), (hydra.core.Name("sequence"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternSequence(t))), hydra.extract.helpers.decode_list(pattern, cx, input)))), (hydra.core.Name("star"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternStar(t))), pattern(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.grammar.Pattern"))
@@ -144,8 +149,9 @@ def production(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
     def _hoist_hydra_decode_grammar_production_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Production]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("symbol", symbol, field_map, cx), (lambda field_symbol: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("pattern", pattern, field_map, cx), (lambda field_pattern: Right(hydra.grammar.Production(field_symbol, field_pattern))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("symbol", symbol, field_map(), cx), (lambda field_symbol: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("pattern", pattern, field_map(), cx), (lambda field_pattern: Right(hydra.grammar.Production(field_symbol, field_pattern))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.grammar.Production"))

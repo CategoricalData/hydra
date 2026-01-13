@@ -45,8 +45,9 @@ def column_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
     def _hoist_hydra_decode_relational_column_schema_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.relational.ColumnSchema[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", column_name, field_map, cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("domain", t, field_map, cx), (lambda field_domain: Right(hydra.relational.ColumnSchema(field_name, field_domain))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", column_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("domain", t, field_map(), cx), (lambda field_domain: Right(hydra.relational.ColumnSchema(field_name, field_domain))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.relational.ColumnSchema"))
@@ -80,8 +81,9 @@ def foreign_key(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
     def _hoist_hydra_decode_relational_foreign_key_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.relational.ForeignKey]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("foreignRelation", relation_name, field_map, cx), (lambda field_foreign_relation: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("keys", (lambda v1, v2: hydra.extract.helpers.decode_map(column_name, column_name, v1, v2)), field_map, cx), (lambda field_keys: Right(hydra.relational.ForeignKey(field_foreign_relation, field_keys))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("foreignRelation", relation_name, field_map(), cx), (lambda field_foreign_relation: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("keys", (lambda v1, v2: hydra.extract.helpers.decode_map(column_name, column_name, v1, v2)), field_map(), cx), (lambda field_keys: Right(hydra.relational.ForeignKey(field_foreign_relation, field_keys))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.relational.ForeignKey"))
@@ -121,8 +123,9 @@ def relation_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hyd
     def _hoist_hydra_decode_relational_relation_schema_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.relational.RelationSchema[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
-                field_map = hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", relation_name, field_map, cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v1, v2: hydra.extract.helpers.decode_list((lambda v1, v2: column_schema(t, v1, v2)), v1, v2)), field_map, cx), (lambda field_columns: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("primaryKeys", (lambda v1, v2: hydra.extract.helpers.decode_list(primary_key, v1, v2)), field_map, cx), (lambda field_primary_keys: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("foreignKeys", (lambda v1, v2: hydra.extract.helpers.decode_list(foreign_key, v1, v2)), field_map, cx), (lambda field_foreign_keys: Right(hydra.relational.RelationSchema(field_name, field_columns, field_primary_keys, field_foreign_keys))))))))))
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", relation_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v1, v2: hydra.extract.helpers.decode_list((lambda v1, v2: column_schema(t, v1, v2)), v1, v2)), field_map(), cx), (lambda field_columns: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("primaryKeys", (lambda v1, v2: hydra.extract.helpers.decode_list(primary_key, v1, v2)), field_map(), cx), (lambda field_primary_keys: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("foreignKeys", (lambda v1, v2: hydra.extract.helpers.decode_list(foreign_key, v1, v2)), field_map(), cx), (lambda field_foreign_keys: Right(hydra.relational.RelationSchema(field_name, field_columns, field_primary_keys, field_foreign_keys))))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.relational.RelationSchema"))

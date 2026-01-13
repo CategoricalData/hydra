@@ -48,6 +48,7 @@ import hydra.show.core
 import hydra.sources.libraries
 import hydra.testing
 import hydra.typing
+import hydra.hoisting
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 
 # Manually load and register hydra.test package
@@ -530,6 +531,27 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
 
         case hydra.testing.TestCaseRewriteType(value=tc):
             return lambda: run_rewrite_type_test(tc)
+
+        case hydra.testing.TestCaseJsonDecode(value=tc):
+            return lambda: run_json_decode_test(tc)
+
+        case hydra.testing.TestCaseJsonEncode(value=tc):
+            return lambda: run_json_encode_test(tc)
+
+        case hydra.testing.TestCaseJsonRoundtrip(value=tc):
+            return lambda: run_json_roundtrip_test(tc)
+
+        case hydra.testing.TestCaseHoistSubterms(value=tc):
+            return lambda: run_hoist_subterms_test(tc)
+
+        case hydra.testing.TestCaseHoistCaseStatements(value=tc):
+            return lambda: run_hoist_case_statements_test(tc)
+
+        case hydra.testing.TestCaseHoistLetBindings(value=tc):
+            return lambda: run_hoist_let_bindings_test(tc)
+
+        case hydra.testing.TestCaseHoistPolymorphicLetBindings(value=tc):
+            return lambda: run_hoist_polymorphic_let_bindings_test(tc)
 
     return None
 
@@ -1014,6 +1036,187 @@ def run_rewrite_type_test(test_case: hydra.testing.RewriteTypeTestCase) -> None:
     )
 
 
+def run_json_decode_test(test_case: hydra.testing.JsonDecodeTestCase) -> None:
+    """Execute a JSON decode test."""
+    import hydra.ext.org.json.coder as json_coder
+
+    graph = get_test_graph()
+
+    # Create a JSON coder for the specified type
+    coder_flow = json_coder.json_coder(test_case.type)
+    coder_state = coder_flow.value(graph, hydra.monads.empty_trace())
+
+    match coder_state.value:
+        case Nothing():
+            errors = "\n".join(coder_state.trace.messages)
+            pytest.fail(f"Failed to create JSON coder: {errors}")
+            return
+        case Just(value=coder):
+            pass
+
+    # Try to decode the JSON
+    decode_flow = coder.decode(test_case.json)
+    decode_state = decode_flow.value(graph, hydra.monads.empty_trace())
+
+    match test_case.expected:
+        case Left(value=_err_msg):
+            # Expected failure
+            match decode_state.value:
+                case Nothing():
+                    pass  # Expected failure, got failure
+                case Just(value=result):
+                    pytest.fail(
+                        f"Expected decode failure but got success: "
+                        f"{hydra.show.core.term(result)}"
+                    )
+        case Right(value=expected_term):
+            # Expected success
+            match decode_state.value:
+                case Nothing():
+                    errors = "\n".join(decode_state.trace.messages)
+                    pytest.fail(f"JSON decode failed: {errors}")
+                case Just(value=result):
+                    assert result == expected_term, (
+                        f"JSON decode mismatch:\n"
+                        f"  Expected: {hydra.show.core.term(expected_term)}\n"
+                        f"  Actual: {hydra.show.core.term(result)}"
+                    )
+
+
+def run_json_encode_test(test_case: hydra.testing.JsonEncodeTestCase) -> None:
+    """Execute a JSON encode test.
+
+    Note: Encoding without a type is challenging since we need a coder.
+    For now, we skip these tests as they require type information.
+    """
+    # Without a type in the test case, we can't create a coder
+    # This matches the Haskell behavior which marks these as pending
+    pytest.skip("JSON encode tests require type information to create coder")
+
+
+def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> None:
+    """Execute a JSON roundtrip test."""
+    import hydra.ext.org.json.coder as json_coder
+
+    graph = get_test_graph()
+
+    # Create a JSON coder for the specified type
+    coder_flow = json_coder.json_coder(test_case.type)
+    coder_state = coder_flow.value(graph, hydra.monads.empty_trace())
+
+    match coder_state.value:
+        case Nothing():
+            errors = "\n".join(coder_state.trace.messages)
+            pytest.fail(f"Failed to create JSON coder: {errors}")
+            return
+        case Just(value=coder):
+            pass
+
+    # Encode the term
+    encode_flow = coder.encode(test_case.term)
+    encode_state = encode_flow.value(graph, hydra.monads.empty_trace())
+
+    match encode_state.value:
+        case Nothing():
+            errors = "\n".join(encode_state.trace.messages)
+            pytest.fail(f"Failed to encode term to JSON: {errors}")
+            return
+        case Just(value=json):
+            pass
+
+    # Decode the JSON back
+    decode_flow = coder.decode(json)
+    decode_state = decode_flow.value(graph, hydra.monads.empty_trace())
+
+    match decode_state.value:
+        case Nothing():
+            errors = "\n".join(decode_state.trace.messages)
+            pytest.fail(f"Failed to decode JSON back to term: {errors}")
+        case Just(value=decoded):
+            assert decoded == test_case.term, (
+                f"JSON roundtrip mismatch:\n"
+                f"  Original: {hydra.show.core.term(test_case.term)}\n"
+                f"  After roundtrip: {hydra.show.core.term(decoded)}"
+            )
+
+
+def run_hoist_subterms_test(test_case: hydra.testing.HoistSubtermsTestCase) -> None:
+    """Execute a hoist subterms test."""
+    # Create an empty type context (matches Haskell's emptyTypeContext)
+    empty_inference_context = hydra.typing.InferenceContext(
+        FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
+    )
+    empty_type_context = hydra.typing.TypeContext(
+        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), empty_inference_context
+    )
+
+    # Build the predicate function based on the predicate type
+    def predicate_fn(path_term: tuple) -> bool:
+        path, term = path_term
+        match test_case.predicate:
+            case hydra.testing.HoistPredicate.NOTHING:
+                return False
+            case hydra.testing.HoistPredicate.LISTS:
+                return isinstance(term, hydra.core.TermList)
+            case hydra.testing.HoistPredicate.APPLICATIONS:
+                return isinstance(term, hydra.core.TermApplication)
+            case hydra.testing.HoistPredicate.CASE_STATEMENTS:
+                # Case statements are elimination functions
+                if isinstance(term, hydra.core.TermFunction):
+                    return isinstance(term.value, hydra.core.FunctionElimination)
+                return False
+
+    result = hydra.hoisting.hoist_subterms(predicate_fn, empty_type_context, test_case.input)
+
+    assert result == test_case.output, (
+        f"Hoist subterms failed:\n"
+        f"  Expected: {hydra.show.core.term(test_case.output)}\n"
+        f"  Actual: {hydra.show.core.term(result)}"
+    )
+
+
+def run_hoist_case_statements_test(test_case: hydra.testing.HoistCaseStatementsTestCase) -> None:
+    """Execute a hoist case statements test."""
+    # Create an empty type context (matches Haskell's emptyTypeContext)
+    empty_inference_context = hydra.typing.InferenceContext(
+        FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
+    )
+    empty_type_context = hydra.typing.TypeContext(
+        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), empty_inference_context
+    )
+
+    result = hydra.hoisting.hoist_case_statements(empty_type_context, test_case.input)
+
+    assert result == test_case.output, (
+        f"Hoist case statements failed:\n"
+        f"  Expected: {hydra.show.core.term(test_case.output)}\n"
+        f"  Actual: {hydra.show.core.term(result)}"
+    )
+
+
+def run_hoist_let_bindings_test(test_case: hydra.testing.HoistLetBindingsTestCase) -> None:
+    """Execute a hoist let bindings test with hoistAll=True."""
+    # hoistLetBindings with True hoists ALL nested bindings, not just polymorphic ones
+    result = hydra.hoisting.hoist_let_bindings(True, test_case.input)
+
+    assert result == test_case.output, (
+        f"Hoist let bindings failed:\n"
+        f"  Expected: {repr(test_case.output)}\n"
+        f"  Actual: {repr(result)}"
+    )
+
+
+def run_hoist_polymorphic_let_bindings_test(test_case: hydra.testing.HoistPolymorphicLetBindingsTestCase) -> None:
+    """Execute a hoist polymorphic let bindings test."""
+    result = hydra.hoisting.hoist_polymorphic_let_bindings(test_case.input)
+
+    assert result == test_case.output, (
+        f"Hoist polymorphic let bindings failed:\n"
+        f"  Expected: {repr(test_case.output)}\n"
+        f"  Actual: {repr(result)}"
+    )
+
+
 def run_test_case(parent_desc: str, runner: TestRunner, tcase: hydra.testing.TestCaseWithMetadata) -> None:
     """
     Run a single test case using the provided runner.
@@ -1111,11 +1314,14 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
         tests.append((test_name, case_hydra_path, make_test(desc, tcase)))
 
     # Recursively generate tests for subgroups
-    # Note: subgroups can be either strings (names to look up) or TestGroup objects directly
+    # Note: subgroups can be strings (names to look up), TestGroup objects directly, or functions that return TestGroups
     for subgroup_item in group.subgroups:
         if isinstance(subgroup_item, str):
             # It's a string name, look it up in test_suite module
             subgroup_obj = getattr(test_suite, subgroup_item)
+        elif callable(subgroup_item):
+            # It's a function that returns a TestGroup - call it
+            subgroup_obj = subgroup_item()
         else:
             # It's already a TestGroup object
             subgroup_obj = subgroup_item

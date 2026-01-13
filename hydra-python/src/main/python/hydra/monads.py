@@ -72,16 +72,16 @@ def from_flow(def_: T0, cx: T1, f: hydra.compute.Flow[T1, T0]) -> T0:
     return hydra.lib.maybes.maybe(def_, (lambda xmo: xmo), f.value(cx, empty_trace()).value)
 
 def get_state() -> hydra.compute.Flow[T0, T0]:
-    return hydra.compute.Flow((lambda s0, t0: (fs1 := (lambda : pure(None).value(s0, t0)), v := (lambda : fs1().value), s := (lambda : fs1().state), t := (lambda : fs1().trace), hydra.lib.maybes.maybe(hydra.compute.FlowState(Nothing(), s(), t()), (lambda _: hydra.compute.FlowState(Just(s()), s(), t())), v()))[4]))
+    return hydra.compute.Flow((lambda s0, t0: (fs1 := pure(None).value(s0, t0), v := fs1.value, s := fs1.state, t := fs1.trace, hydra.lib.maybes.maybe(hydra.compute.FlowState(Nothing(), s, t), (lambda _: hydra.compute.FlowState(Just(s), s, t)), v))[4]))
 
 def map(f: Callable[[T0], T1], f1: hydra.compute.Flow[T2, T0]) -> hydra.compute.Flow[T2, T1]:
-    return hydra.compute.Flow((lambda s0, t0: (f2 := (lambda : f1.value(s0, t0)), hydra.compute.FlowState(hydra.lib.maybes.map(f, f2().value), f2().state, f2().trace))[1]))
+    return hydra.compute.Flow((lambda s0, t0: (f2 := f1.value(s0, t0), hydra.compute.FlowState(hydra.lib.maybes.map(f, f2.value), f2.state, f2.trace))[1]))
 
 def maybe_to_list(mx: Maybe[T0]) -> frozenlist[T0]:
     return hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.lists.pure(x1)), mx)
 
 def put_state(cx: T0) -> hydra.compute.Flow[T0, None]:
-    return hydra.compute.Flow((lambda s0, t0: (f1 := (lambda : pure(None).value(s0, t0)), hydra.compute.FlowState(f1().value, cx, f1().trace))[1]))
+    return hydra.compute.Flow((lambda s0, t0: (f1 := pure(None).value(s0, t0), hydra.compute.FlowState(f1.value, cx, f1.trace))[1]))
 
 def modify(f: Callable[[T0], T0]) -> hydra.compute.Flow[T0, None]:
     return bind(get_state(), (lambda s: put_state(f(s))))
@@ -114,7 +114,7 @@ def unexpected(expected: str, actual: str) -> hydra.compute.Flow[T0, T1]:
     return fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", expected), " but found "), actual))
 
 def warn(msg: str, b: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
-    return hydra.compute.Flow((lambda s0, t0: (f1 := (lambda : b.value(s0, t0)), add_message := (lambda t: hydra.compute.Trace(t.stack, hydra.lib.lists.cons(hydra.lib.strings.cat2("Warning: ", msg), t.messages), t.other)), hydra.compute.FlowState(f1().value, f1().state, add_message(f1().trace)))[2]))
+    return hydra.compute.Flow((lambda s0, t0: (f1 := b.value(s0, t0), add_message := (lambda t: hydra.compute.Trace(t.stack, hydra.lib.lists.cons(hydra.lib.strings.cat2("Warning: ", msg), t.messages), t.other)), hydra.compute.FlowState(f1.value, f1.state, add_message(f1.trace)))[2]))
 
 def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     def mutate(t: hydra.compute.Trace) -> Either[str, hydra.compute.Trace]:
@@ -124,7 +124,7 @@ def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.com
     return mutate_trace(mutate, (lambda x1, x2: restore(x1, x2)), f)
 
 def with_state(cx0: T0, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T2, T1]:
-    return hydra.compute.Flow((lambda cx1, t1: (f1 := (lambda : f.value(cx0, t1)), hydra.compute.FlowState(f1().value, cx1, f1().trace))[1]))
+    return hydra.compute.Flow((lambda cx1, t1: (f1 := f.value(cx0, t1), hydra.compute.FlowState(f1.value, cx1, f1.trace))[1]))
 
 def with_trace(msg: str, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
     def mutate(t: hydra.compute.Trace) -> Either[str, hydra.compute.Trace]:

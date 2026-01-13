@@ -3,7 +3,7 @@
 r"""String representations of hydra.typing types."""
 
 from __future__ import annotations
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import FrozenDict, frozenlist
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps
@@ -15,16 +15,19 @@ import hydra.typing
 def type_constraint(tc: hydra.typing.TypeConstraint) -> str:
     r"""Show a type constraint as a string."""
     
-    ltyp = tc.left
-    rtyp = tc.right
-    return hydra.lib.strings.cat((hydra.show.core.type(ltyp), "≡", hydra.show.core.type(rtyp)))
+    def ltyp() -> hydra.core.Type:
+        return tc.left
+    def rtyp() -> hydra.core.Type:
+        return tc.right
+    return hydra.lib.strings.cat((hydra.show.core.type(ltyp()), "≡", hydra.show.core.type(rtyp())))
 
 def type_subst(ts: hydra.typing.TypeSubst) -> str:
     r"""Show a type substitution as a string."""
     
-    subst = ts.value
+    def subst() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
+        return ts.value
     def pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Type]]:
-        return hydra.lib.maps.to_list(subst)
+        return hydra.lib.maps.to_list(subst())
     def show_pair(pair: tuple[hydra.core.Name, hydra.core.Type]) -> str:
         def name() -> str:
             return hydra.lib.pairs.first(pair).value
