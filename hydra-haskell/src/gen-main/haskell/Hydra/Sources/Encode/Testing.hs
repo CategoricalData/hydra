@@ -1020,6 +1020,116 @@ module_ = Module.Module {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))}]})))),
       Core.bindingType = Nothing},
     Core.Binding {
+      Core.bindingName = (Core.Name "hydra.encode.testing.hoistLetBindingsTestCase"),
+      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+          Core.injectionField = Core.Field {
+            Core.fieldName = (Core.Name "record"),
+            Core.fieldTerm = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.core.Record"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "typeName"),
+                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.HoistLetBindingsTestCase"))}))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "fields"),
+                  Core.fieldTerm = (Core.TermList [
+                    Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "name"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "input"))}))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "term"),
+                          Core.fieldTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.let")),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.testing.HoistLetBindingsTestCase"),
+                                Core.projectionField = (Core.Name "input")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                    (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "name"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "output"))}))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "term"),
+                          Core.fieldTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.let")),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.testing.HoistLetBindingsTestCase"),
+                                Core.projectionField = (Core.Name "output")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
+      Core.bindingType = Nothing},
+    Core.Binding {
+      Core.bindingName = (Core.Name "hydra.encode.testing.hoistPolymorphicLetBindingsTestCase"),
+      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+          Core.injectionField = Core.Field {
+            Core.fieldName = (Core.Name "record"),
+            Core.fieldTerm = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "hydra.core.Record"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "typeName"),
+                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.HoistPolymorphicLetBindingsTestCase"))}))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "fields"),
+                  Core.fieldTerm = (Core.TermList [
+                    Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "name"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "input"))}))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "term"),
+                          Core.fieldTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.let")),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase"),
+                                Core.projectionField = (Core.Name "input")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                    (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "name"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "output"))}))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "term"),
+                          Core.fieldTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.let")),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase"),
+                                Core.projectionField = (Core.Name "output")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
+      Core.bindingType = Nothing},
+    Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.testing.hoistSubtermsTestCase"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
@@ -3091,6 +3201,70 @@ module_ = Module.Module {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.hoistCaseStatementsTestCase")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
+          Core.Field {
+            Core.fieldName = (Core.Name "hoistLetBindings"),
+            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "v"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "union"),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "typeName"),
+                        Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.TestCase"))}))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "field"),
+                        Core.fieldTerm = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hoistLetBindings"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.hoistLetBindingsTestCase")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
+          Core.Field {
+            Core.fieldName = (Core.Name "hoistPolymorphicLetBindings"),
+            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "v"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "union"),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "typeName"),
+                        Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.TestCase"))}))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "field"),
+                        Core.fieldTerm = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hoistPolymorphicLetBindings"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.hoistPolymorphicLetBindingsTestCase")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))}]})))),
       Core.bindingType = Nothing},
     Core.Binding {

@@ -8,6 +8,7 @@ import qualified Hydra.Test.Annotations as Annotations
 import qualified Hydra.Test.Checking.All as All
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
+import qualified Hydra.Test.Hoisting as Hoisting
 import qualified Hydra.Test.Inference.All as All_
 import qualified Hydra.Test.Json.Coder as Coder
 import qualified Hydra.Test.Json.Parser as Parser
@@ -62,6 +63,7 @@ allTests = Testing.TestGroup {
     All.allTests,
     EtaExpansion.allTests,
     Formatting.allTests,
+    Hoisting.allTests,
     All_.allTests,
     Coder.allTests,
     Parser.allTests,
