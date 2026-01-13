@@ -231,6 +231,21 @@ _HoistPredicate_lists = (Core.Name "lists")
 
 _HoistPredicate_nothing = (Core.Name "nothing")
 
+-- | A test case for hoistLetBindings with hoistAll=True, which hoists ALL nested let bindings to the top level of a let term, not just polymorphic ones. This is used for targets like Java that cannot have let expressions in arbitrary positions.
+data HoistLetBindingsTestCase = 
+  HoistLetBindingsTestCase {
+    -- | The input let term
+    hoistLetBindingsTestCaseInput :: Core.Let,
+    -- | The expected output let term with all nested bindings hoisted to top
+    hoistLetBindingsTestCaseOutput :: Core.Let}
+  deriving (Eq, Ord, Read, Show)
+
+_HoistLetBindingsTestCase = (Core.Name "hydra.testing.HoistLetBindingsTestCase")
+
+_HoistLetBindingsTestCase_input = (Core.Name "input")
+
+_HoistLetBindingsTestCase_output = (Core.Name "output")
+
 -- | A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic let bindings to the top level of a let term. This is used for targets like Java which don't support polymorphic lambdas.
 data HoistPolymorphicLetBindingsTestCase = 
   HoistPolymorphicLetBindingsTestCase {
@@ -619,6 +634,8 @@ data TestCase =
   TestCaseHoistSubterms HoistSubtermsTestCase |
   -- | A hoist case statements test
   TestCaseHoistCaseStatements HoistCaseStatementsTestCase |
+  -- | A hoist all let bindings test (hoistAll=True, for Java)
+  TestCaseHoistLetBindings HoistLetBindingsTestCase |
   -- | A hoist polymorphic let bindings test
   TestCaseHoistPolymorphicLetBindings HoistPolymorphicLetBindingsTestCase
   deriving (Eq, Ord, Read, Show)
@@ -688,6 +705,8 @@ _TestCase_rewriteType = (Core.Name "rewriteType")
 _TestCase_hoistSubterms = (Core.Name "hoistSubterms")
 
 _TestCase_hoistCaseStatements = (Core.Name "hoistCaseStatements")
+
+_TestCase_hoistLetBindings = (Core.Name "hoistLetBindings")
 
 _TestCase_hoistPolymorphicLetBindings = (Core.Name "hoistPolymorphicLetBindings")
 

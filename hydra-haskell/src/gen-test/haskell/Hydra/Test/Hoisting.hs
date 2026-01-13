@@ -2862,6 +2862,302 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
+      Testing.testGroupName = "hoistLetBindings",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "simple nested let: inner binding hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "y"),
+                    Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "y"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "nested let inside lambda: binding hoisted with lambda capture",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "a"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "g"),
+                          Core.bindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))}))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "g"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "a"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "a"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mul"))),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "type lambda: nested let NOT hoisted out",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t"),
+                    Core.typeLambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "g"),
+                          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t"))),
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermVariable (Core.Name "g"))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t"),
+                    Core.typeLambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "g"),
+                          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "x"),
+                            Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t"))),
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermVariable (Core.Name "g"))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "type lambda: multiple nested lets NOT hoisted out",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t"),
+                    Core.typeLambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "x"),
+                          Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.Binding {
+                            Core.bindingName = (Core.Name "y"),
+                            Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                            Core.bindingType = Nothing}],
+                        Core.letBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t"),
+                    Core.typeLambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "x"),
+                          Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermLet (Core.Let {
+                        Core.letBindings = [
+                          Core.Binding {
+                            Core.bindingName = (Core.Name "y"),
+                            Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                            Core.bindingType = Nothing}],
+                        Core.letBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "type application: nested let outside lambda CAN be hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "y"),
+                          Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                          Core.bindingType = Nothing}],
+                      Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))})),
+                    Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "y"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                    Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "mixed: let before type lambda can be hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistLetBindings (Testing.HoistLetBindingsTestCase {
+            Testing.hoistLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "outer"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "inner"),
+                    Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = (Core.Name "t"),
+                      Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t"))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "inner")),
+                    Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "outer"))}))}))},
+            Testing.hoistLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "outer"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "inner"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t"),
+                    Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "t"))),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "inner")),
+                  Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "outer"))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
       Testing.testGroupName = "hoistPolymorphicLetBindings",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],
