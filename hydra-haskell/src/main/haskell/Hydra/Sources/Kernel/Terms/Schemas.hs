@@ -299,12 +299,21 @@ extendTypeContextForLet = define "extendTypeContextForLet" $
   "forBinding" ~> "tcontext" ~> "letrec" ~>
   "bindings" <~ Core.letBindings (var "letrec") $
   Typing.typeContext
+    -- Note: Maps.union prefers the left argument when keys conflict, so we put the new bindings first
+    -- to allow inner bindings to shadow outer ones with the same name.
     (Maps.union
-      (Typing.typeContextTypes (var "tcontext"))
-      -- Note: if the binding does not have a type scheme, we have nothing to add here
-      (Maps.fromList $ Maybes.cat $ Lists.map
-        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")) $ Core.bindingType $ var "b")
-        (var "bindings")))
+      -- Add all bindings to typeContextTypes. Use the type scheme if available, otherwise use a placeholder type.
+      -- This ensures that isComplexVariable can distinguish defined local bindings from undefined variables.
+      -- TODO: we should never have missing type schemes after inference
+      (Maps.fromList $ Lists.map
+        ("b" ~> pair (Core.bindingName $ var "b")
+          (optCases (Core.bindingType $ var "b")
+            -- Placeholder type for bindings without type schemes
+            (Core.typeVariable $ Core.name (string "_"))
+            -- Convert type scheme to type if available
+            ("ts" ~> typeSchemeToFType @@ var "ts")))
+        (var "bindings"))
+      (Typing.typeContextTypes (var "tcontext")))
     (Lists.foldl
       ("m" ~> "b" ~> optCases (var "forBinding" @@ var "tcontext" @@ var "b")
         (Maps.delete (Core.bindingName $ var "b") (var "m"))
