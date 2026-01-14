@@ -148,6 +148,18 @@ def poly(vs: Sequence[str], t: Type) -> TypeScheme:
     return TypeScheme(tuple(Name(v) for v in vs), t, Nothing())
 
 
+def scheme(*args) -> TypeScheme:
+    """Create a type scheme with the given type variables and body type.
+
+    Example: scheme("a", "b", function(var("a"), var("b")))
+    Example: scheme(int32())  # monomorphic scheme
+    """
+    if len(args) == 1:
+        return mono(args[0])
+    else:
+        return poly(list(args[:-1]), args[-1])
+
+
 def bigfloat() -> Type:
     """Arbitrary-precision floating point type."""
     return literal(lt.bigfloat())
@@ -281,6 +293,14 @@ def set_(t: Type) -> Type:
     Example: set_(string())
     """
     return TypeSet(t)
+
+
+def flow(state: Type, value: Type) -> Type:
+    """Flow type (monadic computation with state, trace, and error handling).
+
+    Example: flow(var("s"), var("x"))  # Flow s x
+    """
+    return apply(apply(TypeVariable(Name("hydra.compute.Flow")), state), value)
 
 
 def enum(names: Sequence[str]) -> Type:
