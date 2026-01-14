@@ -11,6 +11,8 @@ apply = (<*>)
 bind :: Y.Maybe a -> (a -> Y.Maybe b) -> Y.Maybe b
 bind = (>>=)
 
+-- | Case analysis for Maybe. Arguments are: the Maybe value, the default for Nothing,
+-- and the function to apply for Just. Implements hydra.lib.maybes.cases.
 cases :: Y.Maybe a -> b -> (a -> b) -> b
 cases m n j = Y.maybe n j m
 
@@ -24,7 +26,6 @@ compose f g = \x -> f x >>= g
 fromJust :: Y.Maybe a -> a
 fromJust = Y.fromJust
 
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
 fromMaybe :: a -> Y.Maybe a -> a
 fromMaybe = Y.fromMaybe
 

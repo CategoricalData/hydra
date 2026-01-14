@@ -39,9 +39,11 @@ foldl = CM.foldM
 map :: (x -> y) -> Flow s x -> Flow s y
 map = Monads.map
 
+-- | Apply a Flow-returning function to each value in a map. Implements hydra.lib.flows.mapElems.
 mapElems :: Ord k => (v1 -> Flow s v2) -> M.Map k v1 -> Flow s (M.Map k v2)
 mapElems f m = M.fromList <$> (CM.mapM (\(k, v) -> (,) <$> Monads.pure k <*> f v) $ M.toList m)
 
+-- | Apply a Flow-returning function to each key in a map. Implements hydra.lib.flows.mapKeys.
 mapKeys :: Ord k2 => (k1 -> Flow s k2) -> M.Map k1 v -> Flow s (M.Map k2 v)
 mapKeys f m = M.fromList <$> (CM.mapM (\(k, v) -> (,) <$> f k <*> Monads.pure v) $ M.toList m)
 

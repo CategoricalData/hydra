@@ -119,16 +119,19 @@ define label = definitionInModule module_ ("decode" <> label)
 
 decodeArray :: TBinding ((Value -> Flow s a) -> Value -> Flow s [a])
 decodeArray  = define "Array" $
+  doc "Decode a JSON array using a decoder for elements" $
   lambda "decodeElem" $ match _Value (Just $ Flows.fail (string "expected an array")) [
     _Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
 
 decodeBoolean :: TBinding (Value -> Flow s Bool)
 decodeBoolean  = define "Boolean" $
+  doc "Decode a JSON boolean value" $
   match _Value (Just $ Flows.fail (string "expected a boolean")) [
     _Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
 
 decodeField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
 decodeField  = define "Field" $
+  doc "Decode a required field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     Flows.bind
       (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
@@ -138,16 +141,19 @@ decodeField  = define "Field" $
 
 decodeNumber :: TBinding (Value -> Flow s Double)
 decodeNumber  = define "Number" $
+  doc "Decode a JSON number value" $
   match _Value (Just $ Flows.fail (string "expected a number")) [
     _Value_number>>: lambda "n" $ Flows.pure $ var "n"]
 
 decodeObject :: TBinding (Value -> Flow s (M.Map String Value))
 decodeObject  = define "Object" $
+  doc "Decode a JSON object value" $
   match _Value (Just $ Flows.fail (string "expected an object")) [
     _Value_object>>: lambda "o" $ Flows.pure $ var "o"]
 
 decodeOptionalField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
 decodeOptionalField  = define "OptionalField" $
+  doc "Decode an optional field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (primitive _maybes_maybe
         @@ (Flows.pure nothing)
@@ -156,5 +162,6 @@ decodeOptionalField  = define "OptionalField" $
 
 decodeString :: TBinding (Value -> Flow s String)
 decodeString  = define "String" $
+  doc "Decode a JSON string value" $
   match _Value (Just $ Flows.fail (string "expected a string")) [
     _Value_string>>: lambda "s" $ Flows.pure $ var "s"]

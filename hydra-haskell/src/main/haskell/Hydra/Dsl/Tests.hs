@@ -1,3 +1,5 @@
+-- | Convenience functions for writing Hydra test cases
+
 module Hydra.Dsl.Tests (
     module Hydra.Testing,
     module Hydra.Sources.Libraries,

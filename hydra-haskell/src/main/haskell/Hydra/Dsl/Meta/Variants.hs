@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing variant-related terms (field accessors, etc.)
+
 module Hydra.Dsl.Meta.Variants where
 
 import Hydra.Kernel

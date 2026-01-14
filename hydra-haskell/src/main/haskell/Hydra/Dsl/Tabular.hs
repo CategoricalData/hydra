@@ -1,3 +1,5 @@
+-- | DSL helpers for constructing tabular (relational) schemas
+
 module Hydra.Dsl.Tabular where
 
 import Hydra.Core

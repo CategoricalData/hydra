@@ -1,3 +1,5 @@
+-- | Bidirectional coder between Hydra terms and YAML nodes
+
 module Hydra.Staging.Yaml.Coder (yamlCoder) where
 
 import Hydra.Kernel

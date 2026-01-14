@@ -1,6 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 
+-- | Meta-DSL for constructing test-related terms
 -- TODO: merge with Hydra.Dsl.Tests
+
 module Hydra.Dsl.Meta.Testing where
 
 import Hydra.Kernel

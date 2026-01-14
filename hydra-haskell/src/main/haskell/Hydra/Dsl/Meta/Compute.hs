@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
+-- | Meta-DSL for constructing compute-related terms (Flow, Trace, etc.)
+
 module Hydra.Dsl.Meta.Compute where
 
 import Hydra.Kernel

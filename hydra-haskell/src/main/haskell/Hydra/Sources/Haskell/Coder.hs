@@ -139,22 +139,27 @@ module_ = Module ns elements
 -- TODO: make these settings configurable
 includeTypeDefinitions :: TBinding Bool
 includeTypeDefinitions = haskellCoderDefinition "includeTypeDefinitions" $
+  doc "Whether to include type definitions in generated Haskell modules" $
   false
 useCoreImport :: TBinding Bool
 useCoreImport = haskellCoderDefinition "useCoreImport" $
+  doc "Whether to use the Hydra core import in generated modules" $
   true
 
 keyHaskellVar :: TBinding Name
 keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
+  doc "The key used to track Haskell variable depth in annotations" $
   wrap _Name $ string "haskellVar"
 
 adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Flow Graph H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
+  doc "Adapt a Hydra type to Haskell's type system and encode it" $
   "namespaces" ~>
     AdaptModules.adaptTypeToLanguageAndEncode @@ (HaskellLanguage.haskellLanguage) @@ (encodeType @@ var "namespaces")
 
 constantForFieldName :: TBinding (Name -> Name -> String)
 constantForFieldName = haskellCoderDefinition "constantForFieldName" $
+  doc "Generate a constant name for a field (e.g., '_TypeName_fieldName')" $
   "tname" ~> "fname" ~>
     Strings.cat $ list [
       string "_",
@@ -164,11 +169,14 @@ constantForFieldName = haskellCoderDefinition "constantForFieldName" $
 
 constantForTypeName :: TBinding (Name -> String)
 constantForTypeName = haskellCoderDefinition "constantForTypeName" $
+  doc "Generate a constant name for a type (e.g., '_TypeName')" $
   "tname" ~>
     Strings.cat2 (string "_") (Names.localNameOf @@ var "tname")
 
 constructModule :: TBinding (HaskellNamespaces -> Module -> [Definition] -> Flow Graph H.Module)
-constructModule = haskellCoderDefinition "constructModule" $ "namespaces" ~> "mod" ~> "defs" ~> lets [
+constructModule = haskellCoderDefinition "constructModule" $
+  doc "Construct a Haskell module from a Hydra module and its definitions" $
+  "namespaces" ~> "mod" ~> "defs" ~> lets [
   "h">: "namespace" ~>
     unwrap _Namespace @@ var "namespace",
   "createDeclarations">: "g" ~> "def" ~>
@@ -237,6 +245,7 @@ constructModule = haskellCoderDefinition "constructModule" $ "namespaces" ~> "mo
 
 encodeFunction :: TBinding (HaskellNamespaces -> Function -> Flow Graph H.Expression)
 encodeFunction = haskellCoderDefinition "encodeFunction" $
+  doc "Encode a Hydra function as a Haskell expression" $
   "namespaces" ~> "fun" ~>
     cases _Function (var "fun") Nothing [
       _Function_elimination>>: "e" ~>
@@ -310,6 +319,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
 
 encodeLiteral :: TBinding (Literal -> Flow Graph H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
+  doc "Encode a Hydra literal as a Haskell expression" $
   "l" ~>
     cases _Literal (var "l")
       (Just $ Flows.fail $ Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l")) [
@@ -356,6 +366,7 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
 
 encodeTerm :: TBinding (HaskellNamespaces -> Term -> Flow Graph H.Expression)
 encodeTerm = haskellCoderDefinition "encodeTerm" $
+  doc "Encode a Hydra term as a Haskell expression" $
   "namespaces" ~> "term" ~> lets [
     "encode">: encodeTerm @@ var "namespaces"] $
     "nonemptyMap" <~ ("m" ~> lets [
@@ -474,6 +485,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
 
 encodeType :: TBinding (HaskellNamespaces -> Type -> Flow Graph H.Type)
 encodeType = haskellCoderDefinition "encodeType" $
+  doc "Encode a Hydra type as a Haskell type" $
   "namespaces" ~>
   "typ" ~> lets [
   "encode">: encodeType @@ var "namespaces",
@@ -580,6 +592,7 @@ encodeType = haskellCoderDefinition "encodeType" $
 
 encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type)
 encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAssertions" $
+  doc "Encode a Hydra type as a Haskell type with typeclass assertions" $
   "namespaces" ~> "explicitClasses" ~> "typ" ~> lets [
     "classes">: Maps.union (var "explicitClasses") (getImplicitTypeClasses @@ var "typ"),
     "implicitClasses">: getImplicitTypeClasses @@ var "typ",
@@ -614,6 +627,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
 
 findOrdVariables :: TBinding (Type -> S.Set Name)
 findOrdVariables = haskellCoderDefinition "findOrdVariables" $
+  doc "Find type variables that require an Ord constraint (used in maps or sets)" $
   "typ" ~> lets [
     "fold">: "names" ~> "typ'" ~>
       cases _Type (var "typ'")
@@ -639,6 +653,7 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
 
 getImplicitTypeClasses :: TBinding (Type -> M.Map Name (S.Set TypeClass))
 getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
+  doc "Get implicit typeclass constraints for type variables that need Ord" $
   "typ" ~> lets [
     "toPair">: "name" ~>
       pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
@@ -646,12 +661,15 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
 
 moduleToHaskellModule :: TBinding (Module -> [Definition] -> Flow Graph H.Module)
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
+  doc "Convert a Hydra module and definitions to a Haskell module AST" $
   "mod" ~> "defs" ~>
     "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" $
       constructModule @@ var "namespaces" @@ var "mod" @@ var "defs"
 
 moduleToHaskell :: TBinding (Module -> [Definition] -> Flow Graph (M.Map String String))
-moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $ "mod" ~> "defs" ~>
+moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
+  doc "Convert a Hydra module to Haskell source code as a filepath-to-content map" $
+  "mod" ~> "defs" ~>
   "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
@@ -659,6 +677,7 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $ "mod" ~> "defs" ~>
 
 nameDecls :: TBinding (Graph -> HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
 nameDecls = haskellCoderDefinition "nameDecls" $
+  doc "Generate Haskell declarations for type and field name constants" $
   "g" ~> "namespaces" ~> "name" ~> "typ" ~> lets [
     "nm">: Core.unName $ var "name",
     "toDecl">: "n" ~> "pair" ~> lets [
@@ -684,6 +703,7 @@ nameDecls = haskellCoderDefinition "nameDecls" $
 
 toDataDeclaration :: TBinding (HaskellNamespaces -> TermDefinition -> Flow Graph H.DeclarationWithComments)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
+  doc "Convert a Hydra term definition to a Haskell declaration with comments" $
   "namespaces" ~> "def" ~> lets [
     "name">: Module.termDefinitionName $ var "def",
     "term">: Module.termDefinitionTerm $ var "def",
@@ -873,6 +893,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
 -- This is used with the new Definition-based API
 toTypeDeclarationsFrom :: TBinding (HaskellNamespaces -> Name -> Type -> Flow Graph [H.DeclarationWithComments])
 toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
+  doc "Convert a Hydra type definition to Haskell declarations" $
   "namespaces" ~> "elementName" ~> "typ" ~> lets [
     "lname">: Names.localNameOf @@ var "elementName",
     "hname">: HaskellUtils.simpleName @@ var "lname",
@@ -993,6 +1014,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
 
 typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments)
 typeDecl = haskellCoderDefinition "typeDecl" $
+  doc "Generate a Haskell declaration for a type definition constant" $
   "namespaces" ~> "name" ~> "typ" ~> lets [
     "typeName">: "ns" ~> "name'" ~>
       Names.qname @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
@@ -1049,6 +1071,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
 -- has a 'classes' field of type Set Name. We convert this to Map Name (Set TypeClass).
 typeSchemeConstraintsToClassMap :: TBinding (Maybe (M.Map Name TypeVariableMetadata) -> M.Map Name (S.Set TypeClass))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
+  doc "Convert type scheme constraints to a map of type variables to typeclasses" $
   "maybeConstraints" ~> lets [
     -- Convert a class name to a TypeClass, returning Nothing for unknown classes
     "nameToTypeClass">: "className" ~> lets [

@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing JSON value terms
+
 module Hydra.Dsl.Meta.Json where
 
 import Hydra.Kernel

@@ -1,3 +1,4 @@
+-- | Complete test suite combining all Hydra test groups
 
 module Hydra.Sources.Test.TestSuite where
 

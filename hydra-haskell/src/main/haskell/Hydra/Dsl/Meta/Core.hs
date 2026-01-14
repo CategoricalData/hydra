@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
+-- | Meta-DSL for constructing Hydra core terms and types as first-class values
+
 module Hydra.Dsl.Meta.Core where
 
 import Hydra.Kernel

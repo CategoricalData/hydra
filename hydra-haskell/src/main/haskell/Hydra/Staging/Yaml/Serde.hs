@@ -1,3 +1,5 @@
+-- | YAML serialization and deserialization using the HsYAML library
+
 module Hydra.Staging.Yaml.Serde where
 
 import Hydra.Kernel

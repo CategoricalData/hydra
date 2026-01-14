@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
+-- | Common IsString instances for Term and Type, enabling OverloadedStrings
+
 module Hydra.Dsl.Meta.Common where
 
 import Hydra.Core

@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing grammar-related terms (patterns, productions)
+
 module Hydra.Dsl.Meta.Grammar where
 
 import Hydra.Kernel hiding (Pattern)

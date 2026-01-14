@@ -1,3 +1,5 @@
+-- | Transform test cases for code generation, filtering to tests that can be compiled to target languages
+
 module Hydra.Staging.Testing.Generation.Transform where
 
 import Hydra.Kernel

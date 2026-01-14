@@ -1,3 +1,5 @@
+-- | Module-level YAML generation for Hydra terms
+
 module Hydra.Staging.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
