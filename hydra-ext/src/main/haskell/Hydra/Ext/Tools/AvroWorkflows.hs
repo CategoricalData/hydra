@@ -28,7 +28,7 @@ import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Ext.Staging.Avro.Coder
 import Hydra.Ext.Staging.Avro.SchemaJson
-import Hydra.Ext.Staging.Pg.Graphson.Utils
+import Hydra.Pg.Graphson.Utils
 import Hydra.Ext.Staging.Pg.Coder
 import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
@@ -37,7 +37,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import Hydra.Ext.Staging.Rdf.Serde
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Ext.Staging.Pg.Graphson.Coder
+import Hydra.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
 import Hydra.Ext.Staging.Pg.Utils
 

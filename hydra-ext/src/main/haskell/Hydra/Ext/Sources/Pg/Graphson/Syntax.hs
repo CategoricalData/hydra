@@ -130,7 +130,7 @@ value_ = define "Value" $
   T.union [
     "bigDecimal">: gson "BigDecimalValue",
     "bigInteger">: T.bigint,
-    "binary">: T.binary,
+    "binary">: T.string,  -- Binary data is base64-encoded as a string in GraphSON
     "boolean">: T.boolean,
     "byte">: T.uint8,
     "char">: T.uint32,
