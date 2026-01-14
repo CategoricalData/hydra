@@ -1,4 +1,4 @@
-"""A DSL for constructing literal values."""
+"""A DSL for constructing Hydra literal values in Python."""
 
 from hydra.core import (
     Literal,
@@ -27,86 +27,137 @@ from decimal import Decimal
 
 
 def binary(value: bytes) -> Literal:
-    """Construct a binary literal."""
+    """Create a binary data literal.
+
+    Example: binary(b'\\x48\\x65\\x6C\\x6C\\x6F')
+    """
     return LiteralBinary(value)
 
 
 def boolean(value: bool) -> Literal:
-    """Construct a boolean literal."""
+    """Create a boolean literal.
+
+    Example: boolean(True)
+    """
     return LiteralBoolean(value)
 
 
 def string(value: str) -> Literal:
-    """Construct a string literal."""
+    """Create a string literal.
+
+    Example: string("hello world")
+    """
     return LiteralString(value)
 
 
 def float_(value: FloatValue) -> Literal:
-    """Construct a float literal."""
+    """Create a floating-point literal with specified precision.
+
+    Example: float_(FloatValueFloat32(3.14))
+    """
     return LiteralFloat(value)
 
 
 def float32(value: float) -> Literal:
-    """Construct a float32 literal."""
+    """Create a 32-bit floating point literal.
+
+    Example: float32(3.14)
+    """
     return float_(FloatValueFloat32(value))
 
 
 def float64(value: float) -> Literal:
-    """Construct a float64 literal."""
+    """Create a 64-bit floating point literal.
+
+    Example: float64(3.14159265359)
+    """
     return float_(FloatValueFloat64(value))
 
 
 def bigfloat(value: float) -> Literal:
-    """Construct a bigfloat literal."""
+    """Create an arbitrary-precision floating point literal.
+
+    Example: bigfloat(3.14159265359)
+    """
     # Use str(value) to avoid full binary precision conversion
     return float_(FloatValueBigfloat(Decimal(str(value))))
 
 
 def integer(value: IntegerValue) -> Literal:
-    """Construct an integer literal."""
+    """Create an integer literal with specified bit width.
+
+    Example: integer(IntegerValueInt32(42))
+    """
     return LiteralInteger(value)
 
 
 def int8(value: int) -> Literal:
-    """Construct an int8 literal."""
+    """Create an 8-bit signed integer literal.
+
+    Example: int8(127)
+    """
     return integer(IntegerValueInt8(value))
 
 
 def int16(value: int) -> Literal:
-    """Construct an int16 literal."""
+    """Create a 16-bit signed integer literal.
+
+    Example: int16(32767)
+    """
     return integer(IntegerValueInt16(value))
 
 
 def int32(value: int) -> Literal:
-    """Construct an int32 literal."""
+    """Create a 32-bit signed integer literal.
+
+    Example: int32(42)
+    """
     return integer(IntegerValueInt32(value))
 
 
 def int64(value: int) -> Literal:
-    """Construct an int64 literal."""
+    """Create a 64-bit signed integer literal.
+
+    Example: int64(9223372036854775807)
+    """
     return integer(IntegerValueInt64(value))
 
 
 def bigint(value: int) -> Literal:
-    """Construct a bigint literal."""
+    """Create an arbitrary-precision integer literal.
+
+    Example: bigint(9223372036854775808)
+    """
     return integer(IntegerValueBigint(value))
 
 
+def uint8(value: int) -> Literal:
+    """Create an 8-bit unsigned integer literal.
+
+    Example: uint8(255)
+    """
+    return integer(IntegerValueUint8(value))
+
+
 def uint16(value: int) -> Literal:
-    """Construct a uint16 literal."""
+    """Create a 16-bit unsigned integer literal.
+
+    Example: uint16(65535)
+    """
     return integer(IntegerValueUint16(value))
 
 
 def uint32(value: int) -> Literal:
-    """Construct a uint32 literal."""
+    """Create a 32-bit unsigned integer literal.
+
+    Example: uint32(4294967295)
+    """
     return integer(IntegerValueUint32(value))
 
 
-def uint8(value: int) -> Literal:
-    """Construct a uint8 literal."""
-    return integer(IntegerValueUint8(value))
-
-
 def uint64(value: int) -> Literal:
-    """Construct a uint64 literal."""
+    """Create a 64-bit unsigned integer literal.
+
+    Example: uint64(18446744073709551615)
+    """
     return integer(IntegerValueUint64(value))
