@@ -20,7 +20,8 @@ import static hydra.dsl.Types.scheme;
 
 
 /**
- * Monadic bind for flows.
+ * Monadic bind for optional values (flatMap).
+ * If the optional is Just, applies the function; if Nothing, returns Nothing.
  */
 public class Bind extends PrimitiveFunction {
     /**
@@ -53,7 +54,7 @@ public class Bind extends PrimitiveFunction {
     }
 
     /**
-     * Chains flow computations. Curried version.
+     * Chains optional computations (curried version).
      * @param <X> the input type
      * @param <Y> the output type
      * @param optionalArg the optional value to bind

@@ -42,10 +42,10 @@ public class Reverse extends PrimitiveFunction {
     }
 
     /**
-     * Apply the function to the single argument.
+     * Reverses the order of elements in a list.
      * @param <X> the element type
      * @param list the list to reverse
-     * @return the reversed list
+     * @return a new list with elements in reverse order
      */
     public static <X> List<X> apply(List<X> list) {
         List<X> newList = new ArrayList<>();

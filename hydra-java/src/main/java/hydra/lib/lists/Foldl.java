@@ -21,7 +21,7 @@ import static hydra.dsl.Types.variable;
 
 
 /**
- * Left fold with flow function.
+ * Left-associative fold of a list with a binary function and initial value.
  */
 public class Foldl extends PrimitiveFunction {
     public Name name() {
@@ -51,21 +51,21 @@ public class Foldl extends PrimitiveFunction {
     }
 
     /**
-     * Performs a left fold in flow context.
-     * @param <X> the input element type
+     * Left-associative fold of a list.
+     * @param <X> the list element type
      * @param <Y> the accumulator type
-     * @param mapping the folding function
-     * @return a function that takes an initial value and returns a function that takes a list
+     * @param mapping the binary function (accumulator -&gt; element -&gt; accumulator)
+     * @return a curried function for folding
      */
     public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
     /**
-     * Performs a left fold in flow context.
-     * @param <X> the input element type
+     * Left-associative fold of a list with an initial value.
+     * @param <X> the list element type
      * @param <Y> the accumulator type
-     * @param mapping the folding function
+     * @param mapping the binary function (accumulator -&gt; element -&gt; accumulator)
      * @param init the initial accumulator value
      * @return a function that takes a list and returns the folded result
      */
@@ -74,13 +74,14 @@ public class Foldl extends PrimitiveFunction {
     }
 
     /**
-     * Performs a left fold in flow context.
-     * @param <X> the input element type
+     * Left-associative fold of a list with a binary function and initial value.
+     * Processes elements from left to right: f(f(f(init, x1), x2), x3)...
+     * @param <X> the list element type
      * @param <Y> the accumulator type
-     * @param mapping the folding function
+     * @param mapping the binary function (accumulator -&gt; element -&gt; accumulator)
      * @param init the initial accumulator value
      * @param xs the list to fold
-     * @return the folded result
+     * @return the final accumulated result
      */
     public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
         Y cur = init;
