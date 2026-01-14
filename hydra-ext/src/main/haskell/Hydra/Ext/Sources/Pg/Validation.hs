@@ -340,6 +340,3 @@ vertexLabelMismatch :: TBinding (PG.VertexLabel -> PG.VertexLabel -> String)
 vertexLabelMismatch = validationDefinition "vertexLabelMismatch" $
   "expected" ~> "actual" ~> Strings.cat $ list [
     string "expected ", unwrap _VertexLabel @@ var "expected", string ", found ", unwrap _VertexLabel @@ var "actual"]
-
--- TODO: this is a hack
-ordT0 = (M.fromList [(Name "t0", S.fromList [TypeClassOrdering])])

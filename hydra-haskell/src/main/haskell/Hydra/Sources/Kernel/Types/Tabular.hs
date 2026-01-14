@@ -7,6 +7,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Relational as Relational
 
 
 ns :: Namespace
@@ -16,13 +17,22 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [] [Core.ns] $
+module_ = Module ns elements [Core.ns, Relational.ns] [Core.ns] $
     Just "A simple, untyped tabular data model, suitable for CSVs and TSVs"
   where
     elements = [
+      columnType,
       dataRow,
       headerRow,
-      table]
+      table,
+      tableType]
+
+columnType :: Binding
+columnType = define "ColumnType" $
+ doc "A column type, consisting of a name and a value type" $
+  T.record [
+    "name">: Relational.columnName,
+    "type">: Core.type_]
 
 dataRow :: Binding
 dataRow = define "DataRow" $
@@ -44,3 +54,10 @@ table = define "Table" $
     "data">:
       doc "The data rows of the table. Each row must have the same number of cells." $
       T.list (dataRow @@ "v")]
+
+tableType :: Binding
+tableType = define "TableType" $
+  doc "A type definition for a table, including column names and types" $
+  T.record [
+    "name">: Relational.relationName,
+    "columns">: T.list columnType]

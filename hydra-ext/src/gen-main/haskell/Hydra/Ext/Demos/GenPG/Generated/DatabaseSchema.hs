@@ -1,6 +1,7 @@
 module Hydra.Ext.Demos.GenPG.Generated.DatabaseSchema where
 
-import Hydra.Dsl.Tabular (TableType, tableType, columnType)
+import Hydra.Tabular
+import Hydra.Dsl.Tabular (tableType, columnType)
 import Hydra.Dsl.Types (string, int32, float64, boolean)
 
 appointmentsTable :: TableType
