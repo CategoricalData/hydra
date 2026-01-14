@@ -37,7 +37,10 @@ import qualified Hydra.Ext.Sources.Other.StacItems as StacItems
 import qualified Hydra.Ext.Sources.Owl.Syntax as OwlSyntax
 import qualified Hydra.Ext.Sources.Parquet.Format as ParquetFormat
 import qualified Hydra.Ext.Sources.Pegasus.Pdl as Pdl
+import qualified Hydra.Ext.Sources.Pg.Graphson.Coder as GraphsonCoder
+import qualified Hydra.Ext.Sources.Pg.Graphson.Construct as GraphsonConstruct
 import qualified Hydra.Ext.Sources.Pg.Graphson.Syntax as GraphsonSyntax
+import qualified Hydra.Ext.Sources.Pg.Graphson.Utils as GraphsonUtils
 import qualified Hydra.Ext.Sources.Pg.Mapping as PgMapping
 import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 import qualified Hydra.Ext.Sources.Pg.Query as PgQuery
@@ -77,7 +80,10 @@ hydraExtModules = otherModules ++ gqlModules
       AzureDtld.module_,
       GeoJson.module_,
       graphqlSyntaxModule,
+      GraphsonCoder.module_,
+      GraphsonConstruct.module_,
       GraphsonSyntax.module_,
+      GraphsonUtils.module_,
       Gremlin.module_,
       IanaRelations.module_,
       javaLanguageModule,

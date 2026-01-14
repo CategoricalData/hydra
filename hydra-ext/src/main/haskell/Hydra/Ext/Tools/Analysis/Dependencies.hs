@@ -56,7 +56,7 @@ import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Util as Util
 import Hydra.Ext.Staging.Pg.Utils
-import Hydra.Ext.Staging.Pg.Graphson.Utils
+import Hydra.Pg.Graphson.Utils
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

@@ -1,7 +1,7 @@
 {
   "id": "appointment_1",
   "inE": {
-    "paymentFor": [{"id": null, "outV": "billing_1"}, {"id": null, "outV": "billing_5"}]},
+    "paymentFor": [{"id": null, "outV": "billing_5"}, {"id": null, "outV": "billing_1"}]},
   "label": "Appointment",
   "outE": {
     "assignedTo": [{"id": null, "inV": "doctor_2"}],
@@ -94,7 +94,7 @@
 {
   "id": "appointment_2",
   "inE": {
-    "paymentFor": [{"id": null, "outV": "billing_2"}, {"id": null, "outV": "billing_8"}]},
+    "paymentFor": [{"id": null, "outV": "billing_8"}, {"id": null, "outV": "billing_2"}]},
   "label": "Appointment",
   "outE": {
     "assignedTo": [{"id": null, "inV": "doctor_5"}],
@@ -111,7 +111,7 @@
 {
   "id": "appointment_3",
   "inE": {
-    "paymentFor": [{"id": null, "outV": "billing_3"}, {"id": null, "outV": "billing_6"}]},
+    "paymentFor": [{"id": null, "outV": "billing_6"}, {"id": null, "outV": "billing_3"}]},
   "label": "Appointment",
   "outE": {
     "assignedTo": [{"id": null, "inV": "doctor_3"}],
@@ -128,7 +128,7 @@
 {
   "id": "appointment_4",
   "inE": {
-    "paymentFor": [{"id": null, "outV": "billing_4"}, {"id": null, "outV": "billing_7"}]},
+    "paymentFor": [{"id": null, "outV": "billing_7"}, {"id": null, "outV": "billing_4"}]},
   "label": "Appointment",
   "outE": {
     "assignedTo": [{"id": null, "inV": "doctor_4"}],
@@ -422,9 +422,9 @@
   "id": "department_3",
   "inE": {
     "belongsTo": [
-      {"id": null, "outV": "doctor_3"},
+      {"id": null, "outV": "technician_2"},
       {"id": null, "outV": "technician_1"},
-      {"id": null, "outV": "technician_2"}],
+      {"id": null, "outV": "doctor_3"}],
     "headOf": [{"id": null, "outV": "doctor_3"}]},
   "label": "Department",
   "properties": {
@@ -438,9 +438,9 @@
   "id": "department_4",
   "inE": {
     "belongsTo": [
-      {"id": null, "outV": "doctor_4"},
+      {"id": null, "outV": "technician_5"},
       {"id": null, "outV": "doctor_10"},
-      {"id": null, "outV": "technician_5"}],
+      {"id": null, "outV": "doctor_4"}],
     "headOf": [{"id": null, "outV": "doctor_4"}]},
   "label": "Department",
   "properties": {
@@ -454,8 +454,8 @@
   "id": "department_5",
   "inE": {
     "belongsTo": [
-      {"id": null, "outV": "doctor_5"},
-      {"id": null, "outV": "technician_3"}],
+      {"id": null, "outV": "technician_3"},
+      {"id": null, "outV": "doctor_5"}],
     "headOf": [{"id": null, "outV": "doctor_5"}]},
   "label": "Department",
   "properties": {
@@ -469,9 +469,9 @@
   "id": "department_6",
   "inE": {
     "belongsTo": [
-      {"id": null, "outV": "doctor_6"},
+      {"id": null, "outV": "technician_4"},
       {"id": null, "outV": "doctor_9"},
-      {"id": null, "outV": "technician_4"}],
+      {"id": null, "outV": "doctor_6"}],
     "headOf": [{"id": null, "outV": "doctor_6"}]},
   "label": "Department",
   "properties": {
@@ -484,7 +484,7 @@
 {
   "id": "department_7",
   "inE": {
-    "belongsTo": [{"id": null, "outV": "doctor_7"}, {"id": null, "outV": "doctor_12"}],
+    "belongsTo": [{"id": null, "outV": "doctor_12"}, {"id": null, "outV": "doctor_7"}],
     "headOf": [{"id": null, "outV": "doctor_7"}]},
   "label": "Department",
   "properties": {
@@ -498,8 +498,8 @@
   "id": "department_8",
   "inE": {
     "belongsTo": [
-      {"id": null, "outV": "doctor_8"},
-      {"id": null, "outV": "technician_6"}],
+      {"id": null, "outV": "technician_6"},
+      {"id": null, "outV": "doctor_8"}],
     "headOf": [{"id": null, "outV": "doctor_8"}]},
   "label": "Department",
   "properties": {
@@ -526,15 +526,15 @@
   "id": "doctor_1",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_6"},
-      {"id": null, "outV": "medicalTest_6"}],
+      {"id": null, "outV": "medicalTest_6"},
+      {"id": null, "outV": "appointment_6"}],
     "prescribedBy": [{"id": null, "outV": "prescription_6"}],
-    "referredBy": [{"id": null, "outV": "patient_2"}, {"id": null, "outV": "patient_8"}]},
+    "referredBy": [{"id": null, "outV": "patient_8"}, {"id": null, "outV": "patient_2"}]},
   "label": "Doctor",
   "outE": {
     "belongsTo": [{"id": null, "inV": "department_2"}],
     "headOf": [{"id": null, "inV": "department_2"}],
-    "supervises": [{"id": null, "inV": "doctor_8"}, {"id": null, "inV": "technician_2"}]},
+    "supervises": [{"id": null, "inV": "technician_2"}, {"id": null, "inV": "doctor_8"}]},
   "properties": {
     "email": [{"value": "ghouse@hospital.com"}],
     "firstName": [{"value": "Gregory"}],
@@ -548,8 +548,8 @@
   "id": "doctor_10",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_10"},
-      {"id": null, "outV": "medicalTest_10"}],
+      {"id": null, "outV": "medicalTest_10"},
+      {"id": null, "outV": "appointment_10"}],
     "prescribedBy": [{"id": null, "outV": "prescription_10"}],
     "supervises": [{"id": null, "outV": "doctor_4"}]},
   "label": "Doctor",
@@ -567,8 +567,8 @@
   "id": "doctor_11",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_12"},
-      {"id": null, "outV": "medicalTest_12"}],
+      {"id": null, "outV": "medicalTest_12"},
+      {"id": null, "outV": "appointment_12"}],
     "prescribedBy": [{"id": null, "outV": "prescription_12"}],
     "supervises": [{"id": null, "outV": "doctor_2"}]},
   "label": "Doctor",
@@ -588,8 +588,8 @@
   "id": "doctor_12",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_11"},
-      {"id": null, "outV": "medicalTest_11"}],
+      {"id": null, "outV": "medicalTest_11"},
+      {"id": null, "outV": "appointment_11"}],
     "prescribedBy": [{"id": null, "outV": "prescription_11"}],
     "supervises": [{"id": null, "outV": "doctor_7"}]},
   "label": "Doctor",
@@ -607,13 +607,13 @@
   "id": "doctor_2",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_1"},
-      {"id": null, "outV": "medicalTest_1"}],
+      {"id": null, "outV": "medicalTest_1"},
+      {"id": null, "outV": "appointment_1"}],
     "prescribedBy": [{"id": null, "outV": "prescription_1"}],
     "referredBy": [
-      {"id": null, "outV": "patient_3"},
+      {"id": null, "outV": "patient_11"},
       {"id": null, "outV": "patient_7"},
-      {"id": null, "outV": "patient_11"}]},
+      {"id": null, "outV": "patient_3"}]},
   "label": "Doctor",
   "outE": {
     "belongsTo": [{"id": null, "inV": "department_1"}],
@@ -632,13 +632,13 @@
   "id": "doctor_3",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_3"},
-      {"id": null, "outV": "medicalTest_2"}],
+      {"id": null, "outV": "medicalTest_2"},
+      {"id": null, "outV": "appointment_3"}],
     "prescribedBy": [{"id": null, "outV": "prescription_2"}],
     "referredBy": [
-      {"id": null, "outV": "patient_1"},
+      {"id": null, "outV": "patient_12"},
       {"id": null, "outV": "patient_6"},
-      {"id": null, "outV": "patient_12"}]},
+      {"id": null, "outV": "patient_1"}]},
   "label": "Doctor",
   "outE": {
     "belongsTo": [{"id": null, "inV": "department_3"}],
@@ -656,14 +656,14 @@
   "id": "doctor_4",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_4"},
-      {"id": null, "outV": "appointment_14"},
+      {"id": null, "outV": "medicalTest_14"},
       {"id": null, "outV": "medicalTest_3"},
-      {"id": null, "outV": "medicalTest_14"}],
+      {"id": null, "outV": "appointment_14"},
+      {"id": null, "outV": "appointment_4"}],
     "prescribedBy": [{"id": null, "outV": "prescription_3"}],
     "referredBy": [
-      {"id": null, "outV": "patient_4"},
-      {"id": null, "outV": "patient_10"}]},
+      {"id": null, "outV": "patient_10"},
+      {"id": null, "outV": "patient_4"}]},
   "label": "Doctor",
   "outE": {
     "belongsTo": [{"id": null, "inV": "department_4"}],
@@ -682,12 +682,12 @@
   "id": "doctor_5",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_2"},
-      {"id": null, "outV": "appointment_13"},
+      {"id": null, "outV": "medicalTest_13"},
       {"id": null, "outV": "medicalTest_4"},
-      {"id": null, "outV": "medicalTest_13"}],
+      {"id": null, "outV": "appointment_13"},
+      {"id": null, "outV": "appointment_2"}],
     "prescribedBy": [{"id": null, "outV": "prescription_4"}],
-    "referredBy": [{"id": null, "outV": "patient_5"}, {"id": null, "outV": "patient_9"}]},
+    "referredBy": [{"id": null, "outV": "patient_9"}, {"id": null, "outV": "patient_5"}]},
   "label": "Doctor",
   "outE": {
     "belongsTo": [{"id": null, "inV": "department_5"}],
@@ -705,8 +705,8 @@
   "id": "doctor_6",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_5"},
-      {"id": null, "outV": "medicalTest_5"}],
+      {"id": null, "outV": "medicalTest_5"},
+      {"id": null, "outV": "appointment_5"}],
     "prescribedBy": [{"id": null, "outV": "prescription_5"}]},
   "label": "Doctor",
   "outE": {
@@ -726,8 +726,8 @@
   "id": "doctor_7",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_9"},
-      {"id": null, "outV": "medicalTest_9"}],
+      {"id": null, "outV": "medicalTest_9"},
+      {"id": null, "outV": "appointment_9"}],
     "prescribedBy": [{"id": null, "outV": "prescription_9"}]},
   "label": "Doctor",
   "outE": {
@@ -747,8 +747,8 @@
   "id": "doctor_8",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_7"},
-      {"id": null, "outV": "medicalTest_7"}],
+      {"id": null, "outV": "medicalTest_7"},
+      {"id": null, "outV": "appointment_7"}],
     "prescribedBy": [{"id": null, "outV": "prescription_7"}],
     "supervises": [{"id": null, "outV": "doctor_1"}]},
   "label": "Doctor",
@@ -768,8 +768,8 @@
   "id": "doctor_9",
   "inE": {
     "assignedTo": [
-      {"id": null, "outV": "appointment_8"},
-      {"id": null, "outV": "medicalTest_8"}],
+      {"id": null, "outV": "medicalTest_8"},
+      {"id": null, "outV": "appointment_8"}],
     "prescribedBy": [{"id": null, "outV": "prescription_8"}],
     "supervises": [{"id": null, "outV": "doctor_6"}]},
   "label": "Doctor",
@@ -977,12 +977,12 @@
   "id": "patient_1",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_3"},
-      {"id": null, "outV": "appointment_14"},
-      {"id": null, "outV": "billing_3"},
-      {"id": null, "outV": "billing_6"},
+      {"id": null, "outV": "medicalTest_14"},
       {"id": null, "outV": "medicalTest_2"},
-      {"id": null, "outV": "medicalTest_14"}],
+      {"id": null, "outV": "billing_6"},
+      {"id": null, "outV": "billing_3"},
+      {"id": null, "outV": "appointment_14"},
+      {"id": null, "outV": "appointment_3"}],
     "prescribedTo": [{"id": null, "outV": "prescription_2"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_3"}]},
@@ -1000,10 +1000,10 @@
   "id": "patient_10",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_4"},
-      {"id": null, "outV": "billing_4"},
+      {"id": null, "outV": "medicalTest_3"},
       {"id": null, "outV": "billing_7"},
-      {"id": null, "outV": "medicalTest_3"}],
+      {"id": null, "outV": "billing_4"},
+      {"id": null, "outV": "appointment_4"}],
     "prescribedTo": [{"id": null, "outV": "prescription_3"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_4"}]},
@@ -1021,8 +1021,8 @@
   "id": "patient_11",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_8"},
-      {"id": null, "outV": "medicalTest_8"}],
+      {"id": null, "outV": "medicalTest_8"},
+      {"id": null, "outV": "appointment_8"}],
     "prescribedTo": [{"id": null, "outV": "prescription_8"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_2"}]},
@@ -1040,8 +1040,8 @@
   "id": "patient_12",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_12"},
-      {"id": null, "outV": "medicalTest_12"}],
+      {"id": null, "outV": "medicalTest_12"},
+      {"id": null, "outV": "appointment_12"}],
     "prescribedTo": [{"id": null, "outV": "prescription_12"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_3"}]},
@@ -1059,9 +1059,9 @@
   "id": "patient_2",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_7"},
+      {"id": null, "outV": "medicalTest_7"},
       {"id": null, "outV": "billing_11"},
-      {"id": null, "outV": "medicalTest_7"}],
+      {"id": null, "outV": "appointment_7"}],
     "prescribedTo": [{"id": null, "outV": "prescription_7"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_1"}]},
@@ -1079,12 +1079,12 @@
   "id": "patient_3",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_1"},
-      {"id": null, "outV": "appointment_13"},
-      {"id": null, "outV": "billing_1"},
-      {"id": null, "outV": "billing_5"},
+      {"id": null, "outV": "medicalTest_13"},
       {"id": null, "outV": "medicalTest_1"},
-      {"id": null, "outV": "medicalTest_13"}],
+      {"id": null, "outV": "billing_5"},
+      {"id": null, "outV": "billing_1"},
+      {"id": null, "outV": "appointment_13"},
+      {"id": null, "outV": "appointment_1"}],
     "prescribedTo": [{"id": null, "outV": "prescription_1"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_2"}]},
@@ -1102,8 +1102,8 @@
   "id": "patient_4",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_10"},
-      {"id": null, "outV": "medicalTest_10"}],
+      {"id": null, "outV": "medicalTest_10"},
+      {"id": null, "outV": "appointment_10"}],
     "prescribedTo": [{"id": null, "outV": "prescription_10"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_4"}]},
@@ -1121,9 +1121,9 @@
   "id": "patient_5",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_5"},
+      {"id": null, "outV": "medicalTest_5"},
       {"id": null, "outV": "billing_9"},
-      {"id": null, "outV": "medicalTest_5"}],
+      {"id": null, "outV": "appointment_5"}],
     "prescribedTo": [{"id": null, "outV": "prescription_5"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_5"}]},
@@ -1141,9 +1141,9 @@
   "id": "patient_6",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_11"},
+      {"id": null, "outV": "medicalTest_11"},
       {"id": null, "outV": "billing_12"},
-      {"id": null, "outV": "medicalTest_11"}],
+      {"id": null, "outV": "appointment_11"}],
     "prescribedTo": [{"id": null, "outV": "prescription_11"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_3"}]},
@@ -1161,10 +1161,10 @@
   "id": "patient_7",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_2"},
-      {"id": null, "outV": "billing_2"},
+      {"id": null, "outV": "medicalTest_4"},
       {"id": null, "outV": "billing_8"},
-      {"id": null, "outV": "medicalTest_4"}],
+      {"id": null, "outV": "billing_2"},
+      {"id": null, "outV": "appointment_2"}],
     "prescribedTo": [{"id": null, "outV": "prescription_4"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_2"}]},
@@ -1182,8 +1182,8 @@
   "id": "patient_8",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_9"},
-      {"id": null, "outV": "medicalTest_9"}],
+      {"id": null, "outV": "medicalTest_9"},
+      {"id": null, "outV": "appointment_9"}],
     "prescribedTo": [{"id": null, "outV": "prescription_9"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_1"}]},
@@ -1201,9 +1201,9 @@
   "id": "patient_9",
   "inE": {
     "patient": [
-      {"id": null, "outV": "appointment_6"},
+      {"id": null, "outV": "medicalTest_6"},
       {"id": null, "outV": "billing_10"},
-      {"id": null, "outV": "medicalTest_6"}],
+      {"id": null, "outV": "appointment_6"}],
     "prescribedTo": [{"id": null, "outV": "prescription_6"}]},
   "label": "Patient",
   "outE": {"referredBy": [{"id": null, "inV": "doctor_5"}]},
@@ -1221,10 +1221,10 @@
   "id": "pharmacy_1",
   "inE": {
     "filledBy": [
-      {"id": null, "outV": "prescription_2"},
-      {"id": null, "outV": "prescription_4"},
+      {"id": null, "outV": "prescription_12"},
       {"id": null, "outV": "prescription_8"},
-      {"id": null, "outV": "prescription_12"}]},
+      {"id": null, "outV": "prescription_4"},
+      {"id": null, "outV": "prescription_2"}]},
   "label": "Pharmacy",
   "properties": {
     "address": [{"value": "123 Hospital Ave, Springfield"}],
@@ -1238,9 +1238,9 @@
   "id": "pharmacy_2",
   "inE": {
     "filledBy": [
-      {"id": null, "outV": "prescription_3"},
+      {"id": null, "outV": "prescription_11"},
       {"id": null, "outV": "prescription_7"},
-      {"id": null, "outV": "prescription_11"}]},
+      {"id": null, "outV": "prescription_3"}]},
   "label": "Pharmacy",
   "properties": {
     "address": [{"value": "456 Health St, Springfield"}],
@@ -1254,9 +1254,9 @@
   "id": "pharmacy_3",
   "inE": {
     "filledBy": [
-      {"id": null, "outV": "prescription_1"},
+      {"id": null, "outV": "prescription_10"},
       {"id": null, "outV": "prescription_5"},
-      {"id": null, "outV": "prescription_10"}]},
+      {"id": null, "outV": "prescription_1"}]},
   "label": "Pharmacy",
   "properties": {
     "address": [{"value": "789 Wellness Blvd, Springfield"}],
@@ -1270,8 +1270,8 @@
   "id": "pharmacy_4",
   "inE": {
     "filledBy": [
-      {"id": null, "outV": "prescription_6"},
-      {"id": null, "outV": "prescription_9"}]},
+      {"id": null, "outV": "prescription_9"},
+      {"id": null, "outV": "prescription_6"}]},
   "label": "Pharmacy",
   "properties": {
     "address": [{"value": "101 Care Lane, Springfield"}],
@@ -1477,8 +1477,8 @@
   "id": "technician_1",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_2"},
-      {"id": null, "outV": "medicalTest_9"}]},
+      {"id": null, "outV": "medicalTest_9"},
+      {"id": null, "outV": "medicalTest_2"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_3"}]},
   "properties": {
@@ -1493,8 +1493,8 @@
   "id": "technician_2",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_1"},
-      {"id": null, "outV": "medicalTest_12"}],
+      {"id": null, "outV": "medicalTest_12"},
+      {"id": null, "outV": "medicalTest_1"}],
     "supervises": [{"id": null, "outV": "doctor_1"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_3"}]},
@@ -1510,9 +1510,9 @@
   "id": "technician_3",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_4"},
+      {"id": null, "outV": "medicalTest_13"},
       {"id": null, "outV": "medicalTest_10"},
-      {"id": null, "outV": "medicalTest_13"}]},
+      {"id": null, "outV": "medicalTest_4"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_5"}]},
   "properties": {
@@ -1527,8 +1527,8 @@
   "id": "technician_4",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_5"},
-      {"id": null, "outV": "medicalTest_8"}]},
+      {"id": null, "outV": "medicalTest_8"},
+      {"id": null, "outV": "medicalTest_5"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_6"}]},
   "properties": {
@@ -1543,9 +1543,9 @@
   "id": "technician_5",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_3"},
+      {"id": null, "outV": "medicalTest_14"},
       {"id": null, "outV": "medicalTest_6"},
-      {"id": null, "outV": "medicalTest_14"}]},
+      {"id": null, "outV": "medicalTest_3"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_4"}]},
   "properties": {
@@ -1560,8 +1560,8 @@
   "id": "technician_6",
   "inE": {
     "conductedBy": [
-      {"id": null, "outV": "medicalTest_7"},
-      {"id": null, "outV": "medicalTest_11"}]},
+      {"id": null, "outV": "medicalTest_11"},
+      {"id": null, "outV": "medicalTest_7"}]},
   "label": "Technician",
   "outE": {"belongsTo": [{"id": null, "inV": "department_8"}]},
   "properties": {

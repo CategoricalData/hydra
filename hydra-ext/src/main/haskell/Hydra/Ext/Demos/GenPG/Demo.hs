@@ -12,8 +12,9 @@ import Hydra.Dsl.Tabular
 import Hydra.Ext.Dsl.Pg.Mappings
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Pg.Model as Pg
-import Hydra.Ext.Staging.Pg.Graphson.Utils
+import Hydra.Pg.Graphson.Utils
 import Hydra.Ext.Staging.Pg.Printing
+import Hydra.Ext.Staging.Pg.Utils
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Tools.Monads
 
