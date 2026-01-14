@@ -89,7 +89,7 @@ propertyKey_typeVariant = PG.PropertyKey "typeVariant"
 combinedGraphToDependencyGraphson :: Graph -> Graph -> Flow Graph [Json.Value]
 combinedGraphToDependencyGraphson dataGraph schemaGraph = do
   pg <- combinedGraphToDependencyPropertyGraph dataGraph schemaGraph
-  pgElementsToGraphson stringGraphsonContext $ propertyGraphElements pg
+  pgElementsToGraphson encodeStringValue $ propertyGraphElements pg
 
 combinedGraphToDependencyPropertyGraph :: Graph -> Graph -> Flow Graph (PG.Graph String)
 combinedGraphToDependencyPropertyGraph dataGraph schemaGraph = do
@@ -116,7 +116,7 @@ nameToVertexId :: Name -> String
 nameToVertexId = unName
 
 termGraphToDependencyGraphson :: Bool -> Bool -> Graph -> Flow s [Json.Value]
-termGraphToDependencyGraphson withPrims withTypes g = pgElementsToGraphson stringGraphsonContext $
+termGraphToDependencyGraphson withPrims withTypes g = pgElementsToGraphson encodeStringValue $
   propertyGraphElements $ termGraphToDependencyPropertyGraph withPrims withTypes g
 
 -- | Given a Hydra graph, create a property graph in which the vertices are all elements of the graph
@@ -180,7 +180,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
 typeGraphToDependencyGraphson :: Graph -> Flow Graph [Json.Value]
 typeGraphToDependencyGraphson g = do
   pg <- typeGraphToDependencyPropertyGraph g
-  pgElementsToGraphson stringGraphsonContext $ propertyGraphElements pg
+  pgElementsToGraphson encodeStringValue $ propertyGraphElements pg
 
 typeGraphToDependencyPropertyGraph :: Graph -> Flow Graph (PG.Graph String)
 typeGraphToDependencyPropertyGraph g = do

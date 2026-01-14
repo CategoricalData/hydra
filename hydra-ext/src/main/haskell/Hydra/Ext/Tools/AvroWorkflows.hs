@@ -6,7 +6,7 @@ module Hydra.Ext.Tools.AvroWorkflows (
   TermEncoder(..),
   LastMile(..),
   defaultTinkerpopAnnotations,
-  exampleGraphsonContext,
+  encodeStringValue,
   examplePgSchema,
   executeAvroTransformWorkflow,
   propertyGraphGraphsonLastMile,
