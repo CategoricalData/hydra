@@ -5,12 +5,26 @@
 module Hydra.Tabular where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Relational as Relational
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | A column type, consisting of a name and a value type
+data ColumnType = 
+  ColumnType {
+    columnTypeName :: Relational.ColumnName,
+    columnTypeType :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_ColumnType = (Core.Name "hydra.tabular.ColumnType")
+
+_ColumnType_name = (Core.Name "name")
+
+_ColumnType_type = (Core.Name "type")
 
 -- | A data row, containing optional-valued cells; one per column
 newtype DataRow v = 
@@ -42,3 +56,16 @@ _Table = (Core.Name "hydra.tabular.Table")
 _Table_header = (Core.Name "header")
 
 _Table_data = (Core.Name "data")
+
+-- | A type definition for a table, including column names and types
+data TableType = 
+  TableType {
+    tableTypeName :: Relational.RelationName,
+    tableTypeColumns :: [ColumnType]}
+  deriving (Eq, Ord, Read, Show)
+
+_TableType = (Core.Name "hydra.tabular.TableType")
+
+_TableType_name = (Core.Name "name")
+
+_TableType_columns = (Core.Name "columns")

@@ -38,6 +38,7 @@ module_ = Module ns elements [] [Core.ns] $
       graph,
       graphSchema,
       label,
+      lazyGraph,
       property_,
       propertyKey,
       propertyType,
@@ -170,6 +171,14 @@ label = define "Label" $
   T.union [
     "vertex">: pg "VertexLabel",
     "edge">: pg "EdgeLabel"]
+
+lazyGraph :: Binding
+lazyGraph = define "LazyGraph" $
+  doc ("A graph which does not assume that vertex or edge ids are unique."
+    <> " This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.") $
+  T.forAll "v" $ T.record [
+    "vertices">: T.list $ pg "Vertex" @@ "v",
+    "edges">: T.list $ pg "Edge" @@ "v"]
 
 property_ :: Binding
 property_ = define "Property" $

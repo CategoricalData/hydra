@@ -2,8 +2,6 @@
 
 This subproject contains domain-specific extensions to Hydra, currently
 including the coders and models listed below.
-Most of these artifacts are written in "raw" Haskell, rather than in the Hydra
-DSL.
 There are also a number of demos and tools also written in Haskell, as well as
 a few artifacts in Java and Python.
 
@@ -15,9 +13,9 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
 
 - **`src/main/haskell/`** - Hand-written source code
-  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.)
-  - `Hydra/Ext/Sources/` - Domain models and language syntax definitions
-  - `Hydra/Ext/Demos/` - Demonstration applications
+  - `Hydra/Ext/Demos/` - Demo applications
+  - `Hydra/Ext/Sources/` - Domain models, language syntax definitions, and native Hydra code
+  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.) and other code which is written in "raw" Haskell rather than the Hydra DSL
   - `Hydra/Ext/Tools/` - Analysis and transformation utilities
 
 - **`src/gen-main/haskell/`** - Generated Haskell APIs
@@ -25,13 +23,14 @@ Hydra-Ext uses the **src/main vs src/gen-main** separation pattern (see [Code or
   - Provides typed Haskell interfaces to external formats
 
 - **`src/gen-main/java/`** (not checked in) - Generated Java APIs
-  - Can be generated using `writeJava "src/gen-main/java" hydraExtModules`
+  - Can be generated using `writeJava "src/gen-main/java" hydraKernelModules hydraExtModules`
 
-Note: Only generated Haskell is checked into version control for space reasons. Java can be generated on demand.
+Note: Only generated Haskell is checked into version control for space reasons. Java and Python can be generated on demand.
 
 ## Coders
 
-Hydra-Ext provides coders for generating code in various target languages and formats. These coders vary in their capabilities and maturity levels.
+Hydra-Ext provides coders for generating code in various target languages and formats.
+These coders vary in their capabilities and maturity levels.
 
 ### Coder maturity tiers
 
@@ -41,8 +40,8 @@ These coders generate complete, runnable code including type definitions and ter
 
 | Coder | Status | Notes |
 |-------|--------|-------|
-| **Python** | Production-ready | Most complete implementation; generates full Python modules |
-| **Java** | Production-ready | Types complete; term generation functional but Serde incomplete |
+| **Python** | Production-ready | 100% compliant Hydra implementation; generates full Python modules |
+| **Java** | In progress | Contains all Hydra kernel types, but not yet all Hydra kernel terms. Miscellaneous Java-specific utilities. |
 
 #### Type generation only
 

@@ -5,6 +5,8 @@
 module Hydra.Encode.Tabular where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Relational as Relational
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Tabular as Tabular
@@ -14,6 +16,17 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+columnType :: (Tabular.ColumnType -> Core.Term)
+columnType x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.tabular.ColumnType"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Relational.columnName (Tabular.columnTypeName x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core_.type_ (Tabular.columnTypeType x))}]}))
 
 dataRow :: ((t0 -> Core.Term) -> Tabular.DataRow t0 -> Core.Term)
 dataRow v x = (Core.TermWrap (Core.WrappedTerm {
@@ -35,3 +48,14 @@ table v x = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "data"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (dataRow v) xs)) (Tabular.tableData x))}]}))
+
+tableType :: (Tabular.TableType -> Core.Term)
+tableType x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.tabular.TableType"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Relational.relationName (Tabular.tableTypeName x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "columns"),
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map columnType xs)) (Tabular.tableTypeColumns x))}]}))
