@@ -68,8 +68,8 @@ typeApplicationTermToPropertyGraph schema typ vidType eidType = do
   where
     flattenTree tree = (PG.elementTreeSelf tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
 
-lazyGraphToElements :: LazyGraph v -> [PG.Element v]
-lazyGraphToElements (LazyGraph vertices edges) = fmap PG.ElementVertex vertices ++ fmap PG.ElementEdge edges
+lazyGraphToElements :: PG.LazyGraph v -> [PG.Element v]
+lazyGraphToElements (PG.LazyGraph vertices edges) = fmap PG.ElementVertex vertices ++ fmap PG.ElementEdge edges
 
 pgElementToJson :: PGM.Schema s t v -> PG.Element v -> Flow s Json.Value
 pgElementToJson schema el = case el of

@@ -59,6 +59,7 @@ import Hydra.Ext.Sources.Sql.Ansi
 import qualified Hydra.Ext.Sources.Tinkerpop.Features as TinkerpopFeatures
 import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin as Gremlin
 import Hydra.Ext.Sources.TypeScript.Language
+import qualified Hydra.Ext.Sources.Demos.GenPG.Transform as GenPGTransform
 import qualified Hydra.Ext.Sources.TypeScript.Model as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema as XmlSchema
 
@@ -116,7 +117,8 @@ hydraExtModules = otherModules ++ gqlModules
       TinkerpopFeatures.module_,
       typeScriptLanguageModule,
       TypeScriptModel.module_,
-      XmlSchema.module_]
+      XmlSchema.module_,
+      GenPGTransform.module_]
 
 gqlModules = [
   OpenGql.module_,

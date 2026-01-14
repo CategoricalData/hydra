@@ -3,11 +3,11 @@
 module Hydra.Ext.Demos.GenPG.Generated.Mapping where
 
 import Hydra.Core (Term)
-import Hydra.Pg.Model (Vertex, Edge)
+import Hydra.Pg.Model (Vertex, Edge, LazyGraph)
 import Hydra.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
 import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
-import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edgeNoId, graph, property, vertex)
+import Hydra.Ext.Dsl.Pg.Mappings (column, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
