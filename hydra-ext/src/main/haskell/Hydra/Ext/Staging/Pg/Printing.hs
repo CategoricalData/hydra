@@ -22,13 +22,13 @@ printEdge printer (PG.Edge (PG.EdgeLabel label) id outId inId props) =
   ++ propertyGraphPrinterValue printer inId ++ ")"
 
 printGraph :: PropertyGraphPrinter t v -> PG.Graph v -> String
-printGraph printer graph = printLazyGraph printer $ PGM.LazyGraph vertices edges
+printGraph printer graph = printLazyGraph printer $ PG.LazyGraph vertices edges
   where
     vertices = M.elems $ PG.graphVertices graph
     edges = M.elems $ PG.graphEdges graph
 
-printLazyGraph :: PropertyGraphPrinter t v -> PGM.LazyGraph v -> String
-printLazyGraph printer (PGM.LazyGraph vertices edges) = "vertices:"
+printLazyGraph :: PropertyGraphPrinter t v -> PG.LazyGraph v -> String
+printLazyGraph printer (PG.LazyGraph vertices edges) = "vertices:"
     ++ L.concat (fmap (\v -> "\n\t" ++ printVertex printer v) vertices)
     ++ "\nedges:"
     ++ L.concat (fmap (\e -> "\n\t" ++ printEdge printer e) edges)

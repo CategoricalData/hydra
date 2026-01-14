@@ -11,12 +11,6 @@ import qualified Data.Map as M
 
 -- * Helpers
 
--- | A graph which does not assume that vertex or edge ids are unique.
---   This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.
-data LazyGraph v = LazyGraph
-  { lazyGraphVertices :: [Vertex v]
-  , lazyGraphEdges :: [Edge v]}
-
 temporaryTableName = "(((temp)))"
 
 replaceTableName tableName = rewriteTerm $ \recurse term -> case term of

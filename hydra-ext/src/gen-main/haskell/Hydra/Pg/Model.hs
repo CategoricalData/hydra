@@ -5,7 +5,8 @@
 module Hydra.Pg.Model where
 
 import qualified Hydra.Core as Core
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -215,6 +216,19 @@ _Label = (Core.Name "hydra.pg.model.Label")
 _Label_vertex = (Core.Name "vertex")
 
 _Label_edge = (Core.Name "edge")
+
+-- | A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.
+data LazyGraph v = 
+  LazyGraph {
+    lazyGraphVertices :: [Vertex v],
+    lazyGraphEdges :: [Edge v]}
+  deriving (Eq, Ord, Read, Show)
+
+_LazyGraph = (Core.Name "hydra.pg.model.LazyGraph")
+
+_LazyGraph_vertices = (Core.Name "vertices")
+
+_LazyGraph_edges = (Core.Name "edges")
 
 -- | A key/value property
 data Property v = 
