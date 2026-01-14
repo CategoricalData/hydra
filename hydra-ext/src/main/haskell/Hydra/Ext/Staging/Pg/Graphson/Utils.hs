@@ -1,7 +1,7 @@
 module Hydra.Ext.Staging.Pg.Graphson.Utils where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.Pg.Graphson.Coder
+import Hydra.Ext.Staging.Pg.Graphson.Coder (pgVertexWithAdjacentEdgesToJson)
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Ext.Dsl.Pg.Mappings
 import qualified Hydra.Json.Model as Json
@@ -48,11 +48,9 @@ elementsToVerticesWithAdjacentEdges els = M.elems vertexMap1
                   then v {PG.vertexWithAdjacentEdgesOuts = (adjEdge:(PG.vertexWithAdjacentEdgesOuts v))}
                   else v {PG.vertexWithAdjacentEdgesIns = (adjEdge:(PG.vertexWithAdjacentEdgesIns v))}
 
-exampleGraphsonContext :: GraphsonContext s String
-exampleGraphsonContext = GraphsonContext $ Coder encodeValue decodeValue
-  where
-    encodeValue s = pure $ G.ValueString s
-    decodeValue _ = fail "decoding from GraphSON is not yet supported"
+-- | Encode a String value to GraphSON
+encodeStringValue :: String -> Flow s G.Value
+encodeStringValue s = pure $ G.ValueString s
 
 pgElementToJson :: PGM.Schema s t v -> PG.Element v -> Flow s Json.Value
 pgElementToJson schema el = case el of
@@ -90,18 +88,18 @@ pgElementToJson schema el = case el of
 lazyGraphToElements :: LazyGraph v -> [PG.Element v]
 lazyGraphToElements (LazyGraph vertices edges) = fmap PG.ElementVertex vertices ++ fmap PG.ElementEdge edges
 
-pgElementsToGraphson :: (Ord v, Show v) => GraphsonContext s v -> [PG.Element v] -> Flow s [Json.Value]
-pgElementsToGraphson ctx els = CM.mapM encode vertices
+-- | Convert PG elements to GraphSON JSON values, given a value encoder
+pgElementsToGraphson :: (Ord v, Show v) => (v -> Flow s G.Value) -> [PG.Element v] -> Flow s [Json.Value]
+pgElementsToGraphson encodeValue els = CM.mapM (pgVertexWithAdjacentEdgesToJson encodeValue) vertices
   where
     vertices = elementsToVerticesWithAdjacentEdges els
-    encode = coderEncode (pgVertexWithAdjacentEdgesToJsonCoder ctx)
 
 pgElementsToJson :: PGM.Schema s t v -> [PG.Element v] -> Flow s Json.Value
 pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
 
-propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
-propertyGraphGraphsonLastMile ctx schema vidType eidType =
-  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
+propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => (v -> Flow Graph G.Value) -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
+propertyGraphGraphsonLastMile encodeValue schema vidType eidType =
+  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson encodeValue els) "jsonl"
   where
     jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
 
@@ -109,34 +107,21 @@ propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t 
 propertyGraphJsonLastMile schema vidType eidType =
   LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> JsonWriter.printJson <$> pgElementsToJson schema els) "json"
 
-stringGraphsonContext :: GraphsonContext s String
-stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString
-  where
-    encodeString s = pure $ G.ValueString s
-    decodeString v = case v of
-      G.ValueString s -> pure s
-      _ -> fail $ "expected a string value, got: " ++ show v
-
-termGraphsonContext :: GraphsonContext s Term
-termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
-  where
-    encodeTerm term = case deannotateTerm term of
-        TermLiteral lv -> case lv of
-          LiteralBinary s -> pure $ G.ValueBinary $ Literals.binaryToStringBS s
-          LiteralBoolean b -> pure $ G.ValueBoolean b
-          LiteralFloat fv -> case fv of
-            FloatValueBigfloat f -> pure $ G.ValueBigDecimal $ G.BigDecimalValue $ show f
-            FloatValueFloat32 f -> pure $ G.ValueFloat $ G.FloatValueFinite f
-            FloatValueFloat64 f -> pure $ G.ValueDouble $ G.DoubleValueFinite f
-          LiteralInteger iv -> case iv of
-            IntegerValueBigint i -> pure $ G.ValueBigInteger i
-            IntegerValueInt32 i -> pure $ G.ValueInteger i
-            IntegerValueInt64 i -> pure $ G.ValueLong i
-            _ -> fail $ "integer type is not yet supported: " ++ show (integerValueType iv)
-          LiteralString s -> pure $ G.ValueString s
-        TermRecord r@(Record tname _) -> unexp $ TermRecord r
-        TermUnit -> pure G.ValueNull
-        t -> unexp t
-      where
-        unexp t = unexpected "literal or unit value" $ ShowCore.term t
-    decodeTerm _ = fail "decoding from GraphSON is not yet supported"
+-- | Encode a Term value to GraphSON
+encodeTermValue :: Term -> Flow s G.Value
+encodeTermValue term = case deannotateTerm term of
+    TermLiteral lv -> case lv of
+      LiteralBinary s -> pure $ G.ValueBinary $ Literals.binaryToStringBS s
+      LiteralBoolean b -> pure $ G.ValueBoolean b
+      LiteralFloat fv -> case fv of
+        FloatValueBigfloat f -> pure $ G.ValueBigDecimal $ G.BigDecimalValue $ show f
+        FloatValueFloat32 f -> pure $ G.ValueFloat $ G.FloatValueFinite f
+        FloatValueFloat64 f -> pure $ G.ValueDouble $ G.DoubleValueFinite f
+      LiteralInteger iv -> case iv of
+        IntegerValueBigint i -> pure $ G.ValueBigInteger i
+        IntegerValueInt32 i -> pure $ G.ValueInteger i
+        IntegerValueInt64 i -> pure $ G.ValueLong i
+        _ -> fail $ "integer type is not yet supported: " ++ show (integerValueType iv)
+      LiteralString s -> pure $ G.ValueString s
+    TermUnit -> pure G.ValueNull
+    t -> unexpected "literal or unit value" $ ShowCore.term t

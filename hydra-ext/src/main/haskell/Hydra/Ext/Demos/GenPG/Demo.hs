@@ -45,7 +45,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "  Vertices: " ++ show (L.length vertices)
   log $ "  Edges: " ++ show (L.length edges)
   log $ "Writing GraphSON to " ++ outputPath
-  jsonResult <- flowToIo hydraCoreGraph (pgElementsToGraphson termGraphsonContext els)
+  jsonResult <- flowToIo hydraCoreGraph (pgElementsToGraphson encodeTermValue els)
   writeFile outputPath (jsonValuesToString jsonResult)
   log $ "Done. Output written to " ++ outputPath
   where
