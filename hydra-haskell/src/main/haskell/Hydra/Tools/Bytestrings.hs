@@ -1,3 +1,5 @@
+-- | Utilities for converting between lazy ByteStrings and Strings via UTF-8 encoding
+
 module Hydra.Tools.Bytestrings where
 
 import qualified Data.ByteString.Lazy as BS

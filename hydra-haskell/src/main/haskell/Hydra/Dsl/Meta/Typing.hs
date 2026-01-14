@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
+-- | Meta-DSL for constructing typing-related terms (TypeScheme, TypeConstraints)
+
 module Hydra.Dsl.Meta.Typing where
 
 import Hydra.Kernel

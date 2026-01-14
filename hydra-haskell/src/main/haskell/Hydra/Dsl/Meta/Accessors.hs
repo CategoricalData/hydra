@@ -1,3 +1,5 @@
+-- | Meta-DSL functions for accessing term and type metadata
+
 module Hydra.Dsl.Meta.Accessors where
 
 import Hydra.Kernel

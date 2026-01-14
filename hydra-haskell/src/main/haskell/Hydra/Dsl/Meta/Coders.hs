@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
+-- | Meta-DSL for constructing coder-related terms
+
 module Hydra.Dsl.Meta.Coders where
 
 import Hydra.Kernel

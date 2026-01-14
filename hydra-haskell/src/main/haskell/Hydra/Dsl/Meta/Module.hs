@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing module-related terms (definitions, namespaces)
+
 module Hydra.Dsl.Meta.Module where
 
 import Hydra.Kernel

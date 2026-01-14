@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing graph-related terms (Comparison, Primitive, etc.)
+
 module Hydra.Dsl.Meta.Graph where
 
 import Hydra.Kernel

@@ -1,3 +1,5 @@
+-- | Aggregates all Hydra source modules (kernel, test, and extension modules)
+
 module Hydra.Sources.All(
   module Hydra.Sources.All,
   module Hydra.Sources.Kernel.Terms.All,

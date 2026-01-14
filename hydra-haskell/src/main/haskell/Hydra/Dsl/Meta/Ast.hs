@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing abstract syntax tree nodes
+
 module Hydra.Dsl.Meta.Ast where
 
 import Hydra.Kernel

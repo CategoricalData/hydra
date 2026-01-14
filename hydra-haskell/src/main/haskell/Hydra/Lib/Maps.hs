@@ -5,9 +5,13 @@ module Hydra.Lib.Maps where
 import qualified Data.Map as M
 
 
+-- | Update a value at a key using a function. The function receives Nothing if the key is absent,
+-- or Just the current value if present. Return Nothing to delete, Just to insert/update.
+-- Implements hydra.lib.maps.alter.
 alter :: Ord k => (Maybe v -> Maybe v) -> k -> M.Map k v -> M.Map k v
 alter = M.alter
 
+-- | Transform both keys and values of a map. Implements hydra.lib.maps.bimap.
 bimap :: (Ord k1, Ord k2) => (k1 -> k2) -> (v1 -> v2) -> M.Map k1 v1 -> M.Map k2 v2
 bimap f g = M.fromList . fmap (\(k, v) -> (f k, g v)) . M.toList
 

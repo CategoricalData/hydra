@@ -1,3 +1,5 @@
+-- | Core infrastructure for generating executable test suites from Hydra test specifications
+
 module Hydra.Staging.Testing.Generation.Generate where
 
 import Hydra.Kernel hiding (map)

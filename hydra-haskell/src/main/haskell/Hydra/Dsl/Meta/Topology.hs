@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing topology-related terms (type and term accessors)
+
 module Hydra.Dsl.Meta.Topology where
 
 import Hydra.Kernel

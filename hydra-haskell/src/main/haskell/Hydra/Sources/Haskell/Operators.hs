@@ -144,15 +144,17 @@ module_ = Module ns elements
 
 andOp :: TBinding Op
 andOp = haskellOperatorsDefinition "andOp" $
+  doc "Logical AND operator (&&)" $
   Serialization.op @@ string "&&" @@ int32 3 @@ Ast.associativityRight
 
 apOp :: TBinding Op
 apOp = haskellOperatorsDefinition "apOp" $
+  doc "Applicative apply operator (<*>)" $
   Serialization.op @@ string "<*>" @@ int32 4 @@ Ast.associativityLeft
 
 appOp :: TBinding Op
 appOp = haskellOperatorsDefinition "appOp" $
-  doc "No source" $
+  doc "Function application operator (whitespace)" $
   Ast.op
     (Ast.symbol $ string "")
     (Ast.padding Ast.wsNone Ast.wsSpace)
@@ -161,132 +163,155 @@ appOp = haskellOperatorsDefinition "appOp" $
 
 applyOp :: TBinding Op
 applyOp = haskellOperatorsDefinition "applyOp" $
+  doc "Low-precedence function application ($)" $
   Serialization.op @@ string "$" @@ int32 0 @@ Ast.associativityRight
 
 arrowOp :: TBinding Op
 arrowOp = haskellOperatorsDefinition "arrowOp" $
+  doc "Function type arrow (->)" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
 assertOp :: TBinding Op
 assertOp = haskellOperatorsDefinition "assertOp" $
-  doc "No source" $
+  doc "Type class constraint arrow (=>)" $
   Serialization.op @@ string "=>" @@ int32 0 @@ Ast.associativityNone
 
 bindOp :: TBinding Op
 bindOp = haskellOperatorsDefinition "bindOp" $
+  doc "Monadic bind operator (>>=)" $
   Serialization.op @@ string ">>=" @@ int32 1 @@ Ast.associativityLeft
 
 caseOp :: TBinding Op
 caseOp = haskellOperatorsDefinition "caseOp" $
-  doc "No source" $
+  doc "Case alternative arrow (->)" $
   Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
 
 composeOp :: TBinding Op
 composeOp = haskellOperatorsDefinition "composeOp" $
+  doc "Function composition (.)" $
   Serialization.op @@ string "." @@ int32 9 @@ Ast.associativityLeft
 
 concatOp :: TBinding Op
 concatOp = haskellOperatorsDefinition "concatOp" $
+  doc "List concatenation (++)" $
   Serialization.op @@ string "++" @@ int32 5 @@ Ast.associativityRight
 
 consOp :: TBinding Op
 consOp = haskellOperatorsDefinition "consOp" $
+  doc "List cons (:)" $
   Serialization.op @@ string ":" @@ int32 5 @@ Ast.associativityRight
 
 defineOp :: TBinding Op
 defineOp = haskellOperatorsDefinition "defineOp" $
-  doc "No source" $
+  doc "Definition operator (=)" $
   Serialization.op @@ string "=" @@ int32 0 @@ Ast.associativityNone
 
 diamondOp :: TBinding Op
 diamondOp = haskellOperatorsDefinition "diamondOp" $
+  doc "Semigroup append (<>)" $
   Serialization.op @@ string "<>" @@ int32 6 @@ Ast.associativityRight
 
 divOp :: TBinding Op
 divOp = haskellOperatorsDefinition "divOp" $
+  doc "Integer division (`div`)" $
   Serialization.op @@ string "`div`" @@ int32 7 @@ Ast.associativityLeft
 
 divideOp :: TBinding Op
 divideOp = haskellOperatorsDefinition "divideOp" $
+  doc "Fractional division (/)" $
   Serialization.op @@ string "/" @@ int32 7 @@ Ast.associativityLeft
 
 elemOp :: TBinding Op
 elemOp = haskellOperatorsDefinition "elemOp" $
+  doc "List membership (`elem`)" $
   Serialization.op @@ string "`elem`" @@ int32 4 @@ Ast.associativityNone
 
 equalOp :: TBinding Op
 equalOp = haskellOperatorsDefinition "equalOp" $
+  doc "Equality comparison (==)" $
   Serialization.op @@ string "==" @@ int32 4 @@ Ast.associativityNone
 
 fmapOp :: TBinding Op
 fmapOp = haskellOperatorsDefinition "fmapOp" $
+  doc "Functor map (<$>)" $
   Serialization.op @@ string "<$>" @@ int32 4 @@ Ast.associativityLeft
 
 gtOp :: TBinding Op
 gtOp = haskellOperatorsDefinition "gtOp" $
+  doc "Greater than (>)" $
   Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
 
 gteOp :: TBinding Op
 gteOp = haskellOperatorsDefinition "gteOp" $
+  doc "Greater than or equal (>=)" $
   Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
 indexOp :: TBinding Op
 indexOp = haskellOperatorsDefinition "indexOp" $
+  doc "List indexing (!!)" $
   Serialization.op @@ string "!!" @@ int32 9 @@ Ast.associativityLeft
 
 lambdaOp :: TBinding Op
 lambdaOp = haskellOperatorsDefinition "lambdaOp" $
-  doc "No source" $
+  doc "Lambda body arrow (->)" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
 
 ltOp :: TBinding Op
 ltOp = haskellOperatorsDefinition "ltOp" $
+  doc "Less than (<)" $
   Serialization.op @@ string "<" @@ int32 4 @@ Ast.associativityNone
 
 lteOp :: TBinding Op
 lteOp = haskellOperatorsDefinition "lteOp" $
+  doc "Less than or equal (<=)" $
   Serialization.op @@ string ">=" @@ int32 4 @@ Ast.associativityNone
 
 minusOp :: TBinding Op
 minusOp = haskellOperatorsDefinition "minusOp" $
-  doc "Originally: associativityLeft" $
+  doc "Subtraction (-). Originally: associativityLeft" $
   Serialization.op @@ string "-" @@ int32 6 @@ Ast.associativityBoth
 
 modOp :: TBinding Op
 modOp = haskellOperatorsDefinition "modOp" $
+  doc "Modulo (`mod`)" $
   Serialization.op @@ string "`mod`" @@ int32 7 @@ Ast.associativityLeft
 
 multOp :: TBinding Op
 multOp = haskellOperatorsDefinition "multOp" $
-  doc "Originally: associativityLeft" $
+  doc "Multiplication (*). Originally: associativityLeft" $
   Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
 
 neqOp :: TBinding Op
 neqOp = haskellOperatorsDefinition "neqOp" $
+  doc "Not equal (/=)" $
   Serialization.op @@ string "/=" @@ int32 4 @@ Ast.associativityNone
 
 notElemOp :: TBinding Op
 notElemOp = haskellOperatorsDefinition "notElemOp" $
+  doc "List non-membership (`notElem`)" $
   Serialization.op @@ string "`notElem`" @@ int32 4 @@ Ast.associativityNone
 
 orOp :: TBinding Op
 orOp = haskellOperatorsDefinition "orOp" $
+  doc "Logical OR (||)" $
   Serialization.op @@ string "||" @@ int32 2 @@ Ast.associativityRight
 
 plusOp :: TBinding Op
 plusOp = haskellOperatorsDefinition "plusOp" $
-  doc "Originally: associativityLeft" $
+  doc "Addition (+). Originally: associativityLeft" $
   Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
 
 quotOp :: TBinding Op
 quotOp = haskellOperatorsDefinition "quotOp" $
+  doc "Integer quotient (`quot`)" $
   Serialization.op @@ string "`quot`" @@ int32 7 @@ Ast.associativityLeft
 
 remOp :: TBinding Op
 remOp = haskellOperatorsDefinition "remOp" $
+  doc "Integer remainder (`rem`)" $
   Serialization.op @@ string "`rem`" @@ int32 7 @@ Ast.associativityLeft
 
 typeOp :: TBinding Op
 typeOp = haskellOperatorsDefinition "typeOp" $
-  doc "No source" $
+  doc "Type annotation (::)" $
   Serialization.op @@ string "::" @@ int32 0 @@ Ast.associativityNone

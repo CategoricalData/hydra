@@ -1,3 +1,5 @@
+-- | Meta-DSL for constructing utility-related terms (CaseConvention, etc.)
+
 module Hydra.Dsl.Meta.Util where
 
 import Hydra.Kernel

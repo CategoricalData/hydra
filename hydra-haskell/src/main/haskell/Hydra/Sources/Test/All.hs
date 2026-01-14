@@ -1,3 +1,5 @@
+-- | Aggregates all Hydra test source modules
+
 module Hydra.Sources.Test.All where
 
 import Hydra.Kernel
