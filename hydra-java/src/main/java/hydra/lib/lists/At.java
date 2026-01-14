@@ -21,7 +21,7 @@ import static hydra.dsl.Types.variable;
 
 
 /**
- * Retrieves an element at an index.
+ * Gets the element at the specified index of a list.
  */
 public class At extends PrimitiveFunction {
     public Name name() {
@@ -40,21 +40,22 @@ public class At extends PrimitiveFunction {
     }
 
     /**
-     * Retrieves the element at the given index.
+     * Gets the element at the specified index.
      * @param <X> the element type
-     * @param i the index to retrieve
-     * @return a function that retrieves the element at the given index
+     * @param i the zero-based index
+     * @return a function that gets the element at the given index from a list
      */
     public static <X> Function<List<X>, X> apply(int i) {
         return list -> apply(i, list);
     }
 
     /**
-     * Retrieves the element at the given index.
+     * Gets the element at the specified index. Throws if the list is empty.
      * @param <X> the element type
-     * @param i the index to retrieve
-     * @param list the list to retrieve from
+     * @param i the zero-based index
+     * @param list the list to get the element from
      * @return the element at the given index
+     * @throws IllegalArgumentException if the list is empty
      */
     public static <X> X apply(int i, List<X> list) {
         if (list.isEmpty()) {

@@ -24,7 +24,7 @@ import static hydra.dsl.Types.scheme;
 
 
 /**
- * Filters map entries by value.
+ * Filters a list, keeping only elements that satisfy the predicate.
  */
 public class Filter extends PrimitiveFunction {
     public Name name() {
@@ -46,7 +46,7 @@ public class Filter extends PrimitiveFunction {
     }
 
     /**
-     * Filters entries where values match predicate.
+     * Filters a list, keeping only elements that satisfy the predicate.
      * @param <X> the element type
      * @param pred the predicate to test elements
      * @return a function that filters a list by the predicate
@@ -56,11 +56,11 @@ public class Filter extends PrimitiveFunction {
     }
 
     /**
-     * Filters entries where values match predicate.
+     * Filters a list, keeping only elements that satisfy the predicate.
      * @param <X> the element type
      * @param pred the predicate to test elements
      * @param lst the list to filter
-     * @return the filtered list
+     * @return a new list containing only elements for which the predicate returns true
      */
     public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
         return lst.stream().filter(pred).collect(Collectors.toList());

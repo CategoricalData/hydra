@@ -22,7 +22,7 @@ import static hydra.dsl.Types.scheme;
 
 
 /**
- * Maps a function over a flow.
+ * Applies a function to each element of a list, returning a new list of results.
  */
 public class Map extends PrimitiveFunction {
     public Name name() {
@@ -42,7 +42,7 @@ public class Map extends PrimitiveFunction {
     }
 
     /**
-     * Transforms a flow value.
+     * Applies a function to each element of a list.
      * @param <X> the input element type
      * @param <Y> the output element type
      * @param mapping the function to apply to each element
@@ -53,12 +53,12 @@ public class Map extends PrimitiveFunction {
     }
 
     /**
-     * Transforms a flow value.
+     * Applies a function to each element of a list, returning a new list of results.
      * @param <X> the input element type
      * @param <Y> the output element type
      * @param mapping the function to apply to each element
      * @param arg the list to map over
-     * @return the transformed list
+     * @return a new list containing the results of applying the function to each element
      */
     public static <X, Y> List<Y> apply(Function<X, Y> mapping, List<X> arg) {
         return arg.stream().map(mapping).collect(Collectors.toList());

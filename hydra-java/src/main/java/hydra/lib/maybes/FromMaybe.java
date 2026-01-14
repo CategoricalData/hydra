@@ -21,7 +21,7 @@ import static hydra.dsl.Types.scheme;
 
 
 /**
- * Provides a default for Nothing.
+ * Extracts the value from an optional, or returns a default if Nothing.
  */
 public class FromMaybe extends PrimitiveFunction {
     /**

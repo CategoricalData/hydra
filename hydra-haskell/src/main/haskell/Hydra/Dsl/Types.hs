@@ -201,21 +201,6 @@ polyConstrained vsWithConstraints t = TypeScheme vars (asType t) (Just constrain
     constraintMap = M.fromList
       [(Name v, TypeVariableMetadata $ S.fromList classes) | (v, classes) <- vsWithConstraints, not (L.null classes)]
 
--- | Create a type scheme with one type variable
--- Example: scheme "a" (var "a" --> var "a")
-scheme :: AsType a => String -> a -> TypeScheme
-scheme v t = TypeScheme [Name v] (asType t) Nothing
-
--- | Create a type scheme with two type variables
--- Example: scheme2 "a" "b" (var "a" --> var "b")
-scheme2 :: AsType a => String -> String -> a -> TypeScheme
-scheme2 v1 v2 t = TypeScheme [Name v1, Name v2] (asType t) Nothing
-
--- | Create a type scheme with three type variables
--- Example: scheme3 "a" "b" "c" (var "a" --> var "b" --> var "c")
-scheme3 :: AsType a => String -> String -> String -> a -> TypeScheme
-scheme3 v1 v2 v3 t = TypeScheme [Name v1, Name v2, Name v3] (asType t) Nothing
-
 -- | Create a product type using nested pairs (deprecated: use pair directly)
 -- Example: product [string, int32, boolean] creates pair string (pair int32 boolean)
 product :: [Type] -> Type
@@ -239,11 +224,6 @@ recordWithName tname fields = TypeRecord $ RowType tname fields
 -- Example: set string
 set :: AsType a => a -> Type
 set = TypeSet . asType
-
--- | Flow type (monadic computation with state, trace, and error handling)
--- Example: flow (var "s") (var "x")  -- Flow s x
-flow :: (AsType s, AsType x) => s -> x -> Type
-flow state value = applys (TypeVariable $ Name "hydra.compute.Flow") [asType state, asType value]
 
 -- | String type
 string :: Type
