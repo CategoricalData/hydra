@@ -47,7 +47,56 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
     @lru_cache(1)
     def typ() -> hydra.core.Type:
         return col_type.type
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda value: (parse_error := hydra.lib.strings.cat(("Invalid value for column ", cname(), ": ", value)), _hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[4]), mvalue)
+    def decode_value(value: str) -> Either[str, Maybe[hydra.core.Term]]:
+        @lru_cache(1)
+        def parse_error() -> str:
+            return hydra.lib.strings.cat(("Invalid value for column ", cname(), ": ", value))
+        def _hoist_body_1(v1: hydra.core.FloatType) -> Either[str, Maybe[hydra.core.Term]]:
+            match v1:
+                case hydra.core.FloatType.BIGFLOAT:
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(parsed))))))))), hydra.lib.literals.read_bigfloat(value))
+                
+                case hydra.core.FloatType.FLOAT32:
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat32(parsed))))))))), hydra.lib.literals.read_float32(value))
+                
+                case hydra.core.FloatType.FLOAT64:
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(parsed))))))))), hydra.lib.literals.read_float64(value))
+                
+                case _:
+                    return Left(hydra.lib.strings.cat(("Unsupported float type for column ", cname())))
+        def _hoist_body_2(v1: hydra.core.IntegerType) -> Either[str, Maybe[hydra.core.Term]]:
+            match v1:
+                case hydra.core.IntegerType.INT32:
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(parsed))))))))), hydra.lib.literals.read_int32(value))
+                
+                case hydra.core.IntegerType.INT64:
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt64(parsed))))))))), hydra.lib.literals.read_int64(value))
+                
+                case _:
+                    return Left(hydra.lib.strings.cat(("Unsupported integer type for column ", cname())))
+        def _hoist_body_3(v1: hydra.core.LiteralType) -> Either[str, Maybe[hydra.core.Term]]:
+            match v1:
+                case hydra.core.LiteralTypeBoolean():
+                    return hydra.lib.maybes.maybe(Left(parse_error()), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(parsed))))))), hydra.lib.literals.read_boolean(value))
+                
+                case hydra.core.LiteralTypeFloat(value=ft):
+                    return _hoist_body_1(ft)
+                
+                case hydra.core.LiteralTypeInteger(value=it):
+                    return _hoist_body_2(it)
+                
+                case hydra.core.LiteralTypeString():
+                    return Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(value))))))
+                
+                case _:
+                    return Left(hydra.lib.strings.cat(("Unsupported literal type for column ", cname())))
+        match typ():
+            case hydra.core.TypeLiteral(value=lt):
+                return _hoist_body_3(lt)
+            
+            case _:
+                return Left(hydra.lib.strings.cat(("Unsupported type for column ", cname())))
+    return hydra.lib.maybes.maybe(Right(Nothing()), decode_value, mvalue)
 
 def decode_row(col_types: frozenlist[hydra.tabular.ColumnType], row: hydra.tabular.DataRow[str]) -> Either[str, hydra.tabular.DataRow[hydra.core.Term]]:
     r"""Decode a single data row based on column types."""
@@ -168,7 +217,7 @@ def element_specs_by_table(graph: hydra.pg.model.LazyGraph[hydra.core.Term]) -> 
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v: hydra.lib.eithers.map((lambda t: (t, v)), table_for_vertex(v))), vertices()), (lambda vertex_pairs: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda e: hydra.lib.eithers.map((lambda t: (t, e)), table_for_edge(e))), edges()), (lambda edge_pairs: (add_vertex := (lambda m, p: (table := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(table, m), current := hydra.lib.maybes.from_maybe(((), ()), existing), hydra.lib.maps.insert(table, (hydra.lib.lists.cons(v, hydra.lib.pairs.first(current)), hydra.lib.pairs.second(current)), m))[4]), add_edge := (lambda m, p: (table := hydra.lib.pairs.first(p), e := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(table, m), current := hydra.lib.maybes.from_maybe(((), ()), existing), hydra.lib.maps.insert(table, (hydra.lib.pairs.first(current), hydra.lib.lists.cons(e, hydra.lib.pairs.second(current))), m))[4]), vertex_map := hydra.lib.lists.foldl((lambda x1, x2: add_vertex(x1, x2)), hydra.lib.maps.empty(), vertex_pairs), Right(hydra.lib.lists.foldl((lambda x1, x2: add_edge(x1, x2)), vertex_map, edge_pairs)))[3]))))
 
 def evaluate_properties(specs: FrozenDict[T0, hydra.core.Term], record: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, hydra.core.Term]]:
-    return hydra.lib.flows.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.flows.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), _hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.reduction.reduce_term(True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: _hoist_body_1(hydra.rewriting.deannotate_term(value)))))[3]), hydra.lib.maps.to_list(specs)))
+    return hydra.lib.flows.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.flows.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), hydra.lib.flows.bind(hydra.reduction.reduce_term(True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: hydra.lib.flows.bind(hydra.extract.core.maybe_term((lambda mv: hydra.lib.flows.pure(mv)), hydra.rewriting.deannotate_term(value)), (lambda mv: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda v: (k, v)), mv)))))))[2]), hydra.lib.maps.to_list(specs)))
 
 def evaluate_edge(edge_spec: hydra.pg.model.Edge[hydra.core.Term], record: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.pg.model.Edge[hydra.core.Term]]]:
     r"""Evaluate an edge specification against a record term to produce an optional edge."""
