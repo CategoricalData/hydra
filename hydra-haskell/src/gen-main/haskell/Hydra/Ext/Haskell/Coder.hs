@@ -45,18 +45,23 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Whether to include type definitions in generated Haskell modules
 includeTypeDefinitions :: Bool
 includeTypeDefinitions = False
 
+-- | Whether to use the Hydra core import in generated modules
 useCoreImport :: Bool
 useCoreImport = True
 
+-- | The key used to track Haskell variable depth in annotations
 keyHaskellVar :: Core.Name
 keyHaskellVar = (Core.Name "haskellVar")
 
+-- | Adapt a Hydra type to Haskell's type system and encode it
 adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 adaptTypeToHaskellAndEncode namespaces = (Modules.adaptTypeToLanguageAndEncode Language.haskellLanguage (encodeType namespaces))
 
+-- | Generate a constant name for a field (e.g., '_TypeName_fieldName')
 constantForFieldName :: (Core.Name -> Core.Name -> String)
 constantForFieldName tname fname = (Strings.cat [
   "_",
@@ -64,9 +69,11 @@ constantForFieldName tname fname = (Strings.cat [
   "_",
   (Core.unName fname)])
 
+-- | Generate a constant name for a type (e.g., '_TypeName')
 constantForTypeName :: (Core.Name -> String)
 constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 
+-- | Construct a Haskell module from a Hydra module and its definitions
 constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph Ast.Module)
 constructModule namespaces mod defs =  
   let h = (\namespace -> Module.unNamespace namespace) 
@@ -131,6 +138,7 @@ constructModule namespaces mod defs =
       Ast.moduleImports = imports,
       Ast.moduleDeclarations = decls})))))
 
+-- | Encode a Hydra function as a Haskell expression
 encodeFunction :: (Module.Namespaces Ast.ModuleName -> Core.Function -> Compute.Flow Graph.Graph Ast.Expression)
 encodeFunction namespaces fun = ((\x -> case x of
   Core.FunctionElimination v1 -> ((\x -> case x of
@@ -212,6 +220,7 @@ encodeLiteral l = ((\x -> case x of
   Core.LiteralString v1 -> (Flows.pure (Utils.hslit (Ast.LiteralString v1)))
   _ -> (Flows.fail (Strings.cat2 "literal value " (Core__.literal l)))) l)
 
+-- | Encode a Hydra term as a Haskell expression
 encodeTerm :: (Module.Namespaces Ast.ModuleName -> Core.Term -> Compute.Flow Graph.Graph Ast.Expression)
 encodeTerm namespaces term =  
   let encode = (encodeTerm namespaces)
@@ -369,6 +378,7 @@ encodeType namespaces typ =
       in (ref name)
     _ -> (Flows.fail (Strings.cat2 "unexpected type: " (Core__.type_ typ)))) (Rewriting.deannotateType typ)))
 
+-- | Encode a Hydra type as a Haskell type with typeclass assertions
 encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Compute.Flow Graph.Graph Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
@@ -397,6 +407,7 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
       Ast.contextTypeCtx = hassert,
       Ast.contextTypeType = htyp})))))))
 
+-- | Find type variables that require an Ord constraint (used in maps or sets)
 findOrdVariables :: (Core.Type -> S.Set Core.Name)
 findOrdVariables typ =  
   let fold = (\names -> \typ_ -> (\x -> case x of
@@ -415,15 +426,18 @@ findOrdVariables typ =
               _ -> names) (Rewriting.deannotateType t))
   in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
+-- | Get implicit typeclass constraints for type variables that need Ord
 getImplicitTypeClasses :: (Core.Type -> M.Map Core.Name (S.Set Classes.TypeClass))
 getImplicitTypeClasses typ =  
   let toPair = (\name -> (name, (Sets.fromList [
           Classes.TypeClassOrdering])))
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
+-- | Convert a Hydra module and definitions to a Haskell module AST
 moduleToHaskellModule :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph Ast.Module)
 moduleToHaskellModule mod defs = (Flows.bind (Utils.namespacesForModule mod) (\namespaces -> constructModule namespaces mod defs))
 
+-- | Convert a Hydra module to Haskell source code as a filepath-to-content map
 moduleToHaskell :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map String String))
 moduleToHaskell mod defs = (Flows.bind (moduleToHaskellModule mod defs) (\hsmod ->  
   let s = (Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))) 
@@ -452,6 +466,7 @@ nameDecls g namespaces name typ =
               in (constantForFieldName name fname, (Core.unName fname)))
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
+-- | Convert a Hydra term definition to a Haskell declaration with comments
 toDataDeclaration :: (Module.Namespaces Ast.ModuleName -> Module.TermDefinition -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
 toDataDeclaration namespaces def =  
   let name = (Module.termDefinitionName def) 
@@ -507,6 +522,7 @@ toDataDeclaration namespaces def =
                       Ast.declarationWithCommentsComments = comments}))))))))) (Rewriting.deannotateTerm term_))
   in (Flows.bind (Annotations.getTermDescription term) (\comments -> toDecl comments hname term Nothing))
 
+-- | Convert a Hydra type definition to Haskell declarations
 toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph [Ast.DeclarationWithComments])
 toTypeDeclarationsFrom namespaces elementName typ =  
   let lname = (Names.localNameOf elementName) 

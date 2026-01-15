@@ -5,7 +5,6 @@ import Hydra.Kernel
 import Hydra.Testing
 import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
---import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Meta.Core as Core

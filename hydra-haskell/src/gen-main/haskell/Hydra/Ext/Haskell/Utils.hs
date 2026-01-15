@@ -30,11 +30,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Create an application pattern from a name and argument patterns
 applicationPattern :: (Ast.Name -> [Ast.Pattern] -> Ast.Pattern)
 applicationPattern name args = (Ast.PatternApplication (Ast.ApplicationPattern {
   Ast.applicationPatternName = name,
   Ast.applicationPatternArgs = args}))
 
+-- | Generate a Haskell name reference for a Hydra element
 elementReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Ast.Name)
 elementReference namespaces name =  
   let namespacePair = (Module.namespacesFocus namespaces) 
@@ -52,23 +54,28 @@ elementReference namespaces name =
       ".",
       (sanitizeHaskellName local)]))))))
 
+-- | Create a Haskell function application expression
 hsapp :: (Ast.Expression -> Ast.Expression -> Ast.Expression)
 hsapp l r = (Ast.ExpressionApplication (Ast.ApplicationExpression {
   Ast.applicationExpressionFunction = l,
   Ast.applicationExpressionArgument = r}))
 
+-- | Create a Haskell lambda expression
 hslambda :: (Ast.Name -> Ast.Expression -> Ast.Expression)
 hslambda name rhs = (Ast.ExpressionLambda (Ast.LambdaExpression {
   Ast.lambdaExpressionBindings = [
     Ast.PatternName name],
   Ast.lambdaExpressionInner = rhs}))
 
+-- | Create a Haskell literal expression
 hslit :: (Ast.Literal -> Ast.Expression)
 hslit lit = (Ast.ExpressionLiteral lit)
 
+-- | Create a Haskell variable expression from a string
 hsvar :: (String -> Ast.Expression)
 hsvar s = (Ast.ExpressionVariable (rawName s))
 
+-- | Compute the Haskell module namespaces for a Hydra module
 namespacesForModule :: (Module.Module -> Compute.Flow Graph.Graph (Module.Namespaces Ast.ModuleName))
 namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True True True True mod) (\nss ->  
   let ns = (Module.moduleNamespace mod) 
@@ -96,14 +103,17 @@ namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True T
     Module.namespacesFocus = focusPair,
     Module.namespacesMapping = resultMap}))))
 
+-- | Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)
 newtypeAccessorName :: (Core.Name -> String)
 newtypeAccessorName name = (Strings.cat2 "un" (Names.localNameOf name))
 
+-- | Create a raw Haskell name from a string without sanitization
 rawName :: (String -> Ast.Name)
 rawName n = (Ast.NameNormal (Ast.QualifiedName {
   Ast.qualifiedNameQualifiers = [],
   Ast.qualifiedNameUnqualified = (Ast.NamePart n)}))
 
+-- | Generate a Haskell name for a record field accessor
 recordFieldReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
 recordFieldReference namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
@@ -119,12 +129,15 @@ recordFieldReference namespaces sname fname =
       unqualName = (Names.unqualifyName qualName)
   in (elementReference namespaces unqualName)
 
+-- | Sanitize a string to be a valid Haskell identifier, escaping reserved words
 sanitizeHaskellName :: (String -> String)
 sanitizeHaskellName = (Formatting.sanitizeWithUnderscores Language.reservedWords)
 
+-- | Create a sanitized Haskell name from a string
 simpleName :: (String -> Ast.Name)
 simpleName arg_ = (rawName (sanitizeHaskellName arg_))
 
+-- | Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')
 simpleValueBinding :: (Ast.Name -> Ast.Expression -> Maybe Ast.LocalBindings -> Ast.ValueBinding)
 simpleValueBinding hname rhs bindings =  
   let pat = (Ast.PatternApplication (Ast.ApplicationPattern {
@@ -136,6 +149,7 @@ simpleValueBinding hname rhs bindings =
     Ast.simpleValueBindingRhs = rightHandSide,
     Ast.simpleValueBindingLocalBindings = bindings}))
 
+-- | Convert a list of types into a nested type application
 toTypeApplication :: ([Ast.Type] -> Ast.Type)
 toTypeApplication types =  
   let app = (\l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Ast.TypeApplication (Ast.ApplicationType {
@@ -143,12 +157,14 @@ toTypeApplication types =
           Ast.applicationTypeArgument = (Lists.head l)})) (Lists.head l))
   in (app (Lists.reverse types))
 
+-- | Extract the local type name from a fully qualified record type name
 typeNameForRecord :: (Core.Name -> String)
 typeNameForRecord sname =  
   let snameStr = (Core.unName sname) 
       parts = (Strings.splitOn "." snameStr)
   in (Lists.last parts)
 
+-- | Generate a Haskell name for a union variant constructor
 unionFieldReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
 unionFieldReference namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
