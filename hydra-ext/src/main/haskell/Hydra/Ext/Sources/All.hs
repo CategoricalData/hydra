@@ -63,6 +63,12 @@ import qualified Hydra.Ext.Sources.Demos.GenPG.Transform as GenPGTransform
 import qualified Hydra.Ext.Sources.TypeScript.Model as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema as XmlSchema
 
+import qualified Hydra.Sources.Decode.Pg.Mapping as DecodePgMapping
+import qualified Hydra.Sources.Decode.Pg.Model as DecodePgModel
+
+import qualified Hydra.Sources.Encode.Pg.Mapping as EncodePgMapping
+import qualified Hydra.Sources.Encode.Pg.Model as EncodePgModel
+
 
 hydraExtModules :: [Module]
 hydraExtModules = otherModules ++ gqlModules
@@ -120,7 +126,38 @@ hydraExtModules = otherModules ++ gqlModules
       XmlSchema.module_,
       GenPGTransform.module_]
 
+{-
+  :set +m
+  writeDecoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModules) [
+    Hydra.Ext.Sources.Pg.Mapping.module_,
+    Hydra.Ext.Sources.Pg.Model.module_]
+  writeEncoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModules) [
+    Hydra.Ext.Sources.Pg.Mapping.module_,
+    Hydra.Ext.Sources.Pg.Model.module_]
+-}
+hydraExtDecodingModules = [
+  DecodePgMapping.module_,
+  DecodePgModel.module_]
+hydraExtEncodingModules = [
+  EncodePgMapping.module_,
+  EncodePgModel.module_]
+
 gqlModules = [
   OpenGql.module_,
   PathAlgebraExpressions.module_,
   PathAlgebraSyntax.module_]
+
+-- All hydra-ext modules for the GenPG demo
+genpgModules :: [Module]
+genpgModules = [
+    GraphsonCoder.module_,
+    GraphsonConstruct.module_,
+    GraphsonSyntax.module_,
+    GraphsonUtils.module_,
+    PgMapping.module_,
+    PgModel.module_,
+    GenPGTransform.module_,
+    DecodePgMapping.module_,
+    DecodePgModel.module_,
+    EncodePgMapping.module_,
+    EncodePgModel.module_]

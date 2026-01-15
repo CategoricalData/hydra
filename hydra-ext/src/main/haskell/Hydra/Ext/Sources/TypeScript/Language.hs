@@ -38,7 +38,6 @@ import qualified Hydra.Dsl.Prims         as Prims
 import qualified Hydra.Dsl.Tabular       as Tabular
 import qualified Hydra.Dsl.Meta.Testing       as Testing
 import qualified Hydra.Dsl.Terms         as Terms
-import qualified Hydra.Dsl.Meta.Testing       as Testing
 import qualified Hydra.Dsl.Tests         as Tests
 import qualified Hydra.Dsl.Meta.Topology      as Topology
 import qualified Hydra.Dsl.Types         as Types

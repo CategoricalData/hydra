@@ -49,6 +49,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Types.Tabular as TabularModel
+import qualified Hydra.Sources.Kernel.Types.Relational as RelationalModel
 import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 import qualified Hydra.Pg.Model as PG            -- Generated PG model types
 import qualified Hydra.Tabular as Tab            -- Generated tabular types
@@ -67,20 +68,36 @@ ns = Namespace "hydra.demos.genpg.transform"
 module_ :: Module
 module_ = Module ns elements
     [Reduction.ns, Rewriting.ns, ExtractCore.ns]  -- term dependencies
-    (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns]) $  -- type dependencies
+    (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]) $  -- type dependencies
     Just "Functions for transforming property graph mappings into property graph elements."
   where
     elements = [
+      toBinding concatPairs,
+      toBinding decodeCell,
+      toBinding decodeRow,
+      toBinding decodeTable,
+      toBinding elementIsEdge,
+      toBinding elementIsVertex,
+      toBinding elementSpecsByTable,
       toBinding evaluateEdge,
       toBinding evaluateProperties,
       toBinding evaluateVertex,
       toBinding findTablesInTerm,
       toBinding findTablesInTerms,
-      toBinding elementSpecsByTable,
+      toBinding listAny,
+      toBinding makeLazyGraph,
+      toBinding normalizeField,
+      toBinding parseCsvChar,
+      toBinding parseCsvLine,
+      toBinding parseSingleLine,
+      toBinding parseTableLines,
+      toBinding stripWhitespace,
       toBinding tableForEdge,
       toBinding tableForVertex,
+      toBinding tableTypesByName,
       toBinding termRowToRecord,
-      toBinding transformRecord]
+      toBinding transformRecord,
+      toBinding transformTableRows]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -175,6 +192,24 @@ evaluateVertex = define "evaluateVertex" $
                     PG._Vertex_id>>: var "id",
                     PG._Vertex_properties>>: var "props"])
                 (var "mId")))
+
+-- | Check if an element is an edge
+elementIsEdge :: TBinding (PG.Element a -> Bool)
+elementIsEdge = define "elementIsEdge" $
+  doc "Check if an element is an edge" $
+  "el" ~>
+    match PG._Element (Just $ boolean False) [
+      PG._Element_edge>>: constant $ boolean True]
+    @@ var "el"
+
+-- | Check if an element is a vertex
+elementIsVertex :: TBinding (PG.Element a -> Bool)
+elementIsVertex = define "elementIsVertex" $
+  doc "Check if an element is a vertex" $
+  "el" ~>
+    match PG._Element (Just $ boolean False) [
+      PG._Element_vertex>>: constant $ boolean True]
+    @@ var "el"
 
 -- | Find table names referenced in a term by looking for record projections
 findTablesInTerm :: TBinding (Term -> S.Set String)
@@ -312,3 +347,264 @@ transformRecord = define "transformRecord" $
           (Flows.mapList ("spec" ~> evaluateEdge @@ var "spec" @@ var "record") (var "especs"))
           ("mEdges" ~>
             Flows.pure $ pair (Maybes.cat $ var "mVertices") (Maybes.cat $ var "mEdges")))
+
+--------------------------------------------------------------------------------
+-- CSV Parsing (pure functions)
+
+-- | Parse a CSV line into a list of optional string values
+-- Empty fields become Nothing, non-empty fields become Just value
+-- Handles quoted fields (double-quote to escape quotes within quoted fields)
+parseCsvLine :: TBinding (String -> Either String [Maybe String])
+parseCsvLine = define "parseCsvLine" $
+  doc "Parse a CSV line into fields. Empty fields become Nothing." $
+  "line" ~>
+    -- State is (accumulator, currentField, inQuotes) as a nested pair
+    -- ((acc, field), inQuotes)
+    "chars" <~ Strings.toList (var "line") $
+    "initState" <~ pair (pair (list ([] :: [TTerm (Maybe String)])) (string "")) (boolean False) $
+    "finalState" <~ Lists.foldl parseCsvChar (var "initState") (var "chars") $
+    -- Extract final state
+    "acc" <~ Pairs.first (Pairs.first $ var "finalState") $
+    "field" <~ Pairs.second (Pairs.first $ var "finalState") $
+    "inQuotes" <~ Pairs.second (var "finalState") $
+    -- Finalize: check for unclosed quote, add final field
+    Logic.ifElse (var "inQuotes")
+      (left $ string "Unclosed quoted field")
+      (right $ Lists.reverse $ Lists.cons (normalizeField @@ var "field") (var "acc"))
+
+-- | Process a single character during CSV parsing
+-- State: ((accumulator, currentField), inQuotes)
+parseCsvChar :: TBinding ((([Maybe String], String), Bool) -> Int -> (([Maybe String], String), Bool))
+parseCsvChar = define "parseCsvChar" $
+  doc "Process a single character during CSV parsing" $
+  "state" ~> "c" ~>
+    "acc" <~ Pairs.first (Pairs.first $ var "state") $
+    "field" <~ Pairs.second (Pairs.first $ var "state") $
+    "inQuotes" <~ Pairs.second (var "state") $
+    Logic.ifElse (Equality.equal (var "c") (int32 34))  -- '"' = 34
+      (-- Quote character
+        Logic.ifElse (var "inQuotes")
+          (-- Inside quotes - this ends the quoted section
+            pair (pair (var "acc") (var "field")) (boolean False))
+          (-- Not inside quotes - start quoted section (only if field is empty)
+            Logic.ifElse (Strings.null $ var "field")
+              (pair (pair (var "acc") (var "field")) (boolean True))
+              (-- Quote inside non-empty unquoted field - just add it (simplified behavior)
+                pair (pair (var "acc") (Strings.cat2 (var "field") (string "\""))) (var "inQuotes"))))
+      (-- Not a quote
+        Logic.ifElse (Logic.and (Equality.equal (var "c") (int32 44)) (Logic.not $ var "inQuotes"))  -- ',' = 44
+          (-- Comma outside quotes - end of field
+            pair (pair (Lists.cons (normalizeField @@ var "field") (var "acc")) (string "")) (boolean False))
+          (-- Regular character - append to field
+            pair (pair (var "acc") (Strings.cat2 (var "field") (Strings.fromList $ list [var "c"]))) (var "inQuotes")))
+
+-- | Normalize a CSV field - empty string becomes Nothing, otherwise Just
+normalizeField :: TBinding (String -> Maybe String)
+normalizeField = define "normalizeField" $
+  doc "Normalize a CSV field value - empty becomes Nothing" $
+  "s" ~>
+    Logic.ifElse (Strings.null $ var "s")
+      nothing
+      (just $ var "s")
+
+-- | Concatenate two pairs of lists (used for accumulating vertices and edges)
+concatPairs :: TBinding (([a], [b]) -> ([a], [b]) -> ([a], [b]))
+concatPairs = define "concatPairs" $
+  doc "Concatenate two pairs of lists" $
+  "acc" ~> "p" ~>
+    pair
+      (Lists.concat2 (Pairs.first $ var "acc") (Pairs.first $ var "p"))
+      (Lists.concat2 (Pairs.second $ var "acc") (Pairs.second $ var "p"))
+
+-- | Build a map from table name to table type for efficient lookup
+tableTypesByName :: TBinding ([Tab.TableType] -> M.Map Rel.RelationName Tab.TableType)
+tableTypesByName = define "tableTypesByName" $
+  doc "Build a map from table name to table type" $
+  "tableTypes" ~>
+    Maps.fromList $ Lists.map
+      ("t" ~> pair (project Tab._TableType Tab._TableType_name @@ var "t") (var "t"))
+      (var "tableTypes")
+
+-- | Strip leading and trailing whitespace from a string
+stripWhitespace :: TBinding (String -> String)
+stripWhitespace = define "stripWhitespace" $
+  doc "Strip leading and trailing whitespace from a string" $
+  "s" ~>
+    -- Convert to list of chars, drop leading spaces, reverse, drop leading spaces, reverse back
+    "chars" <~ Strings.toList (var "s") $
+    "isSpaceChar" <~ ("c" ~> Chars.isSpace (var "c")) $
+    "trimLeft" <~ Lists.dropWhile (var "isSpaceChar") (var "chars") $
+    "trimRight" <~ Lists.reverse (Lists.dropWhile (var "isSpaceChar") (Lists.reverse $ var "trimLeft")) $
+    Strings.fromList (var "trimRight")
+
+-- | Check if any element in a list satisfies a predicate
+listAny :: TBinding ((a -> Bool) -> [a] -> Bool)
+listAny = define "listAny" $
+  doc "Check if any element in a list satisfies a predicate" $
+  "pred" ~> "xs" ~>
+    Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
+
+-- | Parse a single CSV line, returning Nothing for empty/whitespace-only lines
+parseSingleLine :: TBinding (String -> Either String (Maybe [Maybe String]))
+parseSingleLine = define "parseSingleLine" $
+  doc "Parse a single CSV line, returning Nothing for empty lines" $
+  "line" ~>
+    "trimmed" <~ (stripWhitespace @@ var "line") $
+    Logic.ifElse (Strings.null $ var "trimmed")
+      (right nothing)
+      (Eithers.map ("x" ~> just (var "x")) (parseCsvLine @@ var "trimmed"))
+
+-- | Parse raw CSV lines into a Table of strings
+-- Takes: hasHeader flag, list of raw lines
+-- Returns: Either error or Table String
+parseTableLines :: TBinding (Bool -> [String] -> Either String (Tab.Table String))
+parseTableLines = define "parseTableLines" $
+  doc "Parse raw CSV lines into a Table of strings" $
+  "hasHeader" ~> "rawLines" ~>
+    -- Parse each line (returns Either String (Maybe [Maybe String]) for each)
+    Eithers.bind
+      (Eithers.mapList ("ln" ~> parseSingleLine @@ var "ln") (var "rawLines"))
+      ("parsedRows" ~>
+        -- Filter out empty lines (Nothing values) to get [[Maybe String]]
+        "rows" <~ Maybes.cat (var "parsedRows") $
+        -- Build the table based on hasHeader flag
+        Logic.ifElse (var "hasHeader")
+          (-- With header: first row is header, rest are data
+            "headerRow" <~ Lists.head (var "rows") $
+            "dataRows" <~ Lists.tail (var "rows") $
+            -- Check for null headers
+            Logic.ifElse (listAny @@ ("m" ~> Maybes.isNothing (var "m")) @@ var "headerRow")
+              (left $ string "null header column(s)")
+              (right $ record Tab._Table [
+                Tab._Table_header>>: just (wrap Tab._HeaderRow $ Maybes.cat $ var "headerRow"),
+                Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "dataRows")]))
+          (-- No header: all rows are data
+            right $ record Tab._Table [
+              Tab._Table_header>>: nothing,
+              Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "rows")]))
+
+-- | Transform all rows from a decoded table through vertex/edge specs
+-- This is the pure part of table transformation (runs in Flow monad)
+transformTableRows :: TBinding ([PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Flow Graph ([PG.Vertex Term], [PG.Edge Term]))
+transformTableRows = define "transformTableRows" $
+  doc "Transform all rows from a table through vertex/edge specifications" $
+  "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>
+    Flows.map
+      ("pairs" ~> Lists.foldl concatPairs (pair (list ([] :: [TTerm (PG.Vertex Term)])) (list ([] :: [TTerm (PG.Edge Term)]))) (var "pairs"))
+      (Flows.mapList
+        ("row" ~> transformRecord @@ var "vspecs" @@ var "especs" @@ (termRowToRecord @@ var "tableType" @@ var "row"))
+        (var "rows"))
+
+-- | Construct a LazyGraph from lists of vertices and edges
+makeLazyGraph :: TBinding ([PG.Vertex Term] -> [PG.Edge Term] -> PG.LazyGraph Term)
+makeLazyGraph = define "makeLazyGraph" $
+  doc "Construct a LazyGraph from vertices and edges" $
+  "vertices" ~> "edges" ~>
+    record PG._LazyGraph [
+      PG._LazyGraph_vertices>>: var "vertices",
+      PG._LazyGraph_edges>>: var "edges"]
+
+--------------------------------------------------------------------------------
+-- Table Decoding (pure functions)
+
+-- | Decode a table of strings into a table of terms based on column types
+decodeTable :: TBinding (Tab.TableType -> Tab.Table String -> Either String (Tab.Table Term))
+decodeTable = define "decodeTable" $
+  doc "Decode a table of strings into a table of terms based on column type specifications" $
+  "tableType" ~> "table" ~>
+    "colTypes" <~ (project Tab._TableType Tab._TableType_columns @@ var "tableType") $
+    "header" <~ (project Tab._Table Tab._Table_header @@ var "table") $
+    "rows" <~ (project Tab._Table Tab._Table_data @@ var "table") $
+    Eithers.map
+      ("decodedRows" ~>
+        record Tab._Table [
+          Tab._Table_header>>: var "header",
+          Tab._Table_data>>: var "decodedRows"])
+      (Eithers.mapList
+        ("row" ~> decodeRow @@ var "colTypes" @@ var "row")
+        (var "rows"))
+
+-- | Decode a single row based on column types
+decodeRow :: TBinding ([Tab.ColumnType] -> Tab.DataRow String -> Either String (Tab.DataRow Term))
+decodeRow = define "decodeRow" $
+  doc "Decode a single data row based on column types" $
+  "colTypes" ~> "row" ~>
+    "cells" <~ (unwrap Tab._DataRow @@ var "row") $
+    Eithers.map
+      ("decodedCells" ~> wrap Tab._DataRow (var "decodedCells"))
+      (Eithers.mapList
+        ("pair" ~>
+          "colType" <~ Pairs.first (var "pair") $
+          "mvalue" <~ Pairs.second (var "pair") $
+          decodeCell @@ var "colType" @@ var "mvalue")
+        (Lists.zip (var "colTypes") (var "cells")))
+
+-- | Decode a single cell value based on its column type
+decodeCell :: TBinding (Tab.ColumnType -> Maybe String -> Either String (Maybe Term))
+decodeCell = define "decodeCell" $
+  doc "Decode a single cell value based on its column type" $
+  "colType" ~> "mvalue" ~>
+    "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
+    "typ" <~ (project Tab._ColumnType Tab._ColumnType_type @@ var "colType") $
+    Maybes.maybe
+      (-- No value - return Nothing
+        right nothing)
+      (-- Has value - decode based on type
+        "value" ~>
+          "parseError" <~ (Strings.cat $ list [
+            string "Invalid value for column ",
+            var "cname",
+            string ": ",
+            var "value"]) $
+          match _Type (Just $ left $ Strings.cat $ list [
+            string "Unsupported type for column ",
+            var "cname"]) [
+            _Type_literal>>: "lt" ~>
+              match _LiteralType (Just $ left $ Strings.cat $ list [
+                string "Unsupported literal type for column ",
+                var "cname"]) [
+                _LiteralType_boolean>>: constant $
+                  Maybes.maybe
+                    (left $ var "parseError")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed")
+                    (Literals.readBoolean $ var "value"),
+                _LiteralType_float>>: "ft" ~>
+                  match _FloatType (Just $ left $ Strings.cat $ list [
+                    string "Unsupported float type for column ",
+                    var "cname"]) [
+                    _FloatType_bigfloat>>: constant $
+                      Maybes.maybe
+                        (left $ var "parseError")
+                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
+                        (Literals.readFloat64 $ var "value"),
+                    _FloatType_float32>>: constant $
+                      Maybes.maybe
+                        (left $ var "parseError")
+                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed")
+                        (Literals.readFloat32 $ var "value"),
+                    _FloatType_float64>>: constant $
+                      Maybes.maybe
+                        (left $ var "parseError")
+                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")
+                        (Literals.readFloat64 $ var "value")]
+                  @@ var "ft",
+                _LiteralType_integer>>: "it" ~>
+                  match _IntegerType (Just $ left $ Strings.cat $ list [
+                    string "Unsupported integer type for column ",
+                    var "cname"]) [
+                    _IntegerType_int32>>: constant $
+                      Maybes.maybe
+                        (left $ var "parseError")
+                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed")
+                        (Literals.readInt32 $ var "value"),
+                    _IntegerType_int64>>: constant $
+                      Maybes.maybe
+                        (left $ var "parseError")
+                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")
+                        (Literals.readInt64 $ var "value")]
+                  @@ var "it",
+                _LiteralType_string>>: constant $
+                  right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
+              @@ var "lt"]
+          @@ var "typ")
+      (var "mvalue")
