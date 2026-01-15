@@ -148,7 +148,9 @@ modulesToGraph universeModules modules = elementsToGraph bootstrapGraph (Just sc
     universe = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ modules]
     schemaModules = moduleTypeDependenciesTransitive universe modules
     dataModules = moduleTermDependenciesTransitive universe modules
-    schemaElements = L.filter isNativeType $ L.concat (moduleElements <$> schemaModules)
+    -- Include type elements from both transitive type dependencies AND the input modules themselves.
+    -- This ensures type modules passed directly are included even if not transitively referenced.
+    schemaElements = L.filter isNativeType $ L.concat (moduleElements <$> (schemaModules ++ modules))
     dataElements = L.filter (not . isNativeType) $ L.concat (moduleElements <$> dataModules)
     schemaGraph = elementsToGraph bootstrapGraph Nothing schemaElements
 
