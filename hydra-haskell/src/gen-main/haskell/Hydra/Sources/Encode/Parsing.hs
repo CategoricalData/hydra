@@ -106,7 +106,7 @@ module_ = Module.Module {
             Core.Field {
               Core.fieldName = (Core.Name "success"),
               Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "v"),
+                Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -136,11 +136,11 @@ module_ = Module.Module {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.parsing.parseSuccess")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
             Core.Field {
               Core.fieldName = (Core.Name "failure"),
               Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "v"),
+                Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermUnion (Core.Injection {
                   Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -168,7 +168,7 @@ module_ = Module.Module {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.parsing.parseError")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))}]}))))}))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]}))))}))),
       Core.bindingType = Nothing},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.parsing.parseSuccess"),
