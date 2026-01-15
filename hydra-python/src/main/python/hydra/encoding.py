@@ -117,7 +117,7 @@ def encode_either_type(et: hydra.core.EitherType) -> hydra.core.Type:
 def encode_field_value(type_name: hydra.core.Name, field_name: hydra.core.Name, field_type: hydra.core.Type) -> hydra.core.Type:
     r"""Generate the encoder for a field's value."""
     
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("v"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), encode_injection(type_name, field_name, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(field_type), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("v"))))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("y"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), encode_injection(type_name, field_name, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(field_type), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("y"))))))))))))))))
 
 def encode_forall_type(ft: hydra.core.ForallType) -> hydra.core.Type:
     r"""Generate an encoder for a polymorphic (forall) type."""

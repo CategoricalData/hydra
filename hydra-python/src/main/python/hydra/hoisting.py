@@ -255,6 +255,29 @@ def is_union_elimination(term: hydra.core.Term) -> bool:
         case _:
             return False
 
+def is_application_function(acc: hydra.accessors.TermAccessor) -> bool:
+    match acc:
+        case hydra.accessors.TermAccessorApplicationFunction():
+            return True
+        
+        case _:
+            return False
+
+def is_lambda_body(acc: hydra.accessors.TermAccessor) -> bool:
+    match acc:
+        case hydra.accessors.TermAccessorLambdaBody():
+            return True
+        
+        case _:
+            return False
+
+def normalize_path_for_hoisting(path: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
+    r"""Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...]."""
+    
+    def go(remaining: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
+        return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
+    return go(path)
+
 def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool, bool]) -> tuple[bool, bool]:
     r"""Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state."""
     
@@ -303,7 +326,7 @@ def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.accessors.
     @lru_cache(1)
     def term() -> hydra.core.Type:
         return hydra.lib.pairs.second(path_and_term)
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(is_union_elimination(term())), (lambda : False), (lambda : (final_state := hydra.lib.lists.foldl((lambda st, acc: update_hoist_state(acc, st)), (True, False), path()), hydra.lib.logic.not_(hydra.lib.pairs.first(final_state)))[1]))
+    return hydra.lib.logic.if_else(hydra.lib.logic.not_(is_union_elimination(term())), (lambda : False), (lambda : (normalized_path := normalize_path_for_hoisting(path()), (final_state := hydra.lib.lists.foldl((lambda st, acc: update_hoist_state(acc, st)), (True, False), normalized_path), hydra.lib.logic.not_(hydra.lib.pairs.first(final_state)))[1])[1]))
 
 def hoist_case_statements(v1: hydra.typing.TypeContext, v2: hydra.core.Term) -> hydra.core.Type:
     r"""Hoist case statements into local let bindings. This is useful for targets such as Python which only support case statements (match) at the top level. Case statements are hoisted only when they appear at non-top-level positions. Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS. Once through an application LHS, lambda bodies no longer count as pass-through."""
@@ -546,29 +569,6 @@ def hoist_polymorphic_let_bindings(v1: hydra.core.Let) -> hydra.core.Type:
     r"""Transform a let-term by pulling all polymorphic let bindings to the top level. This is useful to ensure that polymorphic bindings are not nested within other terms, which is unsupported by certain targets such as Java. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first."""
     
     return hoist_let_bindings(False, v1)
-
-def is_application_function(acc: hydra.accessors.TermAccessor) -> bool:
-    match acc:
-        case hydra.accessors.TermAccessorApplicationFunction():
-            return True
-        
-        case _:
-            return False
-
-def is_lambda_body(acc: hydra.accessors.TermAccessor) -> bool:
-    match acc:
-        case hydra.accessors.TermAccessorLambdaBody():
-            return True
-        
-        case _:
-            return False
-
-def normalize_path_for_hoisting(path: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
-    r"""Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...]."""
-    
-    def go(remaining: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
-    return go(path)
 
 def rewrite_term_with_type_context(f: Callable[[
   Callable[[hydra.core.Term], T0],
