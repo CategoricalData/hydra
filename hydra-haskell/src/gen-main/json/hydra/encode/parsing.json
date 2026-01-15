@@ -141,7 +141,7 @@
                                                     "name": "term",
                                                     "term": {
                                                       "application": {
-                                                        "argument": {"variable": "v"},
+                                                        "argument": {"variable": "y"},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "a"},
@@ -150,7 +150,7 @@
                                         "typeName": "hydra.core.Injection"}}},
                                   "typeName": "hydra.core.Term"}},
                               "domain": null,
-                              "parameter": "v"}}}},
+                              "parameter": "y"}}}},
                       {
                         "name": "failure",
                         "term": {
@@ -184,13 +184,13 @@
                                                     "name": "term",
                                                     "term": {
                                                       "application": {
-                                                        "argument": {"variable": "v"},
+                                                        "argument": {"variable": "y"},
                                                         "function": {"variable": "hydra.encode.parsing.parseError"}}}}],
                                                 "typeName": "hydra.core.Field"}}}],
                                         "typeName": "hydra.core.Injection"}}},
                                   "typeName": "hydra.core.Term"}},
                               "domain": null,
-                              "parameter": "v"}}}}],
+                              "parameter": "y"}}}}],
                     "default": null,
                     "typeName": "hydra.parsing.ParseResult"}}}},
             "domain": null,
