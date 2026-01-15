@@ -22,6 +22,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 ### Refactoring
 
 - **[Refactoring the Hydra kernel](refactoring.md)** - How to create, rename, or delete kernel elements or modules, and propagate the change across all implementations
+- **[Promoting raw code to Hydra modules](promoting-code.md)** - Convert raw Haskell code into Hydra source modules that can be generated to multiple target languages
 
 ### Development Workflow
 
