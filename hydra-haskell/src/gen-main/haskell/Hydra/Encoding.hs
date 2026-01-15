@@ -44,7 +44,7 @@ encodeBindingName n = (Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.
 -- | Generate the encoder for a field's value
 encodeFieldValue :: (Core.Name -> Core.Name -> Core.Type -> Core.Term)
 encodeFieldValue typeName fieldName fieldType = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-  Core.lambdaParameter = (Core.Name "v"),
+  Core.lambdaParameter = (Core.Name "y"),
   Core.lambdaDomain = Nothing,
   Core.lambdaBody = (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -52,7 +52,7 @@ encodeFieldValue typeName fieldName fieldType = (Core.TermFunction (Core.Functio
       Core.fieldName = (Core.Name "union"),
       Core.fieldTerm = (encodeInjection typeName fieldName (Core.TermApplication (Core.Application {
         Core.applicationFunction = (encodeType fieldType),
-        Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})))}}))})))
+        Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))}}))})))
 
 -- | Encode a float value based on its float type
 encodeFloatValue :: (Core.FloatType -> Core.Term -> Core.Term)
