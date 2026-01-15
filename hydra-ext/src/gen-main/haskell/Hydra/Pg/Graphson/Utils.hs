@@ -30,9 +30,9 @@ elementsToVerticesWithAdjacentEdges els =
           Model_.ElementVertex v1 -> (Lists.cons v1 (Pairs.first acc), (Pairs.second acc))
           Model_.ElementEdge v1 -> (Pairs.first acc, (Lists.cons v1 (Pairs.second acc)))) el) ([], []) els)
   in  
-    let vertices = (Pairs.first partitioned)
+    let vertices = (Lists.reverse (Pairs.first partitioned))
     in  
-      let edges = (Pairs.second partitioned)
+      let edges = (Lists.reverse (Pairs.second partitioned))
       in  
         let vertexMap0 = (Maps.fromList (Lists.map (\v -> (Model_.vertexId v, Model_.VertexWithAdjacentEdges {
                 Model_.vertexWithAdjacentEdgesVertex = v,

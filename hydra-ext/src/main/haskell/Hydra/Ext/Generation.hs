@@ -3,6 +3,7 @@
 module Hydra.Ext.Generation (
   module Hydra.Ext.Generation,
   module Hydra.Ext.Sources.All,
+  module Hydra.Generation,
   module Hydra.Sources.All,
 ) where
 
