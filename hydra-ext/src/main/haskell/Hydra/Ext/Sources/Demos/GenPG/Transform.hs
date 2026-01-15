@@ -576,7 +576,7 @@ decodeCell = define "decodeCell" $
                       Maybes.maybe
                         (left $ var "parseError")
                         ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
-                        (Literals.readFloat64 $ var "value"),
+                        (Literals.readBigfloat $ var "value"),
                     _FloatType_float32>>: constant $
                       Maybes.maybe
                         (left $ var "parseError")

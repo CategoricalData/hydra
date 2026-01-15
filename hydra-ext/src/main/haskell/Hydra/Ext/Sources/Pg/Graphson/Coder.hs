@@ -98,7 +98,7 @@ doubleValueToJson :: TBinding (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
   match G._DoubleValue Nothing [
-    G._DoubleValue_finite>>: "d" ~> Json.valueNumber (var "d"),
+    G._DoubleValue_finite>>: "d" ~> Json.valueNumber (Literals.float64ToBigfloat $ var "d"),
     G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]
