@@ -162,7 +162,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -176,7 +176,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "lazy",
                   "term": {
@@ -210,7 +210,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -224,7 +224,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.EvaluationStyle"}}}},
       "type": null},
@@ -784,7 +784,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -798,7 +798,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "collectListLengths",
                   "term": {
@@ -832,7 +832,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -846,7 +846,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "collectLabels",
                   "term": {
@@ -880,7 +880,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -894,7 +894,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.FoldOperation"}}}},
       "type": null},
@@ -1144,7 +1144,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1158,7 +1158,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "applications",
                   "term": {
@@ -1192,7 +1192,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1206,7 +1206,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "lists",
                   "term": {
@@ -1240,7 +1240,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1254,7 +1254,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "nothing",
                   "term": {
@@ -1288,7 +1288,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1302,7 +1302,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.HoistPredicate"}}}},
       "type": null},
@@ -1667,7 +1667,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1681,7 +1681,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "replaceInt32WithInt64",
                   "term": {
@@ -1715,7 +1715,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1729,7 +1729,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.TermRewriter"}}}},
       "type": null},
@@ -1866,7 +1866,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1880,7 +1880,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.TypeRewriter"}}}},
       "type": null},
@@ -2852,13 +2852,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.alphaConversionTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "caseConversion",
                   "term": {
@@ -2892,13 +2892,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.caseConversionTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "deannotateTerm",
                   "term": {
@@ -2932,13 +2932,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.deannotateTermTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "deannotateType",
                   "term": {
@@ -2972,13 +2972,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.deannotateTypeTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "delegatedEvaluation",
                   "term": {
@@ -3012,13 +3012,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.delegatedEvaluationTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "etaExpansion",
                   "term": {
@@ -3052,13 +3052,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.etaExpansionTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "flattenLetTerms",
                   "term": {
@@ -3092,13 +3092,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.flattenLetTermsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "freeVariables",
                   "term": {
@@ -3132,13 +3132,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.freeVariablesTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "evaluation",
                   "term": {
@@ -3172,13 +3172,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.evaluationTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "inference",
                   "term": {
@@ -3212,13 +3212,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.inferenceTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "inferenceFailure",
                   "term": {
@@ -3252,13 +3252,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.inferenceFailureTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonCoder",
                   "term": {
@@ -3292,13 +3292,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonCoderTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonDecode",
                   "term": {
@@ -3332,13 +3332,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonDecodeTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonEncode",
                   "term": {
@@ -3372,13 +3372,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonEncodeTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonParser",
                   "term": {
@@ -3412,13 +3412,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonParserTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonRoundtrip",
                   "term": {
@@ -3452,13 +3452,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonRoundtripTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "jsonWriter",
                   "term": {
@@ -3492,13 +3492,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.jsonWriterTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "liftLambdaAboveLet",
                   "term": {
@@ -3532,13 +3532,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.liftLambdaAboveLetTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "serialization",
                   "term": {
@@ -3572,13 +3572,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.serializationTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "simplifyTerm",
                   "term": {
@@ -3612,13 +3612,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.simplifyTermTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "topologicalSort",
                   "term": {
@@ -3652,13 +3652,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.topologicalSortTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "topologicalSortBindings",
                   "term": {
@@ -3692,13 +3692,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.topologicalSortBindingsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "topologicalSortSCC",
                   "term": {
@@ -3732,13 +3732,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.topologicalSortSCCTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "typeChecking",
                   "term": {
@@ -3772,13 +3772,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.typeCheckingTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "typeCheckingFailure",
                   "term": {
@@ -3812,13 +3812,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.typeCheckingFailureTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "typeReduction",
                   "term": {
@@ -3852,13 +3852,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.typeReductionTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "normalizeTypeVariables",
                   "term": {
@@ -3892,13 +3892,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.normalizeTypeVariablesTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "foldOverTerm",
                   "term": {
@@ -3932,13 +3932,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.foldOverTermTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "rewriteTerm",
                   "term": {
@@ -3972,13 +3972,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.rewriteTermTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "rewriteType",
                   "term": {
@@ -4012,13 +4012,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.rewriteTypeTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "hoistSubterms",
                   "term": {
@@ -4052,13 +4052,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.hoistSubtermsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "hoistCaseStatements",
                   "term": {
@@ -4092,13 +4092,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.hoistCaseStatementsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "hoistLetBindings",
                   "term": {
@@ -4132,13 +4132,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.testing.hoistLetBindingsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "hoistPolymorphicLetBindings",
                   "term": {
@@ -4172,14 +4172,14 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "variable": "hydra.encode.testing.hoistPolymorphicLetBindingsTestCase"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.TestCase"}}}},
       "type": null},

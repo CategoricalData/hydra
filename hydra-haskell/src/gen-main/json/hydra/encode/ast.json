@@ -41,7 +41,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -55,7 +55,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "left",
                   "term": {
@@ -89,7 +89,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -103,7 +103,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "right",
                   "term": {
@@ -137,7 +137,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -151,7 +151,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "both",
                   "term": {
@@ -185,7 +185,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -199,7 +199,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.ast.Associativity"}}}},
       "type": null},
@@ -549,13 +549,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.ast.symbol"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "indent",
                   "term": {
@@ -589,13 +589,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.ast.indentedExpression"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "op",
                   "term": {
@@ -627,13 +627,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.ast.opExpr"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "brackets",
                   "term": {
@@ -667,13 +667,13 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {"variable": "hydra.encode.ast.bracketExpr"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.ast.Expr"}}}},
       "type": null},
@@ -788,7 +788,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -807,7 +807,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "subsequentLines",
                   "term": {
@@ -841,7 +841,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -860,7 +860,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.ast.IndentStyle"}}}},
       "type": null},
@@ -1267,7 +1267,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1281,7 +1281,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "space",
                   "term": {
@@ -1315,7 +1315,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1329,7 +1329,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "break",
                   "term": {
@@ -1363,7 +1363,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1377,7 +1377,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "breakAndIndent",
                   "term": {
@@ -1411,7 +1411,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1430,7 +1430,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}},
+                        "parameter": "y"}}}},
                 {
                   "name": "doubleBreak",
                   "term": {
@@ -1464,7 +1464,7 @@
                                               "name": "term",
                                               "term": {
                                                 "application": {
-                                                  "argument": {"variable": "v"},
+                                                  "argument": {"variable": "y"},
                                                   "function": {
                                                     "function": {
                                                       "lambda": {
@@ -1478,7 +1478,7 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": null,
-                        "parameter": "v"}}}}],
+                        "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.ast.Ws"}}}},
       "type": null}],
