@@ -4,11 +4,13 @@ r"""Test cases for hydra.lib.literals primitives."""
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Just, Nothing
 from typing import cast
 import hydra.core
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Test cases for hydra.lib.literals primitives."""
     

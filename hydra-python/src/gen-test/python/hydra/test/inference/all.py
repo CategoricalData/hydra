@@ -3,6 +3,7 @@
 r"""Hydra's inference test suite."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Nothing
 import hydra.core
 import hydra.test.inference.algebraic_types
@@ -13,6 +14,7 @@ import hydra.test.inference.kernel_examples
 import hydra.test.inference.nominal_types
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""The group of all inference tests."""
     

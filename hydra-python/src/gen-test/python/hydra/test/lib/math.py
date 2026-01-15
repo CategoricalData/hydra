@@ -3,11 +3,13 @@
 r"""Test cases for hydra.lib.math primitives."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Nothing
 from typing import cast
 import hydra.core
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Test cases for hydra.lib.math primitives."""
     

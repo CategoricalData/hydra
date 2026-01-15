@@ -3,11 +3,13 @@
 r"""Source-level representation of hydra.grammar."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Nothing
 from typing import cast
 import hydra.core
 import hydra.module
 
+@lru_cache(1)
 def module() -> hydra.module.Module:
     return hydra.module.Module(hydra.module.Namespace("hydra.grammar"), (hydra.core.Binding(hydra.core.Name("hydra.grammar.Constant"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("annotated"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.AnnotatedType"), (hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedType"), (hydra.core.Field(hydra.core.Name("typeName"), cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("hydra.grammar.Constant")))))))), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))))))))))), hydra.core.Field(hydra.core.Name("annotation"), cast(hydra.core.Term, hydra.core.TermMap(FrozenDict({
       cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("description"))))))): cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("A constant pattern"))))))))))))})))))))))))), FrozenDict({

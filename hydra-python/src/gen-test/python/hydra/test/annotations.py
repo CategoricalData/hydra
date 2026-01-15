@@ -3,12 +3,14 @@
 r"""Test cases for hydra.annotations functions."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Just, Nothing
 from typing import cast
 import hydra.core
 import hydra.lib.maps
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Test cases for hydra.annotations functions."""
     

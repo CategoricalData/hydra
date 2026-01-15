@@ -3,6 +3,7 @@
 r"""Test cases for AST serialization."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Nothing
 from typing import cast
 import hydra.ast
@@ -11,6 +12,7 @@ import hydra.ext.haskell.operators
 import hydra.serialization
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Test cases for AST serialization."""
     

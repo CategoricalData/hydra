@@ -4,12 +4,14 @@ r"""Test cases for JSON serialization."""
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Nothing
 from typing import cast
 import hydra.core
 import hydra.json.model
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Test cases for JSON serialization (writer)."""
     

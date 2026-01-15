@@ -7,8 +7,20 @@ from dataclasses import dataclass
 from hydra.dsl.python import Maybe, Node, frozenlist
 from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
+import hydra.relational
 
 V = TypeVar("V")
+
+@dataclass(frozen=True)
+class ColumnType:
+    r"""A column type, consisting of a name and a value type."""
+    
+    name: hydra.relational.ColumnName
+    type: hydra.core.Type
+
+COLUMN_TYPE__NAME = hydra.core.Name("hydra.tabular.ColumnType")
+COLUMN_TYPE__NAME__NAME = hydra.core.Name("name")
+COLUMN_TYPE__TYPE__NAME = hydra.core.Name("type")
 
 class DataRow(Node["frozenlist[Maybe[V]]"], Generic[V]):
     r"""A data row, containing optional-valued cells; one per column."""
@@ -30,3 +42,14 @@ class Table(Generic[V]):
 TABLE__NAME = hydra.core.Name("hydra.tabular.Table")
 TABLE__HEADER__NAME = hydra.core.Name("header")
 TABLE__DATA__NAME = hydra.core.Name("data")
+
+@dataclass(frozen=True)
+class TableType:
+    r"""A type definition for a table, including column names and types."""
+    
+    name: hydra.relational.RelationName
+    columns: frozenlist[ColumnType]
+
+TABLE_TYPE__NAME = hydra.core.Name("hydra.tabular.TableType")
+TABLE_TYPE__NAME__NAME = hydra.core.Name("name")
+TABLE_TYPE__COLUMNS__NAME = hydra.core.Name("columns")
