@@ -146,11 +146,12 @@ encodeFieldValue = define "encodeFieldValue" $
   doc "Generate the encoder for a field's value" $
   "typeName" ~> "fieldName" ~> "fieldType" ~>
     -- Create a lambda that encodes the value and wraps in Term.union with injection
-    DC.lambda "v" $
+    -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
+    DC.lambda "y" $
       -- Build Term.union containing an encoded Injection with the encoded value
       DC.injection _Term (DC.field _Term_union
         (encodeInjection @@ var "typeName" @@ var "fieldName"
-          @@ ((encodeType @@ var "fieldType") @@@ DC.var "v")))
+          @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
 
 -- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
 encodeInjection :: TBinding (Name -> Name -> Term -> Term)
