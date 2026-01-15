@@ -209,7 +209,7 @@
                                               {
                                                 "name": "parameter",
                                                 "term": {
-                                                  "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                  "wrap": {"body": {"literal": {"string": "y"}}, "typeName": "hydra.core.Name"}}},
                                               {"name": "domain", "term": {"maybe": null}},
                                               {
                                                 "name": "body",
@@ -261,7 +261,7 @@
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {
-                                                                                                "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                "wrap": {"body": {"literal": {"string": "y"}}, "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                     "typeName": "hydra.core.Application"}}},
                                                                               "typeName": "hydra.core.Term"}},

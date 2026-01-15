@@ -26,7 +26,7 @@ module_ = Module.Module {
           Core.Field {
             Core.fieldName = (Core.Name "equality"),
             Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "v"),
+              Core.lambdaParameter = (Core.Name "y"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermUnion (Core.Injection {
                 Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -61,11 +61,11 @@ module_ = Module.Module {
                                     Core.injectionField = Core.Field {
                                       Core.fieldName = (Core.Name "unit"),
                                       Core.fieldTerm = Core.TermUnit}}))}))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))},
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
           Core.Field {
             Core.fieldName = (Core.Name "ordering"),
             Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "v"),
+              Core.lambdaParameter = (Core.Name "y"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermUnion (Core.Injection {
                 Core.injectionTypeName = (Core.Name "hydra.core.Term"),
@@ -100,7 +100,7 @@ module_ = Module.Module {
                                     Core.injectionField = Core.Field {
                                       Core.fieldName = (Core.Name "unit"),
                                       Core.fieldTerm = Core.TermUnit}}))}))),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}]}))}]}))}}))})))}]})))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
       Core.bindingType = Nothing}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core"],
