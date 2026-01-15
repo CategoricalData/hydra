@@ -3,11 +3,13 @@
 r"""Source-level representation of hydra.constants."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Nothing
 from typing import cast
 import hydra.core
 import hydra.module
 
+@lru_cache(1)
 def module() -> hydra.module.Module:
     return hydra.module.Module(hydra.module.Namespace("hydra.constants"), (hydra.core.Binding(hydra.core.Name("hydra.constants.debugInference"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), FrozenDict({
       hydra.core.Name("description"): cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("Disable type checking by default, for better performance"))))})))), Nothing()), hydra.core.Binding(hydra.core.Name("hydra.constants.ignoredVariable"), cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("_")))), FrozenDict({

@@ -3,6 +3,7 @@
 r"""Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import Nothing
 import hydra.core
 import hydra.test.annotations
@@ -35,6 +36,7 @@ import hydra.test.serialization
 import hydra.test.sorting
 import hydra.testing
 
+@lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""The group of all common tests."""
     

@@ -8,6 +8,8 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar
 import hydra.core
+import hydra.decode.core
+import hydra.decode.relational
 import hydra.extract.helpers
 import hydra.graph
 import hydra.lexical
@@ -17,6 +19,19 @@ import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+
+def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.ColumnType]:
+    def _hoist_hydra_decode_tabular_column_type_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.ColumnType]:
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.relational.column_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map(), cx), (lambda field_type: Right(hydra.tabular.ColumnType(field_name, field_type))))))
+            
+            case _:
+                return Left(hydra.util.DecodingError("expected record of type hydra.tabular.ColumnType"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_column_type_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def data_row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.DataRow[T0]]:
     def _hoist_hydra_decode_tabular_data_row_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.DataRow[T1]]:
@@ -64,3 +79,16 @@ def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.De
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.Table"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_table_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+
+def table_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.TableType]:
+    def _hoist_hydra_decode_tabular_table_type_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.TableType]:
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.relational.relation_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v1, v2: hydra.extract.helpers.decode_list(column_type, v1, v2)), field_map(), cx), (lambda field_columns: Right(hydra.tabular.TableType(field_name, field_columns))))))
+            
+            case _:
+                return Left(hydra.util.DecodingError("expected record of type hydra.tabular.TableType"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_table_type_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
