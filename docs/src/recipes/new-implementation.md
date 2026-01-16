@@ -240,7 +240,7 @@ Primitive functions may be implemented in different ways in different Hydra impl
 - Registry: [hydra/lib/Libraries.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/lib/Libraries.java)
 
 **Python**:
-- Implementations: [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/hydra-python/src/main/python/hydra/lib)
+- Implementations: [hydra/lib](https://github.com/CategoricalData/hydra/tree/main/hydra-python/src/main/python/hydra/lib) (hand-written)
 
 ### Requirements for primitives
 
@@ -275,13 +275,13 @@ Start with these basics (needed for Step 9's test runner):
 
 **Native type conversions** - Convert between host language types and Hydra representations:
 - Haskell: [Hydra/Tools/Bytestrings.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Tools/Bytestrings.hs)
-- Python: [hydra/util.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/util.py)
+- Python: [hydra/util.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/gen-main/python/hydra/util.py)
 
 Add these later as your applications need them:
 
 **Serialization** - JSON/YAML coders:
 - Haskell: [Hydra/Staging/Json/Serde.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Staging/Json/Serde.hs), [Hydra/Staging/Yaml/](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Staging/Yaml)
-- Python: [hydra/coders.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/coders.py)
+- Python: [hydra/coders.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/gen-main/python/hydra/coders.py)
 - Java: [hydra/json/](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java/hydra/json)
 
 **Code generation** (optional, for self-hosting):

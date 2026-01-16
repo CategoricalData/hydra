@@ -636,13 +636,13 @@ Or use the REPL:
 ```haskell
 stack exec ghci
 > :l debug/WritePython.hs
-> writePython "../hydra-python/src/main/python" kernelModules Nothing
+> writePython "../hydra-python/src/gen-main/python" kernelModules Nothing
 ```
 
 This regenerates:
-- `hydra-python/src/main/python/hydra/core.py` (adds `TermEither` constructor)
-- `hydra-python/src/main/python/hydra/meta.py` (adds variant enums and type classes)
-- `hydra-python/src/main/python/hydra/util.py` (adds utility types)
+- `hydra-python/src/gen-main/python/hydra/core.py` (adds `TermEither` constructor)
+- `hydra-python/src/gen-main/python/hydra/meta.py` (adds variant enums and type classes)
+- `hydra-python/src/gen-main/python/hydra/util.py` (adds utility types)
 - All other Hydra kernel modules in Python
 
 #### 11.5.3: Update Other Languages
@@ -659,9 +659,9 @@ Each language coder needs to know how to encode/decode the new types in the targ
 ```bash
 # Python
 cd hydra-python
-python3 -m py_compile src/main/python/hydra/core.py
-python3 -m py_compile src/main/python/hydra/meta.py
-python3 -m py_compile src/main/python/hydra/util.py
+python3 -m py_compile src/gen-main/python/hydra/core.py
+python3 -m py_compile src/gen-main/python/hydra/meta.py
+python3 -m py_compile src/gen-main/python/hydra/util.py
 
 # Java (if applicable)
 cd hydra-java
@@ -885,9 +885,9 @@ stack test
 
 - [ ] Regenerate Python code
   - [ ] Run `writePython` from hydra-ext
-  - [ ] Verify `hydra-python/src/main/python/hydra/core.py`
-  - [ ] Verify `hydra-python/src/main/python/hydra/meta.py`
-  - [ ] Verify `hydra-python/src/main/python/hydra/util.py`
+  - [ ] Verify `hydra-python/src/gen-main/python/hydra/core.py`
+  - [ ] Verify `hydra-python/src/gen-main/python/hydra/meta.py`
+  - [ ] Verify `hydra-python/src/gen-main/python/hydra/util.py`
   - [ ] Compile Python modules
 
 - [ ] Java (if needed)

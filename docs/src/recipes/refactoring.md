@@ -7,7 +7,7 @@ This recipe documents how to create, rename, move, or delete kernel elements (de
 Hydra kernel code lives in multiple places:
 - **Source modules** (`hydra-haskell/src/main/haskell/Hydra/Sources/...`) - DSL definitions
 - **Generated Haskell** (`hydra-haskell/src/gen-main/haskell/Hydra/...`) - Generated implementations
-- **Generated Python** (`hydra-python/src/main/python/hydra/...`)
+- **Generated Python** (`hydra-python/src/gen-main/python/hydra/...`)
 - **Generated Java** (`hydra-java/src/gen-main/java/hydra/...`)
 - **JSON kernel** (`hydra-haskell/src/gen-main/json/...`)
 
@@ -227,7 +227,7 @@ rm src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
 
 ```bash
 rm src/gen-main/haskell/Hydra/MyModule.hs
-rm -rf ../hydra-python/src/main/python/hydra/mymodule/
+rm -rf ../hydra-python/src/gen-main/python/hydra/mymodule/
 rm -rf ../hydra-java/src/gen-main/java/hydra/mymodule/
 ```
 
@@ -408,7 +408,7 @@ cd ../hydra-ext
 ./bin/update-python-kernel.sh
 
 # Clean up orphan Python files
-rm -f ../hydra-python/src/main/python/hydra/foo.py
+rm -f ../hydra-python/src/gen-main/python/hydra/foo.py
 
 # Regenerate Java
 ./bin/update-java-kernel-types.sh

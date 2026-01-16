@@ -10,9 +10,9 @@ The synchronization process generates five categories of Python code:
 
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
-| Kernel modules | `Hydra.Sources.All.kernelModules` | `hydra-python/src/main/python/hydra/` | Core Hydra types and functions |
-| Kernel sources | `Hydra.Sources.All.kernelModules` | `hydra-python/src/main/python/hydra/sources/` | Module AST as Python data (for tests) |
-| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `hydra-python/src/main/python/hydra/eval/` | Interpreter-level primitives |
+| Kernel modules | `Hydra.Sources.All.kernelModules` | `hydra-python/src/gen-main/python/hydra/` | Core Hydra types and functions |
+| Kernel sources | `Hydra.Sources.All.kernelModules` | `hydra-python/src/gen-main/python/hydra/sources/` | Module AST as Python data (for tests) |
+| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `hydra-python/src/gen-main/python/hydra/eval/` | Interpreter-level primitives |
 | Kernel tests | `Hydra.Sources.Test.All.testModules` | `hydra-python/src/gen-test/python/hydra/test/` | Test data structures |
 | Generation tests | TestSuite + TestGroups | `hydra-python/src/gen-test/python/generation/` | Executable pytest tests |
 
@@ -85,7 +85,7 @@ Or interactively in GHCi:
 stack ghci hydra-ext:lib hydra:hydra-test
 ```
 ```haskell
-writePython "../hydra-python/src/main/python" kernelModules kernelModules
+writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
 ```
 
 ### Step 3: Generate kernel sources modules
@@ -104,7 +104,7 @@ stack exec update-python-eval-lib -- +RTS -K256M -A32M -RTS
 
 Or in GHCi:
 ```haskell
-writePython "../hydra-python/src/main/python" mainModules evalLibModules
+writePython "../hydra-python/src/gen-main/python" mainModules evalLibModules
 ```
 
 ### Step 5: Generate kernel tests
@@ -134,13 +134,13 @@ stack exec update-python-generation-tests -- +RTS -K256M -A32M -RTS
 ```bash
 cd ../hydra-python
 source .venv/bin/activate
-PYTHONPATH=src/main/python:src/gen-test/python pytest src/gen-test/python/generation -q
+PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/gen-test/python/generation -q
 ```
 
 ### Step 8: Add new files to git
 
 ```bash
-git add src/main/python src/gen-test/python
+git add src/main/python src/gen-main/python src/gen-test/python
 ```
 
 ## GHCi Environment
