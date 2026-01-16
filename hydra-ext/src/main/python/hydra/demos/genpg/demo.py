@@ -180,13 +180,10 @@ def generate_graphson(
     print(f"Done. Output written to {output_path}")
 
 
-def generate_example_graphson() -> None:
-    """Generate GraphSON for the sales example."""
-    # Get standard library primitives
+def _make_graph_context() -> HydraGraph:
+    """Create a Hydra graph context for evaluation with primitives."""
     primitives = hydra.sources.libraries.standard_library()
-
-    # Create a Hydra graph context for evaluation with primitives
-    cx = HydraGraph(
+    return HydraGraph(
         elements=FrozenDict({}),
         environment=FrozenDict({}),
         types=FrozenDict({}),
@@ -195,13 +192,15 @@ def generate_example_graphson() -> None:
         schema=Nothing()
     )
 
-    # Load schemas and mapping from generated Python module (no JSON needed)
+
+def generate_sales_graphson() -> None:
+    """Generate GraphSON for the sales dataset."""
+    cx = _make_graph_context()
+
+    # Load schemas and mapping from generated Python module
     sales_table_schemas = example_database_schema
-    # Note: graph_schema could be loaded for validation, but is not needed for transform
-    # sales_graph_schema = example_graph_schema()
     sales_graph = example_mapping()
 
-    # Source data is in hydra-ext/demos/genpg/data/sources/sales
     source_root = os.path.join(_hydra_ext_root, "demos/genpg/data/sources/sales")
     output_path = os.path.join(_hydra_ext_root, "demos/genpg/output/sales.jsonl")
 
@@ -214,5 +213,19 @@ def generate_example_graphson() -> None:
     )
 
 
+def generate_health_graphson() -> None:
+    """Generate GraphSON for the health dataset (or your custom dataset).
+
+    Note: The Health dataset schemas are defined in Haskell at
+    src/main/haskell/Hydra/Ext/Demos/GenPG/Examples/Health/.
+    To enable Python support for Health, you would need to generate
+    a corresponding Python module similar to hydra.demos.genpg.example.
+    """
+    raise NotImplementedError(
+        "Health dataset is not yet available in Python mode. "
+        "Use Haskell mode (generateHealthGraphSON) or see demos/genpg/README.md."
+    )
+
+
 if __name__ == "__main__":
-    generate_example_graphson()
+    generate_sales_graphson()
