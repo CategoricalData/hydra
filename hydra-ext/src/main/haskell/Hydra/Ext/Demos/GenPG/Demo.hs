@@ -1,12 +1,12 @@
 module Hydra.Ext.Demos.GenPG.Demo where
 
 import Hydra.Kernel
-import Hydra.Ext.Demos.GenPG.ExampleDatabaseSchema
-import Hydra.Ext.Demos.GenPG.ExampleGraphSchema
-import Hydra.Ext.Demos.GenPG.ExampleMapping
-import Hydra.Ext.Demos.GenPG.Generated.DatabaseSchema
-import Hydra.Ext.Demos.GenPG.Generated.GraphSchema
-import Hydra.Ext.Demos.GenPG.Generated.Mapping
+import Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema
+import Hydra.Ext.Demos.GenPG.Examples.Sales.GraphSchema
+import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping
+import Hydra.Ext.Demos.GenPG.Examples.Health.DatabaseSchema
+import Hydra.Ext.Demos.GenPG.Examples.Health.GraphSchema
+import Hydra.Ext.Demos.GenPG.Examples.Health.Mapping
 import Hydra.Dsl.Tabular
 import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Lib.Literals
@@ -26,19 +26,19 @@ import qualified Data.Map as M
 import System.IO (hFlush, stdout)
 
 
-generateExampleGraphSON :: IO ()
-generateExampleGraphSON = generateGraphSON
+generateSalesGraphSON :: IO ()
+generateSalesGraphSON = generateGraphSON
   "demos/genpg/data/sources/sales"
   salesTableSchemas
   salesGraph
   "demos/genpg/output/sales.jsonl"
 
-generateCopilotGraphSON :: IO ()
-generateCopilotGraphSON = generateGraphSON
+generateHealthGraphSON :: IO ()
+generateHealthGraphSON = generateGraphSON
   "demos/genpg/data/sources/health"
-  generatedTableSchemas
-  generatedGraphMapping
-  "demos/genpg/output/copilot.jsonl"
+  healthTableSchemas
+  healthGraph
+  "demos/genpg/output/health.jsonl"
 
 generateGraphSON :: FilePath -> [TableType] -> Pg.LazyGraph Term -> FilePath -> IO ()
 generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
