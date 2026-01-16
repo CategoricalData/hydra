@@ -49,28 +49,28 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataName = "zero",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueNumber 0.0),
-            Testing.writerTestCaseOutput = "0.0"})),
+            Testing.writerTestCaseOutput = "0"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "positive integer",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueNumber 42.0),
-            Testing.writerTestCaseOutput = "42.0"})),
+            Testing.writerTestCaseOutput = "42"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "negative integer",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueNumber (-17.0)),
-            Testing.writerTestCaseOutput = "-17.0"})),
+            Testing.writerTestCaseOutput = "-17"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "large integer",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueNumber 1000000.0),
-            Testing.writerTestCaseOutput = "1000000.0"})),
+            Testing.writerTestCaseOutput = "1000000"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -179,7 +179,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueArray [
               Model.ValueNumber 1.0]),
-            Testing.writerTestCaseOutput = "[1.0]"})),
+            Testing.writerTestCaseOutput = "[1]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -189,7 +189,7 @@ allTests = Testing.TestGroup {
               Model.ValueNumber 1.0,
               Model.ValueNumber 2.0,
               (Model.ValueNumber 3.0)]),
-            Testing.writerTestCaseOutput = "[1.0, 2.0, 3.0]"})),
+            Testing.writerTestCaseOutput = "[1, 2, 3]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -209,7 +209,7 @@ allTests = Testing.TestGroup {
               Model.ValueString "two",
               Model.ValueBoolean True,
               Model.ValueNull]),
-            Testing.writerTestCaseOutput = "[1.0, \"two\", true, null]"})),
+            Testing.writerTestCaseOutput = "[1, \"two\", true, null]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -238,7 +238,7 @@ allTests = Testing.TestGroup {
             Testing.writerTestCaseInput = (Model.ValueObject (M.fromList [
               ("a", (Model.ValueNumber 1.0)),
               ("b", (Model.ValueNumber 2.0))])),
-            Testing.writerTestCaseOutput = "{\"a\": 1.0, \"b\": 2.0}"})),
+            Testing.writerTestCaseOutput = "{\"a\": 1, \"b\": 2}"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -248,7 +248,7 @@ allTests = Testing.TestGroup {
               ("active", (Model.ValueBoolean True)),
               ("count", (Model.ValueNumber 42.0)),
               ("name", (Model.ValueString "test"))])),
-            Testing.writerTestCaseOutput = "{\"active\": true, \"count\": 42.0, \"name\": \"test\"}"})),
+            Testing.writerTestCaseOutput = "{\"active\": true, \"count\": 42, \"name\": \"test\"}"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
@@ -266,7 +266,7 @@ allTests = Testing.TestGroup {
               (Model.ValueArray [
                 Model.ValueNumber 3.0,
                 (Model.ValueNumber 4.0)])]),
-            Testing.writerTestCaseOutput = "[[1.0, 2.0], [3.0, 4.0]]"})),
+            Testing.writerTestCaseOutput = "[[1, 2], [3, 4]]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -276,7 +276,7 @@ allTests = Testing.TestGroup {
               ("items", (Model.ValueArray [
                 Model.ValueNumber 1.0,
                 (Model.ValueNumber 2.0)]))])),
-            Testing.writerTestCaseOutput = "{\"items\": [1.0, 2.0]}"})),
+            Testing.writerTestCaseOutput = "{\"items\": [1, 2]}"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
@@ -287,7 +287,7 @@ allTests = Testing.TestGroup {
                 ("id", (Model.ValueNumber 1.0))]),
               (Model.ValueObject (M.fromList [
                 ("id", (Model.ValueNumber 2.0))]))]),
-            Testing.writerTestCaseOutput = "[{\"id\": 1.0}, {\"id\": 2.0}]"})),
+            Testing.writerTestCaseOutput = "[{\"id\": 1}, {\"id\": 2}]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {

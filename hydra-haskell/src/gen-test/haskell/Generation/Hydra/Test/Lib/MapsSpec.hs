@@ -61,6 +61,15 @@ spec = H.describe "hydra.lib.maps primitives" $ do
       ([
           "a",
           "b"])
+    H.it "unsorted keys" $ H.shouldBe
+      (Maps.elems (M.fromList [
+          (1, "a"),
+          (2, "b"),
+          (3, "c")]))
+      ([
+          "a",
+          "b",
+          "c"])
     H.it "empty map" $ H.shouldBe
       (Maps.elems M.empty)
       ([] :: [Int])
@@ -151,6 +160,15 @@ spec = H.describe "hydra.lib.maps primitives" $ do
           (1, "x")])
   H.describe "keys" $ do
     H.it "get all keys" $ H.shouldBe
+      (Maps.keys (M.fromList [
+          (1, "a"),
+          (2, "b"),
+          (3, "c")]))
+      ([
+          1,
+          2,
+          3])
+    H.it "unsorted keys" $ H.shouldBe
       (Maps.keys (M.fromList [
           (1, "a"),
           (2, "b"),
@@ -266,6 +284,15 @@ spec = H.describe "hydra.lib.maps primitives" $ do
       ([
           (1, "a"),
           (2, "b")])
+    H.it "unsorted keys" $ H.shouldBe
+      (Maps.toList (M.fromList [
+          (1, "a"),
+          (2, "b"),
+          (3, "c")]))
+      ([
+          (1, "a"),
+          (2, "b"),
+          (3, "c")])
     H.it "empty map" $ H.shouldBe
       (Maps.toList M.empty)
       ([] :: [(Int, Int)])

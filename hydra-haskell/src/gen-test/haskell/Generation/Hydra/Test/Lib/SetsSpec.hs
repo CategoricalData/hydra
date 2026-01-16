@@ -60,6 +60,15 @@ spec = H.describe "hydra.lib.sets primitives" $ do
           1,
           2,
           3])
+    H.it "unsorted input" $ H.shouldBe
+      (Sets.toList (S.fromList [
+          1,
+          2,
+          3]))
+      ([
+          1,
+          2,
+          3])
     H.it "empty set" $ H.shouldBe
       (Sets.toList S.empty)
       ([] :: [Int])
