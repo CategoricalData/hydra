@@ -16,5 +16,9 @@ build
 *.iml
 .vscode
 
+# Python
+__pycache__/
+*.pyc
+
 # Other
 *.swp

@@ -8,7 +8,10 @@ a property graph in GraphSON format.
 
 Usage:
     cd hydra-ext
-    python3 src/main/python/hydra/demos/genpg/demo.py
+    .venv/bin/python src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
+    .venv/bin/python src/main/python/hydra/demos/genpg/demo.py health  # processes health data
+
+The 'sales' argument is the default, so it can be omitted.
 """
 
 import os
@@ -40,10 +43,15 @@ import hydra.core
 import hydra.json.writer as json_writer
 import hydra.sources.libraries
 import hydra.demos.genpg.transform as Transform
-from hydra.demos.genpg.example import (
-    example_database_schema,
-    example_graph_schema,
-    example_mapping,
+from hydra.demos.genpg.sales import (
+    sales_database_schema,
+    sales_graph_schema,
+    sales_mapping,
+)
+from hydra.demos.genpg.health import (
+    health_database_schema,
+    health_graph_schema,
+    health_mapping,
 )
 
 
@@ -198,34 +206,55 @@ def generate_sales_graphson() -> None:
     cx = _make_graph_context()
 
     # Load schemas and mapping from generated Python module
-    sales_table_schemas = example_database_schema
-    sales_graph = example_mapping()
+    table_schemas = sales_database_schema
+    graph = sales_mapping()
 
     source_root = os.path.join(_hydra_ext_root, "demos/genpg/data/sources/sales")
     output_path = os.path.join(_hydra_ext_root, "demos/genpg/output/sales.jsonl")
 
     generate_graphson(
         source_root=source_root,
-        table_schemas=list(sales_table_schemas),
-        graph_mapping=sales_graph,
+        table_schemas=list(table_schemas),
+        graph_mapping=graph,
         output_path=output_path,
         cx=cx
     )
 
 
 def generate_health_graphson() -> None:
-    """Generate GraphSON for the health dataset (or your custom dataset).
+    """Generate GraphSON for the health dataset."""
+    cx = _make_graph_context()
 
-    Note: The Health dataset schemas are defined in Haskell at
-    src/main/haskell/Hydra/Ext/Demos/GenPG/Examples/Health/.
-    To enable Python support for Health, you would need to generate
-    a corresponding Python module similar to hydra.demos.genpg.example.
-    """
-    raise NotImplementedError(
-        "Health dataset is not yet available in Python mode. "
-        "Use Haskell mode (generateHealthGraphSON) or see demos/genpg/README.md."
+    # Load schemas and mapping from generated Python module
+    table_schemas = health_database_schema
+    graph = health_mapping()
+
+    source_root = os.path.join(_hydra_ext_root, "demos/genpg/data/sources/health")
+    output_path = os.path.join(_hydra_ext_root, "demos/genpg/output/health.jsonl")
+
+    generate_graphson(
+        source_root=source_root,
+        table_schemas=list(table_schemas),
+        graph_mapping=graph,
+        output_path=output_path,
+        cx=cx
     )
 
 
 if __name__ == "__main__":
-    generate_sales_graphson()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="GenPG Demo - Property Graph Generation from CSV Tables")
+    parser.add_argument(
+        "dataset",
+        nargs="?",
+        choices=["sales", "health"],
+        default="sales",
+        help="Dataset to process (default: sales)"
+    )
+    args = parser.parse_args()
+
+    if args.dataset == "sales":
+        generate_sales_graphson()
+    elif args.dataset == "health":
+        generate_health_graphson()
