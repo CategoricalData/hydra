@@ -125,7 +125,7 @@ And then running the following commands in the GHC REPL.
 -- First arg: output directory
 -- Second arg: universe modules (for dependency resolution)
 -- Third arg: modules to generate
-writePython "../hydra-python/src/main/python" kernelModules kernelModules
+writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
 
 -- Generate the test suite
 let allModules = mainModules ++ testModules
