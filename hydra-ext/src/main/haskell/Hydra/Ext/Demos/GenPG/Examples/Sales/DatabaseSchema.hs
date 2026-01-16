@@ -1,4 +1,4 @@
-module Hydra.Ext.Demos.GenPG.ExampleDatabaseSchema where
+module Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema where
 
 import Hydra.Tabular
 import Hydra.Dsl.Tabular (tableType, columnType)
