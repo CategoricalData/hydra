@@ -6,7 +6,8 @@
 --   - hydra.pg.graphson.* (coder, construct, syntax, utils)
 --   - hydra.encode.pg.*, hydra.decode.pg.*
 --   - hydra.demos.genpg.transform
---   - hydra.demos.genpg.example (schemas and mapping)
+--   - hydra.demos.genpg.sales (sales database/graph schemas and mapping)
+--   - hydra.demos.genpg.health (health database/graph schemas and mapping)
 --
 -- Usage from GHCI:
 --   > import Hydra.Ext.Demos.GenPG.GeneratePython
@@ -18,9 +19,12 @@ import Hydra.Kernel
 import Hydra.Ext.Generation
 import Hydra.Sources.All (kernelModules)
 import Hydra.Ext.Sources.All (hydraExtModules, genpgModules)
-import Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema
-import Hydra.Ext.Demos.GenPG.Examples.Sales.GraphSchema
-import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping
+import Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema as Sales
+import Hydra.Ext.Demos.GenPG.Examples.Sales.GraphSchema as Sales
+import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping as Sales
+import Hydra.Ext.Demos.GenPG.Examples.Health.DatabaseSchema as Health
+import Hydra.Ext.Demos.GenPG.Examples.Health.GraphSchema as Health
+import Hydra.Ext.Demos.GenPG.Examples.Health.Mapping as Health
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Pg.Model as EncodePg
 import qualified Hydra.Encode.Tabular as EncodeTabular
@@ -33,7 +37,8 @@ import System.IO (hFlush, stdout)
 -- This generates to hydra-ext/src/gen-main/python:
 --   - hydra.pg.* modules
 --   - hydra.demos.genpg.transform
---   - hydra.demos.genpg.example
+--   - hydra.demos.genpg.sales
+--   - hydra.demos.genpg.health
 generatePythonModules :: IO ()
 generatePythonModules = do
   let outputDir = "src/gen-main/python"
@@ -49,41 +54,42 @@ generatePythonModules = do
   putStrLn "  - hydra.pg.graphson.* (coder, construct, syntax, utils)"
   putStrLn "  - hydra.encode.pg.*, hydra.decode.pg.*"
   putStrLn "  - hydra.demos.genpg.transform"
-  putStrLn "  - hydra.demos.genpg.example"
+  putStrLn "  - hydra.demos.genpg.sales"
+  putStrLn "  - hydra.demos.genpg.health"
   putStrLn ""
   hFlush stdout
 
   -- Universe includes kernel and hydra-ext modules for dependency resolution
-  -- We generate genpgModules plus the example module
-  let universeModules = kernelModules ++ hydraExtModules ++ [exampleModule]
-  let modulesToGenerate = genpgModules ++ [exampleModule]
+  -- We generate genpgModules plus the sales and health modules
+  let universeModules = kernelModules ++ hydraExtModules ++ [salesModule, healthModule]
+  let modulesToGenerate = genpgModules ++ [salesModule, healthModule]
   writePython outputDir universeModules modulesToGenerate
 
   putStrLn ""
   putStrLn "=== Done! ==="
 
 
--- | The example module containing sales demo schemas and mapping.
-exampleModule :: Module
-exampleModule = Module {
-  moduleNamespace = exampleNamespace,
+-- | The sales module containing sales demo schemas and mapping.
+salesModule :: Module
+salesModule = Module {
+  moduleNamespace = salesNamespace,
   moduleElements = [
-    -- exampleDatabaseSchema: list[TableType]
+    -- salesDatabaseSchema: list[TableType]
     Binding {
-      bindingName = Name "hydra.demos.genpg.example.exampleDatabaseSchema",
-      bindingTerm = TermList $ fmap EncodeTabular.tableType salesTableSchemas,
+      bindingName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
+      bindingTerm = TermList $ fmap EncodeTabular.tableType Sales.salesTableSchemas,
       bindingType = Just listTableTypeScheme
     },
-    -- exampleGraphSchema: GraphSchema[Type]
+    -- salesGraphSchema: GraphSchema[Type]
     Binding {
-      bindingName = Name "hydra.demos.genpg.example.exampleGraphSchema",
-      bindingTerm = EncodePg.graphSchema EncodeCore.type_ salesGraphSchema,
+      bindingName = Name "hydra.demos.genpg.sales.salesGraphSchema",
+      bindingTerm = EncodePg.graphSchema EncodeCore.type_ Sales.salesGraphSchema,
       bindingType = Just graphSchemaTypeScheme
     },
-    -- exampleMapping: LazyGraph[Term]
+    -- salesMapping: LazyGraph[Term]
     Binding {
-      bindingName = Name "hydra.demos.genpg.example.exampleMapping",
-      bindingTerm = EncodePg.lazyGraph EncodeCore.term salesGraph,
+      bindingName = Name "hydra.demos.genpg.sales.salesMapping",
+      bindingTerm = EncodePg.lazyGraph EncodeCore.term Sales.salesGraph,
       bindingType = Just lazyGraphTermScheme
     }
   ],
@@ -99,13 +105,58 @@ exampleModule = Module {
     Namespace "hydra.pg.model",
     Namespace "hydra.core"
   ],
-  moduleDescription = Just "Example GenPG schemas for the sales demo"
+  moduleDescription = Just "GenPG schemas for the sales demo"
 }
 
 
--- | Namespace for the generated example module
-exampleNamespace :: Namespace
-exampleNamespace = Namespace "hydra.demos.genpg.example"
+-- | Namespace for the generated sales module
+salesNamespace :: Namespace
+salesNamespace = Namespace "hydra.demos.genpg.sales"
+
+
+-- | The health module containing health demo schemas and mapping.
+healthModule :: Module
+healthModule = Module {
+  moduleNamespace = healthNamespace,
+  moduleElements = [
+    -- healthDatabaseSchema: list[TableType]
+    Binding {
+      bindingName = Name "hydra.demos.genpg.health.healthDatabaseSchema",
+      bindingTerm = TermList $ fmap EncodeTabular.tableType Health.healthTableSchemas,
+      bindingType = Just listTableTypeScheme
+    },
+    -- healthGraphSchema: GraphSchema[Type]
+    Binding {
+      bindingName = Name "hydra.demos.genpg.health.healthGraphSchema",
+      bindingTerm = EncodePg.graphSchema EncodeCore.type_ Health.healthGraphSchema,
+      bindingType = Just graphSchemaTypeScheme
+    },
+    -- healthMapping: LazyGraph[Term]
+    Binding {
+      bindingName = Name "hydra.demos.genpg.health.healthMapping",
+      bindingTerm = EncodePg.lazyGraph EncodeCore.term Health.healthGraph,
+      bindingType = Just lazyGraphTermScheme
+    }
+  ],
+  moduleTermDependencies = [
+    Namespace "hydra.tabular",
+    Namespace "hydra.relational",
+    Namespace "hydra.pg.model",
+    Namespace "hydra.core"
+  ],
+  moduleTypeDependencies = [
+    Namespace "hydra.tabular",
+    Namespace "hydra.relational",
+    Namespace "hydra.pg.model",
+    Namespace "hydra.core"
+  ],
+  moduleDescription = Just "GenPG schemas for the health demo"
+}
+
+
+-- | Namespace for the generated health module
+healthNamespace :: Namespace
+healthNamespace = Namespace "hydra.demos.genpg.health"
 
 
 -- | Type scheme for list of TableType (no type variables)

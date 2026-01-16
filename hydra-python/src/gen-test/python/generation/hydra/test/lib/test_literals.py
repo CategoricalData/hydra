@@ -433,6 +433,22 @@ def test_showfloat32__zero():
 
     assert (hydra.lib.literals.show_float32(0.0)) == ("0.0")
 
+def test_showfloat32__small_positive():
+
+    assert (hydra.lib.literals.show_float32(5.000000074505806e-2)) == ("5.0e-2")
+
+def test_showfloat32__small_positive_2():
+
+    assert (hydra.lib.literals.show_float32(2.9999999329447746e-2)) == ("3.0e-2")
+
+def test_showfloat32__very_small():
+
+    assert (hydra.lib.literals.show_float32(1.0000000474974513e-3)) == ("1.0e-3")
+
+def test_showfloat32__normal_decimal():
+
+    assert (hydra.lib.literals.show_float32(0.10000000149011612)) == ("0.1")
+
 # showFloat64
 
 def test_showfloat64__positive():
@@ -443,6 +459,22 @@ def test_showfloat64__zero():
 
     assert (hydra.lib.literals.show_float64(0.0)) == ("0.0")
 
+def test_showfloat64__small_positive():
+
+    assert (hydra.lib.literals.show_float64(5.0e-2)) == ("5.0e-2")
+
+def test_showfloat64__small_positive_2():
+
+    assert (hydra.lib.literals.show_float64(3.0e-2)) == ("3.0e-2")
+
+def test_showfloat64__very_small():
+
+    assert (hydra.lib.literals.show_float64(1.0e-3)) == ("1.0e-3")
+
+def test_showfloat64__normal_decimal():
+
+    assert (hydra.lib.literals.show_float64(0.1)) == ("0.1")
+
 # showBigfloat
 
 def test_showbigfloat__positive():
@@ -452,6 +484,22 @@ def test_showbigfloat__positive():
 def test_showbigfloat__zero():
 
     assert (hydra.lib.literals.show_bigfloat(Decimal('0.0'))) == ("0.0")
+
+def test_showbigfloat__small_positive():
+
+    assert (hydra.lib.literals.show_bigfloat(Decimal('5.0e-2'))) == ("5.0e-2")
+
+def test_showbigfloat__small_positive_2():
+
+    assert (hydra.lib.literals.show_bigfloat(Decimal('3.0e-2'))) == ("3.0e-2")
+
+def test_showbigfloat__very_small():
+
+    assert (hydra.lib.literals.show_bigfloat(Decimal('1.0e-3'))) == ("1.0e-3")
+
+def test_showbigfloat__normal_decimal():
+
+    assert (hydra.lib.literals.show_bigfloat(Decimal('0.1'))) == ("0.1")
 
 # showBoolean
 

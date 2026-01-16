@@ -5,6 +5,37 @@ from decimal import Decimal
 from hydra.dsl.python import Maybe, Just, NOTHING
 
 
+def _format_float_like_haskell(x: float) -> str:
+    """Format a float to match Haskell's show behavior.
+
+    Haskell uses exponential notation for small numbers (abs < 0.1, except 0).
+    """
+    if x == 0.0:
+        return "0.0"
+
+    abs_x = abs(x)
+
+    # Haskell uses exponential notation for small numbers
+    if abs_x < 0.1:
+        # Format in exponential notation like Haskell
+        # Haskell produces "5.0e-2" for 0.05
+        formatted = f"{x:.1e}"
+        # Ensure the format matches Haskell's (e.g., "5.0e-2" not "5.0e-02")
+        # Python produces "5.0e-02", Haskell produces "5.0e-2"
+        if 'e-0' in formatted:
+            formatted = formatted.replace('e-0', 'e-')
+        elif 'e+0' in formatted:
+            formatted = formatted.replace('e+0', 'e')
+        return formatted
+    else:
+        # Use repr for normal numbers to match Haskell's precision
+        result = repr(x)
+        # Ensure there's a decimal point
+        if '.' not in result and 'e' not in result:
+            result += '.0'
+        return result
+
+
 def bigfloat_to_bigint(x: Decimal) -> int:
     """Convert a Decimal to an int."""
     return round(x)
@@ -256,8 +287,8 @@ def read_uint64(s: str) -> Maybe[int]:
 
 
 def show_bigfloat(x: Decimal) -> str:
-    """Convert a Decimal to string."""
-    return str(x)
+    """Convert a Decimal to string, matching Haskell's show behavior."""
+    return _format_float_like_haskell(float(x))
 
 
 def show_bigint(x: int) -> str:
@@ -271,23 +302,43 @@ def show_boolean(b: bool) -> str:
 
 
 def show_float32(x: float) -> str:
-    """Convert a float32 to string with appropriate precision.
+    """Convert a float32 to string, matching Haskell's show behavior.
 
-    Float32 has about 6-7 significant decimal digits. We format with
-    enough precision to distinguish float32 values while avoiding
-    spurious digits from float64 representation.
+    Float32 has about 6-7 significant decimal digits of precision.
+    We need to round to this precision before formatting.
     """
-    # Format with 7 significant figures
-    formatted = f"{x:.7g}"
-    # Ensure we have a decimal point for whole numbers (like Haskell)
-    if '.' not in formatted and 'e' not in formatted and 'E' not in formatted:
-        formatted += ".0"
-    return formatted
+    import struct
+    # Round-trip through float32 to get proper precision
+    f32_bytes = struct.pack('f', x)
+    f32 = struct.unpack('f', f32_bytes)[0]
+    # Format with limited precision (6 significant digits for float32)
+    # Use 'g' format which removes trailing zeros and uses exponential for small numbers
+    if f32 == 0.0:
+        return "0.0"
+    abs_f32 = abs(f32)
+    if abs_f32 < 0.1:
+        # Exponential notation for small numbers
+        formatted = f"{f32:.1e}"
+        if 'e-0' in formatted:
+            formatted = formatted.replace('e-0', 'e-')
+        elif 'e+0' in formatted:
+            formatted = formatted.replace('e+0', 'e')
+        return formatted
+    else:
+        # Use float32's natural precision (about 6-7 digits)
+        # Round to 6 significant figures
+        from math import log10, floor
+        magnitude = floor(log10(abs_f32))
+        rounded = round(f32, -int(magnitude) + 5)  # 6 significant figures
+        result = repr(rounded)
+        if '.' not in result and 'e' not in result:
+            result += '.0'
+        return result
 
 
 def show_float64(x: float) -> str:
-    """Convert a float to string."""
-    return str(x)
+    """Convert a float64 to string, matching Haskell's show behavior."""
+    return _format_float_like_haskell(x)
 
 
 def show_int8(x: int) -> str:

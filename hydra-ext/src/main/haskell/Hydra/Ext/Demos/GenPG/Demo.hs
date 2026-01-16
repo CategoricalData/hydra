@@ -56,7 +56,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "Done. Output written to " ++ outputPath
   where
     log msg = putStrLn msg >> hFlush stdout
-    jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
+    jsonValuesToString vals = L.intercalate "\n" (fmap JsonWriter.printJson vals) ++ "\n"
     unRelationName (RelationName n) = n
 
 

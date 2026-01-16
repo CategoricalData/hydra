@@ -1,7 +1,7 @@
 # GenPG demo - property graph generation from CSV tables
 
 This demo demonstrates end-to-end transformation of relational CSV data into
-a property graph in GraphSON format. It can be run in either Haskell or Python.
+a property graph in GraphSON format. This is a translingual application which can be run in either Haskell or Python.
 
 There is a demo video [here](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
 
@@ -48,7 +48,7 @@ hydra-ext/
 │       │   └── Graphson/         # Generated: GraphSON coder, syntax, utils
 │       └── python/hydra/
 │           ├── pg/               # Generated: property graph models
-│           ├── demos/genpg/      # Generated: transform.py, example.py
+│           ├── demos/genpg/      # Generated: transform.py, sales.py, health.py
 │           ├── encode/pg/        # Generated: encoders
 │           └── decode/pg/        # Generated: decoders
 ```
@@ -75,10 +75,23 @@ generateHealthGraphSON   -- processes health data
 
 ### Python mode
 
+Python 3.10+ is required (for `match` statement support). Set up a virtual environment from the `hydra-python` directory:
+
 ```bash
-cd hydra-ext
-python3 src/main/python/hydra/demos/genpg/demo.py
+cd hydra-python
+uv venv --python 3.12
+source .venv/bin/activate
 ```
+
+Then run the demo from `hydra-ext`:
+
+```bash
+cd ../hydra-ext
+.venv/bin/python src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
+.venv/bin/python src/main/python/hydra/demos/genpg/demo.py health  # processes health data
+```
+
+The `sales` argument is the default, so it can be omitted.
 
 Both modes read from `demos/genpg/data/sources/` and write to `demos/genpg/output/`.
 
@@ -157,7 +170,16 @@ writeEncoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModul
   Hydra.Ext.Sources.Pg.Model.module_]
 ```
 
-### Step 2: Generate Python modules
+### Step 2: Sync Python kernel (if kernel code changed)
+
+If Hydra kernel code has changed (e.g., `hydra.json.writer`, `hydra.lib.*`), regenerate the Python kernel modules:
+
+```bash
+cd hydra-ext
+bin/sync-python.sh
+```
+
+### Step 3: Generate Python modules
 
 Generate all Python modules for the GenPG demo:
 
@@ -178,7 +200,8 @@ This generates to `hydra-ext/src/gen-main/python`:
 - `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
 - `hydra.encode.pg.*`, `hydra.decode.pg.*` - Encoders/decoders
 - `hydra.demos.genpg.transform` - Table-to-graph transformation logic
-- `hydra.demos.genpg.example` - Sales demo schemas and mapping
+- `hydra.demos.genpg.sales` - Sales demo schemas and mapping
+- `hydra.demos.genpg.health` - Health demo schemas and mapping
 
 ## How it works
 
