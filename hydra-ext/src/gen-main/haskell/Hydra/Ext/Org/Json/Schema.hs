@@ -5,8 +5,9 @@
 module Hydra.Ext.Org.Json.Schema where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Json.Model as Json
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Hydra.Json.Model as Model
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -241,7 +242,7 @@ data MultipleRestriction =
   MultipleRestrictionAnyOf [Schema] |
   MultipleRestrictionOneOf [Schema] |
   MultipleRestrictionNot Schema |
-  MultipleRestrictionEnum [Json.Value]
+  MultipleRestrictionEnum [Model.Value]
   deriving (Eq, Ord, Read, Show)
 
 _MultipleRestriction = (Core.Name "hydra.ext.org.json.schema.MultipleRestriction")

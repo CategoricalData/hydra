@@ -6,8 +6,9 @@
 module Hydra.Ext.Org.Apache.Avro.Schema where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Json.Model as Json
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Hydra.Json.Model as Model
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -45,13 +46,13 @@ data Field =
     -- | a schema
     fieldType :: Schema,
     -- | default value for this field, only used when reading instances that lack the field for schema evolution purposes
-    fieldDefault :: (Maybe Json.Value),
+    fieldDefault :: (Maybe Model.Value),
     -- | specifies how this field impacts sort ordering of this record
     fieldOrder :: (Maybe Order),
     -- | a JSON array of strings, providing alternate names for this field
     fieldAliases :: (Maybe [String]),
     -- | Any additional key/value pairs attached to the field
-    fieldAnnotations :: (M.Map String Json.Value)}
+    fieldAnnotations :: (M.Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Field = (Core.Name "hydra.ext.org.apache.avro.schema.Field")
@@ -101,7 +102,7 @@ data Named =
     namedDoc :: (Maybe String),
     namedType :: NamedType,
     -- | Any additional key/value pairs attached to the type
-    namedAnnotations :: (M.Map String Json.Value)}
+    namedAnnotations :: (M.Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Named = (Core.Name "hydra.ext.org.apache.avro.schema.Named")

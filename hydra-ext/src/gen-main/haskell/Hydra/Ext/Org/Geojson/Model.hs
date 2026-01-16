@@ -5,8 +5,9 @@
 module Hydra.Ext.Org.Geojson.Model where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Json.Model as Json
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import qualified Hydra.Json.Model as Model
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -38,7 +39,7 @@ data Feature =
     -- | A Feature object has a member with the name "geometry".  The value of the geometry member SHALL be either a Geometry object as defined above or, in the case that the Feature is unlocated, a JSON null value.
     featureGeometry :: (Maybe Geometry),
     -- | A Feature object has a member with the name "properties".  The value of the properties member is an object (any JSON object or a JSON null value).
-    featureProperties :: (Maybe (M.Map String Json.Value)),
+    featureProperties :: (Maybe (M.Map String Model.Value)),
     -- | If a Feature has a commonly used identifier, that identifier SHOULD be included as a member of the Feature object with the name "id", and the value of this member is either a JSON string or number.
     featureId :: (Maybe Id),
     featureBbox :: (Maybe BoundingBox)}
