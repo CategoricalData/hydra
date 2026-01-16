@@ -28,17 +28,17 @@ import System.IO (hFlush, stdout)
 
 generateExampleGraphSON :: IO ()
 generateExampleGraphSON = generateGraphSON
-  "data/genpg/sources/sales"
+  "demos/genpg/data/sources/sales"
   salesTableSchemas
   salesGraph
-  "data/genpg/sales.json"
+  "demos/genpg/output/sales.jsonl"
 
 generateCopilotGraphSON :: IO ()
 generateCopilotGraphSON = generateGraphSON
-  "data/genpg/sources/health"
+  "demos/genpg/data/sources/health"
   generatedTableSchemas
   generatedGraphMapping
-  "data/genpg/copilot.json"
+  "demos/genpg/output/copilot.jsonl"
 
 generateGraphSON :: FilePath -> [TableType] -> Pg.LazyGraph Term -> FilePath -> IO ()
 generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do

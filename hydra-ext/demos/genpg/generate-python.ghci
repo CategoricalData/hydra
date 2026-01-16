@@ -1,0 +1,5 @@
+-- Generate all Python modules for the GenPG demo.
+-- Usage: cd hydra-ext && stack ghci < demos/genpg/generate-python.ghci
+
+import Hydra.Ext.Demos.GenPG.Generate
+generatePythonModules

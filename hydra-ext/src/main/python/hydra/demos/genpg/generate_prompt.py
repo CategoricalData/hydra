@@ -12,8 +12,6 @@ Example:
 import os
 import sys
 import subprocess
-import tempfile
-from pathlib import Path
 
 def run_demo_script(data_dir):
     """Run the summarize_tables.py script to generate table summaries."""
@@ -43,7 +41,7 @@ def read_haskell_file(filename):
 
 def get_sales_example_data():
     """Get the sales domain example data by running demo on sales directory."""
-    sales_data_dir = "data/genpg/sources/sales"
+    sales_data_dir = "demos/genpg/data/sources/sales"
     return run_demo_script(sales_data_dir)
 
 def generate_prompt(new_data_dir):

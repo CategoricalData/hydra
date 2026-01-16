@@ -1,0 +1,1069 @@
+{
+  "id": "employee_1",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "call_4"}, {"id": null, "outV": "meeting_3"}]},
+  "outE": {
+    "manages": [
+      {
+        "id": null,
+        "inV": "employee_2",
+        "properties": {"sinceDate": "2005-06-22"}},
+      {
+        "id": null,
+        "inV": "employee_3",
+        "properties": {"sinceDate": "1980-03-08"}},
+      {
+        "id": null,
+        "inV": "employee_4",
+        "properties": {"sinceDate": "1997-11-30"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_1",
+        "properties": {"joinDate": "1979-10-12", "role": "President"}}]},
+  "properties": {
+    "email": [{"value": "z.beeblebrox@heartofgold.com"}],
+    "firstName": [{"value": "Zaphod"}],
+    "hireDate": [{"value": "1979-10-12"}],
+    "lastName": [{"value": "Beeblebrox"}]}}
+{
+  "id": "employee_2",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "meeting_1"}],
+    "manages": [
+      {
+        "id": null,
+        "outV": "employee_1",
+        "properties": {"sinceDate": "2005-06-22"}}]},
+  "outE": {
+    "sold": [
+      {
+        "id": null,
+        "inV": "sale_2",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.1},
+          "salesChannel": "Direct"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_2",
+        "properties": {"joinDate": "2005-06-22", "role": "Researcher"}}]},
+  "properties": {
+    "email": [{"value": "a.dent@heartofgold.com"}],
+    "firstName": [{"value": "Arthur"}],
+    "hireDate": [{"value": "2005-06-22"}],
+    "lastName": [{"value": "Dent"}]}}
+{
+  "id": "employee_3",
+  "label": "Employee",
+  "inE": {
+    "employee": [
+      {"id": null, "outV": "call_1"},
+      {"id": null, "outV": "call_3"},
+      {"id": null, "outV": "email_3"}],
+    "manages": [
+      {
+        "id": null,
+        "outV": "employee_1",
+        "properties": {"sinceDate": "1980-03-08"}}]},
+  "outE": {
+    "sold": [
+      {
+        "id": null,
+        "inV": "sale_1",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.05},
+          "salesChannel": "Online"}},
+      {
+        "id": null,
+        "inV": "sale_5",
+        "properties": {"commissionRate": {"@type": "g:Double", "@value": 0.05}}}],
+    "manages": [
+      {
+        "id": null,
+        "inV": "employee_6",
+        "properties": {"sinceDate": "1980-01-10"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_3",
+        "properties": {"joinDate": "1980-03-08", "role": "Field Agent"}}]},
+  "properties": {
+    "email": [{"value": "f.prefect@heartofgold.com"}],
+    "firstName": [{"value": "Ford"}],
+    "hireDate": [{"value": "1980-03-08"}],
+    "lastName": [{"value": "Prefect"}]}}
+{
+  "id": "employee_4",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "meeting_2"}],
+    "manages": [
+      {
+        "id": null,
+        "outV": "employee_1",
+        "properties": {"sinceDate": "1997-11-30"}}]},
+  "outE": {
+    "sold": [
+      {
+        "id": null,
+        "inV": "sale_3",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.03},
+          "salesChannel": "Phone"}}],
+    "manages": [{"id": null, "inV": "employee_5"}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_2",
+        "properties": {"joinDate": "1997-11-30", "role": "Lead Scientist"}}]},
+  "properties": {
+    "email": [{"value": "t.astra@heartofgold.com"}],
+    "firstName": [{"value": "Trillian"}],
+    "hireDate": [{"value": "1997-11-30"}],
+    "lastName": [{"value": "Astra"}]}}
+{
+  "id": "employee_5",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "email_2"}],
+    "manages": [{"id": null, "outV": "employee_4"}]},
+  "outE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_4",
+        "properties": {"joinDate": "1981-02-14", "role": "Prototype Tester"}}]},
+  "properties": {
+    "email": [{"value": "m.android@heartofgold.com"}],
+    "firstName": [{"value": "Marvin"}],
+    "hireDate": [{"value": "1981-02-14"}],
+    "lastName": [{"value": "Android"}]}}
+{
+  "id": "employee_6",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "email_1"}, {"id": null, "outV": "meeting_4"}],
+    "manages": [
+      {
+        "id": null,
+        "outV": "employee_3",
+        "properties": {"sinceDate": "1980-01-10"}}]},
+  "outE": {
+    "sold": [
+      {
+        "id": null,
+        "inV": "sale_4",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.15},
+          "salesChannel": "Direct"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_5",
+        "properties": {"role": "Fjord Designer"}}]},
+  "properties": {
+    "email": [{"value": "s.magrathea@heartofgold.com"}],
+    "firstName": [{"value": "Slartibartfast"}],
+    "lastName": [{"value": "Magrathea"}]}}
+{
+  "id": "employee_7",
+  "label": "Employee",
+  "inE": {"employee": [{"id": null, "outV": "email_4"}]},
+  "outE": {
+    "manages": [
+      {
+        "id": null,
+        "inV": "employee_8",
+        "properties": {"sinceDate": "2010-12-05"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_6",
+        "properties": {"joinDate": "1984-09-27", "role": "Editor-in-Chief"}}]},
+  "properties": {
+    "email": [{"value": "z.vann@heartofgold.com"}],
+    "firstName": [{"value": "Zarniwoop"}],
+    "hireDate": [{"value": "1984-09-27"}],
+    "lastName": [{"value": "Vann"}]}}
+{
+  "id": "employee_8",
+  "label": "Employee",
+  "inE": {
+    "employee": [{"id": null, "outV": "call_2"}],
+    "manages": [
+      {
+        "id": null,
+        "outV": "employee_7",
+        "properties": {"sinceDate": "2010-12-05"}}]},
+  "outE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "inV": "department_7",
+        "properties": {"joinDate": "2010-12-05"}}]},
+  "properties": {
+    "email": [{"value": "p.jeltz@vogon.gov"}],
+    "firstName": [{"value": "Prostetnic"}],
+    "hireDate": [{"value": "2010-12-05"}],
+    "lastName": [{"value": "Jeltz"}]}}
+{
+  "id": "department_1",
+  "label": "Department",
+  "inE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "outV": "department_2",
+        "properties": {"since": "1980-01-15"}},
+      {
+        "id": null,
+        "outV": "department_9",
+        "properties": {"since": "1983-11-05"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_1",
+        "properties": {"joinDate": "1979-10-12", "role": "President"}}]},
+  "properties": {"name": [{"value": "Executive Office"}]}}
+{
+  "id": "department_2",
+  "label": "Department",
+  "inE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "outV": "department_3",
+        "properties": {"since": "1981-03-22"}},
+      {
+        "id": null,
+        "outV": "department_4",
+        "properties": {"since": "1982-05-10"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_2",
+        "properties": {"joinDate": "2005-06-22", "role": "Researcher"}},
+      {
+        "id": null,
+        "outV": "employee_4",
+        "properties": {"joinDate": "1997-11-30", "role": "Lead Scientist"}}]},
+  "outE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "inV": "department_1",
+        "properties": {"since": "1980-01-15"}}]},
+  "properties": {"name": [{"value": "Research & Development"}]}}
+{
+  "id": "department_3",
+  "label": "Department",
+  "inE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_3",
+        "properties": {"joinDate": "1980-03-08", "role": "Field Agent"}}]},
+  "outE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "inV": "department_2",
+        "properties": {"since": "1981-03-22"}}]},
+  "properties": {"name": [{"value": "Field Research"}]}}
+{
+  "id": "department_4",
+  "label": "Department",
+  "inE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_5",
+        "properties": {"joinDate": "1981-02-14", "role": "Prototype Tester"}}]},
+  "outE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "inV": "department_2",
+        "properties": {"since": "1982-05-10"}}]},
+  "properties": {"name": [{"value": "Robotics"}]}}
+{
+  "id": "department_5",
+  "label": "Department",
+  "inE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_6",
+        "properties": {"role": "Fjord Designer"}}]},
+  "properties": {"name": [{"value": "Custom Design"}]}}
+{
+  "id": "department_6",
+  "label": "Department",
+  "inE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "outV": "department_7",
+        "properties": {"since": "1990-08-30"}}],
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_7",
+        "properties": {"joinDate": "1984-09-27", "role": "Editor-in-Chief"}}]},
+  "properties": {"name": [{"value": "Megadodo Publications"}]}}
+{
+  "id": "department_7",
+  "label": "Department",
+  "inE": {
+    "belongsTo": [
+      {
+        "id": null,
+        "outV": "employee_8",
+        "properties": {"joinDate": "2010-12-05"}}]},
+  "outE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "inV": "department_6",
+        "properties": {"since": "1990-08-30"}}]},
+  "properties": {"name": [{"value": "Vogon Constructor Fleet"}]}}
+{
+  "id": "department_8",
+  "label": "Department",
+  "properties": {"name": [{"value": "Restaurant Division"}]}}
+{
+  "id": "department_9",
+  "label": "Department",
+  "outE": {
+    "parentDepartment": [
+      {
+        "id": null,
+        "inV": "department_1",
+        "properties": {"since": "1983-11-05"}}]},
+  "properties": {"name": [{"value": "Marketing"}]}}
+{
+  "id": "customer_1",
+  "label": "Customer",
+  "inE": {
+    "customer": [
+      {"id": null, "outV": "call_3"},
+      {"id": null, "outV": "email_2"},
+      {"id": null, "outV": "meeting_1"}]},
+  "outE": {
+    "purchased": [
+      {
+        "id": null,
+        "inV": "sale_2",
+        "properties": {
+          "isRepeatCustomer": false,
+          "paymentMethod": "Bank Transfer",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 4}}}]},
+  "properties": {
+    "companyName": [{"value": "Sirius Cybernetics Corporation"}],
+    "contactName": [{"value": "Hactar"}],
+    "email": [{"value": "hactar@sirius.com"}],
+    "phone": [{"value": "+42-5551234"}]}}
+{
+  "id": "customer_2",
+  "label": "Customer",
+  "inE": {
+    "customer": [
+      {"id": null, "outV": "call_4"},
+      {"id": null, "outV": "email_3"},
+      {"id": null, "outV": "meeting_2"}]},
+  "outE": {
+    "purchased": [
+      {
+        "id": null,
+        "inV": "sale_5",
+        "properties": {
+          "paymentMethod": "Credit",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 4}}}]},
+  "properties": {
+    "companyName": [{"value": "Milliways Restaurant"}],
+    "contactName": [{"value": "Max Quordlepleen"}],
+    "email": [{"value": "max@endofuniverse.com"}],
+    "phone": [{"value": "+42-5557890"}]}}
+{
+  "id": "customer_3",
+  "label": "Customer",
+  "inE": {
+    "customer": [{"id": null, "outV": "email_1"}, {"id": null, "outV": "meeting_3"}]},
+  "outE": {
+    "purchased": [
+      {
+        "id": null,
+        "inV": "sale_3",
+        "properties": {"isRepeatCustomer": true, "paymentMethod": "Credit"}},
+      {
+        "id": null,
+        "inV": "sale_4",
+        "properties": {
+          "isRepeatCustomer": true,
+          "paymentMethod": "Bank Transfer",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 5}}}]},
+  "properties": {
+    "companyName": [{"value": "Magrathean Planetary Design"}],
+    "contactName": [{"value": "Deep Thought"}],
+    "email": [{"value": "thought@magrathea.com"}]}}
+{
+  "id": "customer_4",
+  "label": "Customer",
+  "inE": {
+    "customer": [{"id": null, "outV": "call_2"}, {"id": null, "outV": "email_4"}]},
+  "properties": {
+    "companyName": [{"value": "Vogon Poetry Appreciation"}],
+    "contactName": [{"value": "Prostetnic Jeltz"}],
+    "email": [{"value": "poetry@vogon.gov"}],
+    "phone": [{"value": "+42-5552468"}]}}
+{
+  "id": "customer_5",
+  "label": "Customer",
+  "inE": {
+    "customer": [{"id": null, "outV": "call_1"}, {"id": null, "outV": "meeting_4"}]},
+  "outE": {
+    "purchased": [
+      {
+        "id": null,
+        "inV": "sale_1",
+        "properties": {
+          "isRepeatCustomer": true,
+          "paymentMethod": "Credit",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 5}}}]},
+  "properties": {
+    "companyName": [{"value": "Betelgeusian Trading Co."}],
+    "contactName": [{"value": "Hotblack Desiato"}],
+    "phone": [{"value": "+42-5551357"}]}}
+{
+  "id": "product_1",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_4",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 3650}}},
+      {
+        "id": null,
+        "outV": "saleItem_7",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 7300}}}]},
+  "properties": {
+    "name": [{"value": "Infinite Improbability Drive"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 999999.99}}]}}
+{
+  "id": "product_2",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_6",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 1825}}}]},
+  "properties": {
+    "name": [{"value": "Hitchhiker's Guide Mark II"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 42.0}}]}}
+{
+  "id": "product_3",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_1",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 30}}}]},
+  "properties": {
+    "name": [{"value": "Super-Absorbent Towel"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 19.99}}]}}
+{
+  "id": "product_4",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_10",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 730}}}]},
+  "properties": {
+    "name": [{"value": "Babel Fish Translator"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 149.5}}]}}
+{
+  "id": "product_5",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_8",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 365}}}]},
+  "properties": {
+    "name": [{"value": "Perfect Cup of Tea Simulator"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 239.95}}]}}
+{
+  "id": "product_6",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_9",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 90}}}]},
+  "properties": {
+    "name": [{"value": "Pan Galactic Gargle Blaster Kit"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 59.99}}]}}
+{
+  "id": "product_7",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_2",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 90}}}]},
+  "properties": {
+    "name": [{"value": "Electronic Thumb"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 29.95}}]}}
+{
+  "id": "product_8",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_3",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 180}}}]},
+  "properties": {
+    "name": [{"value": "Digital Watch (Amazingly Complicated)"}],
+    "price": [{"value": {"@type": "g:Double", "@value": 24.95}}]}}
+{
+  "id": "product_9",
+  "label": "Product",
+  "inE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "outV": "saleItem_5",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 365}}}]},
+  "properties": {"name": [{"value": "Nutrimatic Drink Dispenser"}]}}
+{
+  "id": "sale_1",
+  "label": "Sale",
+  "inE": {
+    "sold": [
+      {
+        "id": null,
+        "outV": "employee_3",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.05},
+          "salesChannel": "Online"}}],
+    "purchased": [
+      {
+        "id": null,
+        "outV": "customer_5",
+        "properties": {
+          "isRepeatCustomer": true,
+          "paymentMethod": "Credit",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 5}}}]},
+  "outE": {
+    "includes": [
+      {
+        "id": null,
+        "inV": "saleItem_1",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}},
+      {
+        "id": null,
+        "inV": "saleItem_2",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 5.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}},
+      {
+        "id": null,
+        "inV": "saleItem_3",
+        "properties": {"itemOrder": {"@type": "g:Int32", "@value": 3}}}]},
+  "properties": {
+    "saleDate": [{"value": "2025-01-15"}],
+    "totalAmount": [{"value": {"@type": "g:Double", "@value": 189.97}}]}}
+{
+  "id": "sale_2",
+  "label": "Sale",
+  "inE": {
+    "sold": [
+      {
+        "id": null,
+        "outV": "employee_2",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.1},
+          "salesChannel": "Direct"}}],
+    "purchased": [
+      {
+        "id": null,
+        "outV": "customer_1",
+        "properties": {
+          "isRepeatCustomer": false,
+          "paymentMethod": "Bank Transfer",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 4}}}]},
+  "outE": {
+    "includes": [
+      {
+        "id": null,
+        "inV": "saleItem_4",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}},
+      {
+        "id": null,
+        "inV": "saleItem_5",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 50.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}}]},
+  "properties": {
+    "saleDate": [{"value": "2025-02-22"}],
+    "totalAmount": [{"value": {"@type": "g:Double", "@value": 1000229.93}}]}}
+{
+  "id": "sale_3",
+  "label": "Sale",
+  "inE": {
+    "sold": [
+      {
+        "id": null,
+        "outV": "employee_4",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.03},
+          "salesChannel": "Phone"}}],
+    "purchased": [
+      {
+        "id": null,
+        "outV": "customer_3",
+        "properties": {"isRepeatCustomer": true, "paymentMethod": "Credit"}}]},
+  "outE": {
+    "includes": [
+      {
+        "id": null,
+        "inV": "saleItem_6",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "properties": {
+    "saleDate": [{"value": "2025-03-05"}],
+    "totalAmount": [{"value": {"@type": "g:Double", "@value": 42.0}}]}}
+{
+  "id": "sale_4",
+  "label": "Sale",
+  "inE": {
+    "sold": [
+      {
+        "id": null,
+        "outV": "employee_6",
+        "properties": {
+          "commissionRate": {"@type": "g:Double", "@value": 0.15},
+          "salesChannel": "Direct"}}],
+    "purchased": [
+      {
+        "id": null,
+        "outV": "customer_3",
+        "properties": {
+          "isRepeatCustomer": true,
+          "paymentMethod": "Bank Transfer",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 5}}}]},
+  "outE": {
+    "includes": [
+      {
+        "id": null,
+        "inV": "saleItem_7",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 1000.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "properties": {
+    "saleDate": [{"value": "2025-04-10"}],
+    "totalAmount": [{"value": {"@type": "g:Double", "@value": 999999.99}}]}}
+{
+  "id": "sale_5",
+  "label": "Sale",
+  "inE": {
+    "sold": [
+      {
+        "id": null,
+        "outV": "employee_3",
+        "properties": {"commissionRate": {"@type": "g:Double", "@value": 0.05}}}],
+    "purchased": [
+      {
+        "id": null,
+        "outV": "customer_2",
+        "properties": {
+          "paymentMethod": "Credit",
+          "satisfactionRating": {"@type": "g:Int32", "@value": 4}}}]},
+  "outE": {
+    "includes": [
+      {
+        "id": null,
+        "inV": "saleItem_8",
+        "properties": {"itemOrder": {"@type": "g:Int32", "@value": 1}}},
+      {
+        "id": null,
+        "inV": "saleItem_9",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 10.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}},
+      {
+        "id": null,
+        "inV": "saleItem_10",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 15.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 3}}}]},
+  "properties": {"saleDate": [{"value": "2025-05-01"}]}}
+{
+  "id": "saleItem_1",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_1",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_3",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 30}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 19.99}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_2",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_1",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 5.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_7",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 90}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 29.95}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 2}}]}}
+{
+  "id": "saleItem_3",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_1",
+        "properties": {"itemOrder": {"@type": "g:Int32", "@value": 3}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_8",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 180}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 24.95}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_4",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_2",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_1",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 3650}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 999999.99}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_5",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_2",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 50.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_9",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 365}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 399.99}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_6",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_3",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 0.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_2",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 1825}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 42.0}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_7",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_4",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 1000.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_1",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 7300}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 999999.99}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_8",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_5",
+        "properties": {"itemOrder": {"@type": "g:Int32", "@value": 1}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_5",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 365}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 239.95}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "saleItem_9",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_5",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 10.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 2}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_6",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 90}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 59.99}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 2}}]}}
+{
+  "id": "saleItem_10",
+  "label": "SaleItem",
+  "inE": {
+    "includes": [
+      {
+        "id": null,
+        "outV": "sale_5",
+        "properties": {
+          "discountApplied": {"@type": "g:Double", "@value": 15.0},
+          "itemOrder": {"@type": "g:Int32", "@value": 3}}}]},
+  "outE": {
+    "containsProduct": [
+      {
+        "id": null,
+        "inV": "product_4",
+        "properties": {"warrantyPeriodYears": {"@type": "g:Int32", "@value": 730}}}]},
+  "properties": {
+    "itemPrice": [{"value": {"@type": "g:Double", "@value": 149.5}}],
+    "quantity": [{"value": {"@type": "g:Int32", "@value": 1}}]}}
+{
+  "id": "call_1",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_3"}],
+    "customer": [{"id": null, "inV": "customer_5"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 15}}],
+    "followUpRequired": [{"value": false}],
+    "interactionDate": [{"value": "2025-01-10"}],
+    "interactionType": [{"value": "Call"}],
+    "notes": [
+      {
+        "value": "Explained the importance of carrying towels in their stores"}]}}
+{
+  "id": "call_2",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_8"}],
+    "customer": [{"id": null, "inV": "customer_4"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 90}}],
+    "interactionDate": [{"value": "2025-03-30"}],
+    "interactionType": [{"value": "Call"}],
+    "notes": [{"value": "Listened to poetry (reluctantly)"}]}}
+{
+  "id": "call_3",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_3"}],
+    "customer": [{"id": null, "inV": "customer_1"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 35}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-03-12"}],
+    "interactionType": [{"value": "Call"}],
+    "notes": [{"value": "Technical support for malfunctioning doors"}]}}
+{
+  "id": "call_4",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_1"}],
+    "customer": [{"id": null, "inV": "customer_2"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 25}}],
+    "followUpRequired": [{"value": false}],
+    "interactionDate": [{"value": "2025-03-25"}],
+    "interactionType": [{"value": "Call"}],
+    "notes": [{"value": "Reservation inquiry for end of universe party"}]}}
+{
+  "id": "email_1",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_6"}],
+    "customer": [{"id": null, "inV": "customer_3"}]},
+  "properties": {
+    "customerInitiated": [{"value": false}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 30}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-04-05"}],
+    "interactionType": [{"value": "Email"}],
+    "notes": [{"value": "Sent custom planet designs with fjords"}]}}
+{
+  "id": "email_2",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_5"}],
+    "customer": [{"id": null, "inV": "customer_1"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 10}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-02-18"}],
+    "interactionType": [{"value": "Email"}],
+    "notes": [{"value": "Complained about door personality modules"}]}}
+{
+  "id": "email_3",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_3"}],
+    "customer": [{"id": null, "inV": "customer_2"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "followUpRequired": [{"value": false}],
+    "interactionDate": [{"value": "2025-03-20"}],
+    "interactionType": [{"value": "Email"}],
+    "notes": [{"value": "Request for restaurant menu samples"}]}}
+{
+  "id": "email_4",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_7"}],
+    "customer": [{"id": null, "inV": "customer_4"}]},
+  "properties": {
+    "customerInitiated": [{"value": true}],
+    "followUpRequired": [{"value": false}],
+    "interactionDate": [{"value": "2025-02-28"}],
+    "interactionType": [{"value": "Email"}],
+    "notes": [{"value": "Poetry submission for review"}]}}
+{
+  "id": "meeting_1",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_2"}],
+    "customer": [{"id": null, "inV": "customer_1"}]},
+  "properties": {
+    "customerInitiated": [{"value": false}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 45}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-02-15"}],
+    "interactionType": [{"value": "Meeting"}],
+    "notes": [
+      {"value": "Discussed the improbability of their newest product line"}]}}
+{
+  "id": "meeting_2",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_4"}],
+    "customer": [{"id": null, "inV": "customer_2"}]},
+  "properties": {
+    "customerInitiated": [{"value": false}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 60}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-04-22"}],
+    "interactionType": [{"value": "Meeting"}],
+    "notes": [{"value": "Proposed special menu items for Time Travelers Week"}]}}
+{
+  "id": "meeting_3",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_1"}],
+    "customer": [{"id": null, "inV": "customer_3"}]},
+  "properties": {
+    "customerInitiated": [{"value": false}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 120}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-03-15"}],
+    "interactionType": [{"value": "Meeting"}],
+    "notes": [{"value": "Annual planetary design review"}]}}
+{
+  "id": "meeting_4",
+  "label": "CustomerInteraction",
+  "outE": {
+    "employee": [{"id": null, "inV": "employee_6"}],
+    "customer": [{"id": null, "inV": "customer_5"}]},
+  "properties": {
+    "customerInitiated": [{"value": false}],
+    "durationMinutes": [{"value": {"@type": "g:Int32", "@value": 60}}],
+    "followUpRequired": [{"value": true}],
+    "interactionDate": [{"value": "2025-03-05"}],
+    "interactionType": [{"value": "Meeting"}],
+    "notes": [{"value": "Discussion about towel promotional event"}]}}
