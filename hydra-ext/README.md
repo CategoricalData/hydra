@@ -105,7 +105,7 @@ You can update the Python image of the Hydra kernel with:
 ```haskell
 -- Universe provides all modules for dependency resolution
 -- modulesToGenerate specifies which modules to actually generate
-writePython "../hydra-python/src/main/python" kernelModules kernelModules
+writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
 ```
 
 For Python tests, use:
@@ -392,8 +392,8 @@ This demo provides an example of a hands-off graph generation workflow using an 
 See the demo video linked above to understand how the demo works.
 To run it yourself, you will need a small tabular dataset which illustrates the structure of your data.
 You can find example datasets in
-[src/main/python/hydra/demos/genpg/sales](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/sales)
-and [src/main/python/hydra/demos/genpg/health](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/health);
+[data/genpg/sources/sales](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/sources/sales)
+and [data/genpg/sources/health](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/data/genpg/sources/health);
 the former is a reference dataset which is built into the workflow,
 and the latter is a stand-in for your own domain-specific dataset.
 Feel free to start with the provided `health` dataset, or insert your own from the beginning.

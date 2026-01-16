@@ -15,15 +15,15 @@ main = do
 
   putStrLn "=== Generate Python kernel ==="
   putStrLn ""
-  putStrLn "Generating kernel modules to ../hydra-python/src/main/python..."
+  putStrLn "Generating kernel modules to ../hydra-python/src/gen-main/python..."
   putStrLn ""
 
   -- Universe provides all modules for dependency resolution
   -- modulesToGenerate specifies which modules to actually generate
-  writePython "../hydra-python/src/main/python" kernelModules kernelModules
+  writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
 
   putStrLn ""
   putStrLn "=== Done! ==="
   putStrLn ""
   putStrLn "To view the generated modules:"
-  putStrLn "  ls -R ../hydra-python/src/main/python"
+  putStrLn "  ls -R ../hydra-python/src/gen-main/python"
