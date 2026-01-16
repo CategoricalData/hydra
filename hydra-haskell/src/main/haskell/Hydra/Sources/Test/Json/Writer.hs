@@ -55,11 +55,11 @@ primitivesGroup = subgroup "primitives" [
     writerCase "true" (Json.valueBoolean $ Base.boolean True) "true",
     writerCase "false" (Json.valueBoolean $ Base.boolean False) "false",
 
-    -- Numbers - integers (note: bigfloats are formatted with decimal point)
-    writerCase "zero" (Json.valueNumber $ Base.bigfloat 0.0) "0.0",
-    writerCase "positive integer" (Json.valueNumber $ Base.bigfloat 42.0) "42.0",
-    writerCase "negative integer" (Json.valueNumber $ Base.bigfloat (-17.0)) "-17.0",
-    writerCase "large integer" (Json.valueNumber $ Base.bigfloat 1000000.0) "1000000.0",
+    -- Numbers - integers (whole numbers are formatted without decimal point)
+    writerCase "zero" (Json.valueNumber $ Base.bigfloat 0.0) "0",
+    writerCase "positive integer" (Json.valueNumber $ Base.bigfloat 42.0) "42",
+    writerCase "negative integer" (Json.valueNumber $ Base.bigfloat (-17.0)) "-17",
+    writerCase "large integer" (Json.valueNumber $ Base.bigfloat 1000000.0) "1000000",
 
     -- Numbers - decimals
     writerCase "decimal" (Json.valueNumber $ Base.bigfloat 3.14) "3.14",
@@ -85,13 +85,13 @@ arraysGroup :: TTerm TestGroup
 arraysGroup = subgroup "arrays" [
     -- Empty and single element
     writerCase "empty array" (Json.valueArray $ Base.list ([] :: [TTerm Value])) "[]",
-    writerCase "single element" (Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 1.0]) "[1.0]",
+    writerCase "single element" (Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 1.0]) "[1]",
 
     -- Multiple elements
     writerCase "multiple numbers" (Json.valueArray $ Base.list [
         Json.valueNumber $ Base.bigfloat 1.0,
         Json.valueNumber $ Base.bigfloat 2.0,
-        Json.valueNumber $ Base.bigfloat 3.0]) "[1.0, 2.0, 3.0]",
+        Json.valueNumber $ Base.bigfloat 3.0]) "[1, 2, 3]",
 
     writerCase "multiple strings" (Json.valueArray $ Base.list [
         Json.valueString $ Base.string "a",
@@ -102,7 +102,7 @@ arraysGroup = subgroup "arrays" [
         Json.valueNumber $ Base.bigfloat 1.0,
         Json.valueString $ Base.string "two",
         Json.valueBoolean $ Base.boolean True,
-        Json.valueNull]) "[1.0, \"two\", true, null]"]
+        Json.valueNull]) "[1, \"two\", true, null]"]
 
 objectsGroup :: TTerm TestGroup
 objectsGroup = subgroup "objects" [
@@ -114,31 +114,31 @@ objectsGroup = subgroup "objects" [
     -- Multiple keys
     writerCase "multiple keys" (Json.valueObject $ Base.map $ M.fromList [
         (Base.string "a", Json.valueNumber $ Base.bigfloat 1.0),
-        (Base.string "b", Json.valueNumber $ Base.bigfloat 2.0)]) "{\"a\": 1.0, \"b\": 2.0}",
+        (Base.string "b", Json.valueNumber $ Base.bigfloat 2.0)]) "{\"a\": 1, \"b\": 2}",
 
     -- Mixed value types
     writerCase "mixed value types" (Json.valueObject $ Base.map $ M.fromList [
         (Base.string "count", Json.valueNumber $ Base.bigfloat 42.0),
         (Base.string "name", Json.valueString $ Base.string "test"),
-        (Base.string "active", Json.valueBoolean $ Base.boolean True)]) "{\"active\": true, \"count\": 42.0, \"name\": \"test\"}"]
+        (Base.string "active", Json.valueBoolean $ Base.boolean True)]) "{\"active\": true, \"count\": 42, \"name\": \"test\"}"]
 
 nestedGroup :: TTerm TestGroup
 nestedGroup = subgroup "nested structures" [
     -- Array of arrays
     writerCase "nested arrays" (Json.valueArray $ Base.list [
         Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 1.0, Json.valueNumber $ Base.bigfloat 2.0],
-        Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 3.0, Json.valueNumber $ Base.bigfloat 4.0]]) "[[1.0, 2.0], [3.0, 4.0]]",
+        Json.valueArray $ Base.list [Json.valueNumber $ Base.bigfloat 3.0, Json.valueNumber $ Base.bigfloat 4.0]]) "[[1, 2], [3, 4]]",
 
     -- Object with array
     writerCase "object with array" (Json.valueObject $ Base.map $ M.fromList [
         (Base.string "items", Json.valueArray $ Base.list [
             Json.valueNumber $ Base.bigfloat 1.0,
-            Json.valueNumber $ Base.bigfloat 2.0])]) "{\"items\": [1.0, 2.0]}",
+            Json.valueNumber $ Base.bigfloat 2.0])]) "{\"items\": [1, 2]}",
 
     -- Array of objects
     writerCase "array of objects" (Json.valueArray $ Base.list [
         Json.valueObject $ Base.map $ M.singleton (Base.string "id") (Json.valueNumber $ Base.bigfloat 1.0),
-        Json.valueObject $ Base.map $ M.singleton (Base.string "id") (Json.valueNumber $ Base.bigfloat 2.0)]) "[{\"id\": 1.0}, {\"id\": 2.0}]",
+        Json.valueObject $ Base.map $ M.singleton (Base.string "id") (Json.valueNumber $ Base.bigfloat 2.0)]) "[{\"id\": 1}, {\"id\": 2}]",
 
     -- Nested object
     writerCase "nested object" (Json.valueObject $ Base.map $ M.fromList [
