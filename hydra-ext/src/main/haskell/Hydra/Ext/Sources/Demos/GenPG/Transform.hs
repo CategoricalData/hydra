@@ -114,6 +114,13 @@ evaluateProperties :: TBinding (M.Map PG.PropertyKey Term -> Term -> Flow Graph 
 evaluateProperties = define "evaluateProperties" $
   doc "Evaluate property specifications against a record term" $
   "specs" ~> "record" ~>
+    -- Lift the match extractor outside the inner lambda to avoid Python inline match issues
+    -- This takes the key as parameter so it doesn't need to capture it
+    "extractMaybe" <~ ("k" ~> "term" ~>
+      match _Term Nothing [
+        _Term_maybe>>: "mv" ~>
+          Flows.pure $ Maybes.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
+      @@ var "term") $
     Flows.map
       ("pairs" ~> Maps.fromList $ Maybes.cat $ var "pairs")
       (Flows.mapList
@@ -122,11 +129,7 @@ evaluateProperties = define "evaluateProperties" $
           "spec" <~ Pairs.second (var "pair") $
           Flows.bind
             (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "spec") (var "record")))
-            ("value" ~>
-              match _Term Nothing [
-                _Term_maybe>>: "mv" ~>
-                  Flows.pure $ Maybes.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
-              @@ (Rewriting.deannotateTerm @@ var "value")))
+            ("value" ~> var "extractMaybe" @@ var "k" @@ (Rewriting.deannotateTerm @@ var "value")))
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term
@@ -546,65 +549,66 @@ decodeCell = define "decodeCell" $
   "colType" ~> "mvalue" ~>
     "cname" <~ (unwrap Rel._ColumnName @@ (project Tab._ColumnType Tab._ColumnType_name @@ var "colType")) $
     "typ" <~ (project Tab._ColumnType Tab._ColumnType_type @@ var "colType") $
-    Maybes.maybe
-      (-- No value - return Nothing
-        right nothing)
-      (-- Has value - decode based on type
-        "value" ~>
-          "parseError" <~ (Strings.cat $ list [
-            string "Invalid value for column ",
-            var "cname",
-            string ": ",
-            var "value"]) $
-          match _Type (Just $ left $ Strings.cat $ list [
-            string "Unsupported type for column ",
+    -- Lift the decoder function to a let binding before Maybes.maybe
+    -- This avoids Python issues with match statements inside inline lambdas
+    "decodeValue" <~ ("value" ~>
+      "parseError" <~ (Strings.cat $ list [
+        string "Invalid value for column ",
+        var "cname",
+        string ": ",
+        var "value"]) $
+      match _Type (Just $ left $ Strings.cat $ list [
+        string "Unsupported type for column ",
+        var "cname"]) [
+        _Type_literal>>: "lt" ~>
+          match _LiteralType (Just $ left $ Strings.cat $ list [
+            string "Unsupported literal type for column ",
             var "cname"]) [
-            _Type_literal>>: "lt" ~>
-              match _LiteralType (Just $ left $ Strings.cat $ list [
-                string "Unsupported literal type for column ",
+            _LiteralType_boolean>>: constant $
+              Maybes.maybe
+                (left $ var "parseError")
+                ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed")
+                (Literals.readBoolean $ var "value"),
+            _LiteralType_float>>: "ft" ~>
+              match _FloatType (Just $ left $ Strings.cat $ list [
+                string "Unsupported float type for column ",
                 var "cname"]) [
-                _LiteralType_boolean>>: constant $
+                _FloatType_bigfloat>>: constant $
                   Maybes.maybe
                     (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed")
-                    (Literals.readBoolean $ var "value"),
-                _LiteralType_float>>: "ft" ~>
-                  match _FloatType (Just $ left $ Strings.cat $ list [
-                    string "Unsupported float type for column ",
-                    var "cname"]) [
-                    _FloatType_bigfloat>>: constant $
-                      Maybes.maybe
-                        (left $ var "parseError")
-                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
-                        (Literals.readBigfloat $ var "value"),
-                    _FloatType_float32>>: constant $
-                      Maybes.maybe
-                        (left $ var "parseError")
-                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed")
-                        (Literals.readFloat32 $ var "value"),
-                    _FloatType_float64>>: constant $
-                      Maybes.maybe
-                        (left $ var "parseError")
-                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")
-                        (Literals.readFloat64 $ var "value")]
-                  @@ var "ft",
-                _LiteralType_integer>>: "it" ~>
-                  match _IntegerType (Just $ left $ Strings.cat $ list [
-                    string "Unsupported integer type for column ",
-                    var "cname"]) [
-                    _IntegerType_int32>>: constant $
-                      Maybes.maybe
-                        (left $ var "parseError")
-                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed")
-                        (Literals.readInt32 $ var "value"),
-                    _IntegerType_int64>>: constant $
-                      Maybes.maybe
-                        (left $ var "parseError")
-                        ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")
-                        (Literals.readInt64 $ var "value")]
-                  @@ var "it",
-                _LiteralType_string>>: constant $
-                  right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
-              @@ var "lt"]
-          @@ var "typ")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
+                    (Literals.readBigfloat $ var "value"),
+                _FloatType_float32>>: constant $
+                  Maybes.maybe
+                    (left $ var "parseError")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed")
+                    (Literals.readFloat32 $ var "value"),
+                _FloatType_float64>>: constant $
+                  Maybes.maybe
+                    (left $ var "parseError")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")
+                    (Literals.readFloat64 $ var "value")]
+              @@ var "ft",
+            _LiteralType_integer>>: "it" ~>
+              match _IntegerType (Just $ left $ Strings.cat $ list [
+                string "Unsupported integer type for column ",
+                var "cname"]) [
+                _IntegerType_int32>>: constant $
+                  Maybes.maybe
+                    (left $ var "parseError")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed")
+                    (Literals.readInt32 $ var "value"),
+                _IntegerType_int64>>: constant $
+                  Maybes.maybe
+                    (left $ var "parseError")
+                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")
+                    (Literals.readInt64 $ var "value")]
+              @@ var "it",
+            _LiteralType_string>>: constant $
+              right $ just $ Core.termLiteral $ Core.literalString $ var "value"]
+          @@ var "lt"]
+      @@ var "typ") $
+    Maybes.maybe
+      (right nothing)  -- No value - return Nothing
+      (var "decodeValue")  -- Has value - use the lifted decoder function
       (var "mvalue")

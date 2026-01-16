@@ -153,7 +153,7 @@ elementTypeTree t cx raw = (Eithers.either (\err -> Left (Util.DecodingError err
       Model.elementTypeTreeDependencies = field_dependencies}))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.pg.model.ElementTypeTree"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-graph :: (Ord t0) => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Model.Graph t0))
+graph :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Model.Graph t0))
 graph v cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Helpers.toFieldMap v1)

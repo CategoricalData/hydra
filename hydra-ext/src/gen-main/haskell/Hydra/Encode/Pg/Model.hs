@@ -15,7 +15,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-adjacentEdge :: (Ord t0) => ((t0 -> Core.Term) -> Model.AdjacentEdge t0 -> Core.Term)
+adjacentEdge :: ((t0 -> Core.Term) -> Model.AdjacentEdge t0 -> Core.Term)
 adjacentEdge v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
   Core.recordFields = [
@@ -55,7 +55,7 @@ direction x = case x of
       Core.fieldName = (Core.Name "undirected"),
       Core.fieldTerm = Core.TermUnit}}))
 
-edge :: (Ord t0) => ((t0 -> Core.Term) -> Model.Edge t0 -> Core.Term)
+edge :: ((t0 -> Core.Term) -> Model.Edge t0 -> Core.Term)
 edge v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.Edge"),
   Core.recordFields = [
@@ -100,7 +100,7 @@ edgeType t x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "properties"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (propertyType t) xs)) (Model.edgeTypeProperties x))}]}))
 
-element :: Ord t0 => ((t0 -> Core.Term) -> Model.Element t0 -> Core.Term)
+element :: ((t0 -> Core.Term) -> Model.Element t0 -> Core.Term)
 element v x = case x of
   Model.ElementVertex v1 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
@@ -126,7 +126,7 @@ elementKind x = case x of
       Core.fieldName = (Core.Name "edge"),
       Core.fieldTerm = Core.TermUnit}}))
 
-elementTree :: Ord t0 => ((t0 -> Core.Term) -> Model.ElementTree t0 -> Core.Term)
+elementTree :: ((t0 -> Core.Term) -> Model.ElementTree t0 -> Core.Term)
 elementTree v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.ElementTree"),
   Core.recordFields = [
@@ -161,7 +161,7 @@ elementTypeTree t x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "dependencies"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (elementTypeTree t) xs)) (Model.elementTypeTreeDependencies x))}]}))
 
-graph :: (Ord t0) => ((t0 -> Core.Term) -> Model.Graph t0 -> Core.Term)
+graph :: Ord t0 => ((t0 -> Core.Term) -> Model.Graph t0 -> Core.Term)
 graph v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.Graph"),
   Core.recordFields = [
@@ -172,7 +172,7 @@ graph v x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "edges"),
       Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap v (edge v) m)) (Model.graphEdges x))}]}))
 
-graphSchema :: (Ord t0) => ((t0 -> Core.Term) -> Model.GraphSchema t0 -> Core.Term)
+graphSchema :: ((t0 -> Core.Term) -> Model.GraphSchema t0 -> Core.Term)
 graphSchema t x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
   Core.recordFields = [
@@ -196,7 +196,7 @@ label x = case x of
       Core.fieldName = (Core.Name "edge"),
       Core.fieldTerm = (edgeLabel v1)}}))
 
-lazyGraph :: Ord t0 => ((t0 -> Core.Term) -> Model.LazyGraph t0 -> Core.Term)
+lazyGraph :: ((t0 -> Core.Term) -> Model.LazyGraph t0 -> Core.Term)
 lazyGraph v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
   Core.recordFields = [
@@ -237,7 +237,7 @@ propertyType t x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "required"),
       Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Model.propertyTypeRequired x))}]}))
 
-vertex :: (Ord t0) => ((t0 -> Core.Term) -> Model.Vertex t0 -> Core.Term)
+vertex :: ((t0 -> Core.Term) -> Model.Vertex t0 -> Core.Term)
 vertex v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.Vertex"),
   Core.recordFields = [
@@ -270,7 +270,7 @@ vertexType t x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "properties"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (propertyType t) xs)) (Model.vertexTypeProperties x))}]}))
 
-vertexWithAdjacentEdges :: Ord t0 => ((t0 -> Core.Term) -> Model.VertexWithAdjacentEdges t0 -> Core.Term)
+vertexWithAdjacentEdges :: ((t0 -> Core.Term) -> Model.VertexWithAdjacentEdges t0 -> Core.Term)
 vertexWithAdjacentEdges v x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
   Core.recordFields = [
