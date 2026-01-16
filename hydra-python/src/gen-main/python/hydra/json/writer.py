@@ -57,7 +57,10 @@ def value_to_expr(value: hydra.json.model.Value) -> hydra.core.Type:
             return hydra.serialization.cst("null")
         
         case hydra.json.model.ValueNumber(value=n):
-            return hydra.serialization.cst(hydra.lib.literals.show_bigfloat(n))
+            @lru_cache(1)
+            def rounded() -> int:
+                return hydra.lib.literals.bigfloat_to_bigint(n)
+            return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_bigfloat(rounded())), (lambda : hydra.lib.literals.show_bigint(rounded())), (lambda : hydra.lib.literals.show_bigfloat(n))))
         
         case hydra.json.model.ValueObject(value=obj):
             return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map(key_value_to_expr, hydra.lib.maps.to_list(obj)))
