@@ -79,12 +79,12 @@ main = do
 
   let sourcesModules = L.map toSourcesModule kernelModules
 
-  putStrLn $ "Generating " ++ show (length sourcesModules) ++ " source modules to ../hydra-python/src/main/python..."
+  putStrLn $ "Generating " ++ show (length sourcesModules) ++ " source modules to ../hydra-python/src/gen-main/python..."
   putStrLn ""
 
   -- Universe includes both kernel modules (for type resolution) and sources modules
   -- We only generate the sources modules
-  writePython "../hydra-python/src/main/python" (kernelModules ++ sourcesModules) sourcesModules
+  writePython "../hydra-python/src/gen-main/python" (kernelModules ++ sourcesModules) sourcesModules
 
   putStrLn ""
   putStrLn "=== Done! ==="

@@ -147,7 +147,7 @@ if [ "$QUICK_MODE" = false ]; then
     fi
 
     # Run pytest with PYTHONPATH set
-    PYTHONPATH=src/main/python:src/gen-test/python pytest src/gen-test/python/generation -q
+    PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/gen-test/python/generation -q
 
     if [ $? -eq 0 ]; then
         echo ""
@@ -172,13 +172,13 @@ echo ""
 cd "$HYDRA_PYTHON_DIR"
 
 # Find untracked Python files in gen directories
-NEW_FILES=$(git status --porcelain src/main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}')
+NEW_FILES=$(git status --porcelain src/main/python src/gen-main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}')
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
     echo "  cd $HYDRA_PYTHON_DIR"
-    echo "  git add src/main/python src/gen-test/python"
+    echo "  git add src/main/python src/gen-main/python src/gen-test/python"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20

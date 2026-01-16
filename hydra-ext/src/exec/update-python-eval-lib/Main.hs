@@ -16,15 +16,15 @@ main = do
 
   putStrLn "=== Generate Python eval lib modules ==="
   putStrLn ""
-  putStrLn "Generating eval lib modules to ../hydra-python/src/main/python..."
+  putStrLn "Generating eval lib modules to ../hydra-python/src/gen-main/python..."
   putStrLn ""
 
   -- Universe includes mainModules to provide all dependencies
   -- Generate only the eval lib modules
-  writePython "../hydra-python/src/main/python" mainModules evalLibModules
+  writePython "../hydra-python/src/gen-main/python" mainModules evalLibModules
 
   putStrLn ""
   putStrLn "=== Done! ==="
   putStrLn ""
   putStrLn "To view the generated modules:"
-  putStrLn "  ls -R ../hydra-python/src/main/python/hydra/eval"
+  putStrLn "  ls -R ../hydra-python/src/gen-main/python/hydra/eval"

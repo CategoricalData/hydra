@@ -35,6 +35,14 @@ library:
   ghc-options: [-rtsopts]
 
 executables:
+  export-genpg-schemas:
+    main: Main.hs
+    source-dirs:
+      - src/exec/export-genpg-schemas
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   update-java-kernel:
     main: Main.hs
     source-dirs:
