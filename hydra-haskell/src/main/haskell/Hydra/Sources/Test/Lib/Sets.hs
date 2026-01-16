@@ -59,6 +59,7 @@ setsFromList = subgroup "fromList" [
 setsToList :: TTerm TestGroup
 setsToList = subgroup "toList" [
   test "convert to list" [1, 2, 3] [1, 2, 3],
+  test "unsorted input" [3, 1, 2] [1, 2, 3],
   test "empty set" [] []]
   where
     test name input expected = primCase name _sets_toList [intSetOrEmpty input] (list $ Prelude.map int32 expected)

@@ -73,6 +73,7 @@ mapsFromList = subgroup "fromList" [
 mapsToList :: TTerm TestGroup
 mapsToList = subgroup "toList" [
   test "convert to pairs" [(1, "a"), (2, "b")] [(1, "a"), (2, "b")],
+  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [(1, "a"), (2, "b"), (3, "c")],
   test "empty map" [] []]
   where
     test name input expected = primCase name _maps_toList [intStringMap input] (
@@ -128,6 +129,7 @@ mapsNull = subgroup "null" [
 mapsKeys :: TTerm TestGroup
 mapsKeys = subgroup "keys" [
   test "get all keys" [(1, "a"), (2, "b"), (3, "c")] [1, 2, 3],
+  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] [1, 2, 3],
   test "empty map" [] []]
   where
     test name m result = primCase name _maps_keys [intStringMapOrEmpty m] (list $ Prelude.map int32 result)
@@ -135,6 +137,7 @@ mapsKeys = subgroup "keys" [
 mapsElems :: TTerm TestGroup
 mapsElems = subgroup "elems" [
   test "get all elements" [(1, "a"), (2, "b")] ["a", "b"],
+  test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"],
   test "empty map" [] []]
   where
     test name m result = primCase name _maps_elems [intStringMapOrEmpty m] (list $ Prelude.map MetaTerms.string result)
