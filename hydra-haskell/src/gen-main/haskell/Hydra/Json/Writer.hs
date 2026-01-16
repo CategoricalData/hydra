@@ -57,6 +57,8 @@ valueToExpr value = ((\x -> case x of
   Model.ValueArray v1 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v1))
   Model.ValueBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
   Model.ValueNull -> (Serialization.cst "null")
-  Model.ValueNumber v1 -> (Serialization.cst (Literals.showBigfloat v1))
+  Model.ValueNumber v1 ->
+    let rounded = (Literals.bigfloatToBigint v1)
+    in (Serialization.cst (Logic.ifElse (Equality.equal v1 (Literals.bigintToBigfloat rounded)) (Literals.showBigint rounded) (Literals.showBigfloat v1)))
   Model.ValueObject v1 -> (Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v1)))
   Model.ValueString v1 -> (Serialization.cst (jsonString v1))) value)
