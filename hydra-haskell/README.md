@@ -168,7 +168,7 @@ import Hydra.Ext.Generation
 -- Generate Python kernel
 -- Second arg: universe modules (for dependency resolution)
 -- Third arg: modules to generate
-writePython "../hydra-python/src/main/python" kernelModules kernelModules
+writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
 
 -- Generate Java kernel
 writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
