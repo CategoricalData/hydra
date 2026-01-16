@@ -31,7 +31,7 @@ adjacentEdgeToJson out ae = (toJsonObject [
 -- | Convert a GraphSON DoubleValue to a JSON Value
 doubleValueToJson :: (Syntax.DoubleValue -> Model.Value)
 doubleValueToJson x = case x of
-  Syntax.DoubleValueFinite v1 -> (Model.ValueNumber v1)
+  Syntax.DoubleValueFinite v1 -> (Model.ValueNumber (Literals.float64ToBigfloat v1))
   Syntax.DoubleValueInfinity -> (Model.ValueString "Infinity")
   Syntax.DoubleValueNegativeInfinity -> (Model.ValueString "-Infinity")
   Syntax.DoubleValueNotANumber -> (Model.ValueString "NaN")

@@ -42,35 +42,37 @@ decodeCell colType mvalue =
   let cname = (Relational.unColumnName (Tabular.columnTypeName colType))
   in  
     let typ = (Tabular.columnTypeType colType)
-    in (Maybes.maybe (Right Nothing) (\value ->  
-      let parseError = (Strings.cat [
-              "Invalid value for column ",
-              cname,
-              ": ",
-              value])
-      in ((\x -> case x of
-        Core.TypeLiteral v1 -> ((\x -> case x of
-          Core.LiteralTypeBoolean -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralBoolean parsed)))) (Literals.readBoolean value))
-          Core.LiteralTypeFloat v2 -> ((\x -> case x of
-            Core.FloatTypeBigfloat -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat parsed))))) (Literals.readFloat64 value))
-            Core.FloatTypeFloat32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed))))) (Literals.readFloat32 value))
-            Core.FloatTypeFloat64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed))))) (Literals.readFloat64 value))
-            _ -> (Left (Strings.cat [
-              "Unsupported float type for column ",
-              cname]))) v2)
-          Core.LiteralTypeInteger v2 -> ((\x -> case x of
-            Core.IntegerTypeInt32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed))))) (Literals.readInt32 value))
-            Core.IntegerTypeInt64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed))))) (Literals.readInt64 value))
-            _ -> (Left (Strings.cat [
-              "Unsupported integer type for column ",
-              cname]))) v2)
-          Core.LiteralTypeString -> (Right (Just (Core.TermLiteral (Core.LiteralString value))))
-          _ -> (Left (Strings.cat [
-            "Unsupported literal type for column ",
-            cname]))) v1)
-        _ -> (Left (Strings.cat [
-          "Unsupported type for column ",
-          cname]))) typ)) mvalue)
+    in  
+      let decodeValue = (\value ->  
+              let parseError = (Strings.cat [
+                      "Invalid value for column ",
+                      cname,
+                      ": ",
+                      value])
+              in ((\x -> case x of
+                Core.TypeLiteral v1 -> ((\x -> case x of
+                  Core.LiteralTypeBoolean -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralBoolean parsed)))) (Literals.readBoolean value))
+                  Core.LiteralTypeFloat v2 -> ((\x -> case x of
+                    Core.FloatTypeBigfloat -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat parsed))))) (Literals.readBigfloat value))
+                    Core.FloatTypeFloat32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed))))) (Literals.readFloat32 value))
+                    Core.FloatTypeFloat64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed))))) (Literals.readFloat64 value))
+                    _ -> (Left (Strings.cat [
+                      "Unsupported float type for column ",
+                      cname]))) v2)
+                  Core.LiteralTypeInteger v2 -> ((\x -> case x of
+                    Core.IntegerTypeInt32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed))))) (Literals.readInt32 value))
+                    Core.IntegerTypeInt64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed))))) (Literals.readInt64 value))
+                    _ -> (Left (Strings.cat [
+                      "Unsupported integer type for column ",
+                      cname]))) v2)
+                  Core.LiteralTypeString -> (Right (Just (Core.TermLiteral (Core.LiteralString value))))
+                  _ -> (Left (Strings.cat [
+                    "Unsupported literal type for column ",
+                    cname]))) v1)
+                _ -> (Left (Strings.cat [
+                  "Unsupported type for column ",
+                  cname]))) typ))
+      in (Maybes.maybe (Right Nothing) decodeValue mvalue)
 
 -- | Decode a single data row based on column types
 decodeRow :: ([Tabular.ColumnType] -> Tabular.DataRow String -> Either String (Tabular.DataRow Core.Term))
@@ -160,14 +162,16 @@ evaluateEdge edgeSpec record =
             Model.edgeProperties = props}) mInId)))))))
 
 evaluateProperties :: (Ord t0) => (M.Map t0 Core.Term -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 Core.Term))
-evaluateProperties specs record = (Flows.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Flows.mapList (\pair ->  
-  let k = (Pairs.first pair)
-  in  
-    let spec = (Pairs.second pair)
-    in (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
-      Core.applicationFunction = spec,
-      Core.applicationArgument = record}))) (\value -> (\x -> case x of
-      Core.TermMaybe v1 -> (Flows.pure (Maybes.map (\v -> (k, v)) v1))) (Rewriting.deannotateTerm value)))) (Maps.toList specs)))
+evaluateProperties specs record =  
+  let extractMaybe = (\k -> \term -> (\x -> case x of
+          Core.TermMaybe v1 -> (Flows.pure (Maybes.map (\v -> (k, v)) v1))) term)
+  in (Flows.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Flows.mapList (\pair ->  
+    let k = (Pairs.first pair)
+    in  
+      let spec = (Pairs.second pair)
+      in (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+        Core.applicationFunction = spec,
+        Core.applicationArgument = record}))) (\value -> extractMaybe k (Rewriting.deannotateTerm value)))) (Maps.toList specs)))
 
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
 evaluateVertex :: (Model.Vertex Core.Term -> Core.Term -> Compute.Flow Graph.Graph (Maybe (Model.Vertex Core.Term)))
