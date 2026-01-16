@@ -118,6 +118,22 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "unsorted input",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.toList"))),
+              Core.applicationArgument = (Core.TermSet (S.fromList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
+            Testing.evaluationTestCaseOutput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "empty set",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
             Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
