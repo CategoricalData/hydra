@@ -274,21 +274,33 @@ literalsShowFloat32 :: TTerm TestGroup
 literalsShowFloat32 = subgroup "showFloat32" [
   test "positive" 3.14 "3.14",
   test "negative" (-2.5) "-2.5",
-  test "zero" 0.0 "0.0"]
+  test "zero" 0.0 "0.0",
+  test "small positive" 0.05 "5.0e-2",
+  test "small positive 2" 0.03 "3.0e-2",
+  test "very small" 0.001 "1.0e-3",
+  test "normal decimal" 0.1 "0.1"]
   where
     test name x result = primCase name _literals_showFloat32 [float32 x] (string result)
 
 literalsShowFloat64 :: TTerm TestGroup
 literalsShowFloat64 = subgroup "showFloat64" [
   test "positive" 3.14159 "3.14159",
-  test "zero" 0.0 "0.0"]
+  test "zero" 0.0 "0.0",
+  test "small positive" 0.05 "5.0e-2",
+  test "small positive 2" 0.03 "3.0e-2",
+  test "very small" 0.001 "1.0e-3",
+  test "normal decimal" 0.1 "0.1"]
   where
     test name x result = primCase name _literals_showFloat64 [float64 x] (string result)
 
 literalsShowBigfloat :: TTerm TestGroup
 literalsShowBigfloat = subgroup "showBigfloat" [
   test "positive" 3.14 "3.14",
-  test "zero" 0.0 "0.0"]
+  test "zero" 0.0 "0.0",
+  test "small positive" 0.05 "5.0e-2",
+  test "small positive 2" 0.03 "3.0e-2",
+  test "very small" 0.001 "1.0e-3",
+  test "normal decimal" 0.1 "0.1"]
   where
     test name x result = primCase name _literals_showBigfloat [bigfloat x] (string result)
 

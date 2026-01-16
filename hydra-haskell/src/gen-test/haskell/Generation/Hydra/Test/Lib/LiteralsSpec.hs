@@ -289,6 +289,18 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "zero" $ H.shouldBe
       (Literals.showFloat32 0.0)
       ("0.0")
+    H.it "small positive" $ H.shouldBe
+      (Literals.showFloat32 5.0e-2)
+      ("5.0e-2")
+    H.it "small positive 2" $ H.shouldBe
+      (Literals.showFloat32 3.0e-2)
+      ("3.0e-2")
+    H.it "very small" $ H.shouldBe
+      (Literals.showFloat32 1.0e-3)
+      ("1.0e-3")
+    H.it "normal decimal" $ H.shouldBe
+      (Literals.showFloat32 0.1)
+      ("0.1")
   H.describe "showFloat64" $ do
     H.it "positive" $ H.shouldBe
       (Literals.showFloat64 3.14159)
@@ -296,6 +308,18 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "zero" $ H.shouldBe
       (Literals.showFloat64 0.0)
       ("0.0")
+    H.it "small positive" $ H.shouldBe
+      (Literals.showFloat64 5.0e-2)
+      ("5.0e-2")
+    H.it "small positive 2" $ H.shouldBe
+      (Literals.showFloat64 3.0e-2)
+      ("3.0e-2")
+    H.it "very small" $ H.shouldBe
+      (Literals.showFloat64 1.0e-3)
+      ("1.0e-3")
+    H.it "normal decimal" $ H.shouldBe
+      (Literals.showFloat64 0.1)
+      ("0.1")
   H.describe "showBigfloat" $ do
     H.it "positive" $ H.shouldBe
       (Literals.showBigfloat 3.14)
@@ -303,6 +327,18 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "zero" $ H.shouldBe
       (Literals.showBigfloat 0.0)
       ("0.0")
+    H.it "small positive" $ H.shouldBe
+      (Literals.showBigfloat 5.0e-2)
+      ("5.0e-2")
+    H.it "small positive 2" $ H.shouldBe
+      (Literals.showBigfloat 3.0e-2)
+      ("3.0e-2")
+    H.it "very small" $ H.shouldBe
+      (Literals.showBigfloat 1.0e-3)
+      ("1.0e-3")
+    H.it "normal decimal" $ H.shouldBe
+      (Literals.showBigfloat 0.1)
+      ("0.1")
   H.describe "showBoolean" $ do
     H.it "true" $ H.shouldBe
       (Literals.showBoolean True)
