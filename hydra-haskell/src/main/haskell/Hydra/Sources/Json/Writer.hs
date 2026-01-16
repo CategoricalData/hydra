@@ -137,7 +137,12 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
     J._Value_null>>: constant $
       Serialization.cst @@ string "null",
     J._Value_number>>: "n" ~>
-      Serialization.cst @@ (Literals.showBigfloat $ var "n"),
+      -- For whole numbers, omit the decimal point (e.g., 15 instead of 15.0)
+      "rounded" <~ Literals.bigfloatToBigint (var "n") $
+      Serialization.cst @@ (Logic.ifElse
+        (Equality.equal (var "n") (Literals.bigintToBigfloat $ var "rounded"))
+        (Literals.showBigint $ var "rounded")
+        (Literals.showBigfloat $ var "n")),
     J._Value_object>>: "obj" ~>
       Serialization.bracesListAdaptive @@ (Lists.map (keyValueToExpr) (Maps.toList $ var "obj")),
     J._Value_string>>: "s" ~>
