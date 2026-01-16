@@ -6,7 +6,8 @@
 module Hydra.Ext.Org.Apache.Parquet.Format where
 
 import qualified Hydra.Core as Core
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -63,9 +64,9 @@ data Statistics =
     statisticsNullCount :: (Maybe Integer),
     statisticsDistinctCount :: (Maybe Integer),
     -- | Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix.
-    statisticsMaxValue :: (Maybe String),
+    statisticsMaxValue :: (Maybe B.ByteString),
     -- | Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix.
-    statisticsMinValue :: (Maybe String)}
+    statisticsMinValue :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
 
 _Statistics = (Core.Name "hydra.ext.org.apache.parquet.format.Statistics")
@@ -672,7 +673,7 @@ data EncryptionWithColumnKey =
     -- | Column path in schema
     encryptionWithColumnKeyPathInSchema :: [String],
     -- | Retrieval metadata of column encryption key
-    encryptionWithColumnKeyKeyMetadata :: (Maybe String)}
+    encryptionWithColumnKeyKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
 
 _EncryptionWithColumnKey = (Core.Name "hydra.ext.org.apache.parquet.format.EncryptionWithColumnKey")
@@ -711,7 +712,7 @@ data ColumnChunk =
     -- | Crypto metadata of encrypted columns
     columnChunkCryptoMetadata :: (Maybe ColumnCryptoMetaData),
     -- | Encrypted column metadata for this chunk
-    columnChunkEncryptedColumnMetadata :: (Maybe String)}
+    columnChunkEncryptedColumnMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnChunk = (Core.Name "hydra.ext.org.apache.parquet.format.ColumnChunk")
@@ -852,8 +853,8 @@ data ColumnIndex =
     -- | A list of Boolean values to determine the validity of the corresponding min and max values. If true, a page contains only null values, and writers have to set the corresponding entries in min_values and max_values to byte[0], so that all lists have the same length. If false, the corresponding entries in min_values and max_values must be valid.
     columnIndexNullPages :: [Bool],
     -- | minValues and maxValues are lists containing lower and upper bounds for the values of each page determined by the ColumnOrder of the column. These may be the actual minimum and maximum values found on a page, but can also be (more compact) values that do not exist on a page. For example, instead of storing "Blart Versenwald III", a writer may set min_values[i]="B", max_values[i]="C". Such more compact values must still be valid values within the column's logical type. Readers must make sure that list entries are populated before using them by inspecting null_pages.
-    columnIndexMinValues :: [String],
-    columnIndexMaxValues :: [String],
+    columnIndexMinValues :: [B.ByteString],
+    columnIndexMaxValues :: [B.ByteString],
     -- | Stores whether both min_values and max_values are orderd and if so, in which direction. This allows readers to perform binary searches in both lists. Readers cannot assume that max_values[i] <= min_values[i+1], even if the lists are ordered.
     columnIndexBoundaryOrder :: BoundaryOrder,
     -- | A list containing the number of null values for each page
@@ -875,9 +876,9 @@ _ColumnIndex_nullCounts = (Core.Name "nullCounts")
 data AesGcmV1 = 
   AesGcmV1 {
     -- | AAD prefix
-    aesGcmV1AadPrefix :: (Maybe String),
+    aesGcmV1AadPrefix :: (Maybe B.ByteString),
     -- | Unique file identifier part of AAD suffix
-    aesGcmV1AadFileUnique :: (Maybe String),
+    aesGcmV1AadFileUnique :: (Maybe B.ByteString),
     -- | In files encrypted with AAD prefix without storing it, readers must supply the prefix
     aesGcmV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
@@ -893,9 +894,9 @@ _AesGcmV1_supplyAadPrefix = (Core.Name "supplyAadPrefix")
 data AesGcmCtrV1 = 
   AesGcmCtrV1 {
     -- | AAD prefix
-    aesGcmCtrV1AadPrefix :: (Maybe String),
+    aesGcmCtrV1AadPrefix :: (Maybe B.ByteString),
     -- | Unique file identifier part of AAD suffix
-    aesGcmCtrV1AadFileUnique :: (Maybe String),
+    aesGcmCtrV1AadFileUnique :: (Maybe B.ByteString),
     -- | In files encrypted with AAD prefix without storing it, readers must supply the prefix
     aesGcmCtrV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
@@ -941,7 +942,7 @@ data FileMetaData =
     -- | Encryption algorithm. This field is set only in encrypted files with plaintext footer. Files with encrypted footer store algorithm id in FileCryptoMetaData structure.
     fileMetaDataEncryptionAlgorithm :: (Maybe EncryptionAlgorithm),
     -- | Retrieval metadata of key used for signing the footer. Used only in encrypted files with plaintext footer.
-    fileMetaDataFooterSigningKeyMetadata :: (Maybe String)}
+    fileMetaDataFooterSigningKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
 
 _FileMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.FileMetaData")
@@ -970,7 +971,7 @@ data FileCryptoMetaData =
     -- | Encryption algorithm. This field is only used for files with encrypted footer. Files with plaintext footer store algorithm id inside footer (FileMetaData structure).
     fileCryptoMetaDataEncryptionAlgorithm :: EncryptionAlgorithm,
     -- | Retrieval metadata of key used for encryption of footer, and (possibly) columns
-    fileCryptoMetaDataKeyMetadata :: (Maybe String)}
+    fileCryptoMetaDataKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
 
 _FileCryptoMetaData = (Core.Name "hydra.ext.org.apache.parquet.format.FileCryptoMetaData")

@@ -5,7 +5,8 @@
 module Hydra.Ext.Protobuf.Any where
 
 import qualified Hydra.Core as Core
-import Prelude hiding  (Enum, Ordering, fail, map, pure, sum)
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -17,7 +18,7 @@ data Any =
     -- | A URL/resource name that uniquely identifies the type of the serialized protocol buffer message.
     anyTypeUrl :: String,
     -- | Must be a valid serialized protocol buffer of the above specified type.
-    anyValue :: String}
+    anyValue :: B.ByteString}
   deriving (Eq, Ord, Read, Show)
 
 _Any = (Core.Name "hydra.ext.protobuf.any.Any")
