@@ -97,6 +97,13 @@ def test_elems__get_all_elements():
   1: "a",
   2: "b"}))) == (("a", "b"))
 
+def test_elems__unsorted_keys():
+
+    assert (hydra.lib.maps.elems(FrozenDict({
+  1: "a",
+  2: "b",
+  3: "c"}))) == (("a", "b", "c"))
+
 def test_elems__empty_map():
 
     assert (hydra.lib.maps.elems(FrozenDict({}))) == (())
@@ -206,6 +213,13 @@ def test_insert__insert_into_empty():
 # keys
 
 def test_keys__get_all_keys():
+
+    assert (hydra.lib.maps.keys(FrozenDict({
+  1: "a",
+  2: "b",
+  3: "c"}))) == ((1, 2, 3))
+
+def test_keys__unsorted_keys():
 
     assert (hydra.lib.maps.keys(FrozenDict({
   1: "a",
@@ -346,6 +360,13 @@ def test_tolist__convert_to_pairs():
     assert (hydra.lib.maps.to_list(FrozenDict({
   1: "a",
   2: "b"}))) == (((1, "a"), (2, "b")))
+
+def test_tolist__unsorted_keys():
+
+    assert (hydra.lib.maps.to_list(FrozenDict({
+  1: "a",
+  2: "b",
+  3: "c"}))) == (((1, "a"), (2, "b"), (3, "c")))
 
 def test_tolist__empty_map():
 

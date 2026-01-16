@@ -81,6 +81,10 @@ def test_tolist__convert_to_list():
 
     assert (hydra.lib.sets.to_list(frozenset({1, 2, 3}))) == ((1, 2, 3))
 
+def test_tolist__unsorted_input():
+
+    assert (hydra.lib.sets.to_list(frozenset({1, 2, 3}))) == ((1, 2, 3))
+
 def test_tolist__empty_set():
 
     assert (hydra.lib.sets.to_list(frozenset({}))) == (())

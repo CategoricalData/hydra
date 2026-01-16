@@ -38,8 +38,8 @@ def delete(key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
 
 
 def elems(mapping: Mapping[Any, V]) -> frozenlist[V]:
-    """Get the values of a map."""
-    return tuple(mapping.values())
+    """Get the values of a map, in sorted key order."""
+    return tuple(v for _, v in sorted(mapping.items()))
 
 
 def empty() -> FrozenDict[Any, Any]:
@@ -74,8 +74,8 @@ def insert(key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
 
 
 def keys(mapping: Mapping[K, Any]) -> frozenlist[K]:
-    """Get the keys of a map."""
-    return tuple(mapping.keys())
+    """Get the keys of a map, in sorted order."""
+    return tuple(sorted(mapping.keys()))
 
 
 def lookup(key: K, mapping: Mapping[K, V]) -> Maybe[V]:
@@ -118,8 +118,8 @@ def size(mapping: Mapping[Any, Any]) -> int:
 
 
 def to_list(mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
-    """Convert a map to a list of key-value pairs."""
-    return tuple(mapping.items())
+    """Convert a map to a list of key-value pairs, sorted by key."""
+    return tuple(sorted(mapping.items()))
 
 
 def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
