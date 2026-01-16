@@ -483,6 +483,25 @@ encodeBindingAsAssignment allowThunking env (Binding name term Nothing) = do
   where
     tc = pythonEnvironmentTypeContext env
 
+-- | Extract lambdas and their bodies from a term.
+-- Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
+gatherLambdas :: Term -> ([Name], Term)
+gatherLambdas = go []
+  where
+    go params term = case deannotateAndDetypeTerm term of
+      TermFunction (FunctionLambda (Lambda name _ body)) -> go (params ++ [name]) body
+      _ -> (params, term)
+
+-- | Check if a term is a case statement applied to exactly one argument.
+-- Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
+isCaseStatementApplication :: Term -> Maybe (Name, Maybe Term, [Field], Term)
+isCaseStatementApplication term = case gatherApplications term of
+  ([arg], body) -> case deannotateAndDetypeTerm body of
+    TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) ->
+      Just (tname, dflt, cases, arg)
+    _ -> Nothing
+  _ -> Nothing
+
 encodeBindingAs :: PythonEnvironment -> Binding -> Flow PyGraph Py.Statement
 encodeBindingAs env (Binding name1 term1 mts) = do
   comment <- fmap normalizeComment <$> (inGraphContext $ getTermDescription term1)
@@ -492,33 +511,40 @@ encodeBindingAs env (Binding name1 term1 mts) = do
       -- For bindings without type schemes (e.g., lifted local functions),
       -- encode based on term type
       let fname = encodeName True CaseConventionLowerSnake env name1
-      case deannotateAndDetypeTerm term1 of
-        TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
-          -- This is a case elimination function - encode it as a function with a match statement
-          -- The function takes one argument 'x' and pattern-matches on it
+      -- Check if this is a lambda wrapping a case statement application (from hoisting)
+      let (lambdaParams, innerBody) = gatherLambdas term1
+      case isCaseStatementApplication innerBody of
+        Just (tname, dflt, cases, arg) | not (L.null lambdaParams) -> do
+          -- This is a hoisted binding: lambdas wrapping a case statement application
+          -- Encode as: def fname(lambdaParams..., matchArg): match matchArg: ...
           rt <- inGraphContext $ requireUnionType tname
           let isEnum = isEnumRowType rt
           let isFull = L.length cases >= L.length (rowTypeFields rt)
-          let param = Py.ParamNoDefault (Py.Param (Py.Name "x") Nothing) Nothing
-          let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters [param] [] Nothing
-          pyCases <- CM.mapM (toCaseBlock rt isEnum) cases
-          pyDflt <- toDefault isFull dflt
-          let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple $ pyNameToPyExpression (Py.Name "x")
+          -- Create parameters for captured variables and the match subject
+          let matchArgName = Py.Name "x"
+          let capturedParams = fmap (\n -> Py.ParamNoDefault (Py.Param (encodeName False CaseConventionLowerSnake env n) Nothing) Nothing) lambdaParams
+          let matchParam = Py.ParamNoDefault (Py.Param matchArgName Nothing) Nothing
+          let allParams = capturedParams ++ [matchParam]
+          let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters allParams [] Nothing
+          -- Encode the match statement
+          pyCases <- CM.mapM (toCaseBlockForHoisted rt isEnum) cases
+          pyDflt <- toDefaultForHoisted isFull dflt tname
+          let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple $ pyNameToPyExpression matchArgName
           let matchStmt = Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ pyDflt
           let body = indentedBlock Nothing [[matchStmt]]
           return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
             Py.FunctionDefRaw False fname [] (Just params) Nothing Nothing body
           where
-            toDefault isFull dflt = do
-              stmt <- case dflt of
+            toDefaultForHoisted isFull mdflt tname = do
+              stmt <- case mdflt of
                 Nothing -> if isFull
                   then pure $ raiseAssertionError "Unreachable: all variants handled"
                   else pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
                 Just d -> returnSingle <$> encodeTermInline env False d
               let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
-              let body = indentedBlock Nothing [[stmt]]
-              return [Py.CaseBlock patterns Nothing body]
-            toCaseBlock rt isEnum (Field fname fterm) = case deannotateTerm fterm of
+              let caseBody = indentedBlock Nothing [[stmt]]
+              return [Py.CaseBlock patterns Nothing caseBody]
+            toCaseBlockForHoisted rt isEnum (Field fname fterm) = case deannotateTerm fterm of
               TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
                   let isUnitVariant = case L.find (\ft -> fieldTypeName ft == fname) (rowTypeFields rt) of
                         Just ft -> Schemas.isUnitType $ deannotateType $ fieldTypeType ft
@@ -544,7 +570,60 @@ encodeBindingAs env (Binding name1 term1 mts) = do
                               Py.ClosedPatternCapture $ Py.CapturePattern
                                 $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
                     return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing pyBody
-              _ -> fail $ "unsupported case in lifted binding: " ++ ShowCore.term fterm
+              _ -> fail $ "unsupported case in hoisted binding: " ++ ShowCore.term fterm
+        _ -> case deannotateAndDetypeTerm term1 of
+          TermFunction (FunctionElimination (EliminationUnion (CaseStatement tname dflt cases))) -> do
+            -- This is a case elimination function - encode it as a function with a match statement
+            -- The function takes one argument 'x' and pattern-matches on it
+            rt <- inGraphContext $ requireUnionType tname
+            let isEnum = isEnumRowType rt
+            let isFull = L.length cases >= L.length (rowTypeFields rt)
+            let param = Py.ParamNoDefault (Py.Param (Py.Name "x") Nothing) Nothing
+            let params = Py.ParametersParamNoDefault $ Py.ParamNoDefaultParameters [param] [] Nothing
+            pyCases <- CM.mapM (toCaseBlock rt isEnum) cases
+            pyDflt <- toDefault isFull dflt
+            let subj = Py.SubjectExpressionSimple $ Py.NamedExpressionSimple $ pyNameToPyExpression (Py.Name "x")
+            let matchStmt = Py.StatementCompound $ Py.CompoundStatementMatch $ Py.MatchStatement subj $ pyCases ++ pyDflt
+            let body = indentedBlock Nothing [[matchStmt]]
+            return $ Py.StatementCompound $ Py.CompoundStatementFunction $ Py.FunctionDefinition Nothing $
+              Py.FunctionDefRaw False fname [] (Just params) Nothing Nothing body
+            where
+              toDefault isFull dflt = do
+                stmt <- case dflt of
+                  Nothing -> if isFull
+                    then pure $ raiseAssertionError "Unreachable: all variants handled"
+                    else pure $ raiseTypeError $ "Unsupported " ++ localNameOf tname
+                  Just d -> returnSingle <$> encodeTermInline env False d
+                let patterns = pyClosedPatternToPyPatterns Py.ClosedPatternWildcard
+                let body = indentedBlock Nothing [[stmt]]
+                return [Py.CaseBlock patterns Nothing body]
+              toCaseBlock rt isEnum (Field fname fterm) = case deannotateTerm fterm of
+                TermFunction (FunctionLambda lam@(Lambda v _ body)) -> do
+                    let isUnitVariant = case L.find (\ft -> fieldTypeName ft == fname) (rowTypeFields rt) of
+                          Just ft -> Schemas.isUnitType $ deannotateType $ fieldTypeType ft
+                          Nothing -> False
+                    let effectiveBody = if isUnitVariant
+                          then eliminateUnitVar v body
+                          else body
+                    withLambda env lam $ \env2 -> do
+                      stmts <- encodeTermMultiline env2 effectiveBody
+                      let pyBody = indentedBlock Nothing [stmts]
+                      let pattern = if isEnum
+                            then Py.ClosedPatternValue $ Py.ValuePattern $ Py.Attribute [
+                              encodeName True CaseConventionPascal env tname,
+                              encodeEnumValue env2 fname]
+                            else if (isUnitVariant || isFreeVariableInTerm v body || Schemas.isUnitTerm body)
+                            then Py.ClosedPatternClass $
+                              Py.ClassPattern pyVarName Nothing Nothing
+                            else Py.ClosedPatternClass $
+                              Py.ClassPattern pyVarName Nothing (Just $ Py.KeywordPatterns [argPattern])
+                            where
+                              pyVarName = Py.NameOrAttribute [variantName True env2 tname fname]
+                              argPattern = Py.KeywordPattern (Py.Name "value") $ Py.PatternOr $ Py.OrPattern [
+                                Py.ClosedPatternCapture $ Py.CapturePattern
+                                  $ Py.PatternCaptureTarget (encodeName False CaseConventionLowerSnake env2 v)]
+                      return $ Py.CaseBlock (pyClosedPatternToPyPatterns pattern) Nothing pyBody
+                _ -> fail $ "unsupported case in lifted binding: " ++ ShowCore.term fterm
         _ -> do
           -- Not a case elimination, encode normally
           stmts <- encodeTermMultiline env term1
