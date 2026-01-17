@@ -31,7 +31,8 @@ allTests = definitionInModule module_ "allTests" $
       hoistSubtermsGroup,
       hoistCaseStatementsGroup,
       hoistLetBindingsGroup,
-      hoistPolymorphicLetBindingsGroup]
+      hoistPolymorphicLetBindingsGroup,
+      hoistPolymorphicTypeParametersGroup]
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -1416,3 +1417,316 @@ polyType vars typ = Phantoms.just $ Core.typeScheme (Phantoms.list $ nm <$> vars
 -- | Convenience function for creating hoist polymorphic let bindings test cases
 hoistPolyCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistPolyCase cname input output = hoistPolymorphicLetBindingsCase cname input output
+
+-- | Test cases for type parameter extraction when hoisting polymorphic let bindings
+-- This group specifically tests scenarios where Java code generation fails because
+-- type parameters (t0, t1, t2, etc.) are used in generated code but not declared
+-- in method signatures. The root cause is that javaTypeParametersForType doesn't
+-- properly collect all free type variables from nested generic types.
+--
+-- These tests illustrate the EXPECTED behavior after the issue is fixed.
+-- Currently, the Java coder fails to generate compilable code for these cases.
+hoistPolymorphicTypeParametersGroup :: TTerm TestGroup
+hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" [
+    -- ============================================================
+    -- Test: Nested polymorphic bindings with multiple type variables
+    -- This is the core issue: when a polymorphic binding like `choose`
+    -- uses type variables (t0, t1, t2) in nested function types,
+    -- those variables must be declared in the hoisted method signature.
+    -- ============================================================
+
+    hoistPolyCase "nested function types: all type variables must be declared"
+      -- Input: let f = (let choose : forall t0 t1 t2. (t0 -> t1) -> (t2 -> t1) -> Either<t0, t2> -> t1 = ... in choose) in f
+      -- This simulates the `mutateTrace` scenario where `choose` is a polymorphic
+      -- local binding with multiple type parameters in nested function types.
+      (mkLet [(nm "f",
+        Core.termLet $ mkLet [(nm "choose",
+          T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+            (T.apply (T.apply (T.apply (T.var "either") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+          -- Type: forall t0 t1 t2. (t0 -> t1) -> (t2 -> t1) -> Either<t0, t2> -> t1
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function
+              (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
+              (MetaTypes.function
+                (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
+                (MetaTypes.function
+                  (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") (MetaTypes.var "t0")) (MetaTypes.var "t2"))
+                  (MetaTypes.var "t1")))))]
+          (T.var "choose"),
+        monoType (MetaTypes.function
+          (MetaTypes.function MetaTypes.string MetaTypes.int32)
+          (MetaTypes.function
+            (MetaTypes.function MetaTypes.boolean MetaTypes.int32)
+            (MetaTypes.function
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") MetaTypes.string) MetaTypes.boolean)
+              MetaTypes.int32))))]
+        (T.var "f"))
+      -- Output: choose is hoisted to top level with ALL type parameters preserved
+      -- When generating Java, the method signature must declare t0, t1, t2:
+      -- <t0, t1, t2> Function<Function<t0, t1>, Function<Function<t2, t1>, Function<Either<t0, t2>, t1>>> choose = ...
+      (mkLet [
+        (nm "choose",
+          T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+            (T.apply (T.apply (T.apply (T.var "either") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function
+              (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
+              (MetaTypes.function
+                (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
+                (MetaTypes.function
+                  (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") (MetaTypes.var "t0")) (MetaTypes.var "t2"))
+                  (MetaTypes.var "t1"))))),
+        (nm "f",
+          T.var "choose",
+          monoType (MetaTypes.function
+            (MetaTypes.function MetaTypes.string MetaTypes.int32)
+            (MetaTypes.function
+              (MetaTypes.function MetaTypes.boolean MetaTypes.int32)
+              (MetaTypes.function
+                (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") MetaTypes.string) MetaTypes.boolean)
+                MetaTypes.int32))))]
+        (T.var "f")),
+
+    -- ============================================================
+    -- Test: Type variable in return position only
+    -- Type variables appearing only in the return type of a nested
+    -- function must still be declared.
+    -- ============================================================
+
+    hoistPolyCase "type variable in return position only"
+      -- Input: let f = (let returnT : forall t. () -> t = ... in returnT) in f
+      (mkLet [(nm "f",
+        Core.termLet $ mkLet [(nm "returnT",
+          T.lambda "unit" (T.var "undefined"),
+          polyType ["t"] (MetaTypes.function MetaTypes.unit (MetaTypes.var "t")))]
+          (T.var "returnT"),
+        monoType (MetaTypes.function MetaTypes.unit MetaTypes.int32))]
+        (T.var "f"))
+      -- Output: returnT hoisted with t declared
+      (mkLet [
+        (nm "returnT",
+          T.lambda "unit" (T.var "undefined"),
+          polyType ["t"] (MetaTypes.function MetaTypes.unit (MetaTypes.var "t"))),
+        (nm "f",
+          T.var "returnT",
+          monoType (MetaTypes.function MetaTypes.unit MetaTypes.int32))]
+        (T.var "f")),
+
+    -- ============================================================
+    -- Test: Type variables in deeply nested generic types
+    -- The Java coder uses freeVariablesInType but may not recurse
+    -- into all nested type structures.
+    -- ============================================================
+
+    hoistPolyCase "type variables in deeply nested generics"
+      -- Input: let f = (let nested : forall t0 t1 t2. List<Map<t0, Pair<t1, t2>>> -> t0 = ... in nested) in f
+      -- Type variables t0, t1, t2 are buried in nested generic type constructors
+      (mkLet [(nm "f",
+        Core.termLet $ mkLet [(nm "nested",
+          T.lambda "x" (T.var "undefined"),
+          -- Type: forall t0 t1 t2. List<Map<t0, Pair<t1, t2>>> -> t0
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function
+              (MetaTypes.apply (MetaTypes.var "List")
+                (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Map") (MetaTypes.var "t0"))
+                  (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Pair") (MetaTypes.var "t1")) (MetaTypes.var "t2"))))
+              (MetaTypes.var "t0")))]
+          (T.var "nested"),
+        monoType (MetaTypes.function
+          (MetaTypes.apply (MetaTypes.var "List")
+            (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Map") MetaTypes.string)
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Pair") MetaTypes.int32) MetaTypes.boolean)))
+          MetaTypes.string))]
+        (T.var "f"))
+      -- Output: nested hoisted with all type parameters t0, t1, t2 declared
+      (mkLet [
+        (nm "nested",
+          T.lambda "x" (T.var "undefined"),
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function
+              (MetaTypes.apply (MetaTypes.var "List")
+                (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Map") (MetaTypes.var "t0"))
+                  (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Pair") (MetaTypes.var "t1")) (MetaTypes.var "t2"))))
+              (MetaTypes.var "t0"))),
+        (nm "f",
+          T.var "nested",
+          monoType (MetaTypes.function
+            (MetaTypes.apply (MetaTypes.var "List")
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Map") MetaTypes.string)
+                (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Pair") MetaTypes.int32) MetaTypes.boolean)))
+            MetaTypes.string))]
+        (T.var "f")),
+
+    -- ============================================================
+    -- Test: Multiple polymorphic bindings that share type variable names
+    -- Each binding should independently track its own type variables.
+    -- ============================================================
+
+    hoistPolyCase "multiple bindings with overlapping type variable names"
+      -- Input: let outer = (let id1 : forall t. t -> t = \x -> x; id2 : forall t. t -> t = \y -> y in pair id1 id2) in outer
+      -- Both id1 and id2 use "t" but they are independent
+      (mkLet [(nm "outer",
+        Core.termLet $ mkLet [
+          (nm "id1", T.lambda "x" (T.var "x"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
+          (nm "id2", T.lambda "y" (T.var "y"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t")))]
+          (T.apply (T.apply (T.var "pair") (T.var "id1")) (T.var "id2")),
+        monoType (MetaTypes.pair
+          (MetaTypes.function MetaTypes.int32 MetaTypes.int32)
+          (MetaTypes.function MetaTypes.string MetaTypes.string)))]
+        (T.var "outer"))
+      -- Output: both hoisted, each with their own t parameter
+      (mkLet [
+        (nm "id1", T.lambda "x" (T.var "x"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
+        (nm "id2", T.lambda "y" (T.var "y"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
+        (nm "outer",
+          T.apply (T.apply (T.var "pair") (T.var "id1")) (T.var "id2"),
+          monoType (MetaTypes.pair
+            (MetaTypes.function MetaTypes.int32 MetaTypes.int32)
+            (MetaTypes.function MetaTypes.string MetaTypes.string)))]
+        (T.var "outer")),
+
+    -- ============================================================
+    -- Test: Polymorphic binding with captured term variable AND type parameters
+    -- This is the combination case: the binding both captures a lambda-bound
+    -- term variable AND has type parameters that need to be declared.
+    -- ============================================================
+
+    hoistPolyCase "captured variable with type parameters"
+      -- Input: let f = \(a:String) -> (let g : forall t. t -> Pair<String, t> = \x -> pair a x in g 42) in f "hello"
+      -- Here 'g' captures 'a' AND has type parameter t
+      -- When hoisted: g must be wrapped in lambda for 'a', AND method must declare t
+      (mkLet [(nm "f",
+        T.lambdaTyped "a" MetaTypes.string (Core.termLet $ mkLet [
+          (nm "g",
+            T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x")),
+            polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.pair MetaTypes.string (MetaTypes.var "t"))))]
+          (T.apply (T.var "g") (T.int32 42))),
+        monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
+        (T.apply (T.var "f") (T.string "hello")))
+      -- Output: g is hoisted with lambda wrapper for 'a', and t must be declared
+      -- Java signature: <t> Function<String, Function<t, Pair<String, t>>> g = a -> x -> pair(a, x);
+      (mkLet [
+        (nm "g",
+          T.lambdaTyped "a" MetaTypes.string (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x"))),
+          polyType ["t"] (MetaTypes.function MetaTypes.string (MetaTypes.function (MetaTypes.var "t") (MetaTypes.pair MetaTypes.string (MetaTypes.var "t"))))),
+        (nm "f",
+          T.lambdaTyped "a" MetaTypes.string (T.apply (T.apply (T.var "g") (T.var "a")) (T.int32 42)),
+          monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
+        (T.apply (T.var "f") (T.string "hello"))),
+
+    -- ============================================================
+    -- Test: Short type variable names (the isLambdaBoundVariable heuristic)
+    -- The Java coder's isLambdaBoundVariable uses name length <= 4 to identify
+    -- type variables. These tests ensure that this heuristic correctly
+    -- identifies variables that should become Java type parameters.
+    -- ============================================================
+
+    hoistPolyCase "short type variable names are treated as type parameters"
+      -- Input: let f = (let g : forall s t v. s -> t -> v = ... in g) in f
+      -- s, t, v have length <= 4, so they should be recognized as type parameters
+      (mkLet [(nm "f",
+        Core.termLet $ mkLet [(nm "g",
+          T.lambda "s" (T.lambda "t" (T.var "undefined")),
+          polyType ["s", "t", "v"]
+            (MetaTypes.function (MetaTypes.var "s")
+              (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "v"))))]
+          (T.var "g"),
+        monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+        (T.var "f"))
+      -- Output: g hoisted with s, t, v declared as type parameters
+      (mkLet [
+        (nm "g",
+          T.lambda "s" (T.lambda "t" (T.var "undefined")),
+          polyType ["s", "t", "v"]
+            (MetaTypes.function (MetaTypes.var "s")
+              (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "v")))),
+        (nm "f",
+          T.var "g",
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+        (T.var "f")),
+
+    hoistPolyCase "numbered type variables like t0 t1 t2"
+      -- Input: let f = (let g : forall t0 t1 t2. t0 -> t1 -> t2 = ... in g) in f
+      -- t0, t1, t2 have length <= 4, common pattern in generated code
+      (mkLet [(nm "f",
+        Core.termLet $ mkLet [(nm "g",
+          T.lambda "x" (T.lambda "y" (T.var "undefined")),
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function (MetaTypes.var "t0")
+              (MetaTypes.function (MetaTypes.var "t1") (MetaTypes.var "t2"))))]
+          (T.var "g"),
+        monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+        (T.var "f"))
+      -- Output: g hoisted with t0, t1, t2 declared
+      (mkLet [
+        (nm "g",
+          T.lambda "x" (T.lambda "y" (T.var "undefined")),
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function (MetaTypes.var "t0")
+              (MetaTypes.function (MetaTypes.var "t1") (MetaTypes.var "t2")))),
+        (nm "f",
+          T.var "g",
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+        (T.var "f")),
+
+    -- ============================================================
+    -- Test: Complex "choose" pattern from mutateTrace
+    -- This directly models the failing code in Monads.java
+    -- ============================================================
+
+    hoistPolyCase "choose pattern from mutateTrace"
+      -- Input simulates: let mutateTrace = ... in
+      --   choose <~ (forLeft ~> forRight ~> e ~> either forLeft forRight e) $
+      --   ... rest of mutateTrace ...
+      -- The `choose` binding has type:
+      --   forall t0 t1 t2. (t0 -> t1) -> (t2 -> t1) -> Either<t0, t2> -> t1
+      (mkLet [(nm "mutateTrace",
+        T.lambda "mutate" (T.lambda "restore" (T.lambda "f"
+          (Core.termLet $ mkLet [(nm "choose",
+            -- choose = \forLeft -> \forRight -> \e -> either forLeft forRight e
+            T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+              (T.apply (T.apply (T.apply (T.var "either") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+            -- Type: forall t0 t1 t2. (t0 -> t1) -> (t2 -> t1) -> Either<t0, t2> -> t1
+            polyType ["t0", "t1", "t2"]
+              (MetaTypes.function
+                (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
+                (MetaTypes.function
+                  (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
+                  (MetaTypes.function
+                    (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") (MetaTypes.var "t0")) (MetaTypes.var "t2"))
+                    (MetaTypes.var "t1")))))]
+            -- Body uses choose
+            (T.apply (T.apply (T.apply (T.var "choose") (T.var "forLeft")) (T.var "forRight")) (T.var "e"))))),
+        -- Full type of mutateTrace (simplified)
+        monoType (MetaTypes.function
+          (MetaTypes.var "MutateType")
+          (MetaTypes.function
+            (MetaTypes.var "RestoreType")
+            (MetaTypes.function (MetaTypes.var "FlowType") (MetaTypes.var "FlowType")))))]
+        (T.var "mutateTrace"))
+      -- Output: choose is hoisted to top level, MUST have t0, t1, t2 declared
+      -- In Java this becomes:
+      --   public static <t0, t1, t2> Function<Function<t0, t1>,
+      --     Function<Function<t2, t1>,
+      --       Function<Either<t0, t2>, t1>>> choose = ...
+      (mkLet [
+        (nm "choose",
+          T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+            (T.apply (T.apply (T.apply (T.var "either") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+          polyType ["t0", "t1", "t2"]
+            (MetaTypes.function
+              (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
+              (MetaTypes.function
+                (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
+                (MetaTypes.function
+                  (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Either") (MetaTypes.var "t0")) (MetaTypes.var "t2"))
+                  (MetaTypes.var "t1"))))),
+        (nm "mutateTrace",
+          T.lambda "mutate" (T.lambda "restore" (T.lambda "f"
+            (T.apply (T.apply (T.apply (T.var "choose") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+          monoType (MetaTypes.function
+            (MetaTypes.var "MutateType")
+            (MetaTypes.function
+              (MetaTypes.var "RestoreType")
+              (MetaTypes.function (MetaTypes.var "FlowType") (MetaTypes.var "FlowType")))))]
+        (T.var "mutateTrace"))]
