@@ -68,9 +68,9 @@ public abstract class Literal implements Serializable {
    * A binary literal
    */
   public static final class Binary extends hydra.core.Literal implements Serializable {
-    public final STUB:ArrayType value;
+    public final byte[] value;
     
-    public Binary (STUB:ArrayType value) {
+    public Binary (byte[] value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
