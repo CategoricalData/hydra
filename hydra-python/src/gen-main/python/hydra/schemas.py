@@ -253,7 +253,7 @@ def graph_to_inference_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T
     return hydra.lib.flows.bind(schema_graph_to_typing_environment(schema()), (lambda schema_types: hydra.lib.flows.pure(hydra.typing.InferenceContext(schema_types, prim_types(), var_types(), hydra.lib.maps.empty(), False))))
 
 def graph_to_type_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.TypeContext]:
-    return hydra.lib.flows.bind(graph_to_inference_context(graph), (lambda ix: hydra.lib.flows.pure(hydra.typing.TypeContext(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix))))
+    return hydra.lib.flows.bind(graph_to_inference_context(graph), (lambda ix: (element_types := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), hydra.lib.maps.elems(graph.elements)))), hydra.lib.flows.pure(hydra.typing.TypeContext(element_types, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix)))[1]))
 
 def instantiate_type_scheme(scheme: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     @lru_cache(1)

@@ -251,7 +251,7 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                     return arity_of(txt(), tl.body)
                 
                 case hydra.core.TermVariable(value=name):
-                    return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound variable: ", name.value))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maps.lookup(name, tx2.types))
+                    return hydra.lib.maybes.maybe(hydra.lib.flows.map(hydra.arity.type_arity, hydra.checking.type_of(tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name)))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maps.lookup(name, tx2.types))
                 
                 case _:
                     return dflt()

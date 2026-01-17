@@ -315,8 +315,6 @@ def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], te
     return rewrite_term(replace, term)
 
 def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Type:
-    r"""Flatten nested let expressions."""
-    
     def rewrite_binding(binding: hydra.core.Binding) -> tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]]:
         @lru_cache(1)
         def key0() -> hydra.core.Type:
@@ -377,7 +375,20 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Type:
             
             case _:
                 return (hydra.core.Binding(key0(), val0(), t()), ())
-    def flatten(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Type:
+    def flatten_body_let(bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term):
+        match body:
+            case hydra.core.TermLet(value=inner_lt):
+                @lru_cache(1)
+                def inner_bindings() -> frozenlist[hydra.core.Binding]:
+                    return inner_lt.bindings
+                @lru_cache(1)
+                def inner_body() -> hydra.core.Type:
+                    return inner_lt.body
+                return flatten_body_let(hydra.lib.lists.concat2(bindings, inner_bindings()), inner_body())
+            
+            case _:
+                return (bindings, body)
+    def flatten(recurse: Callable[[T1], hydra.core.Term], term2: T1) -> hydra.core.Type:
         @lru_cache(1)
         def rewritten() -> hydra.core.Type:
             return recurse(term2)
@@ -389,12 +400,21 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Type:
                 @lru_cache(1)
                 def body() -> hydra.core.Type:
                     return lt.body
-                def for_result(hr: tuple[T1, frozenlist[T1]]) -> frozenlist[T1]:
+                def for_result(hr: tuple[T2, frozenlist[T2]]) -> frozenlist[T2]:
                     return hydra.lib.lists.cons(hydra.lib.pairs.first(hr), hydra.lib.pairs.second(hr))
                 @lru_cache(1)
-                def new_bindings() -> frozenlist[hydra.core.Binding]:
+                def flattened_bindings() -> frozenlist[hydra.core.Binding]:
                     return hydra.lib.lists.concat(hydra.lib.lists.map((lambda arg_: for_result(rewrite_binding(arg_))), bindings()))
-                return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(new_bindings(), body())))
+                @lru_cache(1)
+                def merged() -> tuple[T2, hydra.core.Term]:
+                    return flatten_body_let(flattened_bindings(), body())
+                @lru_cache(1)
+                def new_bindings() -> T2:
+                    return hydra.lib.pairs.first(merged())
+                @lru_cache(1)
+                def new_body() -> hydra.core.Type:
+                    return hydra.lib.pairs.second(merged())
+                return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(new_bindings(), new_body())))
             
             case _:
                 return rewritten()

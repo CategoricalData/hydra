@@ -39,28 +39,8 @@ T2 = TypeVar("T2")
 def all_equal(els: frozenlist[T0]) -> bool:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : True), (lambda : hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, hydra.lib.equality.equal(t, hydra.lib.lists.head(els)))), True, hydra.lib.lists.tail(els))))
 
-def check_type_variables(tx: hydra.typing.TypeContext, typ: hydra.core.Type) -> hydra.compute.Flow[T0, None]:
-    @lru_cache(1)
-    def cx() -> hydra.core.Type:
-        return tx.inference_context
-    @lru_cache(1)
-    def vars() -> frozenset[hydra.core.Name]:
-        return tx.type_variables
-    @lru_cache(1)
-    def dflt() -> hydra.compute.Flow[T0, None]:
-        return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: check_type_variables(tx, v1)), hydra.rewriting.subtypes(typ)), (lambda _: hydra.lib.flows.pure(None)))
-    @lru_cache(1)
-    def check() -> hydra.compute.Flow[T0, None]:
-        match typ:
-            case hydra.core.TypeForall(value=ft):
-                return check_type_variables(hydra.typing.TypeContext(tx.types, tx.metadata, hydra.lib.sets.insert(ft.parameter, vars()), tx.lambda_variables, tx.inference_context), ft.body)
-            
-            case hydra.core.TypeVariable(value=v):
-                return hydra.lib.logic.if_else(hydra.lib.sets.member(v, vars()), (lambda : hydra.lib.flows.pure(None)), (lambda : hydra.lib.logic.if_else(hydra.lib.maps.member(v, cx().schema_types), (lambda : hydra.lib.flows.pure(None)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("unbound type variable \"", v.value, "\" in ", hydra.show.core.type(typ), ". Local variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.sets.to_list(vars()))), "}, schema variables: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(cx().schema_types))), "}")))))))
-            
-            case _:
-                return dflt()
-    return hydra.monads.with_trace(hydra.lib.strings.cat(("checking variables of: ", hydra.show.core.type(typ))), check())
+def check_type_variables(_tx: T0, _typ: T1) -> hydra.compute.Flow[T2, None]:
+    return hydra.lib.flows.pure(None)
 
 def apply_type_arguments_to_type(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
     @lru_cache(1)
@@ -76,8 +56,8 @@ def apply_type_arguments_to_type(tx: hydra.typing.TypeContext, type_args: frozen
                 return apply_type_arguments_to_type(tx, hydra.lib.lists.tail(type_args), hydra.substitution.subst_in_type(hydra.typing.TypeSubst(hydra.lib.maps.singleton(v(), hydra.lib.lists.head(type_args))), tbody()))
             
             case _:
-                return hydra.lib.flows.fail(hydra.lib.strings.cat(("not a forall type: ", hydra.show.core.type(t))))
-    return hydra.lib.flows.bind(check_type_variables(tx, t), (lambda _: hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.lib.flows.pure(t)), (lambda : nonnull()))))
+                return hydra.lib.flows.fail(hydra.lib.strings.cat(("not a forall type: ", hydra.show.core.type(t), ". Trying to apply ", hydra.lib.literals.show_int32(hydra.lib.lists.length(type_args)), " type args: ", hydra.formatting.show_list(hydra.show.core.type, type_args), ". Context has vars: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(tx.types))), "}")))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.lib.flows.bind(check_type_variables(tx, t), (lambda _: hydra.lib.flows.pure(t)))), (lambda : nonnull()))
 
 def check_for_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
     @lru_cache(1)
@@ -333,7 +313,7 @@ def type_of_application(tx: hydra.typing.TypeContext, type_args: frozenlist[hydr
             
             case _:
                 return hydra.lib.flows.fail(hydra.lib.strings.cat(("left hand side of application (", hydra.show.core.term(fun()), ") is not function-typed (", hydra.show.core.type(tfun), ")", ". types: ", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda p: hydra.lib.strings.cat((hydra.lib.pairs.first(p).value, ": ", hydra.show.core.type(hydra.lib.pairs.second(p))))), hydra.lib.maps.to_list(tx.types))))))
-    return hydra.lib.flows.bind(type_of(tx, (), fun()), (lambda tfun: hydra.lib.flows.bind(check_type_variables(tx, tfun), (lambda _: hydra.lib.flows.bind(type_of(tx, (), arg()), (lambda targ: hydra.lib.flows.bind(check_type_variables(tx, targ), (lambda _2: hydra.lib.flows.bind(try_type(tfun, targ), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))))))))))
+    return hydra.lib.flows.bind(type_of(tx, (), fun()), (lambda tfun: hydra.lib.flows.bind(type_of(tx, (), arg()), (lambda targ: hydra.lib.flows.bind(try_type(tfun, targ), (lambda t: apply_type_arguments_to_type(tx, type_args, t)))))))
 
 def type_of_case_statement(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], cs: hydra.core.CaseStatement) -> hydra.compute.Flow[T0, hydra.core.Type]:
     @lru_cache(1)
@@ -386,7 +366,7 @@ def type_of_let(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
         return hydra.lib.lists.map((lambda v1: v1.term), bs())
     def binding_type(b: hydra.core.Binding) -> hydra.compute.Flow[T1, hydra.core.Type]:
         return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("untyped let binding: ", hydra.show.core.binding(b)))), (lambda ts: hydra.lib.flows.pure(hydra.schemas.type_scheme_to_f_type(ts))), b.type)
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: binding_type(x1)), bs()), (lambda btypes: (tx2 := hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(bnames(), btypes)), tx.types), tx.metadata, tx.type_variables, tx.lambda_variables, tx.inference_context), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx2, (), v1)), bterms()), (lambda typeofs: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: check_type_variables(tx, v1)), btypes), (lambda _: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: check_type_variables(tx, v1)), typeofs), (lambda _2: hydra.lib.flows.bind(hydra.lib.logic.if_else(type_lists_effectively_equal(tx, typeofs, btypes), (lambda : type_of(tx2, (), body())), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("binding types disagree: ", hydra.formatting.show_list(hydra.show.core.type, btypes), " and ", hydra.formatting.show_list(hydra.show.core.type, typeofs), " from terms: ", hydra.formatting.show_list(hydra.show.core.term, bterms())))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t))))))))))[1]))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: binding_type(x1)), bs()), (lambda btypes: (tx2 := hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(bnames(), btypes)), tx.types), tx.metadata, tx.type_variables, tx.lambda_variables, tx.inference_context), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx2, (), v1)), bterms()), (lambda typeofs: hydra.lib.flows.bind(hydra.lib.logic.if_else(type_lists_effectively_equal(tx, typeofs, btypes), (lambda : type_of(tx2, (), body())), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("binding types disagree: ", hydra.formatting.show_list(hydra.show.core.type, btypes), " and ", hydra.formatting.show_list(hydra.show.core.type, typeofs), " from terms: ", hydra.formatting.show_list(hydra.show.core.term, bterms())))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t))))))[1]))
 
 def type_of_list(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(type_args), 1), (lambda : hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeList(hydra.lib.lists.head(type_args))))), (lambda : hydra.lib.flows.fail("list type applied to more or less than one argument")))), (lambda : hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx, (), v1)), els), (lambda eltypes: hydra.lib.flows.bind(check_same_type(tx, "list elements", eltypes), (lambda unified_type: hydra.lib.flows.bind(check_type_variables(tx, unified_type), (lambda _: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeList(unified_type)))))))))))
