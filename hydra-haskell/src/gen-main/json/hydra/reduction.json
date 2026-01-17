@@ -1948,14 +1948,20 @@
                                                                                                                                         "argument": {
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
-                                                                                                                                              "list": [
-                                                                                                                                                {"literal": {"string": "unbound variable: "}},
-                                                                                                                                                {
+                                                                                                                                              "union": {
+                                                                                                                                                "field": {"name": "variable", "term": {"variable": "name"}},
+                                                                                                                                                "typeName": "hydra.core.Term"}},
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {"list": []},
+                                                                                                                                                "function": {
                                                                                                                                                   "application": {
-                                                                                                                                                    "argument": {"variable": "name"},
-                                                                                                                                                    "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                                                                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                                                                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
+                                                                                                                                                    "argument": {"variable": "tx"},
+                                                                                                                                                    "function": {"variable": "hydra.checking.typeOf"}}}}}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "hydra.arity.typeArity"},
+                                                                                                                                            "function": {"function": {"primitive": "hydra.lib.flows.map"}}}}}},
                                                                                                                                     "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
                                                                                                                         "domain": null,
                                                                                                                         "parameter": "name"}}}}],

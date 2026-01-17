@@ -49,8 +49,15 @@ applyTypeArgumentsToType tx typeArgs t =
               in (applyTypeArgumentsToType tx (Lists.tail typeArgs) (Substitution.substInType (Typing.TypeSubst (Maps.singleton v (Lists.head typeArgs))) tbody))
           _ -> (Flows.fail (Strings.cat [
             "not a forall type: ",
-            (Core__.type_ t)]))) t)
-  in (Flows.bind (checkTypeVariables tx t) (\_ -> Logic.ifElse (Lists.null typeArgs) (Flows.pure t) nonnull))
+            Core__.type_ t,
+            ". Trying to apply ",
+            Literals.showInt32 (Lists.length typeArgs),
+            " type args: ",
+            Formatting.showList Core__.type_ typeArgs,
+            ". Context has vars: {",
+            Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
+            "}"]))) t)
+  in (Logic.ifElse (Lists.null typeArgs) (Flows.bind (checkTypeVariables tx t) (\_ -> Flows.pure t)) nonnull)
 
 checkForUnboundTypeVariables :: (Typing.InferenceContext -> Core.Term -> Compute.Flow t0 ())
 checkForUnboundTypeVariables cx term0 =  
@@ -140,35 +147,8 @@ checkTypeSubst cx subst =
               let printPair = (\p -> Strings.cat2 (Strings.cat2 (Core.unName (Pairs.first p)) " --> ") (Core__.type_ (Pairs.second p)))
               in (Logic.ifElse (Sets.null badVars) (Flows.pure subst) (Flows.fail (Strings.cat2 (Strings.cat2 "Schema type(s) incorrectly unified: {" (Strings.intercalate ", " (Lists.map printPair badPairs))) "}")))
 
-checkTypeVariables :: (Typing.TypeContext -> Core.Type -> Compute.Flow t0 ())
-checkTypeVariables tx typ =  
-  let cx = (Typing.typeContextInferenceContext tx)
-  in  
-    let vars = (Typing.typeContextTypeVariables tx)
-    in  
-      let dflt = (Flows.bind (Flows.mapList (checkTypeVariables tx) (Rewriting.subtypes typ)) (\_ -> Flows.pure ()))
-      in  
-        let check = ((\x -> case x of
-                Core.TypeForall v1 -> (checkTypeVariables (Typing.TypeContext {
-                  Typing.typeContextTypes = (Typing.typeContextTypes tx),
-                  Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
-                  Typing.typeContextTypeVariables = (Sets.insert (Core.forallTypeParameter v1) vars),
-                  Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
-                  Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}) (Core.forallTypeBody v1))
-                Core.TypeVariable v1 -> (Logic.ifElse (Sets.member v1 vars) (Flows.pure ()) (Logic.ifElse (Maps.member v1 (Typing.inferenceContextSchemaTypes cx)) (Flows.pure ()) (Flows.fail (Strings.cat [
-                  "unbound type variable \"",
-                  Core.unName v1,
-                  "\" in ",
-                  Core__.type_ typ,
-                  ". Local variables: {",
-                  Strings.intercalate ", " (Lists.map Core.unName (Sets.toList vars)),
-                  "}, schema variables: {",
-                  Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.inferenceContextSchemaTypes cx))),
-                  "}"]))))
-                _ -> dflt) typ)
-        in (Monads.withTrace (Strings.cat [
-          "checking variables of: ",
-          (Core__.type_ typ)]) check)
+checkTypeVariables :: (t0 -> t1 -> Compute.Flow t2 ())
+checkTypeVariables _tx _typ = (Flows.pure ())
 
 -- | Convert an inference context to a type environment by converting type schemes to System F types
 toFContext :: (Typing.InferenceContext -> M.Map Core.Name Core.Type)
@@ -242,7 +222,7 @@ typeOfApplication tx typeArgs app =
                   Core.unName (Pairs.first p),
                   ": ",
                   (Core__.type_ (Pairs.second p))]) (Maps.toList (Typing.typeContextTypes tx))))]))) tfun)
-      in (Flows.bind (typeOf tx [] fun) (\tfun -> Flows.bind (checkTypeVariables tx tfun) (\_ -> Flows.bind (typeOf tx [] arg) (\targ -> Flows.bind (checkTypeVariables tx targ) (\_ -> Flows.bind (tryType tfun targ) (\t -> applyTypeArgumentsToType tx typeArgs t))))))
+      in (Flows.bind (typeOf tx [] fun) (\tfun -> Flows.bind (typeOf tx [] arg) (\targ -> Flows.bind (tryType tfun targ) (\t -> applyTypeArgumentsToType tx typeArgs t))))
 
 typeOfCaseStatement :: (Typing.TypeContext -> [Core.Type] -> Core.CaseStatement -> Compute.Flow t0 Core.Type)
 typeOfCaseStatement tx typeArgs cs =  
@@ -323,13 +303,13 @@ typeOfLet tx typeArgs letTerm =
                     Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tx),
                     Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
-            in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Flows.mapList (checkTypeVariables tx) btypes) (\_ -> Flows.bind (Flows.mapList (checkTypeVariables tx) typeofs) (\_ -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
+            in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
               "binding types disagree: ",
               Formatting.showList Core__.type_ btypes,
               " and ",
               Formatting.showList Core__.type_ typeofs,
               " from terms: ",
-              (Formatting.showList Core__.term bterms)]))) (\t -> applyTypeArgumentsToType tx typeArgs t)))))))
+              (Formatting.showList Core__.term bterms)]))) (\t -> applyTypeArgumentsToType tx typeArgs t)))))
 
 typeOfList :: (Typing.TypeContext -> [Core.Type] -> [Core.Term] -> Compute.Flow t0 Core.Type)
 typeOfList tx typeArgs els = (Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Flows.pure (Core.TypeList (Lists.head typeArgs))) (Flows.fail "list type applied to more or less than one argument")) (Flows.bind (Flows.mapList (typeOf tx []) els) (\eltypes -> Flows.bind (checkSameType tx "list elements" eltypes) (\unifiedType -> Flows.bind (checkTypeVariables tx unifiedType) (\_ -> Flows.pure (Core.TypeList unifiedType))))))

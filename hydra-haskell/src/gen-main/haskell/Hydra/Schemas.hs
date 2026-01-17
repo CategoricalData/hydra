@@ -221,12 +221,14 @@ graphToInferenceContext graph =
         Typing.inferenceContextDebug = False})))
 
 graphToTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing.TypeContext)
-graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix -> Flows.pure (Typing.TypeContext {
-  Typing.typeContextTypes = Maps.empty,
-  Typing.typeContextMetadata = Maps.empty,
-  Typing.typeContextTypeVariables = Sets.empty,
-  Typing.typeContextLambdaVariables = Sets.empty,
-  Typing.typeContextInferenceContext = ix})))
+graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix ->  
+  let elementTypes = (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, (typeSchemeToFType ts))) (Core.bindingType b)) (Maps.elems (Graph.graphElements graph)))))
+  in (Flows.pure (Typing.TypeContext {
+    Typing.typeContextTypes = elementTypes,
+    Typing.typeContextMetadata = Maps.empty,
+    Typing.typeContextTypeVariables = Sets.empty,
+    Typing.typeContextLambdaVariables = Sets.empty,
+    Typing.typeContextInferenceContext = ix}))))
 
 instantiateType :: (Core.Type -> Compute.Flow t0 Core.Type)
 instantiateType typ = (Flows.bind (instantiateTypeScheme (typeToTypeScheme typ)) (\ts -> Flows.pure (typeSchemeToFType ts)))

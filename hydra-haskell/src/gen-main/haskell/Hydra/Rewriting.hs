@@ -92,7 +92,6 @@ detypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
--- | Flatten nested let expressions
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
   let rewriteBinding = (\binding ->  
@@ -153,22 +152,36 @@ flattenLetTerms term =
                   Core.bindingTerm = val0,
                   Core.bindingType = t}, [])) val0))
   in  
-    let flatten = (\recurse -> \term ->  
-            let rewritten = (recurse term)
-            in ((\x -> case x of
-              Core.TermLet v1 ->  
-                let bindings = (Core.letBindings v1)
-                in  
-                  let body = (Core.letBody v1)
+    let flattenBodyLet = (\bindings -> \body -> (\x -> case x of
+            Core.TermLet v1 ->  
+              let innerBindings = (Core.letBindings v1)
+              in  
+                let innerBody = (Core.letBody v1)
+                in (flattenBodyLet (Lists.concat2 bindings innerBindings) innerBody)
+            _ -> (bindings, body)) body)
+    in  
+      let flatten = (\recurse -> \term ->  
+              let rewritten = (recurse term)
+              in ((\x -> case x of
+                Core.TermLet v1 ->  
+                  let bindings = (Core.letBindings v1)
                   in  
-                    let forResult = (\hr -> Lists.cons (Pairs.first hr) (Pairs.second hr))
+                    let body = (Core.letBody v1)
                     in  
-                      let newBindings = (Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings))
-                      in (Core.TermLet (Core.Let {
-                        Core.letBindings = newBindings,
-                        Core.letBody = body}))
-              _ -> rewritten) rewritten))
-    in (rewriteTerm flatten term)
+                      let forResult = (\hr -> Lists.cons (Pairs.first hr) (Pairs.second hr))
+                      in  
+                        let flattenedBindings = (Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings))
+                        in  
+                          let merged = (flattenBodyLet flattenedBindings body)
+                          in  
+                            let newBindings = (Pairs.first merged)
+                            in  
+                              let newBody = (Pairs.second merged)
+                              in (Core.TermLet (Core.Let {
+                                Core.letBindings = newBindings,
+                                Core.letBody = newBody}))
+                _ -> rewritten) rewritten))
+      in (rewriteTerm flatten term)
 
 foldOverTerm :: (Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0)
 foldOverTerm order fld b0 term = ((\x -> case x of
