@@ -78,7 +78,16 @@ writeArrayInitializer :: Java.ArrayInitializer -> Ast.Expr
 writeArrayInitializer _ = cst "STUB:ArrayInitializer"
 
 writeArrayType :: Java.ArrayType -> Ast.Expr
-writeArrayType _ = cst "STUB:ArrayType"
+writeArrayType (Java.ArrayType dims variant) = noSep [writeArrayTypeVariant variant, writeDims dims]
+  where
+    writeArrayTypeVariant v = case v of
+      Java.ArrayType_VariantPrimitive pt -> writePrimitiveTypeWithAnnotations pt
+      Java.ArrayType_VariantClassOrInterface cit -> writeClassOrInterfaceType cit
+      Java.ArrayType_VariantVariable tv -> writeName tv
+    writeDims (Java.Dims annsList) = noSep $ fmap writeDim annsList
+    writeDim anns = noSep $ Y.catMaybes [
+      if L.null anns then Nothing else Just $ spaceSep $ fmap writeAnnotation anns,
+      Just $ cst "[]"]
 
 writeAssertStatement :: Java.AssertStatement -> Ast.Expr
 writeAssertStatement _ = cst "STUB:AssertStatement"
