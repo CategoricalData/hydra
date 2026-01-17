@@ -279,7 +279,9 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
---        _Term_application>>: ...
+        -- Note: No _Term_application case - the dflt fallback using typeOf is correct.
+        -- We can't use arityOf(f) - 1 because that doesn't account for higher-order functions
+        -- like identity where (id x) has the same arity as x.
         _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
         _Term_let>>: "l" ~>
           "txl" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
@@ -289,9 +291,9 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
           "txt" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
           var "arityOf" @@ var "txt" @@ Core.typeLambdaBody (var "tl"),
         _Term_variable>>: "name" ~> optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
-          (Flows.fail $ Strings.cat $ list [
-            string "unbound variable: ",
-            Core.unName $ var "name"])
+          -- Variable not in typeContextTypes; use typeOf with CURRENT context and variable term as fallback
+          -- This can happen with local let bindings that aren't yet in scope during eta expansion
+          (Flows.map Arity.typeArity (Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ Core.termVariable (var "name")))
           ("t" ~> produce $ Arity.typeArity @@ var "t")]) $
 
 --    "arityOf" <~ ("term" ~> Flows.map

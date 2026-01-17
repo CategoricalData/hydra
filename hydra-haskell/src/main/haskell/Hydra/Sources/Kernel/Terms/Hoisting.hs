@@ -153,20 +153,94 @@ hoistLetBindings = define "hoistLetBindings" $
           "keptBindingsRaw" <~ Lists.reverse (Pairs.second (Pairs.second $ var "bindingsResult")) $
           -- Process the body
           "bodyResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reservedAfterBindings" @@ (Core.letBody $ var "lt") $
-          "hoistedFromBody" <~ Pairs.first (var "bodyResult") $
+          "hoistedFromBodyRaw" <~ Pairs.first (var "bodyResult") $
           "reservedAfterBody" <~ Pairs.first (Pairs.second $ var "bodyResult") $
           "processedBodyRaw" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-          -- Combine all hoisted bindings
-          "allHoisted" <~ Lists.concat2 (var "hoistedFromBody") (var "hoistedFromBindings") $
-          -- Replace references to hoisted bindings in kept bindings and body
-          -- Only replace references to bindings hoisted at THIS level (hoistedFromBindings)
-          -- References to bindings from nested lets (hoistedFromBody) were already replaced
-          "keptBindings" <~ Lists.map
+
+          -- Find kept bindings that are referenced by hoistedFromBody bindings.
+          -- These must also be hoisted to maintain scope integrity.
+          -- Collect names of all kept bindings
+          "keptNames" <~ Sets.fromList (Lists.map ("b" ~> Core.bindingName (var "b")) (var "keptBindingsRaw")) $
+          -- Collect free variables in all hoistedFromBody terms
+          "hoistedBodyFreeVars" <~ Sets.fromList (Lists.concat (Lists.map
+            ("info" ~> Sets.toList (Rewriting.freeVariablesInTerm @@ Pairs.first (Pairs.second $ var "info")))
+            (var "hoistedFromBodyRaw"))) $
+          -- Find kept bindings referenced by hoisted body bindings
+          "forcedHoistNames" <~ Sets.intersection (var "keptNames") (var "hoistedBodyFreeVars") $
+
+          -- Split keptBindingsRaw into bindings that must be force-hoisted and bindings that stay kept
+          "forceHoistedBindings" <~ Lists.filter
+            ("b" ~> Sets.member (Core.bindingName $ var "b") (var "forcedHoistNames"))
+            (var "keptBindingsRaw") $
+          "trulyKeptBindingsRaw" <~ Lists.filter
+            ("b" ~> Logic.not (Sets.member (Core.bindingName $ var "b") (var "forcedHoistNames")))
+            (var "keptBindingsRaw") $
+
+          -- First, replace references to hoistedFromBindings in the terms of force-hoisted bindings.
+          -- These bindings were kept bindings, so their terms need reference replacement.
+          "forceHoistedBindingsWithReplacedRefs" <~ Lists.map
             ("b" ~>
               "updatedTerm" <~ var "replaceReferences" @@ var "hoistedFromBindings" @@ (Core.bindingTerm (var "b")) $
               Core.binding (Core.bindingName (var "b")) (var "updatedTerm") (Core.bindingType (var "b")))
-            (var "keptBindingsRaw") $
-          "processedBody" <~ var "replaceReferences" @@ var "hoistedFromBindings" @@ var "processedBodyRaw" $
+            (var "forceHoistedBindings") $
+
+          -- Convert force-hoisted bindings to hoisted info format
+          -- Note: These bindings were originally monomorphic, so they have no captured type vars
+          -- but we still need to handle captured term vars (lambda-bound variables they reference)
+          "forceHoistedInfo" <~ Lists.map
+            ("binding" ~>
+              "bindingName" <~ Core.bindingName (var "binding") $
+              "freeVars" <~ Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "binding") $
+              "lambdaVarNames" <~ Sets.fromList (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "lambdaVars")) $
+              "capturedVarNames" <~ Sets.intersection (var "lambdaVarNames") (var "freeVars") $
+              "capturedTermVars" <~ Lists.filter ("lv" ~> Sets.member (Pairs.first (var "lv")) (var "capturedVarNames")) (var "lambdaVars") $
+              -- Wrap the term in lambdas for each captured term variable
+              "wrappedTerm" <~ Lists.foldl
+                ("body" ~> "lv" ~>
+                  Core.termFunction $ Core.functionLambda $ Core.lambda (Pairs.first (var "lv")) (Pairs.second (var "lv")) (var "body"))
+                (Core.bindingTerm $ var "binding")
+                (Lists.reverse $ var "capturedTermVars") $
+              -- Compute wrapped type with captured term variable types prepended
+              "wrappedType" <~ optCases (Core.bindingType $ var "binding")
+                Phantoms.nothing
+                ("ts" ~>
+                  "origType" <~ Core.typeSchemeType (var "ts") $
+                  "newType" <~ Lists.foldl
+                    ("innerType" ~> "lv" ~>
+                      optCases (Pairs.second $ var "lv")
+                        (var "innerType")
+                        ("domainType" ~> Core.typeFunction $ Core.functionType (var "domainType") (var "innerType")))
+                    (var "origType")
+                    (Lists.reverse $ var "capturedTermVars") $
+                  Phantoms.just $ Core.typeScheme (Core.typeSchemeVariables $ var "ts") (var "newType") (Core.typeSchemeConstraints $ var "ts")) $
+              Phantoms.tuple5 (var "bindingName") (var "wrappedTerm") (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "capturedTermVars")) (list ([] :: [TTerm Name])) (var "wrappedType"))
+            (var "forceHoistedBindingsWithReplacedRefs") $
+
+          -- Combine hoistedFromBindings with force-hoisted bindings for replacement purposes
+          "allHoistedFromThisLevel" <~ Lists.concat2 (var "hoistedFromBindings") (var "forceHoistedInfo") $
+
+          -- Replace references to allHoistedFromThisLevel (bindings hoisted at THIS level) in the
+          -- terms of hoistedFromBody (bindings hoisted from nested lets).
+          -- This handles the case where a nested let binding references a sibling from an outer let.
+          "hoistedFromBody" <~ Lists.map
+            ("info" ~>
+              "infoName" <~ var "getInfoName" @@ var "info" $
+              "infoTerm" <~ Pairs.first (Pairs.second $ var "info") $
+              "infoCapTermVars" <~ var "getInfoCapturedTermVars" @@ var "info" $
+              "infoCapTypeVars" <~ var "getInfoCapturedTypeVars" @@ var "info" $
+              "infoType" <~ Pairs.second (Pairs.second (Pairs.second (Pairs.second $ var "info"))) $
+              "updatedTerm" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ var "infoTerm" $
+              Phantoms.tuple5 (var "infoName") (var "updatedTerm") (var "infoCapTermVars") (var "infoCapTypeVars") (var "infoType"))
+            (var "hoistedFromBodyRaw") $
+          -- Combine all hoisted bindings (from body + from this level's bindings + force-hoisted)
+          "allHoisted" <~ Lists.concat (list [var "hoistedFromBody", var "hoistedFromBindings", var "forceHoistedInfo"]) $
+          -- Replace references to hoisted bindings in kept bindings and body
+          "keptBindings" <~ Lists.map
+            ("b" ~>
+              "updatedTerm" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ (Core.bindingTerm (var "b")) $
+              Core.binding (Core.bindingName (var "b")) (var "updatedTerm") (Core.bindingType (var "b")))
+            (var "trulyKeptBindingsRaw") $
+          "processedBody" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ var "processedBodyRaw" $
           -- If no bindings left, just return the body; otherwise rebuild the let
           Logic.ifElse (Lists.null $ var "keptBindings")
             (pair (var "allHoisted") (pair (var "reservedAfterBody") (var "processedBody")))
@@ -275,9 +349,18 @@ hoistLetBindings = define "hoistLetBindings" $
          "capturedVarNames" <~ Sets.intersection (var "lambdaVarNames") (var "freeVars") $
          -- Filter lambdaVars to only those that are captured, preserving order
          "capturedTermVars" <~ Lists.filter ("lv" ~> Sets.member (Pairs.first (var "lv")) (var "capturedVarNames")) (var "lambdaVars") $
-         -- Captured type vars: only the type variables actually used by this binding's type
-         -- (computed earlier as usedTypeVars)
-         "capturedTypeVars" <~ var "usedTypeVars" $
+         -- Captured type vars: ALL free type variables in the binding's type that are not already quantified
+         -- This includes both type variables from enclosing type lambdas (usedTypeVars)
+         -- AND any other free type variables that may have been introduced during inference
+         "capturedTypeVars" <~ optCases (Core.bindingType $ var "binding")
+           (list ([] :: [TTerm Name]))  -- No type scheme means no captured type vars
+           ("ts" ~>
+             "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
+             "alreadyQuantified" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
+             -- All free type vars not already in the type scheme's variables
+             "allUnquantified" <~ Sets.toList (Sets.difference (var "freeInType") (var "alreadyQuantified")) $
+             -- Prepend the outer type lambda vars to ensure they come first (maintaining order)
+             Lists.concat2 (var "usedTypeVars") (Lists.filter ("tv" ~> Logic.not (Sets.member (var "tv") (Sets.fromList $ var "usedTypeVars"))) (var "allUnquantified"))) $
          -- Wrap the term in lambdas for each captured term variable (outermost to innermost)
          "wrappedTerm" <~ Lists.foldl
            ("body" ~> "lv" ~>

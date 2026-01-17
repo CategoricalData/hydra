@@ -277,6 +277,13 @@ flattenLetTerms = define "flattenLetTerms" $
         pair
           (Core.binding (var "key0") (var "newBody") (var "t"))
           (Lists.map (var "newBinding") (var "bindings1"))]) $
+  -- flattenBodyLet: if body is a let, merge its bindings into the outer let
+  "flattenBodyLet" <~ ("bindings" ~> "body" ~>
+    cases _Term (var "body") (Just $ pair (var "bindings") (var "body")) [
+      _Term_let>>: "innerLt" ~>
+        "innerBindings" <~ Core.letBindings (var "innerLt") $
+        "innerBody" <~ Core.letBody (var "innerLt") $
+        var "flattenBodyLet" @@ Lists.concat2 (var "bindings") (var "innerBindings") @@ var "innerBody"]) $
   "flatten" <~ ("recurse" ~> "term" ~>
     "rewritten" <~ var "recurse" @@ var "term" $
     cases _Term (var "rewritten")
@@ -285,8 +292,12 @@ flattenLetTerms = define "flattenLetTerms" $
         "bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
         "forResult" <~ ("hr" ~> Lists.cons (Pairs.first $ var "hr") (Pairs.second $ var "hr")) $
-        "newBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
-        Core.termLet $ Core.let_ (var "newBindings") (var "body")]) $
+        "flattenedBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
+        -- Now check if body is also a let and merge those bindings too
+        "merged" <~ var "flattenBodyLet" @@ var "flattenedBindings" @@ var "body" $
+        "newBindings" <~ Pairs.first (var "merged") $
+        "newBody" <~ Pairs.second (var "merged") $
+        Core.termLet $ Core.let_ (var "newBindings") (var "newBody")]) $
   rewriteTerm @@ var "flatten" @@ var "term"
 
 foldOverTerm :: TBinding (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
