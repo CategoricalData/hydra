@@ -71,6 +71,12 @@ addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsF
 analyzeJavaFunction :: JavaEnvironment -> Term -> Flow Graph (FunctionStructure JavaEnvironment)
 analyzeJavaFunction env = analyzeFunctionTerm javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc }) env
 
+-- | Like analyzeJavaFunction but without type inference for the codomain.
+-- This is used when encoding lambdas in contexts where type inference might fail
+-- due to hoisting disrupting type annotations.
+analyzeJavaFunctionNoInfer :: JavaEnvironment -> Term -> Flow Graph (FunctionStructure JavaEnvironment)
+analyzeJavaFunctionNoInfer env = analyzeFunctionTermNoInfer javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc }) env
+
 bindingNameToFilePath :: Name -> FilePath
 bindingNameToFilePath name = nameToFilePath CaseConventionCamel CaseConventionPascal (FileExtension "java")
     $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
@@ -82,6 +88,64 @@ boundTypeVariables typ = case typ of
   TypeAnnotated (AnnotatedType typ1 _) -> boundTypeVariables typ1
   TypeForall (ForallType v body) -> v:(boundTypeVariables body)
   _ -> []
+
+-- | Try to infer the function type from the function structure when type annotations are unavailable.
+-- For lambdas with domain annotations, we can extract the domain type.
+-- The codomain is inferred from the body's type annotation if available.
+tryInferFunctionType :: Function -> Maybe Type
+tryInferFunctionType fun = case fun of
+  FunctionLambda (Lambda _ mdom body) -> do
+    -- If lambda has a domain type annotation, use it
+    dom <- mdom
+    -- Try to get the body's type from its annotation
+    cod <- case body of
+      TermAnnotated (AnnotatedTerm _ ann) -> do
+        typeTerm <- M.lookup key_type ann
+        -- The type term should encode a Type; decode it
+        decodeTypeFromTerm typeTerm
+      _ -> Nothing
+    Just $ TypeFunction $ FunctionType dom cod
+  _ -> Nothing
+  where
+    -- Decode a Type from its term encoding
+    decodeTypeFromTerm :: Term -> Maybe Type
+    decodeTypeFromTerm term = case deannotateTerm term of
+      TermUnion (Injection tname (Field fname fterm)) ->
+        if tname == Name "hydra.core.Type"
+          then case unName fname of
+            "annotated" -> case fterm of
+              TermRecord (Record _ fields) -> do
+                bodyField <- L.find (\f -> fieldName f == Name "body") fields
+                decodeTypeFromTerm (fieldTerm bodyField)
+              _ -> Nothing
+            "application" -> case fterm of
+              TermRecord (Record _ fields) -> do
+                funcField <- L.find (\f -> fieldName f == Name "function") fields
+                argField <- L.find (\f -> fieldName f == Name "argument") fields
+                func <- decodeTypeFromTerm (fieldTerm funcField)
+                arg <- decodeTypeFromTerm (fieldTerm argField)
+                Just $ TypeApplication $ ApplicationType func arg
+              _ -> Nothing
+            "function" -> case fterm of
+              TermRecord (Record _ fields) -> do
+                domField <- L.find (\f -> fieldName f == Name "domain") fields
+                codField <- L.find (\f -> fieldName f == Name "codomain") fields
+                dom <- decodeTypeFromTerm (fieldTerm domField)
+                cod <- decodeTypeFromTerm (fieldTerm codField)
+                Just $ TypeFunction $ FunctionType dom cod
+              _ -> Nothing
+            "variable" -> case fterm of
+              TermWrap (WrappedTerm _ (TermLiteral (LiteralString s))) -> Just $ TypeVariable $ Name s
+              _ -> Nothing
+            "literal" -> case fterm of
+              TermUnion (Injection _ (Field ltName _)) ->
+                if unName ltName == "string"
+                  then Just $ TypeLiteral LiteralTypeString
+                  else Nothing  -- Simplified, could handle more
+              _ -> Nothing
+            _ -> Nothing  -- Other type variants not handled yet
+          else Nothing
+      _ -> Nothing
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
@@ -383,8 +447,13 @@ elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
 encodeApplication :: JavaEnvironment -> Application -> Flow Graph Java.Expression
 encodeApplication env app@(Application lhs rhs) = do
     -- Get the function's arity from its type
-    funTyp <- withTrace "debug b" $ typeOf tc [] fun
-    let arity = typeArity funTyp
+    -- Try to get type from annotations first (works better with hoisted terms)
+    mfunTyp <- getType (termAnnotationInternal fun)
+    mfunTyp2 <- case mfunTyp of
+      Just t -> pure $ Just t
+      Nothing -> tryTypeOf tc fun
+    -- If we can't determine the type, assume arity 1 (single argument function)
+    let arity = maybe 1 typeArity mfunTyp2
     -- Split arguments based on arity
     let hargs = L.take arity args  -- Head arguments: pass directly
         rargs = L.drop arity args  -- Remaining arguments: apply via .apply()
@@ -422,10 +491,18 @@ encodeApplication env app@(Application lhs rhs) = do
 --          then fail $ "lhs: " ++ ShowCore.term lhs
 --          else pure ()
 
-        t <- withTrace "debug c" $ typeOf tc [] lhs
-        (dom, cod) <- case deannotateTypeParameters $ deannotateType t of
-            TypeFunction (FunctionType dom cod) -> pure (dom, cod)
-            t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
+        -- Try to get type from annotations first (works better with hoisted terms)
+        mt <- getType (termAnnotationInternal lhs)
+        mt2 <- case mt of
+          Just typ -> pure $ Just typ
+          Nothing -> tryTypeOf tc lhs
+        -- Get domain and codomain, with fallback to Object types if type unknown
+        let objType = TypeVariable $ Name "java.lang.Object"
+        (dom, cod) <- case mt2 of
+            Just t -> case deannotateTypeParameters $ deannotateType t of
+              TypeFunction (FunctionType dom cod) -> pure (dom, cod)
+              _ -> pure (objType, objType)  -- Fallback for non-function types
+            Nothing -> pure (objType, objType)  -- Fallback when type inference fails
         case deannotateTerm lhs of
           TermFunction f -> case f of
             FunctionElimination e -> do
@@ -577,17 +654,27 @@ encodeFunction env dom cod fun = case fun of
         TermFunction (FunctionLambda innerLam) -> do
           -- Body is another lambda - recursively encode it
           -- The type of body is a function type, so we need to extract dom' and cod'
-          bodyTyp <- typeOf (javaEnvironmentTypeContext env2) [] body
-          case deannotateType bodyTyp of
-            TypeFunction (FunctionType dom' cod') -> do
-              innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
-              let lam' = javaLambda var innerJavaLambda
-              -- Apply cast
-              jtype <- encodeType aliases S.empty (TypeFunction $ FunctionType dom cod)
-              rt <- javaTypeToJavaReferenceType jtype
-              return $ javaCastExpressionToJavaExpression $
-                javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
-            _ -> fail $ "expected function type for lambda body, but got: " ++ show bodyTyp
+          -- Try to get type from annotations first (works better with hoisted terms)
+          mbodyTyp <- getType (termAnnotationInternal body)
+          mbodyTyp2 <- case mbodyTyp of
+            Just t -> pure $ Just t
+            Nothing -> tryTypeOf (javaEnvironmentTypeContext env2) body
+          case mbodyTyp2 of
+            Nothing -> do
+              -- Fallback: use Object -> Object and let the inner encoding figure it out
+              let objType = TypeVariable $ Name "java.lang.Object"
+              warn "Could not determine type for inner lambda body, using Object -> Object fallback" $
+                encodeFunction env2 objType objType (FunctionLambda innerLam)
+            Just bodyTyp -> case deannotateType bodyTyp of
+              TypeFunction (FunctionType dom' cod') -> do
+                innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
+                let lam' = javaLambda var innerJavaLambda
+                -- Apply cast
+                jtype <- encodeType aliases S.empty (TypeFunction $ FunctionType dom cod)
+                rt <- javaTypeToJavaReferenceType jtype
+                return $ javaCastExpressionToJavaExpression $
+                  javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
+              _ -> fail $ "expected function type for lambda body, but got: " ++ show bodyTyp
         _ -> do
           -- Body is not a lambda - analyze and encode normally
           fs <- withTrace "analyze function body" $ analyzeJavaFunction env2 body
@@ -706,13 +793,57 @@ encodeTerm env term0 = encodeInternal [] [] term0
                 methodInvocationStaticWithTypeArgs (Java.Identifier "hydra.util.Either") (Java.Identifier "right") targs [expr]
 
         TermFunction f -> withTrace ("encode function (" ++ show (functionVariant f) ++ ")") $ do
-          t <- withTrace "debug d" $ typeOf tc [] term0
-          case deannotateType t of
-            TypeFunction (FunctionType dom cod) -> do
-              encodeFunction env dom cod f
-            _ -> encodeNullaryConstant env t f
+          -- Try to get type from annotations first (works better with hoisted terms)
+          -- Fall back to typeOf only if annotation not available
+          let combinedAnns = M.unions anns
+          mt <- getType combinedAnns
+          mtyp <- case mt of
+            Just typ -> pure $ Just typ
+            Nothing -> do
+              -- Try to infer the type from the function structure before falling back to typeOf
+              case tryInferFunctionType f of
+                Just inferredType -> pure $ Just inferredType
+                Nothing -> do
+                  -- typeOf might fail after hoisting if type context is inconsistent
+                  -- Use tryTypeOf to safely attempt type inference
+                  tryTypeOf tc term0
+          case mtyp of
+            Just t -> case deannotateType t of
+              TypeFunction (FunctionType dom cod) -> do
+                encodeFunction env dom cod f
+              _ -> case f of
+                -- Lambdas are always functions, even if the type doesn't look like one
+                -- This can happen after hoisting when type annotations are inconsistent
+                FunctionLambda _ -> do
+                  let objType = TypeVariable $ Name "java.lang.Object"
+                  warn "Lambda has non-function type, using Object -> Object fallback" $
+                    encodeFunction env objType objType f
+                -- For primitives and other non-lambda functions, encodeNullaryConstant is appropriate
+                _ -> encodeNullaryConstant env t f
+            Nothing -> do
+              -- Last resort: try to encode with Object -> Object type
+              -- This happens when hoisting disrupts type annotations
+              let objType = TypeVariable $ Name "java.lang.Object"
+              warn "Could not determine type for function, using Object -> Object fallback" $
+                encodeFunction env objType objType f
 
-        TermLet _ -> fail $ "nested let is unsupported for Java: " ++ ShowCore.term term
+        TermLet lt -> withTrace "encode let as lambda application" $ do
+          -- Convert let x1=e1, x2=e2 in body to ((x1) -> ((x2) -> body).apply(e2)).apply(e1)
+          -- We fold from right to left, wrapping body in lambdas, then applying arguments
+          let bindings = letBindings lt
+          let body = letBody lt
+          if L.null bindings
+            then encode body
+            else do
+              -- Build nested lambdas from innermost (last binding) to outermost (first binding)
+              -- Note: bindingType is Maybe TypeScheme, but Lambda needs Maybe Type
+              let getDomainType b = typeSchemeType <$> bindingType b
+              let buildLambda b innerBody = TermFunction $ FunctionLambda $ Lambda (bindingName b) (getDomainType b) innerBody
+              let lambdaBody = L.foldr buildLambda body bindings
+              -- Build nested applications from outermost (first binding) to innermost (last binding)
+              let buildApp lambdaOrApp b = TermApplication $ Application lambdaOrApp (bindingTerm b)
+              let fullApp = L.foldl buildApp lambdaBody bindings
+              encode fullApp
 
         TermList els -> do
           jels <- CM.mapM encode els
@@ -766,7 +897,14 @@ encodeTerm env term0 = encodeInternal [] [] term0
         TermTypeApplication (TypeApplicationTerm body atyp) -> do
           -- Type applications in Java require casting to the appropriate type
           -- We encode the body (stripping type applications) and cast it to the inferred type
-          typ <- withTrace "debug e" $ typeOf tc [] term0
+          -- Try to get type from annotations first (works better with hoisted terms)
+          let combinedAnns = M.unions anns
+          mtyp <- getType combinedAnns
+          mtyp2 <- case mtyp of
+            Just t -> pure $ Just t
+            Nothing -> tryTypeOf tc term0
+          -- Fallback to Object if type inference fails
+          let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp2
           jtype <- encodeType aliases S.empty typ
           jatyp <- encodeType aliases S.empty atyp
           jbody <- encodeInternal anns (jatyp:tyapps) body
@@ -774,7 +912,16 @@ encodeTerm env term0 = encodeInternal [] [] term0
           return $ javaCastExpressionToJavaExpression $
             javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
 
-        TermTypeLambda tl@(TypeLambda _ body) -> withTypeLambda env tl $ \env2 -> encodeTerm env2 body
+        TermTypeLambda tl@(TypeLambda v body) -> withTypeLambda env tl $ \env2 -> do
+          -- When entering a type lambda body, extract the body type from the forall
+          -- and re-annotate the body with it, so nested encoding can find the type
+          let combinedAnns = M.unions anns
+          mtyp <- getType combinedAnns
+          let annotatedBody = case mtyp of
+                Just (TypeForall (ForallType _ bodyType)) ->
+                  setTermAnnotation key_type (Just $ EncodeCore.type_ bodyType) body
+                _ -> body
+          encodeTerm env2 annotatedBody
 
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
@@ -860,8 +1007,14 @@ bindingsToStatements env bindings = if L.null bindings
     -- Initialize recursive bindings with AtomicReference
     toDeclInit name = if S.member name recursiveVars
       then do
-        let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
-        typ <- withTrace "debug f" $ typeOf tcExtended [] value
+        let binding = L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
+        let value = bindingTerm binding
+        -- Use the binding's type scheme if available, otherwise infer from the term
+        mtyp <- case bindingType binding of
+          Just ts -> pure $ Just $ typeSchemeType ts
+          Nothing -> tryTypeOf tcExtended value
+        -- Fallback to Object if type inference fails
+        let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp
         jtype <- encodeType aliasesWithRecursive S.empty typ
         let id = variableToJavaIdentifier name
         let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
@@ -877,11 +1030,19 @@ bindingsToStatements env bindings = if L.null bindings
 
     -- Declare or set binding value
     toDeclStatement name = do
-      let value = bindingTerm $ L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
-      typ <- withTrace "debug g" $ typeOf tcExtended [] value
+      let binding = L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
+      let value = bindingTerm binding
+      -- Use the binding's type scheme if available, otherwise infer from the term
+      mtyp <- case bindingType binding of
+        Just ts -> pure $ Just $ typeSchemeType ts
+        Nothing -> tryTypeOf tcExtended value
+      -- Fallback to Object if type inference fails
+      let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp
       jtype <- encodeType aliasesWithRecursive S.empty typ
       let id = variableToJavaIdentifier name
-      rhs <- encodeTerm envExtended value
+      -- Annotate the value with its type so that nested encoding can find it
+      let annotatedValue = setTermAnnotation key_type (Just $ EncodeCore.type_ typ) value
+      rhs <- encodeTerm envExtended annotatedValue
       return $ if S.member name recursiveVars
         then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
           methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
@@ -893,10 +1054,15 @@ bindingsToStatements env bindings = if L.null bindings
 -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
 -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
 encodeTermDefinition :: JavaEnvironment -> TermDefinition -> Flow Graph Java.InterfaceMemberDeclaration
-encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term definition \"" ++ unName name ++ "\"") $ do
+encodeTermDefinition env (TermDefinition name term ts) = withTrace ("encode term definition \"" ++ unName name ++ "\"") $ do
 
     fs <- withTrace "analyze function term for term assignment" $ analyzeJavaFunction env term
-    let tparams = functionStructureTypeParams fs
+    -- Use type scheme variables as the authoritative source for type parameters.
+    -- This is critical for hoisted polymorphic bindings where TermTypeLambda nodes
+    -- may have been stripped but the TypeScheme still contains the type variables.
+    let schemeVars = typeSchemeVariables ts
+        termVars = functionStructureTypeParams fs
+        tparams = if L.null schemeVars then termVars else schemeVars
         params = functionStructureParams fs
         bindings = functionStructureBindings fs
         body = functionStructureBody fs
@@ -904,17 +1070,24 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
         env2 = functionStructureEnvironment fs
     cod <- case functionStructureCodomain fs of
       Just c -> return c
-      Nothing -> fail "Java requires a return type annotation, but type inference failed for this term"
+      Nothing -> do
+        -- Fallback to Object return type if type inference fails
+        -- This can happen after hoisting disrupts type annotations
+        warn "Using Object return type fallback due to type inference failure" $
+          pure $ TypeVariable $ Name "java.lang.Object"
     let jparams = fmap toParam tparams
         aliases2 = javaEnvironmentAliases env2
 
     -- Convert bindings to Java block statements
     (bindingStmts, env3) <- bindingsToStatements env2 bindings
 
+    -- Annotate the body with its type so that nested encoding can find it
+    let annotatedBody = setTermAnnotation key_type (Just $ EncodeCore.type_ cod) body
+
     if (L.null tparams && L.null params && L.null bindings)
       then do -- Special case: constant field
         jtype <- Java.UnannType <$> encodeType aliases2 S.empty cod
-        jbody <- encodeTerm env3 body
+        jbody <- encodeTerm env3 annotatedBody
         let mods = []
         let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jbody
         return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
@@ -924,7 +1097,7 @@ encodeTermDefinition env (TermDefinition name term _) = withTrace ("encode term 
             return $ javaTypeToJavaFormalParameter jdom (Name $ unName param)
           ) (L.zip doms params)
         result <- javaTypeToJavaResult <$> encodeType aliases2 S.empty cod
-        jbody <- encodeTerm env3 body
+        jbody <- encodeTerm env3 annotatedBody
         let mods = [Java.InterfaceMethodModifierStatic]
         let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
         return $ interfaceMethodDeclaration mods jparams jname jformalParams result (Just $ bindingStmts ++ [returnSt])

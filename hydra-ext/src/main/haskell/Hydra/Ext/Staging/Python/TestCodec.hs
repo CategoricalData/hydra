@@ -70,7 +70,8 @@ termToPythonWithContext namespaces tcontext skipCasts term = do
         pythonEnvironmentTypeContext = tcontext,
         pythonEnvironmentNUllaryBindings = S.empty,
         pythonEnvironmentVersion = PyNames.targetPythonVersion,
-        pythonEnvironmentSkipCasts = skipCasts
+        pythonEnvironmentSkipCasts = skipCasts,
+        pythonEnvironmentInlineVariables = S.empty
       }
       -- Create initial PyGraph state
       ns = fst $ namespacesFocus namespaces
@@ -108,7 +109,8 @@ typeToPython namespaces typ = do
         pythonEnvironmentTypeContext = tcontext,
         pythonEnvironmentNUllaryBindings = S.empty,
         pythonEnvironmentVersion = PyNames.targetPythonVersion,
-        pythonEnvironmentSkipCasts = False  -- Types don't use casts anyway
+        pythonEnvironmentSkipCasts = False,  -- Types don't use casts anyway
+        pythonEnvironmentInlineVariables = S.empty
       }
       ns = fst $ namespacesFocus namespaces
       meta = emptyPythonModuleMetadata ns
