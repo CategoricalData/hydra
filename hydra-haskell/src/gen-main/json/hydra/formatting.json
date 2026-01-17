@@ -592,7 +592,7 @@
                                         "application": {
                                           "argument": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 57.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 57}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "c"},
@@ -601,7 +601,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 48.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 48}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "c"},
@@ -613,7 +613,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 122.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 122}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "c"},
@@ -622,7 +622,7 @@
                                                 "application": {
                                                   "argument": {
                                                     "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 97.0}}},
+                                                      "argument": {"literal": {"integer": {"int32": 97}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {"variable": "c"},
@@ -635,7 +635,7 @@
                                         "application": {
                                           "argument": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 90.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 90}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "c"},
@@ -644,7 +644,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 65.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 65}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "c"},
@@ -696,7 +696,7 @@
                                                                 "argument": {"variable": "s"},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"literal": {"integer": {"int32": 95.0}}},
+                                                                    "argument": {"literal": {"integer": {"int32": 95}}},
                                                                     "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
                                                             "@second": {"literal": {"boolean": true}}}},
                                                         "function": {
@@ -900,135 +900,135 @@
                               "list": [
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 32.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 32}}},
                                     "@second": {"literal": {"string": "sp"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 33.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 33}}},
                                     "@second": {"literal": {"string": "excl"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 34.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 34}}},
                                     "@second": {"literal": {"string": "quot"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 35.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 35}}},
                                     "@second": {"literal": {"string": "num"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 36.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 36}}},
                                     "@second": {"literal": {"string": "dollar"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 37.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 37}}},
                                     "@second": {"literal": {"string": "percnt"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 38.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 38}}},
                                     "@second": {"literal": {"string": "amp"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 39.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 39}}},
                                     "@second": {"literal": {"string": "apos"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 40.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 40}}},
                                     "@second": {"literal": {"string": "lpar"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 41.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 41}}},
                                     "@second": {"literal": {"string": "rpar"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 42.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 42}}},
                                     "@second": {"literal": {"string": "ast"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 43.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 43}}},
                                     "@second": {"literal": {"string": "plus"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 44.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 44}}},
                                     "@second": {"literal": {"string": "comma"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 45.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 45}}},
                                     "@second": {"literal": {"string": "minus"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 46.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 46}}},
                                     "@second": {"literal": {"string": "period"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 47.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 47}}},
                                     "@second": {"literal": {"string": "sol"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 58.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 58}}},
                                     "@second": {"literal": {"string": "colon"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 59.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 59}}},
                                     "@second": {"literal": {"string": "semi"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 60.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 60}}},
                                     "@second": {"literal": {"string": "lt"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 61.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 61}}},
                                     "@second": {"literal": {"string": "equals"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 62.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 62}}},
                                     "@second": {"literal": {"string": "gt"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 63.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 63}}},
                                     "@second": {"literal": {"string": "quest"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 64.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 64}}},
                                     "@second": {"literal": {"string": "commat"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 91.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 91}}},
                                     "@second": {"literal": {"string": "lsqb"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 92.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 92}}},
                                     "@second": {"literal": {"string": "bsol"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 93.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 93}}},
                                     "@second": {"literal": {"string": "rsqb"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 94.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 94}}},
                                     "@second": {"literal": {"string": "circ"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 95.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 95}}},
                                     "@second": {"literal": {"string": "lowbar"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 96.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 96}}},
                                     "@second": {"literal": {"string": "grave"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 123.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 123}}},
                                     "@second": {"literal": {"string": "lcub"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 124.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 124}}},
                                     "@second": {"literal": {"string": "verbar"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 125.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 125}}},
                                     "@second": {"literal": {"string": "rcub"}}}},
                                 {
                                   "pair": {
-                                    "@first": {"literal": {"integer": {"int32": 126.0}}},
+                                    "@first": {"literal": {"integer": {"int32": 126}}},
                                     "@second": {"literal": {"string": "tilde"}}}}]},
                             "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
                         "type": null},
@@ -1146,7 +1146,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"literal": {"integer": {"int32": 9.0}}},
+                                                                            "argument": {"literal": {"integer": {"int32": 9}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "c"},
@@ -1158,7 +1158,7 @@
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {
-                                                                                "argument": {"literal": {"integer": {"int32": 32.0}}},
+                                                                                "argument": {"literal": {"integer": {"int32": 32}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "c"},
@@ -1293,7 +1293,7 @@
                                         "application": {"argument": {"list": []}, "function": {"variable": "helper"}}}}},
                                   "function": {
                                     "application": {
-                                      "argument": {"list": [{"literal": {"integer": {"int32": 10.0}}}]},
+                                      "argument": {"list": [{"literal": {"integer": {"int32": 10}}}]},
                                       "function": {"function": {"primitive": "hydra.lib.lists.intercalate"}}}}}},
                               "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}}}},
                       "domain": null,

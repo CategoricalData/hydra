@@ -2903,7 +2903,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 2.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 2}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "n"},
@@ -2949,7 +2949,7 @@
                                                                                                   "argument": {"variable": "typeArgs"},
                                                                                                   "function": {
                                                                                                     "application": {
-                                                                                                      "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                      "argument": {"literal": {"integer": {"int32": 0}}},
                                                                                                       "function": {"function": {"primitive": "hydra.lib.lists.at"}}}}}}},
                                                                                             {"name": "right", "term": {"variable": "rightType"}}],
                                                                                           "typeName": "hydra.core.EitherType"}}},
@@ -3016,7 +3016,7 @@
                                                                                                       "argument": {"variable": "typeArgs"},
                                                                                                       "function": {
                                                                                                         "application": {
-                                                                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                          "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                           "function": {"function": {"primitive": "hydra.lib.lists.at"}}}}}}}],
                                                                                               "typeName": "hydra.core.EitherType"}}},
                                                                                         "typeName": "hydra.core.Type"}},
@@ -3922,7 +3922,7 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
@@ -4193,7 +4193,7 @@
                                                                       "argument": {"variable": "typeArgs"},
                                                                       "function": {
                                                                         "application": {
-                                                                          "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
                                                                           "function": {"function": {"primitive": "hydra.lib.lists.at"}}}}}}},
                                                                 {
                                                                   "name": "values",
@@ -4202,7 +4202,7 @@
                                                                       "argument": {"variable": "typeArgs"},
                                                                       "function": {
                                                                         "application": {
-                                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                          "argument": {"literal": {"integer": {"int32": 1}}},
                                                                           "function": {"function": {"primitive": "hydra.lib.lists.at"}}}}}}}],
                                                               "typeName": "hydra.core.MapType"}}},
                                                         "typeName": "hydra.core.Type"}},
@@ -4211,7 +4211,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 2.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 2}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -4305,7 +4305,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 1}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "n"},
@@ -4461,7 +4461,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 2.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 2}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "n"},
@@ -5100,7 +5100,7 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {

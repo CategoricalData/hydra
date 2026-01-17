@@ -110,7 +110,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -121,7 +121,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}}],
@@ -399,7 +399,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -410,7 +410,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -421,7 +421,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -432,7 +432,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -443,7 +443,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -454,7 +454,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -465,7 +465,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}},
@@ -476,7 +476,7 @@
                           "lambda": {
                             "body": {
                               "union": {
-                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64.0}}}},
+                                "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
                             "domain": null,
                             "parameter": "_"}}}}],

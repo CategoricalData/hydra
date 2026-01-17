@@ -40,7 +40,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -93,7 +93,7 @@
                                                         "application": {
                                                           "argument": {
                                                             "application": {
-                                                              "argument": {"literal": {"integer": {"int32": 9.0}}},
+                                                              "argument": {"literal": {"integer": {"int32": 9}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "c"},
@@ -106,7 +106,7 @@
                                                     "application": {
                                                       "argument": {
                                                         "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 13.0}}},
+                                                          "argument": {"literal": {"integer": {"int32": 13}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "c"},
@@ -119,7 +119,7 @@
                                                 "application": {
                                                   "argument": {
                                                     "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 10.0}}},
+                                                      "argument": {"literal": {"integer": {"int32": 10}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {"variable": "c"},
@@ -132,7 +132,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 92.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 92}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "c"},
@@ -145,7 +145,7 @@
                                         "application": {
                                           "argument": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 34.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 34}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "c"},
@@ -339,12 +339,43 @@
                                   "function": {
                                     "lambda": {
                                       "body": {
-                                        "application": {
-                                          "argument": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "rounded",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "n"},
+                                                  "function": {"function": {"primitive": "hydra.lib.literals.bigfloatToBigint"}}}},
+                                              "type": null}],
+                                          "body": {
                                             "application": {
-                                              "argument": {"variable": "n"},
-                                              "function": {"function": {"primitive": "hydra.lib.literals.showBigfloat"}}}},
-                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "n"},
+                                                      "function": {"function": {"primitive": "hydra.lib.literals.showBigfloat"}}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "rounded"},
+                                                          "function": {"function": {"primitive": "hydra.lib.literals.showBigint"}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "rounded"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "n"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                              "function": {"variable": "hydra.serialization.cst"}}}}},
                                       "domain": null,
                                       "parameter": "n"}}}},
                               {

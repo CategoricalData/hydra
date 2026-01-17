@@ -113,7 +113,7 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"literal": {"integer": {"int32": 70.0}}},
+                                    "argument": {"literal": {"integer": {"int32": 70}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -211,7 +211,7 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"literal": {"integer": {"int32": 70.0}}},
+                                    "argument": {"literal": {"integer": {"int32": 70}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -484,7 +484,7 @@
                                           "name": "precedence",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"integer": {"int32": 0.0}}},
+                                              "body": {"literal": {"integer": {"int32": 0}}},
                                               "typeName": "hydra.ast.Precedence"}}},
                                         {
                                           "name": "associativity",
@@ -521,7 +521,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {
@@ -583,7 +583,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -629,7 +629,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -696,7 +696,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 0.0}}},
+                                                        "body": {"literal": {"integer": {"int32": 0}}},
                                                         "domain": null,
                                                         "parameter": "_"}}}},
                                                 {
@@ -704,7 +704,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 1.0}}},
+                                                        "body": {"literal": {"integer": {"int32": 1}}},
                                                         "domain": null,
                                                         "parameter": "_"}}}},
                                                 {
@@ -712,7 +712,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 1.0}}},
+                                                        "body": {"literal": {"integer": {"int32": 1}}},
                                                         "domain": null,
                                                         "parameter": "_"}}}},
                                                 {
@@ -728,7 +728,7 @@
                                                                 "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                                 "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
                                                         "domain": null,
                                                         "parameter": "s"}}}},
@@ -737,7 +737,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 2.0}}},
+                                                        "body": {"literal": {"integer": {"int32": 2}}},
                                                         "domain": null,
                                                         "parameter": "_"}}}}],
                                               "default": null,
@@ -771,7 +771,7 @@
                                                       "argument": {"function": {"primitive": "hydra.lib.strings.length"}},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                          "argument": {"literal": {"integer": {"int32": 0}}},
                                                           "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
                                               "type": null}],
                                           "body": {
@@ -781,10 +781,10 @@
                                                   "name": "nlBeforeLen",
                                                   "term": {
                                                     "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                      "argument": {"literal": {"integer": {"int32": 0}}},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                          "argument": {"literal": {"integer": {"int32": 1}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {
@@ -803,10 +803,10 @@
                                                       "name": "nlAfterLen",
                                                       "term": {
                                                         "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                          "argument": {"literal": {"integer": {"int32": 0}}},
                                                           "function": {
                                                             "application": {
-                                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                              "argument": {"literal": {"integer": {"int32": 1}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -1464,7 +1464,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -1529,7 +1529,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -1654,7 +1654,7 @@
                     "name": "precedence",
                     "term": {
                       "wrap": {
-                        "body": {"literal": {"integer": {"int32": 0.0}}},
+                        "body": {"literal": {"integer": {"int32": 0}}},
                         "typeName": "hydra.ast.Precedence"}}},
                   {
                     "name": "associativity",
@@ -1740,7 +1740,7 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {
@@ -1792,7 +1792,7 @@
                                         "application": {
                                           "argument": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 1}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {
@@ -2444,7 +2444,7 @@
                                   "name": "precedence",
                                   "term": {
                                     "wrap": {
-                                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                                      "body": {"literal": {"integer": {"int32": 0}}},
                                       "typeName": "hydra.ast.Precedence"}}},
                                 {
                                   "name": "associativity",
@@ -2723,7 +2723,7 @@
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {
@@ -3173,7 +3173,7 @@
                                         "application": {
                                           "argument": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 1}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {
@@ -3235,7 +3235,7 @@
                   "name": "precedence",
                   "term": {
                     "wrap": {
-                      "body": {"literal": {"integer": {"int32": 0.0}}},
+                      "body": {"literal": {"integer": {"int32": 0}}},
                       "typeName": "hydra.ast.Precedence"}}},
                 {
                   "name": "associativity",
@@ -3361,7 +3361,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "breakCount"},
@@ -3377,7 +3377,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                            "argument": {"literal": {"integer": {"int32": 0}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "breakCount"},
@@ -3415,7 +3415,7 @@
                                                         "name": "precedence",
                                                         "term": {
                                                           "wrap": {
-                                                            "body": {"literal": {"integer": {"int32": 0.0}}},
+                                                            "body": {"literal": {"integer": {"int32": 0}}},
                                                             "typeName": "hydra.ast.Precedence"}}},
                                                       {
                                                         "name": "associativity",
@@ -3458,7 +3458,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
