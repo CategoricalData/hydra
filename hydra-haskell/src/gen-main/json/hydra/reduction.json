@@ -867,7 +867,7 @@
                                                                             "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
                                                                         "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
                                                                 "function": {
                                                                   "application": {
@@ -1203,7 +1203,7 @@
                                           "lambda": {
                                             "body": {
                                               "application": {
-                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -1240,7 +1240,7 @@
                                                             "term": {
                                                               "function": {
                                                                 "lambda": {
-                                                                  "body": {"literal": {"integer": {"int32": 1.0}}},
+                                                                  "body": {"literal": {"integer": {"int32": 1}}},
                                                                   "domain": null,
                                                                   "parameter": "_"}}}},
                                                           {
@@ -1248,7 +1248,7 @@
                                                             "term": {
                                                               "function": {
                                                                 "lambda": {
-                                                                  "body": {"literal": {"integer": {"int32": 0.0}}},
+                                                                  "body": {"literal": {"integer": {"int32": 0}}},
                                                                   "domain": null,
                                                                   "parameter": "_"}}}},
                                                           {
@@ -1362,11 +1362,11 @@
                                                           "parameter": "ts"}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 0}}},
                                                         "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
                                             "domain": null,
                                             "parameter": "name"}}}}],
-                                  "default": [{"literal": {"integer": {"int32": 0.0}}}],
+                                  "default": [{"literal": {"integer": {"int32": 0}}}],
                                   "typeName": "hydra.core.Term"}}}}}},
                       "domain": null,
                       "parameter": "term"}}},
@@ -1720,7 +1720,7 @@
                                                                                                                                       "lambda": {
                                                                                                                                         "body": {
                                                                                                                                           "application": {
-                                                                                                                                            "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                             "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
                                                                                                                                         "domain": null,
                                                                                                                                         "parameter": "_"}}}},
@@ -1981,7 +1981,7 @@
                                                                                                 "argument": {"variable": "n"},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                     "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
                                                                                             "function": {
                                                                                               "application": {
@@ -2480,7 +2480,7 @@
                                                                                                                                                       "argument": {"variable": "base"},
                                                                                                                                                       "function": {
                                                                                                                                                         "application": {
-                                                                                                                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                          "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                           "function": {"variable": "padn"}}}}},
                                                                                                                                                   "function": {
                                                                                                                                                     "application": {
@@ -2596,7 +2596,7 @@
                                                                                                                                                                                                 "application": {
                                                                                                                                                                                                   "argument": {
                                                                                                                                                                                                     "application": {
-                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                                                       "function": {
                                                                                                                                                                                                         "application": {
                                                                                                                                                                                                           "argument": {"variable": "lhsarity"},
@@ -2606,7 +2606,7 @@
                                                                                                                                                                                             "application": {
                                                                                                                                                                                               "argument": {
                                                                                                                                                                                                 "application": {
-                                                                                                                                                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                                                   "function": {
                                                                                                                                                                                                     "application": {
                                                                                                                                                                                                       "argument": {"variable": "lhsarity"},

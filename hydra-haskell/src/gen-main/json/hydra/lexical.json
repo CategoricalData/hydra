@@ -47,7 +47,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 1}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "index"},
@@ -63,7 +63,7 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "index"},
@@ -84,7 +84,7 @@
                           "type": null}],
                       "body": {
                         "application": {
-                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                          "argument": {"literal": {"integer": {"int32": 1}}},
                           "function": {"variable": "tryName"}}}}},
                   "domain": null,
                   "parameter": "name"}}},
@@ -1326,7 +1326,7 @@
                                                   "argument": {"variable": "strings"},
                                                   "function": {
                                                     "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 3.0}}},
+                                                      "argument": {"literal": {"integer": {"int32": 3}}},
                                                       "function": {"function": {"primitive": "hydra.lib.lists.take"}}}}}},
                                               "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
                                       "function": {
@@ -1341,7 +1341,7 @@
                                                 "application": {
                                                   "argument": {
                                                     "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 3.0}}},
+                                                      "argument": {"literal": {"integer": {"int32": 3}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {

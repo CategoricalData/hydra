@@ -2753,7 +2753,7 @@
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {
@@ -2763,7 +2763,7 @@
                                                                                       "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                   "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
                                                                           "function": {
                                                                             "application": {
@@ -3047,7 +3047,7 @@
                                                                                             "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                             "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
                                                                                     "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
                                                                     "domain": null,
@@ -5342,7 +5342,7 @@
                                                                                                                                                             "application": {
                                                                                                                                                               "argument": {
                                                                                                                                                                 "application": {
-                                                                                                                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                   "function": {
                                                                                                                                                                     "application": {
                                                                                                                                                                       "argument": {"variable": "level"},
@@ -5369,7 +5369,7 @@
                                                                                                                     "application": {
                                                                                                                       "argument": {
                                                                                                                         "application": {
-                                                                                                                          "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "level"},

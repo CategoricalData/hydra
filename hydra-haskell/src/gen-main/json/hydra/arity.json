@@ -21,7 +21,7 @@
                       "term": {
                         "function": {
                           "lambda": {
-                            "body": {"literal": {"integer": {"int32": 1.0}}},
+                            "body": {"literal": {"integer": {"int32": 1}}},
                             "domain": null,
                             "parameter": "_"}}}},
                     {
@@ -56,7 +56,7 @@
                                           "argument": {"variable": "i"},
                                           "function": {
                                             "application": {
-                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                              "argument": {"literal": {"integer": {"int32": 1}}},
                                               "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
                                       "domain": null,
                                       "parameter": "i"}}}}},
@@ -75,7 +75,7 @@
                                     "@value": {
                                       "literal": {
                                         "string": "TODO: This function needs to be monadic, so we can look up the primitive"}}}],
-                                "body": {"literal": {"integer": {"int32": 42.0}}}}},
+                                "body": {"literal": {"integer": {"int32": 42}}}}},
                             "domain": null,
                             "parameter": "_"}}}}],
                   "default": null,
@@ -161,7 +161,7 @@
                                               "lambda": {
                                                 "body": {
                                                   "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "xapp"},
@@ -175,7 +175,7 @@
                     {
                       "name": "function",
                       "term": {"variable": "hydra.arity.functionArity"}}],
-                  "default": [{"literal": {"integer": {"int32": 0.0}}}],
+                  "default": [{"literal": {"integer": {"int32": 0}}}],
                   "typeName": "hydra.core.Term"}}}}}},
       "type": null},
     {
@@ -268,11 +268,11 @@
                                           "parameter": "arg_"}}}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                     "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
                             "domain": null,
                             "parameter": "f"}}}}],
-                  "default": [{"literal": {"integer": {"int32": 0.0}}}],
+                  "default": [{"literal": {"integer": {"int32": 0}}}],
                   "typeName": "hydra.core.Type"}}}}}},
       "type": null},
     {

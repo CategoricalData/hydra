@@ -344,7 +344,7 @@
                                         "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                        "argument": {"literal": {"integer": {"int32": 1}}},
                                         "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
                                 "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
                 "domain": null,

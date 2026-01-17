@@ -3282,7 +3282,7 @@
                                                                                                                                                                                                                 "application": {
                                                                                                                                                                                                                   "argument": {
                                                                                                                                                                                                                     "application": {
-                                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                                                                       "function": {
                                                                                                                                                                                                                         "application": {
                                                                                                                                                                                                                           "argument": {"variable": "rem"},
@@ -3291,7 +3291,7 @@
                                                                                                                                                                                                                     "application": {
                                                                                                                                                                                                                       "argument": {
                                                                                                                                                                                                                         "application": {
-                                                                                                                                                                                                                          "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                                                                          "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                                                                           "function": {
                                                                                                                                                                                                                             "application": {
                                                                                                                                                                                                                               "argument": {"variable": "i"},
@@ -3307,7 +3307,7 @@
                                                                                                                                                                                                                 "application": {
                                                                                                                                                                                                                   "argument": {
                                                                                                                                                                                                                     "application": {
-                                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                                                                                                                      "argument": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                                                                                       "function": {
                                                                                                                                                                                                                         "application": {
                                                                                                                                                                                                                           "argument": {"variable": "rem"},
@@ -3333,7 +3333,7 @@
                                                                                                                                                                                             "argument": {"variable": "k"},
                                                                                                                                                                                             "function": {
                                                                                                                                                                                               "application": {
-                                                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 0}}},
                                                                                                                                                                                                 "function": {"variable": "gen"}}}}}}},
                                                                                                                                                                                     "type": null}],
                                                                                                                                                                                 "body": {
@@ -3769,7 +3769,7 @@
                                           "pair": {
                                             "@first": {"function": {"primitive": "hydra.lib.maps.empty"}},
                                             "@second": {"function": {"primitive": "hydra.lib.sets.empty"}}}},
-                                        "@second": {"literal": {"integer": {"int32": 0.0}}}}},
+                                        "@second": {"literal": {"integer": {"int32": 0}}}}},
                                     "function": {"variable": "rewriteWithSubst"}}}}}}}}}}},
                 "domain": null,
                 "parameter": "term"}}}}},
@@ -9299,7 +9299,7 @@
                                                                                                                     "bindings": [
                                                                                                                       {
                                                                                                                         "name": "idx",
-                                                                                                                        "term": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                        "term": {"literal": {"integer": {"int32": 0}}},
                                                                                                                         "type": null}],
                                                                                                                     "body": {
                                                                                                                       "let": {
@@ -9365,7 +9365,7 @@
                                                                                                                                                           "pair": {
                                                                                                                                                             "@first": {
                                                                                                                                                               "application": {
-                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {
@@ -9437,7 +9437,7 @@
                                                                                                                     "bindings": [
                                                                                                                       {
                                                                                                                         "name": "idx",
-                                                                                                                        "term": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                        "term": {"literal": {"integer": {"int32": 0}}},
                                                                                                                         "type": null}],
                                                                                                                     "body": {
                                                                                                                       "let": {
@@ -9547,7 +9547,7 @@
                                                                                                                                                               "pair": {
                                                                                                                                                                 "@first": {
                                                                                                                                                                   "application": {
-                                                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                     "function": {
                                                                                                                                                                       "application": {
                                                                                                                                                                         "argument": {
@@ -9695,7 +9695,7 @@
                                                                                                                                               "union": {
                                                                                                                                                 "field": {
                                                                                                                                                   "name": "productTerm",
-                                                                                                                                                  "term": {"literal": {"integer": {"int32": 0.0}}}},
+                                                                                                                                                  "term": {"literal": {"integer": {"int32": 0}}}},
                                                                                                                                                 "typeName": "hydra.accessors.TermAccessor"}}]},
                                                                                                                                         "function": {
                                                                                                                                           "application": {
@@ -9730,7 +9730,7 @@
                                                                                                                                                   "union": {
                                                                                                                                                     "field": {
                                                                                                                                                       "name": "productTerm",
-                                                                                                                                                      "term": {"literal": {"integer": {"int32": 1.0}}}},
+                                                                                                                                                      "term": {"literal": {"integer": {"int32": 1}}}},
                                                                                                                                                     "typeName": "hydra.accessors.TermAccessor"}}]},
                                                                                                                                             "function": {
                                                                                                                                               "application": {
@@ -9907,7 +9907,7 @@
                                                                                                                     "bindings": [
                                                                                                                       {
                                                                                                                         "name": "idx",
-                                                                                                                        "term": {"literal": {"integer": {"int32": 0.0}}},
+                                                                                                                        "term": {"literal": {"integer": {"int32": 0}}},
                                                                                                                         "type": null}],
                                                                                                                     "body": {
                                                                                                                       "let": {
@@ -9976,7 +9976,7 @@
                                                                                                                                                           "pair": {
                                                                                                                                                             "@first": {
                                                                                                                                                               "application": {
-                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                                "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {
@@ -17393,7 +17393,7 @@
                                                 "union": {
                                                   "field": {
                                                     "name": "listElement",
-                                                    "term": {"literal": {"integer": {"int32": 0.0}}}},
+                                                    "term": {"literal": {"integer": {"int32": 0}}}},
                                                   "typeName": "hydra.accessors.TermAccessor"}},
                                               "@second": {"variable": "e"}}},
                                           "domain": null,
@@ -17429,7 +17429,7 @@
                                                     "pair": {
                                                       "@first": {
                                                         "union": {
-                                                          "field": {"name": "mapKey", "term": {"literal": {"integer": {"int32": 0.0}}}},
+                                                          "field": {"name": "mapKey", "term": {"literal": {"integer": {"int32": 0}}}},
                                                           "typeName": "hydra.accessors.TermAccessor"}},
                                                       "@second": {
                                                         "application": {
@@ -17439,7 +17439,7 @@
                                                     "pair": {
                                                       "@first": {
                                                         "union": {
-                                                          "field": {"name": "mapValue", "term": {"literal": {"integer": {"int32": 0.0}}}},
+                                                          "field": {"name": "mapValue", "term": {"literal": {"integer": {"int32": 0}}}},
                                                           "typeName": "hydra.accessors.TermAccessor"}},
                                                       "@second": {
                                                         "application": {
@@ -17549,7 +17549,7 @@
                                                 "union": {
                                                   "field": {
                                                     "name": "listElement",
-                                                    "term": {"literal": {"integer": {"int32": 0.0}}}},
+                                                    "term": {"literal": {"integer": {"int32": 0}}}},
                                                   "typeName": "hydra.accessors.TermAccessor"}},
                                               "@second": {"variable": "e"}}},
                                           "domain": null,
@@ -18352,7 +18352,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "start"},
@@ -18400,7 +18400,7 @@
                                                                                             "application": {
                                                                                               "argument": {
                                                                                                 "application": {
-                                                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "i"},
@@ -18416,7 +18416,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "application": {
-                                                                  "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
                                                                   "function": {"variable": "rangeFrom"}}},
                                                               "function": {
                                                                 "application": {
@@ -18996,7 +18996,7 @@
                                                                                                                                 "name": "i2",
                                                                                                                                 "term": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "i"},
@@ -19102,7 +19102,7 @@
                                                                                                                                                           "argument": {"variable": "m"},
                                                                                                                                                           "function": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                                                                              "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {"variable": "v"},
@@ -19173,7 +19173,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {
                                                                                                           "application": {
-                                                                                                            "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "i"},

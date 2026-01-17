@@ -59,7 +59,7 @@
                                             "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"literal": {"integer": {"int32": 0.0}}},
+                                            "argument": {"literal": {"integer": {"int32": 0}}},
                                             "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
                                     "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
                             "type": null}],
@@ -403,7 +403,7 @@
           "body": {
             "record": {
               "fields": [
-                {"name": "counter", "term": {"literal": {"integer": {"int32": 0.0}}}},
+                {"name": "counter", "term": {"literal": {"integer": {"int32": 0}}}},
                 {
                   "name": "indices",
                   "term": {"function": {"primitive": "hydra.lib.maps.empty"}}},
@@ -744,7 +744,7 @@
                                                     "name": "counter",
                                                     "term": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 1.0}}},
+                                                        "argument": {"literal": {"integer": {"int32": 1}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "i"},
