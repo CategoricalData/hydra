@@ -46,8 +46,8 @@ public interface Arity {
       }
       
       @Override
-      public Integer visit(hydra.core.Term.Function v1) {
-        return hydra.arity.Arity.functionArity(((v1)).value);
+      public Integer visit(hydra.core.Term.Function v12) {
+        return hydra.arity.Arity.functionArity(((v12)).value);
       }
     });
   }
