@@ -163,10 +163,15 @@ analyzeFunctionTermNoInferWith forBinding getTC setTC env term = gather True env
 -- | Try to infer the type of a term, returning Nothing if type inference fails.
 -- This is useful for generating code in dynamically-typed languages where
 -- type information is optional (e.g., Python).
+--
+-- Note: This function suppresses both the error result AND discards any error
+-- messages/traces that were accumulated during the failed typeOf call.
 tryTypeOf :: TypeContext -> Term -> Flow s (Maybe Type)
 tryTypeOf tc term = Flow $ \s t ->
   let FlowState mResult s' t' = unFlow (typeOf tc [] term) s t
-  in FlowState (Just mResult) s' t'
+  in case mResult of
+    Just typ -> FlowState (Just (Just typ)) s' t'  -- Success: preserve new state and trace
+    Nothing -> FlowState (Just Nothing) s t         -- Failure: discard new state and trace to suppress errors
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
 bindingMetadata :: TypeContext -> Binding -> Maybe Term
