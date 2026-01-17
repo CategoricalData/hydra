@@ -182,44 +182,83 @@
                                                               {
                                                                 "application": {
                                                                   "argument": {"variable": "t"},
-                                                                  "function": {"variable": "hydra.show.core.type"}}}]},
+                                                                  "function": {"variable": "hydra.show.core.type"}}},
+                                                              {"literal": {"string": ". Trying to apply "}},
+                                                              {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "typeArgs"},
+                                                                      "function": {"function": {"primitive": "hydra.lib.lists.length"}}}},
+                                                                  "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
+                                                              {"literal": {"string": " type args: "}},
+                                                              {
+                                                                "application": {
+                                                                  "argument": {"variable": "typeArgs"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "hydra.show.core.type"},
+                                                                      "function": {"variable": "hydra.formatting.showList"}}}}},
+                                                              {"literal": {"string": ". Context has vars: {"}},
+                                                              {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "tx"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "types", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                                                          "function": {"function": {"primitive": "hydra.lib.maps.keys"}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"function": {"elimination": {"wrap": "hydra.core.Name"}}},
+                                                                          "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"literal": {"string": ", "}},
+                                                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                                              {"literal": {"string": "}"}}]},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
                                                       "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
                                                 "typeName": "hydra.core.Type"}}}}}},
                                     "type": null}],
                                 "body": {
                                   "application": {
-                                    "argument": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "nonnull"},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "t"},
-                                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "typeArgs"},
-                                                          "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                          "domain": null,
-                                          "parameter": "_"}}},
+                                    "argument": {"variable": "nonnull"},
                                     "function": {
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "t"},
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {"variable": "t"},
+                                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                                  "domain": null,
+                                                  "parameter": "_"}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "tx"},
-                                                "function": {"variable": "hydra.checking.checkTypeVariables"}}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "t"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "tx"},
+                                                        "function": {"variable": "hydra.checking.checkTypeVariables"}}}}},
+                                                "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "typeArgs"},
+                                                "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
+                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
                             "domain": null,
                             "parameter": "t"}}},
                       "domain": null,
@@ -1533,7 +1572,8 @@
             {
               "@key": "description",
               "@value": {
-                "literal": {"string": "Check that all type variables in a type are bound"}}}],
+                "literal": {
+                  "string": "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code."}}}],
           "body": {
             "function": {
               "lambda": {
@@ -1541,280 +1581,13 @@
                   "function": {
                     "lambda": {
                       "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "cx",
-                              "term": {
-                                "application": {
-                                  "argument": {"variable": "tx"},
-                                  "function": {
-                                    "function": {
-                                      "elimination": {
-                                        "record": {"field": "inferenceContext", "typeName": "hydra.typing.TypeContext"}}}}}},
-                              "type": null}],
-                          "body": {
-                            "let": {
-                              "bindings": [
-                                {
-                                  "name": "vars",
-                                  "term": {
-                                    "application": {
-                                      "argument": {"variable": "tx"},
-                                      "function": {
-                                        "function": {
-                                          "elimination": {
-                                            "record": {"field": "typeVariables", "typeName": "hydra.typing.TypeContext"}}}}}},
-                                  "type": null}],
-                              "body": {
-                                "let": {
-                                  "bindings": [
-                                    {
-                                      "name": "dflt",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"unit": {}},
-                                                    "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                "domain": null,
-                                                "parameter": "_"}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "typ"},
-                                                      "function": {"variable": "hydra.rewriting.subtypes"}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "tx"},
-                                                          "function": {"variable": "hydra.checking.checkTypeVariables"}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
-                                      "type": null}],
-                                  "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "check",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "typ"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "union": {
-                                                      "cases": [
-                                                        {
-                                                          "name": "forall",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "ft"},
-                                                                        "function": {
-                                                                          "function": {
-                                                                            "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "record": {
-                                                                            "fields": [
-                                                                              {
-                                                                                "name": "types",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "tx"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {"record": {"field": "types", "typeName": "hydra.typing.TypeContext"}}}}}}},
-                                                                              {
-                                                                                "name": "metadata",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "tx"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "metadata", "typeName": "hydra.typing.TypeContext"}}}}}}},
-                                                                              {
-                                                                                "name": "typeVariables",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "vars"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "ft"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {
-                                                                                                  "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.sets.insert"}}}}}}},
-                                                                              {
-                                                                                "name": "lambdaVariables",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "tx"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "lambdaVariables", "typeName": "hydra.typing.TypeContext"}}}}}}},
-                                                                              {
-                                                                                "name": "inferenceContext",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "tx"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "inferenceContext", "typeName": "hydra.typing.TypeContext"}}}}}}}],
-                                                                            "typeName": "hydra.typing.TypeContext"}},
-                                                                        "function": {"variable": "hydra.checking.checkTypeVariables"}}}}},
-                                                                "domain": null,
-                                                                "parameter": "ft"}}}},
-                                                        {
-                                                          "name": "variable",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "list": [
-                                                                                    {"literal": {"string": "unbound type variable \""}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "v"},
-                                                                                        "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                    {"literal": {"string": "\" in "}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "typ"},
-                                                                                        "function": {"variable": "hydra.show.core.type"}}},
-                                                                                    {"literal": {"string": ". Local variables: {"}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "vars"},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"function": {"elimination": {"wrap": "hydra.core.Name"}}},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"string": ", "}},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                                                    {"literal": {"string": "}, schema variables: {"}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "cx"},
-                                                                                                    "function": {
-                                                                                                      "function": {
-                                                                                                        "elimination": {
-                                                                                                          "record": {"field": "schemaTypes", "typeName": "hydra.typing.InferenceContext"}}}}}},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.maps.keys"}}}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"function": {"elimination": {"wrap": "hydra.core.Name"}}},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"string": ", "}},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                                                    {"literal": {"string": "}"}}]},
-                                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"unit": {}},
-                                                                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "cx"},
-                                                                                        "function": {
-                                                                                          "function": {
-                                                                                            "elimination": {
-                                                                                              "record": {"field": "schemaTypes", "typeName": "hydra.typing.InferenceContext"}}}}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "v"},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.maps.member"}}}}}},
-                                                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"unit": {}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "vars"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "v"},
-                                                                                    "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                                                "domain": null,
-                                                                "parameter": "v"}}}}],
-                                                      "default": [{"variable": "dflt"}],
-                                                      "typeName": "hydra.core.Type"}}}}}},
-                                          "type": null}],
-                                      "body": {
-                                        "application": {
-                                          "argument": {"variable": "check"},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {
-                                                    "list": [
-                                                      {"literal": {"string": "checking variables of: "}},
-                                                      {
-                                                        "application": {
-                                                          "argument": {"variable": "typ"},
-                                                          "function": {"variable": "hydra.show.core.type"}}}]},
-                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                              "function": {"variable": "hydra.monads.withTrace"}}}}}}}}}}}}},
+                        "application": {
+                          "argument": {"unit": {}},
+                          "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
                       "domain": null,
-                      "parameter": "typ"}}},
+                      "parameter": "_typ"}}},
                 "domain": null,
-                "parameter": "tx"}}}}},
+                "parameter": "_tx"}}}}},
       "type": null},
     {
       "name": "hydra.checking.toFContext",
@@ -2518,74 +2291,40 @@
                                                                     "lambda": {
                                                                       "body": {
                                                                         "application": {
-                                                                          "argument": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "function": {
-                                                                                        "lambda": {
-                                                                                          "body": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "t"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "typeArgs"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "tx"},
-                                                                                                      "function": {"variable": "hydra.checking.applyTypeArgumentsToType"}}}}}}},
-                                                                                          "domain": null,
-                                                                                          "parameter": "t"}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "targ"},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "tfun"},
-                                                                                                "function": {"variable": "tryType"}}}}},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
-                                                                                "domain": null,
-                                                                                "parameter": "_"}}},
+                                                                          "argument": {"variable": "t"},
                                                                           "function": {
                                                                             "application": {
-                                                                              "argument": {
+                                                                              "argument": {"variable": "typeArgs"},
+                                                                              "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "targ"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "tx"},
-                                                                                      "function": {"variable": "hydra.checking.checkTypeVariables"}}}}},
-                                                                              "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                  "argument": {"variable": "tx"},
+                                                                                  "function": {"variable": "hydra.checking.applyTypeArgumentsToType"}}}}}}},
                                                                       "domain": null,
-                                                                      "parameter": "targ"}}},
+                                                                      "parameter": "t"}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {"variable": "arg"},
+                                                                        "argument": {"variable": "targ"},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"list": []},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "tx"},
-                                                                                "function": {"variable": "hydra.checking.typeOf"}}}}}}},
+                                                                            "argument": {"variable": "tfun"},
+                                                                            "function": {"variable": "tryType"}}}}},
                                                                     "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
                                                             "domain": null,
-                                                            "parameter": "_"}}},
+                                                            "parameter": "targ"}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {
                                                             "application": {
-                                                              "argument": {"variable": "tfun"},
+                                                              "argument": {"variable": "arg"},
                                                               "function": {
                                                                 "application": {
-                                                                  "argument": {"variable": "tx"},
-                                                                  "function": {"variable": "hydra.checking.checkTypeVariables"}}}}},
+                                                                  "argument": {"list": []},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "tx"},
+                                                                      "function": {"variable": "hydra.checking.typeOf"}}}}}}},
                                                           "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
                                                   "domain": null,
                                                   "parameter": "tfun"}}},
@@ -3660,117 +3399,77 @@
                                                                                 "lambda": {
                                                                                   "body": {
                                                                                     "application": {
-                                                                                      "argument": {
-                                                                                        "function": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "t"},
-                                                                                                          "function": {
-                                                                                                            "application": {
-                                                                                                              "argument": {"variable": "typeArgs"},
-                                                                                                              "function": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "tx"},
-                                                                                                                  "function": {"variable": "hydra.checking.applyTypeArgumentsToType"}}}}}}},
-                                                                                                      "domain": null,
-                                                                                                      "parameter": "t"}}},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "list": [
-                                                                                                                    {"literal": {"string": "binding types disagree: "}},
-                                                                                                                    {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "btypes"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "hydra.show.core.type"},
-                                                                                                                            "function": {"variable": "hydra.formatting.showList"}}}}},
-                                                                                                                    {"literal": {"string": " and "}},
-                                                                                                                    {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "typeofs"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "hydra.show.core.type"},
-                                                                                                                            "function": {"variable": "hydra.formatting.showList"}}}}},
-                                                                                                                    {"literal": {"string": " from terms: "}},
-                                                                                                                    {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "bterms"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "hydra.show.core.term"},
-                                                                                                                            "function": {"variable": "hydra.formatting.showList"}}}}}]},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                                            "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "body"},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"list": []},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "tx2"},
-                                                                                                                        "function": {"variable": "hydra.checking.typeOf"}}}}}}},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "btypes"},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "typeofs"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "tx"},
-                                                                                                                            "function": {"variable": "hydra.checking.typeListsEffectivelyEqual"}}}}}}},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
-                                                                                            "domain": null,
-                                                                                            "parameter": "_"}}},
+                                                                                      "argument": {"variable": "t"},
                                                                                       "function": {
                                                                                         "application": {
-                                                                                          "argument": {
+                                                                                          "argument": {"variable": "typeArgs"},
+                                                                                          "function": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "typeofs"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "tx"},
-                                                                                                      "function": {"variable": "hydra.checking.checkTypeVariables"}}},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
-                                                                                          "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
+                                                                                              "argument": {"variable": "tx"},
+                                                                                              "function": {"variable": "hydra.checking.applyTypeArgumentsToType"}}}}}}},
                                                                                   "domain": null,
-                                                                                  "parameter": "_"}}},
+                                                                                  "parameter": "t"}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "btypes"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "list": [
+                                                                                                {"literal": {"string": "binding types disagree: "}},
+                                                                                                {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "btypes"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.show.core.type"},
+                                                                                                        "function": {"variable": "hydra.formatting.showList"}}}}},
+                                                                                                {"literal": {"string": " and "}},
+                                                                                                {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "typeofs"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.show.core.type"},
+                                                                                                        "function": {"variable": "hydra.formatting.showList"}}}}},
+                                                                                                {"literal": {"string": " from terms: "}},
+                                                                                                {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "bterms"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.show.core.term"},
+                                                                                                        "function": {"variable": "hydra.formatting.showList"}}}}}]},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "tx"},
-                                                                                            "function": {"variable": "hydra.checking.checkTypeVariables"}}},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
+                                                                                            "argument": {"variable": "body"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"list": []},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "tx2"},
+                                                                                                    "function": {"variable": "hydra.checking.typeOf"}}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "btypes"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "typeofs"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "tx"},
+                                                                                                        "function": {"variable": "hydra.checking.typeListsEffectivelyEqual"}}}}}}},
+                                                                                            "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
                                                                                 "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
                                                                         "domain": null,
                                                                         "parameter": "typeofs"}}},

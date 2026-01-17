@@ -823,7 +823,7 @@
                       "let": {
                         "bindings": [
                           {
-                            "name": "flatten",
+                            "name": "flattenBodyLet",
                             "term": {
                               "function": {
                                 "lambda": {
@@ -831,130 +831,235 @@
                                     "function": {
                                       "lambda": {
                                         "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "rewritten",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "term"},
-                                                    "function": {"variable": "recurse"}}},
-                                                "type": null}],
-                                            "body": {
-                                              "application": {
-                                                "argument": {"variable": "rewritten"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "union": {
-                                                        "cases": [
-                                                          {
-                                                            "name": "let",
-                                                            "term": {
-                                                              "function": {
-                                                                "lambda": {
+                                          "application": {
+                                            "argument": {"variable": "body"},
+                                            "function": {
+                                              "function": {
+                                                "elimination": {
+                                                  "union": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "let",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "innerBindings",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "innerLt"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
+                                                                      "type": null}],
                                                                   "body": {
                                                                     "let": {
                                                                       "bindings": [
                                                                         {
-                                                                          "name": "bindings",
+                                                                          "name": "innerBody",
                                                                           "term": {
                                                                             "application": {
-                                                                              "argument": {"variable": "lt"},
+                                                                              "argument": {"variable": "innerLt"},
                                                                               "function": {
                                                                                 "function": {
-                                                                                  "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
+                                                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
                                                                           "type": null}],
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "innerBody"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "innerBindings"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "bindings"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
+                                                                              "function": {"variable": "flattenBodyLet"}}}}}}}}},
+                                                              "domain": null,
+                                                              "parameter": "innerLt"}}}}],
+                                                    "default": [
+                                                      {
+                                                        "pair": {"@first": {"variable": "bindings"}, "@second": {"variable": "body"}}}],
+                                                    "typeName": "hydra.core.Term"}}}}}},
+                                        "domain": null,
+                                        "parameter": "body"}}},
+                                  "domain": null,
+                                  "parameter": "bindings"}}},
+                            "type": null}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "flatten",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "rewritten",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "term"},
+                                                        "function": {"variable": "recurse"}}},
+                                                    "type": null}],
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "rewritten"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {
+                                                          "union": {
+                                                            "cases": [
+                                                              {
+                                                                "name": "let",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
                                                                       "body": {
                                                                         "let": {
                                                                           "bindings": [
                                                                             {
-                                                                              "name": "body",
+                                                                              "name": "bindings",
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "lt"},
                                                                                   "function": {
                                                                                     "function": {
-                                                                                      "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
+                                                                                      "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
                                                                               "type": null}],
                                                                           "body": {
                                                                             "let": {
                                                                               "bindings": [
                                                                                 {
-                                                                                  "name": "forResult",
+                                                                                  "name": "body",
                                                                                   "term": {
-                                                                                    "function": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "hr"},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "hr"},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
-                                                                                        "domain": null,
-                                                                                        "parameter": "hr"}}},
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "lt"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
                                                                                   "type": null}],
                                                                               "body": {
                                                                                 "let": {
                                                                                   "bindings": [
                                                                                     {
-                                                                                      "name": "newBindings",
+                                                                                      "name": "forResult",
                                                                                       "term": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "bindings"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "function": {
-                                                                                                      "lambda": {
-                                                                                                        "body": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "arg_"},
-                                                                                                                "function": {"variable": "rewriteBinding"}}},
-                                                                                                            "function": {"variable": "forResult"}}},
-                                                                                                        "domain": null,
-                                                                                                        "parameter": "arg_"}}},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}},
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "hr"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hr"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
+                                                                                            "domain": null,
+                                                                                            "parameter": "hr"}}},
                                                                                       "type": null}],
                                                                                   "body": {
-                                                                                    "union": {
-                                                                                      "field": {
-                                                                                        "name": "let",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {"name": "bindings", "term": {"variable": "newBindings"}},
-                                                                                              {"name": "body", "term": {"variable": "body"}}],
-                                                                                            "typeName": "hydra.core.Let"}}},
-                                                                                      "typeName": "hydra.core.Term"}}}}}}}}}},
-                                                                  "domain": null,
-                                                                  "parameter": "lt"}}}}],
-                                                        "default": [{"variable": "rewritten"}],
-                                                        "typeName": "hydra.core.Term"}}}}}}}},
-                                        "domain": null,
-                                        "parameter": "term"}}},
-                                  "domain": null,
-                                  "parameter": "recurse"}}},
-                            "type": null}],
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "term"},
-                            "function": {
+                                                                                    "let": {
+                                                                                      "bindings": [
+                                                                                        {
+                                                                                          "name": "flattenedBindings",
+                                                                                          "term": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "bindings"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "arg_"},
+                                                                                                                    "function": {"variable": "rewriteBinding"}}},
+                                                                                                                "function": {"variable": "forResult"}}},
+                                                                                                            "domain": null,
+                                                                                                            "parameter": "arg_"}}},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                                                                              "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}},
+                                                                                          "type": null}],
+                                                                                      "body": {
+                                                                                        "let": {
+                                                                                          "bindings": [
+                                                                                            {
+                                                                                              "name": "merged",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "body"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "flattenedBindings"},
+                                                                                                      "function": {"variable": "flattenBodyLet"}}}}},
+                                                                                              "type": null}],
+                                                                                          "body": {
+                                                                                            "let": {
+                                                                                              "bindings": [
+                                                                                                {
+                                                                                                  "name": "newBindings",
+                                                                                                  "term": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "merged"},
+                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
+                                                                                                  "type": null}],
+                                                                                              "body": {
+                                                                                                "let": {
+                                                                                                  "bindings": [
+                                                                                                    {
+                                                                                                      "name": "newBody",
+                                                                                                      "term": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "merged"},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
+                                                                                                      "type": null}],
+                                                                                                  "body": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "let",
+                                                                                                        "term": {
+                                                                                                          "record": {
+                                                                                                            "fields": [
+                                                                                                              {"name": "bindings", "term": {"variable": "newBindings"}},
+                                                                                                              {"name": "body", "term": {"variable": "newBody"}}],
+                                                                                                            "typeName": "hydra.core.Let"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}}}}}}}}}}}}}},
+                                                                      "domain": null,
+                                                                      "parameter": "lt"}}}}],
+                                                            "default": [{"variable": "rewritten"}],
+                                                            "typeName": "hydra.core.Term"}}}}}}}},
+                                            "domain": null,
+                                            "parameter": "term"}}},
+                                      "domain": null,
+                                      "parameter": "recurse"}}},
+                                "type": null}],
+                            "body": {
                               "application": {
-                                "argument": {"variable": "flatten"},
-                                "function": {"variable": "hydra.rewriting.rewriteTerm"}}}}}}}}},
+                                "argument": {"variable": "term"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "flatten"},
+                                    "function": {"variable": "hydra.rewriting.rewriteTerm"}}}}}}}}}}},
                 "domain": null,
                 "parameter": "term"}}}}},
       "type": null},

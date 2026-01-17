@@ -218,9 +218,7 @@ etaExpandTypedTerm tx0 term0 =
                         Core.TermTypeLambda v1 ->  
                           let txt = (Schemas.extendTypeContextForTypeLambda tx v1)
                           in (arityOf txt (Core.typeLambdaBody v1))
-                        Core.TermVariable v1 -> (Maybes.maybe (Flows.fail (Strings.cat [
-                          "unbound variable: ",
-                          (Core.unName v1)])) (\t -> Flows.pure (Arity.typeArity t)) (Maps.lookup v1 (Typing.typeContextTypes tx)))
+                        Core.TermVariable v1 -> (Maybes.maybe (Flows.map Arity.typeArity (Checking.typeOf tx [] (Core.TermVariable v1))) (\t -> Flows.pure (Arity.typeArity t)) (Maps.lookup v1 (Typing.typeContextTypes tx)))
                         _ -> dflt) term))
             in  
               let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))

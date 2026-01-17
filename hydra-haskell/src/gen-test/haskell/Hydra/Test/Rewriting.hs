@@ -180,7 +180,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "non-nested let unchanged",
+          Testing.testCaseWithMetadataName = "sequential lets in body are flattened",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseFlattenLetTerms (Testing.FlattenLetTermsTestCase {
             Testing.flattenLetTermsTestCaseInput = (Core.TermLet (Core.Let {
               Core.letBindings = [
@@ -202,16 +202,14 @@ allTests = Testing.TestGroup {
                 Core.Binding {
                   Core.bindingName = (Core.Name "x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "y"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   Core.bindingType = Nothing}],
-              Core.letBody = (Core.TermLet (Core.Let {
-                Core.letBindings = [
-                  Core.Binding {
-                    Core.bindingName = (Core.Name "y"),
-                    Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    Core.bindingType = Nothing}],
-                Core.letBody = (Core.TermList [
-                  Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))])}))}))})),
+              Core.letBody = (Core.TermList [
+                Core.TermVariable (Core.Name "x"),
+                (Core.TermVariable (Core.Name "y"))])}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
