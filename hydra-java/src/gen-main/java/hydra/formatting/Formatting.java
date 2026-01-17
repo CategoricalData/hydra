@@ -13,7 +13,7 @@ public interface Formatting {
   }
   
   static String convertCase(hydra.util.CaseConvention from, hydra.util.CaseConvention to, String original) {
-    java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>> splitOnUppercase = (java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>>) (acc -> (java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
+    java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>> parts_byCaps_splitOnUppercase = (java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>>) (acc -> (java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.apply(
         hydra.lib.chars.IsUpper.apply((c)),
         java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
@@ -23,34 +23,34 @@ public interface Formatting {
           (c),
           hydra.lib.lists.Head.apply((acc))),
         hydra.lib.lists.Tail.apply((acc))))));
-    java.util.List<String> byCaps = hydra.lib.lists.Map.apply(
+    java.util.List<String> parts_byCaps = hydra.lib.lists.Map.apply(
       (hydra.lib.strings.FromList::apply),
       hydra.lib.lists.Foldl.apply(
-        (splitOnUppercase),
+        (parts_byCaps_splitOnUppercase),
         java.util.List.of((java.util.List<Integer>) (java.util.List.<Integer>of())),
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(hydra.formatting.Formatting.decapitalize((original))))));
-    java.util.List<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
+    java.util.List<String> parts_byUnderscores = hydra.lib.strings.SplitOn.apply(
       "_",
       (original));
     java.util.List<String> parts = ((from)).accept(new hydra.util.CaseConvention.Visitor<>() {
       @Override
       public java.util.List<String> visit(hydra.util.CaseConvention.Camel ignored) {
-        return (byCaps);
+        return (parts_byCaps);
       }
       
       @Override
       public java.util.List<String> visit(hydra.util.CaseConvention.Pascal ignored) {
-        return (byCaps);
+        return (parts_byCaps);
       }
       
       @Override
       public java.util.List<String> visit(hydra.util.CaseConvention.LowerSnake ignored) {
-        return (byUnderscores);
+        return (parts_byUnderscores);
       }
       
       @Override
       public java.util.List<String> visit(hydra.util.CaseConvention.UpperSnake ignored) {
-        return (byUnderscores);
+        return (parts_byUnderscores);
       }
     });
     return ((to)).accept(new hydra.util.CaseConvention.Visitor<>() {
