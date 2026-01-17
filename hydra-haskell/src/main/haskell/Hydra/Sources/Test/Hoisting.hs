@@ -1729,4 +1729,105 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
             (MetaTypes.function
               (MetaTypes.var "RestoreType")
               (MetaTypes.function (MetaTypes.var "FlowType") (MetaTypes.var "FlowType")))))]
-        (T.var "mutateTrace"))]
+        (T.var "mutateTrace")),
+
+    -- ============================================================
+    -- Test: Inner binding uses type variable from OUTER polymorphic context
+    -- THIS IS THE CRITICAL FAILURE CASE for Java generation.
+    --
+    -- When the outer function is polymorphic in 's' (e.g., Flow s a),
+    -- and an inner polymorphic binding uses 's' in its type
+    -- (e.g., forCaseStatement : CaseStatement -> Flow s CaseStatement),
+    -- hoisting must preserve that 's' comes from the outer context.
+    --
+    -- Currently this fails during type inference in the code generation
+    -- pipeline because after hoisting, 's' becomes unbound.
+    -- ============================================================
+
+    hoistPolyCase "inner binding uses type variable from outer polymorphic context"
+      -- Input: let etaExpand : forall s. TypeContext -> Term -> Flow s Term =
+      --          \tx -> \term ->
+      --            (let forCaseStatement : CaseStatement -> Flow s CaseStatement = \cs -> ...
+      --             in forCaseStatement (getCaseStatement term))
+      --        in etaExpand
+      --
+      -- The 's' in forCaseStatement's type comes from etaExpand's forall s.
+      -- When forCaseStatement is hoisted, its type must somehow reference the
+      -- outer 's', OR the hoisting must add 's' to forCaseStatement's type scheme.
+      (mkLet [(nm "etaExpand",
+        T.tylam "s" (T.lambda "tx" (T.lambda "term"
+          (Core.termLet $ mkLet [(nm "forCaseStatement",
+            T.lambda "cs" (T.apply (T.var "processCaseStatement") (T.var "cs")),
+            -- Type uses 's' from outer context, but binding has NO type variables of its own
+            -- This is the problematic pattern: no forall, but uses outer 's'
+            monoType (MetaTypes.function
+              (MetaTypes.var "CaseStatement")
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) (MetaTypes.var "CaseStatement"))))]
+            (T.apply (T.var "forCaseStatement") (T.apply (T.var "getCaseStatement") (T.var "term")))))),
+        -- Outer type: forall s. TypeContext -> Term -> Flow s Term
+        polyType ["s"]
+          (MetaTypes.function (MetaTypes.var "TypeContext")
+            (MetaTypes.function (MetaTypes.var "Term")
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) (MetaTypes.var "Term")))))]
+        (T.var "etaExpand"))
+      -- Output: forCaseStatement must be hoisted with 's' captured somehow.
+      -- Option A: Add 's' to forCaseStatement's type scheme (making it polymorphic in s)
+      -- Option B: Wrap in type lambda that captures 's' (like term variable capture)
+      --
+      -- Expected output (Option A - add s to type scheme):
+      (mkLet [
+        (nm "forCaseStatement",
+          T.lambda "cs" (T.apply (T.var "processCaseStatement") (T.var "cs")),
+          -- Now polymorphic in s (was monomorphic but used outer s)
+          polyType ["s"]
+            (MetaTypes.function
+              (MetaTypes.var "CaseStatement")
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) (MetaTypes.var "CaseStatement")))),
+        (nm "etaExpand",
+          T.tylam "s" (T.lambda "tx" (T.lambda "term"
+            -- Reference to forCaseStatement needs type application @s
+            (T.apply (T.tyapp (T.var "forCaseStatement") (MetaTypes.var "s"))
+              (T.apply (T.var "getCaseStatement") (T.var "term"))))),
+          polyType ["s"]
+            (MetaTypes.function (MetaTypes.var "TypeContext")
+              (MetaTypes.function (MetaTypes.var "Term")
+                (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) (MetaTypes.var "Term")))))]
+        (T.var "etaExpand")),
+
+    -- ============================================================
+    -- Test: Simpler version - monomorphic binding inside type lambda
+    -- The binding value doesn't use 's', but its TYPE does.
+    -- ============================================================
+
+    hoistPolyCase "monomorphic binding with type referencing outer type variable"
+      -- Input: let f : forall s. s -> Flow s Int =
+      --          Λs. \x -> (let g : Flow s Int = pure 42 in g)
+      --        in f
+      --
+      -- 'g' is monomorphic (no forall) but its type mentions 's' from outer context
+      (mkLet [(nm "f",
+        T.tylam "s" (T.lambda "x"
+          (Core.termLet $ mkLet [(nm "g",
+            T.apply (T.var "pure") (T.int32 42),
+            -- Type uses 's' from outer type lambda
+            monoType (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) MetaTypes.int32))]
+            (T.var "g"))),
+        polyType ["s"]
+          (MetaTypes.function (MetaTypes.var "s")
+            (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) MetaTypes.int32)))]
+        (T.var "f"))
+      -- Output: 'g' must be hoisted with 's' added to its type scheme
+      (mkLet [
+        (nm "g",
+          T.apply (T.var "pure") (T.int32 42),
+          -- Now polymorphic in s
+          polyType ["s"]
+            (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) MetaTypes.int32)),
+        (nm "f",
+          T.tylam "s" (T.lambda "x"
+            -- Reference needs type application
+            (T.tyapp (T.var "g") (MetaTypes.var "s"))),
+          polyType ["s"]
+            (MetaTypes.function (MetaTypes.var "s")
+              (MetaTypes.apply (MetaTypes.apply (MetaTypes.var "Flow") (MetaTypes.var "s")) MetaTypes.int32)))]
+        (T.var "f"))]

@@ -66,113 +66,128 @@ hoistCaseStatementsInGraph graph =
             Graph.graphPrimitives = (Graph.graphPrimitives graph),
             Graph.graphSchema = (Graph.graphSchema graph)}))
 
--- | Transform a let-term by pulling let bindings to the top level. The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False). This is useful for targets like Java that cannot have let-expressions in arbitrary positions. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
+-- | Transform a let-term by pulling let bindings to the top level. The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False). This is useful for targets like Java that cannot have let-expressions in arbitrary positions. Polymorphic bindings are those with a non-empty list of type scheme variables, OR bindings inside a type lambda scope (which use outer type variables in their types). If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindings :: (Bool -> Core.Let -> Core.Let)
 hoistLetBindings hoistAll let0 =  
   let topLevelNames = (Sets.fromList (Lists.map (\b -> Core.bindingName b) (Core.letBindings let0)))
   in  
-    let processTermForHoisting = (\lambdaVars -> \reserved -> \term -> (\x -> case x of
-            Core.TermLet v1 ->  
-              let bindingsResult = (Lists.foldl (processBinding lambdaVars) ([], (reserved, [])) (Core.letBindings v1))
-              in  
-                let hoistedFromBindings = (Pairs.first bindingsResult)
-                in  
-                  let reservedAfterBindings = (Pairs.first (Pairs.second bindingsResult))
+    let emptyHoisted = [] 
+        processTermForHoisting = (\typeVars -> \lambdaVars -> \reserved -> \term -> (\x -> case x of
+                Core.TermLet v1 ->  
+                  let bindingsResult = (Lists.foldl (processBinding typeVars lambdaVars) (emptyHoisted, (reserved, [])) (Core.letBindings v1))
                   in  
-                    let keptBindingsRaw = (Lists.reverse (Pairs.second (Pairs.second bindingsResult)))
+                    let hoistedFromBindings = (Pairs.first bindingsResult)
                     in  
-                      let bodyResult = (processTermForHoisting lambdaVars reservedAfterBindings (Core.letBody v1))
+                      let reservedAfterBindings = (Pairs.first (Pairs.second bindingsResult))
                       in  
-                        let hoistedFromBody = (Pairs.first bodyResult)
+                        let keptBindingsRaw = (Lists.reverse (Pairs.second (Pairs.second bindingsResult)))
                         in  
-                          let reservedAfterBody = (Pairs.first (Pairs.second bodyResult))
+                          let bodyResult = (processTermForHoisting typeVars lambdaVars reservedAfterBindings (Core.letBody v1))
                           in  
-                            let processedBodyRaw = (Pairs.second (Pairs.second bodyResult))
+                            let hoistedFromBody = (Pairs.first bodyResult)
                             in  
-                              let allHoisted = (Lists.concat2 hoistedFromBody hoistedFromBindings)
+                              let reservedAfterBody = (Pairs.first (Pairs.second bodyResult))
                               in  
-                                let keptBindings = (Lists.map (\b ->  
-                                        let updatedTerm = (replaceReferences hoistedFromBindings (Core.bindingTerm b))
-                                        in Core.Binding {
-                                          Core.bindingName = (Core.bindingName b),
-                                          Core.bindingTerm = updatedTerm,
-                                          Core.bindingType = (Core.bindingType b)}) keptBindingsRaw)
+                                let processedBodyRaw = (Pairs.second (Pairs.second bodyResult))
                                 in  
-                                  let processedBody = (replaceReferences hoistedFromBindings processedBodyRaw)
-                                  in (Logic.ifElse (Lists.null keptBindings) (allHoisted, (reservedAfterBody, processedBody)) (allHoisted, (reservedAfterBody, (Core.TermLet (Core.Let {
-                                    Core.letBindings = keptBindings,
-                                    Core.letBody = processedBody})))))
-            Core.TermFunction v1 -> ((\x -> case x of
-              Core.FunctionLambda v2 ->  
-                let paramName = (Core.lambdaParameter v2)
-                in  
-                  let paramDomain = (Core.lambdaDomain v2)
-                  in  
-                    let newLambdaVars = (Lists.concat2 lambdaVars (Lists.pure (paramName, paramDomain)))
+                                  let allHoisted = (Lists.concat2 hoistedFromBody hoistedFromBindings)
+                                  in  
+                                    let keptBindings = (Lists.map (\b ->  
+                                            let updatedTerm = (replaceReferences hoistedFromBindings (Core.bindingTerm b))
+                                            in Core.Binding {
+                                              Core.bindingName = (Core.bindingName b),
+                                              Core.bindingTerm = updatedTerm,
+                                              Core.bindingType = (Core.bindingType b)}) keptBindingsRaw)
+                                    in  
+                                      let processedBody = (replaceReferences hoistedFromBindings processedBodyRaw)
+                                      in (Logic.ifElse (Lists.null keptBindings) (allHoisted, (reservedAfterBody, processedBody)) (allHoisted, (reservedAfterBody, (Core.TermLet (Core.Let {
+                                        Core.letBindings = keptBindings,
+                                        Core.letBody = processedBody})))))
+                Core.TermFunction v1 -> ((\x -> case x of
+                  Core.FunctionLambda v2 ->  
+                    let paramName = (Core.lambdaParameter v2)
                     in  
-                      let bodyResult = (processTermForHoisting newLambdaVars reserved (Core.lambdaBody v2))
+                      let paramDomain = (Core.lambdaDomain v2)
+                      in  
+                        let newLambdaVars = (Lists.concat2 lambdaVars (Lists.pure (paramName, paramDomain)))
+                        in  
+                          let bodyResult = (processTermForHoisting typeVars newLambdaVars reserved (Core.lambdaBody v2))
+                          in  
+                            let hoisted = (Pairs.first bodyResult)
+                            in  
+                              let newReserved = (Pairs.first (Pairs.second bodyResult))
+                              in  
+                                let newBody = (Pairs.second (Pairs.second bodyResult))
+                                in (hoisted, (newReserved, (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                  Core.lambdaParameter = paramName,
+                                  Core.lambdaDomain = paramDomain,
+                                  Core.lambdaBody = newBody})))))
+                  _ -> (emptyHoisted, (reserved, term))) v1)
+                Core.TermApplication v1 ->  
+                  let fnResult = (processTermForHoisting typeVars lambdaVars reserved (Core.applicationFunction v1))
+                  in  
+                    let fnHoisted = (Pairs.first fnResult)
+                    in  
+                      let reservedAfterFn = (Pairs.first (Pairs.second fnResult))
+                      in  
+                        let newFn = (Pairs.second (Pairs.second fnResult))
+                        in  
+                          let argResult = (processTermForHoisting typeVars lambdaVars reservedAfterFn (Core.applicationArgument v1))
+                          in  
+                            let argHoisted = (Pairs.first argResult)
+                            in  
+                              let reservedAfterArg = (Pairs.first (Pairs.second argResult))
+                              in  
+                                let newArg = (Pairs.second (Pairs.second argResult))
+                                in (Lists.concat2 argHoisted fnHoisted, (reservedAfterArg, (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = newFn,
+                                  Core.applicationArgument = newArg}))))
+                Core.TermAnnotated v1 ->  
+                  let bodyResult = (processTermForHoisting typeVars lambdaVars reserved (Core.annotatedTermBody v1))
+                  in  
+                    let hoisted = (Pairs.first bodyResult)
+                    in  
+                      let newReserved = (Pairs.first (Pairs.second bodyResult))
+                      in  
+                        let newBody = (Pairs.second (Pairs.second bodyResult))
+                        in (hoisted, (newReserved, (Core.TermAnnotated (Core.AnnotatedTerm {
+                          Core.annotatedTermBody = newBody,
+                          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
+                Core.TermTypeLambda v1 ->  
+                  let typeParam = (Core.typeLambdaParameter v1)
+                  in  
+                    let newTypeVars = (Lists.concat2 typeVars (Lists.pure typeParam))
+                    in  
+                      let bodyResult = (processTermForHoisting newTypeVars lambdaVars reserved (Core.typeLambdaBody v1))
                       in  
                         let hoisted = (Pairs.first bodyResult)
                         in  
                           let newReserved = (Pairs.first (Pairs.second bodyResult))
                           in  
                             let newBody = (Pairs.second (Pairs.second bodyResult))
-                            in (hoisted, (newReserved, (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                              Core.lambdaParameter = paramName,
-                              Core.lambdaDomain = paramDomain,
-                              Core.lambdaBody = newBody})))))
-              _ -> ([], (reserved, term))) v1)
-            Core.TermApplication v1 ->  
-              let fnResult = (processTermForHoisting lambdaVars reserved (Core.applicationFunction v1))
-              in  
-                let fnHoisted = (Pairs.first fnResult)
-                in  
-                  let reservedAfterFn = (Pairs.first (Pairs.second fnResult))
+                            in (hoisted, (newReserved, (Core.TermTypeLambda (Core.TypeLambda {
+                              Core.typeLambdaParameter = typeParam,
+                              Core.typeLambdaBody = newBody}))))
+                Core.TermTypeApplication v1 ->  
+                  let bodyResult = (processTermForHoisting typeVars lambdaVars reserved (Core.typeApplicationTermBody v1))
                   in  
-                    let newFn = (Pairs.second (Pairs.second fnResult))
+                    let hoisted = (Pairs.first bodyResult)
                     in  
-                      let argResult = (processTermForHoisting lambdaVars reservedAfterFn (Core.applicationArgument v1))
+                      let newReserved = (Pairs.first (Pairs.second bodyResult))
                       in  
-                        let argHoisted = (Pairs.first argResult)
-                        in  
-                          let reservedAfterArg = (Pairs.first (Pairs.second argResult))
-                          in  
-                            let newArg = (Pairs.second (Pairs.second argResult))
-                            in (Lists.concat2 argHoisted fnHoisted, (reservedAfterArg, (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = newFn,
-                              Core.applicationArgument = newArg}))))
-            Core.TermAnnotated v1 ->  
-              let bodyResult = (processTermForHoisting lambdaVars reserved (Core.annotatedTermBody v1))
-              in  
-                let hoisted = (Pairs.first bodyResult)
-                in  
-                  let newReserved = (Pairs.first (Pairs.second bodyResult))
-                  in  
-                    let newBody = (Pairs.second (Pairs.second bodyResult))
-                    in (hoisted, (newReserved, (Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermBody = newBody,
-                      Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))))
-            Core.TermTypeLambda _ -> ([], (reserved, term))
-            Core.TermTypeApplication v1 ->  
-              let bodyResult = (processTermForHoisting lambdaVars reserved (Core.typeApplicationTermBody v1))
-              in  
-                let hoisted = (Pairs.first bodyResult)
-                in  
-                  let newReserved = (Pairs.first (Pairs.second bodyResult))
-                  in  
-                    let newBody = (Pairs.second (Pairs.second bodyResult))
-                    in (hoisted, (newReserved, (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                      Core.typeApplicationTermBody = newBody,
-                      Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))))
-            _ -> ([], (reserved, term))) term) 
-        processBinding = (\lambdaVars -> \state -> \binding ->  
+                        let newBody = (Pairs.second (Pairs.second bodyResult))
+                        in (hoisted, (newReserved, (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                          Core.typeApplicationTermBody = newBody,
+                          Core.typeApplicationTermType = (Core.typeApplicationTermType v1)}))))
+                _ -> (emptyHoisted, (reserved, term))) term)
+        processBinding = (\typeVars -> \lambdaVars -> \state -> \binding ->  
                 let hoisted = (Pairs.first state)
                 in  
                   let reserved = (Pairs.first (Pairs.second state))
                   in  
                     let kept = (Pairs.second (Pairs.second state))
                     in  
-                      let processedTerm = (processTermForHoisting lambdaVars reserved (Core.bindingTerm binding))
+                      let processedTerm = (processTermForHoisting typeVars lambdaVars reserved (Core.bindingTerm binding))
                       in  
                         let innerHoisted = (Pairs.first processedTerm)
                         in  
@@ -180,88 +195,111 @@ hoistLetBindings hoistAll let0 =
                           in  
                             let newTerm = (Pairs.second (Pairs.second processedTerm))
                             in  
-                              let shouldHoist = (Logic.or hoistAll (bindingIsPolymorphic binding))
-                              in (Logic.ifElse shouldHoist ( 
-                                let bindingName = (Core.bindingName binding)
+                              let isInsideTypeLambda = (Logic.not (Lists.null typeVars))
+                              in  
+                                let usedTypeVars = (Maybes.maybe [] (\ts ->  
+                                        let freeInType = (Rewriting.freeVariablesInType (Core.typeSchemeType ts))
+                                        in (Lists.filter (\tv -> Sets.member tv freeInType) typeVars)) (Core.bindingType binding))
                                 in  
-                                  let freeVars = (Rewriting.freeVariablesInTerm newTerm)
+                                  let usesOuterTypeVars = (Logic.not (Lists.null usedTypeVars))
                                   in  
-                                    let lambdaVarNames = (Sets.fromList (Lists.map (\lv -> Pairs.first lv) lambdaVars))
-                                    in  
-                                      let capturedVarNames = (Sets.intersection lambdaVarNames freeVars)
+                                    let shouldHoist = (Logic.ifElse hoistAll (Logic.not isInsideTypeLambda) (Logic.or (bindingIsPolymorphic binding) usesOuterTypeVars))
+                                    in (Logic.ifElse shouldHoist ( 
+                                      let bindingName = (Core.bindingName binding)
                                       in  
-                                        let capturedVars = (Lists.filter (\lv -> Sets.member (Pairs.first lv) capturedVarNames) lambdaVars)
+                                        let freeVars = (Rewriting.freeVariablesInTerm newTerm)
                                         in  
-                                          let wrappedTerm = (Lists.foldl (\body -> \lv -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                  Core.lambdaParameter = (Pairs.first lv),
-                                                  Core.lambdaDomain = (Pairs.second lv),
-                                                  Core.lambdaBody = body}))) newTerm (Lists.reverse capturedVars))
+                                          let lambdaVarNames = (Sets.fromList (Lists.map (\lv -> Pairs.first lv) lambdaVars))
                                           in  
-                                            let wrappedType = (Maybes.maybe Nothing (\ts ->  
-                                                    let origType = (Core.typeSchemeType ts)
-                                                    in  
-                                                      let newType = (Lists.foldl (\innerType -> \lv -> Maybes.maybe innerType (\domainType -> Core.TypeFunction (Core.FunctionType {
-                                                              Core.functionTypeDomain = domainType,
-                                                              Core.functionTypeCodomain = innerType})) (Pairs.second lv)) origType (Lists.reverse capturedVars))
-                                                      in (Just (Core.TypeScheme {
-                                                        Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-                                                        Core.typeSchemeType = newType,
-                                                        Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}))) (Core.bindingType binding))
+                                            let capturedVarNames = (Sets.intersection lambdaVarNames freeVars)
                                             in  
-                                              let hoistedInfo = (bindingName, (wrappedTerm, (Lists.map (\lv -> Pairs.first lv) capturedVars, wrappedType)))
-                                              in (Lists.cons hoistedInfo (Lists.concat2 innerHoisted hoisted), (newReserved, kept))) ( 
-                                let processedBinding = Core.Binding {
-                                        Core.bindingName = (Core.bindingName binding),
-                                        Core.bindingTerm = newTerm,
-                                        Core.bindingType = (Core.bindingType binding)}
-                                in (Lists.concat2 innerHoisted hoisted, (newReserved, (Lists.cons processedBinding kept))))))
+                                              let capturedTermVars = (Lists.filter (\lv -> Sets.member (Pairs.first lv) capturedVarNames) lambdaVars)
+                                              in  
+                                                let capturedTypeVars = usedTypeVars
+                                                in  
+                                                  let wrappedTerm = (Lists.foldl (\body -> \lv -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                          Core.lambdaParameter = (Pairs.first lv),
+                                                          Core.lambdaDomain = (Pairs.second lv),
+                                                          Core.lambdaBody = body}))) newTerm (Lists.reverse capturedTermVars))
+                                                  in  
+                                                    let wrappedType = (Maybes.maybe Nothing (\ts ->  
+                                                            let origType = (Core.typeSchemeType ts)
+                                                            in  
+                                                              let origTypeVars = (Core.typeSchemeVariables ts)
+                                                              in  
+                                                                let newTypeVars = (Lists.concat2 capturedTypeVars origTypeVars)
+                                                                in  
+                                                                  let newType = (Lists.foldl (\innerType -> \lv -> Maybes.maybe innerType (\domainType -> Core.TypeFunction (Core.FunctionType {
+                                                                          Core.functionTypeDomain = domainType,
+                                                                          Core.functionTypeCodomain = innerType})) (Pairs.second lv)) origType (Lists.reverse capturedTermVars))
+                                                                  in (Just (Core.TypeScheme {
+                                                                    Core.typeSchemeVariables = newTypeVars,
+                                                                    Core.typeSchemeType = newType,
+                                                                    Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}))) (Core.bindingType binding))
+                                                    in  
+                                                      let hoistedInfo = (bindingName, (wrappedTerm, (Lists.map (\lv -> Pairs.first lv) capturedTermVars, (capturedTypeVars, wrappedType))))
+                                                      in (Lists.cons hoistedInfo (Lists.concat2 innerHoisted hoisted), (newReserved, kept))) ( 
+                                      let processedBinding = Core.Binding {
+                                              Core.bindingName = (Core.bindingName binding),
+                                              Core.bindingTerm = newTerm,
+                                              Core.bindingType = (Core.bindingType binding)}
+                                      in (Lists.concat2 innerHoisted hoisted, (newReserved, (Lists.cons processedBinding kept))))))
         replaceReferences = (\hoistedInfoList -> \term -> Rewriting.rewriteTerm (\recurse -> \t -> (\x -> case x of
                 Core.TermVariable v1 ->  
                   let matchingInfo = (Lists.filter (\info -> Equality.equal v1 (getInfoName info)) hoistedInfoList)
                   in (Logic.ifElse (Lists.null matchingInfo) t ( 
                     let info = (Lists.head matchingInfo)
                     in  
-                      let capturedVars = (getInfoCaptured info)
-                      in (Lists.foldl (\fn -> \capturedName -> Core.TermApplication (Core.Application {
-                        Core.applicationFunction = fn,
-                        Core.applicationArgument = (Core.TermVariable capturedName)})) (Core.TermVariable v1) capturedVars)))
+                      let capturedTermVars = (getInfoCapturedTermVars info)
+                      in  
+                        let capturedTypeVars = (getInfoCapturedTypeVars info)
+                        in  
+                          let withTypeApps = (Lists.foldl (\fn -> \typeVarName -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                  Core.typeApplicationTermBody = fn,
+                                  Core.typeApplicationTermType = (Core.TypeVariable typeVarName)})) (Core.TermVariable v1) capturedTypeVars)
+                          in (Lists.foldl (\fn -> \capturedName -> Core.TermApplication (Core.Application {
+                            Core.applicationFunction = fn,
+                            Core.applicationArgument = (Core.TermVariable capturedName)})) withTypeApps capturedTermVars)))
                 _ -> (recurse t)) t) term)
         getInfoName = (\info -> Pairs.first info)
-        getInfoCaptured = (\info -> Pairs.first (Pairs.second (Pairs.second info)))
+        getInfoCapturedTermVars = (\info -> Pairs.first (Pairs.second (Pairs.second info)))
+        getInfoCapturedTypeVars = (\info -> Pairs.first (Pairs.second (Pairs.second (Pairs.second info))))
     in  
-      let emptyLambdaVars = []
+      let emptyTypeVars = []
       in  
-        let result = (Lists.foldl (processBinding emptyLambdaVars) ([], (topLevelNames, [])) (Core.letBindings let0))
+        let emptyLambdaVars = []
         in  
-          let hoistedInfo = (Lists.reverse (Pairs.first result))
+          let result = (Lists.foldl (processBinding emptyTypeVars emptyLambdaVars) (emptyHoisted, (topLevelNames, [])) (Core.letBindings let0))
           in  
-            let reservedNames = (Pairs.first (Pairs.second result))
+            let hoistedInfo = (Lists.reverse (Pairs.first result))
             in  
-              let keptBindings = (Lists.reverse (Pairs.second (Pairs.second result)))
+              let reservedNames = (Pairs.first (Pairs.second result))
               in  
-                let bodyResult = (processTermForHoisting emptyLambdaVars reservedNames (Core.letBody let0))
+                let keptBindings = (Lists.reverse (Pairs.second (Pairs.second result)))
                 in  
-                  let hoistedFromBody = (Lists.reverse (Pairs.first bodyResult))
+                  let bodyResult = (processTermForHoisting emptyTypeVars emptyLambdaVars reservedNames (Core.letBody let0))
                   in  
-                    let processedBody = (Pairs.second (Pairs.second bodyResult))
+                    let hoistedFromBody = (Lists.reverse (Pairs.first bodyResult))
                     in  
-                      let allHoistedInfo = (Lists.concat2 hoistedInfo hoistedFromBody)
+                      let processedBody = (Pairs.second (Pairs.second bodyResult))
                       in  
-                        let hoistedBindings = (Lists.map (\info ->  
-                                let name = (getInfoName info)
-                                in  
-                                  let wrappedTerm = (Pairs.first (Pairs.second info))
-                                  in  
-                                    let origType = (Pairs.second (Pairs.second (Pairs.second info)))
-                                    in Core.Binding {
-                                      Core.bindingName = name,
-                                      Core.bindingTerm = wrappedTerm,
-                                      Core.bindingType = origType}) allHoistedInfo)
+                        let allHoistedInfo = (Lists.concat2 hoistedInfo hoistedFromBody)
                         in  
-                          let allBindings = (Lists.concat2 hoistedBindings keptBindings)
-                          in Core.Let {
-                            Core.letBindings = allBindings,
-                            Core.letBody = processedBody}
+                          let hoistedBindings = (Lists.map (\info ->  
+                                  let name = (getInfoName info)
+                                  in  
+                                    let wrappedTerm = (Pairs.first (Pairs.second info))
+                                    in  
+                                      let wrappedType = (Pairs.second (Pairs.second (Pairs.second (Pairs.second info))))
+                                      in Core.Binding {
+                                        Core.bindingName = name,
+                                        Core.bindingTerm = wrappedTerm,
+                                        Core.bindingType = wrappedType}) allHoistedInfo)
+                          in  
+                            let allBindings = (Lists.concat2 hoistedBindings keptBindings)
+                            in Core.Let {
+                              Core.letBindings = allBindings,
+                              Core.letBody = processedBody}
 
 -- | Transform a let-term by pulling all polymorphic let bindings to the top level. This is useful to ensure that polymorphic bindings are not nested within other terms, which is unsupported by certain targets such as Java. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistPolymorphicLetBindings :: (Core.Let -> Core.Let)
