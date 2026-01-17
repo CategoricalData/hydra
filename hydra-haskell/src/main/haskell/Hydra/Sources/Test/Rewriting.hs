@@ -227,13 +227,13 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
       (T.list [T.string "foo"])
       (T.list [T.string "foo"]),
 
-    flattenCase "non-nested let unchanged"
+    flattenCase "sequential lets in body are flattened"
+      -- let x = 1 in (let y = 2 in [x, y]) becomes let x = 1, y = 2 in [x, y]
       (letExpr "x" (T.int32 1)
         (letExpr "y" (T.int32 2)
           (T.list [T.var "x", T.var "y"])))
-      (letExpr "x" (T.int32 1)
-        (letExpr "y" (T.int32 2)
-          (T.list [T.var "x", T.var "y"]))),
+      (multiLet [("x", T.int32 1), ("y", T.int32 2)]
+        (T.list [T.var "x", T.var "y"])),
 
     -- Nested bindings are flattened with prefix renaming
     flattenCase "nested binding in let value is flattened"

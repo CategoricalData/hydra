@@ -419,14 +419,19 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
      produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
     (produce $ var "graphh1") $
 
-  -- Step 3: If eta expansion OR polymorphic let hoisting is needed, run inference first
-  -- (eta expansion needs types; polymorphic let hoisting needs to know which bindings are polymorphic)
-  "needFirstInference" <~ Logic.or (var "doExpand") (var "doHoistPolymorphicLetBindings") $
-  "graphi1" <<~ Logic.ifElse (var "needFirstInference")
+  -- Step 3: Run first inference if eta expansion is needed (eta expansion needs types)
+  "graphi1" <<~ Logic.ifElse (var "doExpand")
     (Inference.inferGraphTypes @@ var "graphu1")
     (produce $ var "graphu1") $
 
-  -- Step 4: Hoist polymorphic let bindings AFTER first inference
+  -- Step 4: Adapt the graph (includes eta expansion if enabled)
+  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi1" $
+
+  -- Step 5: Perform second inference on the adapted graph (eta expansion may introduce new terms)
+  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
+
+  -- Step 6: Hoist polymorphic let bindings AFTER all inference is complete
+  -- This ensures the hoisted type schemes won't be overwritten by inference
   -- If doHoistPolymorphicLetBindings is True, polymorphic bindings are hoisted to top level (for Java)
   -- Non-polymorphic bindings are kept as inner let terms (local variables)
   -- Note: We wrap non-let terms in a dummy let, process them, then unwrap
@@ -450,26 +455,31 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
          (Core.bindingName $ var "binding")
          (var "resultTerm")
          (Core.bindingType $ var "binding")) $
-     "newBindings" <~ Lists.map (var "processBinding") (Maps.elems $ Graph.graphElements $ var "graphi1") $
+     "newBindings" <~ Lists.map (var "processBinding") (Maps.elems $ Graph.graphElements $ var "graph2") $
      "newElements3" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "newBindings")) $
-     produce $ Graph.graphWithElements (var "graphi1") (var "newElements3"))
-    (produce $ var "graphi1") $
+     produce $ Graph.graphWithElements (var "graph2") (var "newElements3"))
+    (produce $ var "graph2") $
 
-  -- Step 5: Unshadow variables after polymorphic let hoisting (if it was done)
-  "graphu2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
-    ("gterm4" <~ Schemas.graphAsTerm @@ var "graphh2" $
-     "gterm5" <~ Rewriting.unshadowVariables @@ var "gterm4" $
-     "newElements4" <~ Schemas.termAsGraph @@ var "gterm5" $
-     produce $ Graph.graphWithElements (var "graphh2") (var "newElements4"))
+  -- Step 6b: Flatten nested let terms for Java (when polymorphic let hoisting is enabled)
+  -- After polymorphic let hoisting, non-polymorphic nested lets remain, which Java doesn't support
+  "graphf2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    ("flattenBinding" <~ ("binding" ~>
+       Core.binding
+         (Core.bindingName $ var "binding")
+         (Rewriting.flattenLetTerms @@ (Core.bindingTerm $ var "binding"))
+         (Core.bindingType $ var "binding")) $
+     "newBindingsF" <~ Lists.map (var "flattenBinding") (Maps.elems $ Graph.graphElements $ var "graphh2") $
+     "newElementsF" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "newBindingsF")) $
+     produce $ Graph.graphWithElements (var "graphh2") (var "newElementsF"))
     (produce $ var "graphh2") $
 
-  -- Step 6: Adapt the graph (includes eta expansion if enabled)
-  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphu2" $
-
---  Flows.fail ("adapted graph: " ++ (ShowGraph.graph @@ var "graph1"))
-
-  -- Step 7: Perform final inference on the adapted graph
-  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
+  -- Step 7: Unshadow variables after polymorphic let hoisting and flattening (if it was done)
+  "graphu2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    ("gterm4" <~ Schemas.graphAsTerm @@ var "graphf2" $
+     "gterm5" <~ Rewriting.unshadowVariables @@ var "gterm4" $
+     "newElements4" <~ Schemas.termAsGraph @@ var "gterm5" $
+     produce $ Graph.graphWithElements (var "graphf2") (var "newElements4"))
+    (produce $ var "graphf2") $
 
   -- Construct term definitions
   "toDef" <~ ("el" ~>
@@ -480,10 +490,10 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (var "ts")) $
 
   produce $ pair
-    (var "graph2")
+    (var "graphu2")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> Maybes.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graph2")) (var "names"))
+        Lists.map ("n" ~> Maybes.fromJust $ Maps.lookup (var"n") (Graph.graphElements $ var "graphu2")) (var "names"))
       (var "nameLists"))
 
 literalTypeSupported :: TBinding (LanguageConstraints -> LiteralType -> Bool)

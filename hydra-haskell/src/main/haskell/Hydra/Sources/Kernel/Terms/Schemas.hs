@@ -450,10 +450,15 @@ graphToInferenceContext = define "graphToInferenceContext" $
 
 graphToTypeContext :: TBinding (Graph -> Flow s TypeContext)
 graphToTypeContext = define "graphToTypeContext" $
-  doc "Convert a graph to a top-level type context (outside of the bindings of the graph)" $
+  doc "Convert a graph to a type context including the graph's element types" $
   "graph" ~>
   "ix" <<~ graphToInferenceContext @@ var "graph" $
-  produce $ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty (var "ix")
+  -- Populate typeContextTypes from graph elements' type schemes (converted to System F types)
+  -- This ensures variables are resolvable during eta expansion and other processing
+  "elementTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
+    ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")) $ Core.bindingType $ var "b")
+    (Maps.elems $ Graph.graphElements $ var "graph")) $
+  produce $ Typing.typeContext (var "elementTypes") Maps.empty Sets.empty Sets.empty (var "ix")
 
 instantiateType :: TBinding (Type -> Flow s Type)
 instantiateType = define "instantiateType" $
