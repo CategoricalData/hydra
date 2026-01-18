@@ -18,7 +18,6 @@ The GenPG demo:
 hydra-ext/
 ├── demos/genpg/
 │   ├── README.md                 # This file
-│   ├── analysis.md               # Import dependency analysis
 │   ├── generate-python.ghci      # Script to generate Python modules
 │   ├── data/
 │   │   ├── sources/sales/        # CSV input files (sales example)
