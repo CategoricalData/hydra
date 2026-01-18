@@ -95,7 +95,7 @@ public class Expect {
 
             @Override
             public Flow<S, String> visit(Literal.Binary instance) {
-                return pure(instance.value);
+                return pure(new String(instance.value, java.nio.charset.StandardCharsets.UTF_8));
             }
         }));
     }

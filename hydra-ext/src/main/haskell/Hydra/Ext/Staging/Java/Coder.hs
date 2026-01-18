@@ -765,8 +765,43 @@ encodeLiteralType lt = case lt of
 
 encodeNullaryConstant :: JavaEnvironment -> Type -> Function -> Flow Graph Java.Expression
 encodeNullaryConstant env typ fun = case fun of
-  FunctionPrimitive name -> functionCall env True name []
+  -- For nullary primitives that return a value (not a function), call them directly
+  -- Need to include type arguments for generic methods like Empty.<Name>apply()
+  FunctionPrimitive name -> do
+    let aliases = javaEnvironmentAliases env
+    targs <- typeArgumentsFromReturnType aliases typ
+    if L.null targs
+      then do
+        let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier True False aliases name
+        return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header []
+      else do
+        -- Use qualified call with type arguments: ClassName.<Type>apply()
+        let Java.Identifier fullName = elementJavaIdentifier True False aliases name
+        -- Split "hydra.lib.sets.Empty.apply" into class "hydra.lib.sets.Empty" and method "apply"
+        let parts = LS.splitOn "." fullName
+        let className = Java.Identifier $ L.intercalate "." $ L.init parts
+        let methodName = Java.Identifier $ L.last parts
+        return $ javaMethodInvocationToJavaExpression $
+          methodInvocationStaticWithTypeArgs className methodName targs []
   _ -> unexpected "nullary function" $ show fun
+  where
+    -- Extract type arguments from the return type (e.g., Set<Name> -> [Name])
+    typeArgumentsFromReturnType :: Aliases -> Type -> Flow Graph [Java.TypeArgument]
+    typeArgumentsFromReturnType aliases t = case deannotateType t of
+      TypeSet st -> do
+        jst <- encodeType aliases S.empty st >>= javaTypeToJavaReferenceType
+        return [Java.TypeArgumentReference jst]
+      TypeList lt -> do
+        jlt <- encodeType aliases S.empty lt >>= javaTypeToJavaReferenceType
+        return [Java.TypeArgumentReference jlt]
+      TypeMaybe mt -> do
+        jmt <- encodeType aliases S.empty mt >>= javaTypeToJavaReferenceType
+        return [Java.TypeArgumentReference jmt]
+      TypeMap (MapType kt vt) -> do
+        jkt <- encodeType aliases S.empty kt >>= javaTypeToJavaReferenceType
+        jvt <- encodeType aliases S.empty vt >>= javaTypeToJavaReferenceType
+        return [Java.TypeArgumentReference jkt, Java.TypeArgumentReference jvt]
+      _ -> return []
 
 encodeTerm :: JavaEnvironment -> Term -> Flow Graph Java.Expression
 encodeTerm env term0 = encodeInternal [] [] term0
@@ -1154,7 +1189,9 @@ encodeType aliases boundVars t =  case deannotateType t of
     TypeWrap (WrappedType name _) -> pure $ forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
-    forReference name = if isLambdaBoundVariable name
+    forReference name = if unName name == "java.lang.Object"
+        then javaRefType [] javaLangPackageName "Object"  -- Special case for Object fallback
+        else if isLambdaBoundVariable name
         then variableReference name
         else nameReference name
     nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
@@ -1239,10 +1276,12 @@ functionCall env isPrim name args = do
       jargs <- CM.mapM (encodeTerm env) args
       if isLocalVariable name
         then do
+          -- Local variables use .apply() with all arguments at once (like Python)
           prim <- javaExpressionToJavaPrimary <$> encodeVariable env name
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
         else do
+          -- Module-level functions (both primitives and generated) take all args directly
           let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
           return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
   where

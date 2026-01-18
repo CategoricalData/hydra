@@ -40,7 +40,7 @@ public interface Literals {
      * @return a binary literal
      */
     static Literal binary(final String value) {
-        return new Literal.Binary(value);
+        return new Literal.Binary(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     /**
