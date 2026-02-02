@@ -2,10 +2,7 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
-import java.math.BigInteger;
 
 public class RangeLiteral implements Serializable {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.cypher.openCypher.RangeLiteral");
@@ -14,11 +11,11 @@ public class RangeLiteral implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_END = new hydra.core.Name("end");
   
-  public final Maybe<BigInteger> start;
+  public final hydra.util.Maybe<java.math.BigInteger> start;
   
-  public final Maybe<BigInteger> end;
+  public final hydra.util.Maybe<java.math.BigInteger> end;
   
-  public RangeLiteral (Maybe<BigInteger> start, Maybe<BigInteger> end) {
+  public RangeLiteral (hydra.util.Maybe<java.math.BigInteger> start, hydra.util.Maybe<java.math.BigInteger> end) {
     java.util.Objects.requireNonNull((start));
     java.util.Objects.requireNonNull((end));
     this.start = start;
@@ -39,12 +36,12 @@ public class RangeLiteral implements Serializable {
     return 2 * start.hashCode() + 3 * end.hashCode();
   }
   
-  public RangeLiteral withStart(Maybe<BigInteger> start) {
+  public RangeLiteral withStart(hydra.util.Maybe<java.math.BigInteger> start) {
     java.util.Objects.requireNonNull((start));
     return new RangeLiteral(start, end);
   }
   
-  public RangeLiteral withEnd(Maybe<BigInteger> end) {
+  public RangeLiteral withEnd(hydra.util.Maybe<java.math.BigInteger> end) {
     java.util.Objects.requireNonNull((end));
     return new RangeLiteral(start, end);
   }

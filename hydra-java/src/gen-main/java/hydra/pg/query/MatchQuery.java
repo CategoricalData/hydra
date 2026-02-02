@@ -2,8 +2,6 @@
 
 package hydra.pg.query;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class MatchQuery implements Serializable {
@@ -19,9 +17,9 @@ public class MatchQuery implements Serializable {
   
   public final java.util.List<hydra.pg.query.Projection> pattern;
   
-  public final Maybe<Expression> where;
+  public final hydra.util.Maybe<hydra.pg.query.Expression> where;
   
-  public MatchQuery (Boolean optional, java.util.List<hydra.pg.query.Projection> pattern, Maybe<Expression> where) {
+  public MatchQuery (Boolean optional, java.util.List<hydra.pg.query.Projection> pattern, hydra.util.Maybe<hydra.pg.query.Expression> where) {
     java.util.Objects.requireNonNull((optional));
     java.util.Objects.requireNonNull((pattern));
     java.util.Objects.requireNonNull((where));
@@ -54,7 +52,7 @@ public class MatchQuery implements Serializable {
     return new MatchQuery(optional, pattern, where);
   }
   
-  public MatchQuery withWhere(Maybe<Expression> where) {
+  public MatchQuery withWhere(hydra.util.Maybe<hydra.pg.query.Expression> where) {
     java.util.Objects.requireNonNull((where));
     return new MatchQuery(optional, pattern, where);
   }

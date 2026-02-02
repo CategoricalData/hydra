@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class ListComprehension implements Serializable {
@@ -15,9 +13,9 @@ public class ListComprehension implements Serializable {
   
   public final hydra.ext.cypher.openCypher.FilterExpression left;
   
-  public final Maybe<Expression> right;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> right;
   
-  public ListComprehension (hydra.ext.cypher.openCypher.FilterExpression left, Maybe<Expression> right) {
+  public ListComprehension (hydra.ext.cypher.openCypher.FilterExpression left, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> right) {
     java.util.Objects.requireNonNull((left));
     java.util.Objects.requireNonNull((right));
     this.left = left;
@@ -43,7 +41,7 @@ public class ListComprehension implements Serializable {
     return new ListComprehension(left, right);
   }
   
-  public ListComprehension withRight(Maybe<Expression> right) {
+  public ListComprehension withRight(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> right) {
     java.util.Objects.requireNonNull((right));
     return new ListComprehension(left, right);
   }

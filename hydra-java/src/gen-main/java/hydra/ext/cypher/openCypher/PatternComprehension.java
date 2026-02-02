@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class PatternComprehension implements Serializable {
@@ -17,15 +15,15 @@ public class PatternComprehension implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
   
-  public final Maybe<Variable> variable;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable;
   
   public final hydra.ext.cypher.openCypher.RelationshipsPattern pattern;
   
-  public final Maybe<Where> where;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where;
   
   public final hydra.ext.cypher.openCypher.Expression right;
   
-  public PatternComprehension (Maybe<Variable> variable, hydra.ext.cypher.openCypher.RelationshipsPattern pattern, Maybe<Where> where, hydra.ext.cypher.openCypher.Expression right) {
+  public PatternComprehension (hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable, hydra.ext.cypher.openCypher.RelationshipsPattern pattern, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where, hydra.ext.cypher.openCypher.Expression right) {
     java.util.Objects.requireNonNull((variable));
     java.util.Objects.requireNonNull((pattern));
     java.util.Objects.requireNonNull((where));
@@ -50,7 +48,7 @@ public class PatternComprehension implements Serializable {
     return 2 * variable.hashCode() + 3 * pattern.hashCode() + 5 * where.hashCode() + 7 * right.hashCode();
   }
   
-  public PatternComprehension withVariable(Maybe<Variable> variable) {
+  public PatternComprehension withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {
     java.util.Objects.requireNonNull((variable));
     return new PatternComprehension(variable, pattern, where, right);
   }
@@ -60,7 +58,7 @@ public class PatternComprehension implements Serializable {
     return new PatternComprehension(variable, pattern, where, right);
   }
   
-  public PatternComprehension withWhere(Maybe<Where> where) {
+  public PatternComprehension withWhere(hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
     java.util.Objects.requireNonNull((where));
     return new PatternComprehension(variable, pattern, where, right);
   }

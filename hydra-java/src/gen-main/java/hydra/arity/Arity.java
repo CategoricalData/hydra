@@ -7,7 +7,7 @@ package hydra.arity;
  */
 public interface Arity {
   static Integer functionArity(hydra.core.Function v1) {
-    return ((v1)).accept(new hydra.core.Function.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public Integer visit(hydra.core.Function.Elimination ignored) {
         return 1;
@@ -15,9 +15,9 @@ public interface Arity {
       
       @Override
       public Integer visit(hydra.core.Function.Lambda arg_) {
-        return ((java.util.function.Function<Integer, Integer>) (i -> hydra.lib.math.Add.apply(
+        return hydra.lib.math.Add.apply(
           1,
-          (i)))).apply(((java.util.function.Function<hydra.core.Lambda, Integer>) (arg_2 -> hydra.arity.Arity.termArity(((arg_2)).body))).apply(((arg_)).value));
+          hydra.arity.Arity.termArity((((arg_)).value).body));
       }
       
       @Override
@@ -28,7 +28,7 @@ public interface Arity {
   }
   
   static Integer primitiveArity(hydra.graph.Primitive arg_) {
-    return ((java.util.function.Function<hydra.core.TypeScheme, Integer>) (arg_2 -> hydra.arity.Arity.typeArity(((arg_2)).type))).apply(((arg_)).type);
+    return hydra.arity.Arity.typeArity((((arg_)).type).type);
   }
   
   static Integer termArity(hydra.core.Term v1) {
@@ -40,9 +40,9 @@ public interface Arity {
       
       @Override
       public Integer visit(hydra.core.Term.Application arg_) {
-        return ((java.util.function.Function<hydra.core.Term, Integer>) (arg_2 -> ((java.util.function.Function<Integer, Integer>) (xapp -> hydra.lib.math.Sub.apply(
-          (xapp),
-          1))).apply(hydra.arity.Arity.termArity((arg_2))))).apply((((arg_)).value).function);
+        return hydra.lib.math.Sub.apply(
+          hydra.arity.Arity.termArity((((arg_)).value).function),
+          1);
       }
       
       @Override
@@ -78,7 +78,7 @@ public interface Arity {
       public Integer visit(hydra.core.Type.Function f) {
         return hydra.lib.math.Add.apply(
           1,
-          ((java.util.function.Function<hydra.core.FunctionType, Integer>) (arg_ -> hydra.arity.Arity.typeArity(((arg_)).codomain))).apply(((f)).value));
+          hydra.arity.Arity.typeArity((((f)).value).codomain));
       }
     });
   }
@@ -113,7 +113,7 @@ public interface Arity {
       public java.util.List<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.lists.Cons.apply(
           (((ft)).value).domain,
-          ((java.util.function.Function<hydra.core.FunctionType, java.util.List<hydra.core.Type>>) (arg_ -> hydra.arity.Arity.uncurryType(((arg_)).codomain))).apply(((ft)).value));
+          hydra.arity.Arity.uncurryType((((ft)).value).codomain));
       }
     });
   }

@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class CaseExpression implements Serializable {
@@ -15,13 +13,13 @@ public class CaseExpression implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
   
-  public final Maybe<Expression> expression;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression;
   
   public final java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives;
   
-  public final Maybe<Expression> else_;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_;
   
-  public CaseExpression (Maybe<Expression> expression, java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, Maybe<Expression> else_) {
+  public CaseExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression, java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
     java.util.Objects.requireNonNull((expression));
     java.util.Objects.requireNonNull((alternatives));
     java.util.Objects.requireNonNull((else_));
@@ -44,7 +42,7 @@ public class CaseExpression implements Serializable {
     return 2 * expression.hashCode() + 3 * alternatives.hashCode() + 5 * else_.hashCode();
   }
   
-  public CaseExpression withExpression(Maybe<Expression> expression) {
+  public CaseExpression withExpression(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression) {
     java.util.Objects.requireNonNull((expression));
     return new CaseExpression(expression, alternatives, else_);
   }
@@ -54,7 +52,7 @@ public class CaseExpression implements Serializable {
     return new CaseExpression(expression, alternatives, else_);
   }
   
-  public CaseExpression withElse(Maybe<Expression> else_) {
+  public CaseExpression withElse(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
     java.util.Objects.requireNonNull((else_));
     return new CaseExpression(expression, alternatives, else_);
   }

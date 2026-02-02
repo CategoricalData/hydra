@@ -7,7 +7,7 @@ package hydra.literals;
  */
 public interface Literals {
   static hydra.core.FloatValue bigfloatToFloatValue(hydra.core.FloatType ft, java.math.BigDecimal bf) {
-    return ((ft)).accept(new hydra.core.FloatType.Visitor<>() {
+    return ((ft)).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.core.FloatValue visit(hydra.core.FloatType.Bigfloat ignored) {
         return new hydra.core.FloatValue.Bigfloat((bf));
@@ -26,7 +26,7 @@ public interface Literals {
   }
   
   static hydra.core.IntegerValue bigintToIntegerValue(hydra.core.IntegerType it, java.math.BigInteger bi) {
-    return ((it)).accept(new hydra.core.IntegerType.Visitor<>() {
+    return ((it)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public hydra.core.IntegerValue visit(hydra.core.IntegerType.Bigint ignored) {
         return new hydra.core.IntegerValue.Bigint((bi));
@@ -75,7 +75,7 @@ public interface Literals {
   }
   
   static java.math.BigDecimal floatValueToBigfloat(hydra.core.FloatValue v1) {
-    return ((v1)).accept(new hydra.core.FloatValue.Visitor<>() {
+    return ((v1)).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public java.math.BigDecimal visit(hydra.core.FloatValue.Bigfloat bf) {
         return ((bf)).value;
@@ -94,7 +94,7 @@ public interface Literals {
   }
   
   static java.math.BigInteger integerValueToBigint(hydra.core.IntegerValue v1) {
-    return ((v1)).accept(new hydra.core.IntegerValue.Visitor<>() {
+    return ((v1)).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public java.math.BigInteger visit(hydra.core.IntegerValue.Bigint bi) {
         return ((bi)).value;

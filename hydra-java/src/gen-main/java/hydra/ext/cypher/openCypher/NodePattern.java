@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class NodePattern implements Serializable {
@@ -15,13 +13,13 @@ public class NodePattern implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
   
-  public final Maybe<Variable> variable;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable;
   
-  public final Maybe<NodeLabels> labels;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels;
   
-  public final Maybe<Properties> properties;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Properties> properties;
   
-  public NodePattern (Maybe<Variable> variable, Maybe<NodeLabels> labels, Maybe<Properties> properties) {
+  public NodePattern (hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable, hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels, hydra.util.Maybe<hydra.ext.cypher.openCypher.Properties> properties) {
     java.util.Objects.requireNonNull((variable));
     java.util.Objects.requireNonNull((labels));
     java.util.Objects.requireNonNull((properties));
@@ -44,17 +42,17 @@ public class NodePattern implements Serializable {
     return 2 * variable.hashCode() + 3 * labels.hashCode() + 5 * properties.hashCode();
   }
   
-  public NodePattern withVariable(Maybe<Variable> variable) {
+  public NodePattern withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {
     java.util.Objects.requireNonNull((variable));
     return new NodePattern(variable, labels, properties);
   }
   
-  public NodePattern withLabels(Maybe<NodeLabels> labels) {
+  public NodePattern withLabels(hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels) {
     java.util.Objects.requireNonNull((labels));
     return new NodePattern(variable, labels, properties);
   }
   
-  public NodePattern withProperties(Maybe<Properties> properties) {
+  public NodePattern withProperties(hydra.util.Maybe<hydra.ext.cypher.openCypher.Properties> properties) {
     java.util.Objects.requireNonNull((properties));
     return new NodePattern(variable, labels, properties);
   }

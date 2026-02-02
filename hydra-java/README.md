@@ -15,7 +15,6 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code o
   - `hydra/lib/` - Primitive function implementations
   - `hydra/util/` - Core utilities (Either, Maybe, Tuple, Unit, etc.)
   - `hydra/tools/` - Framework classes (PrimitiveFunction, MapperBase, etc.)
-  - `hydra/Rewriting.java`, `hydra/Reduction.java` - Core algorithms
   - Language-specific parsers and extensions
 
 - **`src/gen-main/java/`** - Generated Java code
@@ -175,5 +174,5 @@ Notice that we have defined two inner classes, `Element.Vertex` and `Element.Edg
 as well as a pair of "visitor" classes: `Element.Visitor` and `Element.PartialVisitor`.
 The first two classes are used to instantiate an `Element` either as the first alternative (a vertex) or the second (an edge).
 The `Visitor` class is for pattern matching over the alternatives, and `PartialVisitor` is a convenient extension of the same which allows us to supply a default value for alternatives we do not care to match explicitly.
-The [Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Rewriting.java) and [Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Reduction.java) classes are good examples of pattern matching in action,
+The [Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/rewriting/Rewriting.java) and [Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/reduction/Reduction.java) classes are good examples of pattern matching in action,
 and there are simpler examples in [VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/test/java/hydra/VisitorTest.java).

@@ -7,7 +7,7 @@ package hydra.show.util;
  */
 public interface Util {
   static String caseConvention(hydra.util.CaseConvention c) {
-    return ((c)).accept(new hydra.util.CaseConvention.Visitor<>() {
+    return ((c)).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
       @Override
       public String visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return "lower_snake_case";

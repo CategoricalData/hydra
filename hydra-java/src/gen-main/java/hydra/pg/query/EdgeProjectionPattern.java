@@ -2,9 +2,6 @@
 
 package hydra.pg.query;
 
-import hydra.pg.model.EdgeLabel;
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class EdgeProjectionPattern implements Serializable {
@@ -20,13 +17,13 @@ public class EdgeProjectionPattern implements Serializable {
   
   public final hydra.pg.model.Direction direction;
   
-  public final Maybe<EdgeLabel> label;
+  public final hydra.util.Maybe<hydra.pg.model.EdgeLabel> label;
   
   public final java.util.List<hydra.pg.query.PropertyPattern> properties;
   
-  public final Maybe<VertexPattern> vertex;
+  public final hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex;
   
-  public EdgeProjectionPattern (hydra.pg.model.Direction direction, Maybe<EdgeLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, Maybe<VertexPattern> vertex) {
+  public EdgeProjectionPattern (hydra.pg.model.Direction direction, hydra.util.Maybe<hydra.pg.model.EdgeLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex) {
     java.util.Objects.requireNonNull((direction));
     java.util.Objects.requireNonNull((label));
     java.util.Objects.requireNonNull((properties));
@@ -56,7 +53,7 @@ public class EdgeProjectionPattern implements Serializable {
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   
-  public EdgeProjectionPattern withLabel(Maybe<EdgeLabel> label) {
+  public EdgeProjectionPattern withLabel(hydra.util.Maybe<hydra.pg.model.EdgeLabel> label) {
     java.util.Objects.requireNonNull((label));
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
@@ -66,7 +63,7 @@ public class EdgeProjectionPattern implements Serializable {
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   
-  public EdgeProjectionPattern withVertex(Maybe<VertexPattern> vertex) {
+  public EdgeProjectionPattern withVertex(hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex) {
     java.util.Objects.requireNonNull((vertex));
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }

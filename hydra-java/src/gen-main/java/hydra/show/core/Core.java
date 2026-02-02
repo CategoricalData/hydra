@@ -28,7 +28,7 @@ public interface Core {
   }
   
   static String elimination(hydra.core.Elimination elm) {
-    return ((elm)).accept(new hydra.core.Elimination.Visitor<>() {
+    return ((elm)).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.Elimination.Record proj) {
         String fname = ((((proj)).value).field).value;
@@ -101,7 +101,7 @@ public interface Core {
   }
   
   static String float_(hydra.core.FloatValue fv) {
-    return ((fv)).accept(new hydra.core.FloatValue.Visitor<>() {
+    return ((fv)).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.FloatValue.Bigfloat v) {
         return hydra.lib.strings.Cat2.apply(
@@ -126,7 +126,7 @@ public interface Core {
   }
   
   static String floatType(hydra.core.FloatType ft) {
-    return ((ft)).accept(new hydra.core.FloatType.Visitor<>() {
+    return ((ft)).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.FloatType.Bigfloat ignored) {
         return "bigfloat";
@@ -145,7 +145,7 @@ public interface Core {
   }
   
   static String function(hydra.core.Function f) {
-    return ((f)).accept(new hydra.core.Function.Visitor<>() {
+    return ((f)).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.Function.Elimination v1) {
         return hydra.show.core.Core.elimination(((v1)).value);
@@ -176,7 +176,7 @@ public interface Core {
   }
   
   static String integer(hydra.core.IntegerValue iv) {
-    return ((iv)).accept(new hydra.core.IntegerValue.Visitor<>() {
+    return ((iv)).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.IntegerValue.Bigint v) {
         return hydra.lib.strings.Cat2.apply(
@@ -243,7 +243,7 @@ public interface Core {
   }
   
   static String integerType(hydra.core.IntegerType it) {
-    return ((it)).accept(new hydra.core.IntegerType.Visitor<>() {
+    return ((it)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.IntegerType.Bigint ignored) {
         return "bigint";
@@ -309,6 +309,21 @@ public interface Core {
       hydra.show.core.Core.term((body))));
   }
   
+  static String let(hydra.core.Let l) {
+    java.util.List<hydra.core.Binding> bindings = ((l)).bindings;
+    java.util.List<String> bindingStrs = hydra.lib.lists.Map.apply(
+      (hydra.show.core.Core::binding),
+      (bindings));
+    hydra.core.Term env = ((l)).body;
+    return hydra.lib.strings.Cat.apply(java.util.List.of(
+      "let ",
+      hydra.lib.strings.Intercalate.apply(
+        ", ",
+        (bindingStrs)),
+      " in ",
+      hydra.show.core.Core.term((env))));
+  }
+  
   static <T0> String list(java.util.function.Function<T0, String> f, java.util.List<T0> xs) {
     java.util.List<String> elementStrs = hydra.lib.lists.Map.apply(
       (f),
@@ -322,7 +337,7 @@ public interface Core {
   }
   
   static String literal(hydra.core.Literal l) {
-    return ((l)).accept(new hydra.core.Literal.Visitor<>() {
+    return ((l)).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.Literal.Binary ignored) {
         return "[binary]";
@@ -354,7 +369,7 @@ public interface Core {
   }
   
   static String literalType(hydra.core.LiteralType lt) {
-    return ((lt)).accept(new hydra.core.LiteralType.Visitor<>() {
+    return ((lt)).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.LiteralType.Binary ignored) {
         return "binary";
@@ -405,7 +420,7 @@ public interface Core {
         }
       });
     })));
-    return ((t)).accept(new hydra.core.Term.Visitor<>() {
+    return ((t)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.Term.Annotated at) {
         return hydra.show.core.Core.term((((at)).value).body);
@@ -446,18 +461,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Let l) {
-        java.util.List<hydra.core.Binding> bindings = (((l)).value).bindings;
-        java.util.List<String> bindingStrs = hydra.lib.lists.Map.apply(
-          (hydra.show.core.Core::binding),
-          (bindings));
-        hydra.core.Term env = (((l)).value).body;
-        return hydra.lib.strings.Cat.apply(java.util.List.of(
-          "let ",
-          hydra.lib.strings.Intercalate.apply(
-            ", ",
-            (bindingStrs)),
-          " in ",
-          hydra.show.core.Core.term((env))));
+        return hydra.show.core.Core.let(((l)).value);
       }
       
       @Override
@@ -642,7 +646,7 @@ public interface Core {
           (fieldStrs)),
         "}"));
     });
-    return ((typ)).accept(new hydra.core.Type.Visitor<>() {
+    return ((typ)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public String visit(hydra.core.Type.Annotated at) {
         return hydra.show.core.Core.type((((at)).value).body);
@@ -795,7 +799,7 @@ public interface Core {
     hydra.core.Type body = ((ts)).type;
     java.util.List<hydra.core.Name> vars = ((ts)).variables;
     java.util.List<String> varNames = hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Name, String>) (v1 -> ((v1)).value),
+      wrapped -> ((wrapped)).value,
       (vars));
     String fa = hydra.lib.logic.IfElse.apply(
       hydra.lib.lists.Null.apply((vars)),

@@ -48,6 +48,9 @@ public abstract class Node implements Serializable {
     }
   }
   
+  /**
+   * A mapping from nodes to nodes
+   */
   public static final class Mapping extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final java.util.Map<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value;
     
@@ -76,6 +79,9 @@ public abstract class Node implements Serializable {
     }
   }
   
+  /**
+   * A scalar value
+   */
   public static final class Scalar extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final hydra.ext.org.yaml.model.Scalar value;
     
@@ -104,6 +110,9 @@ public abstract class Node implements Serializable {
     }
   }
   
+  /**
+   * A sequence of nodes
+   */
   public static final class Sequence extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final java.util.List<hydra.ext.org.yaml.model.Node> value;
     

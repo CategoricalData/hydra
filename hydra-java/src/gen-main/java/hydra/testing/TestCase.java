@@ -734,9 +734,9 @@ public abstract class TestCase implements Serializable {
    * A JSON parser test
    */
   public static final class JsonParser extends hydra.testing.TestCase implements Serializable {
-    public final hydra.testing.JsonParserTestCase value;
+    public final hydra.testing.ParserTestCase<hydra.json.model.Value> value;
     
-    public JsonParser (hydra.testing.JsonParserTestCase value) {
+    public JsonParser (hydra.testing.ParserTestCase<hydra.json.model.Value> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
@@ -796,9 +796,9 @@ public abstract class TestCase implements Serializable {
    * A JSON writer test
    */
   public static final class JsonWriter extends hydra.testing.TestCase implements Serializable {
-    public final hydra.testing.JsonWriterTestCase value;
+    public final hydra.testing.WriterTestCase<hydra.json.model.Value> value;
     
-    public JsonWriter (hydra.testing.JsonWriterTestCase value) {
+    public JsonWriter (hydra.testing.WriterTestCase<hydra.json.model.Value> value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }
