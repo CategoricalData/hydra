@@ -236,6 +236,7 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
         (T.list [T.var "x", T.var "y"])),
 
     -- Nested bindings are flattened with prefix renaming
+    -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "nested binding in let value is flattened"
       -- let a = 1; b = (let x = 1; y = 2 in [x, y]) in [a, b]
       (multiLet [
@@ -243,15 +244,17 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
         ("b", multiLet [("x", T.int32 1), ("y", T.int32 2)]
                 (T.list [T.var "x", T.var "y"]))]
         (T.list [T.var "a", T.var "b"]))
-      -- let a = 1; b = [b_x, b_y]; b_x = 1; b_y = 2 in [a, b]
+      -- let a = 1; b_x = 1; b_y = 2; b = [b_x, b_y] in [a, b]
+      -- Note: dependencies (b_x, b_y) come before b
       (multiLet [
         ("a", T.int32 1),
-        ("b", T.list [T.var "b_x", T.var "b_y"]),
         ("b_x", T.int32 1),
-        ("b_y", T.int32 2)]
+        ("b_y", T.int32 2),
+        ("b", T.list [T.var "b_x", T.var "b_y"])]
         (T.list [T.var "a", T.var "b"])),
 
     -- Multiple levels of nesting
+    -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "multiple levels of nesting are flattened"
       -- let a = 1; b = (let x = 1; y = (let p = 137; q = [x, 5] in [a, q]) in [x, y]) in [a, b]
       (multiLet [
@@ -265,13 +268,14 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
           (T.list [T.var "x", T.var "y"]))]
         (T.list [T.var "a", T.var "b"]))
       -- Flattened with proper prefixes
+      -- Order: a, then b's deps (b_x, b_y's deps (b_y_p, b_y_q), b_y), then b
       (multiLet [
         ("a", T.int32 1),
-        ("b", T.list [T.var "b_x", T.var "b_y"]),
         ("b_x", T.int32 1),
-        ("b_y", T.list [T.var "a", T.var "b_y_q"]),
         ("b_y_p", T.int32 137),
-        ("b_y_q", T.list [T.var "b_x", T.int32 5])]
+        ("b_y_q", T.list [T.var "b_x", T.int32 5]),
+        ("b_y", T.list [T.var "a", T.var "b_y_q"]),
+        ("b", T.list [T.var "b_x", T.var "b_y"])]
         (T.list [T.var "a", T.var "b"]))]
 
 -- | Test cases for lifting lambda above let
