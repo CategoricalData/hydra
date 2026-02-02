@@ -120,8 +120,7 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertInvalid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Maybe<String> result = Validation.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(type).apply(element);
+        Maybe<String> result = Validation.validateVertex(CHECK_LITERAL, Literals::showLiteral, type, element);
         if (!result.isJust()) {
             fail("Validation succeeded where it should have failed");
         }
@@ -130,8 +129,8 @@ public class ValidationTest extends PropertyGraphTestBase {
     private static void assertInvalid(EdgeType<LiteralType> type,
                                       Edge<Literal> element,
                                       Maybe<Function<Literal, Maybe<VertexLabel>>> labelForVertexId) {
-        Maybe<String> result = Validation.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(labelForVertexId).apply(type).apply(element);
+        Maybe<String> result = Validation.validateEdge(CHECK_LITERAL, Literals::showLiteral,
+                labelForVertexId, type, element);
         if (!result.isJust()) {
             fail("Validation succeeded where it should have failed");
         }
@@ -144,24 +143,23 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     private static void assertInvalid(ElementType<LiteralType> type,
                                       Element<Literal> element) {
-        Maybe<String> result = Validation.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(Maybe.nothing()).apply(type).apply(element);
+        Maybe<String> result = Validation.validateElement(CHECK_LITERAL, Literals::showLiteral,
+                Maybe.nothing(), type, element);
         if (!result.isJust()) {
             fail("Validation succeeded where it should have failed");
         }
     }
 
     private static void assertValid(VertexType<LiteralType> type, Vertex<Literal> element) {
-        Maybe<String> result = Validation.validateVertex(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(type).apply(element);
+        Maybe<String> result = Validation.validateVertex(CHECK_LITERAL, Literals::showLiteral, type, element);
         result.ifJust(s -> fail("Validation failed: " + s));
     }
 
     private static void assertValid(EdgeType<LiteralType> type,
                                     Edge<Literal> element,
                                     Maybe<Function<Literal, Maybe<VertexLabel>>> labelForVertexId) {
-        Maybe<String> result = Validation.validateEdge(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(labelForVertexId).apply(type).apply(element);
+        Maybe<String> result = Validation.validateEdge(CHECK_LITERAL, Literals::showLiteral,
+                labelForVertexId, type, element);
         result.ifJust(s -> fail("Validation failed: " + s));
     }
 
@@ -171,8 +169,8 @@ public class ValidationTest extends PropertyGraphTestBase {
     }
 
     private static void assertValid(ElementType<LiteralType> type, Element<Literal> element) {
-        Maybe<String> result = Validation.validateElement(CHECK_LITERAL).apply(Literals::showLiteral)
-                .apply(Maybe.nothing()).apply(type).apply(element);
+        Maybe<String> result = Validation.validateElement(CHECK_LITERAL, Literals::showLiteral,
+                Maybe.nothing(), type, element);
         result.ifJust(s -> fail("Validation failed: " + s));
     }
 }
