@@ -44,7 +44,7 @@ import qualified Hydra.Ext.Sources.Pg.Graphson.Utils as GraphsonUtils
 import qualified Hydra.Ext.Sources.Pg.Mapping as PgMapping
 import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 import qualified Hydra.Ext.Sources.Pg.Query as PgQuery
-import Hydra.Ext.Sources.Pg.Validation
+import qualified Hydra.Ext.Sources.Pg.Validation as PgValidation
 import qualified Hydra.Ext.Sources.Protobuf.Any as ProtobufAny
 import Hydra.Ext.Sources.Protobuf.Language
 import qualified Hydra.Ext.Sources.Protobuf.Proto3 as Proto3
@@ -107,7 +107,7 @@ hydraExtModules = otherModules ++ gqlModules
       PgMapping.module_,
       PgModel.module_,
       PgQuery.module_,
-      pgValidationModule,
+      PgValidation.module_,
       Proto3.module_,
       ProtobufAny.module_,
       protobufLanguageModule,

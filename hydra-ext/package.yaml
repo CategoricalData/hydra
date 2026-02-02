@@ -87,6 +87,14 @@ executables:
       - hydra-ext
       - hspec
 
+  test-java-modules:
+    main: Main.hs
+    source-dirs:
+      - src/exec/test-java-modules
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   update-python-kernel-sources:
     main: Main.hs
     source-dirs:

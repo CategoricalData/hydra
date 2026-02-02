@@ -327,8 +327,6 @@ encodeApplication env app = do
     PyGraph g _ <- getState
     -- Try to get arity from type; fall back to term-based arity if typeOf fails
     -- (typeOf can fail for types like Either that require type arguments)
-    -- Note: We always need type inference for arity calculation to handle variables correctly,
-    -- but we can skip cast generation when skipCasts is enabled.
     -- termArityWithPrimitives handles primitives correctly by looking up their types in the graph.
     arity <- tryFlowWithFallback (termArityWithPrimitives g fun) $ typeArity <$> typeOf (pythonEnvironmentTypeContext env) [] fun
     let term = TermApplication app
@@ -402,7 +400,7 @@ encodeApplication env app = do
         TermVariable name -> do
           PyGraph g _ <- getState
           let allArgs = hargs ++ rargs
-          case M.lookup name (graphElements g) of
+          case L.find (\b -> bindingName b == name) (graphElements g) of
             Just el -> case bindingType el of
               Just ts -> do
                 let elArity = typeSchemeArity ts
@@ -725,6 +723,20 @@ encodeFunction env f = case f of
                    (pyPrimaryToPyExpression indexedExpr)
   -- Only nullary primitives should appear here.
   FunctionPrimitive name -> encodeVariable env name []
+  -- Record projections as values: generate lambda v1: v1.field
+  FunctionElimination (EliminationRecord (Projection _ fname)) -> do
+    let paramName = Py.Name "v1"
+    let body = projectFromExpression (pyNameToPyExpression paramName) (encodeFieldName env fname)
+    return $ Py.ExpressionLambda $ Py.Lambda
+      (Py.LambdaParameters Nothing [Py.LambdaParamNoDefault paramName] [] Nothing)
+      body
+  -- Wrap eliminations as values: generate lambda v1: v1.value
+  FunctionElimination (EliminationWrap _) -> do
+    let paramName = Py.Name "v1"
+    let body = projectFromExpression (pyNameToPyExpression paramName) (Py.Name "value")
+    return $ Py.ExpressionLambda $ Py.Lambda
+      (Py.LambdaParameters Nothing [Py.LambdaParamNoDefault paramName] [] Nothing)
+      body
   -- Case eliminations as values (not applied) cannot be directly expressed in Python
   -- because match is a statement, not an expression. Generate a runtime error.
   FunctionElimination _ -> return $ functionCall
@@ -1352,7 +1364,7 @@ encodeVariable env name args = do
         -- Check if this is a local binding (in typeContextTypes but NOT in typeContextMetadata)
         -- These are either external module bindings or regular inline bindings.
         else if not (M.member name (typeContextMetadata tc))
-          then case M.lookup name (graphElements g) of
+          then case L.find (\b -> bindingName b == name) (graphElements g) of
             -- External binding (in graphElements) - check if needs ()
             Just el -> case bindingType el of
               Just ts -> return $ if isNullary typ && isComplexBinding tc el
@@ -1380,7 +1392,7 @@ encodeVariable env name args = do
               then asFunctionReference (primitiveType prim)
               else asPartialApplication (primitiveArity prim)
           -- Check if the variable is a graph element (external binding)
-          Nothing -> case M.lookup name (graphElements g) of
+          Nothing -> case L.find (\b -> bindingName b == name) (graphElements g) of
             Just el -> case bindingType el of
               Just ts -> return $ if typeSchemeArity ts == 0 && isComplexBinding tc el
                 then asFunctionCallTmp "six"

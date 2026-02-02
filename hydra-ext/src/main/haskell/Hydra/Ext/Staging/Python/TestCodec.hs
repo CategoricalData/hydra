@@ -29,8 +29,9 @@ import qualified Data.Maybe as Y
 import qualified Data.Set as S
 import Data.Char (toLower, isAlphaNum)
 import qualified Hydra.Typing as Typing
-import Hydra.Typing (TypeContext(..), InferenceContext(..))
+import Hydra.Typing (TypeContext(..), InferenceContext(..), InferenceResult(..))
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Inference as Inference
 
 
 -- | Initial empty metadata for running encoding in PyGraph
@@ -41,6 +42,7 @@ emptyPythonModuleMetadata ns = PythonModuleMetadata {
   pythonModuleMetadataUsesAnnotated = False,
   pythonModuleMetadataUsesCallable = False,
   pythonModuleMetadataUsesCast = False,
+  pythonModuleMetadataUsesLruCache = False,
   pythonModuleMetadataUsesTypeAlias = False,
   pythonModuleMetadataUsesDataclass = False,
   pythonModuleMetadataUsesDecimal = False,
@@ -205,7 +207,7 @@ namespacesForPythonModule mod = do
     graph <- getState
     -- Convert Bindings to Definitions for findNamespaces
     -- We only need term definitions for namespace discovery
-    let bindings = M.elems $ graphElements graph
+    let bindings = graphElements graph
         defs = Y.mapMaybe bindingToDefinition bindings
         ns = moduleNamespace mod
     return $ findNamespaces ns defs
@@ -314,15 +316,18 @@ buildPythonTestModule codec testModule testGroup testBody namespaces = header ++
 -- | Generate Python test file for a test group
 generatePythonTestFile :: Module -> TestGroup -> Flow Graph (FilePath, String)
 generatePythonTestFile testModule testGroup = do
+  -- Run type inference on all test terms to ensure lambdas have domain types
+  inferredTestGroup <- inferTestGroupTerms testGroup
+
   -- Build proper namespaces that include all primitives
-  namespaces <- buildNamespacesForTestGroup testModule testGroup
+  namespaces <- buildNamespacesForTestGroup testModule inferredTestGroup
 
   -- Build TypeContext ONCE per test file (critical for performance)
   g <- getState
   tcontext <- Schemas.graphToTypeContext g
 
   -- Generate test file using the efficient codec with pre-built TypeContext
-  generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces tcontext) testModule testGroup namespaces
+  generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces tcontext) testModule inferredTestGroup namespaces
   where
     buildNamespacesForTestGroup mod tgroup = do
       let testCases = collectTestCases tgroup
@@ -333,6 +338,31 @@ generatePythonTestFile testModule testGroup = do
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
       TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
       _ -> []
+
+-- | Run type inference on all terms in a TestGroup
+-- This ensures that lambdas have their domain types filled in, which is required by the Python coder
+inferTestGroupTerms :: TestGroup -> Flow Graph TestGroup
+inferTestGroupTerms (TestGroup name desc subgroups cases) = do
+  inferredSubgroups <- mapM inferTestGroupTerms subgroups
+  inferredCases <- mapM inferTestCase cases
+  return $ TestGroup name desc inferredSubgroups inferredCases
+
+-- | Run type inference on the terms in a test case
+inferTestCase :: TestCaseWithMetadata -> Flow Graph TestCaseWithMetadata
+inferTestCase (TestCaseWithMetadata name tcase desc tags) = do
+  inferredTcase <- case tcase of
+    TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
+      inferredInput <- inferTerm input
+      inferredOutput <- inferTerm output
+      return $ TestCaseDelegatedEvaluation $ DelegatedEvaluationTestCase inferredInput inferredOutput
+    other -> return other
+  return $ TestCaseWithMetadata name inferredTcase desc tags
+
+-- | Run type inference on a single term
+inferTerm :: Term -> Flow Graph Term
+inferTerm term = do
+  result <- Inference.inferInGraphContext term
+  return $ inferenceResultTerm result
 
 -- | Python-specific test generator
 -- Provides the complete Python implementation of the TestGenerator abstraction

@@ -145,7 +145,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                     (propertyKey_typeExpression, ShowCore.typeScheme $ primitiveType prim)]
                   where
                     name = primitiveName prim
-            els = fmap toVertex $ M.elems elements
+            els = fmap toVertex elements
               where
                 toVertex el = PG.Vertex vertexLabel_Term (nameToVertexId $ bindingName el) $ M.fromList [
                     (propertyKey_localName, localNameOf name),
@@ -167,7 +167,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                 edgesFrom el = fmap (namePairToEdge edgeLabel_hasType (bindingName el)) $
                   S.toList $ termDependencyNames False False True $ bindingTerm el
             primEdges = if withPrims
-                then L.concat $ fmap edgesFrom elements
+                then L.concat $ fmap edgesFrom $ graphElements g
                 else []
               where
                 edgesFrom el = fmap (namePairToEdge edgeLabel_usesPrimitive (bindingName el)) $
@@ -191,7 +191,7 @@ typeGraphToDependencyPropertyGraph g = do
       (M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices)
       (M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges)
   where
-    elements = M.elems $ graphElements g
+    elements = graphElements g
     terms = fmap bindingTerm elements
     names = fmap bindingName elements
     toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps
