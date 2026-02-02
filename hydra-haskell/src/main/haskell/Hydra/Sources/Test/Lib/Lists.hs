@@ -60,6 +60,7 @@ allTests = define "allTests" $
       listsDropWhile,
       listsElem,
       listsFilter,
+      listsFind,
       listsFoldl,
       listsGroup,
       listsHead,
@@ -71,6 +72,7 @@ allTests = define "allTests" $
       listsMap,
       listsNub,
       listsNull,
+      listsPartition,
       listsPure,
       listsReplicate,
       listsReverse,
@@ -181,7 +183,16 @@ allTests = define "allTests" $
         test "empty list" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [] []]
         where
           test name pred lst result = primCase name _lists_filter [pred, intList lst] (intList result)
-  
+
+      listsFind = subgroup "find" [
+        test "find existing element" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 3)) [1, 2, 4, 5] (Just 4),
+        test "find first matching" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [1, 2, 3] (Just 1),
+        test "find no match" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] Nothing,
+        test "find in empty list" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [] Nothing,
+        test "find single element" (lambda "x" (primitive _equality_equal @@ var "x" @@ int32 42)) [42] (Just 42)]
+        where
+          test name pred lst result = primCase name _lists_find [pred, intList lst] (optionalInt32 result)
+
       listsFoldl = subgroup "foldl" [
         test "sum with addition" (primitive _math_add) 0 [1, 2, 3, 4] 10,
         test "product with multiplication" (primitive _math_mul) 1 [2, 3, 4] 24,
@@ -287,7 +298,16 @@ allTests = define "allTests" $
         where
           testInt name lst result = primCase name _lists_null [intList lst] (boolean result)
           testStr name lst result = primCase name _lists_null [stringList lst] (boolean result)
-  
+
+      listsPartition = subgroup "partition" [
+        test "partition greater than 3" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 3)) [1, 2, 3, 4, 5, 6] ([4, 5, 6], [1, 2, 3]),
+        test "partition all elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 10)) [1, 2, 3] ([1, 2, 3], []),
+        test "partition no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
+        test "partition even numbers" (lambda "x" (primitive _math_even @@ var "x")) [1, 2, 3, 4, 5, 6] ([2, 4, 6], [1, 3, 5]),
+        test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] ([], [])]
+        where
+          test name pred lst (yes, no) = primCase name _lists_partition [pred, intList lst] (pair (intList yes) (intList no))
+
       listsPure = subgroup "pure" [
         testStr "string element" "one" ["one"],
         testStr "empty string" "" [""],
