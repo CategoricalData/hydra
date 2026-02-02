@@ -617,7 +617,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
       Logic.ifElse (Lists.null $ var "assertPairs")
         (Flows.pure $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
-          "hassert">: Logic.ifElse (Equality.gt (Lists.length $ var "encoded") (int32 1))
+          "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
             (Lists.head $ var "encoded")
             (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
           Flows.pure $ inject H._Type H._Type_ctx $ record H._ContextType [
@@ -946,7 +946,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         "tname">: Names.unqualifyName @@ record _QualifiedName [
           _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
-        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
+        Logic.ifElse (Maybes.isJust $ Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "tname")) (Graph.graphElements $ var "g'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
       "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
@@ -1075,8 +1075,8 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
     -- Convert a class name to a TypeClass, returning Nothing for unknown classes
     "nameToTypeClass">: "className" ~> lets [
       "classNameStr">: Core.unName $ var "className",
-      "isEq">: Equality.equal (var "classNameStr") (string "hydra.typeclass.Eq"),
-      "isOrd">: Equality.equal (var "classNameStr") (string "hydra.typeclass.Ord")] $
+      "isEq">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_equality),
+      "isOrd">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_ordering)] $
       Logic.ifElse (var "isEq")
         (just $ inject _TypeClass _TypeClass_equality unit)
         (Logic.ifElse (var "isOrd")
