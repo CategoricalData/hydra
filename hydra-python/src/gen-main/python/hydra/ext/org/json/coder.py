@@ -60,7 +60,7 @@ def decode_record(rt: hydra.core.RowType, coders: frozenlist[tuple[hydra.core.Fi
             return hydra.lib.flows.bind(coder_().decode(json_value()), (lambda v: hydra.lib.flows.pure(hydra.core.Field(fname(), v))))
         return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: decode_field(x1)), coders), (lambda fields: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(rt.type_name, fields))))))
     @lru_cache(1)
-    def result() -> hydra.compute.Flow[T1, hydra.core.Term]:
+    def result() -> hydra.compute.Flow[hydra.core.Term, hydra.core.Term]:
         match n:
             case hydra.json.model.ValueObject(value=v1):
                 return decode_object_body(v1)
@@ -320,20 +320,20 @@ def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.
             
             case _:
                 return hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), untyped_term_to_json(t))
-    def match_elimination(unexp: Callable[[str], T1], as_variant: Callable[[str, hydra.core.Term], T1], elm: hydra.core.Elimination) -> T1:
+    def match_elimination(unexp2: Callable[[str], T1], as_variant2: Callable[[str, hydra.core.Term], T1], elm: hydra.core.Elimination) -> T1:
         match elm:
             case hydra.core.EliminationRecord(value=proj):
-                return as_variant("project", cast(hydra.core.Term, hydra.core.TermVariable(proj.field)))
+                return as_variant2("project", cast(hydra.core.Term, hydra.core.TermVariable(proj.field)))
             
             case _:
-                return unexp(hydra.lib.strings.cat(("unexpected elimination variant: ", hydra.show.core.elimination(elm))))
-    def match_function(unexp: Callable[[str], hydra.compute.Flow[T1, hydra.json.model.Value]], as_record: Callable[[frozenlist[hydra.core.Field]], hydra.compute.Flow[T1, hydra.json.model.Value]], as_variant: Callable[[str, hydra.core.Term], hydra.compute.Flow[T1, hydra.json.model.Value]], f: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.json.model.Value]:
+                return unexp2(hydra.lib.strings.cat(("unexpected elimination variant: ", hydra.show.core.elimination(elm))))
+    def match_function(unexp2: Callable[[str], hydra.compute.Flow[T1, hydra.json.model.Value]], as_record2: Callable[[frozenlist[hydra.core.Field]], hydra.compute.Flow[T1, hydra.json.model.Value]], as_variant2: Callable[[str, hydra.core.Term], hydra.compute.Flow[T1, hydra.json.model.Value]], f: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.json.model.Value]:
         match f:
             case hydra.core.FunctionElimination(value=elm):
-                return match_elimination(unexp, as_variant, elm)
+                return match_elimination(unexp2, as_variant2, elm)
             
             case hydra.core.FunctionLambda(value=l):
-                return as_record((hydra.core.Field(hydra.core.Name("parameter"), cast(hydra.core.Term, hydra.core.TermVariable(l.parameter))), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.type, l.domain)))), hydra.core.Field(hydra.core.Name("body"), l.body)))
+                return as_record2((hydra.core.Field(hydra.core.Name("parameter"), cast(hydra.core.Term, hydra.core.TermVariable(l.parameter))), hydra.core.Field(hydra.core.Name("domain"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.type, l.domain)))), hydra.core.Field(hydra.core.Name("body"), l.body)))
             
             case hydra.core.FunctionPrimitive(value=name):
                 return hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueString(name.value)))

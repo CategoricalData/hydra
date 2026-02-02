@@ -455,11 +455,11 @@ def print_expr(e: hydra.ast.Expr) -> str:
             @lru_cache(1)
             def ilns() -> frozenlist[str]:
                 match style():
-                    case hydra.ast.IndentStyleAllLines(value=idt):
-                        return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), lns())
+                    case hydra.ast.IndentStyleAllLines(value=idt2):
+                        return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), lns())
                     
-                    case hydra.ast.IndentStyleSubsequentLines(value=idt2):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns()), 1), (lambda : lns()), (lambda : hydra.lib.lists.cons(hydra.lib.lists.head(lns()), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), hydra.lib.lists.tail(lns())))))
+                    case hydra.ast.IndentStyleSubsequentLines(value=idt22):
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns()), 1), (lambda : lns()), (lambda : hydra.lib.lists.cons(hydra.lib.lists.head(lns()), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt22, line)), hydra.lib.lists.tail(lns())))))
                     
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
@@ -525,7 +525,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
                 return style().newline_after_content
             @lru_cache(1)
             def ibody() -> str:
-                return hydra.lib.maybes.maybe(body(), (lambda idt: custom_indent(idt, body())), do_indent())
+                return hydra.lib.maybes.maybe(body(), (lambda idt2: custom_indent(idt2, body())), do_indent())
             @lru_cache(1)
             def pre() -> str:
                 return hydra.lib.logic.if_else(nl_before(), (lambda : "\n"), (lambda : ""))

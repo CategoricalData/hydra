@@ -16,7 +16,7 @@ A = TypeVar("A")
 class Graph:
     r"""A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
     
-    elements: Annotated[FrozenDict[hydra.core.Name, hydra.core.Binding], "All of the elements in the graph"]
+    elements: Annotated[frozenlist[hydra.core.Binding], "All of the elements in the graph"]
     environment: Annotated[FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
     types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]

@@ -38,7 +38,7 @@ def decode_list(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Eit
     def _hoist_hydra_extract_helpers_decode_list_1(elem_decoder: Callable[[T1, hydra.core.Term], Either[hydra.util.DecodingError, T2]], g: T1, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, frozenlist[T2]]:
         match v1:
             case hydra.core.TermList(value=els):
-                return hydra.lib.eithers.map_list((lambda v1: elem_decoder(g, v1)), els)
+                return hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), els)
             
             case _:
                 return Left(hydra.util.DecodingError("expected list"))
@@ -58,7 +58,7 @@ def decode_maybe(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Ei
     def _hoist_hydra_extract_helpers_decode_maybe_1(elem_decoder: Callable[[T1, hydra.core.Term], Either[hydra.util.DecodingError, T2]], g: T1, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, Maybe[T2]]:
         match v1:
             case hydra.core.TermMaybe(value=opt):
-                return hydra.lib.eithers.map_maybe((lambda v1: elem_decoder(g, v1)), opt)
+                return hydra.lib.eithers.map_maybe((lambda v12: elem_decoder(g, v12)), opt)
             
             case _:
                 return Left(hydra.util.DecodingError("expected optional value"))
@@ -78,7 +78,7 @@ def decode_set(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Eith
     def _hoist_hydra_extract_helpers_decode_set_1(elem_decoder: Callable[[T1, hydra.core.Term], Either[hydra.util.DecodingError, T2]], g: T1, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, frozenset[T2]]:
         match v1:
             case hydra.core.TermSet(value=s):
-                return hydra.lib.eithers.map((lambda x1: hydra.lib.sets.from_list(x1)), hydra.lib.eithers.map_list((lambda v1: elem_decoder(g, v1)), hydra.lib.sets.to_list(s)))
+                return hydra.lib.eithers.map((lambda x1: hydra.lib.sets.from_list(x1)), hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), hydra.lib.sets.to_list(s)))
             
             case _:
                 return Left(hydra.util.DecodingError("expected set"))

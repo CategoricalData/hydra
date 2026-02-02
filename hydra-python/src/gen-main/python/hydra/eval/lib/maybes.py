@@ -19,7 +19,7 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
 def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-    def _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term: hydra.core.Term, mf: Maybe[hydra.core.Term], v1: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
+    def _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term: hydra.core.Term, mf: Maybe[hydra.core.Term], v1: hydra.core.Term) -> hydra.compute.Flow[hydra.core.Term, hydra.core.Term]:
         match v1:
             case hydra.core.TermMaybe(value=mx):
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.bind(mf, (lambda f: hydra.lib.maybes.map((lambda x: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(f, x)))), mx))))))

@@ -8,6 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import TypeVar
 import hydra.core
+import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
@@ -20,6 +21,9 @@ import hydra.topology
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
+
+def adjacency_list_to_map(pairs: frozenlist[tuple[T0, frozenlist[T1]]]) -> FrozenDict[T0, frozenlist[T1]]:
+    return hydra.lib.lists.foldl((lambda mp, p: (k := hydra.lib.pairs.first(p), vs := hydra.lib.pairs.second(p), existing := hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(k, mp)), hydra.lib.maps.insert(k, hydra.lib.lists.concat2(existing, vs), mp))[3]), hydra.lib.maps.empty(), pairs)
 
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
     def source_to_target_mapping(els: frozenlist[T2]) -> frozenlist[T2]:
@@ -41,6 +45,23 @@ def find_reachable_nodes(adj: Callable[[T0], frozenset[T0]], root: T0) -> frozen
             return hydra.lib.sets.difference(adj(node), visited)
         return hydra.lib.logic.if_else(hydra.lib.sets.null(to_visit()), (lambda : visited), (lambda : hydra.lib.lists.foldl((lambda v, n: visit(hydra.lib.sets.insert(n, v), n)), visited, hydra.lib.sets.to_list(to_visit()))))
     return visit(hydra.lib.sets.singleton(root), root)
+
+def propagate_tags(edges: frozenlist[tuple[T0, frozenlist[T0]]], node_tags: frozenlist[tuple[T0, frozenlist[T1]]]) -> frozenlist[tuple[T0, frozenset[T1]]]:
+    @lru_cache(1)
+    def adj_map() -> FrozenDict[T0, frozenlist[T0]]:
+        return adjacency_list_to_map(edges)
+    @lru_cache(1)
+    def tag_map() -> FrozenDict[T0, frozenset[T1]]:
+        return hydra.lib.maps.map((lambda x1: hydra.lib.sets.from_list(x1)), adjacency_list_to_map(node_tags))
+    @lru_cache(1)
+    def all_nodes() -> frozenlist[T0]:
+        return hydra.lib.sets.to_list(hydra.lib.sets.from_list(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: hydra.lib.pairs.first(x1)), edges), hydra.lib.lists.map((lambda x1: hydra.lib.pairs.first(x1)), node_tags))))
+    def get_tags_for_node(node: T0) -> frozenset[T1]:
+        @lru_cache(1)
+        def reachable() -> frozenset[T0]:
+            return find_reachable_nodes((lambda n: hydra.lib.sets.from_list(hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(n, adj_map())))), node)
+        return hydra.lib.sets.unions(hydra.lib.lists.map((lambda n: hydra.lib.maybes.maybe(hydra.lib.sets.empty(), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(n, tag_map()))), hydra.lib.sets.to_list(reachable())))
+    return hydra.lib.lists.map((lambda n: (n, get_tags_for_node(n))), all_nodes())
 
 def topological_sort_components(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> frozenlist[frozenlist[T0]]:
     @lru_cache(1)

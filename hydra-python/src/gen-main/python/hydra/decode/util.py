@@ -85,7 +85,7 @@ def decoding_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
     def _hoist_hydra_decode_util_decoding_error_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.DecodingError]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.util.DecodingError(b)), (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_util_decoding_error_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2)))(cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.util.DecodingError(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_util_decoding_error_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
             
             case _:
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.util.DecodingError"))
@@ -109,28 +109,28 @@ def precision(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.util.Precision]]]:
-                    def _hoist_variant_map_1(v1: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
-                        match v1:
+                    def _hoist_variant_map_1(v12: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+                        match v12:
                             case hydra.core.IntegerValueInt32(value=i):
                                 return Right(i)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected int32 value"))
-                    def _hoist_variant_map_2(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
-                        match v1:
-                            case hydra.core.LiteralInteger(value=v1):
-                                return _hoist_variant_map_1(v1)
+                    def _hoist_variant_map_2(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+                        match v12:
+                            case hydra.core.LiteralInteger(value=v13):
+                                return _hoist_variant_map_1(v13)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected int32 literal"))
-                    def _hoist_variant_map_3(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
-                        match v1:
+                    def _hoist_variant_map_3(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+                        match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_2(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2)))(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
                 return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:

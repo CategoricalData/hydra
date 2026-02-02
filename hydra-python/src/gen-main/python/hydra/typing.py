@@ -65,7 +65,8 @@ class TypeContext:
     types: Annotated[FrozenDict[hydra.core.Name, hydra.core.Type], "A mapping of lambda- and let-bound variables to their types"]
     metadata: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "Any additional metadata about lambda- and let-bound variables"]
     type_variables: Annotated[frozenset[hydra.core.Name], "The set of type variables introduced by enclosing type lambdas"]
-    lambda_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by lambdas, as opposed to let bindings"]
+    lambda_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by lambdas (even if untyped)"]
+    let_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by let bindings (even if untyped)"]
     inference_context: Annotated[InferenceContext, "The schema types, primitive types, and data types of the graph"]
 
 TYPE_CONTEXT__NAME = hydra.core.Name("hydra.typing.TypeContext")
@@ -73,6 +74,7 @@ TYPE_CONTEXT__TYPES__NAME = hydra.core.Name("types")
 TYPE_CONTEXT__METADATA__NAME = hydra.core.Name("metadata")
 TYPE_CONTEXT__TYPE_VARIABLES__NAME = hydra.core.Name("typeVariables")
 TYPE_CONTEXT__LAMBDA_VARIABLES__NAME = hydra.core.Name("lambdaVariables")
+TYPE_CONTEXT__LET_VARIABLES__NAME = hydra.core.Name("letVariables")
 TYPE_CONTEXT__INFERENCE_CONTEXT__NAME = hydra.core.Name("inferenceContext")
 
 class TypeSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Type]"]):

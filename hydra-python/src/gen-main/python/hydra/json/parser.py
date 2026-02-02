@@ -5,7 +5,7 @@ r"""JSON parser using Hydra parser combinators."""
 from __future__ import annotations
 from decimal import Decimal
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Maybe, frozenlist
+from hydra.dsl.python import Maybe, frozenlist
 from typing import TypeVar, cast
 import hydra.core
 import hydra.json.model
@@ -112,7 +112,7 @@ def json_key_value() -> hydra.parsing.Parser[tuple[str, hydra.json.model.Value]]
 def json_object() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON object."""
     
-    return hydra.parsers.map((lambda arg_: (lambda x: cast(hydra.json.model.Value, hydra.json.model.ValueObject(x)))(hydra.lib.maps.from_list(arg_))), hydra.parsers.between(token(hydra.parsers.char(123)), token(hydra.parsers.char(125)), hydra.parsers.sep_by(json_key_value(), token(hydra.parsers.char(44)))))
+    return hydra.parsers.map((lambda arg_: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(arg_)))), hydra.parsers.between(token(hydra.parsers.char(123)), token(hydra.parsers.char(125)), hydra.parsers.sep_by(json_key_value(), token(hydra.parsers.char(44)))))
 
 @lru_cache(1)
 def json_value() -> hydra.parsing.Parser[hydra.json.model.Value]:

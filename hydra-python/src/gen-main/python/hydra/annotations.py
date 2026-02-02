@@ -179,7 +179,7 @@ def set_annotation(key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict
 def set_description(d: Maybe[str], v1: FrozenDict[hydra.core.Name, hydra.core.Term]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Set description in annotations."""
     
-    return set_annotation(hydra.constants.key_description, hydra.lib.maybes.map((lambda arg_: (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(x)))((lambda x: cast(hydra.core.Literal, hydra.core.LiteralString(x)))(arg_))), d), v1)
+    return set_annotation(hydra.constants.key_description, hydra.lib.maybes.map((lambda arg_: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(arg_))))), d), v1)
 
 def set_term_annotation(key: hydra.core.Name, val: Maybe[hydra.core.Term], term: hydra.core.Term) -> hydra.core.Type:
     r"""Set term annotation."""
@@ -242,7 +242,7 @@ def set_type_classes(m: FrozenDict[hydra.core.Name, frozenset[hydra.classes.Type
 def set_type_description(d: Maybe[str], v1: hydra.core.Type) -> hydra.core.Type:
     r"""Set type description."""
     
-    return set_type_annotation(hydra.constants.key_description, hydra.lib.maybes.map((lambda arg_: (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(x)))((lambda x: cast(hydra.core.Literal, hydra.core.LiteralString(x)))(arg_))), d), v1)
+    return set_type_annotation(hydra.constants.key_description, hydra.lib.maybes.map((lambda arg_: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(arg_))))), d), v1)
 
 def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Type:
     r"""Create a type element with proper annotations."""

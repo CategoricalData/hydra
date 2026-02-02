@@ -8,7 +8,6 @@ from hydra.dsl.python import frozenlist
 import hydra.core
 import hydra.graph
 import hydra.lib.lists
-import hydra.lib.maps
 import hydra.lib.strings
 import hydra.show.core
 
@@ -17,7 +16,7 @@ def graph(graph: hydra.graph.Graph) -> str:
     
     @lru_cache(1)
     def elements() -> frozenlist[hydra.core.Binding]:
-        return hydra.lib.maps.elems(graph.elements)
+        return graph.elements
     @lru_cache(1)
     def element_strs() -> frozenlist[str]:
         return hydra.lib.lists.map(hydra.show.core.binding, elements())

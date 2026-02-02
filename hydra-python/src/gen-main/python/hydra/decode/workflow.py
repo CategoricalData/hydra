@@ -27,7 +27,7 @@ def hydra_schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hyd
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("modules", (lambda v1, v2: hydra.extract.helpers.decode_list(hydra.decode.module.module, v1, v2)), field_map(), cx), (lambda field_modules: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", hydra.decode.core.name, field_map(), cx), (lambda field_type_name: Right(hydra.workflow.HydraSchemaSpec(field_modules, field_type_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("modules", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.module.module, v12, v2)), field_map(), cx), (lambda field_modules: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", hydra.decode.core.name, field_map(), cx), (lambda field_type_name: Right(hydra.workflow.HydraSchemaSpec(field_modules, field_type_name))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.workflow.HydraSchemaSpec"))
@@ -51,21 +51,21 @@ def schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.workflow.SchemaSpec]]]:
-                    def _hoist_variant_map_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                        match v1:
+                    def _hoist_variant_map_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                        match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                        match v1:
+                    def _hoist_variant_map_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                        match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_1(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("hydra"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecHydra(t))), hydra_schema_spec(cx, input)))), (hydra.core.Name("file"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecFile(t))), (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2)))(cx, input)))), (hydra.core.Name("provided"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecProvided())), hydra.extract.helpers.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("hydra"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecHydra(t))), hydra_schema_spec(cx, input)))), (hydra.core.Name("file"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecFile(t))), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("provided"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecProvided())), hydra.extract.helpers.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             
             case _:
@@ -79,43 +79,43 @@ def transform_workflow(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hy
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_3(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_4(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_3(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_5(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_5(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_6(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_6(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_5(v)
                         

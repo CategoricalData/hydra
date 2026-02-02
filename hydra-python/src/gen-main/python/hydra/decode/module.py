@@ -91,7 +91,7 @@ def file_extension(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
     def _hoist_hydra_decode_module_file_extension_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.FileExtension]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.module.FileExtension(b)), (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_module_file_extension_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2)))(cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.module.FileExtension(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_module_file_extension_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
             
             case _:
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.module.FileExtension"))
@@ -115,7 +115,7 @@ def namespace(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.
     def _hoist_hydra_decode_module_namespace_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.module.Namespace]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.module.Namespace(b)), (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_module_namespace_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2)))(cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.module.Namespace(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_module_namespace_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
             
             case _:
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.module.Namespace"))
@@ -128,21 +128,21 @@ def module(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Dec
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("namespace", namespace, field_map(), cx), (lambda field_namespace: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("elements", (lambda v1, v2: hydra.extract.helpers.decode_list(hydra.decode.core.binding, v1, v2)), field_map(), cx), (lambda field_elements: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("termDependencies", (lambda v1, v2: hydra.extract.helpers.decode_list(namespace, v1, v2)), field_map(), cx), (lambda field_term_dependencies: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeDependencies", (lambda v1, v2: hydra.extract.helpers.decode_list(namespace, v1, v2)), field_map(), cx), (lambda field_type_dependencies: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("description", (lambda v1, v2: hydra.extract.helpers.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v1, v2)), field_map(), cx), (lambda field_description: Right(hydra.module.Module(field_namespace, field_elements, field_term_dependencies, field_type_dependencies, field_description))))))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("namespace", namespace, field_map(), cx), (lambda field_namespace: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("elements", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.core.binding, v12, v2)), field_map(), cx), (lambda field_elements: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("termDependencies", (lambda v12, v2: hydra.extract.helpers.decode_list(namespace, v12, v2)), field_map(), cx), (lambda field_term_dependencies: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeDependencies", (lambda v12, v2: hydra.extract.helpers.decode_list(namespace, v12, v2)), field_map(), cx), (lambda field_type_dependencies: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("description", (lambda v12, v2: hydra.extract.helpers.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_description: Right(hydra.module.Module(field_namespace, field_elements, field_term_dependencies, field_type_dependencies, field_description))))))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.module.Module"))
@@ -155,7 +155,7 @@ def namespaces(n: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.ut
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("focus", (lambda v1, v2: hydra.extract.helpers.decode_pair(namespace, n, v1, v2)), field_map(), cx), (lambda field_focus: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("mapping", (lambda v1, v2: hydra.extract.helpers.decode_map(namespace, n, v1, v2)), field_map(), cx), (lambda field_mapping: Right(hydra.module.Namespaces(field_focus, field_mapping))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("focus", (lambda v12, v2: hydra.extract.helpers.decode_pair(namespace, n, v12, v2)), field_map(), cx), (lambda field_focus: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("mapping", (lambda v12, v2: hydra.extract.helpers.decode_map(namespace, n, v12, v2)), field_map(), cx), (lambda field_mapping: Right(hydra.module.Namespaces(field_focus, field_mapping))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.module.Namespaces"))
@@ -168,21 +168,21 @@ def qualified_name(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("namespace", (lambda v1, v2: hydra.extract.helpers.decode_maybe(namespace, v1, v2)), field_map(), cx), (lambda field_namespace: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("local", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_local: Right(hydra.module.QualifiedName(field_namespace, field_local))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("namespace", (lambda v12, v2: hydra.extract.helpers.decode_maybe(namespace, v12, v2)), field_map(), cx), (lambda field_namespace: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("local", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_local: Right(hydra.module.QualifiedName(field_namespace, field_local))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.module.QualifiedName"))

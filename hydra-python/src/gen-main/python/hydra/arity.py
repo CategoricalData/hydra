@@ -17,7 +17,7 @@ def function_arity(v1: hydra.core.Function) -> int:
             return 1
         
         case hydra.core.FunctionLambda(value=arg_):
-            return (lambda i: hydra.lib.math.add(1, i))((lambda arg_2: term_arity(arg_2.body))(arg_))
+            return hydra.lib.math.add(1, term_arity(arg_.body))
         
         case hydra.core.FunctionPrimitive():
             return 42
@@ -30,10 +30,10 @@ def term_arity(v1: hydra.core.Term) -> int:
     
     match v1:
         case hydra.core.TermApplication(value=arg_):
-            return (lambda arg_2: (lambda xapp: hydra.lib.math.sub(xapp, 1))(term_arity(arg_2)))(arg_.function)
+            return hydra.lib.math.sub(term_arity(arg_.function), 1)
         
-        case hydra.core.TermFunction(value=v1):
-            return function_arity(v1)
+        case hydra.core.TermFunction(value=v12):
+            return function_arity(v12)
         
         case _:
             return 0
@@ -52,7 +52,7 @@ def type_arity(v1: hydra.core.Type) -> int:
             return type_arity(arg_3.body)
         
         case hydra.core.TypeFunction(value=f):
-            return hydra.lib.math.add(1, (lambda arg_: type_arity(arg_.codomain))(f))
+            return hydra.lib.math.add(1, type_arity(f.codomain))
         
         case _:
             return 0
@@ -60,7 +60,7 @@ def type_arity(v1: hydra.core.Type) -> int:
 def primitive_arity(arg_: hydra.graph.Primitive) -> int:
     r"""Find the arity (expected number of arguments) of a primitive constant or function."""
     
-    return (lambda arg_2: type_arity(arg_2.type))(arg_.type)
+    return type_arity(arg_.type.type)
 
 def type_scheme_arity(arg_: hydra.core.TypeScheme) -> int:
     r"""Find the arity (expected number of arguments) of a type scheme."""
@@ -81,7 +81,7 @@ def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return uncurry_type(arg_3.body)
         
         case hydra.core.TypeFunction(value=ft):
-            return hydra.lib.lists.cons(ft.domain, (lambda arg_: uncurry_type(arg_.codomain))(ft))
+            return hydra.lib.lists.cons(ft.domain, uncurry_type(ft.codomain))
         
         case _:
             return (t,)

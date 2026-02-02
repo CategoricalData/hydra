@@ -3,7 +3,7 @@
 r"""Term encoders for hydra.query."""
 
 from __future__ import annotations
-from hydra.dsl.python import Maybe, frozenlist
+from hydra.dsl.python import frozenlist
 from typing import cast
 import hydra.core
 import hydra.encode.core
@@ -14,31 +14,31 @@ import hydra.query
 def comparison_constraint(v1: hydra.query.ComparisonConstraint) -> hydra.core.Type:
     match v1:
         case hydra.query.ComparisonConstraint.EQUAL:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("equal"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("equal"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.ComparisonConstraint.NOT_EQUAL:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("notEqual"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("notEqual"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.ComparisonConstraint.LESS_THAN:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("lessThan"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("lessThan"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.ComparisonConstraint.GREATER_THAN:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("greaterThan"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("greaterThan"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.ComparisonConstraint.LESS_THAN_OR_EQUAL:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("lessThanOrEqual"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("lessThanOrEqual"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.ComparisonConstraint.GREATER_THAN_OR_EQUAL:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("greaterThanOrEqual"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.ComparisonConstraint"), hydra.core.Field(hydra.core.Name("greaterThanOrEqual"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def edge(x: hydra.query.Edge) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Edge"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.name(x.type)), hydra.core.Field(hydra.core.Name("out"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.name, opt))))(x.out)), hydra.core.Field(hydra.core.Name("in"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.name, opt))))(x.in_))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Edge"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.name(x.type)), hydra.core.Field(hydra.core.Name("out"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.name, x.out)))), hydra.core.Field(hydra.core.Name("in"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.name, x.in_))))))))
 
 def variable(x: hydra.query.Variable) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.query.Variable"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.value))))
+    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.query.Variable"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
 def node(v1: hydra.query.Node_) -> hydra.core.Type:
     match v1:
@@ -49,33 +49,33 @@ def node(v1: hydra.query.Node_) -> hydra.core.Type:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Node"), hydra.core.Field(hydra.core.Name("variable"), variable(y2)))))
         
         case hydra.query.NodeWildcard():
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Node"), hydra.core.Field(hydra.core.Name("wildcard"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Node"), hydra.core.Field(hydra.core.Name("wildcard"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def range_(x: hydra.query.Range) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Range"), (hydra.core.Field(hydra.core.Name("min"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x2)))))))(x.min)), hydra.core.Field(hydra.core.Name("max"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x2)))))))(x.max))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Range"), (hydra.core.Field(hydra.core.Name("min"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x.min))))))), hydra.core.Field(hydra.core.Name("max"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x.max)))))))))))
 
 def regex_quantifier(v1: hydra.query.RegexQuantifier) -> hydra.core.Type:
     match v1:
         case hydra.query.RegexQuantifierOne():
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("one"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("one"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.RegexQuantifierZeroOrOne():
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("zeroOrOne"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("zeroOrOne"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.RegexQuantifierZeroOrMore():
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("zeroOrMore"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("zeroOrMore"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.RegexQuantifierOneOrMore():
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("oneOrMore"), (lambda _: cast(hydra.core.Term, hydra.core.TermUnit()))(None)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("oneOrMore"), cast(hydra.core.Term, hydra.core.TermUnit())))))
         
         case hydra.query.RegexQuantifierExactly(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("exactly"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x)))))))(y5)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("exactly"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(y5))))))))))
         
         case hydra.query.RegexQuantifierAtLeast(value=y6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("atLeast"), (lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(x)))))))(y6)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("atLeast"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(y6))))))))))
         
         case hydra.query.RegexQuantifierRange(value=y7):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.RegexQuantifier"), hydra.core.Field(hydra.core.Name("range"), range_(y7)))))
@@ -118,7 +118,7 @@ def triple_pattern(x: hydra.query.TriplePattern) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.TriplePattern"), (hydra.core.Field(hydra.core.Name("subject"), node(x.subject)), hydra.core.Field(hydra.core.Name("predicate"), path(x.predicate)), hydra.core.Field(hydra.core.Name("object"), node(x.object))))))
 
 def graph_pattern(x: hydra.query.GraphPattern) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.GraphPattern"), (hydra.core.Field(hydra.core.Name("graph"), hydra.encode.core.name(x.graph)), hydra.core.Field(hydra.core.Name("patterns"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, xs))))(x.patterns))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.GraphPattern"), (hydra.core.Field(hydra.core.Name("graph"), hydra.encode.core.name(x.graph)), hydra.core.Field(hydra.core.Name("patterns"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, x.patterns))))))))
 
 def pattern(v1: hydra.query.Pattern) -> hydra.core.Type:
     match v1:
@@ -129,10 +129,10 @@ def pattern(v1: hydra.query.Pattern) -> hydra.core.Type:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("negation"), pattern(y2)))))
         
         case hydra.query.PatternConjunction(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("conjunction"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, xs))))(y3)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("conjunction"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, y3)))))))
         
         case hydra.query.PatternDisjunction(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("disjunction"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, xs))))(y4)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("disjunction"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, y4)))))))
         
         case hydra.query.PatternGraph(value=y5):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.query.Pattern"), hydra.core.Field(hydra.core.Name("graph"), graph_pattern(y5)))))
@@ -141,4 +141,4 @@ def pattern(v1: hydra.query.Pattern) -> hydra.core.Type:
             raise AssertionError("Unreachable: all variants handled")
 
 def query(x: hydra.query.Query) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Query"), (hydra.core.Field(hydra.core.Name("variables"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(variable, xs))))(x.variables)), hydra.core.Field(hydra.core.Name("patterns"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, xs))))(x.patterns))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Query"), (hydra.core.Field(hydra.core.Name("variables"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(variable, x.variables)))), hydra.core.Field(hydra.core.Name("patterns"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, x.patterns))))))))
