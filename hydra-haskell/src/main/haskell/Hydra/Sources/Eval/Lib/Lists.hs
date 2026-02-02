@@ -76,8 +76,10 @@ module_ = Module ns elements
       toBinding bind_,
       toBinding dropWhile_,
       toBinding filter_,
+      toBinding find_,
       toBinding foldl_,
       toBinding map_,
+      toBinding partition_,
       toBinding sortOn_,
       toBinding span_,
       toBinding zipWith_]
@@ -143,6 +145,21 @@ filter_ = define "filter" $
         (Core.termList $ list ([] :: [TTerm Term])))
       (var "elements"))
 
+-- | Interpreter-friendly find for List terms.
+-- Returns the first element where predTerm returns true, or Nothing if none found.
+find_ :: TBinding (Term -> Term -> Flow s Term)
+find_ = define "find" $
+  doc "Interpreter-friendly find for List terms." $
+  "predTerm" ~> "listTerm" ~>
+  -- Build: safeHead (filter predTerm listTerm) - delegate to filter and safeHead
+  produce $ Core.termApplication $ Core.application
+    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_safeHead)
+    (Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_filter)
+        (var "predTerm"))
+      (var "listTerm"))
+
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
 foldl_ :: TBinding (Term -> Term -> Term -> Flow s Term)
@@ -174,6 +191,58 @@ map_ = define "map" $
       (var "acc"))
     (list ([] :: [TTerm Term]))
     (var "elements")
+
+-- | Interpreter-friendly partition for List terms.
+-- Partitions elements into (satisfying predicate, not satisfying predicate).
+-- Unlike span, partition checks ALL elements, not just the prefix.
+partition_ :: TBinding (Term -> Term -> Flow s Term)
+partition_ = define "partition" $
+  doc "Interpreter-friendly partition for List terms." $
+  "predTerm" ~> "listTerm" ~>
+  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  -- State: (yeses, nos) - two accumulators
+  -- Initial: ([], [])
+  -- Step: ifElse (pred el) (append yeses [el], nos) (yeses, append nos [el])
+  -- Result: (yeses, nos) - already in correct order due to foldl + concat2
+  "initialState" <~ (Core.termPair $ pair
+    (Core.termList $ list ([] :: [TTerm Term]))
+    (Core.termList $ list ([] :: [TTerm Term]))) $
+  "finalState" <~ (Lists.foldl
+    ("acc" ~> "el" ~>
+      -- Extract state components
+      "yeses" <~ (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (var "acc")) $
+      "nos" <~ (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+        (var "acc")) $
+      -- Build ifElse (pred el) trueCase falseCase
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            -- condition: pred el
+            (Core.termApplication $ Core.application (var "predTerm") (var "el")))
+          -- true branch: (append yeses [el], nos)
+          (Core.termPair $ pair
+            (Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                (var "yeses"))
+              (Core.termList $ list [var "el"]))
+            (var "nos")))
+        -- false branch: (yeses, append nos [el])
+        (Core.termPair $ pair
+          (var "yeses")
+          (Core.termApplication $ Core.application
+            (Core.termApplication $ Core.application
+              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+              (var "nos"))
+            (Core.termList $ list [var "el"]))))
+    (var "initialState")
+    (var "elements")) $
+  -- Return the final state directly (it's already a pair)
+  produce $ var "finalState"
 
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.

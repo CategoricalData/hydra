@@ -51,6 +51,10 @@ elem = L.elem
 filter :: (a -> Bool) -> [a] -> [a]
 filter = L.filter
 
+-- | Find the first element matching a predicate.
+find :: (a -> Bool) -> [a] -> Maybe a
+find = L.find
+
 -- | Fold a list from the left.
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl = L.foldl
@@ -101,6 +105,11 @@ null = L.null
 -- | Create a list with a single element.
 pure :: a -> [a]
 pure e = [e]
+
+-- | Partition a list based on a predicate.
+-- Returns (elements satisfying predicate, elements not satisfying predicate).
+partition :: (a -> Bool) -> [a] -> ([a], [a])
+partition = L.partition
 
 -- | Create a list with n copies of a value.
 replicate :: Int -> a -> [a]

@@ -41,6 +41,9 @@ elem = primitive2 _lists_elem
 filter :: AsTerm t [a] => TTerm (a -> Bool) -> t -> TTerm [a]
 filter p xs = primitive2 _lists_filter p (asTerm xs)
 
+find :: TTerm (a -> Bool) -> TTerm [a] -> TTerm (Maybe a)
+find = primitive2 _lists_find
+
 foldl :: AsTerm f (b -> a -> b) => f -> TTerm b -> TTerm [a] -> TTerm b
 foldl f = primitive3 _lists_foldl (asTerm f)
 
@@ -75,6 +78,9 @@ nub = primitive1 _lists_nub
 
 null :: TTerm [a] -> TTerm Bool
 null = primitive1 _lists_null
+
+partition :: TTerm (a -> Bool) -> TTerm [a] -> TTerm ([a], [a])
+partition = primitive2 _lists_partition
 
 pure :: TTerm a -> TTerm [a]
 pure = primitive1 _lists_pure
