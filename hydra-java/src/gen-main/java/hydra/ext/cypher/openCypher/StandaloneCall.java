@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class StandaloneCall implements Serializable {
@@ -15,9 +13,9 @@ public class StandaloneCall implements Serializable {
   
   public final hydra.ext.cypher.openCypher.ProcedureInvocation call;
   
-  public final Maybe<StarOrYieldItems> yieldItems;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.StarOrYieldItems> yieldItems;
   
-  public StandaloneCall (hydra.ext.cypher.openCypher.ProcedureInvocation call, Maybe<StarOrYieldItems> yieldItems) {
+  public StandaloneCall (hydra.ext.cypher.openCypher.ProcedureInvocation call, hydra.util.Maybe<hydra.ext.cypher.openCypher.StarOrYieldItems> yieldItems) {
     java.util.Objects.requireNonNull((call));
     java.util.Objects.requireNonNull((yieldItems));
     this.call = call;
@@ -43,7 +41,7 @@ public class StandaloneCall implements Serializable {
     return new StandaloneCall(call, yieldItems);
   }
   
-  public StandaloneCall withYieldItems(Maybe<StarOrYieldItems> yieldItems) {
+  public StandaloneCall withYieldItems(hydra.util.Maybe<hydra.ext.cypher.openCypher.StarOrYieldItems> yieldItems) {
     java.util.Objects.requireNonNull((yieldItems));
     return new StandaloneCall(call, yieldItems);
   }

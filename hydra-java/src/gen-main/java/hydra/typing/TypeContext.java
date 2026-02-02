@@ -18,6 +18,8 @@ public class TypeContext implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_LAMBDA_VARIABLES = new hydra.core.Name("lambdaVariables");
   
+  public static final hydra.core.Name FIELD_NAME_LET_VARIABLES = new hydra.core.Name("letVariables");
+  
   public static final hydra.core.Name FIELD_NAME_INFERENCE_CONTEXT = new hydra.core.Name("inferenceContext");
   
   /**
@@ -36,25 +38,32 @@ public class TypeContext implements Serializable {
   public final java.util.Set<hydra.core.Name> typeVariables;
   
   /**
-   * The set of term variables introduced by lambdas, as opposed to let bindings
+   * The set of term variables introduced by lambdas (even if untyped)
    */
   public final java.util.Set<hydra.core.Name> lambdaVariables;
+  
+  /**
+   * The set of term variables introduced by let bindings (even if untyped)
+   */
+  public final java.util.Set<hydra.core.Name> letVariables;
   
   /**
    * The schema types, primitive types, and data types of the graph
    */
   public final hydra.typing.InferenceContext inferenceContext;
   
-  public TypeContext (java.util.Map<hydra.core.Name, hydra.core.Type> types, java.util.Map<hydra.core.Name, hydra.core.Term> metadata, java.util.Set<hydra.core.Name> typeVariables, java.util.Set<hydra.core.Name> lambdaVariables, hydra.typing.InferenceContext inferenceContext) {
+  public TypeContext (java.util.Map<hydra.core.Name, hydra.core.Type> types, java.util.Map<hydra.core.Name, hydra.core.Term> metadata, java.util.Set<hydra.core.Name> typeVariables, java.util.Set<hydra.core.Name> lambdaVariables, java.util.Set<hydra.core.Name> letVariables, hydra.typing.InferenceContext inferenceContext) {
     java.util.Objects.requireNonNull((types));
     java.util.Objects.requireNonNull((metadata));
     java.util.Objects.requireNonNull((typeVariables));
     java.util.Objects.requireNonNull((lambdaVariables));
+    java.util.Objects.requireNonNull((letVariables));
     java.util.Objects.requireNonNull((inferenceContext));
     this.types = types;
     this.metadata = metadata;
     this.typeVariables = typeVariables;
     this.lambdaVariables = lambdaVariables;
+    this.letVariables = letVariables;
     this.inferenceContext = inferenceContext;
   }
   
@@ -64,36 +73,41 @@ public class TypeContext implements Serializable {
       return false;
     }
     TypeContext o = (TypeContext) (other);
-    return types.equals(o.types) && metadata.equals(o.metadata) && typeVariables.equals(o.typeVariables) && lambdaVariables.equals(o.lambdaVariables) && inferenceContext.equals(o.inferenceContext);
+    return types.equals(o.types) && metadata.equals(o.metadata) && typeVariables.equals(o.typeVariables) && lambdaVariables.equals(o.lambdaVariables) && letVariables.equals(o.letVariables) && inferenceContext.equals(o.inferenceContext);
   }
   
   @Override
   public int hashCode() {
-    return 2 * types.hashCode() + 3 * metadata.hashCode() + 5 * typeVariables.hashCode() + 7 * lambdaVariables.hashCode() + 11 * inferenceContext.hashCode();
+    return 2 * types.hashCode() + 3 * metadata.hashCode() + 5 * typeVariables.hashCode() + 7 * lambdaVariables.hashCode() + 11 * letVariables.hashCode() + 13 * inferenceContext.hashCode();
   }
   
   public TypeContext withTypes(java.util.Map<hydra.core.Name, hydra.core.Type> types) {
     java.util.Objects.requireNonNull((types));
-    return new TypeContext(types, metadata, typeVariables, lambdaVariables, inferenceContext);
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
   }
   
   public TypeContext withMetadata(java.util.Map<hydra.core.Name, hydra.core.Term> metadata) {
     java.util.Objects.requireNonNull((metadata));
-    return new TypeContext(types, metadata, typeVariables, lambdaVariables, inferenceContext);
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
   }
   
   public TypeContext withTypeVariables(java.util.Set<hydra.core.Name> typeVariables) {
     java.util.Objects.requireNonNull((typeVariables));
-    return new TypeContext(types, metadata, typeVariables, lambdaVariables, inferenceContext);
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
   }
   
   public TypeContext withLambdaVariables(java.util.Set<hydra.core.Name> lambdaVariables) {
     java.util.Objects.requireNonNull((lambdaVariables));
-    return new TypeContext(types, metadata, typeVariables, lambdaVariables, inferenceContext);
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
+  }
+  
+  public TypeContext withLetVariables(java.util.Set<hydra.core.Name> letVariables) {
+    java.util.Objects.requireNonNull((letVariables));
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
   }
   
   public TypeContext withInferenceContext(hydra.typing.InferenceContext inferenceContext) {
     java.util.Objects.requireNonNull((inferenceContext));
-    return new TypeContext(types, metadata, typeVariables, lambdaVariables, inferenceContext);
+    return new TypeContext(types, metadata, typeVariables, lambdaVariables, letVariables, inferenceContext);
   }
 }

@@ -25,7 +25,7 @@ public class Graph implements Serializable {
   /**
    * All of the elements in the graph
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Binding> elements;
+  public final java.util.List<hydra.core.Binding> elements;
   
   /**
    * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
@@ -52,7 +52,7 @@ public class Graph implements Serializable {
    */
   public final hydra.util.Maybe<hydra.graph.Graph> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Maybe<hydra.graph.Graph> schema) {
+  public Graph (java.util.List<hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Maybe<hydra.graph.Graph> schema) {
     java.util.Objects.requireNonNull((elements));
     java.util.Objects.requireNonNull((environment));
     java.util.Objects.requireNonNull((types));
@@ -81,7 +81,7 @@ public class Graph implements Serializable {
     return 2 * elements.hashCode() + 3 * environment.hashCode() + 5 * types.hashCode() + 7 * body.hashCode() + 11 * primitives.hashCode() + 13 * schema.hashCode();
   }
   
-  public Graph withElements(java.util.Map<hydra.core.Name, hydra.core.Binding> elements) {
+  public Graph withElements(java.util.List<hydra.core.Binding> elements) {
     java.util.Objects.requireNonNull((elements));
     return new Graph(elements, environment, types, body, primitives, schema);
   }

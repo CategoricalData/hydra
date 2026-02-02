@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class UnaryAddOrSubtractExpression implements Serializable {
@@ -13,11 +11,11 @@ public class UnaryAddOrSubtractExpression implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
   
-  public final Maybe<AddOrSubtractOperator> operator;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.AddOrSubtractOperator> operator;
   
   public final hydra.ext.cypher.openCypher.NonArithmeticOperatorExpression expression;
   
-  public UnaryAddOrSubtractExpression (Maybe<AddOrSubtractOperator> operator, hydra.ext.cypher.openCypher.NonArithmeticOperatorExpression expression) {
+  public UnaryAddOrSubtractExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.AddOrSubtractOperator> operator, hydra.ext.cypher.openCypher.NonArithmeticOperatorExpression expression) {
     java.util.Objects.requireNonNull((operator));
     java.util.Objects.requireNonNull((expression));
     this.operator = operator;
@@ -38,7 +36,7 @@ public class UnaryAddOrSubtractExpression implements Serializable {
     return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public UnaryAddOrSubtractExpression withOperator(Maybe<AddOrSubtractOperator> operator) {
+  public UnaryAddOrSubtractExpression withOperator(hydra.util.Maybe<hydra.ext.cypher.openCypher.AddOrSubtractOperator> operator) {
     java.util.Objects.requireNonNull((operator));
     return new UnaryAddOrSubtractExpression(operator, expression);
   }

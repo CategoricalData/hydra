@@ -17,6 +17,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -176,7 +177,7 @@ public class HydraTestBase {
      * @return an empty graph
      */
     protected static Graph emptyGraph() {
-        Map<Name, hydra.core.Binding> elements = Collections.emptyMap();
+        List<hydra.core.Binding> elements = Collections.emptyList();
         Map<Name, TypeScheme> types = Collections.emptyMap();
         Map<Name, Maybe<Term>> environment = Collections.emptyMap();
         Term body = Terms.string("empty graph");

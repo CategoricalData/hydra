@@ -99,9 +99,9 @@ public abstract class Scalar implements Serializable {
    * Represents an approximation to real numbers
    */
   public static final class Float_ extends hydra.ext.org.yaml.model.Scalar implements Serializable {
-    public final String value;
+    public final java.math.BigDecimal value;
     
-    public Float_ (String value) {
+    public Float_ (java.math.BigDecimal value) {
       java.util.Objects.requireNonNull((value));
       this.value = value;
     }

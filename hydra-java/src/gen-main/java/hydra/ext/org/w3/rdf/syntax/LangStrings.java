@@ -2,8 +2,6 @@
 
 package hydra.ext.org.w3.rdf.syntax;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -14,9 +12,9 @@ public class LangStrings implements Serializable {
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
   
-  public final java.util.Map<Maybe<LanguageTag>, String> value;
+  public final java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value;
   
-  public LangStrings (java.util.Map<Maybe<LanguageTag>, String> value) {
+  public LangStrings (java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value) {
     java.util.Objects.requireNonNull((value));
     this.value = value;
   }

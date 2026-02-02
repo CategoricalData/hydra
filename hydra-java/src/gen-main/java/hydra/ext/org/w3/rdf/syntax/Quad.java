@@ -2,8 +2,6 @@
 
 package hydra.ext.org.w3.rdf.syntax;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 /**
@@ -26,9 +24,9 @@ public class Quad implements Serializable {
   
   public final hydra.ext.org.w3.rdf.syntax.Node object;
   
-  public final Maybe<Iri> graph;
+  public final hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Iri> graph;
   
-  public Quad (hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.ext.org.w3.rdf.syntax.Iri predicate, hydra.ext.org.w3.rdf.syntax.Node object, Maybe<Iri> graph) {
+  public Quad (hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.ext.org.w3.rdf.syntax.Iri predicate, hydra.ext.org.w3.rdf.syntax.Node object, hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Iri> graph) {
     java.util.Objects.requireNonNull((subject));
     java.util.Objects.requireNonNull((predicate));
     java.util.Objects.requireNonNull((object));
@@ -68,7 +66,7 @@ public class Quad implements Serializable {
     return new Quad(subject, predicate, object, graph);
   }
   
-  public Quad withGraph(Maybe<Iri> graph) {
+  public Quad withGraph(hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Iri> graph) {
     java.util.Objects.requireNonNull((graph));
     return new Quad(subject, predicate, object, graph);
   }

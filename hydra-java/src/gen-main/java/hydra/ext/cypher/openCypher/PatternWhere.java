@@ -2,8 +2,6 @@
 
 package hydra.ext.cypher.openCypher;
 
-import hydra.util.Maybe;
-
 import java.io.Serializable;
 
 public class PatternWhere implements Serializable {
@@ -15,9 +13,9 @@ public class PatternWhere implements Serializable {
   
   public final hydra.ext.cypher.openCypher.Pattern pattern;
   
-  public final Maybe<Where> where;
+  public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where;
   
-  public PatternWhere (hydra.ext.cypher.openCypher.Pattern pattern, Maybe<Where> where) {
+  public PatternWhere (hydra.ext.cypher.openCypher.Pattern pattern, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
     java.util.Objects.requireNonNull((pattern));
     java.util.Objects.requireNonNull((where));
     this.pattern = pattern;
@@ -43,7 +41,7 @@ public class PatternWhere implements Serializable {
     return new PatternWhere(pattern, where);
   }
   
-  public PatternWhere withWhere(Maybe<Where> where) {
+  public PatternWhere withWhere(hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
     java.util.Objects.requireNonNull((where));
     return new PatternWhere(pattern, where);
   }

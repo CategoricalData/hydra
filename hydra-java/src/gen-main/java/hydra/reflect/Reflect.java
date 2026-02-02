@@ -7,7 +7,7 @@ package hydra.reflect;
  */
 public interface Reflect {
   static hydra.variants.EliminationVariant eliminationVariant(hydra.core.Elimination v1) {
-    return ((v1)).accept(new hydra.core.Elimination.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Record ignored) {
         return new hydra.variants.EliminationVariant.Record(true);
@@ -31,7 +31,7 @@ public interface Reflect {
     new hydra.variants.EliminationVariant.Wrap(true));
   
   static hydra.util.Precision floatTypePrecision(hydra.core.FloatType v1) {
-    return ((v1)).accept(new hydra.core.FloatType.Visitor<>() {
+    return ((v1)).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.util.Precision visit(hydra.core.FloatType.Bigfloat ignored) {
         return new hydra.util.Precision.Arbitrary(true);
@@ -55,7 +55,7 @@ public interface Reflect {
     new hydra.core.FloatType.Float64(true));
   
   static hydra.core.FloatType floatValueType(hydra.core.FloatValue v1) {
-    return ((v1)).accept(new hydra.core.FloatValue.Visitor<>() {
+    return ((v1)).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Bigfloat ignored) {
         return new hydra.core.FloatType.Bigfloat(true);
@@ -74,7 +74,7 @@ public interface Reflect {
   }
   
   static hydra.variants.FunctionVariant functionVariant(hydra.core.Function v1) {
-    return ((v1)).accept(new hydra.core.Function.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.variants.FunctionVariant visit(hydra.core.Function.Elimination ignored) {
         return new hydra.variants.FunctionVariant.Elimination(true);
@@ -98,7 +98,7 @@ public interface Reflect {
     new hydra.variants.FunctionVariant.Primitive(true));
   
   static Boolean integerTypeIsSigned(hydra.core.IntegerType v1) {
-    return ((v1)).accept(new hydra.core.IntegerType.Visitor<>() {
+    return ((v1)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public Boolean visit(hydra.core.IntegerType.Bigint ignored) {
         return true;
@@ -147,7 +147,7 @@ public interface Reflect {
   }
   
   static hydra.util.Precision integerTypePrecision(hydra.core.IntegerType v1) {
-    return ((v1)).accept(new hydra.core.IntegerType.Visitor<>() {
+    return ((v1)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public hydra.util.Precision visit(hydra.core.IntegerType.Bigint ignored) {
         return new hydra.util.Precision.Arbitrary(true);
@@ -207,7 +207,7 @@ public interface Reflect {
     new hydra.core.IntegerType.Uint64(true));
   
   static hydra.core.IntegerType integerValueType(hydra.core.IntegerValue v1) {
-    return ((v1)).accept(new hydra.core.IntegerValue.Visitor<>() {
+    return ((v1)).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Bigint ignored) {
         return new hydra.core.IntegerType.Bigint(true);
@@ -256,7 +256,7 @@ public interface Reflect {
   }
   
   static hydra.core.LiteralType literalType(hydra.core.Literal v1) {
-    return ((v1)).accept(new hydra.core.Literal.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Binary ignored) {
         return new hydra.core.LiteralType.Binary(true);
@@ -269,12 +269,12 @@ public interface Reflect {
       
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Float_ arg_) {
-        return ((java.util.function.Function<hydra.core.FloatType, hydra.core.LiteralType>) (injected_ -> new hydra.core.LiteralType.Float_((injected_)))).apply(hydra.reflect.Reflect.floatValueType(((arg_)).value));
+        return new hydra.core.LiteralType.Float_(hydra.reflect.Reflect.floatValueType(((arg_)).value));
       }
       
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Integer_ arg_) {
-        return ((java.util.function.Function<hydra.core.IntegerType, hydra.core.LiteralType>) (injected_ -> new hydra.core.LiteralType.Integer_((injected_)))).apply(hydra.reflect.Reflect.integerValueType(((arg_)).value));
+        return new hydra.core.LiteralType.Integer_(hydra.reflect.Reflect.integerValueType(((arg_)).value));
       }
       
       @Override
@@ -285,7 +285,7 @@ public interface Reflect {
   }
   
   static hydra.variants.LiteralVariant literalTypeVariant(hydra.core.LiteralType v1) {
-    return ((v1)).accept(new hydra.core.LiteralType.Visitor<>() {
+    return ((v1)).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Binary ignored) {
         return new hydra.variants.LiteralVariant.Binary(true);
@@ -337,7 +337,7 @@ public interface Reflect {
     new hydra.variants.LiteralVariant.String_(true));
   
   static hydra.variants.TermVariant termVariant(hydra.core.Term v1) {
-    return ((v1)).accept(new hydra.core.Term.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Annotated ignored) {
         return new hydra.variants.TermVariant.Annotated(true);
@@ -450,7 +450,7 @@ public interface Reflect {
     new hydra.variants.TermVariant.Wrap(true));
   
   static hydra.variants.TypeVariant typeVariant(hydra.core.Type v1) {
-    return ((v1)).accept(new hydra.core.Type.Visitor<>() {
+    return ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Annotated ignored) {
         return new hydra.variants.TypeVariant.Annotated(true);

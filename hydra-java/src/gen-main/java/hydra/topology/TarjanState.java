@@ -27,29 +27,29 @@ public class TarjanState implements Serializable {
   /**
    * Mapping from vertices to their indices in the DFS traversal
    */
-  public final java.util.Map<hydra.topology.Vertex, Integer> indices;
+  public final java.util.Map<Integer, Integer> indices;
   
   /**
    * Mapping from vertices to their lowest reachable index in the DFS traversal
    */
-  public final java.util.Map<hydra.topology.Vertex, Integer> lowLinks;
+  public final java.util.Map<Integer, Integer> lowLinks;
   
   /**
    * Current DFS stack, with vertices in reverse order
    */
-  public final java.util.List<hydra.topology.Vertex> stack;
+  public final java.util.List<Integer> stack;
   
   /**
    * Set of vertices currently on the stack, for quick lookup
    */
-  public final java.util.Set<hydra.topology.Vertex> onStack;
+  public final java.util.Set<Integer> onStack;
   
   /**
    * Accumulated strongly connected components, each a list of vertices
    */
-  public final java.util.List<java.util.List<hydra.topology.Vertex>> sccs;
+  public final java.util.List<java.util.List<Integer>> sccs;
   
-  public TarjanState (Integer counter, java.util.Map<hydra.topology.Vertex, Integer> indices, java.util.Map<hydra.topology.Vertex, Integer> lowLinks, java.util.List<hydra.topology.Vertex> stack, java.util.Set<hydra.topology.Vertex> onStack, java.util.List<java.util.List<hydra.topology.Vertex>> sccs) {
+  public TarjanState (Integer counter, java.util.Map<Integer, Integer> indices, java.util.Map<Integer, Integer> lowLinks, java.util.List<Integer> stack, java.util.Set<Integer> onStack, java.util.List<java.util.List<Integer>> sccs) {
     java.util.Objects.requireNonNull((counter));
     java.util.Objects.requireNonNull((indices));
     java.util.Objects.requireNonNull((lowLinks));
@@ -83,27 +83,27 @@ public class TarjanState implements Serializable {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
-  public TarjanState withIndices(java.util.Map<hydra.topology.Vertex, Integer> indices) {
+  public TarjanState withIndices(java.util.Map<Integer, Integer> indices) {
     java.util.Objects.requireNonNull((indices));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
-  public TarjanState withLowLinks(java.util.Map<hydra.topology.Vertex, Integer> lowLinks) {
+  public TarjanState withLowLinks(java.util.Map<Integer, Integer> lowLinks) {
     java.util.Objects.requireNonNull((lowLinks));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
-  public TarjanState withStack(java.util.List<hydra.topology.Vertex> stack) {
+  public TarjanState withStack(java.util.List<Integer> stack) {
     java.util.Objects.requireNonNull((stack));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
-  public TarjanState withOnStack(java.util.Set<hydra.topology.Vertex> onStack) {
+  public TarjanState withOnStack(java.util.Set<Integer> onStack) {
     java.util.Objects.requireNonNull((onStack));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
-  public TarjanState withSccs(java.util.List<java.util.List<hydra.topology.Vertex>> sccs) {
+  public TarjanState withSccs(java.util.List<java.util.List<Integer>> sccs) {
     java.util.Objects.requireNonNull((sccs));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
