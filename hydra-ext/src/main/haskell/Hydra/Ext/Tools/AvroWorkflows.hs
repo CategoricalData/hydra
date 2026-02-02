@@ -93,7 +93,7 @@ typeApplicationTermToShaclRdf :: Type -> Flow Graph (Term -> Graph -> Flow Graph
 typeApplicationTermToShaclRdf _ = pure encode
   where
     encode term graph = do
-        elDescs <- CM.mapM encodeElement $ M.elems $ graphElements graph
+        elDescs <- CM.mapM encodeElement $ graphElements graph
         termDescs <- encodeBlankTerm
         return $ L.concat (termDescs:elDescs)
       where
@@ -105,7 +105,7 @@ typeApplicationTermToShaclRdf _ = pure encode
             subject <- RdfUt.nextBlankNode
             Shacl.encodeTerm subject $ listsToSets term
           else pure []
-        notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ M.elems $ graphElements graph
+        notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphElements graph
 
 transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile Graph x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do

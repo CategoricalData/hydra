@@ -96,10 +96,10 @@ import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 
 
 validationDefinition :: String -> TTerm a -> TBinding a
-validationDefinition = definitionInModule pgValidationModule
+validationDefinition = definitionInModule module_
 
-pgValidationModule :: Module
-pgValidationModule = Module (Namespace "hydra.pg.validation") elements
+module_ :: Module
+module_ = Module (Namespace "hydra.pg.validation") elements
     []
     [PgModel.ns] $
     Just "Utilities for validating property graphs against property graph schemas"
