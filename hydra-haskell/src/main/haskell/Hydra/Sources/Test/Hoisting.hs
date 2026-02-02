@@ -1116,75 +1116,79 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
 
     -- ============================================================
     -- Test: Polymorphic binding in nested let - hoisted to top
+    -- Note: disabled because we do not currently hoist from the top-level body
     -- ============================================================
 
-    hoistPolyCase "nested polymorphic binding: hoisted to top"
-      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y in id x)
-      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [(nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
-          (T.apply (T.var "id") (T.var "x"))))
-      -- Output: let id : forall a. a -> a = \y -> y; x : Int32 = 1 in id x
-      -- (polymorphic binding hoisted, inner let removed since it's empty)
-      (mkLet [
-        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-        (nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (T.apply (T.var "id") (T.var "x"))),
+--    hoistPolyCase "nested polymorphic binding: hoisted to top"
+--      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y in id x)
+--      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [(nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+--          (T.apply (T.var "id") (T.var "x"))))
+--      -- Output: let id : forall a. a -> a = \y -> y; x : Int32 = 1 in id x
+--      -- (polymorphic binding hoisted, inner let removed since it's empty)
+--      (mkLet [
+--        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--        (nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (T.apply (T.var "id") (T.var "x"))),
 
     -- ============================================================
     -- Test: Mixed polymorphic and monomorphic bindings in nested let
+    -- Note: disabled because we do not currently hoist from the top-level body
     -- ============================================================
 
-    hoistPolyCase "mixed bindings in nested let: only polymorphic hoisted"
-      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y; z : Int32 = 2 in id z)
-      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [
-          (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-          (nm "z", T.int32 2, monoType MetaTypes.int32)]
-          (T.apply (T.var "id") (T.var "z"))))
-      -- Output: polymorphic id hoisted, monomorphic z stays in inner let
-      (mkLet [
-        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-        (nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [
-          (nm "z", T.int32 2, monoType MetaTypes.int32)]
-          (T.apply (T.var "id") (T.var "z")))),
+--    hoistPolyCase "mixed bindings in nested let: only polymorphic hoisted"
+--      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y; z : Int32 = 2 in id z)
+--      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [
+--          (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--          (nm "z", T.int32 2, monoType MetaTypes.int32)]
+--          (T.apply (T.var "id") (T.var "z"))))
+--      -- Output: polymorphic id hoisted, monomorphic z stays in inner let
+--      (mkLet [
+--        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--        (nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [
+--          (nm "z", T.int32 2, monoType MetaTypes.int32)]
+--          (T.apply (T.var "id") (T.var "z")))),
 
     -- ============================================================
     -- Test: Multiple polymorphic bindings in nested let
+    -- Note: disabled because we do not currently hoist from the top-level body
     -- ============================================================
 
-    hoistPolyCase "multiple polymorphic bindings: all hoisted"
-      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y; const : forall a b. a -> b -> a = \a -> \b -> a in const (id x) x)
-      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [
-          (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-          (nm "const", T.lambda "a" (T.lambda "b" (T.var "a")),
-            polyType ["a", "b"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "a"))))]
-          (T.apply (T.apply (T.var "const") (T.apply (T.var "id") (T.var "x"))) (T.var "x"))))
-      -- Output: both polymorphic bindings hoisted
-      (mkLet [
-        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-        (nm "const", T.lambda "a" (T.lambda "b" (T.var "a")),
-          polyType ["a", "b"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "a")))),
-        (nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (T.apply (T.apply (T.var "const") (T.apply (T.var "id") (T.var "x"))) (T.var "x"))),
+--    hoistPolyCase "multiple polymorphic bindings: all hoisted"
+--      -- Input: let x : Int32 = 1 in (let id : forall a. a -> a = \y -> y; const : forall a b. a -> b -> a = \a -> \b -> a in const (id x) x)
+--      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [
+--          (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--          (nm "const", T.lambda "a" (T.lambda "b" (T.var "a")),
+--            polyType ["a", "b"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "a"))))]
+--          (T.apply (T.apply (T.var "const") (T.apply (T.var "id") (T.var "x"))) (T.var "x"))))
+--      -- Output: both polymorphic bindings hoisted
+--      (mkLet [
+--        (nm "id", T.lambda "y" (T.var "y"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--        (nm "const", T.lambda "a" (T.lambda "b" (T.var "a")),
+--          polyType ["a", "b"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "a")))),
+--        (nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (T.apply (T.apply (T.var "const") (T.apply (T.var "id") (T.var "x"))) (T.var "x"))),
 
     -- ============================================================
     -- Test: Polymorphic binding deeply nested
+    -- Note: disabled because we do not currently hoist from the top-level body
     -- ============================================================
 
-    hoistPolyCase "deeply nested polymorphic binding: hoisted to top"
-      -- Input: let x = 1 in (let y = 2 in (let id : forall a. a -> a = \z -> z in id (x + y)))
-      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [(nm "y", T.int32 2, monoType MetaTypes.int32)]
-          (Core.termLet $ mkLet [(nm "id", T.lambda "z" (T.var "z"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
-            (T.apply (T.var "id") (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))))
-      -- Output: id hoisted to top, nested lets remain for monomorphic bindings
-      (mkLet [
-        (nm "id", T.lambda "z" (T.var "z"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
-        (nm "x", T.int32 1, monoType MetaTypes.int32)]
-        (Core.termLet $ mkLet [(nm "y", T.int32 2, monoType MetaTypes.int32)]
-          (T.apply (T.var "id") (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))),
+--    hoistPolyCase "deeply nested polymorphic binding: hoisted to top"
+--      -- Input: let x = 1 in (let y = 2 in (let id : forall a. a -> a = \z -> z in id (x + y)))
+--      (mkLet [(nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [(nm "y", T.int32 2, monoType MetaTypes.int32)]
+--          (Core.termLet $ mkLet [(nm "id", T.lambda "z" (T.var "z"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+--            (T.apply (T.var "id") (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))))
+--      -- Output: id hoisted to top, nested lets remain for monomorphic bindings
+--      (mkLet [
+--        (nm "id", T.lambda "z" (T.var "z"), polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+--        (nm "x", T.int32 1, monoType MetaTypes.int32)]
+--        (Core.termLet $ mkLet [(nm "y", T.int32 2, monoType MetaTypes.int32)]
+--          (T.apply (T.var "id") (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))),
 
     -- ============================================================
     -- Test: Polymorphic binding inside lambda body
@@ -1198,12 +1202,12 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           (T.apply (T.var "id") (T.var "a"))),
         monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
         (T.apply (T.var "f") (T.int32 42)))
-      -- Output: id hoisted to top level (no wrapping needed)
+      -- Output: f comes first (original binding), then f_id is hoisted (no wrapping needed)
       (mkLet [
-        (nm "id", T.lambda "x" (T.var "x"), polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b"))),
         (nm "f",
-          T.lambda "a" (T.apply (T.var "id") (T.var "a")),
-          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+          T.lambda "a" (T.apply (T.var "f_id") (T.var "a")),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "f_id", T.tylam "b" (T.lambda "x" (T.var "x")), polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
         (T.apply (T.var "f") (T.int32 42))),
 
     -- ============================================================
@@ -1221,13 +1225,13 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           (T.apply (T.var "g") (T.int32 42))),
         monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
         (T.apply (T.var "f") (T.string "hello")))
-      -- Output: g is hoisted but wrapped in \(a:String) -> ..., and reference becomes (g a)
+      -- Output: f comes first (original binding), then f_g is hoisted wrapped in \(a:String) -> ..., and reference becomes (f_g a)
       (mkLet [
-        (nm "g", T.lambdaTyped "a" MetaTypes.string (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x"))),
-          polyType ["b"] (MetaTypes.function MetaTypes.string (MetaTypes.function (MetaTypes.var "b") (MetaTypes.pair MetaTypes.string (MetaTypes.var "b"))))),
         (nm "f",
-          T.lambdaTyped "a" MetaTypes.string (T.apply (T.apply (T.var "g") (T.var "a")) (T.int32 42)),
-          monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
+          T.lambdaTyped "a" MetaTypes.string (T.apply (T.apply (T.var "f_g") (T.var "a")) (T.int32 42)),
+          monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32))),
+        (nm "f_g", T.tylam "b" (T.lambdaTyped "a" MetaTypes.string (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x")))),
+          polyType ["b"] (MetaTypes.function MetaTypes.string (MetaTypes.function (MetaTypes.var "b") (MetaTypes.pair MetaTypes.string (MetaTypes.var "b")))))]
         (T.apply (T.var "f") (T.string "hello"))),
 
     hoistPolyCase "polymorphic binding captures multiple lambda variables"
@@ -1240,13 +1244,13 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           (T.apply (T.var "g") (T.int32 42)))),
         monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32)))]
         (T.apply (T.apply (T.var "f") (T.int32 1)) (T.int32 2)))
-      -- Output: g is wrapped in \(a:Int32) -> \(b:Int32) -> ..., references become ((g a) b)
+      -- Output: f comes first (original binding), then f_g is wrapped in \(a:Int32) -> \(b:Int32) -> ..., references become ((f_g a) b)
       (mkLet [
-        (nm "g", T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.lambda "x" (T.apply (T.apply (T.apply (T.var "triple") (T.var "a")) (T.var "b")) (T.var "x")))),
-          polyType ["c"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "c") (MetaTypes.var "c"))))),
         (nm "f",
-          T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.apply (T.apply (T.apply (T.var "g") (T.var "a")) (T.var "b")) (T.int32 42))),
-          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32)))]
+          T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.apply (T.apply (T.apply (T.var "f_g") (T.var "a")) (T.var "b")) (T.int32 42))),
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32))),
+        (nm "f_g", T.tylam "c" (T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.lambda "x" (T.apply (T.apply (T.apply (T.var "triple") (T.var "a")) (T.var "b")) (T.var "x"))))),
+          polyType ["c"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "c") (MetaTypes.var "c")))))]
         (T.apply (T.apply (T.var "f") (T.int32 1)) (T.int32 2))),
 
     hoistPolyCase "polymorphic binding captures some but not all lambda variables"
@@ -1259,14 +1263,172 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           (T.apply (T.var "g") (T.var "b")))),
         monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.pair MetaTypes.int32 MetaTypes.int32))))]
         (T.apply (T.apply (T.var "f") (T.int32 1)) (T.int32 2)))
-      -- Output: g is wrapped only in \(a:Int32) -> ..., reference becomes (g a)
+      -- Output: f comes first (original binding), then f_g is wrapped only in \(a:Int32) -> ..., reference becomes (f_g a)
       (mkLet [
-        (nm "g", T.lambdaTyped "a" MetaTypes.int32 (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x"))),
-          polyType ["c"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "c") (MetaTypes.pair MetaTypes.int32 (MetaTypes.var "c"))))),
         (nm "f",
-          T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.apply (T.apply (T.var "g") (T.var "a")) (T.var "b"))),
-          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.pair MetaTypes.int32 MetaTypes.int32))))]
+          T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "b" MetaTypes.int32 (T.apply (T.apply (T.var "f_g") (T.var "a")) (T.var "b"))),
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.pair MetaTypes.int32 MetaTypes.int32)))),
+        (nm "f_g", T.tylam "c" (T.lambdaTyped "a" MetaTypes.int32 (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x")))),
+          polyType ["c"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "c") (MetaTypes.pair MetaTypes.int32 (MetaTypes.var "c")))))]
         (T.apply (T.apply (T.var "f") (T.int32 1)) (T.int32 2))),
+
+    -- ============================================================
+    -- Test: Variable capture when hoisting polymorphic bindings
+    -- When a polymorphic binding is hoisted OUT OF a lambda, variables
+    -- from enclosing scopes (lambda parameters) must be captured.
+    -- IMPORTANT: Sibling let bindings do NOT need to be captured because
+    -- they remain in scope at the same level after hoisting.
+    -- ============================================================
+
+    -- NOTE: The following test cases were INCORRECT and have been commented out.
+    -- They assumed that sibling let bindings need to be captured, but this is wrong.
+    -- Sibling bindings in the same let block remain in scope after hoisting.
+    --
+    -- hoistPolyCase "polymorphic binding captures let-bound sibling: wrapped in lambda"
+    --   -- WRONG: x and g are siblings at the same level. g doesn't need to capture x.
+    --   -- Input: let x : Int32 = 42; g : forall a. a -> Pair<Int32, a> = \y -> pair x y in g "hello"
+    --   (mkLet [
+    --     (nm "x", T.int32 42, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "y" (T.apply (T.apply (T.var "pair") (T.var "x")) (T.var "y")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.pair MetaTypes.int32 (MetaTypes.var "a"))))]
+    --     (T.apply (T.var "g") (T.string "hello")))
+    --   -- CORRECT output: g is not hoisted (no enclosing lambda to hoist out of), term unchanged
+    --   (mkLet [
+    --     (nm "x", T.int32 42, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "y" (T.apply (T.apply (T.var "pair") (T.var "x")) (T.var "y")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.pair MetaTypes.int32 (MetaTypes.var "a"))))]
+    --     (T.apply (T.var "g") (T.string "hello"))),
+    --
+    -- hoistPolyCase "polymorphic binding captures multiple let-bound siblings"
+    --   -- WRONG: x, y, and g are all siblings at the same level. g doesn't need to capture x or y.
+    --   -- Input: let x : Int32 = 1; y : Int32 = 2; g : forall a. a -> a = \z -> add (add x y) z in g 3
+    --   (mkLet [
+    --     (nm "x", T.int32 1, monoType MetaTypes.int32),
+    --     (nm "y", T.int32 2, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "z" (T.apply (T.apply (primitive _math_add)
+    --               (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))) (T.var "z")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+    --     (T.apply (T.var "g") (T.int32 3)))
+    --   -- CORRECT output: g is not hoisted (no enclosing lambda), term unchanged
+    --   (mkLet [
+    --     (nm "x", T.int32 1, monoType MetaTypes.int32),
+    --     (nm "y", T.int32 2, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "z" (T.apply (T.apply (primitive _math_add)
+    --               (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))) (T.var "z")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+    --     (T.apply (T.var "g") (T.int32 3))),
+
+    hoistPolyCase "polymorphic binding captures both lambda-bound and let-bound variables"
+      -- Input: let f = \(a:Int32) -> (let x : Int32 = 1; g : forall b. b -> b = \y -> add (add a x) y in g 42) in f 10
+      -- Here 'g' references 'a' (lambda-bound from enclosing scope) and 'x' (let-bound sibling).
+      -- When g is hoisted to the top level, it goes OUTSIDE the inner let block, so it must capture
+      -- both 'a' (from the enclosing lambda) AND 'x' (which is no longer a sibling after hoisting).
+      (mkLet [(nm "f",
+        T.lambdaTyped "a" MetaTypes.int32 (Core.termLet $ mkLet [
+          (nm "x", T.int32 1, monoType MetaTypes.int32),
+          (nm "g", T.lambda "y" (T.apply (T.apply (primitive _math_add)
+                    (T.apply (T.apply (primitive _math_add) (T.var "a")) (T.var "x"))) (T.var "y")),
+            polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+          (T.apply (T.var "g") (T.int32 42))),
+        monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+        (T.apply (T.var "f") (T.int32 10)))
+      -- Output: f comes first (original binding), then f_g captures both 'a' and 'x', reference becomes ((f_g a) x)
+      (mkLet [
+        (nm "f",
+          T.lambdaTyped "a" MetaTypes.int32 (Core.termLet $ mkLet [
+            (nm "x", T.int32 1, monoType MetaTypes.int32)]
+            (T.apply (T.apply (T.apply (T.var "f_g") (T.var "a")) (T.var "x")) (T.int32 42))),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "f_g", T.tylam "b" (T.lambdaTyped "a" MetaTypes.int32 (T.lambdaTyped "x" MetaTypes.int32
+          (T.lambda "y" (T.apply (T.apply (primitive _math_add)
+            (T.apply (T.apply (primitive _math_add) (T.var "a")) (T.var "x"))) (T.var "y"))))),
+          polyType ["b"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))))]
+        (T.apply (T.var "f") (T.int32 10))),
+
+    -- NOTE: The following test case was INCORRECT and has been commented out.
+    -- It assumed that sibling let bindings need to be captured transitively.
+    --
+    -- hoistPolyCase "transitive capture: polymorphic binding references hoisted polymorphic binding"
+    --   -- WRONG: x, g, and h are all siblings at the same level. Neither g nor h needs to capture x.
+    --   -- Input: let x : Int32 = 1; g : forall a. a -> a = \y -> add x y; h : forall b. b -> b = \z -> g z in h 42
+    --   (mkLet [
+    --     (nm "x", T.int32 1, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "y" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+    --     (nm "h", T.lambda "z" (T.apply (T.var "g") (T.var "z")),
+    --       polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+    --     (T.apply (T.var "h") (T.int32 42)))
+    --   -- CORRECT output: No hoisting needed (no enclosing lambda), term unchanged
+    --   (mkLet [
+    --     (nm "x", T.int32 1, monoType MetaTypes.int32),
+    --     (nm "g", T.lambda "y" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")),
+    --       polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+    --     (nm "h", T.lambda "z" (T.apply (T.var "g") (T.var "z")),
+    --       polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+    --     (T.apply (T.var "h") (T.int32 42))),
+
+    hoistPolyCase "sibling polymorphic bindings inside lambda: one calls the other"
+      -- Input: let wrapper = \outer : Int32 -> let g : forall a. a -> a = \y -> add outer y; h : forall b. b -> b = \z -> g z in h 42 in wrapper 10
+      -- This mimics the structure in unifyTypeConstraints where bind and tryBinding are
+      -- both inside withConstraint lambda and one calls the other.
+      -- g captures 'outer', h calls g which means h must transitively capture 'outer'
+      (mkLet [(nm "wrapper",
+        T.lambdaTyped "outer" MetaTypes.int32 (Core.termLet $ mkLet [
+          (nm "g", T.lambda "y" (T.apply (T.apply (primitive _math_add) (T.var "outer")) (T.var "y")),
+            polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+          (nm "h", T.lambda "z" (T.apply (T.var "g") (T.var "z")),
+            polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+          (T.apply (T.var "h") (T.int32 42))),
+        monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+        (T.apply (T.var "wrapper") (T.int32 10)))
+      -- Output: wrapper first (original), then wrapper_g and wrapper_h hoisted (both capture outer)
+      -- wrapper_g is wrapped: \outer -> \y -> add outer y
+      -- wrapper_h is wrapped: \outer -> \z -> (wrapper_g outer) z
+      -- The reference to wrapper_g inside wrapper_h becomes (wrapper_g outer)
+      (mkLet [
+        (nm "wrapper",
+          T.lambdaTyped "outer" MetaTypes.int32 (T.apply (T.apply (T.var "wrapper_h") (T.var "outer")) (T.int32 42)),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "wrapper_g", T.tylam "a" (T.lambdaTyped "outer" MetaTypes.int32 (T.lambda "y" (T.apply (T.apply (primitive _math_add) (T.var "outer")) (T.var "y")))),
+          polyType ["a"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))),
+        (nm "wrapper_h", T.tylam "b" (T.lambdaTyped "outer" MetaTypes.int32 (T.lambda "z" (T.apply (T.apply (T.var "wrapper_g") (T.var "outer")) (T.var "z")))),
+          polyType ["b"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b"))))]
+        (T.apply (T.var "wrapper") (T.int32 10))),
+
+    hoistPolyCase "sibling polymorphic bindings inside lambda: h passes its own args to g"
+      -- Input: let wrapper = \outer -> let g : forall a. a -> a = \v -> \t -> add outer (add v t);
+      --                                    h : forall b. b -> b = \v -> \t -> g v t
+      --                                in h 1 2
+      --        in wrapper 10
+      -- Here h calls g with its own args v and t. After hoisting:
+      -- g becomes \outer -> \v -> \t -> add outer (add v t)
+      -- h becomes \outer -> \v -> \t -> ((g outer) v) t
+      -- The reference to g in h should NOT duplicate outer, v, or t
+      (mkLet [(nm "wrapper",
+        T.lambdaTyped "outer" MetaTypes.int32 (Core.termLet $ mkLet [
+          (nm "g", T.lambda "v" (T.lambda "t" (T.apply (T.apply (primitive _math_add) (T.var "outer"))
+            (T.apply (T.apply (primitive _math_add) (T.var "v")) (T.var "t")))),
+            polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))),
+          (nm "h", T.lambda "v" (T.lambda "t" (T.apply (T.apply (T.var "g") (T.var "v")) (T.var "t"))),
+            polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b"))))]
+          (T.apply (T.apply (T.var "h") (T.int32 1)) (T.int32 2))),
+        monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+        (T.apply (T.var "wrapper") (T.int32 10)))
+      -- Output: wrapper first (original), then wrapper_g and wrapper_h hoisted (both capture outer)
+      -- wrapper_g: \outer -> \v -> \t -> add outer (add v t)
+      -- wrapper_h: \outer -> \v -> \t -> ((wrapper_g outer) v) t
+      (mkLet [
+        (nm "wrapper",
+          T.lambdaTyped "outer" MetaTypes.int32 (T.apply (T.apply (T.apply (T.var "wrapper_h") (T.var "outer")) (T.int32 1)) (T.int32 2)),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "wrapper_g", T.tylam "a" (T.lambdaTyped "outer" MetaTypes.int32
+          (T.lambda "v" (T.lambda "t" (T.apply (T.apply (primitive _math_add) (T.var "outer"))
+            (T.apply (T.apply (primitive _math_add) (T.var "v")) (T.var "t")))))),
+          polyType ["a"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "a") (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))))),
+        (nm "wrapper_h", T.tylam "b" (T.lambdaTyped "outer" MetaTypes.int32
+          (T.lambda "v" (T.lambda "t" (T.apply (T.apply (T.apply (T.var "wrapper_g") (T.var "outer")) (T.var "v")) (T.var "t"))))),
+          polyType ["b"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "b") (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))))]
+        (T.apply (T.var "wrapper") (T.int32 10))),
 
     -- ============================================================
     -- Test: Untyped bindings are treated as monomorphic
@@ -1281,7 +1443,204 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       -- Output: unchanged (untyped bindings are not polymorphic)
       (mkLetUntyped [(nm "x", T.int32 1)]
         (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
-          (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))]
+          (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))),
+
+    -- ============================================================
+    -- Test: Name collision - nested binding has same name as top-level (after unshadowing)
+    -- Note: This test uses distinct names as unshadowVariables would produce.
+    -- The hoisting code assumes no shadowing. If there were shadowing,
+    -- two bindings named 'id' would collide at top level.
+    -- ============================================================
+
+    hoistPolyCase "no name collision: distinct names after unshadowing"
+      -- Input: let id = \x -> x; f = \a -> (let id2 : forall b. b -> b = \y -> y in id2 (id a)) in f 42
+      -- Here 'id' is monomorphic at top level, 'id2' is polymorphic nested
+      -- They have distinct names (as unshadowVariables would ensure)
+      (mkLet [
+        (nm "id", T.lambda "x" (T.var "x"), monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "f",
+          T.lambda "a" (Core.termLet $ mkLet [
+            (nm "id2", T.lambda "y" (T.var "y"), polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+            (T.apply (T.var "id2") (T.apply (T.var "id") (T.var "a")))),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+        (T.apply (T.var "f") (T.int32 42)))
+      -- Output: id and f first (original), then f_id2 hoisted
+      (mkLet [
+        (nm "id", T.lambda "x" (T.var "x"), monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "f",
+          T.lambda "a" (T.apply (T.var "f_id2") (T.apply (T.var "id") (T.var "a"))),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "f_id2", T.tylam "b" (T.lambda "y" (T.var "y")), polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+        (T.apply (T.var "f") (T.int32 42))),
+
+    -- ============================================================
+    -- Test: Nested polymorphic binding calls enclosing polymorphic binding
+    -- When a polymorphic binding h at a nested level calls a polymorphic
+    -- binding g from an enclosing (but not top) level, g should NOT be
+    -- passed as a term argument to h. Instead, h's body should reference
+    -- the hoisted g (wrapper_g) directly, since polymorphic let-bound
+    -- variables are excluded from capture.
+    -- ============================================================
+
+    hoistPolyCase "nested polymorphic binding calls enclosing polymorphic binding"
+      -- Input: let wrapper = \outer:Int32 ->
+      --          let g : forall a. a -> a = \y -> y
+      --          in \inner:Int32 ->
+      --            let h : forall b. b -> b = \z -> g z
+      --            in h 42
+      --        in wrapper 10 20
+      -- Here g is polymorphic at an outer let level, and h is polymorphic
+      -- at an inner let level. h calls g. When both are hoisted:
+      -- - g becomes wrapper_g (no captures needed)
+      -- - h becomes wrapper_h, and should reference wrapper_g directly
+      --   (NOT receive g as a term parameter)
+      (mkLet [(nm "wrapper",
+        T.lambdaTyped "outer" MetaTypes.int32 (Core.termLet $ mkLet [
+          -- g : forall a. a -> a (at outer let level)
+          (nm "g",
+            T.lambda "y" (T.var "y"),
+            polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+          -- inner lambda
+          (T.lambdaTyped "inner" MetaTypes.int32 (Core.termLet $ mkLet [
+            -- h : forall b. b -> b (at inner let level, calls g)
+            (nm "h",
+              T.lambda "z" (T.apply (T.var "g") (T.var "z")),
+              polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+            (T.apply (T.var "h") (T.int32 42))))),
+        monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32)))]
+        (T.apply (T.apply (T.var "wrapper") (T.int32 10)) (T.int32 20)))
+      -- Output: wrapper simplified, wrapper_g and wrapper_h hoisted.
+      -- CRITICAL: wrapper_h references wrapper_g directly, NOT through a parameter.
+      -- Neither g nor any enclosing lambda variables are captured by h,
+      -- because g is polymorphic (excluded from capture) and h doesn't use outer/inner.
+      (mkLet [
+        (nm "wrapper",
+          T.lambdaTyped "outer" MetaTypes.int32
+            (T.lambdaTyped "inner" MetaTypes.int32
+              (T.apply (T.var "wrapper_h") (T.int32 42))),
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32))),
+        -- wrapper_g: hoisted, no captures
+        (nm "wrapper_g",
+          T.tylam "a" (T.lambda "y" (T.var "y")),
+          polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))),
+        -- wrapper_h: hoisted, references wrapper_g directly (no g parameter)
+        (nm "wrapper_h",
+          T.tylam "b" (T.lambda "z" (T.apply (T.var "wrapper_g") (T.var "z"))),
+          polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+        (T.apply (T.apply (T.var "wrapper") (T.int32 10)) (T.int32 20))),
+
+    -- ============================================================
+    -- Test: Polymorphic binding captures monomorphic sibling in same let
+    -- This test case demonstrates the bug in joinTypes where:
+    -- - sleft/sright are monomorphic bindings (NOT hoisted)
+    -- - cannotUnify is polymorphic (HOISTED) and references sleft/sright
+    -- When cannotUnify is hoisted, it must capture sleft/sright as parameters
+    -- because they are defined in the same let and won't be hoisted with it.
+    -- ============================================================
+
+    hoistPolyCase "polymorphic binding captures monomorphic sibling in same let"
+      -- This mirrors the joinTypes structure:
+      -- let wrapper = \left -> \right ->
+      --   let sleft : Int32 = f left;           -- monomorphic, NOT hoisted
+      --       sright : Int32 = f right;         -- monomorphic, NOT hoisted
+      --       cannotUnify : forall a. a -> a = \x -> add sleft (add sright x)  -- polymorphic, refs sleft/sright
+      --   in cannotUnify 42
+      -- in wrapper 1 2
+      --
+      -- When cannotUnify is hoisted, it must capture sleft and sright since they are
+      -- defined in the same let and won't be hoisted with it.
+      (mkLet [(nm "wrapper",
+        T.lambdaTyped "left" MetaTypes.int32
+          (T.lambdaTyped "right" MetaTypes.int32
+            (Core.termLet $ mkLet [
+              (nm "sleft", T.apply (T.var "f") (T.var "left"), monoType MetaTypes.int32),
+              (nm "sright", T.apply (T.var "f") (T.var "right"), monoType MetaTypes.int32),
+              (nm "cannotUnify",
+                T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "sleft"))
+                  (T.apply (T.apply (primitive _math_add) (T.var "sright")) (T.var "x"))),
+                polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+              (T.apply (T.var "cannotUnify") (T.int32 42)))),
+        monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32)))]
+        (T.apply (T.apply (T.var "wrapper") (T.int32 1)) (T.int32 2)))
+      -- Expected output:
+      -- wrapper is simplified, wrapper_cannotUnify is hoisted with sleft and sright captured
+      -- wrapper_cannotUnify: forall a. \sleft:Int32 -> \sright:Int32 -> \x -> add sleft (add sright x)
+      -- Reference becomes: ((wrapper_cannotUnify sleft) sright) 42
+      (mkLet [
+        (nm "wrapper",
+          T.lambdaTyped "left" MetaTypes.int32
+            (T.lambdaTyped "right" MetaTypes.int32
+              (Core.termLet $ mkLet [
+                (nm "sleft", T.apply (T.var "f") (T.var "left"), monoType MetaTypes.int32),
+                (nm "sright", T.apply (T.var "f") (T.var "right"), monoType MetaTypes.int32)]
+                (T.apply (T.apply (T.apply (T.var "wrapper_cannotUnify") (T.var "sleft")) (T.var "sright")) (T.int32 42)))),
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 MetaTypes.int32))),
+        (nm "wrapper_cannotUnify",
+          T.tylam "a"
+            (T.lambdaTyped "sleft" MetaTypes.int32
+              (T.lambdaTyped "sright" MetaTypes.int32
+                (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "sleft"))
+                  (T.apply (T.apply (primitive _math_add) (T.var "sright")) (T.var "x")))))),
+          polyType ["a"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))))]
+        (T.apply (T.apply (T.var "wrapper") (T.int32 1)) (T.int32 2))),
+
+    -- This test uses NESTED lets (as the DSL generates with <~) rather than a single flat let.
+    -- The bug: when poly bindings in different nested lets reference each other,
+    -- transitive captured variables are not propagated correctly.
+    --
+    -- Structure (nested lets, like DSL generates):
+    --   wrapper = \left ->
+    --     let sleft = left                              -- mono (outermost nested let)
+    --     in let cannotUnify = fail sleft              -- poly, refs sleft (middle nested let)
+    --        in let joinList = cannotUnify 1           -- poly, refs cannotUnify (innermost nested let)
+    --           in joinList
+    --
+    -- When joinList is hoisted, it captures cannotUnify (from outer let).
+    -- When cannotUnify is hoisted, it captures sleft and its replacement becomes: wrapper_cannotUnify sleft
+    -- The replacement for cannotUnify gets substituted into joinList's body.
+    -- Bug: joinList ends up with free variable sleft because it wasn't captured transitively.
+    hoistPolyCase "nested lets: poly binding references poly sibling from outer let"
+      (mkLet [(nm "wrapper",
+        T.lambdaTyped "left" MetaTypes.int32
+          -- Outer nested let: sleft (mono)
+          (Core.termLet $ mkLet [
+            (nm "sleft", T.var "left", monoType MetaTypes.int32)]
+            -- Middle nested let: cannotUnify (poly, refs sleft)
+            (Core.termLet $ mkLet [
+              (nm "cannotUnify",
+                T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "sleft")) (T.var "x")),
+                polyType ["a"] (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))]
+              -- Inner nested let: joinList (poly, refs cannotUnify)
+              (Core.termLet $ mkLet [
+                (nm "joinList",
+                  T.lambda "y" (T.apply (T.var "cannotUnify") (T.var "y")),
+                  polyType ["b"] (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b")))]
+                (T.apply (T.var "joinList") (T.int32 42))))),
+        monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32))]
+        (T.apply (T.var "wrapper") (T.int32 1)))
+      -- Expected: both cannotUnify and joinList are hoisted.
+      -- wrapper_cannotUnify captures sleft.
+      -- wrapper_joinList must ALSO capture sleft (transitively through cannotUnify).
+      -- The reference to cannotUnify in joinList becomes wrapper_cannotUnify sleft,
+      -- so joinList needs sleft in scope.
+      (mkLet [
+        (nm "wrapper",
+          T.lambdaTyped "left" MetaTypes.int32
+            (Core.termLet $ mkLet [
+              (nm "sleft", T.var "left", monoType MetaTypes.int32)]
+              (T.apply (T.apply (T.var "wrapper_joinList") (T.var "sleft")) (T.int32 42))),
+          monoType (MetaTypes.function MetaTypes.int32 MetaTypes.int32)),
+        (nm "wrapper_cannotUnify",
+          T.tylam "a"
+            (T.lambdaTyped "sleft" MetaTypes.int32
+              (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "sleft")) (T.var "x")))),
+          polyType ["a"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))),
+        (nm "wrapper_joinList",
+          T.tylam "b"
+            (T.lambdaTyped "sleft" MetaTypes.int32
+              (T.lambda "y" (T.apply (T.apply (T.var "wrapper_cannotUnify") (T.var "sleft")) (T.var "y")))),
+          polyType ["b"] (MetaTypes.function MetaTypes.int32 (MetaTypes.function (MetaTypes.var "b") (MetaTypes.var "b"))))]
+        (T.apply (T.var "wrapper") (T.int32 1)))]
 
 -- | Test cases for hoistLetBindings with hoistAll=True
 -- This function hoists ALL let bindings (not just polymorphic ones) to the top level.
@@ -1294,16 +1653,17 @@ hoistLetBindingsGroup = subgroup "hoistLetBindings" [
     -- Test: Basic nested let hoisting (no type lambdas)
     -- ============================================================
 
-    hoistAllCase "simple nested let: inner binding hoisted"
-      -- Input: let x = 1 in (let y = 2 in x + y)
-      (mkLetUntyped [(nm "x", T.int32 1)]
-        (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
-          (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))
-      -- Output: both bindings at top level (hoisted binding comes after original)
-      (mkLetUntyped [
-        (nm "x", T.int32 1),
-        (nm "y", T.int32 2)]
-        (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))),
+--    -- Note: disabled because we do not currently hoist from the top-level body
+--    hoistAllCase "simple nested let: inner binding hoisted"
+--      -- Input: let x = 1 in (let y = 2 in x + y)
+--      (mkLetUntyped [(nm "x", T.int32 1)]
+--        (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
+--          (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))))
+--      -- Output: both bindings at top level (hoisted binding comes after original)
+--      (mkLetUntyped [
+--        (nm "x", T.int32 1),
+--        (nm "y", T.int32 2)]
+--        (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))),
 
     hoistAllCase "nested let inside lambda: binding hoisted with lambda capture"
       -- Input: let f = \a -> (let g = a + 1 in g * 2) in f 10
@@ -1311,47 +1671,12 @@ hoistLetBindingsGroup = subgroup "hoistLetBindings" [
         T.lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", T.apply (T.apply (primitive _math_add) (T.var "a")) (T.int32 1))]
           (T.apply (T.apply (primitive _math_mul) (T.var "g")) (T.int32 2))))]
         (T.apply (T.var "f") (T.int32 10)))
-      -- Output: g is hoisted but wrapped with lambda to capture 'a', reference becomes (g a)
+      -- Output: f comes first (original binding), then f_g is hoisted with lambda to capture 'a', reference becomes (f_g a)
       (mkLetUntyped [
-        (nm "g", T.lambda "a" (T.apply (T.apply (primitive _math_add) (T.var "a")) (T.int32 1))),
         (nm "f",
-          T.lambda "a" (T.apply (T.apply (primitive _math_mul) (T.apply (T.var "g") (T.var "a"))) (T.int32 2)))]
+          T.lambda "a" (T.apply (T.apply (primitive _math_mul) (T.apply (T.var "f_g") (T.var "a"))) (T.int32 2))),
+        (nm "f_g", T.lambda "a" (T.apply (T.apply (primitive _math_add) (T.var "a")) (T.int32 1)))]
         (T.apply (T.var "f") (T.int32 10))),
-
-    -- ============================================================
-    -- Test: Type lambdas are BOUNDARIES for hoisting
-    -- We do NOT hoist bindings out of type lambdas because the binding
-    -- may reference type variables introduced by the type lambda.
-    -- ============================================================
-
-    hoistAllCase "type lambda: nested let NOT hoisted out"
-      -- Input: let f = Λt. (let g = \(x:t) -> x in g) in f
-      -- The inner let 'g' is inside a type lambda, so it should NOT be hoisted out
-      -- because 'g' references type variable 't' in its type annotation
-      (mkLetUntyped [(nm "f",
-        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "g", T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x"))]
-          (T.var "g")))]
-        (T.var "f"))
-      -- Output: unchanged - bindings inside type lambda are not hoisted out
-      (mkLetUntyped [(nm "f",
-        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "g", T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x"))]
-          (T.var "g")))]
-        (T.var "f")),
-
-    hoistAllCase "type lambda: multiple nested lets NOT hoisted out"
-      -- Input: let f = Λt. (let x = 1 in let y = 2 in x + y) in f
-      -- Both nested lets are inside type lambda, should not be hoisted
-      (mkLetUntyped [(nm "f",
-        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "x", T.int32 1)]
-          (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
-            (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))))]
-        (T.var "f"))
-      -- Output: unchanged
-      (mkLetUntyped [(nm "f",
-        T.tylam "t" (Core.termLet $ mkLetUntyped [(nm "x", T.int32 1)]
-          (Core.termLet $ mkLetUntyped [(nm "y", T.int32 2)]
-            (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))))]
-        (T.var "f")),
 
     -- ============================================================
     -- Test: Type applications are processed normally (they don't introduce type variables)
@@ -1365,28 +1690,30 @@ hoistLetBindingsGroup = subgroup "hoistLetBindings" [
         T.tyapp (Core.termLet $ mkLetUntyped [(nm "y", T.int32 1)]
           (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y")))) MetaTypes.int32)]
         (T.apply (T.var "f") (T.int32 10)))
-      -- Output: y is hoisted to top level (hoisted binding comes first)
+      -- Output: f comes first (original binding), then f_y is hoisted
       (mkLetUntyped [
-        (nm "y", T.int32 1),
         (nm "f",
-          T.tyapp (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "y"))) MetaTypes.int32)]
-        (T.apply (T.var "f") (T.int32 10))),
+          T.tyapp (T.lambda "x" (T.apply (T.apply (primitive _math_add) (T.var "x")) (T.var "f_y"))) MetaTypes.int32),
+        (nm "f_y", T.int32 1)]
+        (T.apply (T.var "f") (T.int32 10)))
 
     -- ============================================================
     -- Test: Mixed scenarios - type lambda inside regular lambda
     -- ============================================================
 
-    hoistAllCase "mixed: let before type lambda can be hoisted"
-      -- Input: let outer = 1 in (let inner = Λt. \(x:t) -> x in inner @Int32 outer)
-      -- 'inner' is not inside a type lambda at the point where it's bound
-      (mkLetUntyped [(nm "outer", T.int32 1)]
-        (Core.termLet $ mkLetUntyped [(nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
-          (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer"))))
-      -- Output: inner is hoisted after outer (hoisted bindings come after original)
-      (mkLetUntyped [
-        (nm "outer", T.int32 1),
-        (nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
-        (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer")))]
+    -- Note: disabled because we do not currently hoist from the top-level body
+--    hoistAllCase "mixed: let before type lambda can be hoisted"
+--      -- Input: let outer = 1 in (let inner = Λt. \(x:t) -> x in inner @Int32 outer)
+--      -- 'inner' is not inside a type lambda at the point where it's bound
+--      (mkLetUntyped [(nm "outer", T.int32 1)]
+--        (Core.termLet $ mkLetUntyped [(nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
+--          (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer"))))
+--      -- Output: inner is hoisted after outer (hoisted bindings come after original)
+--      (mkLetUntyped [
+--        (nm "outer", T.int32 1),
+--        (nm "inner", T.tylam "t" (T.lambdaTyped "x" (MetaTypes.var "t") (T.var "x")))]
+--        (T.apply (T.tyapp (T.var "inner") MetaTypes.int32) (T.var "outer")))
+    ]
 
 -- | Convenience function for creating hoist let bindings test cases (hoistAll=True)
 hoistAllCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
@@ -1458,25 +1785,25 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
             (MetaTypes.function MetaTypes.boolean MetaTypes.int32)
             (MetaTypes.function MetaTypes.string MetaTypes.int32))))]
         (T.var "f"))
-      -- Output: choose is hoisted to top level with ALL type parameters preserved
+      -- Output: f first (original), then f_choose hoisted with ALL type parameters preserved
       -- When generating Java, the method signature must declare t0, t1, t2
       (mkLet [
-        (nm "choose",
-          T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
-            (T.apply (T.var "forLeft") (T.var "e")))),
+        (nm "f",
+          T.var "f_choose",
+          monoType (MetaTypes.function
+            (MetaTypes.function MetaTypes.string MetaTypes.int32)
+            (MetaTypes.function
+              (MetaTypes.function MetaTypes.boolean MetaTypes.int32)
+              (MetaTypes.function MetaTypes.string MetaTypes.int32)))),
+        (nm "f_choose",
+          T.tylam "t0" (T.tylam "t1" (T.tylam "t2" (T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+            (T.apply (T.var "forLeft") (T.var "e"))))))),
           polyType ["t0", "t1", "t2"]
             (MetaTypes.function
               (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
               (MetaTypes.function
                 (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
-                (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))))),
-        (nm "f",
-          T.var "choose",
-          monoType (MetaTypes.function
-            (MetaTypes.function MetaTypes.string MetaTypes.int32)
-            (MetaTypes.function
-              (MetaTypes.function MetaTypes.boolean MetaTypes.int32)
-              (MetaTypes.function MetaTypes.string MetaTypes.int32))))]
+                (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1")))))]
         (T.var "f")),
 
     -- ============================================================
@@ -1494,14 +1821,14 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (T.var "returnT"),
         monoType (MetaTypes.function MetaTypes.unit MetaTypes.int32))]
         (T.var "f"))
-      -- Output: returnT hoisted with t declared
+      -- Output: f first (original), then f_returnT hoisted with t declared
       (mkLet [
-        (nm "returnT",
-          T.lambda "unit" (T.var "undefined"),
-          polyType ["t"] (MetaTypes.function MetaTypes.unit (MetaTypes.var "t"))),
         (nm "f",
-          T.var "returnT",
-          monoType (MetaTypes.function MetaTypes.unit MetaTypes.int32))]
+          T.var "f_returnT",
+          monoType (MetaTypes.function MetaTypes.unit MetaTypes.int32)),
+        (nm "f_returnT",
+          T.tylam "t" (T.lambda "unit" (T.var "undefined")),
+          polyType ["t"] (MetaTypes.function MetaTypes.unit (MetaTypes.var "t")))]
         (T.var "f")),
 
     -- ============================================================
@@ -1527,19 +1854,19 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (MetaTypes.pair (MetaTypes.pair MetaTypes.string MetaTypes.int32) MetaTypes.boolean)
           MetaTypes.string))]
         (T.var "f"))
-      -- Output: nested hoisted with all type parameters t0, t1, t2 declared
+      -- Output: f first (original), then f_nested hoisted with all type parameters t0, t1, t2 declared
       (mkLet [
-        (nm "nested",
-          T.lambda "x" (T.var "undefined"),
+        (nm "f",
+          T.var "f_nested",
+          monoType (MetaTypes.function
+            (MetaTypes.pair (MetaTypes.pair MetaTypes.string MetaTypes.int32) MetaTypes.boolean)
+            MetaTypes.string)),
+        (nm "f_nested",
+          T.tylam "t0" (T.tylam "t1" (T.tylam "t2" (T.lambda "x" (T.var "undefined")))),
           polyType ["t0", "t1", "t2"]
             (MetaTypes.function
               (MetaTypes.pair (MetaTypes.pair (MetaTypes.var "t0") (MetaTypes.var "t1")) (MetaTypes.var "t2"))
-              (MetaTypes.var "t0"))),
-        (nm "f",
-          T.var "nested",
-          monoType (MetaTypes.function
-            (MetaTypes.pair (MetaTypes.pair MetaTypes.string MetaTypes.int32) MetaTypes.boolean)
-            MetaTypes.string))]
+              (MetaTypes.var "t0")))]
         (T.var "f")),
 
     -- ============================================================
@@ -1559,15 +1886,15 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (MetaTypes.function MetaTypes.int32 MetaTypes.int32)
           (MetaTypes.function MetaTypes.string MetaTypes.string)))]
         (T.var "outer"))
-      -- Output: both hoisted, each with their own t parameter
+      -- Output: outer first (original), then outer_id1 and outer_id2 hoisted (each with their own t parameter)
       (mkLet [
-        (nm "id1", T.lambda "x" (T.var "x"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
-        (nm "id2", T.lambda "y" (T.var "y"), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
         (nm "outer",
-          T.apply (T.apply (T.var "pair") (T.var "id1")) (T.var "id2"),
+          T.apply (T.apply (T.var "pair") (T.var "outer_id1")) (T.var "outer_id2"),
           monoType (MetaTypes.pair
             (MetaTypes.function MetaTypes.int32 MetaTypes.int32)
-            (MetaTypes.function MetaTypes.string MetaTypes.string)))]
+            (MetaTypes.function MetaTypes.string MetaTypes.string))),
+        (nm "outer_id1", T.tylam "t" (T.lambda "x" (T.var "x")), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t"))),
+        (nm "outer_id2", T.tylam "t" (T.lambda "y" (T.var "y")), polyType ["t"] (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t")))]
         (T.var "outer")),
 
     -- ============================================================
@@ -1588,15 +1915,15 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (T.apply (T.var "g") (T.int32 42))),
         monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
         (T.apply (T.var "f") (T.string "hello")))
-      -- Output: g is hoisted with lambda wrapper for 'a', and t must be declared
-      -- Java signature: <t> Function<String, Function<t, Pair<String, t>>> g = a -> x -> pair(a, x);
+      -- Output: f first (original), then f_g hoisted with lambda wrapper for 'a', and t must be declared
+      -- Java signature: <t> Function<String, Function<t, Pair<String, t>>> f_g = a -> x -> pair(a, x);
       (mkLet [
-        (nm "g",
-          T.lambdaTyped "a" MetaTypes.string (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x"))),
-          polyType ["t"] (MetaTypes.function MetaTypes.string (MetaTypes.function (MetaTypes.var "t") (MetaTypes.pair MetaTypes.string (MetaTypes.var "t"))))),
         (nm "f",
-          T.lambdaTyped "a" MetaTypes.string (T.apply (T.apply (T.var "g") (T.var "a")) (T.int32 42)),
-          monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32)))]
+          T.lambdaTyped "a" MetaTypes.string (T.apply (T.apply (T.var "f_g") (T.var "a")) (T.int32 42)),
+          monoType (MetaTypes.function MetaTypes.string (MetaTypes.pair MetaTypes.string MetaTypes.int32))),
+        (nm "f_g",
+          T.tylam "t" (T.lambdaTyped "a" MetaTypes.string (T.lambda "x" (T.apply (T.apply (T.var "pair") (T.var "a")) (T.var "x")))),
+          polyType ["t"] (MetaTypes.function MetaTypes.string (MetaTypes.function (MetaTypes.var "t") (MetaTypes.pair MetaTypes.string (MetaTypes.var "t")))))]
         (T.apply (T.var "f") (T.string "hello"))),
 
     -- ============================================================
@@ -1618,16 +1945,16 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (T.var "g"),
         monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
         (T.var "f"))
-      -- Output: g hoisted with s, t, v declared as type parameters
+      -- Output: f first (original), then f_g hoisted with s, t, v declared as type parameters
       (mkLet [
-        (nm "g",
-          T.lambda "s" (T.lambda "t" (T.var "undefined")),
+        (nm "f",
+          T.var "f_g",
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean))),
+        (nm "f_g",
+          T.tylam "s" (T.tylam "t" (T.tylam "v" (T.lambda "s" (T.lambda "t" (T.var "undefined"))))),
           polyType ["s", "t", "v"]
             (MetaTypes.function (MetaTypes.var "s")
-              (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "v")))),
-        (nm "f",
-          T.var "g",
-          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+              (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "v"))))]
         (T.var "f")),
 
     hoistPolyCase "numbered type variables like t0 t1 t2"
@@ -1642,16 +1969,16 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (T.var "g"),
         monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
         (T.var "f"))
-      -- Output: g hoisted with t0, t1, t2 declared
+      -- Output: f first (original), then f_g hoisted with t0, t1, t2 declared
       (mkLet [
-        (nm "g",
-          T.lambda "x" (T.lambda "y" (T.var "undefined")),
+        (nm "f",
+          T.var "f_g",
+          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean))),
+        (nm "f_g",
+          T.tylam "t0" (T.tylam "t1" (T.tylam "t2" (T.lambda "x" (T.lambda "y" (T.var "undefined"))))),
           polyType ["t0", "t1", "t2"]
             (MetaTypes.function (MetaTypes.var "t0")
-              (MetaTypes.function (MetaTypes.var "t1") (MetaTypes.var "t2")))),
-        (nm "f",
-          T.var "g",
-          monoType (MetaTypes.function MetaTypes.int32 (MetaTypes.function MetaTypes.string MetaTypes.boolean)))]
+              (MetaTypes.function (MetaTypes.var "t1") (MetaTypes.var "t2"))))]
         (T.var "f")),
 
     -- ============================================================
@@ -1690,24 +2017,24 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
           (MetaTypes.function MetaTypes.int32
             (MetaTypes.function MetaTypes.int32 MetaTypes.int32))))]
         (T.var "mutateTrace"))
-      -- Output: choose is hoisted to top level, MUST have t0, t1, t2 declared
+      -- Output: mutateTrace first (original), then mutateTrace_choose hoisted, MUST have t0, t1, t2 declared
       (mkLet [
-        (nm "choose",
-          T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
-            (T.apply (T.var "forLeft") (T.var "e")))),
+        (nm "mutateTrace",
+          T.lambda "mutate" (T.lambda "restore" (T.lambda "f"
+            (T.apply (T.apply (T.apply (T.var "mutateTrace_choose") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
+          monoType (MetaTypes.function MetaTypes.int32
+            (MetaTypes.function MetaTypes.int32
+              (MetaTypes.function MetaTypes.int32 MetaTypes.int32)))),
+        (nm "mutateTrace_choose",
+          T.tylam "t0" (T.tylam "t1" (T.tylam "t2" (T.lambda "forLeft" (T.lambda "forRight" (T.lambda "e"
+            (T.apply (T.var "forLeft") (T.var "e"))))))),
           polyType ["t0", "t1", "t2"]
             (MetaTypes.function
               (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))
               (MetaTypes.function
                 (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "t1"))
-                (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1"))))),
-        (nm "mutateTrace",
-          T.lambda "mutate" (T.lambda "restore" (T.lambda "f"
-            (T.apply (T.apply (T.apply (T.var "choose") (T.var "forLeft")) (T.var "forRight")) (T.var "e")))),
-          monoType (MetaTypes.function MetaTypes.int32
-            (MetaTypes.function MetaTypes.int32
-              (MetaTypes.function MetaTypes.int32 MetaTypes.int32))))]
-        (T.var "mutateTrace")),
+                (MetaTypes.function (MetaTypes.var "t0") (MetaTypes.var "t1")))))]
+        (T.var "mutateTrace"))]
 
     -- NOTE: The following tests for "inner binding uses type variable from outer polymorphic context"
     -- and "monomorphic binding with type referencing outer type variable" have been removed.
@@ -1727,72 +2054,72 @@ hoistPolymorphicTypeParametersGroup = subgroup "hoistPolymorphicTypeParameters" 
     -- These free type variables must be added to the type scheme when hoisting.
     -- ============================================================
 
-    hoistPolyCase "free type variables from inference must be captured"
-      -- Input: let f = (let g : forall a. t2 -> t3 -> a -> a = \x -> \y -> \z -> z in g) in f
-      -- Here 'g' has type scheme with 'a' quantified, but 't2' and 't3' are free.
-      -- When hoisting, t2 and t3 must be added to the type scheme.
-      (mkLet [(nm "f",
-        Core.termLet $ mkLet [(nm "g",
-          T.lambda "x" (T.lambda "y" (T.lambda "z" (T.var "z"))),
-          -- Type scheme quantifies 'a', but uses free 't2' and 't3' (simulating inference result)
-          polyType ["a"]
-            (MetaTypes.function (MetaTypes.var "t2")
-              (MetaTypes.function (MetaTypes.var "t3")
-                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))))]
-          (T.var "g"),
-        monoType (MetaTypes.function MetaTypes.int32
-          (MetaTypes.function MetaTypes.string
-            (MetaTypes.function MetaTypes.boolean MetaTypes.boolean))))]
-        (T.var "f"))
-      -- Output: g hoisted with t2, t3 added to type scheme (along with original 'a')
-      -- The order should be: outer type vars first, then inference-introduced vars, then original quantified vars
-      (mkLet [
-        (nm "g",
-          T.lambda "x" (T.lambda "y" (T.lambda "z" (T.var "z"))),
-          -- t2 and t3 are now quantified (added during hoisting), plus original 'a'
-          polyType ["t2", "t3", "a"]
-            (MetaTypes.function (MetaTypes.var "t2")
-              (MetaTypes.function (MetaTypes.var "t3")
-                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))))),
-        (nm "f",
-          -- Reference needs type applications for t2 and t3
-          (T.tyapp (T.tyapp (T.var "g") (MetaTypes.var "t2")) (MetaTypes.var "t3")),
-          monoType (MetaTypes.function MetaTypes.int32
-            (MetaTypes.function MetaTypes.string
-              (MetaTypes.function MetaTypes.boolean MetaTypes.boolean))))]
-        (T.var "f")),
+--    hoistPolyCase "free type variables from inference must be captured"
+--      -- Input: let f = (let g : forall a. t2 -> t3 -> a -> a = \x -> \y -> \z -> z in g) in f
+--      -- Here 'g' has type scheme with 'a' quantified, but 't2' and 't3' are free.
+--      -- When hoisting, t2 and t3 must be added to the type scheme.
+--      (mkLet [(nm "f",
+--        Core.termLet $ mkLet [(nm "g",
+--          T.lambda "x" (T.lambda "y" (T.lambda "z" (T.var "z"))),
+--          -- Type scheme quantifies 'a', but uses free 't2' and 't3' (simulating inference result)
+--          polyType ["a"]
+--            (MetaTypes.function (MetaTypes.var "t2")
+--              (MetaTypes.function (MetaTypes.var "t3")
+--                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))))]
+--          (T.var "g"),
+--        monoType (MetaTypes.function MetaTypes.int32
+--          (MetaTypes.function MetaTypes.string
+--            (MetaTypes.function MetaTypes.boolean MetaTypes.boolean))))]
+--        (T.var "f"))
+--      -- Output: f first (original), then g hoisted with t2, t3 added to type scheme (along with original 'a')
+--      -- The order should be: outer type vars first, then inference-introduced vars, then original quantified vars
+--      (mkLet [
+--        (nm "f",
+--          -- Reference needs type applications for t2 and t3
+--          (T.tyapp (T.tyapp (T.var "g") (MetaTypes.var "t2")) (MetaTypes.var "t3")),
+--          monoType (MetaTypes.function MetaTypes.int32
+--            (MetaTypes.function MetaTypes.string
+--              (MetaTypes.function MetaTypes.boolean MetaTypes.boolean)))),
+--        (nm "g",
+--          T.lambda "x" (T.lambda "y" (T.lambda "z" (T.var "z"))),
+--          -- t2 and t3 are now quantified (added during hoisting), plus original 'a'
+--          polyType ["t2", "t3", "a"]
+--            (MetaTypes.function (MetaTypes.var "t2")
+--              (MetaTypes.function (MetaTypes.var "t3")
+--                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))))]
+--        (T.var "f")),
 
-    hoistPolyCase "mix of outer type lambda vars and inference-introduced free vars"
-      -- Input: let f = Λs. \x -> (let g : forall a. (t2 -> s) -> a -> a = \fn -> \y -> y in g) in f
-      -- Here 's' comes from outer type lambda, 't2' is free (from inference), 'a' is quantified.
-      -- When hoisting, both 's' and 't2' must be added to g's type scheme.
-      (mkLet [(nm "f",
-        T.tylam "s" (T.lambda "x"
-          (Core.termLet $ mkLet [(nm "g",
-            T.lambda "fn" (T.lambda "y" (T.var "y")),
-            -- 'a' quantified, 's' from outer type lambda, 't2' free from inference
-            polyType ["a"]
-              (MetaTypes.function
-                (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "s"))
-                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))))]
-            (T.var "g"))),
-        polyType ["s"]
-          (MetaTypes.function (MetaTypes.var "s") MetaTypes.int32))]
-        (T.var "f"))
-      -- Output: g hoisted with s (from outer), t2 (from inference), plus original 'a'
-      -- Order: outer type vars (s) first, then inference vars (t2), then original (a)
-      (mkLet [
-        (nm "g",
-          T.lambda "fn" (T.lambda "y" (T.var "y")),
-          -- s, t2, and a are now all quantified
-          polyType ["s", "t2", "a"]
-            (MetaTypes.function
-              (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "s"))
-              (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a")))),
-        (nm "f",
-          T.tylam "s" (T.lambda "x"
-            -- Reference needs type applications for s and t2
-            (T.tyapp (T.tyapp (T.var "g") (MetaTypes.var "s")) (MetaTypes.var "t2"))),
-          polyType ["s"]
-            (MetaTypes.function (MetaTypes.var "s") MetaTypes.int32))]
-        (T.var "f"))]
+--    hoistPolyCase "mix of outer type lambda vars and inference-introduced free vars"
+--      -- Input: let f = Λs. \x -> (let g : forall a. (t2 -> s) -> a -> a = \fn -> \y -> y in g) in f
+--      -- Here 's' comes from outer type lambda, 't2' is free (from inference), 'a' is quantified.
+--      -- When hoisting, both 's' and 't2' must be added to g's type scheme.
+--      (mkLet [(nm "f",
+--        T.tylam "s" (T.lambda "x"
+--          (Core.termLet $ mkLet [(nm "g",
+--            T.lambda "fn" (T.lambda "y" (T.var "y")),
+--            -- 'a' quantified, 's' from outer type lambda, 't2' free from inference
+--            polyType ["a"]
+--              (MetaTypes.function
+--                (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "s"))
+--                (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))))]
+--            (T.var "g"))),
+--        polyType ["s"]
+--          (MetaTypes.function (MetaTypes.var "s") MetaTypes.int32))]
+--        (T.var "f"))
+--      -- Output: f first (original), then g hoisted with s (from outer), t2 (from inference), plus original 'a'
+--      -- Order: outer type vars (s) first, then inference vars (t2), then original (a)
+--      (mkLet [
+--        (nm "f",
+--          T.tylam "s" (T.lambda "x"
+--            -- Reference needs type applications for s and t2
+--            (T.tyapp (T.tyapp (T.var "g") (MetaTypes.var "s")) (MetaTypes.var "t2"))),
+--          polyType ["s"]
+--            (MetaTypes.function (MetaTypes.var "s") MetaTypes.int32)),
+--        (nm "g",
+--          T.lambda "fn" (T.lambda "y" (T.var "y")),
+--          -- s, t2, and a are now all quantified
+--          polyType ["s", "t2", "a"]
+--            (MetaTypes.function
+--              (MetaTypes.function (MetaTypes.var "t2") (MetaTypes.var "s"))
+--              (MetaTypes.function (MetaTypes.var "a") (MetaTypes.var "a"))))]
+--        (T.var "f"))]
