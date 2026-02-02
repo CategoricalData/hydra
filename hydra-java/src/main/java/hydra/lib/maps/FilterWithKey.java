@@ -65,28 +65,28 @@ public class FilterWithKey extends PrimitiveFunction {
     }
 
     /**
-     * Filters entries based on key-value predicate.
+     * Filters entries based on a curried key-value predicate (used by generated code).
      * @param <K> the key type
      * @param <V> the value type
-     * @param pred the predicate to test key-value pairs
+     * @param pred the curried predicate: key -> value -> Boolean
      * @return a function that takes a map and returns the filtered map
      */
-    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(BiPredicate<K, V> pred) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Function<K, Function<V, Boolean>> pred) {
         return mp -> apply(pred, mp);
     }
 
     /**
-     * Filters entries based on key-value predicate.
+     * Filters entries based on a curried key-value predicate (used by generated code).
      * @param <K> the key type
      * @param <V> the value type
-     * @param pred the predicate to test key-value pairs
+     * @param pred the curried predicate: key -> value -> Boolean
      * @param mp the map to filter
      * @return the filtered map
      */
-    public static <K, V> Map<K, V> apply(BiPredicate<K, V> pred, Map<K, V> mp) {
+    public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
         Map<K, V> result = new HashMap<>();
         for (Map.Entry<K, V> entry : mp.entrySet()) {
-            if (pred.test(entry.getKey(), entry.getValue())) {
+            if (pred.apply(entry.getKey()).apply(entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }

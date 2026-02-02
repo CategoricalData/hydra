@@ -47,13 +47,14 @@ public class Sort extends PrimitiveFunction {
 
     /**
      * Sorts the list in ascending order.
-     * @param <X> the element type, which must be comparable
+     * @param <X> the element type (expected to be Comparable at runtime)
      * @param lst the list to sort
      * @return the sorted list
      */
-    public static <X extends Comparable<X>> List<X> apply(List<X> lst) {
+    @SuppressWarnings("unchecked")
+    public static <X> List<X> apply(List<X> lst) {
         List<X> result = new ArrayList<>(lst);
-        Collections.sort(result);
+        result.sort((a, b) -> ((Comparable) a).compareTo(b));
         return result;
     }
 }

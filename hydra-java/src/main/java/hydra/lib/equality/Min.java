@@ -44,7 +44,8 @@ public class Min extends PrimitiveFunction {
      * @param left the first value
      * @return a function that takes the second value and returns the minimum
      */
-    public static <A extends Comparable<A>> Function<A, A> apply(A left) {
+    @SuppressWarnings("unchecked")
+    public static <A> Function<A, A> apply(A left) {
         return right -> apply(left, right);
     }
 
@@ -55,7 +56,8 @@ public class Min extends PrimitiveFunction {
      * @param right the second value
      * @return the minimum of the two values
      */
-    public static <A extends Comparable<A>> A apply(A left, A right) {
-        return left.compareTo(right) <= 0 ? left : right;
+    @SuppressWarnings("unchecked")
+    public static <A> A apply(A left, A right) {
+        return ((Comparable) left).compareTo(right) <= 0 ? left : right;
     }
 }
