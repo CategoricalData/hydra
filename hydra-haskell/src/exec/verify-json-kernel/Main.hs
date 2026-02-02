@@ -60,10 +60,10 @@ termToType g term = case DecodeCore.type_ g term of
 buildSchemaMap :: Graph -> M.Map Name Type
 buildSchemaMap g = case graphSchema g of
   Nothing -> M.empty
-  Just schemaGraph -> M.fromList $ concatMap (extractType schemaGraph) $ M.toList $ graphElements schemaGraph
+  Just schemaGraph -> M.fromList $ concatMap (extractType schemaGraph) $ graphElements schemaGraph
   where
-    extractType sg (name, binding) = case termToType sg (bindingTerm binding) of
-      Just typ -> [(name, stripTypeAnnotationsTop typ)]
+    extractType sg binding = case termToType sg (bindingTerm binding) of
+      Just typ -> [(bindingName binding, stripTypeAnnotationsTop typ)]
       Nothing -> []
 
     -- Strip only top-level annotations
