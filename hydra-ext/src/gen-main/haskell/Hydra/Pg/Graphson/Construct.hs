@@ -21,7 +21,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-aggregateMap :: (Ord t0) => ([(t0, t1)] -> M.Map t0 [t1])
+aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
 aggregateMap pairs = (Lists.foldl (\m -> \p ->  
   let k = (Pairs.first p)
   in  

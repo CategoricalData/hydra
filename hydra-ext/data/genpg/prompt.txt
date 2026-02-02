@@ -1,0 +1,623 @@
+I would like you to help me map my tabular data into a strongly-typed property graph using Hydra.
+I will first help you understand the framework by giving you the following:
+(1) Some sample CSV data from a Sales domain
+(2) A lightweight database schema for the Sales data, called generatedTableSchemas,
+(3) A well-designed property graph schema for the Sales data, called generatedGraphSchema, and finally
+(4) A well-designed mapping for the Sales data, called generatedGraphMapping.
+After that, I will give you (5), a sample of the actual CSV data I need to map into the graph.
+Please give me three files: DatabaseSchema.hs, GraphSchema.hs and Mapping.hs, all in the package
+Hydra.Ext.Demos.GenPG.Generated, in the directory src/gen-main/haskell/Hydra.Ext.Demos/GenPG/Generated.
+Feel free to ask any clarifying questions as needed before you generate the files.
+
+################################################################################
+1. SAMPLE OF SALES DATA
+
+Found 9 CSV files:
+
+==================================================
+File: meetings.csv
+==================================================
+Line 1: ['id', 'customer_id', 'employee_id', 'interaction_date', 'notes', 'duration_minutes', 'follow_up_required', 'customer_initiated']
+Line 2: ['1', '1', '2', '2025-02-15', 'Discussed the improbability of their newest product line', '45', 'true', 'false']
+Line 3: ['2', '2', '4', '2025-04-22', 'Proposed special menu items for Time Travelers Week', '60', 'true', 'false']
+Line 4: ['3', '3', '1', '2025-03-15', 'Annual planetary design review', '120', 'true', 'false']
+Line 5: ['4', '5', '6', '2025-03-05', 'Discussion about towel promotional event', '60', 'true', 'false']
+Line 6: []
+... and 1 more lines.
+
+==================================================
+File: emails.csv
+==================================================
+Line 1: ['id', 'customer_id', 'employee_id', 'interaction_date', 'notes', 'duration_minutes', 'follow_up_required', 'customer_initiated']
+Line 2: ['1', '3', '6', '2025-04-05', 'Sent custom planet designs with fjords', '30', 'true', 'false']
+Line 3: ['2', '1', '5', '2025-02-18', 'Complained about door personality modules', '10', 'true', 'true']
+Line 4: ['3', '2', '3', '2025-03-20', 'Request for restaurant menu samples', '', 'false', 'true']
+Line 5: ['4', '4', '7', '2025-02-28', 'Poetry submission for review', '', 'false', 'true']
+Line 6: []
+... and 1 more lines.
+
+==================================================
+File: customers.csv
+==================================================
+Line 1: ['customer_id', 'company_name', 'contact_name', 'email', 'phone']
+Line 2: ['1', 'Sirius Cybernetics Corporation', 'Hactar', 'hactar@sirius.com', '+42-5551234']
+Line 3: ['2', 'Milliways Restaurant', 'Max Quordlepleen', 'max@endofuniverse.com', '+42-5557890']
+Line 4: ['3', 'Magrathean Planetary Design', 'Deep Thought', 'thought@magrathea.com', '']
+Line 5: ['4', 'Vogon Poetry Appreciation', 'Prostetnic Jeltz', 'poetry@vogon.gov', '+42-5552468']
+Line 6: ['5', 'Betelgeusian Trading Co.', 'Hotblack Desiato', '', '+42-5551357']
+... and 1 more lines.
+
+==================================================
+File: products.csv
+==================================================
+Line 1: ['product_id', 'product_name', 'price', 'category_name', 'since_date', 'is_primary']
+Line 2: ['1', 'Infinite Improbability Drive', '999999.99', 'Improbability Devices', '2024-01-15', 'true']
+Line 3: ['2', "Hitchhiker's Guide Mark II", '42.00', 'Guide Editions', '2023-11-30', 'true']
+Line 4: ['3', 'Super-Absorbent Towel', '19.99', 'Towels', '', 'true']
+Line 5: ['4', 'Babel Fish Translator', '149.50', 'Babel Fish Products', '2024-02-20', 'true']
+Line 6: ['5', 'Perfect Cup of Tea Simulator', '239.95', 'Nutrimatic Machines', '2023-09-05', 'true']
+Line 7: ['6', 'Pan Galactic Gargle Blaster Kit', '59.99', 'Nutrimatic Machines', '2023-08-12', 'true']
+Line 8: ['7', 'Electronic Thumb', '29.95', 'Improbability Devices', '2022-03-18', 'false']
+Line 9: ['8', 'Digital Watch (Amazingly Complicated)', '24.95', 'Improbability Devices', '', 'true']
+Line 10: ['9', 'Nutrimatic Drink Dispenser', '', 'Nutrimatic Machines', '2023-01-08', 'true']
+... and 5 more lines.
+
+==================================================
+File: departments.csv
+==================================================
+Line 1: ['department_id', 'department_name', 'parent_department_id', 'parent_department_since']
+Line 2: ['1', 'Executive Office', '', '']
+Line 3: ['2', 'Research & Development', '1', '1980-01-15']
+Line 4: ['3', 'Field Research', '2', '1981-03-22']
+Line 5: ['4', 'Robotics', '2', '1982-05-10']
+Line 6: ['5', 'Custom Design', '', '']
+Line 7: ['6', 'Megadodo Publications', '', '']
+Line 8: ['7', 'Vogon Constructor Fleet', '6', '1990-08-30']
+Line 9: ['8', 'Restaurant Division', '', '']
+Line 10: ['9', 'Marketing', '1', '1983-11-05']
+... and 5 more lines.
+
+==================================================
+File: calls.csv
+==================================================
+Line 1: ['id', 'customer_id', 'employee_id', 'interaction_date', 'notes', 'duration_minutes', 'follow_up_required', 'customer_initiated']
+Line 2: ['1', '5', '3', '2025-01-10', 'Explained the importance of carrying towels in their stores', '15', 'false', 'true']
+Line 3: ['2', '4', '8', '2025-03-30', 'Listened to poetry (reluctantly)', '90', '', 'true']
+Line 4: ['3', '1', '3', '2025-03-12', 'Technical support for malfunctioning doors', '35', 'true', 'true']
+Line 5: ['4', '2', '1', '2025-03-25', 'Reservation inquiry for end of universe party', '25', 'false', 'true']
+
+==================================================
+File: sale_items.csv
+==================================================
+Line 1: ['sale_item_id', 'sale_id', 'product_id', 'quantity', 'item_price', 'item_order', 'discount_applied', 'warranty_period']
+Line 2: ['1', '1', '3', '1', '19.99', '1', '0.00', '30']
+Line 3: ['2', '1', '7', '2', '29.95', '2', '5.00', '90']
+Line 4: ['3', '1', '8', '1', '24.95', '3', '', '180']
+Line 5: ['4', '2', '1', '1', '999999.99', '1', '0.00', '3650']
+Line 6: ['5', '2', '9', '1', '399.99', '2', '50.00', '365']
+Line 7: ['6', '3', '2', '1', '42.00', '1', '0.00', '1825']
+Line 8: ['7', '4', '1', '1', '999999.99', '1', '1000.00', '7300']
+Line 9: ['8', '5', '5', '1', '239.95', '1', '', '365']
+Line 10: ['9', '5', '6', '2', '59.99', '2', '10.00', '90']
+... and 6 more lines.
+
+==================================================
+File: employees.csv
+==================================================
+Line 1: ['employee_id', 'first_name', 'last_name', 'email', 'hire_date', 'manager_id', 'department_id', 'management_since_date', 'department_join_date', 'department_role']
+Line 2: ['1', 'Zaphod', 'Beeblebrox', 'z.beeblebrox@heartofgold.com', '1979-10-12', '', '1', '', '1979-10-12', 'President']
+Line 3: ['2', 'Arthur', 'Dent', 'a.dent@heartofgold.com', '2005-06-22', '1', '2', '2005-06-22', '2005-06-22', 'Researcher']
+Line 4: ['3', 'Ford', 'Prefect', 'f.prefect@heartofgold.com', '1980-03-08', '1', '3', '1980-03-08', '1980-03-08', 'Field Agent']
+Line 5: ['4', 'Trillian', 'Astra', 't.astra@heartofgold.com', '1997-11-30', '1', '2', '1997-11-30', '1997-11-30', 'Lead Scientist']
+Line 6: ['5', 'Marvin', 'Android', 'm.android@heartofgold.com', '1981-02-14', '4', '4', '', '1981-02-14', 'Prototype Tester']
+Line 7: ['6', 'Slartibartfast', 'Magrathea', 's.magrathea@heartofgold.com', '', '3', '5', '1980-01-10', '', 'Fjord Designer']
+Line 8: ['7', 'Zarniwoop', 'Vann', 'z.vann@heartofgold.com', '1984-09-27', '', '6', '', '1984-09-27', 'Editor-in-Chief']
+Line 9: ['8', 'Prostetnic', 'Jeltz', 'p.jeltz@vogon.gov', '2010-12-05', '7', '7', '2010-12-05', '2010-12-05', '']
+... and 4 more lines.
+
+==================================================
+File: sales.csv
+==================================================
+Line 1: ['sale_id', 'employee_id', 'customer_id', 'sale_date', 'total_amount', 'commission_rate', 'sales_channel', 'payment_method', 'satisfaction_rating', 'is_repeat_customer']
+Line 2: ['1', '3', '5', '2025-01-15', '189.97', '0.05', 'Online', 'Credit', '5', 'true']
+Line 3: ['2', '2', '1', '2025-02-22', '1000229.93', '0.10', 'Direct', 'Bank Transfer', '4', 'false']
+Line 4: ['3', '4', '3', '2025-03-05', '42.00', '0.03', 'Phone', 'Credit', '', 'true']
+Line 5: ['4', '6', '3', '2025-04-10', '999999.99', '0.15', 'Direct', 'Bank Transfer', '5', 'true']
+Line 6: ['5', '3', '2', '2025-05-01', '', '0.05', '', 'Credit', '4', '']
+... and 1 more lines.
+
+
+################################################################################
+2. SALES DATABASE SCHEMA
+
+module Hydra.Ext.Demos.GenPG.ExampleDatabaseSchema where
+
+import Hydra.Dsl.Tabular (TableType, tableType, columnType)
+import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+
+employeesTableType :: TableType
+employeesTableType = tableType "employees.csv" [
+  columnType "employee_id" int32,
+  columnType "first_name" string,
+  columnType "last_name" string,
+  columnType "email" string,
+  columnType "hire_date" string,
+  columnType "manager_id" int32,
+  columnType "department_id" int32,
+  columnType "management_since_date" string,
+  columnType "department_join_date" string,
+  columnType "department_role" string]
+
+departmentsTableType :: TableType
+departmentsTableType = tableType "departments.csv" [
+  columnType "department_id" int32,
+  columnType "department_name" string,
+  columnType "parent_department_id" int32,
+  columnType "parent_department_since" string]
+
+customersTableType :: TableType
+customersTableType = tableType "customers.csv" [
+  columnType "customer_id" int32,
+  columnType "company_name" string,
+  columnType "contact_name" string,
+  columnType "email" string,
+  columnType "phone" string]
+
+productsTableType :: TableType
+productsTableType = tableType "products.csv" [
+  columnType "product_id" int32,
+  columnType "product_name" string,
+  columnType "price" float64,
+  columnType "category_name" string,
+  columnType "since_date" string,
+  columnType "is_primary" boolean]
+
+salesTableType :: TableType
+salesTableType = tableType "sales.csv" [
+  columnType "sale_id" int32,
+  columnType "employee_id" int32,
+  columnType "customer_id" int32,
+  columnType "sale_date" string,
+  columnType "total_amount" float64,
+  columnType "commission_rate" float64,
+  columnType "sales_channel" string,
+  columnType "payment_method" string,
+  columnType "satisfaction_rating" int32,
+  columnType "is_repeat_customer" boolean]
+
+saleItemsTableType :: TableType
+saleItemsTableType = tableType "sale_items.csv" [
+  columnType "sale_item_id" int32,
+  columnType "sale_id" int32,
+  columnType "product_id" int32,
+  columnType "quantity" int32,
+  columnType "item_price" float64,
+  columnType "item_order" int32,
+  columnType "discount_applied" float64,
+  columnType "warranty_period" int32]
+
+callsTableType :: TableType
+callsTableType = tableType "calls.csv" [
+  columnType "id" int32,
+  columnType "customer_id" int32,
+  columnType "employee_id" int32,
+  columnType "interaction_date" string,
+  columnType "notes" string,
+  columnType "duration_minutes" int32,
+  columnType "follow_up_required" boolean,
+  columnType "customer_initiated" boolean]
+
+emailsTableType :: TableType
+emailsTableType = tableType "emails.csv" [
+  columnType "id" int32,
+  columnType "customer_id" int32,
+  columnType "employee_id" int32,
+  columnType "interaction_date" string,
+  columnType "notes" string,
+  columnType "duration_minutes" int32,
+  columnType "follow_up_required" boolean,
+  columnType "customer_initiated" boolean]
+
+meetingsTableType :: TableType
+meetingsTableType = tableType "meetings.csv" [
+  columnType "id" int32,
+  columnType "customer_id" int32,
+  columnType "employee_id" int32,
+  columnType "interaction_date" string,
+  columnType "notes" string,
+  columnType "duration_minutes" int32,
+  columnType "follow_up_required" boolean,
+  columnType "customer_initiated" boolean]
+
+salesTableSchemas :: [TableType]
+salesTableSchemas = [
+  employeesTableType,
+  departmentsTableType,
+  customersTableType,
+  productsTableType,
+  salesTableType,
+  saleItemsTableType,
+  callsTableType,
+  emailsTableType,
+  meetingsTableType]
+
+
+################################################################################
+3. SALES GRAPH SCHEMA
+
+module Hydra.Ext.Demos.GenPG.ExampleGraphSchema where
+
+import Hydra.Ext.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
+import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+
+dateType = string
+decimalType = float64
+
+-- Vertex labels -----------------------
+
+employeeVertexLabel = "Employee"
+departmentVertexLabel = "Department"
+customerVertexLabel = "Customer"
+productVertexLabel = "Product"
+saleVertexLabel = "Sale"
+saleItemVertexLabel = "SaleItem"
+customerInteractionVertexLabel = "CustomerInteraction"
+
+-- Edge labels -------------------------
+
+managesEdgeLabel = "manages"
+belongsToEdgeLabel = "belongsTo"
+parentDepartmentEdgeLabel = "parentDepartment"
+soldEdgeLabel = "sold"
+purchasedEdgeLabel = "purchased"
+includesEdgeLabel = "includes"
+containsProductEdgeLabel = "containsProduct"
+employeeEdgeLabel = "employee"
+customerEdgeLabel = "customer"
+
+-- Interaction types -------------------
+
+callInteractionType = "Call"
+emailInteractionType = "Email"
+meetingInteractionType = "Meeting"
+
+-- Graph Schema ------------------------
+
+salesGraphSchema = schema vertexTypes edgeTypes
+  where
+    vertexTypes = [
+      vertexType employeeVertexLabel int32 [
+        required $ propertyType "firstName" string,
+        required $ propertyType "lastName" string,
+        required $ propertyType "email" string,
+        propertyType "hireDate" dateType],
+
+      vertexType departmentVertexLabel int32 [
+        required $ propertyType "name" string],
+
+      vertexType customerVertexLabel int32 [
+        required $ propertyType "companyName" string,
+        propertyType "contactName" string,
+        propertyType "email" string,
+        propertyType "phone" string],
+
+      vertexType productVertexLabel int32 [
+        required $ propertyType "name" string,
+        propertyType "price" decimalType],
+
+      vertexType saleVertexLabel int32 [
+        required $ propertyType "saleDate" dateType,
+        propertyType "totalAmount" decimalType],
+
+      vertexType saleItemVertexLabel int32 [
+        propertyType "quantity" int32,
+        propertyType "itemPrice" decimalType],
+
+      vertexType customerInteractionVertexLabel string [
+        required $ propertyType "interactionDate" dateType,
+        required $ propertyType "interactionType" string,
+        propertyType "notes" string,
+        propertyType "durationMinutes" int32,
+        propertyType "followUpRequired" boolean,
+        propertyType "customerInitiated" boolean]]
+
+    edgeTypes = [
+      simpleEdgeType managesEdgeLabel employeeVertexLabel employeeVertexLabel [
+        propertyType "sinceDate" dateType],
+
+      simpleEdgeType belongsToEdgeLabel employeeVertexLabel departmentVertexLabel [
+        required $ propertyType "joinDate" dateType,
+        propertyType "role" string],
+
+      simpleEdgeType parentDepartmentEdgeLabel departmentVertexLabel departmentVertexLabel [
+        propertyType "since" dateType],
+
+      simpleEdgeType "hasCategory" productVertexLabel "Category" [
+        propertyType "sinceDate" dateType,
+        required $ propertyType "isPrimary" boolean],
+
+      simpleEdgeType soldEdgeLabel employeeVertexLabel saleVertexLabel [
+        required $ propertyType "commissionRate" float64,
+        propertyType "salesChannel" string],
+
+      simpleEdgeType purchasedEdgeLabel customerVertexLabel saleVertexLabel [
+        required $ propertyType "paymentMethod" string,
+        propertyType "satisfactionRating" int32,
+        propertyType "isRepeatCustomer" boolean],
+
+      simpleEdgeType includesEdgeLabel saleVertexLabel saleItemVertexLabel [
+        required $ propertyType "itemOrder" int32,
+        propertyType "discountApplied" float64],
+
+      simpleEdgeType containsProductEdgeLabel saleItemVertexLabel productVertexLabel [
+        propertyType "warrantyPeriodYears" int32],
+
+      simpleEdgeType employeeEdgeLabel customerInteractionVertexLabel employeeVertexLabel [],
+
+      simpleEdgeType customerEdgeLabel customerInteractionVertexLabel customerVertexLabel []]
+
+
+################################################################################
+4. SALES MAPPING
+
+module Hydra.Ext.Demos.GenPG.ExampleMapping where
+
+import Hydra.Core (Term)
+import Hydra.Pg.Model (Edge, Vertex)
+import Hydra.Formatting (decapitalize)
+import Hydra.Phantoms (TTerm)
+import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Ext.Demos.GenPG.ExampleGraphSchema
+
+-- Helpers -----------------------
+
+labeledIntId :: String -> TTerm (r -> Maybe Int) -> TTerm (r -> String)
+labeledIntId itype iid = lambda "r" $ Optionals.map
+  (lambda "i" $ Strings.concat [
+    string $ decapitalize itype,
+    string "_",
+    Literals.showInt32 $ var "i"])
+  (iid @@ var "r")
+
+interactionVertex :: String -> String -> Vertex Term
+interactionVertex tableName itype = vertex tableName customerInteractionVertexLabel
+  (labeledIntId itype (column "id"))
+  [property "interactionType" $ constant $ just $ string itype,
+   property "interactionDate" $ column "interaction_date",
+   property "notes" $ column "notes",
+   property "durationMinutes" $ column "duration_minutes",
+   property "followUpRequired" $ column "follow_up_required",
+   property "customerInitiated" $ column "customer_initiated"]
+
+employeeEdge :: String -> String -> Edge Term
+employeeEdge tableName itype = edgeNoId tableName employeeEdgeLabel
+  (labeledIntId itype (column "id"))
+  (labeledIntId employeeVertexLabel $ column "employee_id")
+  []
+
+customerEdge :: String -> String -> Edge Term
+customerEdge tableName itype = edgeNoId tableName customerEdgeLabel
+  (labeledIntId itype (column "id"))
+  (labeledIntId customerVertexLabel $ column "customer_id")
+  []
+
+-- Mapping -----------------------------
+
+salesGraph :: LazyGraph Term
+salesGraph = graph
+  -- Vertices
+  [vertex "employees.csv" employeeVertexLabel (labeledIntId employeeVertexLabel $ column "employee_id") [
+     property "firstName" $ column "first_name",
+     property "lastName" $ column "last_name",
+     property "email" $ column "email",
+     property "hireDate" $ column "hire_date"],
+
+   vertex "departments.csv" departmentVertexLabel (labeledIntId departmentVertexLabel $ column "department_id") [
+     property "name" $ column "department_name"],
+
+   vertex "customers.csv" customerVertexLabel (labeledIntId customerVertexLabel $ column "customer_id") [
+     property "companyName" $ column "company_name",
+     property "contactName" $ column "contact_name",
+     property "email" $ column "email",
+     property "phone" $ column "phone"],
+
+   vertex "products.csv" productVertexLabel (labeledIntId productVertexLabel $ column "product_id") [
+     property "name" $ column "product_name",
+     property "price" $ column "price"],
+
+   vertex "sales.csv" saleVertexLabel (labeledIntId saleVertexLabel $ column "sale_id") [
+     property "saleDate" $ column "sale_date",
+     property "totalAmount" $ column "total_amount"],
+
+   vertex "sale_items.csv" saleItemVertexLabel (labeledIntId saleItemVertexLabel $ column "sale_item_id") [
+     property "quantity" $ column "quantity",
+     property "itemPrice" $ column "item_price"],
+
+   interactionVertex "calls.csv" callInteractionType,
+   interactionVertex "emails.csv" emailInteractionType,
+   interactionVertex "meetings.csv" meetingInteractionType]
+
+  -- Edges
+  [edgeNoId "employees.csv" managesEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "manager_id")
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     [property "sinceDate" $ column "management_since_date"],
+
+   edgeNoId "employees.csv" belongsToEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     (labeledIntId departmentVertexLabel $ column "department_id")
+     [property "joinDate" $ column "department_join_date",
+      property "role" $ column "department_role"],
+
+   edgeNoId "departments.csv" parentDepartmentEdgeLabel
+     (labeledIntId departmentVertexLabel $ column "department_id")
+     (labeledIntId departmentVertexLabel $ column "parent_department_id")
+     [property "since" $ column "parent_department_since"],
+
+   edgeNoId "sales.csv" soldEdgeLabel
+     (labeledIntId employeeVertexLabel $ column "employee_id")
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     [property "commissionRate" $ column "commission_rate",
+      property "salesChannel" $ column "sales_channel"],
+
+   edgeNoId "sales.csv" purchasedEdgeLabel
+     (labeledIntId customerVertexLabel $ column "customer_id")
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     [property "paymentMethod" $ column "payment_method",
+      property "satisfactionRating" $ column "satisfaction_rating",
+      property "isRepeatCustomer" $ column "is_repeat_customer"],
+
+   edgeNoId "sale_items.csv" includesEdgeLabel
+     (labeledIntId saleVertexLabel $ column "sale_id")
+     (labeledIntId saleItemVertexLabel $ column "sale_item_id")
+     [property "itemOrder" $ column "item_order",
+      property "discountApplied" $ column "discount_applied"],
+
+   edgeNoId "sale_items.csv" containsProductEdgeLabel
+     (labeledIntId saleItemVertexLabel $ column "sale_item_id")
+     (labeledIntId productVertexLabel $ column "product_id")
+     [property "warrantyPeriodYears" $ column "warranty_period"],
+
+   employeeEdge "calls.csv" callInteractionType,
+   customerEdge "calls.csv" callInteractionType,
+   employeeEdge "emails.csv" emailInteractionType,
+   customerEdge "emails.csv" emailInteractionType,
+   employeeEdge "meetings.csv" meetingInteractionType,
+   customerEdge "meetings.csv" meetingInteractionType]
+
+
+################################################################################
+SAMPLE OF NEW DOMAIN DATA
+
+Found 9 CSV files:
+
+==================================================
+File: appointments.csv
+==================================================
+Line 1: ['appointment_id', 'patient_id', 'doctor_id', 'appointment_date', 'appointment_time', 'duration_minutes', 'status', 'room_number', 'appointment_type', 'follow_up_required', 'notes']
+Line 2: ['1', '3', '2', '2023-04-10', '09:30', '30', 'Completed', 'A301', 'Consultation', 'true', 'Patient experiencing abdominal pain']
+Line 3: ['2', '7', '5', '2023-04-10', '10:00', '45', 'Completed', 'A405', 'Check-up', 'false', 'Routine annual cardiac check-up']
+Line 4: ['3', '1', '3', '2023-04-10', '11:15', '30', 'Completed', 'A204', 'Follow-up', 'true', 'Review of blood test results']
+Line 5: ['4', '10', '4', '2023-04-10', '14:00', '60', 'Completed', 'C403', 'New Patient', 'true', 'Initial consultation for chronic headaches']
+Line 6: ['5', '5', '6', '2023-04-11', '09:00', '30', 'Scheduled', 'D105', 'Follow-up', 'false', 'Post-treatment evaluation']
+Line 7: ['6', '9', '1', '2023-04-11', '10:30', '45', 'Scheduled', 'B102', 'Diagnostic', 'true', 'Mysterious recurring symptoms']
+Line 8: ['7', '2', '8', '2023-04-11', '13:00', '60', 'Scheduled', 'C205', 'Procedure', 'true', 'Evaluation for knee replacement']
+Line 9: ['8', '11', '9', '2023-04-12', '09:15', '30', 'Scheduled', 'D107', 'Consultation', 'false', 'Pediatric wellness check']
+Line 10: ['9', '8', '7', '2023-04-12', '11:00', '45', 'Scheduled', 'E103', 'Emergency', 'true', 'Follow-up from ER visit']
+... and 10 more lines.
+
+==================================================
+File: pharmacy.csv
+==================================================
+Line 1: ['pharmacy_id', 'pharmacy_name', 'address', 'phone', 'email', 'hours_of_operation', 'is_hospital_affiliated', 'manager_name']
+Line 2: ['1', 'General Hospital Pharmacy', '123 Hospital Ave, Springfield', '555-2001', 'ghpharmacy@hospital.com', '24/7', 'true', 'Janet Miller']
+Line 3: ['2', 'MedPlus Pharmacy', '456 Health St, Springfield', '555-2002', 'info@medplus.com', 'Mon-Sat 8AM-9PM', 'false', 'Robert Chen']
+Line 4: ['3', 'Wellness Drugs', '789 Wellness Blvd, Springfield', '555-2003', 'rx@wellnessdrugs.com', 'Mon-Sun 7AM-10PM', 'false', 'Maria Santos']
+Line 5: ['4', 'Care Pharmacy', '101 Care Lane, Springfield', '555-2004', 'care@carepharmacy.com', 'Mon-Fri 8AM-8PM', 'true', 'David Wilson']
+
+==================================================
+File: medical_tests.csv
+==================================================
+Line 1: ['test_id', 'patient_id', 'doctor_id', 'test_name', 'test_date', 'result_date', 'result_status', 'department_id', 'technician_id', 'priority', 'notes']
+Line 2: ['1', '3', '2', 'Complete Blood Count', '2023-04-10', '2023-04-11', 'Completed', '3', '2', 'Normal', 'Within normal range']
+Line 3: ['2', '1', '3', 'Blood Pressure', '2023-04-10', '2023-04-10', 'Completed', '3', '1', 'Urgent', 'Elevated - 145/95']
+Line 4: ['3', '10', '4', 'MRI - Brain', '2023-04-10', '2023-04-12', 'Completed', '4', '5', 'High', 'Small lesion identified']
+Line 5: ['4', '7', '5', 'Echocardiogram', '2023-04-10', '2023-04-11', 'Completed', '5', '3', 'Normal', 'Normal heart function']
+Line 6: ['5', '5', '6', 'Strep Test', '2023-04-11', '2023-04-11', 'Completed', '6', '4', 'Normal', 'Positive']
+Line 7: ['6', '9', '1', 'CT Scan - Abdomen', '2023-04-11', '2023-04-12', 'Completed', '2', '5', 'High', 'Inflammation noted']
+Line 8: ['7', '2', '8', 'X-Ray - Knee', '2023-04-11', '2023-04-11', 'Completed', '8', '6', 'Normal', 'Severe osteoarthritis']
+Line 9: ['8', '11', '9', 'Lung Function Test', '2023-04-12', '2023-04-13', 'Pending', '6', '4', 'Normal', '']
+Line 10: ['9', '8', '7', 'Blood Alcohol Level', '2023-04-12', '2023-04-12', 'Completed', '7', '1', 'Urgent', 'Elevated']
+... and 10 more lines.
+
+==================================================
+File: billing.csv
+==================================================
+Line 1: ['billing_id', 'patient_id', 'appointment_id', 'service_description', 'date_billed', 'amount', 'insurance_coverage', 'patient_responsibility', 'payment_status', 'payment_date']
+Line 2: ['1', '3', '1', 'Initial Consultation', '2023-04-10', '250.00', '200.00', '50.00', 'Paid', '2023-04-15']
+Line 3: ['2', '7', '2', 'Cardiac Evaluation', '2023-04-10', '350.00', '280.00', '70.00', 'Paid', '2023-04-20']
+Line 4: ['3', '1', '3', 'Follow-up Visit', '2023-04-10', '150.00', '120.00', '30.00', 'Paid', '2023-04-18']
+Line 5: ['4', '10', '4', 'Neurological Assessment', '2023-04-10', '400.00', '320.00', '80.00', 'Pending', '']
+Line 6: ['5', '3', '1', 'Complete Blood Count', '2023-04-10', '75.00', '60.00', '15.00', 'Paid', '2023-04-15']
+Line 7: ['6', '1', '3', 'Blood Pressure Test', '2023-04-10', '50.00', '40.00', '10.00', 'Paid', '2023-04-18']
+Line 8: ['7', '10', '4', 'MRI - Brain', '2023-04-10', '1200.00', '960.00', '240.00', 'Pending', '']
+Line 9: ['8', '7', '2', 'Echocardiogram', '2023-04-10', '550.00', '440.00', '110.00', 'Paid', '2023-04-20']
+Line 10: ['9', '5', '5', 'Strep Test', '2023-04-11', '85.00', '68.00', '17.00', 'Pending', '']
+... and 8 more lines.
+
+==================================================
+File: doctors.csv
+==================================================
+Line 1: ['doctor_id', 'first_name', 'last_name', 'specialization', 'email', 'phone', 'hire_date', 'department_id', 'license_number', 'is_resident', 'supervisor_id']
+Line 2: ['1', 'Gregory', 'House', 'Diagnostics', 'ghouse@hospital.com', '555-1001', '2019-05-15', '2', 'MD12345', 'false', '']
+Line 3: ['2', 'Meredith', 'Grey', 'General Surgery', 'mgrey@hospital.com', '555-1002', '2020-03-10', '1', 'MD67890', 'false', '']
+Line 4: ['3', 'Miranda', 'Bailey', 'Internal Medicine', 'mbailey@hospital.com', '555-1003', '2018-11-22', '3', 'MD24680', 'false', '']
+Line 5: ['4', 'Derek', 'Shepherd', 'Neurology', 'dshepherd@hospital.com', '555-1004', '2019-08-05', '4', 'MD13579', 'false', '']
+Line 6: ['5', 'Christina', 'Yang', 'Cardiology', 'cyang@hospital.com', '555-1005', '2020-01-17', '5', 'MD97531', 'false', '']
+Line 7: ['6', 'Alex', 'Karev', 'Pediatrics', 'akarev@hospital.com', '555-1006', '2021-04-28', '6', 'MD86420', 'false', '']
+Line 8: ['7', 'Owen', 'Hunt', 'Emergency Medicine', 'ohunt@hospital.com', '555-1007', '2019-12-03', '7', 'MD31415', 'false', '']
+Line 9: ['8', 'Callie', 'Torres', 'Orthopedics', 'ctorres@hospital.com', '555-1008', '2020-06-21', '8', 'MD27182', 'false', '1']
+Line 10: ['9', 'Arizona', 'Robbins', 'Pediatric Surgery', 'arobbins@hospital.com', '555-1009', '2021-02-14', '6', 'MD16180', 'false', '6']
+... and 8 more lines.
+
+==================================================
+File: prescriptions.csv
+==================================================
+Line 1: ['prescription_id', 'patient_id', 'doctor_id', 'medication_name', 'dosage', 'frequency', 'start_date', 'end_date', 'refill_count', 'pharmacy_id', 'is_controlled', 'notes']
+Line 2: ['1', '3', '2', 'Ibuprofen', '400mg', 'Every 6 hours', '2023-04-10', '2023-04-17', '0', '3', 'false', 'Take with food']
+Line 3: ['2', '1', '3', 'Lisinopril', '10mg', 'Once daily', '2023-04-10', '2023-05-10', '2', '1', 'false', 'Take in the morning']
+Line 4: ['3', '10', '4', 'Sumatriptan', '50mg', 'As needed', '2023-04-10', '2023-07-10', '3', '2', 'false', 'Take at onset of migraine']
+Line 5: ['4', '7', '5', 'Atorvastatin', '20mg', 'Once daily', '2023-04-10', '2023-10-10', '5', '1', 'false', 'Take in the evening']
+Line 6: ['5', '5', '6', 'Amoxicillin', '500mg', 'Every 8 hours', '2023-04-11', '2023-04-18', '0', '3', 'false', 'Complete full course']
+Line 7: ['6', '9', '1', 'Prednisone', '20mg', 'Once daily', '2023-04-11', '2023-04-25', '0', '4', 'false', 'Taper down as directed']
+Line 8: ['7', '2', '8', 'Celecoxib', '200mg', 'Twice daily', '2023-04-11', '2023-04-25', '1', '2', 'true', 'Take with food']
+Line 9: ['8', '11', '9', 'Albuterol', '90mcg', 'As needed', '2023-04-12', '2023-07-12', '2', '1', 'false', 'Use inhaler as instructed']
+Line 10: ['9', '8', '7', 'Tramadol', '50mg', 'Every 6 hours', '2023-04-12', '2023-04-19', '0', '4', 'true', 'Do not drive while taking']
+... and 8 more lines.
+
+==================================================
+File: departments.csv
+==================================================
+Line 1: ['department_id', 'department_name', 'location', 'head_doctor_id', 'founded_date', 'budget', 'is_teaching', 'max_capacity']
+Line 2: ['1', 'General Surgery', 'Building A - Floor 3', '2', '2005-01-15', '1500000', 'true', '60']
+Line 3: ['2', 'Diagnostics', 'Building B - Floor 1', '1', '2007-03-22', '1250000', 'true', '25']
+Line 4: ['3', 'Internal Medicine', 'Building A - Floor 2', '3', '2005-01-15', '1350000', 'true', '100']
+Line 5: ['4', 'Neurology', 'Building C - Floor 4', '4', '2008-08-10', '1750000', 'true', '40']
+Line 6: ['5', 'Cardiology', 'Building A - Floor 4', '5', '2006-11-30', '2000000', 'true', '50']
+Line 7: ['6', 'Pediatrics', 'Building D - Floor 1', '6', '2009-05-18', '1150000', 'true', '80']
+Line 8: ['7', 'Emergency Medicine', 'Building E - Floor 1', '7', '2005-01-15', '2250000', 'false', '150']
+Line 9: ['8', 'Orthopedics', 'Building C - Floor 2', '8', '2010-10-05', '1650000', 'true', '45']
+Line 10: ['9', 'Plastic Surgery', 'Building B - Floor 3', '11', '2012-07-12', '1000000', 'false', '20']
+... and 6 more lines.
+
+==================================================
+File: patients.csv
+==================================================
+Line 1: ['patient_id', 'first_name', 'last_name', 'date_of_birth', 'gender', 'phone', 'email', 'address', 'insurance_provider', 'registration_date', 'primary_doctor_id']
+Line 2: ['1', 'Sarah', 'Johnson', '1978-05-12', 'F', '555-0101', 'sjohnson@email.com', '123 Oak St, Springfield', 'BlueCross', '2022-01-15', '3']
+Line 3: ['2', 'Michael', 'Williams', '1965-11-30', 'M', '555-0102', 'mwilliams@email.com', '456 Pine Ave, Springfield', 'Medicare', '2022-02-03', '1']
+Line 4: ['3', 'Emma', 'Brown', '1990-03-22', 'F', '555-0103', 'ebrown@email.com', '789 Maple Dr, Springfield', 'Aetna', '2022-01-20', '2']
+Line 5: ['4', 'David', 'Jones', '1972-07-08', 'M', '555-0104', 'djones@email.com', '101 Elm Blvd, Springfield', 'UnitedHealth', '2022-03-05', '4']
+Line 6: ['5', 'Lisa', 'Garcia', '1983-09-15', 'F', '555-0105', 'lgarcia@email.com', '202 Cedar St, Springfield', 'Cigna', '2022-02-10', '5']
+Line 7: ['6', 'Robert', 'Miller', '1956-12-01', 'M', '555-0106', 'rmiller@email.com', '304 Birch Ln, Springfield', 'Medicare', '2022-01-22', '3']
+Line 8: ['7', 'Jennifer', 'Davis', '1988-04-17', 'F', '555-0107', 'jdavis@email.com', '405 Willow Way, Springfield', 'BlueCross', '2022-03-12', '2']
+Line 9: ['8', 'James', 'Rodriguez', '1975-08-25', 'M', '555-0108', 'jrodriguez@email.com', '506 Aspen Ct, Springfield', 'Aetna', '2022-02-18', '1']
+Line 10: ['9', 'Patricia', 'Martinez', '1962-10-05', 'F', '555-0109', 'pmartinez@email.com', '607 Redwood Rd, Springfield', 'Medicare', '2022-03-01', '5']
+... and 8 more lines.
+
+==================================================
+File: technicians.csv
+==================================================
+Line 1: ['technician_id', 'first_name', 'last_name', 'specialization', 'department_id', 'hire_date', 'certification', 'phone', 'email', 'supervisor_id']
+Line 2: ['1', 'Thomas', 'White', 'Phlebotomy', '3', '2020-05-15', 'CPT', '555-3001', 'twhite@hospital.com', '']
+Line 3: ['2', 'Jessica', 'Black', 'Laboratory', '3', '2021-01-10', 'MLT', '555-3002', 'jblack@hospital.com', '1']
+Line 4: ['3', 'Kevin', 'Green', 'Cardiology', '5', '2019-11-22', 'RCCS', '555-3003', 'kgreen@hospital.com', '']
+Line 5: ['4', 'Melissa', 'Blue', 'Respiratory', '6', '2021-06-05', 'RRT', '555-3004', 'mblue@hospital.com', '']
+Line 6: ['5', 'Eric', 'Brown', 'Radiology', '4', '2020-08-17', 'RT', '555-3005', 'ebrown@hospital.com', '']
+Line 7: ['6', 'Diana', 'Gray', 'Orthopedics', '8', '2022-02-28', 'COMT', '555-3006', 'dgray@hospital.com', '']
+... and 2 more lines.
+

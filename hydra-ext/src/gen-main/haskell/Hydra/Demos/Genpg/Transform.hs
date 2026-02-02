@@ -161,7 +161,7 @@ evaluateEdge edgeSpec record =
             Model.edgeIn = inId,
             Model.edgeProperties = props}) mInId)))))))
 
-evaluateProperties :: (Ord t0) => (M.Map t0 Core.Term -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 Core.Term))
+evaluateProperties :: Ord t0 => (M.Map t0 Core.Term -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 Core.Term))
 evaluateProperties specs record =  
   let extractMaybe = (\k -> \term -> (\x -> case x of
           Core.TermMaybe v1 -> (Flows.pure (Maybes.map (\v -> (k, v)) v1))) term)

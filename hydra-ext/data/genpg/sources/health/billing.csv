@@ -1,0 +1,13 @@
+billing_id,patient_id,appointment_id,service_description,date_billed,amount,insurance_coverage,patient_responsibility,payment_status,payment_date
+1,3,1,Initial Consultation,2023-04-10,250.00,200.00,50.00,Paid,2023-04-15
+2,7,2,Cardiac Evaluation,2023-04-10,350.00,280.00,70.00,Paid,2023-04-20
+3,1,3,Follow-up Visit,2023-04-10,150.00,120.00,30.00,Paid,2023-04-18
+4,10,4,Neurological Assessment,2023-04-10,400.00,320.00,80.00,Pending,
+5,3,1,Complete Blood Count,2023-04-10,75.00,60.00,15.00,Paid,2023-04-15
+6,1,3,Blood Pressure Test,2023-04-10,50.00,40.00,10.00,Paid,2023-04-18
+7,10,4,MRI - Brain,2023-04-10,1200.00,960.00,240.00,Pending,
+8,7,2,Echocardiogram,2023-04-10,550.00,440.00,110.00,Paid,2023-04-20
+9,5,5,Strep Test,2023-04-11,85.00,68.00,17.00,Pending,
+10,9,6,CT Scan - Abdomen,2023-04-11,800.00,640.00,160.00,Pending,
+11,2,7,X-Ray - Knee,2023-04-11,175.00,140.00,35.00,Pending,
+12,6,11,Trauma Assessment,2023-04-13,300.00,240.00,60.00,Pending,

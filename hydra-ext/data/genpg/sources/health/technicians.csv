@@ -1,0 +1,7 @@
+technician_id,first_name,last_name,specialization,department_id,hire_date,certification,phone,email,supervisor_id
+1,Thomas,White,Phlebotomy,3,2020-05-15,CPT,555-3001,twhite@hospital.com,
+2,Jessica,Black,Laboratory,3,2021-01-10,MLT,555-3002,jblack@hospital.com,1
+3,Kevin,Green,Cardiology,5,2019-11-22,RCCS,555-3003,kgreen@hospital.com,
+4,Melissa,Blue,Respiratory,6,2021-06-05,RRT,555-3004,mblue@hospital.com,
+5,Eric,Brown,Radiology,4,2020-08-17,RT,555-3005,ebrown@hospital.com,
+6,Diana,Gray,Orthopedics,8,2022-02-28,COMT,555-3006,dgray@hospital.com,

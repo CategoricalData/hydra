@@ -1,0 +1,13 @@
+prescription_id,patient_id,doctor_id,medication_name,dosage,frequency,start_date,end_date,refill_count,pharmacy_id,is_controlled,notes
+1,3,2,Ibuprofen,400mg,Every 6 hours,2023-04-10,2023-04-17,0,3,false,Take with food
+2,1,3,Lisinopril,10mg,Once daily,2023-04-10,2023-05-10,2,1,false,Take in the morning
+3,10,4,Sumatriptan,50mg,As needed,2023-04-10,2023-07-10,3,2,false,Take at onset of migraine
+4,7,5,Atorvastatin,20mg,Once daily,2023-04-10,2023-10-10,5,1,false,Take in the evening
+5,5,6,Amoxicillin,500mg,Every 8 hours,2023-04-11,2023-04-18,0,3,false,Complete full course
+6,9,1,Prednisone,20mg,Once daily,2023-04-11,2023-04-25,0,4,false,Taper down as directed
+7,2,8,Celecoxib,200mg,Twice daily,2023-04-11,2023-04-25,1,2,true,Take with food
+8,11,9,Albuterol,90mcg,As needed,2023-04-12,2023-07-12,2,1,false,Use inhaler as instructed
+9,8,7,Tramadol,50mg,Every 6 hours,2023-04-12,2023-04-19,0,4,true,Do not drive while taking
+10,4,10,Ondansetron,8mg,Every 8 hours,2023-04-12,2023-04-26,1,3,false,For nausea and vomiting
+11,6,12,Naproxen,500mg,Twice daily,2023-04-13,2023-04-20,0,2,false,Take with food
+12,12,11,Cephalexin,500mg,Every 12 hours,2023-04-13,2023-04-20,0,1,false,Complete full course
