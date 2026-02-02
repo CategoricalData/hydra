@@ -247,18 +247,18 @@ allTests = Testing.TestGroup {
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   Core.bindingType = Nothing},
                 Core.Binding {
-                  Core.bindingName = (Core.Name "b"),
-                  Core.bindingTerm = (Core.TermList [
-                    Core.TermVariable (Core.Name "b_x"),
-                    (Core.TermVariable (Core.Name "b_y"))]),
-                  Core.bindingType = Nothing},
-                Core.Binding {
                   Core.bindingName = (Core.Name "b_x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   Core.bindingType = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "b_y"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "b"),
+                  Core.bindingTerm = (Core.TermList [
+                    Core.TermVariable (Core.Name "b_x"),
+                    (Core.TermVariable (Core.Name "b_y"))]),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermList [
                 Core.TermVariable (Core.Name "a"),
@@ -314,20 +314,8 @@ allTests = Testing.TestGroup {
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   Core.bindingType = Nothing},
                 Core.Binding {
-                  Core.bindingName = (Core.Name "b"),
-                  Core.bindingTerm = (Core.TermList [
-                    Core.TermVariable (Core.Name "b_x"),
-                    (Core.TermVariable (Core.Name "b_y"))]),
-                  Core.bindingType = Nothing},
-                Core.Binding {
                   Core.bindingName = (Core.Name "b_x"),
                   Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  Core.bindingType = Nothing},
-                Core.Binding {
-                  Core.bindingName = (Core.Name "b_y"),
-                  Core.bindingTerm = (Core.TermList [
-                    Core.TermVariable (Core.Name "a"),
-                    (Core.TermVariable (Core.Name "b_y_q"))]),
                   Core.bindingType = Nothing},
                 Core.Binding {
                   Core.bindingName = (Core.Name "b_y_p"),
@@ -338,6 +326,18 @@ allTests = Testing.TestGroup {
                   Core.bindingTerm = (Core.TermList [
                     Core.TermVariable (Core.Name "b_x"),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "b_y"),
+                  Core.bindingTerm = (Core.TermList [
+                    Core.TermVariable (Core.Name "a"),
+                    (Core.TermVariable (Core.Name "b_y_q"))]),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "b"),
+                  Core.bindingTerm = (Core.TermList [
+                    Core.TermVariable (Core.Name "b_x"),
+                    (Core.TermVariable (Core.Name "b_y"))]),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermList [
                 Core.TermVariable (Core.Name "a"),

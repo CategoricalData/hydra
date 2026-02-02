@@ -17,7 +17,7 @@ import qualified Data.Set as S
 data Graph = 
   Graph {
     -- | All of the elements in the graph
-    graphElements :: (M.Map Core.Name Core.Binding),
+    graphElements :: [Core.Binding],
     -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
     graphEnvironment :: (M.Map Core.Name (Maybe Core.Term)),
     -- | The typing environment of the graph

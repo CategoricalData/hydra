@@ -858,7 +858,7 @@ module_ = Module.Module {
         Core.typeSchemeConstraints = (Just (M.fromList [
           (Core.Name "v", Core.TypeVariableMetadata {
             Core.typeVariableMetadataClasses = (S.fromList [
-              Core.Name "hydra.typeclass.Ord"])})]))}))},
+              Core.Name "ordering"])})]))}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.decode.relational.row"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {

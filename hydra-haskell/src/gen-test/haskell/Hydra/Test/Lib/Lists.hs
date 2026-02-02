@@ -973,6 +973,117 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
+      Testing.testGroupName = "find",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "find existing element",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "find first matching",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "find no match",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "find in empty list",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+              Core.applicationArgument = (Core.TermList [])})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe Nothing)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "find single element",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
       Testing.testGroupName = "foldl",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],
@@ -1855,6 +1966,140 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "a")])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean False))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "partition",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "partition greater than 3",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.partition"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))], (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "partition all elements",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.partition"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))], (Core.TermList [])))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "partition no elements",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.partition"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "partition even numbers",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.partition"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.even"))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))], (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "empty list",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.partition"))),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lt"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})))})),
+              Core.applicationArgument = (Core.TermList [])})),
+            Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

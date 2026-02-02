@@ -43,6 +43,13 @@ idTypeSubst = (Typing.TypeSubst Maps.empty)
 singletonTypeSubst :: (Core.Name -> Core.Type -> Typing.TypeSubst)
 singletonTypeSubst v t = (Typing.TypeSubst (Maps.singleton v t))
 
+-- | Apply a term substitution to a binding
+substituteInBinding :: (Typing.TermSubst -> Core.Binding -> Core.Binding)
+substituteInBinding subst b = Core.Binding {
+  Core.bindingName = (Core.bindingName b),
+  Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
+  Core.bindingType = (Core.bindingType b)}
+
 -- | Apply a type substitution to a type constraint
 substituteInConstraint :: (Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint)
 substituteInConstraint subst c = Typing.TypeConstraint {

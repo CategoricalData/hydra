@@ -402,7 +402,7 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ =
               in (Lists.map toPair (Sets.toList clsSet)))
   in (Monads.withTrace "encode with assertions" (Flows.bind (adaptTypeToHaskellAndEncode namespaces typ) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Flows.pure htyp) ( 
     let encoded = (Lists.map encodeAssertion assertPairs) 
-        hassert = (Logic.ifElse (Equality.gt (Lists.length encoded) 1) (Lists.head encoded) (Ast.AssertionTuple encoded))
+        hassert = (Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Lists.head encoded) (Ast.AssertionTuple encoded))
     in (Flows.pure (Ast.TypeCtx (Ast.ContextType {
       Ast.contextTypeCtx = hassert,
       Ast.contextTypeType = htyp})))))))
@@ -571,7 +571,7 @@ toTypeDeclarationsFrom namespaces elementName typ =
                           let tname = (Names.unqualifyName (Module.QualifiedName {
                                   Module.qualifiedNameNamespace = (Just (Pairs.first (Module.namespacesFocus namespaces))),
                                   Module.qualifiedNameLocal = name}))
-                          in (Logic.ifElse (Maybes.isJust (Maps.lookup tname (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
+                          in (Logic.ifElse (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.bindingName b) tname) (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
                 let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
                 in (Flows.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
@@ -676,11 +676,11 @@ typeDecl namespaces name typ =
       Ast.declarationWithCommentsBody = decl,
       Ast.declarationWithCommentsComments = Nothing})))))
 
-typeSchemeConstraintsToClassMap :: (Ord t0) => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
+typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
 typeSchemeConstraintsToClassMap maybeConstraints =  
   let nameToTypeClass = (\className ->  
           let classNameStr = (Core.unName className) 
-              isEq = (Equality.equal classNameStr "hydra.typeclass.Eq")
-              isOrd = (Equality.equal classNameStr "hydra.typeclass.Ord")
+              isEq = (Equality.equal classNameStr (Core.unName (Core.Name "equality")))
+              isOrd = (Equality.equal classNameStr (Core.unName (Core.Name "ordering")))
           in (Logic.ifElse isEq (Just Classes.TypeClassEquality) (Logic.ifElse isOrd (Just Classes.TypeClassOrdering) Nothing)))
   in (Maybes.maybe Maps.empty (\constraints -> Maps.map (\meta -> Sets.fromList (Maybes.cat (Lists.map nameToTypeClass (Sets.toList (Core.typeVariableMetadataClasses meta))))) constraints) maybeConstraints)

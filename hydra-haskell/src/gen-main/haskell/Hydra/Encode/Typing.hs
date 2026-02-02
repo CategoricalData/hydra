@@ -89,6 +89,9 @@ typeContext x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "lambdaVariables"),
       Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Typing.typeContextLambdaVariables x))},
     Core.Field {
+      Core.fieldName = (Core.Name "letVariables"),
+      Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Typing.typeContextLetVariables x))},
+    Core.Field {
       Core.fieldName = (Core.Name "inferenceContext"),
       Core.fieldTerm = (inferenceContext (Typing.typeContextInferenceContext x))}]}))
 

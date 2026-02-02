@@ -1674,7 +1674,7 @@
                 "parameter": "var"}}}}},
       "type": null}],
   "namespace": "hydra.unification",
-  "termDependencies": ["hydra.show.core", "hydra.substitution"],
+  "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.substitution"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",

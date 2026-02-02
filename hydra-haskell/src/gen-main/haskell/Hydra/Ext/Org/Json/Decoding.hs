@@ -35,7 +35,7 @@ decodeObject x = case x of
   Model.ValueObject v1 -> (Flows.pure v1)
   _ -> (Flows.fail "expected an object")
 
-decodeOptionalField :: (Ord t3) => ((t0 -> Compute.Flow t1 t2) -> t3 -> M.Map t3 t0 -> Compute.Flow t1 (Maybe t2))
+decodeOptionalField :: Ord t3 => ((t0 -> Compute.Flow t1 t2) -> t3 -> M.Map t3 t0 -> Compute.Flow t1 (Maybe t2))
 decodeOptionalField decodeValue name m = (Maybes.maybe (Flows.pure Nothing) (\v -> Flows.map (\x -> Just x) (decodeValue v)) (Maps.lookup name m))
 
 decodeString :: (Model.Value -> Compute.Flow t0 String)

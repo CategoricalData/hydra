@@ -250,7 +250,7 @@ literal term0 =
           _ -> (Monads.unexpected "literal" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
-map :: (Ord t0) => ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 t1))
+map :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 t1))
 map fk fv term0 =  
   let pair = (\kvPair ->  
           let kterm = (Pairs.first kvPair)
@@ -316,7 +316,7 @@ set term =
           _ -> (Monads.unexpected "set" (Core_.term stripped))) stripped)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term) (\stripped -> extract stripped))
 
-setOf :: (Ord t0) => ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (S.Set t0))
+setOf :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (S.Set t0))
 setOf f term = (Flows.bind (set term) (\els -> Flows.mapSet f els))
 
 setType :: (Core.Type -> Compute.Flow t0 Core.Type)

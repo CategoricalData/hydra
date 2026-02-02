@@ -12,7 +12,6 @@ import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
@@ -28,12 +27,10 @@ import qualified Data.Set as S
 -- | Create a graph schema from a graph which contains nothing but encoded type definitions
 graphToSchema :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 graphToSchema g =  
-  let toPair = (\nameAndEl ->  
-          let name = (Pairs.first nameAndEl)
-          in  
-            let el = (Pairs.second nameAndEl)
-            in (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
-  in (Flows.bind (Flows.mapList toPair (Maps.toList (Graph.graphElements g))) (\pairs -> Flows.pure (Maps.fromList pairs)))
+  let toPair = (\el ->  
+          let name = (Core.bindingName el)
+          in (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
+  in (Flows.bind (Flows.mapList toPair (Graph.graphElements g)) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
 instantiateTemplate minimal schema t =  

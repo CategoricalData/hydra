@@ -392,6 +392,33 @@ spec = H.describe "hydra.lib.lists primitives" $ do
     H.it "empty list" $ H.shouldBe
       (Lists.filter (\x -> Equality.gt x 0) [])
       ([])
+  H.describe "find" $ do
+    H.it "find existing element" $ H.shouldBe
+      (Lists.find (\x -> Equality.gt x 3) [
+          1,
+          2,
+          4,
+          5])
+      (Just 4)
+    H.it "find first matching" $ H.shouldBe
+      (Lists.find (\x -> Equality.gt x 0) [
+          1,
+          2,
+          3])
+      (Just 1)
+    H.it "find no match" $ H.shouldBe
+      (Lists.find (\x -> Equality.gt x 10) [
+          1,
+          2,
+          3])
+      (Nothing)
+    H.it "find in empty list" $ H.shouldBe
+      (Lists.find (\x -> Equality.gt x 0) [])
+      (Nothing)
+    H.it "find single element" $ H.shouldBe
+      (Lists.find (\x -> Equality.equal x 42) [
+          42])
+      (Just 42)
   H.describe "foldl" $ do
     H.it "sum with addition" $ H.shouldBe
       (Lists.foldl Math.add 0 [
@@ -803,6 +830,58 @@ spec = H.describe "hydra.lib.lists primitives" $ do
       (Lists.null [
           "a"])
       (False)
+  H.describe "partition" $ do
+    H.it "partition greater than 3" $ H.shouldBe
+      (Lists.partition (\x -> Equality.gt x 3) [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6])
+      (([
+          4,
+          5,
+          6], [
+          1,
+          2,
+          3]))
+    H.it "partition all elements" $ H.shouldBe
+      (Lists.partition (\x -> Equality.lt x 10) [
+          1,
+          2,
+          3])
+      (([
+          1,
+          2,
+          3], []))
+    H.it "partition no elements" $ H.shouldBe
+      (Lists.partition (\x -> Equality.gt x 10) [
+          1,
+          2,
+          3])
+      (([], [
+          1,
+          2,
+          3]))
+    H.it "partition even numbers" $ H.shouldBe
+      (Lists.partition (\x -> Math.even x) [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6])
+      (([
+          2,
+          4,
+          6], [
+          1,
+          3,
+          5]))
+    H.it "empty list" $ H.shouldBe
+      (Lists.partition (\x -> Equality.lt x 5) [])
+      (([], []))
   H.describe "pure" $ do
     H.it "string element" $ H.shouldBe
       (Lists.pure "one")

@@ -75,7 +75,7 @@ relationSchema t cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)
       Relational.relationSchemaForeignKeys = field_foreignKeys}))))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.relational.RelationSchema"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-relationship :: (Ord t0) => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Relational.Relationship t0))
+relationship :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Relational.Relationship t0))
 relationship v cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v1 -> (Eithers.map (\b -> Relational.Relationship b) (Helpers.decodeSet (Helpers.decodeMap columnName v) cx (Core.wrappedTermBody v1)))
   _ -> (Left (Util.DecodingError "expected wrapped type hydra.relational.Relationship"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

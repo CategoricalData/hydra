@@ -98,8 +98,10 @@ data TypeContext =
     typeContextMetadata :: (M.Map Core.Name Core.Term),
     -- | The set of type variables introduced by enclosing type lambdas
     typeContextTypeVariables :: (S.Set Core.Name),
-    -- | The set of term variables introduced by lambdas, as opposed to let bindings
+    -- | The set of term variables introduced by lambdas (even if untyped)
     typeContextLambdaVariables :: (S.Set Core.Name),
+    -- | The set of term variables introduced by let bindings (even if untyped)
+    typeContextLetVariables :: (S.Set Core.Name),
     -- | The schema types, primitive types, and data types of the graph
     typeContextInferenceContext :: InferenceContext}
   deriving (Eq, Ord, Read, Show)
@@ -113,6 +115,8 @@ _TypeContext_metadata = (Core.Name "metadata")
 _TypeContext_typeVariables = (Core.Name "typeVariables")
 
 _TypeContext_lambdaVariables = (Core.Name "lambdaVariables")
+
+_TypeContext_letVariables = (Core.Name "letVariables")
 
 _TypeContext_inferenceContext = (Core.Name "inferenceContext")
 

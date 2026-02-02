@@ -8,19 +8,6 @@
         "annotated": {
           "annotation": [
             {
-              "@key": "classes",
-              "@value": {
-                "map": [
-                  {
-                    "@key": {
-                      "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
-                    "@value": {
-                      "set": [
-                        {
-                          "union": {
-                            "field": {"name": "ordering", "term": {"unit": {}}},
-                            "typeName": "hydra.classes.TypeClass"}}]}}]}},
-            {
               "@key": "description",
               "@value": {
                 "literal": {

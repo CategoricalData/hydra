@@ -725,31 +725,51 @@ module_ = Module.Module {
                                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
-                                                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "inferenceContext"))})),
-                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.typing.inferenceContext"))})),
+                                                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "letVariables"))})),
+                                                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeSet")),
+                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.name"))}))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                Core.lambdaParameter = (Core.Name "field_inferenceContext"),
+                                                Core.lambdaParameter = (Core.Name "field_letVariables"),
                                                 Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                                  Core.recordTypeName = (Core.Name "hydra.typing.TypeContext"),
-                                                  Core.recordFields = [
-                                                    Core.Field {
-                                                      Core.fieldName = (Core.Name "types"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_types"))},
-                                                    Core.Field {
-                                                      Core.fieldName = (Core.Name "metadata"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_metadata"))},
-                                                    Core.Field {
-                                                      Core.fieldName = (Core.Name "typeVariables"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeVariables"))},
-                                                    Core.Field {
-                                                      Core.fieldName = (Core.Name "lambdaVariables"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_lambdaVariables"))},
-                                                    Core.Field {
-                                                      Core.fieldName = (Core.Name "inferenceContext"),
-                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_inferenceContext"))}]}))))})))}))})))}))})))}))})))}))})))}))}))})))}]})))),
+                                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
+                                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "inferenceContext"))})),
+                                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.typing.inferenceContext"))})),
+                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
+                                                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                    Core.lambdaParameter = (Core.Name "field_inferenceContext"),
+                                                    Core.lambdaDomain = Nothing,
+                                                    Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
+                                                      Core.recordTypeName = (Core.Name "hydra.typing.TypeContext"),
+                                                      Core.recordFields = [
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "types"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_types"))},
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "metadata"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_metadata"))},
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "typeVariables"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeVariables"))},
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "lambdaVariables"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_lambdaVariables"))},
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "letVariables"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_letVariables"))},
+                                                        Core.Field {
+                                                          Core.fieldName = (Core.Name "inferenceContext"),
+                                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_inferenceContext"))}]}))))})))}))})))}))})))}))})))}))})))}))})))}))}))})))}]})))),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {

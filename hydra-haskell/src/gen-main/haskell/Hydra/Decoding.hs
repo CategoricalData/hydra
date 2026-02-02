@@ -1505,7 +1505,7 @@ decoderTypeScheme typ =
       let ordVars = (Lists.filter (\v -> Lists.elem v typeVars) allOrdVars)
       in  
         let constraints = (Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "hydra.typeclass.Ord"))})) ordVars))))
+                Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars))))
         in Core.TypeScheme {
           Core.typeSchemeVariables = typeVars,
           Core.typeSchemeType = (decoderType typ),

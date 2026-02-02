@@ -710,6 +710,44 @@
                                       "name": "name",
                                       "term": {
                                         "wrap": {
+                                          "body": {"literal": {"string": "letVariables"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "letVariables", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "set",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "s"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.encode.core.name"},
+                                                              "function": {"function": {"primitive": "hydra.lib.sets.map"}}}}}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": null,
+                                                "parameter": "s"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
                                           "body": {"literal": {"string": "inferenceContext"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {

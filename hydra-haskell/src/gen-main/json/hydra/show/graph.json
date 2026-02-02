@@ -19,13 +19,10 @@
                         "name": "elements",
                         "term": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "graph"},
-                                "function": {
-                                  "function": {
-                                    "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
-                            "function": {"function": {"primitive": "hydra.lib.maps.elems"}}}},
+                            "argument": {"variable": "graph"},
+                            "function": {
+                              "function": {
+                                "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
                         "type": null},
                       {
                         "name": "elementStrs",

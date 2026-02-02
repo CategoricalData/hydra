@@ -55,33 +55,16 @@
                                                                 "term": {
                                                                   "union": {
                                                                     "field": {
-                                                                      "name": "map",
+                                                                      "name": "list",
                                                                       "term": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "keys",
-                                                                              "term": {
-                                                                                "union": {
-                                                                                  "field": {
-                                                                                    "name": "variable",
-                                                                                    "term": {
-                                                                                      "wrap": {
-                                                                                        "body": {"literal": {"string": "hydra.core.Name"}},
-                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                  "typeName": "hydra.core.Type"}}},
-                                                                            {
-                                                                              "name": "values",
-                                                                              "term": {
-                                                                                "union": {
-                                                                                  "field": {
-                                                                                    "name": "variable",
-                                                                                    "term": {
-                                                                                      "wrap": {
-                                                                                        "body": {"literal": {"string": "hydra.core.Binding"}},
-                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                  "typeName": "hydra.core.Type"}}}],
-                                                                          "typeName": "hydra.core.MapType"}}},
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"string": "hydra.core.Binding"}},
+                                                                                "typeName": "hydra.core.Name"}}},
+                                                                          "typeName": "hydra.core.Type"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
                                                                 "name": "annotation",

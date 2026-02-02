@@ -93,10 +93,10 @@ buildTypeApplicationTerm tvars body = (Lists.foldl (\t -> \v -> Core.TermTypeApp
 -- | An empty inference context
 emptyInferenceContext :: Typing_.InferenceContext
 emptyInferenceContext = Typing_.InferenceContext {
-  Typing_.inferenceContextSchemaTypes = M.empty,
-  Typing_.inferenceContextPrimitiveTypes = M.empty,
-  Typing_.inferenceContextDataTypes = M.empty,
-  Typing_.inferenceContextClassConstraints = M.empty,
+  Typing_.inferenceContextSchemaTypes = Maps.empty,
+  Typing_.inferenceContextPrimitiveTypes = Maps.empty,
+  Typing_.inferenceContextDataTypes = Maps.empty,
+  Typing_.inferenceContextClassConstraints = Maps.empty,
   Typing_.inferenceContextDebug = False}
 
 -- | Add (term variable, type scheme) pairs to the typing environment
@@ -126,17 +126,21 @@ freshVariableType = (Flows.map (\x -> Core.TypeVariable x) Schemas.freshName)
 -- | Generalize a type to a type scheme
 generalize :: (Typing_.InferenceContext -> Core.Type -> Core.TypeScheme)
 generalize cx typ =  
-  let vars = (Lists.nub (Lists.filter (isUnbound cx) (Rewriting.freeVariablesInTypeOrdered typ)))
+  let isTypeVarName = (\name ->  
+          let parts = (Strings.splitOn "." (Core.unName name))
+          in (Equality.lte (Lists.length parts) 1))
   in  
-    let allConstraints = (Typing_.inferenceContextClassConstraints cx)
+    let vars = (Lists.nub (Lists.filter (\v -> Logic.and (isUnbound cx v) (isTypeVarName v)) (Rewriting.freeVariablesInTypeOrdered typ)))
     in  
-      let relevantConstraints = (Maps.fromList (Maybes.cat (Lists.map (\v -> Maybes.map (\meta -> (v, meta)) (Maps.lookup v allConstraints)) vars)))
+      let allConstraints = (Typing_.inferenceContextClassConstraints cx)
       in  
-        let constraintsMaybe = (Logic.ifElse (Maps.null relevantConstraints) Nothing (Just relevantConstraints))
-        in Core.TypeScheme {
-          Core.typeSchemeVariables = vars,
-          Core.typeSchemeType = typ,
-          Core.typeSchemeConstraints = constraintsMaybe}
+        let relevantConstraints = (Maps.fromList (Maybes.cat (Lists.map (\v -> Maybes.map (\meta -> (v, meta)) (Maps.lookup v allConstraints)) vars)))
+        in  
+          let constraintsMaybe = (Logic.ifElse (Maps.null relevantConstraints) Nothing (Just relevantConstraints))
+          in Core.TypeScheme {
+            Core.typeSchemeVariables = vars,
+            Core.typeSchemeType = typ,
+            Core.typeSchemeConstraints = constraintsMaybe}
 
 inferGraphTypes :: (Graph.Graph -> Compute.Flow t0 Graph.Graph)
 inferGraphTypes g0 =  
@@ -144,15 +148,13 @@ inferGraphTypes g0 =
           let bindings = (Core.letBindings l)
           in  
             let body = (Core.letBody l)
-            in  
-              let fromBinding = (\b -> (Core.bindingName b, b))
-              in Graph.Graph {
-                Graph.graphElements = (Maps.fromList (Lists.map fromBinding bindings)),
-                Graph.graphEnvironment = Maps.empty,
-                Graph.graphTypes = Maps.empty,
-                Graph.graphBody = body,
-                Graph.graphPrimitives = (Graph.graphPrimitives g0),
-                Graph.graphSchema = (Graph.graphSchema g0)})
+            in Graph.Graph {
+              Graph.graphElements = bindings,
+              Graph.graphEnvironment = Maps.empty,
+              Graph.graphTypes = Maps.empty,
+              Graph.graphBody = body,
+              Graph.graphPrimitives = (Graph.graphPrimitives g0),
+              Graph.graphSchema = (Graph.graphSchema g0)})
   in  
     let toLetTerm = (\g ->  
             let toBinding = (\el -> Core.Binding {
@@ -160,7 +162,7 @@ inferGraphTypes g0 =
                     Core.bindingTerm = (Core.bindingTerm el),
                     Core.bindingType = (Core.bindingType el)})
             in (Core.TermLet (Core.Let {
-              Core.letBindings = (Lists.map toBinding (Maps.elems (Graph.graphElements g))),
+              Core.letBindings = (Lists.map toBinding (Graph.graphElements g)),
               Core.letBody = (Graph.graphBody g)})))
     in  
       let forFinal = (\finalized -> (\x -> case x of
@@ -299,7 +301,7 @@ inferTypeOfCaseStatement cx caseStmt =
                       in  
                         let dfltConstraints = (Monads.maybeToList (Maybes.map (\r -> Typing_.TypeConstraint {
                                 Typing_.typeConstraintLeft = cod,
-                                Typing_.typeConstraintRight = (Typing_.inferenceResultType r),
+                                Typing_.typeConstraintRight = (Substitution.substInType isubst (Typing_.inferenceResultType r)),
                                 Typing_.typeConstraintComment = "match default"}) dfltResult))
                         in  
                           let caseConstraints = (Maybes.cat (Lists.zipWith (\fname -> \itype -> Maybes.map (\ftype -> Typing_.TypeConstraint {
@@ -574,11 +576,11 @@ inferTypeOfLetNormalized cx0 letTerm =
                                                               in  
                                                                 let ts = (Pairs.second nameTsPair)
                                                                 in  
-                                                                  let typeLambdaTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
-                                                                          Core.typeLambdaParameter = v,
-                                                                          Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables ts)))
+                                                                  let finalTs = (Substitution.substInTypeScheme sbody ts)
                                                                   in  
-                                                                    let finalTs = (Substitution.substInTypeScheme sbody ts)
+                                                                    let typeLambdaTerm = (Lists.foldl (\b -> \v -> Core.TermTypeLambda (Core.TypeLambda {
+                                                                            Core.typeLambdaParameter = v,
+                                                                            Core.typeLambdaBody = b})) (Substitution.substituteInTerm st1 term) (Lists.reverse (Core.typeSchemeVariables finalTs)))
                                                                     in Core.Binding {
                                                                       Core.bindingName = name,
                                                                       Core.bindingTerm = (Substitution.substTypesInTerm (Substitution.composeTypeSubst sbody s2) typeLambdaTerm),
@@ -638,10 +640,10 @@ inferTypeOfLet cx let0 =
                                               Core.TermLet v1 ->  
                                                 let bs = (Core.letBindings v1)
                                                 in  
-                                                  let e = (Core.letBody v1)
+                                                  let letBody = (Core.letBody v1)
                                                   in (helper (Math.sub level 1) (Lists.concat [
                                                     bs,
-                                                    bins]) e)) term)
+                                                    bins]) letBody)) term)
                                       in (Logic.ifElse (Equality.equal level 0) (bins, term) (nonzero term)))
                               in  
                                 let result = (helper (Lists.length groups) [] iterm)
@@ -936,16 +938,15 @@ inferTypesOfTemporaryBindings cx bins =
 
 initialTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing_.TypeContext)
 initialTypeContext g =  
-  let toPair = (\pair ->  
-          let name = (Pairs.first pair)
-          in  
-            let el = (Pairs.second pair)
-            in (Maybes.maybe (Flows.fail (Strings.cat2 "untyped element: " (Core.unName name))) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
-  in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Maps.toList (Graph.graphElements g)))) (\types -> Flows.pure (Typing_.TypeContext {
+  let toPair = (\el ->  
+          let name = (Core.bindingName el)
+          in (Maybes.maybe (Flows.fail (Strings.cat2 "untyped element: " (Core.unName name))) (\ts -> Flows.pure (name, (Schemas.typeSchemeToFType ts))) (Core.bindingType el)))
+  in (Flows.bind (Schemas.graphToInferenceContext g) (\ix -> Flows.bind (Flows.map Maps.fromList (Flows.mapList toPair (Graph.graphElements g))) (\types -> Flows.pure (Typing_.TypeContext {
     Typing_.typeContextTypes = types,
     Typing_.typeContextMetadata = Maps.empty,
     Typing_.typeContextTypeVariables = Sets.empty,
     Typing_.typeContextLambdaVariables = Sets.empty,
+    Typing_.typeContextLetVariables = Sets.empty,
     Typing_.typeContextInferenceContext = ix}))))
 
 -- | Check if a variable is unbound in context
@@ -955,7 +956,7 @@ isUnbound cx v = (Logic.and (Logic.not (Sets.member v (freeVariablesInContext cx
 mapConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> t0) -> [Typing_.TypeConstraint] -> Compute.Flow t1 t0)
 mapConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) (\s -> Flows.bind (Checking.checkTypeSubst cx s) (\_ -> Flows.pure (f s))))
 
-mergeClassConstraints :: (Ord t0) => (M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata)
+mergeClassConstraints :: Ord t0 => (M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata)
 mergeClassConstraints m1 m2 = (Lists.foldl (\acc -> \pair ->  
   let k = (Pairs.first pair)
   in  
