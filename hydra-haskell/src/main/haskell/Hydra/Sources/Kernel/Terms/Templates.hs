@@ -78,13 +78,12 @@ graphToSchema :: TBinding (Graph -> Flow Graph (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Create a graph schema from a graph which contains nothing but encoded type definitions" $
   "g" ~>
-  "toPair" <~ ("nameAndEl" ~>
-    "name" <~ Pairs.first (var "nameAndEl") $
-    "el" <~ Pairs.second (var "nameAndEl") $
+  "toPair" <~ ("el" ~>
+    "name" <~ Core.bindingName (var "el") $
     "cx" <<~ Monads.getState $
     Flows.bind (trace (string "graph to schema") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el")))) (
       "t" ~> Flows.pure (pair (var "name") (var "t")))) $
-  Flows.bind (Flows.mapList (var "toPair") (Maps.toList (Graph.graphElements (var "g")))) (
+  Flows.bind (Flows.mapList (var "toPair") (Graph.graphElements (var "g"))) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))
 
 instantiateTemplate :: TBinding (Bool -> M.Map Name Type -> Type -> Flow s Term)

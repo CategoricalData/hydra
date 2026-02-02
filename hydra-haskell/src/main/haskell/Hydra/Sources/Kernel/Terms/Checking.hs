@@ -12,7 +12,7 @@ module Hydra.Sources.Kernel.Terms.Checking where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
   allEqual, applyTypeArgumentsToType, checkForUnboundTypeVariables, checkNominalApplication,
-  checkSameType, checkType, checkTypeSubst, checkTypeVariables, containsInScopeTypeVars, toFContext,
+  checkSameType, checkType, checkTypeSubst, checkTypeVariables, containsInScopeTypeVars, normalizeTypeFreeVars, toFContext,
   typeListsEffectivelyEqual, typeOf, typeOfAnnotatedTerm, typeOfApplication, typeOfCaseStatement,
   typeOfEither, typeOfFunction, typeOfInjection, typeOfLambda, typeOfLet, typeOfLiteral, typeOfList,
   typeOfMap, typeOfMaybe, typeOfPair, typeOfPrimitive, typeOfProjection, typeOfRecord, typeOfSet,
@@ -126,18 +126,22 @@ module_ = Module ns elements
       toBinding typeOfVariable,
       toBinding typeOfWrappedTerm,
       toBinding containsInScopeTypeVars,
+      toBinding normalizeTypeFreeVars,
       toBinding typesAllEffectivelyEqual,
       toBinding typesEffectivelyEqual]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
+noTypeArgs :: TTerm [Type]
+noTypeArgs = list ([] :: [TTerm Type])
+
 --
 
 -- TODO: move this
 allEqual :: TBinding ([a] -> Bool)
 allEqual = define "allEqual" $
-  withEq "t0" $ "els" ~>
+  "els" ~>
   Logic.ifElse (Lists.null $ var "els")
     true
     (Lists.foldl
@@ -267,7 +271,7 @@ checkType = define "checkType" $
   "cx" <~ Typing.typeContextInferenceContext (var "tx") $
   "vars" <~ Typing.typeContextTypeVariables (var "tx") $
   Logic.ifElse (Constants.debugInference)
-    ("t0" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term" $
+    ("t0" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "term" $
       Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
         (Flows.pure unit)
         (Flows.fail $ Strings.cat $ list [
@@ -438,8 +442,8 @@ typeOfApplication = define "typeOfApplication" $
   -- Note: We don't call checkTypeVariables on tfun/targ because they may contain
   -- phantom type variables from polymorphic instantiation that aren't in scope.
   -- The type matching in tryType ensures type correctness.
-  "tfun" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "fun" $
-  "targ" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "arg" $
+  "tfun" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "fun" $
+  "targ" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "arg" $
   "t" <<~ var "tryType" @@ var "tfun" @@ var "targ" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
@@ -452,8 +456,8 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
   "cases" <~ Core.caseStatementCases (var "cs") $
   "cterms" <~ Lists.map (unaryFunction Core.fieldTerm) (var "cases") $
-  "tdflt" <<~ Flows.mapMaybe ("e" ~> typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "e") (var "dflt") $
-  "tcterms" <<~ Flows.mapList ("e" ~> typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "e") (var "cterms") $
+  "tdflt" <<~ Flows.mapMaybe ("e" ~> typeOf @@ var "tx" @@ noTypeArgs  @@ var "e") (var "dflt") $
+  "tcterms" <<~ Flows.mapList ("e" ~> typeOf @@ var "tx" @@ noTypeArgs  @@ var "e") (var "cterms") $
   "fcods" <<~ Flows.mapList ("t" ~> Flows.map (unaryFunction Core.functionTypeCodomain) $ ExtractCore.functionType @@ var "t") (var "tcterms") $
   "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
   "cod" <<~ checkSameType @@ var "tx" @@ (string "case branches") @@ var "cods" $
@@ -476,11 +480,11 @@ typeOfEither = define "typeOfEither" $
   exec (var "checkLength") $
   Eithers.either_
     ("leftTerm" ~>
-      "leftType" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "leftTerm" $
+      "leftType" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "leftTerm" $
       exec (checkTypeVariables @@ var "tx" @@ var "leftType") $
       Flows.pure $ Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs"))
     ("rightTerm" ~>
-      "rightType" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "rightTerm" $
+      "rightType" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "rightTerm" $
       exec (checkTypeVariables @@ var "tx" @@ var "rightType") $
       Flows.pure $ Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType"))
     (var "et")
@@ -515,7 +519,7 @@ typeOfLambda = define "typeOfLambda" $
     ("dom" ~>
       exec (checkTypeVariables @@ var "tx" @@ var "dom") $
       "types2" <~ Maps.insert (var "v") (var "dom") (Typing.typeContextTypes $ var "tx") $
-      "cod" <<~ typeOf @@ (Typing.typeContextWithTypes (var "tx") $ var "types2") @@ list ([] :: [TTerm Type]) @@ var "body" $
+      "cod" <<~ typeOf @@ (Typing.typeContextWithTypes (var "tx") $ var "types2") @@ noTypeArgs  @@ var "body" $
       exec (checkTypeVariables @@ var "tx" @@ var "cod") $
       Flows.pure $ Core.typeFunction $ Core.functionType (var "dom") (var "cod")) $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "tbody"
@@ -543,13 +547,13 @@ typeOfLet = define "typeOfLet" $
       (Maps.fromList $ Lists.zip (var "bnames") (var "btypes"))
       (Typing.typeContextTypes $ var "tx"))) $
   -- Reconstructed type for each binding
-  "typeofs" <<~ Flows.mapList (typeOf @@ var "tx2" @@ list ([] :: [TTerm Type])) (var "bterms") $
+  "typeofs" <<~ Flows.mapList (typeOf @@ var "tx2" @@ noTypeArgs ) (var "bterms") $
   -- Note: We don't call checkTypeVariables on btypes because they come from type schemes that
   -- may contain phantom type variables from polymorphic instantiation. These were already
   -- validated during inference. We also don't check typeofs since they also come from inference.
   -- The type equality check below ensures they match.
   "t" <<~ Logic.ifElse (typeListsEffectivelyEqual @@ var "tx" @@ var "typeofs" @@ var "btypes")
-    (typeOf @@ var "tx2" @@ list ([] :: [TTerm Type]) @@ var "body")
+    (typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body")
     (Flows.fail $ Strings.cat $ list [
       string "binding types disagree: ",
       Formatting.showList @@ ShowCore.type_ @@ var "btypes",
@@ -570,7 +574,7 @@ typeOfList = define "typeOfList" $
       (Flows.fail (string "list type applied to more or less than one argument")))
     -- Nonempty list must have elements of the same type
     ( "eltypes" <<~ Flows.mapList
-       (typeOf @@ var "tx" @@ list ([] :: [TTerm Type]))
+       (typeOf @@ var "tx" @@ noTypeArgs )
        (var "els") $
        "unifiedType" <<~ checkSameType @@ var "tx" @@ (string "list elements") @@ var "eltypes" $
        -- Verify the unified type is well-formed in the current scope
@@ -591,11 +595,11 @@ typeOfMap = define "typeOfMap" $
   "nonnull" <~ (
     "pairs" <~ Maps.toList (var "m") $
     "kt" <<~ Flows.bind
-      (Flows.mapList (typeOf @@ var "tx" @@ list ([] :: [TTerm Type])) $
+      (Flows.mapList (typeOf @@ var "tx" @@ noTypeArgs ) $
         Lists.map (unaryFunction Pairs.first) (var "pairs"))
       (checkSameType @@ var "tx" @@ (string "map keys")) $
     "vt" <<~ Flows.bind
-      (Flows.mapList (typeOf @@ var "tx" @@ list ([] :: [TTerm Type])) $
+      (Flows.mapList (typeOf @@ var "tx" @@ noTypeArgs ) $
         Lists.map (unaryFunction Pairs.second) (var "pairs"))
       (checkSameType @@ var "tx" @@ (string "map values")) $
     exec (checkTypeVariables @@ var "tx" @@ var "kt") $
@@ -625,7 +629,7 @@ typeOfMaybe = define "typeOfMaybe" $
     -- Just case: infer type of the contained term
   "forJust" <~ ("term" ~>
     "t" <<~ (
-      "termType" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term" $
+      "termType" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "term" $
        exec (checkTypeVariables @@ var "tx" @@ var "termType") $
        Flows.pure $ Core.typeMaybe $ var "termType") $
     applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t") $
@@ -643,9 +647,9 @@ typeOfPair = define "typeOfPair" $
   exec (var "checkLength") $
   "pairFst" <~ Pairs.first (var "p") $
   "pairSnd" <~ Pairs.second (var "p") $
-  "firstType" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "pairFst" $
+  "firstType" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "pairFst" $
   exec (checkTypeVariables @@ var "tx" @@ var "firstType") $
-  "secondType" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "pairSnd" $
+  "secondType" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "pairSnd" $
   exec (checkTypeVariables @@ var "tx" @@ var "secondType") $
   Flows.pure $ Core.typePair $ Core.pairType (var "firstType") (var "secondType")
 
@@ -688,7 +692,7 @@ typeOfRecord = define "typeOfRecord" $
   -- The following is only for checking, not for reconstruction
   "fields" <~ Core.recordFields (var "record") $
   "ftypes" <<~ Flows.mapList
-    (typeOf @@ var "tx" @@ list ([] :: [TTerm Type]))
+    (typeOf @@ var "tx" @@ noTypeArgs )
     (Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
   exec (Flows.mapList (checkTypeVariables @@ var "tx") (var "ftypes")) $
 
@@ -705,7 +709,7 @@ typeOfSet = define "typeOfSet" $
       (Flows.fail (string "set type applied to more or less than one argument")))
     -- Nonempty set must have elements of the same type
     ( "eltypes" <<~ Flows.mapList
-       (typeOf @@ var "tx" @@ list ([] :: [TTerm Type]))
+       (typeOf @@ var "tx" @@ noTypeArgs )
        (Sets.toList $ var "els") $
        "unifiedType" <<~ checkSameType @@ var "tx" @@ (string "set elements") @@ var "eltypes" $
        -- Verify the unified type is well-formed in the current scope
@@ -728,7 +732,7 @@ typeOfTypeLambda = define "typeOfTypeLambda" $
   "body" <~ Core.typeLambdaBody (var "tl") $
   "vars" <~ Typing.typeContextTypeVariables (var "tx") $
   "tx2" <~ Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
-  "t1" <<~ typeOf @@ var "tx2" @@ list ([] :: [TTerm Type]) @@ var "body" $
+  "t1" <<~ typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body" $
   exec (checkTypeVariables @@ var "tx2" @@ var "t1") $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs"
     @@ (Core.typeForall $ Core.forallType (var "v") (var "t1"))
@@ -757,14 +761,18 @@ typeOfVariable :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
 typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable" $
   "tx" ~> "typeArgs" ~> "name" ~>
-  "t" <<~ optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
-    (Flows.fail $ Strings.cat $ list [
+  "rawType" <~ Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx") $
+  "failMsg" <~ Flows.fail (Strings.cat $ list [
       string "unbound variable: ",
       Core.unName $ var "name",
       string ". Variables: {",
       Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.typeContextTypes $ var "tx"),
-      string "}"])
-    (Schemas.instantiateType) $
+      string "}"]) $
+  "t" <<~ optCases (var "rawType")
+    (var "failMsg")
+    ("t" ~> Logic.ifElse (Lists.null $ var "typeArgs")
+      (Schemas.instantiateType @@ var "t")
+      (Flows.pure $ var "t")) $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfWrappedTerm :: TBinding (TypeContext -> [Type] -> WrappedTerm -> Flow s Type)
@@ -775,17 +783,41 @@ typeOfWrappedTerm = define "typeOfWrappedTerm" $
 
   -- The following is only for checking, not for reconstruction
   "body" <~ Core.wrappedTermBody (var "wt") $
-  "btype" <<~ typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "body" $
+  "btype" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "body" $
   exec (checkTypeVariables @@ var "tx" @@ var "btype") $
 
   produce $ Schemas.nominalApplication @@ var "tname" @@ var "typeArgs"
 
+normalizeTypeFreeVars :: TBinding (Type -> Type)
+normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
+  doc "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables." $
+  "typ" ~>
+  "collectVars" <~ ("acc" ~> "t" ~>
+    cases _Type (var "t")
+      (Just $ var "acc") [
+      _Type_variable>>: "v" ~>
+        Logic.ifElse (Maps.member (var "v") (var "acc"))
+          (var "acc")
+          (Maps.insert (var "v") (Core.name $ Strings.cat2 (string "_tv") (Literals.showInt32 $ Maps.size $ var "acc")) (var "acc"))]) $
+  "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ Maps.empty @@ var "typ" $
+  Rewriting.substituteTypeVariables @@ var "subst" @@ var "typ"
+
 typesAllEffectivelyEqual :: TBinding (TypeContext -> [Type] -> Bool)
 typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
-  doc "Check whether a list of types are effectively equal, disregarding type aliases" $
+  doc ("Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming."
+    <> " Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.") $
   "tx" ~> "tlist" ~>
   "types" <~ Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext $ var "tx") $
-  allEqual @@ (Lists.map (Rewriting.replaceTypedefs @@ var "types") (var "tlist"))
+  "containsFreeVar" <~ ("t" ~>
+    "allVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
+    "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
+    Logic.not $ Sets.null $ Sets.difference (var "allVars") (var "schemaNames")) $
+  "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
+  Logic.ifElse (var "anyContainsFreeVar")
+    true
+    (Logic.ifElse (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ var "t") (var "tlist")))
+      true
+      (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Rewriting.deannotateTypeRecursive @@ (Rewriting.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
 
 -- | Check if a type contains any type variable that's in scope (from typeContextTypeVariables)
 containsInScopeTypeVars :: TBinding (TypeContext -> Type -> Bool)
@@ -805,5 +837,5 @@ typesEffectivelyEqual = define "typesEffectivelyEqual" $
   Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t1") $
   Logic.or (containsInScopeTypeVars @@ var "tx" @@ var "t2") $
   typesAllEffectivelyEqual @@ var "tx" @@ list [
-    Schemas.fullyStripType @@ var "t1",
-    Schemas.fullyStripType @@ var "t2"]
+    Schemas.fullyStripAndNormalizeType @@ var "t1",
+    Schemas.fullyStripAndNormalizeType @@ var "t2"]

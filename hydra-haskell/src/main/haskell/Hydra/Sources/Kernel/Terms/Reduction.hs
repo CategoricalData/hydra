@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Reduction where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm,
+  alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpandTermNew, etaExpansionArity, etaExpandTypedTerm,
   reduceTerm, termIsClosed, termIsValue)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
@@ -87,6 +87,7 @@ module_ = Module ns elements
      toBinding countPrimitiveInvocations,
      toBinding etaReduceTerm,
      toBinding etaExpandTerm,
+     toBinding etaExpandTermNew,
      toBinding etaExpansionArity,
      toBinding etaExpandTypedTerm,
      toBinding reduceTerm,
@@ -200,6 +201,228 @@ etaExpandTerm = define "etaExpandTerm" $
         var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
   contractTerm @@ (Rewriting.rewriteTerm @@ (var "rewrite" @@ list ([] :: [TTerm Term])) @@ var "term")
 
+-- | Eta-expand a term using TypeContext for type lookups. This is a pure function that does not
+-- require type inference, instead relying on the TypeContext being properly populated with types
+-- for all in-scope variables.
+--
+-- The key differences from etaExpandTypedTerm:
+-- 1. Pure (no Flow monad needed) because we look up types directly from the context
+-- 2. Manually tracks TypeContext when entering lambdas, lets, and type lambdas
+-- 3. Preserves existing type annotations where possible
+etaExpandTermNew :: TBinding (TypeContext -> Term -> Term)
+etaExpandTermNew = define "etaExpandTermNew" $
+  doc ("Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'."
+    <> " Uses the TypeContext to look up types for arity calculation."
+    <> " Bare primitives and variables are NOT expanded; eliminations and partial applications are."
+    <> " This version properly tracks the TypeContext through nested scopes.") $
+  "tx0" ~> "term0" ~>
+
+  -- termArityWithContext: compute arity of a term using TypeContext for lookups
+  "termArityWithContext" <~ ("tx" ~> "term" ~>
+    cases _Term (var "term")
+      (Just $ int32 0) [
+      _Term_annotated>>: "at" ~>
+        var "termArityWithContext" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
+      _Term_application>>: "app" ~>
+        Math.sub (var "termArityWithContext" @@ var "tx" @@ Core.applicationFunction (var "app")) (int32 1),
+      _Term_function>>: "f" ~> cases _Function (var "f") Nothing [
+        _Function_elimination>>: constant $ int32 1,
+        _Function_lambda>>: constant $ int32 0,
+        _Function_primitive>>: "name" ~>
+          optCases (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx"))
+            (int32 0) Arity.typeSchemeArity],
+      _Term_let>>: "l" ~>
+        var "termArityWithContext"
+          @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
+          @@ Core.letBody (var "l"),
+      _Term_typeLambda>>: "tl" ~>
+        var "termArityWithContext"
+          @@ (Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl")
+          @@ Core.typeLambdaBody (var "tl"),
+      _Term_typeApplication>>: "tat" ~>
+        var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
+      _Term_variable>>: "name" ~>
+        optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
+          (int32 0) Arity.typeArity]) $
+
+  -- expand: apply args to head and pad with lambdas if needed
+  -- alwaysPad: if true, pad even when args is empty (for eliminations)
+  "expand" <~ ("alwaysPad" ~> "args" ~> "arity" ~> "head" ~>
+    "applied" <~ Lists.foldl
+      ("lhs" ~> "arg" ~> Core.termApplication (Core.application (var "lhs") (var "arg")))
+      (var "head") (var "args") $
+    "numArgs" <~ Lists.length (var "args") $
+    "needed" <~ Math.sub (var "arity") (var "numArgs") $
+    -- Pad if: (needed > 0) AND (alwaysPad OR numArgs > 0)
+    Logic.ifElse (Logic.and (Equality.gt (var "needed") (int32 0))
+                            (Logic.or (var "alwaysPad") (Equality.gt (var "numArgs") (int32 0))))
+      -- Pad with lambdas: first build fully applied term, then wrap with lambdas
+      ("indices" <~ Math.range (int32 1) (var "needed") $
+       -- Step 1: Build fully applied term: applied v1 v2 ... vn
+       "fullyApplied" <~ Lists.foldl
+         ("body" ~> "i" ~>
+           "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+           Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
+         (var "applied") (var "indices") $
+       -- Step 2: Wrap with lambdas from inside out by reversing indices: \v1 -> \v2 -> ... -> fullyApplied
+       -- Using foldl with reversed indices gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)
+       Lists.foldl
+         ("body" ~> "i" ~>
+           "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
+           Core.termFunction $ Core.functionLambda $ Core.lambda (var "vn") nothing (var "body"))
+         (var "fullyApplied") (Lists.reverse (var "indices")))
+      (var "applied")) $
+
+  -- rewriteWithArgs: tracks accumulated args as we descend into application spines
+  -- This is a recursive let binding that calls itself directly
+  "rewriteWithArgs" <~ ("args" ~> "tx" ~> "term" ~>
+    -- recurse is shorthand for calling rewriteWithArgs with empty args
+    "recurse" <~ ("tx1" ~> "term1" ~> var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ var "term1") $
+
+    -- afterRecursion: apply expansion logic after subterms have been processed
+    "afterRecursion" <~ ("trm" ~>
+      "arity" <~ var "termArityWithContext" @@ var "tx" @@ var "trm" $
+      var "expand" @@ false @@ var "args" @@ var "arity" @@ var "trm") $
+
+    -- Helper for processing fields (used in records, unions, but NOT case statement branches)
+    "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f")) (var "f")) $
+
+    -- Helper for case statement branches - forces expansion of the branch body
+    -- This is needed because case branches represent partial function values that need full expansion
+    "forCaseBranch" <~ ("f" ~>
+      "branchBody" <~ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "branchBody" $
+      Core.fieldWithTerm (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchBody") (var "f")) $
+
+    -- Helper for eliminations
+    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
+      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
+      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map ("t1" ~> var "recurse" @@ var "tx" @@ var "t1") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forCaseBranch") (Core.caseStatementCases $ var "cs")),
+      _Elimination_wrap>>: "nm" ~> Core.eliminationWrap $ var "nm"]) $
+
+    -- Helper for maps
+    "forMap" <~ ("mp" ~>
+      "forPair" <~ ("pr" ~> pair (var "recurse" @@ var "tx" @@ Pairs.first (var "pr"))
+                                 (var "recurse" @@ var "tx" @@ Pairs.second (var "pr"))) $
+      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "mp") $
+
+    cases _Term (var "term") Nothing [
+      -- Annotated: recurse into body, preserve annotation
+      _Term_annotated>>: "at" ~> var "afterRecursion" @@ Core.termAnnotated (Core.annotatedTerm
+        (var "recurse" @@ var "tx" @@ Core.annotatedTermBody (var "at"))
+        (Core.annotatedTermAnnotation $ var "at")),
+
+      -- Application: process RHS with empty args, then descend into LHS with RHS added to args
+      _Term_application>>: "app" ~>
+        "rhs" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx" @@ Core.applicationArgument (var "app") $
+        var "rewriteWithArgs" @@ Lists.cons (var "rhs") (var "args") @@ var "tx" @@ Core.applicationFunction (var "app"),
+
+      -- Either: recurse into left or right
+      _Term_either>>: "e" ~> var "afterRecursion" @@ Core.termEither (Eithers.either_
+        ("l" ~> left $ var "recurse" @@ var "tx" @@ var "l")
+        ("r" ~> right $ var "recurse" @@ var "tx" @@ var "r")
+        (var "e")),
+
+      -- Function: special handling
+      _Term_function>>: "fn" ~> cases _Function (var "fn")
+        Nothing [
+        _Function_elimination>>: "elm" ~>
+          -- Recurse into the elimination, then expand
+          -- Only pad union eliminations (case statements); record/wrap eliminations are handled by the language coder
+          "padElim" <~ cases _Elimination (var "elm") Nothing [
+            _Elimination_record>>: "_" ~> false,
+            _Elimination_union>>: "_" ~> true,
+            _Elimination_wrap>>: "_" ~> false] $
+          var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@
+            (Core.termFunction $ Core.functionElimination $ var "forElimination" @@ var "elm"),
+        _Function_lambda>>: "lm" ~>
+          "tx1" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "lm" $
+          "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
+          "result" <~ Core.termFunction (Core.functionLambda $
+            Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
+          "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "result",
+        _Function_primitive>>: "pn" ~>
+          -- Don't expand if bare
+          "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "term"],
+
+      -- Let: extend context for bindings and body
+      _Term_let>>: "lt" ~>
+        "tx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
+        "mapBinding" <~ ("b" ~> Core.binding
+          (Core.bindingName $ var "b")
+          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
+          (Core.bindingType $ var "b")) $
+        "result" <~ Core.termLet (Core.let_
+          (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
+          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.letBody (var "lt"))) $
+        var "afterRecursion" @@ var "result",
+
+      -- List: recurse into elements
+      _Term_list>>: "els" ~> var "afterRecursion" @@
+        (Core.termList $ Lists.map ("el" ~> var "recurse" @@ var "tx" @@ var "el") (var "els")),
+
+      -- Literal: no recursion needed
+      _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
+
+      -- Map: recurse into keys and values
+      _Term_map>>: "mp" ~> var "afterRecursion" @@ (Core.termMap $ var "forMap" @@ var "mp"),
+
+      -- Maybe: recurse into value if present
+      _Term_maybe>>: "mb" ~> var "afterRecursion" @@
+        (Core.termMaybe $ Maybes.map ("v" ~> var "recurse" @@ var "tx" @@ var "v") (var "mb")),
+
+      -- Pair: recurse into both elements
+      _Term_pair>>: "pr" ~> var "afterRecursion" @@ (Core.termPair $ pair
+        (var "recurse" @@ var "tx" @@ Pairs.first (var "pr"))
+        (var "recurse" @@ var "tx" @@ Pairs.second (var "pr"))),
+
+      -- Record: recurse into fields
+      _Term_record>>: "rc" ~> var "afterRecursion" @@ (Core.termRecord $ Core.record
+        (Core.recordTypeName $ var "rc")
+        (Lists.map (var "forField") (Core.recordFields $ var "rc"))),
+
+      -- Set: recurse into elements
+      _Term_set>>: "st" ~> var "afterRecursion" @@
+        (Core.termSet $ Sets.fromList $ Lists.map ("el" ~> var "recurse" @@ var "tx" @@ var "el") $ Sets.toList (var "st")),
+
+      -- TypeApplication: recurse into body
+      _Term_typeApplication>>: "tt" ~> var "afterRecursion" @@ (Core.termTypeApplication $ Core.typeApplicationTerm
+        (var "recurse" @@ var "tx" @@ Core.typeApplicationTermBody (var "tt"))
+        (Core.typeApplicationTermType $ var "tt")),
+
+      -- TypeLambda: extend context for body
+      _Term_typeLambda>>: "tl" ~>
+        "tx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+        "result" <~ Core.termTypeLambda (Core.typeLambda
+          (Core.typeLambdaParameter $ var "tl")
+          (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.typeLambdaBody (var "tl"))) $
+        var "afterRecursion" @@ var "result",
+
+      -- Union: recurse into injection field
+      _Term_union>>: "inj" ~> var "afterRecursion" @@ (Core.termUnion $ Core.injection
+        (Core.injectionTypeName $ var "inj")
+        (var "forField" @@ Core.injectionField (var "inj"))),
+
+      -- Unit: no recursion needed
+      _Term_unit>>: constant Core.termUnit,
+
+      -- Variable: don't expand if bare
+      _Term_variable>>: "vn" ~>
+        "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
+        var "expand" @@ false @@ var "args" @@ var "arty" @@ var "term",
+
+      -- Wrap: recurse into body
+      _Term_wrap>>: "wt" ~> var "afterRecursion" @@ (Core.termWrap $ Core.wrappedTerm
+        (Core.wrappedTermTypeName $ var "wt")
+        (var "recurse" @@ var "tx" @@ Core.wrappedTermBody (var "wt")))]) $
+
+  contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx0" @@ var "term0")
+
 -- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but a TypeContext.
 --       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
 --       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
@@ -243,7 +466,6 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     ) $
   "tx0" ~> "term0" ~>
   "rewrite" <~ ("topLevel" ~> "forced" ~> "typeArgs" ~> "recurse" ~> "tx" ~> "term" ~>
-
     "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
       (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>

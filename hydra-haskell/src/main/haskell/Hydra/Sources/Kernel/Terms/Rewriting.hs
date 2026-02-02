@@ -3,6 +3,7 @@ module Hydra.Sources.Kernel.Terms.Rewriting where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  applyInsideTypeLambdasAndAnnotations,
   deannotateAndDetypeTerm,
   deannotateTerm,
   deannotateType,
@@ -29,6 +30,7 @@ import Hydra.Kernel hiding (
   pruneLet,
   removeTermAnnotations,
   removeTypeAnnotations,
+  removeTypeAnnotationsFromTerm,
   removeTypesFromTerm,
   replaceFreeTermVariable,
   replaceFreeTypeVariable,
@@ -123,6 +125,7 @@ module_ = Module ns elements
     Just ("Utilities for type and term rewriting and analysis.")
   where
    elements = [
+     toBinding applyInsideTypeLambdasAndAnnotations,
      toBinding deannotateAndDetypeTerm,
      toBinding deannotateTerm,
      toBinding deannotateType,
@@ -150,6 +153,7 @@ module_ = Module ns elements
      toBinding pruneLet,
      toBinding removeTermAnnotations,
      toBinding removeTypeAnnotations,
+     toBinding removeTypeAnnotationsFromTerm,
      toBinding removeTypesFromTerm,
      toBinding replaceFreeTermVariable,
      toBinding replaceFreeTypeVariable,
@@ -178,6 +182,16 @@ module_ = Module ns elements
      toBinding typeDependencyNames,
      toBinding typeNamesInType,
      toBinding unshadowVariables]
+
+applyInsideTypeLambdasAndAnnotations :: TBinding ((Term -> Term) -> Term -> Term)
+applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
+  doc "Apply a term-level function inside any leading type lambdas" $
+  "f" ~> "term0" ~> cases _Term (var "term0")
+    (Just $ var "f" @@ var "term0") [
+    _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at")
+      (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.annotatedTermBody $ var "at")),
+    _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambdaWithBody (var "tl")
+      (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.typeLambdaBody $ var "tl"))]
 
 deannotateAndDetypeTerm :: TBinding (Term -> Term)
 deannotateAndDetypeTerm = define "deannotateAndDetypeTerm" $
@@ -278,8 +292,10 @@ flattenLetTerms = define "flattenLetTerms" $
           (Core.binding (var "key0") (var "newBody") (var "t"))
           (Lists.map (var "newBinding") (var "bindings1"))]) $
   -- flattenBodyLet: if body is a let, merge its bindings into the outer let
+  -- Note: The default case uses concat2 with empty list to force bindings to have type [Binding]
+  -- This ensures proper type inference and prevents incorrect generalization
   "flattenBodyLet" <~ ("bindings" ~> "body" ~>
-    cases _Term (var "body") (Just $ pair (var "bindings") (var "body")) [
+    cases _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TTerm Binding])) (var "bindings")) (var "body")) [
       _Term_let>>: "innerLt" ~>
         "innerBindings" <~ Core.letBindings (var "innerLt") $
         "innerBody" <~ Core.letBody (var "innerLt") $
@@ -291,7 +307,10 @@ flattenLetTerms = define "flattenLetTerms" $
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
-        "forResult" <~ ("hr" ~> Lists.cons (Pairs.first $ var "hr") (Pairs.second $ var "hr")) $
+        -- Put dependencies BEFORE the binding that depends on them
+        -- This is important for hoisting: dependencies need to be hoisted first
+        -- so that transitive capture works correctly
+        "forResult" <~ ("hr" ~> Lists.concat2 (Pairs.second $ var "hr") (Lists.pure (Pairs.first $ var "hr"))) $
         "flattenedBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
         -- Now check if body is also a let and merge those bindings too
         "merged" <~ var "flattenBodyLet" @@ var "flattenedBindings" @@ var "body" $
@@ -737,6 +756,25 @@ removeTypesFromTerm = define "removeTypesFromTerm" $
       _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
   rewriteTerm @@ var "strip" @@ var "term"
 
+removeTypeAnnotationsFromTerm :: TBinding (Term -> Term)
+removeTypeAnnotationsFromTerm = define "removeTypeAnnotationsFromTerm" $
+  doc "Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations" $
+  "term" ~>
+  "strip" <~ ("recurse" ~> "term" ~>
+    "rewritten" <~ var "recurse" @@ var "term" $
+    "stripBinding" <~ ("b" ~> Core.binding
+      (Core.bindingName $ var "b")
+      (Core.bindingTerm $ var "b")
+      nothing) $
+    cases _Term (var "rewritten")
+      (Just $ var "rewritten") [
+      _Term_let>>: "lt" ~> Core.termLet $ Core.let_
+        (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
+        (Core.letBody $ var "lt"),
+      _Term_typeApplication>>: "tt" ~> Core.typeApplicationTermBody $ var "tt",
+      _Term_typeLambda>>: "ta" ~> Core.typeLambdaBody $ var "ta"]) $
+  rewriteTerm @@ var "strip" @@ var "term"
+
 replaceFreeTermVariable :: TBinding (Name -> Term -> Term -> Term)
 replaceFreeTermVariable = define "replaceFreeTermVariable" $
   doc "Replace a free variable in a term" $
@@ -784,7 +822,9 @@ replaceTypedefs = define "replaceTypedefs" $
     cases _Type (var "typ")
       (Just $ var "dflt") [
 --      _Type_forall>>: "ft" ~> ... -- TODO: shadowing via forall-bound variables
-      _Type_annotated>>: "at" ~> var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"),
+      _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
+        (var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"))
+        (Core.annotatedTypeAnnotation $ var "at"),
       _Type_record>>: constant $ var "typ",
       _Type_union>>: constant $ var "typ",
       _Type_variable>>: "v" ~>
@@ -2184,7 +2224,7 @@ typeNamesInType = define "typeNamesInType" $
 
 unshadowVariables :: TBinding (Term -> Term)
 unshadowVariables = define "unshadowVariables" $
-  doc "Unshadow lambda-bound variables in a term" $
+  doc "Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term" $
   "term0" ~>
   "rewrite" <~ ("recurse" ~> "m" ~> "term"~>
     "dflt" <~ var "recurse" @@ var "m" @@ var "term" $
@@ -2208,6 +2248,12 @@ unshadowVariables = define "unshadowVariables" $
               "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
               Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
                 (Pairs.second $ var "rewrite" @@ var "recurse" @@ var "m2" @@ var "body"))],
+      -- Track let-bound variables so that inner lambdas with the same names get renamed
+      _Term_let>>: "lt" ~>
+        "m2" <~ Lists.foldl ("acc" ~> "b" ~>
+          Maps.insert (Core.bindingName $ var "b") (int32 1) (var "acc"))
+          (var "m") (Core.letBindings $ var "lt") $
+        var "recurse" @@ var "m2" @@ var "term",
       _Term_variable>>: "v" ~> pair (var "m") $ Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
         (var "v")
         ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))

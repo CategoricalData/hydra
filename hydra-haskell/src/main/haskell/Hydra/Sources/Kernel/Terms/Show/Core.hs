@@ -79,6 +79,7 @@ module_ = Module ns elements
      toBinding integerValue,
      toBinding integerType,
      toBinding lambda,
+     toBinding let_,
      toBinding list_,
      toBinding literal,
      toBinding literalType,
@@ -252,6 +253,19 @@ lambda = define "lambda" $
     string ".",
     term @@ var "body"]
 
+let_ :: TBinding (Let -> String)
+let_ = define "let" $
+  doc "Show a let expression as a string" $
+  "l" ~>
+  "bindings" <~ Core.letBindings (var "l") $
+  "env" <~ Core.letBody (var "l") $
+  "bindingStrs" <~ Lists.map binding (var "bindings") $
+  Strings.cat $ list [
+    string "let ",
+    Strings.intercalate (string ", ") (var "bindingStrs"),
+    string " in ",
+    term @@ var "env"]
+
 list_ :: TBinding ((a -> String) -> [a] -> String)
 list_ = define "list" $
   doc "Show a list using a given function to show each element" $
@@ -312,15 +326,7 @@ term = define "term" $
         string ")"])
       (var "e"),
     _Term_function>>: function,
-    _Term_let>>: "l" ~>
-      "bindings" <~ Core.letBindings (var "l") $
-      "env" <~ Core.letBody (var "l") $
-      "bindingStrs" <~ Lists.map binding (var "bindings") $
-      Strings.cat $ list [
-        string "let ",
-        Strings.intercalate (string ", ") (var "bindingStrs"),
-        string " in ",
-        term @@ var "env"],
+    _Term_let>>: "l" ~> let_ @@ var "l",
     _Term_list>>: "els" ~>
       "termStrs" <~ Lists.map term (var "els") $
       Strings.cat $ list [
