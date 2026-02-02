@@ -26,7 +26,17 @@ data Aliases = Aliases {
   -- | All in-scope Java variable names (for avoiding lambda parameter shadowing)
   aliasesInScopeJavaVars :: S.Set Name,
   -- | Variable renames for avoiding shadowing (maps Hydra name to Java name)
-  aliasesVarRenames :: M.Map Name Name } deriving Show
+  aliasesVarRenames :: M.Map Name Name,
+  -- | Lambda-bound variables (including hoisted captures with qualified names)
+  aliasesLambdaVars :: S.Set Name,
+  -- | Type variable substitution: maps fresh inference variable names to canonical scheme variable names
+  aliasesTypeVarSubst :: M.Map Name Name,
+  -- | Type variables that actually appear in the method's formal parameter types.
+  -- Used to validate lambda cast type variables — only these are trusted.
+  aliasesTrustedTypeVars :: S.Set Name,
+  -- | The enclosing method's codomain (return type), used for casting pair expressions
+  -- that have over-generalized type variables from inference.
+  aliasesMethodCodomain :: Maybe Type } deriving Show
 
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
 addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
@@ -62,7 +72,7 @@ fieldNameToJavaVariableDeclaratorId :: Name -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (Name n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForModule :: Module -> Aliases
-importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty S.empty S.empty S.empty M.empty
+importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty S.empty S.empty S.empty M.empty S.empty M.empty S.empty Nothing
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -98,6 +108,10 @@ javaCastExpression :: Java.ReferenceType -> Java.UnaryExpression -> Java.CastExp
 javaCastExpression rt expr = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb expr
   where
     rb = Java.CastExpression_RefAndBounds rt []
+
+javaCastPrimitive :: Java.PrimitiveType -> Java.UnaryExpression -> Java.CastExpression
+javaCastPrimitive pt expr = Java.CastExpressionPrimitive $
+  Java.CastExpression_Primitive (Java.PrimitiveTypeWithAnnotations pt []) expr
 
 javaCastExpressionToJavaExpression :: Java.CastExpression -> Java.Expression
 javaCastExpressionToJavaExpression = javaUnaryExpressionToJavaExpression . Java.UnaryExpressionOther .

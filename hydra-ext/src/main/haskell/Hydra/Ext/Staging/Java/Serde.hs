@@ -40,7 +40,7 @@ withComments mc expr = case mc of
         toLine l = " * " ++ l
 
 writeAdditionalBound :: Java.AdditionalBound -> Ast.Expr
-writeAdditionalBound _ = cst "STUB:AdditionalBound"
+writeAdditionalBound (Java.AdditionalBound it) = spaceSep [cst "&", writeInterfaceType it]
 
 writeAdditiveExpression :: Java.AdditiveExpression -> Ast.Expr
 writeAdditiveExpression e = case e of
@@ -148,7 +148,9 @@ writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = pa
   if L.null adds then Nothing else Just $ spaceSep (writeAdditionalBound <$> adds)]]
 
 writeCastExpression_Primitive :: Java.CastExpression_Primitive -> Ast.Expr
-writeCastExpression_Primitive _ = cst "STUB:CastExpression_Primitive"
+writeCastExpression_Primitive (Java.CastExpression_Primitive pt ex) = spaceSep [
+  parenList False [writePrimitiveTypeWithAnnotations pt],
+  writeUnaryExpression ex]
 
 writeCharacterLiteral :: Int -> Ast.Expr
 writeCharacterLiteral c = cst $ "'" ++ escapeChar (Chr.chr c) ++ "'"
@@ -871,7 +873,12 @@ writeTypeArgumentsOrDiamond targs = case targs of
   Java.TypeArgumentsOrDiamondDiamond -> cst "<>"
 
 writeTypeBound :: Java.TypeBound -> Ast.Expr
-writeTypeBound _ = cst "STUB:TypeBound"
+writeTypeBound b = case b of
+  Java.TypeBoundVariable tv -> writeName tv
+  Java.TypeBoundClassOrInterface (Java.TypeBound_ClassOrInterface cit additional) ->
+    if L.null additional
+      then writeClassOrInterfaceType cit
+      else spaceSep $ writeClassOrInterfaceType cit : (writeAdditionalBound <$> additional)
 
 writeTypeDeclaration :: Java.TypeDeclaration -> Ast.Expr
 writeTypeDeclaration d = case d of
