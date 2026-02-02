@@ -201,10 +201,10 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.Type:
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())
         
         case hydra.core.LiteralFloat(value=arg_):
-            return (lambda injected_: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(injected_)))(float_value_type(arg_))
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(float_value_type(arg_)))
         
         case hydra.core.LiteralInteger(value=arg_2):
-            return (lambda injected_: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(injected_)))(integer_value_type(arg_2))
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(integer_value_type(arg_2)))
         
         case hydra.core.LiteralString():
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())

@@ -277,6 +277,28 @@ def test_filter__empty_list():
 
     assert (hydra.lib.lists.filter((lambda x: hydra.lib.equality.gt(x, 0)), ())) == (())
 
+# find
+
+def test_find__find_existing_element():
+
+    assert (hydra.lib.lists.find((lambda x: hydra.lib.equality.gt(x, 3)), (1, 2, 4, 5))) == (Just(4))
+
+def test_find__find_first_matching():
+
+    assert (hydra.lib.lists.find((lambda x: hydra.lib.equality.gt(x, 0)), (1, 2, 3))) == (Just(1))
+
+def test_find__find_no_match():
+
+    assert (hydra.lib.lists.find((lambda x: hydra.lib.equality.gt(x, 10)), (1, 2, 3))) == (Nothing())
+
+def test_find__find_in_empty_list():
+
+    assert (hydra.lib.lists.find((lambda x: hydra.lib.equality.gt(x, 0)), ())) == (Nothing())
+
+def test_find__find_single_element():
+
+    assert (hydra.lib.lists.find((lambda x: hydra.lib.equality.equal(x, 42)), (42,))) == (Just(42))
+
 # foldl
 
 def test_foldl__sum_with_addition():
@@ -514,6 +536,28 @@ def test_null__empty_string_list():
 def test_null__non_empty_string_list():
 
     assert (hydra.lib.lists.null(("a",))) == (False)
+
+# partition
+
+def test_partition__partition_greater_than_3():
+
+    assert (hydra.lib.lists.partition((lambda x: hydra.lib.equality.gt(x, 3)), (1, 2, 3, 4, 5, 6))) == (((4, 5, 6), (1, 2, 3)))
+
+def test_partition__partition_all_elements():
+
+    assert (hydra.lib.lists.partition((lambda x: hydra.lib.equality.lt(x, 10)), (1, 2, 3))) == (((1, 2, 3), ()))
+
+def test_partition__partition_no_elements():
+
+    assert (hydra.lib.lists.partition((lambda x: hydra.lib.equality.gt(x, 10)), (1, 2, 3))) == (((), (1, 2, 3)))
+
+def test_partition__partition_even_numbers():
+
+    assert (hydra.lib.lists.partition((lambda x: hydra.lib.math.even(x)), (1, 2, 3, 4, 5, 6))) == (((2, 4, 6), (1, 3, 5)))
+
+def test_partition__empty_list():
+
+    assert (hydra.lib.lists.partition((lambda x: hydra.lib.equality.lt(x, 5)), ())) == (((), ()))
 
 # pure
 

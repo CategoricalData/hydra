@@ -15,7 +15,6 @@ import hydra.lib.flows
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
-import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.monads
@@ -29,15 +28,12 @@ T2 = TypeVar("T2")
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
     
-    def to_pair(name_and_el: tuple[T0, hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, hydra.core.Type]]:
+    def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, tuple[hydra.core.Name, hydra.core.Type]]:
         @lru_cache(1)
-        def name() -> T0:
-            return hydra.lib.pairs.first(name_and_el)
-        @lru_cache(1)
-        def el() -> hydra.core.Type:
-            return hydra.lib.pairs.second(name_and_el)
-        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el().term))), (lambda t: hydra.lib.flows.pure((name(), t))))))
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), hydra.lib.maps.to_list(g.elements)), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
+        def name() -> hydra.core.Type:
+            return el.name
+        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda t: hydra.lib.flows.pure((name(), t))))))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, g.elements), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
 
 def instantiate_template(minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
     def inst(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:

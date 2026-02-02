@@ -4,7 +4,6 @@ r"""Term encoders for hydra.module."""
 
 from __future__ import annotations
 from collections.abc import Callable
-from hydra.dsl.python import FrozenDict, Maybe, frozenlist
 from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.core
@@ -34,16 +33,16 @@ def definition(v1: hydra.module.Definition) -> hydra.core.Type:
             raise AssertionError("Unreachable: all variants handled")
 
 def file_extension(x: hydra.module.FileExtension) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.module.FileExtension"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.value))))
+    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.module.FileExtension"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
 def namespace(x: hydra.module.Namespace) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.module.Namespace"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.value))))
+    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.module.Namespace"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
 def module(x: hydra.module.Module) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.Module"), (hydra.core.Field(hydra.core.Name("namespace"), namespace(x.namespace)), hydra.core.Field(hydra.core.Name("elements"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.binding, xs))))(x.elements)), hydra.core.Field(hydra.core.Name("termDependencies"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(namespace, xs))))(x.term_dependencies)), hydra.core.Field(hydra.core.Name("typeDependencies"), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(namespace, xs))))(x.type_dependencies)), hydra.core.Field(hydra.core.Name("description"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), opt))))(x.description))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.Module"), (hydra.core.Field(hydra.core.Name("namespace"), namespace(x.namespace)), hydra.core.Field(hydra.core.Name("elements"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.binding, x.elements)))), hydra.core.Field(hydra.core.Name("termDependencies"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(namespace, x.term_dependencies)))), hydra.core.Field(hydra.core.Name("typeDependencies"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(namespace, x.type_dependencies)))), hydra.core.Field(hydra.core.Name("description"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.description))))))))
 
 def namespaces(n: Callable[[T0], hydra.core.Term], x: hydra.module.Namespaces[T0]) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.Namespaces"), (hydra.core.Field(hydra.core.Name("focus"), (lambda p: cast(hydra.core.Term, hydra.core.TermPair(hydra.lib.pairs.bimap(namespace, n, p))))(x.focus)), hydra.core.Field(hydra.core.Name("mapping"), (lambda m: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(namespace, n, m))))(x.mapping))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.Namespaces"), (hydra.core.Field(hydra.core.Name("focus"), cast(hydra.core.Term, hydra.core.TermPair(hydra.lib.pairs.bimap(namespace, n, x.focus)))), hydra.core.Field(hydra.core.Name("mapping"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(namespace, n, x.mapping))))))))
 
 def qualified_name(x: hydra.module.QualifiedName) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.QualifiedName"), (hydra.core.Field(hydra.core.Name("namespace"), (lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(namespace, opt))))(x.namespace)), hydra.core.Field(hydra.core.Name("local"), (lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2)))))(x.local))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.module.QualifiedName"), (hydra.core.Field(hydra.core.Name("namespace"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(namespace, x.namespace)))), hydra.core.Field(hydra.core.Name("local"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.local)))))))))

@@ -446,7 +446,7 @@ def decoder_type_scheme(typ: hydra.core.Type) -> hydra.core.Type:
         return hydra.lib.lists.filter((lambda v: hydra.lib.lists.elem(v, type_vars())), all_ord_vars())
     @lru_cache(1)
     def constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(ord_vars()), (lambda : Nothing()), (lambda : Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda v: (v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton(hydra.core.Name("hydra.typeclass.Ord"))))), ord_vars())))))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(ord_vars()), (lambda : Nothing()), (lambda : Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda v: (v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton(hydra.core.Name("ordering"))))), ord_vars())))))
     return hydra.core.TypeScheme(type_vars(), decoder_type(typ), constraints())
 
 def decode_binding(b: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Binding]:

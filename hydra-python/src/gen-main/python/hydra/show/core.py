@@ -434,6 +434,20 @@ def lambda_(l: hydra.core.Lambda) -> str:
         return hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt())
     return hydra.lib.strings.cat(("λ", v(), type_str(), ".", term(body())))
 
+def let(l: hydra.core.Let) -> str:
+    r"""Show a let expression as a string."""
+    
+    @lru_cache(1)
+    def bindings() -> frozenlist[hydra.core.Binding]:
+        return l.bindings
+    @lru_cache(1)
+    def env() -> hydra.core.Type:
+        return l.body
+    @lru_cache(1)
+    def binding_strs() -> frozenlist[str]:
+        return hydra.lib.lists.map(binding, bindings())
+    return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs()), " in ", term(env())))
+
 def term(t: hydra.core.Term) -> str:
     r"""Show a term as a string."""
     
@@ -470,16 +484,7 @@ def term(t: hydra.core.Term) -> str:
             return function(v1)
         
         case hydra.core.TermLet(value=l):
-            @lru_cache(1)
-            def bindings() -> frozenlist[hydra.core.Binding]:
-                return l.bindings
-            @lru_cache(1)
-            def env() -> hydra.core.Type:
-                return l.body
-            @lru_cache(1)
-            def binding_strs() -> frozenlist[str]:
-                return hydra.lib.lists.map(binding, bindings())
-            return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs()), " in ", term(env())))
+            return let(l)
         
         case hydra.core.TermList(value=els):
             @lru_cache(1)

@@ -28,29 +28,29 @@ def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_3(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_4(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_3(v)
                         
@@ -69,15 +69,15 @@ def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
-                    match v1:
+                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         

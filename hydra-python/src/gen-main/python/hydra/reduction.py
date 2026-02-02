@@ -5,7 +5,7 @@ r"""Functions for reducing terms and types, i.e. performing computations."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Maybe, Nothing, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.arity
 import hydra.checking
@@ -189,6 +189,214 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
             case _:
                 return after_recursion(recurse(t2()))
     return contract_term(hydra.rewriting.rewrite_term((lambda v1, v2: rewrite((), v1, v2)), term))
+
+def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.core.Type:
+    r"""Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the TypeContext to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the TypeContext through nested scopes."""
+    
+    def term_arity_with_context(tx: hydra.typing.TypeContext, term: hydra.core.Term) -> int:
+        def _hoist_term_arity_with_context_1(tx: hydra.typing.TypeContext, v1: hydra.core.Function) -> int:
+            match v1:
+                case hydra.core.FunctionElimination():
+                    return 1
+                
+                case hydra.core.FunctionLambda():
+                    return 0
+                
+                case hydra.core.FunctionPrimitive(value=name):
+                    return hydra.lib.maybes.maybe(0, hydra.arity.type_scheme_arity, hydra.lib.maps.lookup(name, tx.inference_context.primitive_types))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        match term:
+            case hydra.core.TermAnnotated(value=at):
+                return term_arity_with_context(tx, at.body)
+            
+            case hydra.core.TermApplication(value=app):
+                return hydra.lib.math.sub(term_arity_with_context(tx, app.function), 1)
+            
+            case hydra.core.TermFunction(value=f):
+                return _hoist_term_arity_with_context_1(tx, f)
+            
+            case hydra.core.TermLet(value=l):
+                return term_arity_with_context(hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx, l), l.body)
+            
+            case hydra.core.TermTypeLambda(value=tl):
+                return term_arity_with_context(hydra.schemas.extend_type_context_for_type_lambda(tx, tl), tl.body)
+            
+            case hydra.core.TermTypeApplication(value=tat):
+                return term_arity_with_context(tx, tat.body)
+            
+            case hydra.core.TermVariable(value=name):
+                return hydra.lib.maybes.maybe(0, hydra.arity.type_arity, hydra.lib.maps.lookup(name, tx.types))
+            
+            case _:
+                return 0
+    def expand(always_pad: bool, args: frozenlist[hydra.core.Term], arity: int, head: hydra.core.Term) -> hydra.core.Type:
+        @lru_cache(1)
+        def applied() -> hydra.core.Type:
+            return hydra.lib.lists.foldl((lambda lhs, arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, arg)))), head, args)
+        @lru_cache(1)
+        def num_args() -> int:
+            return hydra.lib.lists.length(args)
+        @lru_cache(1)
+        def needed() -> int:
+            return hydra.lib.math.sub(arity, num_args())
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (fully_applied := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, Nothing(), body))))))[1]), fully_applied, hydra.lib.lists.reverse(indices)))[1])[1]), (lambda : applied()))
+    def rewrite_with_args(args: frozenlist[hydra.core.Term], tx: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.core.Type:
+        def recurse(tx1: hydra.typing.TypeContext, term1: hydra.core.Term) -> hydra.core.Type:
+            return rewrite_with_args((), tx1, term1)
+        def after_recursion(trm: hydra.core.Term) -> hydra.core.Type:
+            @lru_cache(1)
+            def arity() -> int:
+                return term_arity_with_context(tx, trm)
+            return expand(False, args, arity(), trm)
+        def for_field(f: hydra.core.Field) -> hydra.core.Type:
+            return hydra.core.Field(f.name, recurse(tx, f.term))
+        def for_case_branch(f: hydra.core.Field) -> hydra.core.Type:
+            @lru_cache(1)
+            def branch_body() -> hydra.core.Type:
+                return recurse(tx, f.term)
+            @lru_cache(1)
+            def arty() -> int:
+                return term_arity_with_context(tx, branch_body())
+            return hydra.core.Field(f.name, expand(True, (), arty(), branch_body()))
+        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Type:
+            match elm:
+                case hydra.core.EliminationRecord(value=p):
+                    return cast(hydra.core.Elimination, hydra.core.EliminationRecord(p))
+                
+                case hydra.core.EliminationUnion(value=cs):
+                    return cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.maybes.map((lambda t1: recurse(tx, t1)), cs.default), hydra.lib.lists.map(for_case_branch, cs.cases))))
+                
+                case hydra.core.EliminationWrap(value=nm):
+                    return cast(hydra.core.Elimination, hydra.core.EliminationWrap(nm))
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        def for_map(mp: FrozenDict[hydra.core.Term, hydra.core.Term]) -> FrozenDict[hydra.core.Term, hydra.core.Term]:
+            def for_pair(pr: tuple[hydra.core.Term, hydra.core.Term]) -> tuple[hydra.core.Term, hydra.core.Term]:
+                return (recurse(tx, hydra.lib.pairs.first(pr)), recurse(tx, hydra.lib.pairs.second(pr)))
+            return hydra.lib.maps.from_list(hydra.lib.lists.map(for_pair, hydra.lib.maps.to_list(mp)))
+        def _hoist_body_1(v1: hydra.core.Function) -> hydra.core.Type:
+            match v1:
+                case hydra.core.FunctionElimination(value=elm):
+                    @lru_cache(1)
+                    def pad_elim() -> bool:
+                        match elm:
+                            case hydra.core.EliminationRecord():
+                                return False
+                            
+                            case hydra.core.EliminationUnion():
+                                return True
+                            
+                            case hydra.core.EliminationWrap():
+                                return False
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
+                    return expand(pad_elim(), args, 1, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(for_elimination(elm))))))
+                
+                case hydra.core.FunctionLambda(value=lm):
+                    @lru_cache(1)
+                    def tx1() -> hydra.core.Type:
+                        return hydra.schemas.extend_type_context_for_lambda(tx, lm)
+                    @lru_cache(1)
+                    def body() -> hydra.core.Type:
+                        return rewrite_with_args((), tx1(), lm.body)
+                    @lru_cache(1)
+                    def result() -> hydra.core.Type:
+                        return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(lm.parameter, lm.domain, body())))))
+                    @lru_cache(1)
+                    def arty() -> int:
+                        return term_arity_with_context(tx, result())
+                    return expand(False, args, arty(), result())
+                
+                case hydra.core.FunctionPrimitive():
+                    @lru_cache(1)
+                    def arty() -> int:
+                        return term_arity_with_context(tx, term)
+                    return expand(False, args, arty(), term)
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
+        match term:
+            case hydra.core.TermAnnotated(value=at):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(recurse(tx, at.body), at.annotation))))
+            
+            case hydra.core.TermApplication(value=app):
+                @lru_cache(1)
+                def rhs() -> hydra.core.Type:
+                    return rewrite_with_args((), tx, app.argument)
+                return rewrite_with_args(hydra.lib.lists.cons(rhs(), args), tx, app.function)
+            
+            case hydra.core.TermEither(value=e):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: Left(recurse(tx, l))), (lambda r: Right(recurse(tx, r))), e))))
+            
+            case hydra.core.TermFunction(value=fn):
+                return _hoist_body_1(fn)
+            
+            case hydra.core.TermLet(value=lt):
+                @lru_cache(1)
+                def tx1() -> hydra.core.Type:
+                    return hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx, lt)
+                def map_binding(b: hydra.core.Binding) -> hydra.core.Type:
+                    return hydra.core.Binding(b.name, rewrite_with_args((), tx1(), b.term), b.type)
+                @lru_cache(1)
+                def result() -> hydra.core.Type:
+                    return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map(map_binding, lt.bindings), rewrite_with_args((), tx1(), lt.body))))
+                return after_recursion(result())
+            
+            case hydra.core.TermList(value=els):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: recurse(tx, el)), els))))
+            
+            case hydra.core.TermLiteral(value=v):
+                return cast(hydra.core.Term, hydra.core.TermLiteral(v))
+            
+            case hydra.core.TermMap(value=mp):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermMap(for_map(mp))))
+            
+            case hydra.core.TermMaybe(value=mb):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda v: recurse(tx, v)), mb))))
+            
+            case hydra.core.TermPair(value=pr):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermPair((recurse(tx, hydra.lib.pairs.first(pr)), recurse(tx, hydra.lib.pairs.second(pr))))))
+            
+            case hydra.core.TermRecord(value=rc):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(rc.type_name, hydra.lib.lists.map(for_field, rc.fields)))))
+            
+            case hydra.core.TermSet(value=st):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(hydra.lib.lists.map((lambda el: recurse(tx, el)), hydra.lib.sets.to_list(st))))))
+            
+            case hydra.core.TermTypeApplication(value=tt):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(recurse(tx, tt.body), tt.type))))
+            
+            case hydra.core.TermTypeLambda(value=tl):
+                @lru_cache(1)
+                def tx1() -> hydra.core.Type:
+                    return hydra.schemas.extend_type_context_for_type_lambda(tx, tl)
+                @lru_cache(1)
+                def result() -> hydra.core.Type:
+                    return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, rewrite_with_args((), tx1(), tl.body))))
+                return after_recursion(result())
+            
+            case hydra.core.TermUnion(value=inj):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, for_field(inj.field)))))
+            
+            case hydra.core.TermUnit():
+                return cast(hydra.core.Term, hydra.core.TermUnit())
+            
+            case hydra.core.TermVariable():
+                @lru_cache(1)
+                def arty() -> int:
+                    return term_arity_with_context(tx, term)
+                return expand(False, args, arty(), term)
+            
+            case hydra.core.TermWrap(value=wt):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, recurse(tx, wt.body)))))
+            
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return contract_term(rewrite_with_args((), tx0, term0))
 
 def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], tx: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
@@ -540,7 +748,7 @@ def term_is_value(g: T0, term: hydra.core.Term) -> bool:
                     return True
                 
                 case hydra.core.EliminationUnion(value=cs):
-                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), cs.default))
+                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda v12: term_is_value(g, v12)), cs.default))
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")

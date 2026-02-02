@@ -22,6 +22,7 @@ import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
+import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
@@ -123,7 +124,7 @@ def extend_type_context_for_lambda(tcontext: hydra.typing.TypeContext, lam: hydr
     @lru_cache(1)
     def var() -> hydra.core.Type:
         return lam.parameter
-    return hydra.typing.TypeContext(hydra.lib.maybes.maybe(tcontext.types, (lambda dom: hydra.lib.maps.insert(var(), dom, tcontext.types)), lam.domain), hydra.lib.maps.delete(var(), tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var(), tcontext.lambda_variables), tcontext.inference_context)
+    return hydra.typing.TypeContext(hydra.lib.maybes.maybe(tcontext.types, (lambda dom: hydra.lib.maps.insert(var(), dom, tcontext.types)), lam.domain), hydra.lib.maps.delete(var(), tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var(), tcontext.lambda_variables), hydra.lib.sets.delete(var(), tcontext.let_variables), tcontext.inference_context)
 
 def type_scheme_to_f_type(ts: hydra.core.TypeScheme) -> hydra.core.Type:
     r"""Convert a type scheme to a forall type."""
@@ -142,7 +143,7 @@ def extend_type_context_for_let(for_binding: Callable[[hydra.typing.TypeContext,
     @lru_cache(1)
     def bindings() -> frozenlist[hydra.core.Binding]:
         return letrec.bindings
-    return hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda ts: type_scheme_to_f_type(ts)), b.type))), bindings())), tcontext.types), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings()), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings()), tcontext.inference_context)
+    return hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), bindings()))), tcontext.types), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings()), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings()), hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.insert(b.name, s)), tcontext.let_variables, bindings()), tcontext.inference_context)
 
 def extend_type_context_for_type_lambda(tcontext: hydra.typing.TypeContext, tlam: hydra.core.TypeLambda) -> hydra.core.Type:
     r"""Extend a type context by descending into a System F type lambda body."""
@@ -150,7 +151,20 @@ def extend_type_context_for_type_lambda(tcontext: hydra.typing.TypeContext, tlam
     @lru_cache(1)
     def name() -> hydra.core.Type:
         return tlam.parameter
-    return hydra.typing.TypeContext(tcontext.types, tcontext.metadata, hydra.lib.sets.insert(name(), tcontext.type_variables), tcontext.lambda_variables, tcontext.inference_context)
+    return hydra.typing.TypeContext(tcontext.types, tcontext.metadata, hydra.lib.sets.insert(name(), tcontext.type_variables), tcontext.lambda_variables, tcontext.let_variables, tcontext.inference_context)
+
+def f_type_is_polymorphic(typ: hydra.core.Type) -> bool:
+    r"""Test whether a given System F type is polymorphic (i.e., a forall type)."""
+    
+    match typ:
+        case hydra.core.TypeAnnotated(value=at):
+            return f_type_is_polymorphic(at.body)
+        
+        case hydra.core.TypeForall():
+            return True
+        
+        case _:
+            return False
 
 def f_type_to_type_scheme(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Convert a forall type to a type scheme."""
@@ -197,6 +211,31 @@ def fresh_name() -> hydra.compute.Flow[T0, hydra.core.Name]:
 def fresh_names(n: int) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Name]]:
     return hydra.lib.flows.sequence(hydra.lib.lists.replicate(n, fresh_name()))
 
+def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
+    def go(depth: int, subst2: FrozenDict[hydra.core.Name, hydra.core.Name], t: hydra.core.Type) -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
+        match hydra.rewriting.deannotate_type(t):
+            case hydra.core.TypeForall(value=ft):
+                @lru_cache(1)
+                def old_var() -> hydra.core.Type:
+                    return ft.parameter
+                @lru_cache(1)
+                def new_var() -> hydra.core.Type:
+                    return hydra.core.Name(hydra.lib.strings.cat2("_", hydra.lib.literals.show_int32(depth)))
+                return go(hydra.lib.math.add(depth, 1), hydra.lib.maps.insert(old_var(), new_var(), subst2), ft.body)
+            
+            case _:
+                return (subst2, t)
+    @lru_cache(1)
+    def result() -> tuple[T1, hydra.core.Type]:
+        return go(0, hydra.lib.maps.empty(), typ)
+    @lru_cache(1)
+    def subst() -> T1:
+        return hydra.lib.pairs.first(result())
+    @lru_cache(1)
+    def body() -> hydra.core.Type:
+        return hydra.lib.pairs.second(result())
+    return hydra.rewriting.substitute_type_variables(subst(), body())
+
 def fully_strip_type(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Fully strip a type of forall quantifiers."""
     
@@ -207,26 +246,20 @@ def fully_strip_type(typ: hydra.core.Type) -> hydra.core.Type:
         case _:
             return typ
 
+def graph_as_let(g: hydra.graph.Graph) -> hydra.core.Type:
+    r"""Convert a graph to a let expression."""
+    
+    return hydra.core.Let(g.elements, g.body)
+
 def graph_as_term(g: hydra.graph.Graph) -> hydra.core.Type:
     r"""Convert a graph to a term, taking advantage of the built-in duality between graphs and terms."""
     
-    def to_binding(el: hydra.core.Binding) -> hydra.core.Type:
-        @lru_cache(1)
-        def name() -> hydra.core.Type:
-            return el.name
-        @lru_cache(1)
-        def term() -> hydra.core.Type:
-            return el.term
-        @lru_cache(1)
-        def mts() -> Maybe[hydra.core.TypeScheme]:
-            return el.type
-        return hydra.core.Binding(name(), term(), mts())
-    return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map(to_binding, hydra.lib.maps.elems(g.elements)), g.body)))
+    return cast(hydra.core.Term, hydra.core.TermLet(graph_as_let(g)))
 
 def graph_as_types(sg: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Decode a schema graph which encodes a set of named types."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (els := hydra.lib.maps.elems(sg.elements), to_pair := (lambda el: hydra.lib.flows.bind(hydra.monads.with_trace(hydra.lib.strings.cat2("graph as types: ", el.name.value), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda typ: hydra.lib.flows.pure((el.name, typ))))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), els), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs)))))[2]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (els := sg.elements, to_pair := (lambda el: hydra.lib.flows.bind(hydra.monads.with_trace(hydra.lib.strings.cat2("graph as types: ", el.name.value), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda typ: hydra.lib.flows.pure((el.name, typ))))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), els), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs)))))[2]))
 
 def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> hydra.compute.Flow[T0, FrozenDict[hydra.core.Name, hydra.core.TypeScheme]]:
     def to_type_scheme(vars: frozenlist[hydra.core.Name], typ: hydra.core.Type) -> hydra.core.Type:
@@ -238,7 +271,7 @@ def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> hydra.compute.Fl
                 return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
         return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (for_term := (lambda term: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts)))))[1]))
-    return hydra.monads.with_trace("schema graph to typing environment", hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, hydra.lib.maps.elems(g.elements)), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.maybes.cat(mpairs)))))))
+    return hydra.monads.with_trace("schema graph to typing environment", hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list(to_pair, g.elements), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.maybes.cat(mpairs)))))))
 
 def graph_to_inference_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.InferenceContext]:
     @lru_cache(1)
@@ -249,11 +282,11 @@ def graph_to_inference_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (p.name, p.type)), hydra.lib.maps.elems(graph.primitives)))
     @lru_cache(1)
     def var_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), hydra.lib.maps.elems(graph.elements))))
+        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), graph.elements)))
     return hydra.lib.flows.bind(schema_graph_to_typing_environment(schema()), (lambda schema_types: hydra.lib.flows.pure(hydra.typing.InferenceContext(schema_types, prim_types(), var_types(), hydra.lib.maps.empty(), False))))
 
 def graph_to_type_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.TypeContext]:
-    return hydra.lib.flows.bind(graph_to_inference_context(graph), (lambda ix: (element_types := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), hydra.lib.maps.elems(graph.elements)))), hydra.lib.flows.pure(hydra.typing.TypeContext(element_types, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix)))[1]))
+    return hydra.lib.flows.bind(graph_to_inference_context(graph), (lambda ix: (element_types := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), graph.elements))), hydra.lib.flows.pure(hydra.typing.TypeContext(element_types, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix)))[1]))
 
 def instantiate_type_scheme(scheme: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     @lru_cache(1)
@@ -491,29 +524,15 @@ def resolve_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, 
                 return hydra.lib.flows.pure(Just(typ))
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: _hoist_hydra_schemas_resolve_type_1(cx, typ, hydra.rewriting.deannotate_type(typ))))
 
-def term_as_graph(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
+def term_as_graph(term: hydra.core.Term) -> frozenlist[hydra.core.Binding]:
     r"""Find the equivalent graph representation of a term."""
     
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermLet(value=lt):
-            @lru_cache(1)
-            def bindings() -> frozenlist[hydra.core.Binding]:
-                return lt.bindings
-            def from_binding(b: hydra.core.Binding) -> tuple[hydra.core.Name, hydra.core.Binding]:
-                @lru_cache(1)
-                def name() -> hydra.core.Type:
-                    return b.name
-                @lru_cache(1)
-                def term() -> hydra.core.Type:
-                    return b.term
-                @lru_cache(1)
-                def ts() -> Maybe[hydra.core.TypeScheme]:
-                    return b.type
-                return (name(), hydra.core.Binding(name(), term(), ts()))
-            return hydra.lib.maps.from_list(hydra.lib.lists.map(from_binding, bindings()))
+            return lt.bindings
         
         case _:
-            return hydra.lib.maps.empty()
+            return ()
 
 def topological_sort_type_definitions(defs: frozenlist[hydra.module.TypeDefinition]) -> frozenlist[frozenlist[hydra.module.TypeDefinition]]:
     r"""Topologically sort type definitions by dependencies."""
@@ -528,15 +547,15 @@ def topological_sort_type_definitions(defs: frozenlist[hydra.module.TypeDefiniti
         return hydra.sorting.topological_sort_components(hydra.lib.lists.map(to_pair, defs))
     return hydra.lib.lists.map((lambda names: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, name_to_def())), names))), sorted())
 
-def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
-    r"""Encode a map of named types to a map of elements."""
+def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) -> frozenlist[hydra.core.Binding]:
+    r"""Encode a map of named types to a list of elements."""
     
-    def to_element(pair: tuple[hydra.core.Name, hydra.core.Type]) -> tuple[hydra.core.Name, hydra.core.Binding]:
+    def to_element(pair: tuple[hydra.core.Name, hydra.core.Type]) -> hydra.core.Type:
         @lru_cache(1)
         def name() -> hydra.core.Type:
             return hydra.lib.pairs.first(pair)
-        return (name(), hydra.core.Binding(name(), hydra.encode.core.type(hydra.lib.pairs.second(pair)), Nothing()))
-    return hydra.lib.maps.from_list(hydra.lib.lists.map(to_element, hydra.lib.maps.to_list(type_map)))
+        return hydra.core.Binding(name(), hydra.encode.core.type(hydra.lib.pairs.second(pair)), Nothing())
+    return hydra.lib.lists.map(to_element, hydra.lib.maps.to_list(type_map))
 
 def with_lambda_context(get_context: Callable[[T0], hydra.typing.TypeContext], set_context: Callable[[hydra.typing.TypeContext, T0], T1], env: T0, lam: hydra.core.Lambda, body: Callable[[T1], T2]) -> T2:
     @lru_cache(1)

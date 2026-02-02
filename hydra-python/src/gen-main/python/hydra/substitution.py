@@ -148,16 +148,6 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
                 return dflt()
     return hydra.rewriting.rewrite_term(rewrite, term0)
 
-def substitute_in_constraint(subst: hydra.typing.TypeSubst, c: hydra.typing.TypeConstraint) -> hydra.core.Type:
-    r"""Apply a type substitution to a type constraint."""
-    
-    return hydra.typing.TypeConstraint(subst_in_type(subst, c.left), subst_in_type(subst, c.right), c.comment)
-
-def substitute_in_constraints(subst: hydra.typing.TypeSubst, cs: frozenlist[hydra.typing.TypeConstraint]) -> frozenlist[hydra.typing.TypeConstraint]:
-    r"""Apply a type substitution to a list of type constraints."""
-    
-    return hydra.lib.lists.map((lambda v1: substitute_in_constraint(subst, v1)), cs)
-
 def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) -> hydra.core.Type:
     r"""Apply a term substitution to a term."""
     
@@ -206,3 +196,18 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
             case _:
                 return recurse(term)
     return hydra.rewriting.rewrite_term(rewrite, term0)
+
+def substitute_in_binding(subst: hydra.typing.TermSubst, b: hydra.core.Binding) -> hydra.core.Type:
+    r"""Apply a term substitution to a binding."""
+    
+    return hydra.core.Binding(b.name, substitute_in_term(subst, b.term), b.type)
+
+def substitute_in_constraint(subst: hydra.typing.TypeSubst, c: hydra.typing.TypeConstraint) -> hydra.core.Type:
+    r"""Apply a type substitution to a type constraint."""
+    
+    return hydra.typing.TypeConstraint(subst_in_type(subst, c.left), subst_in_type(subst, c.right), c.comment)
+
+def substitute_in_constraints(subst: hydra.typing.TypeSubst, cs: frozenlist[hydra.typing.TypeConstraint]) -> frozenlist[hydra.typing.TypeConstraint]:
+    r"""Apply a type substitution to a list of type constraints."""
+    
+    return hydra.lib.lists.map((lambda v1: substitute_in_constraint(subst, v1)), cs)

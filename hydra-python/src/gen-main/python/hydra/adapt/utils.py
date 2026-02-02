@@ -96,8 +96,8 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
     @lru_cache(1)
     def local() -> str:
         return qual_name().local
-    def ns_to_file_path(ns: hydra.module.Namespace) -> str:
-        return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns.value)))
+    def ns_to_file_path(ns2: hydra.module.Namespace) -> str:
+        return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
     @lru_cache(1)
     def prefix() -> str:
         return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns())
@@ -121,8 +121,8 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
                 return False
     def is_supported_variant(v: hydra.variants.TypeVariant) -> bool:
         return hydra.lib.logic.or_(is_variable(v), hydra.lib.sets.member(v, constraints.type_variants))
-    def is_supported(base: hydra.core.Type) -> bool:
-        match base:
+    def is_supported(base2: hydra.core.Type) -> bool:
+        match base2:
             case hydra.core.TypeAnnotated(value=at):
                 return type_is_supported(constraints, at.body)
             
