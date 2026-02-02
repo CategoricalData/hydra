@@ -157,7 +157,7 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     prim2Eval _flows_mapList  EvalFlows.mapList  [_x, _s, _y]                 (function x_ (flow s_ y_)) (list x_) (flow s_ (list y_)),
     prim2Eval _flows_mapMaybe EvalFlows.mapMaybe [_x, _s, _y]                 (function x_ $ flow s_ y_) (optional x_) (flow s_ $ optional y_),
     prim2Eval _flows_mapSet   EvalFlows.mapSet   [_xOrd, _s, _yOrd]           (function x_ (flow s_ y_)) (set x_) (flow s_ (set y_)),
-    prim1     _flows_pure     Flows.pure         [_x, _s]                     x_ (flow s_ x_),
+    prim1     _flows_pure     Flows.pure         [_s, _x]                     x_ (flow s_ x_),
     prim1     _flows_sequence Flows.sequence     [_s, _x]                     (list (flow s_ x_)) (flow s_ (list x_))]
 
 hydraLibLists :: Library
@@ -172,6 +172,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2Eval _lists_dropWhile   EvalLists.dropWhile [_x]         (function x_ boolean) (list x_) (list x_),
     prim2     _lists_elem        Lists.elem          [_xEq]       x_ (list x_) boolean,
     prim2Eval _lists_filter      EvalLists.filter    [_x]         (function x_ boolean) (list x_) (list x_),
+    prim2Eval _lists_find        EvalLists.find      [_x]         (function x_ boolean) (list x_) (optional x_),
     prim3Eval _lists_foldl       EvalLists.foldl     [_y, _x]     (function y_ (function x_ y_)) y_ (list x_) y_,
     prim1     _lists_group       Lists.group         [_xEq]       (list x_) (list (list x_)),
     prim1     _lists_head        Lists.head          [_x]         (list x_) x_,
@@ -183,6 +184,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2Eval _lists_map         EvalLists.map       [_x, _y]     (function x_ y_) (list x_) (list y_),
     prim1     _lists_nub         Lists.nub           [_xEq]       (list x_) (list x_),
     prim1     _lists_null        Lists.null          [_x]         (list x_) boolean,
+    prim2Eval _lists_partition   EvalLists.partition [_x]         (function x_ boolean) (list x_) (pair (list x_) (list x_)),
     prim1     _lists_pure        Lists.pure          [_x]         x_ (list x_),
     prim2     _lists_replicate   Lists.replicate     [_x]         int32 x_ (list x_),
     prim1     _lists_reverse     Lists.reverse       [_x]         (list x_) (list x_),
