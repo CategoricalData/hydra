@@ -84,7 +84,6 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
     <> " back to its original key.") $
-  withOrd "t0" $
   "edges0" ~>
   "sortedEdges" <~ Lists.sortOn (unaryFunction Pairs.first) (var "edges0") $
   "indexedEdges" <~ Lists.zip (Math.range (int32 0) (Lists.length (var "sortedEdges"))) (var "sortedEdges") $

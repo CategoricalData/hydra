@@ -74,7 +74,7 @@ graph :: TBinding (Graph -> String)
 graph = define "graph" $
   doc "Show a graph as a string" $
   lambda "graph" $ lets [
-    "elements">: Maps.elems $ Graph.graphElements $ var "graph",
+    "elements">: Graph.graphElements $ var "graph",
     "elementStrs">: Lists.map ShowCore.binding (var "elements")] $
     Strings.cat $ list [
       string "{",

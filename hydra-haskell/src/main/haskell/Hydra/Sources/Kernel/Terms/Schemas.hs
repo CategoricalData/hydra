@@ -12,6 +12,7 @@ import Hydra.Kernel hiding (
   extendTypeContextForLambda,
   extendTypeContextForLet,
   extendTypeContextForTypeLambda,
+  fTypeIsPolymorphic,
   fTypeToTypeScheme,
   fieldMap,
   fieldTypeMap,
@@ -19,7 +20,9 @@ import Hydra.Kernel hiding (
   findFieldType,
   freshName,
   freshNames,
+  fullyStripAndNormalizeType,
   fullyStripType,
+  graphAsLet,
   graphAsTerm,
   graphAsTypes,
   graphToInferenceContext,
@@ -152,8 +155,11 @@ module_ = Module ns elements
       toBinding findFieldType,
       toBinding freshName,
       toBinding freshNames,
+      toBinding fTypeIsPolymorphic,
       toBinding fTypeToTypeScheme,
+      toBinding fullyStripAndNormalizeType,
       toBinding fullyStripType,
+      toBinding graphAsLet,
       toBinding graphAsTerm,
       toBinding graphAsTypes,
       toBinding graphToInferenceContext,
@@ -289,7 +295,10 @@ extendTypeContextForLambda = define "extendTypeContextForLambda" $
       ("dom" ~> Maps.insert (var "var") (var "dom") $ Typing.typeContextTypes $ var "tcontext"))
     (Maps.delete (var "var") (Typing.typeContextMetadata $ var "tcontext"))
     (Typing.typeContextTypeVariables $ var "tcontext")
+    -- Add the variable to lambda variables
     (Sets.insert (var "var") $ Typing.typeContextLambdaVariables $ var "tcontext")
+    -- Remove the variable from let variables if it exists there; it is shadowed if so
+    (Sets.delete (var "var") $ Typing.typeContextLetVariables $ var "tcontext")
     (Typing.typeContextInferenceContext $ var "tcontext")
 
 extendTypeContextForLet :: TBinding ((TypeContext -> Binding -> Maybe Term) -> TypeContext -> Let -> TypeContext)
@@ -303,14 +312,11 @@ extendTypeContextForLet = define "extendTypeContextForLet" $
     (Maps.union
       -- Add all bindings to typeContextTypes. Use the type scheme if available, otherwise use a placeholder type.
       -- This ensures that isComplexVariable can distinguish defined local bindings from undefined variables.
-      -- TODO: we should never have missing type schemes after inference
-      (Maps.fromList $ Lists.map
-        ("b" ~> pair (Core.bindingName $ var "b")
-          (optCases (Core.bindingType $ var "b")
-            -- Placeholder type for bindings without type schemes
-            (Core.typeVariable $ Core.name (string "_"))
-            -- Convert type scheme to type if available
-            ("ts" ~> typeSchemeToFType @@ var "ts")))
+      (Maps.fromList $ Maybes.cat $ Lists.map
+        ("b" ~>
+          (Maybes.map
+            ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")))
+            (Core.bindingType $ var "b"))
         (var "bindings"))
       (Typing.typeContextTypes (var "tcontext")))
     (Lists.foldl
@@ -320,9 +326,15 @@ extendTypeContextForLet = define "extendTypeContextForLet" $
       (Typing.typeContextMetadata $ var "tcontext")
       (var "bindings"))
     (Typing.typeContextTypeVariables $ var "tcontext")
+    -- Remove all binding names from lambda variables; they are shadowed if so
     (Lists.foldl
       ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
       (Typing.typeContextLambdaVariables $ var "tcontext")
+      (var "bindings"))
+    -- Add all binding names to let variables
+    (Lists.foldl
+      ("s" ~> "b" ~> Sets.insert (Core.bindingName $ var "b") (var "s"))
+      (Typing.typeContextLetVariables $ var "tcontext")
       (var "bindings"))
     (Typing.typeContextInferenceContext $ var "tcontext")
 
@@ -380,6 +392,14 @@ findFieldType = define "findFieldType" $
       (Flows.pure (Core.fieldTypeType (Lists.head (var "matchingFields"))))
       (Flows.fail (Strings.cat2 (string "Multiple fields named ") (Core.unName (var "fname")))))
 
+fTypeIsPolymorphic :: TBinding (Type -> Bool)
+fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
+  doc "Test whether a given System F type is polymorphic (i.e., a forall type)" $
+  "typ" ~> cases _Type (var "typ")
+    (Just false) [
+    _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
+    _Type_forall>>: "ft" ~> true]
+
 fTypeToTypeScheme :: TBinding (Type -> TypeScheme)
 fTypeToTypeScheme = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
@@ -401,6 +421,26 @@ freshNames = define "freshNames" $
   doc "Generate multiple fresh type variable names" $
   "n" ~> Flows.sequence $ Lists.replicate (var "n") (freshName)
 
+fullyStripAndNormalizeType :: TBinding (Type -> Type)
+fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
+  doc "Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison" $
+  "typ" ~>
+  -- Collect forall-bound variables and the body in one pass
+  "go" <~ ("depth" ~> "subst" ~> "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
+      (Just $ pair (var "subst") (var "t")) [
+      _Type_forall>>: "ft" ~>
+        "oldVar" <~ Core.forallTypeParameter (var "ft") $
+        "newVar" <~ Core.name (Strings.cat2 (string "_") (Literals.showInt32 $ var "depth")) $
+        var "go"
+          @@ (Math.add (var "depth") (int32 1))
+          @@ (Maps.insert (var "oldVar") (var "newVar") (var "subst"))
+          @@ (Core.forallTypeBody (var "ft"))]) $
+  "result" <~ var "go" @@ int32 0 @@ Maps.empty @@ var "typ" $
+  "subst" <~ Pairs.first (var "result") $
+  "body" <~ Pairs.second (var "result") $
+  -- Apply the renaming substitution
+  Rewriting.substituteTypeVariables @@ var "subst" @@ var "body"
+
 fullyStripType :: TBinding (Type -> Type)
 fullyStripType = define "fullyStripType" $
   doc "Fully strip a type of forall quantifiers" $
@@ -409,25 +449,25 @@ fullyStripType = define "fullyStripType" $
     _Type_forall>>: "ft" ~> fullyStripType @@ Core.forallTypeBody (var "ft")]
   @@ (Rewriting.deannotateType @@ var "typ")
 
+graphAsLet :: TBinding (Graph -> Let)
+graphAsLet = define "graphAsLet" $
+  doc "Convert a graph to a let expression" $
+  "g" ~>
+  Core.let_
+    (Graph.graphElements $ var "g")
+    (Graph.graphBody $ var "g")
+
 graphAsTerm :: TBinding (Graph -> Term)
 graphAsTerm = define "graphAsTerm" $
   doc "Convert a graph to a term, taking advantage of the built-in duality between graphs and terms" $
-  "g" ~>
-  "toBinding" <~ ("el" ~>
-    "name" <~ Core.bindingName (var "el") $
-    "term" <~ Core.bindingTerm (var "el") $
-    "mts" <~ Core.bindingType (var "el") $
-    Core.binding (var "name") (var "term") (var "mts")) $
-  Core.termLet $ Core.let_
-    (Lists.map (var "toBinding") (Maps.elems $ Graph.graphElements (var "g")))
-    (Graph.graphBody (var "g"))
+  "g" ~> Core.termLet (graphAsLet @@ var "g")
 
 graphAsTypes :: TBinding (Graph -> Flow s (M.Map Name Type))
 graphAsTypes = define "graphAsTypes" $
   doc "Decode a schema graph which encodes a set of named types" $
   "sg" ~>
   "cx" <<~ Monads.getState $
-  "els" <~ Maps.elems (Graph.graphElements (var "sg")) $
+  "els" <~ Graph.graphElements (var "sg") $
   "toPair" <~ ("el" ~>
     "typ" <<~ (trace ((string "graph as types: ") ++ Core.unName (Core.bindingName $ var "el")) $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm $ var "el"))) $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
@@ -444,7 +484,7 @@ graphToInferenceContext = define "graphToInferenceContext" $
     (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
   "varTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
     ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts")) $ Core.bindingType $ var "b")
-    (Maps.elems $ Graph.graphElements $ var "graph")) $
+    (Graph.graphElements $ var "graph")) $
   "schemaTypes" <<~ schemaGraphToTypingEnvironment @@ var "schema" $
   produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") Maps.empty false
 
@@ -457,8 +497,8 @@ graphToTypeContext = define "graphToTypeContext" $
   -- This ensures variables are resolvable during eta expansion and other processing
   "elementTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
     ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")) $ Core.bindingType $ var "b")
-    (Maps.elems $ Graph.graphElements $ var "graph")) $
-  produce $ Typing.typeContext (var "elementTypes") Maps.empty Sets.empty Sets.empty (var "ix")
+    (Graph.graphElements $ var "graph")) $
+  produce $ Typing.typeContext (var "elementTypes") Maps.empty Sets.empty Sets.empty Sets.empty (var "ix")
 
 instantiateType :: TBinding (Type -> Flow s Type)
 instantiateType = define "instantiateType" $
@@ -768,23 +808,16 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   trace (string "schema graph to typing environment") $
   Monads.withState @@ var "g" @@
-    (Flows.bind (Flows.mapList (var "toPair") (Maps.elems (Graph.graphElements (var "g")))) (
+    (Flows.bind (Flows.mapList (var "toPair") (Graph.graphElements (var "g"))) (
       "mpairs" ~> Flows.pure (Maps.fromList (Maybes.cat (var "mpairs")))))
 
 -- Note: this is lossy, as it throws away the term body
-termAsGraph :: TBinding (Term -> (M.Map Name Term, Term))
+termAsGraph :: TBinding (Term -> [Binding])
 termAsGraph = define "termAsGraph" $
   doc "Find the equivalent graph representation of a term" $
   "term" ~> cases _Term (Rewriting.deannotateTerm @@ var "term")
-    (Just Maps.empty) [
-    _Term_let>>: "lt" ~>
-      "bindings" <~ Core.letBindings (var "lt") $
-      "fromBinding" <~ ("b" ~>
-        "name" <~ Core.bindingName (var "b") $
-        "term" <~ Core.bindingTerm (var "b") $
-        "ts" <~ Core.bindingType (var "b") $
-        pair (var "name") (Core.binding (var "name") (var "term") (var "ts"))) $
-      Maps.fromList $ Lists.map (var "fromBinding") (var "bindings")]
+    (Just (list ([] :: [TTerm Binding]))) [
+    _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 
 topologicalSortTypeDefinitions :: TBinding ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
@@ -850,19 +883,17 @@ typeToTypeScheme = define "typeToTypeScheme" $
       @@ (Core.forallTypeBody $ var "ft")]) $
   var "helper" @@ list ([] :: [TTerm Name]) @@ var "t0"
 
-typesToElements :: TBinding (M.Map Name Type -> M.Map Name Binding)
+typesToElements :: TBinding (M.Map Name Type -> [Binding])
 typesToElements = define "typesToElements" $
-  doc "Encode a map of named types to a map of elements" $
+  doc "Encode a map of named types to a list of elements" $
   "typeMap" ~>
   "toElement" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $
-    pair
+    Core.binding
       (var "name")
-      (Core.binding
-        (var "name")
-        (encoderFor _Type @@ (Pairs.second $ var "pair"))
-        nothing)) $
-  Maps.fromList $ Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
+      (encoderFor _Type @@ (Pairs.second $ var "pair"))
+      nothing) $
+  Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
 
 withLambdaContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> Lambda -> (e -> Flow s a) -> Flow s a)
 withLambdaContext = define "withLambdaContext" $

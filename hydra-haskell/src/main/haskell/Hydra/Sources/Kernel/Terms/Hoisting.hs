@@ -2,12 +2,13 @@ module Hydra.Sources.Kernel.Terms.Hoisting where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  bindingIsPolymorphic,
-  hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindings, hoistPolymorphicLetBindings, hoistSubterms,
+  augmentBindingsWithNewFreeVars,
+  bindingIsPolymorphic, bindingUsesContextTypeVars,
+  hoistAllLetBindings, hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindingsWithContext, hoistLetBindingsWithPredicate, hoistPolymorphicLetBindings, hoistSubterms,
   isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination,
   normalizePathForHoisting,
   rewriteAndFoldTermWithTypeContext, rewriteAndFoldTermWithTypeContextAndPath, rewriteTermWithTypeContext,
-  shouldHoistCaseStatement, updateHoistState)
+  shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -61,6 +62,8 @@ import qualified Data.Maybe              as Y
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
 ns :: Namespace
@@ -71,15 +74,19 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Lexical.ns, Rewriting.ns, Schemas.ns]
+    [Lexical.ns, Rewriting.ns, Schemas.ns, Sorting.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
   where
    elements = [
+     toBinding augmentBindingsWithNewFreeVars,
      toBinding bindingIsPolymorphic,
+     toBinding bindingUsesContextTypeVars,
+     toBinding hoistAllLetBindings,
      toBinding hoistCaseStatements,
      toBinding hoistCaseStatementsInGraph,
-     toBinding hoistLetBindings,
+     toBinding hoistLetBindingsWithContext,
+     toBinding hoistLetBindingsWithPredicate,
      toBinding hoistPolymorphicLetBindings,
      toBinding hoistSubterms,
      toBinding isApplicationFunction,
@@ -90,7 +97,9 @@ module_ = Module ns elements
      toBinding rewriteAndFoldTermWithTypeContext,
      toBinding rewriteAndFoldTermWithTypeContextAndPath,
      toBinding rewriteTermWithTypeContext,
+     toBinding shouldHoistAll,
      toBinding shouldHoistCaseStatement,
+     toBinding shouldHoistPolymorphic,
      toBinding updateHoistState]
 
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
@@ -102,386 +111,297 @@ bindingIsPolymorphic = define "bindingIsPolymorphic" $
     false  -- No type scheme means monomorphic (or untyped)
     ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
 
--- | Transform a let-term by pulling let bindings to the top level.
--- The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False).
--- This is useful for targets like Java that cannot have let-expressions in arbitrary positions.
-hoistLetBindings :: TBinding (Bool -> Let -> Let)
-hoistLetBindings = define "hoistLetBindings" $
+-- | Check if a binding's type uses any type variables from the given TypeContext.
+-- This checks if the free type variables in the binding's type intersect with
+-- the type variables in scope (typeContextTypeVariables).
+bindingUsesContextTypeVars :: TBinding (TypeContext -> Binding -> Bool)
+bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
+  doc ("Check if a binding's type uses any type variables from the given TypeContext."
+    <> " Returns True if the free type variables in the binding's type intersect with"
+    <> " the type variables in scope (typeContextTypeVariables).") $
+  "cx" ~> "binding" ~>
+  optCases (Core.bindingType $ var "binding")
+    false  -- No type scheme means no type variables used
+    ("ts" ~>
+      "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
+      "contextTypeVars" <~ Typing.typeContextTypeVariables (var "cx") $
+      Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
+
+-- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
+augmentBindingsWithNewFreeVars :: TBinding (TypeContext -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
+augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
+  doc "Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas." $
+  "cx" ~> "boundVars" ~> "bindings" ~>
+  "types" <~ Typing.typeContextTypes (var "cx") $
+  "wrapAfterTypeLambdas" <~ ("vars" ~> "term" ~>
+    cases _Term (var "term")
+      -- Default: wrap with lambdas (for any non-type-lambda term)
+      (Just $ Lists.foldl
+        ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
+          Core.lambda (Pairs.first $ var "p") (Pairs.second $ var "p") (var "t"))
+        (var "term") (Lists.reverse $ var "vars")) [
+      -- Recurse through type lambdas
+      _Term_typeLambda>>: "tl" ~>
+        Core.termTypeLambda $ Core.typeLambda
+          (Core.typeLambdaParameter $ var "tl")
+          (var "wrapAfterTypeLambdas" @@ var "vars" @@ (Core.typeLambdaBody $ var "tl"))]) $
+  "augment" <~ ("b" ~>
+    "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Rewriting.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
+    "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types"))) (var "freeVars") $
+    "varTypes" <~ Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "varTypePairs")) $
+    Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
+                           (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
+      (pair (var "b") nothing)
+      (pair
+        (Core.binding
+          (Core.bindingName $ var "b")
+          (var "wrapAfterTypeLambdas" @@ var "varTypePairs" @@ (Core.bindingTerm $ var "b"))
+          (Maybes.map ("ts" ~> Core.typeScheme
+            (Core.typeSchemeVariables $ var "ts")
+            (Lists.foldl
+              ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
+              (Core.typeSchemeType $ var "ts")
+              (Lists.reverse $ var "varTypes"))
+            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingType $ var "b")))
+        (just $ pair
+          (Core.bindingName $ var "b")
+          (Lists.foldl
+            ("t" ~> "v" ~> Core.termApplication $ Core.application (var "t") (Core.termVariable $ var "v"))
+            (Core.termVariable $ Core.bindingName $ var "b")
+            (var "freeVars"))))) $
+  "results" <~ Lists.map (var "augment") (var "bindings") $
+  pair
+    (Lists.map (unaryFunction Pairs.first) (var "results"))
+    (Typing.termSubst $ Maps.fromList $ Maybes.cat $ Lists.map (unaryFunction Pairs.second) (var "results"))
+
+-- | Predicate for hoisting polymorphic bindings.
+-- A binding should be hoisted if it is polymorphic or uses outer type variables.
+shouldHoistPolymorphic :: TBinding (TypeContext -> Binding -> Bool)
+shouldHoistPolymorphic = define "shouldHoistPolymorphic" $
+  doc ("Predicate for hoisting polymorphic bindings."
+    <> " Returns True if the binding is polymorphic (has type scheme variables)"
+    <> " or if its type uses any type variables from the TypeContext.") $
+  "cx" ~> "binding" ~>
+  Logic.or (bindingIsPolymorphic @@ var "binding") (bindingUsesContextTypeVars @@ var "cx" @@ var "binding")
+
+-- | Predicate for hoisting all bindings unconditionally.
+shouldHoistAll :: TBinding (TypeContext -> Binding -> Bool)
+shouldHoistAll = define "shouldHoistAll" $
+  doc "Predicate that always returns True, for hoisting all bindings unconditionally." $
+  constant (constant true)
+
+hoistLetBindingsWithPredicate :: TBinding ((Binding -> Bool) -> (TypeContext -> Binding -> Bool) -> TypeContext -> Let -> Let)
+hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
   doc ("Transform a let-term by pulling let bindings to the top level."
-    <> " The hoistAll parameter controls whether to hoist all bindings (True) or only polymorphic ones (False)."
-    <> " This is useful for targets like Java that cannot have let-expressions in arbitrary positions."
-    <> " Polymorphic bindings are those with a non-empty list of type scheme variables,"
-    <> " OR bindings inside a type lambda scope (which use outer type variables in their types)."
-    <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
+    <> " The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are"
+    <> " eligible for hoisting."
+    <> " The shouldHoistBinding predicate takes the TypeContext and a subterm binding,"
+    <> " and returns True if the binding should be hoisted."
+    <> " This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions."
+    <> " The TypeContext provides information about type variables and lambda variables in scope."
+    <> " If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
     <> " If a hoisted binding captures type variables from an enclosing type lambda scope,"
     <> " those type variables are added to the binding's type scheme, and references are replaced"
     <> " with type applications."
-    <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
-  "hoistAll" ~> "let0" ~>
-  -- Collect all binding names from the original let (to avoid name collisions)
-  "topLevelNames" <~ Sets.fromList (Lists.map ("b" ~> Core.bindingName $ var "b") $ Core.letBindings $ var "let0") $
+    <> " Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+  "isParentBinding" ~> "shouldHoistBinding" ~> "cx0" ~> "let0" ~>
+  "hoistOne" <~ ("prefix" ~> "cx" ~> "pair" ~> "bindingWithCapturedVars" ~>
+    "bindingAndReplacementPairs" <~ Pairs.first (var "pair") $
+    "alreadyUsedNames" <~ Pairs.second (var "pair") $
+    "b" <~ Pairs.first (var "bindingWithCapturedVars") $
+    "capturedTermVars" <~ Pairs.second (var "bindingWithCapturedVars") $
+    "types" <~ Typing.typeContextTypes (var "cx") $
+    "capturedTermVarTypePairs" <~ Lists.map
+      ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types")))
+      (var "capturedTermVars") $
+    "capturedTypeVars" <~ Sets.toList (Sets.intersection
+      (Typing.typeContextTypeVariables $ var "cx")
+      (optCases (Core.bindingType $ var "b")
+        Sets.empty
+        ("ts" ~> Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")))) $
+    "globalBindingName" <~ Lexical.chooseUniqueName
+      @@ var "alreadyUsedNames"
+      @@ (Core.name (Strings.cat2 (var "prefix") (Core.unName $ Core.bindingName $ var "b"))) $
+    "newUsedNames" <~ Sets.insert (var "globalBindingName") (var "alreadyUsedNames") $
 
-  -- Define mutually recursive helper functions together using lets
-  lets [
-    -- Process a term to find and hoist nested let bindings
-    -- typeVars: list of Names for type variables in scope from enclosing type lambdas (outermost to innermost)
-    -- lambdaVars: list of (Name, Maybe Type) for lambda-bound variables in scope (in order from outermost to innermost)
-    -- reserved: set of reserved names
-    -- Returns (hoistedBindings, reservedNames, processedTerm)
-    -- Each hoisted binding is a tuple: (bindingName, wrappedTerm, capturedTermVars, capturedTypeVars, originalType)
-    -- where capturedTermVars is the list of captured lambda variables (for replacing references)
-    -- and capturedTypeVars is the list of captured type variables from enclosing type lambdas
-    -- Hoisted binding info is a 5-tuple: (name, wrappedTerm, capturedTermVars, capturedTypeVars, wrappedType)
-    -- Empty hoisted list type annotation
-    "emptyHoisted">: (list ([] :: [TTerm (Name, Term, [Name], [Name], Y.Maybe TypeScheme)])),
+    -- We can only construct a new type scheme if all of the captured term variables have types
+    -- If there are any captured term variables, we create a function type
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Rewriting.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
+    "newTypeScheme" <~ Logic.ifElse
+      (Equality.equal (Lists.length $ var "capturedTermVarTypes") (Lists.length $ var "capturedTermVarTypePairs"))
+      (Maybes.map
+        ("ts" ~> Core.typeScheme
+          (Lists.nub $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
+          (Lists.foldl
+            ("t" ~> "a" ~> Core.typeFunction $ Core.functionType (var "a") (var "t"))
+            (Core.typeSchemeType $ var "ts")
+            (Lists.reverse $ var "capturedTermVarTypes"))
+          (Core.typeSchemeConstraints $ var "ts"))
+       (Core.bindingType $ var "b"))
+      nothing $
 
-    "processTermForHoisting">: ("typeVars" ~> "lambdaVars" ~> "reserved" ~> "term" ~>
-      cases _Term (var "term")
-        -- Default: return unchanged
-        (Just $ pair (var "emptyHoisted") (pair (var "reserved") (var "term"))) [
-        -- For let terms, process their bindings and body
-        _Term_let>>: "lt" ~>
-          -- Process each binding
-          "bindingsResult" <~ Lists.foldl
-            (var "processBinding" @@ var "typeVars" @@ var "lambdaVars")
-            (pair (var "emptyHoisted") (pair (var "reserved") (list ([] :: [TTerm Binding]))))
-            (Core.letBindings $ var "lt") $
-          "hoistedFromBindings" <~ Pairs.first (var "bindingsResult") $
-          "reservedAfterBindings" <~ Pairs.first (Pairs.second $ var "bindingsResult") $
-          "keptBindingsRaw" <~ Lists.reverse (Pairs.second (Pairs.second $ var "bindingsResult")) $
-          -- Process the body
-          "bodyResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reservedAfterBindings" @@ (Core.letBody $ var "lt") $
-          "hoistedFromBodyRaw" <~ Pairs.first (var "bodyResult") $
-          "reservedAfterBody" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-          "processedBodyRaw" <~ Pairs.second (Pairs.second $ var "bodyResult") $
+    -- Strip all type lambdas from the original term. We will add new ones at the right level.
+    "strippedTerm" <~ Rewriting.detypeTerm @@ (Core.bindingTerm $ var "b") $
+    "termWithLambdas" <~ Lists.foldl
+      ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
+        Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Rewriting.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
+      (var "strippedTerm")
+      (Lists.reverse $ var "capturedTermVarTypePairs") $
+    "termWithTypeLambdas" <~ Lists.foldl
+      ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
+      (var "termWithLambdas")
+      (Lists.reverse $ Maybes.maybe (list ([] :: [TTerm Name])) (unaryFunction Core.typeSchemeVariables) $ var "newTypeScheme") $
 
-          -- Find kept bindings that are referenced by hoistedFromBody bindings.
-          -- These must also be hoisted to maintain scope integrity.
-          -- Collect names of all kept bindings
-          "keptNames" <~ Sets.fromList (Lists.map ("b" ~> Core.bindingName (var "b")) (var "keptBindingsRaw")) $
-          -- Collect free variables in all hoistedFromBody terms
-          "hoistedBodyFreeVars" <~ Sets.fromList (Lists.concat (Lists.map
-            ("info" ~> Sets.toList (Rewriting.freeVariablesInTerm @@ Pairs.first (Pairs.second $ var "info")))
-            (var "hoistedFromBodyRaw"))) $
-          -- Find kept bindings referenced by hoisted body bindings
-          "forcedHoistNames" <~ Sets.intersection (var "keptNames") (var "hoistedBodyFreeVars") $
+    "replacement" <~ Lists.foldl
+      ("t" ~> "v" ~> Core.termApplication $ Core.application (var "t") (Core.termVariable $ var "v"))
+      (Core.termVariable $ var "globalBindingName")
+      (var "capturedTermVars") $
 
-          -- Split keptBindingsRaw into bindings that must be force-hoisted and bindings that stay kept
-          "forceHoistedBindings" <~ Lists.filter
-            ("b" ~> Sets.member (Core.bindingName $ var "b") (var "forcedHoistNames"))
-            (var "keptBindingsRaw") $
-          "trulyKeptBindingsRaw" <~ Lists.filter
-            ("b" ~> Logic.not (Sets.member (Core.bindingName $ var "b") (var "forcedHoistNames")))
-            (var "keptBindingsRaw") $
+    "newBindingAndReplacement" <~ pair
+      (Core.binding (var "globalBindingName") (var "termWithTypeLambdas") (var "newTypeScheme"))
+      (var "replacement") $
 
-          -- First, replace references to hoistedFromBindings in the terms of force-hoisted bindings.
-          -- These bindings were kept bindings, so their terms need reference replacement.
-          "forceHoistedBindingsWithReplacedRefs" <~ Lists.map
-            ("b" ~>
-              "updatedTerm" <~ var "replaceReferences" @@ var "hoistedFromBindings" @@ (Core.bindingTerm (var "b")) $
-              Core.binding (Core.bindingName (var "b")) (var "updatedTerm") (Core.bindingType (var "b")))
-            (var "forceHoistedBindings") $
+    -- Note: using cons for efficiency; will reverse later so that original bindings come first
+    "newPairs" <~ Lists.cons (var "newBindingAndReplacement") (var "bindingAndReplacementPairs") $
+    pair (var "newPairs") (var "newUsedNames")) $
 
-          -- Convert force-hoisted bindings to hoisted info format
-          -- Note: These bindings were originally monomorphic, so they have no captured type vars
-          -- but we still need to handle captured term vars (lambda-bound variables they reference)
-          "forceHoistedInfo" <~ Lists.map
-            ("binding" ~>
-              "bindingName" <~ Core.bindingName (var "binding") $
-              "freeVars" <~ Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "binding") $
-              "lambdaVarNames" <~ Sets.fromList (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "lambdaVars")) $
-              "capturedVarNames" <~ Sets.intersection (var "lambdaVarNames") (var "freeVars") $
-              "capturedTermVars" <~ Lists.filter ("lv" ~> Sets.member (Pairs.first (var "lv")) (var "capturedVarNames")) (var "lambdaVars") $
-              -- Wrap the term in lambdas for each captured term variable
-              "wrappedTerm" <~ Lists.foldl
-                ("body" ~> "lv" ~>
-                  Core.termFunction $ Core.functionLambda $ Core.lambda (Pairs.first (var "lv")) (Pairs.second (var "lv")) (var "body"))
-                (Core.bindingTerm $ var "binding")
-                (Lists.reverse $ var "capturedTermVars") $
-              -- Compute wrapped type with captured term variable types prepended
-              "wrappedType" <~ optCases (Core.bindingType $ var "binding")
-                Phantoms.nothing
-                ("ts" ~>
-                  "origType" <~ Core.typeSchemeType (var "ts") $
-                  "newType" <~ Lists.foldl
-                    ("innerType" ~> "lv" ~>
-                      optCases (Pairs.second $ var "lv")
-                        (var "innerType")
-                        ("domainType" ~> Core.typeFunction $ Core.functionType (var "domainType") (var "innerType")))
-                    (var "origType")
-                    (Lists.reverse $ var "capturedTermVars") $
-                  Phantoms.just $ Core.typeScheme (Core.typeSchemeVariables $ var "ts") (var "newType") (Core.typeSchemeConstraints $ var "ts")) $
-              Phantoms.tuple5 (var "bindingName") (var "wrappedTerm") (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "capturedTermVars")) (list ([] :: [TTerm Name])) (var "wrappedType"))
-            (var "forceHoistedBindingsWithReplacedRefs") $
+  -- Rewriting function for subterms of existing bindings which also produces hoisted bindings
+  "rewrite" <~ ("prefix" ~> "recurse" ~> "cx" ~> "bindingsAndNames" ~> "term" ~>
+    -- Save previously finished bindings before we recurse; we don't want to apply the same substitutions to these
+    "previouslyFinishedBindings" <~ Pairs.first (var "bindingsAndNames") $
+    "emptyBindingsAndNames" <~ pair
+      (list ([] :: [TBinding Binding]))
+      (Pairs.second $ var "bindingsAndNames") $
+    -- Recurse to hoist bindings from further subterms. After this, we only need to check for let at the current level.
+    "result" <~ var "recurse" @@ var "emptyBindingsAndNames" @@ var "term" $
+    "newBindingsAndNames" <~ Pairs.first (var "result") $
+    "bindingsSoFar" <~ Pairs.first (var "newBindingsAndNames") $
+    "alreadyUsedNames" <~ Pairs.second (var "newBindingsAndNames") $
+    "newTerm" <~ Pairs.second (var "result") $
+    cases _Term (var "newTerm")
+      -- Not a let; we are done with this subterm
+      (Just $ pair
+        (pair (Lists.concat2 (var "previouslyFinishedBindings") (var "bindingsSoFar")) (var "alreadyUsedNames"))
+        (var "newTerm")) [
+      -- For a let term, we must process its bindings, hoist any or all of them as needed,
+      -- and then we must replace any references to the hoisted bindings
+      _Term_let>>: "l" ~>
+        "body" <~ Core.letBody (var "l") $
 
-          -- Combine hoistedFromBindings with force-hoisted bindings for replacement purposes
-          "allHoistedFromThisLevel" <~ Lists.concat2 (var "hoistedFromBindings") (var "forceHoistedInfo") $
+        -- Separate bindings to be hoisted from those to be left in place
+        "partitionPair" <~ Lists.partition (var "shouldHoistBinding" @@ var "cx") (Core.letBindings $ var "l") $
+        "hoistUs" <~ Pairs.first (var "partitionPair") $
+        "keepUs" <~ Pairs.second (var "partitionPair") $
 
-          -- Replace references to allHoistedFromThisLevel (bindings hoisted at THIS level) in the
-          -- terms of hoistedFromBody (bindings hoisted from nested lets).
-          -- This handles the case where a nested let binding references a sibling from an outer let.
-          "hoistedFromBody" <~ Lists.map
-            ("info" ~>
-              "infoName" <~ var "getInfoName" @@ var "info" $
-              "infoTerm" <~ Pairs.first (Pairs.second $ var "info") $
-              "infoCapTermVars" <~ var "getInfoCapturedTermVars" @@ var "info" $
-              "infoCapTypeVars" <~ var "getInfoCapturedTypeVars" @@ var "info" $
-              "infoType" <~ Pairs.second (Pairs.second (Pairs.second (Pairs.second $ var "info"))) $
-              "updatedTerm" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ var "infoTerm" $
-              Phantoms.tuple5 (var "infoName") (var "updatedTerm") (var "infoCapTermVars") (var "infoCapTypeVars") (var "infoType"))
-            (var "hoistedFromBodyRaw") $
-          -- Combine all hoisted bindings (from body + from this level's bindings + force-hoisted)
-          "allHoisted" <~ Lists.concat (list [var "hoistedFromBody", var "hoistedFromBindings", var "forceHoistedInfo"]) $
-          -- Replace references to hoisted bindings in kept bindings and body
-          "keptBindings" <~ Lists.map
-            ("b" ~>
-              "updatedTerm" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ (Core.bindingTerm (var "b")) $
-              Core.binding (Core.bindingName (var "b")) (var "updatedTerm") (Core.bindingType (var "b")))
-            (var "trulyKeptBindingsRaw") $
-          "processedBody" <~ var "replaceReferences" @@ var "allHoistedFromThisLevel" @@ var "processedBodyRaw" $
-          -- If no bindings left, just return the body; otherwise rebuild the let
-          Logic.ifElse (Lists.null $ var "keptBindings")
-            (pair (var "allHoisted") (pair (var "reservedAfterBody") (var "processedBody")))
-            (pair (var "allHoisted") (pair (var "reservedAfterBody")
-              (Core.termLet $ Core.let_ (var "keptBindings") (var "processedBody")))),
-        -- Lambda: add parameter to lambdaVars and recurse into body
-        _Term_function>>: "f" ~>
-          cases _Function (var "f")
-            (Just $ pair (var "emptyHoisted") (pair (var "reserved") (var "term"))) [
-            _Function_lambda>>: "lam" ~>
-              "paramName" <~ Core.lambdaParameter (var "lam") $
-              "paramDomain" <~ Core.lambdaDomain (var "lam") $
-              -- Add this lambda's parameter to the list of lambda-bound variables
-              "newLambdaVars" <~ Lists.concat2 (var "lambdaVars") (Lists.pure (pair (var "paramName") (var "paramDomain"))) $
-              "bodyResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "newLambdaVars" @@ var "reserved" @@ (Core.lambdaBody $ var "lam") $
-              "hoisted" <~ Pairs.first (var "bodyResult") $
-              "newReserved" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-              "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-              pair (var "hoisted") (pair (var "newReserved")
-                (Core.termFunction $ Core.functionLambda $
-                  Core.lambda (var "paramName") (var "paramDomain") (var "newBody")))],
-        -- Application: recurse into function and argument
-        _Term_application>>: "app" ~>
-          "fnResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reserved" @@ (Core.applicationFunction $ var "app") $
-          "fnHoisted" <~ Pairs.first (var "fnResult") $
-          "reservedAfterFn" <~ Pairs.first (Pairs.second $ var "fnResult") $
-          "newFn" <~ Pairs.second (Pairs.second $ var "fnResult") $
-          "argResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reservedAfterFn" @@ (Core.applicationArgument $ var "app") $
-          "argHoisted" <~ Pairs.first (var "argResult") $
-          "reservedAfterArg" <~ Pairs.first (Pairs.second $ var "argResult") $
-          "newArg" <~ Pairs.second (Pairs.second $ var "argResult") $
-          pair (Lists.concat2 (var "argHoisted") (var "fnHoisted"))
-            (pair (var "reservedAfterArg")
-              (Core.termApplication $ Core.application (var "newFn") (var "newArg"))),
-        -- Annotated: recurse into body
-        _Term_annotated>>: "ann" ~>
-          "bodyResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reserved" @@ (Core.annotatedTermBody $ var "ann") $
-          "hoisted" <~ Pairs.first (var "bodyResult") $
-          "newReserved" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-          "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-          pair (var "hoisted") (pair (var "newReserved")
-            (Core.termAnnotated $ Core.annotatedTerm (var "newBody") (Core.annotatedTermAnnotation $ var "ann"))),
-        -- Type lambda: recurse into body, tracking the type parameter
-        -- Bindings inside type lambdas that use the type parameter will have it added to their type scheme
-        _Term_typeLambda>>: "tl" ~>
-          "typeParam" <~ Core.typeLambdaParameter (var "tl") $
-          -- Add this type lambda's parameter to the list of type variables in scope
-          "newTypeVars" <~ Lists.concat2 (var "typeVars") (Lists.pure (var "typeParam")) $
-          "bodyResult" <~ var "processTermForHoisting" @@ var "newTypeVars" @@ var "lambdaVars" @@ var "reserved" @@ (Core.typeLambdaBody $ var "tl") $
-          "hoisted" <~ Pairs.first (var "bodyResult") $
-          "newReserved" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-          "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-          pair (var "hoisted") (pair (var "newReserved")
-            (Core.termTypeLambda $ Core.typeLambda (var "typeParam") (var "newBody"))),
-        -- Type application: recurse into body (type applications don't introduce new type variables)
-        _Term_typeApplication>>: "ta" ~>
-          "bodyResult" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reserved" @@ (Core.typeApplicationTermBody $ var "ta") $
-          "hoisted" <~ Pairs.first (var "bodyResult") $
-          "newReserved" <~ Pairs.first (Pairs.second $ var "bodyResult") $
-          "newBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
-          pair (var "hoisted") (pair (var "newReserved")
-            (Core.termTypeApplication $ Core.typeApplicationTerm (var "newBody") (Core.typeApplicationTermType $ var "ta")))]),
+        -- Find all of the term-level variables which are captured by each binding to be hoisted.
+        -- Because of dependencies between sibling bindings, this must be done all at once, rather than
+        -- individually per binding.
+        "hoistedBindingNames" <~ Lists.map (unaryFunction $ Core.bindingName) (var "hoistUs") $
 
-    -- Process a single binding: if hoistAll is True, binding is polymorphic, OR we're inside a type lambda scope, add to hoisted list
-    -- typeVars: list of Names for type variables in scope from enclosing type lambdas
-    -- lambdaVars: list of (Name, Maybe Type) for lambda-bound variables in scope
-    -- State is (hoistedBindings, reservedNames, keptBindings)
-    "processBinding">: ("typeVars" ~> "lambdaVars" ~> "state" ~> "binding" ~>
-      "hoisted" <~ Pairs.first (var "state") $
-      "reserved" <~ Pairs.first (Pairs.second $ var "state") $
-      "kept" <~ Pairs.second (Pairs.second $ var "state") $
-      -- Process the binding's term to hoist nested bindings
-      "processedTerm" <~ var "processTermForHoisting" @@ var "typeVars" @@ var "lambdaVars" @@ var "reserved" @@ (Core.bindingTerm $ var "binding") $
-      "innerHoisted" <~ Pairs.first (var "processedTerm") $
-      "newReserved" <~ Pairs.first (Pairs.second $ var "processedTerm") $
-      "newTerm" <~ Pairs.second (Pairs.second $ var "processedTerm") $
-      -- Check if this binding should be hoisted:
-      -- 1. hoistAll is True (but NOT if inside type lambda - those need special handling), OR
-      -- 2. binding is polymorphic (has type scheme variables), OR
-      -- 3. binding's type uses type variables from enclosing type lambdas
-      --
-      -- For case 3: we need to check if the binding's type references any of the type variables in scope.
-      -- If so, we must hoist it and add those type variables to its type scheme.
-      "isInsideTypeLambda" <~ Logic.not (Lists.null $ var "typeVars") $
-      -- Compute which type variables from scope are actually used by this binding's type
-      "usedTypeVars" <~ optCases (Core.bindingType $ var "binding")
-        (list ([] :: [TTerm Name]))  -- No type scheme, no type vars used
-        ("ts" ~>
-          -- Get free type variables in the type scheme's body
-          "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
-          -- Filter to only those from enclosing type lambdas
-          Lists.filter ("tv" ~> Sets.member (var "tv") (var "freeInType")) (var "typeVars")) $
-      -- Binding uses outer type vars if usedTypeVars is non-empty
-      "usesOuterTypeVars" <~ Logic.not (Lists.null $ var "usedTypeVars") $
-      -- When hoistAll=true: hoist everything except bindings inside type lambdas
-      -- When hoistAll=false: hoist polymorphic bindings, plus monomorphic ones that use outer type vars
-      "shouldHoist" <~ Logic.ifElse (var "hoistAll")
-        (Logic.not $ var "isInsideTypeLambda")  -- hoistAll: don't hoist inside type lambdas
-        (Logic.or (bindingIsPolymorphic @@ var "binding") (var "usesOuterTypeVars")) $
-      Logic.ifElse (var "shouldHoist")
-        -- Hoist: compute captured term variables and type variables, add to hoisted list
-        ("bindingName" <~ Core.bindingName (var "binding") $
-         "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "newTerm" $
-         "lambdaVarNames" <~ Sets.fromList (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "lambdaVars")) $
-         -- Captured term vars are lambda-bound variables that appear free in the binding
-         "capturedVarNames" <~ Sets.intersection (var "lambdaVarNames") (var "freeVars") $
-         -- Filter lambdaVars to only those that are captured, preserving order
-         "capturedTermVars" <~ Lists.filter ("lv" ~> Sets.member (Pairs.first (var "lv")) (var "capturedVarNames")) (var "lambdaVars") $
-         -- Captured type vars: ALL free type variables in the binding's type that are not already quantified
-         -- This includes both type variables from enclosing type lambdas (usedTypeVars)
-         -- AND any other free type variables that may have been introduced during inference
-         "capturedTypeVars" <~ optCases (Core.bindingType $ var "binding")
-           (list ([] :: [TTerm Name]))  -- No type scheme means no captured type vars
-           ("ts" ~>
-             "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
-             "alreadyQuantified" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
-             -- All free type vars not already in the type scheme's variables
-             "allUnquantified" <~ Sets.toList (Sets.difference (var "freeInType") (var "alreadyQuantified")) $
-             -- Prepend the outer type lambda vars to ensure they come first (maintaining order)
-             Lists.concat2 (var "usedTypeVars") (Lists.filter ("tv" ~> Logic.not (Sets.member (var "tv") (Sets.fromList $ var "usedTypeVars"))) (var "allUnquantified"))) $
-         -- Wrap the term in lambdas for each captured term variable (outermost to innermost)
-         "wrappedTerm" <~ Lists.foldl
-           ("body" ~> "lv" ~>
-             Core.termFunction $ Core.functionLambda $ Core.lambda (Pairs.first (var "lv")) (Pairs.second (var "lv")) (var "body"))
-           (var "newTerm")
-           (Lists.reverse $ var "capturedTermVars") $
-         -- Compute the wrapped type:
-         -- 1. Add captured type variables to the type scheme's variables list
-         -- 2. Prepend captured term variable types to the type scheme's body
-         -- Original: forall vars. T -> becomes -> forall (capturedTypeVars ++ vars). T1 -> T2 -> ... -> T
-         "wrappedType" <~ optCases (Core.bindingType $ var "binding")
-           Phantoms.nothing  -- No type scheme, keep as nothing
-           ("ts" ~>
-             "origType" <~ Core.typeSchemeType (var "ts") $
-             "origTypeVars" <~ Core.typeSchemeVariables (var "ts") $
-             -- Add captured type vars to the front of the type scheme variables
-             "newTypeVars" <~ Lists.concat2 (var "capturedTypeVars") (var "origTypeVars") $
-             -- Prepend captured term variable types to the body type
-             "newType" <~ Lists.foldl
-               ("innerType" ~> "lv" ~>
-                 optCases (Pairs.second $ var "lv")
-                   -- No domain type, skip this variable in type wrapping
-                   (var "innerType")
-                   -- Has domain type, prepend it
-                   ("domainType" ~> Core.typeFunction $ Core.functionType (var "domainType") (var "innerType")))
-               (var "origType")
-               (Lists.reverse $ var "capturedTermVars") $
-             Phantoms.just $ Core.typeScheme (var "newTypeVars") (var "newType") (Core.typeSchemeConstraints $ var "ts")) $
-         -- Record (name, wrappedTerm, capturedTermVarNames as list, capturedTypeVars, wrappedType)
-         "hoistedInfo" <~ Phantoms.tuple5 (var "bindingName") (var "wrappedTerm") (Lists.map ("lv" ~> Pairs.first (var "lv")) (var "capturedTermVars")) (var "capturedTypeVars") (var "wrappedType") $
-         pair
-           (Lists.cons (var "hoistedInfo") (Lists.concat2 (var "innerHoisted") (var "hoisted")))
-           (pair (var "newReserved") (var "kept")))
-        -- Don't hoist: keep in place, but still add inner hoisted bindings
-        ("processedBinding" <~ Core.binding (Core.bindingName $ var "binding") (var "newTerm") (Core.bindingType $ var "binding") $
-         pair
-           (Lists.concat2 (var "innerHoisted") (var "hoisted"))
-           (pair (var "newReserved") (Lists.cons (var "processedBinding") (var "kept"))))),
+        -- Polymorphic let-bound variables, which are hoisted themselves.
+        -- We need to include them for argument propagation, but exclude them from the final list of arguments
+        -- for each hoisted binding.
+        "polyLetVariables" <~ (Sets.fromList $ Lists.filter
+          ("v" ~> optCases (Maps.lookup (var "v") (Typing.typeContextTypes $ var "cx"))
+            false -- This function should not be applied to untyped terms, but we make a hopeful guess if it is
+            Schemas.fTypeIsPolymorphic)
+          (Sets.toList $ Typing.typeContextLetVariables $ var "cx")) $
 
-    -- Replace references to hoisted bindings with type applications and term applications
-    -- hoistedInfoList: list of (name, wrappedTerm, capturedTermVars, capturedTypeVars, wrappedType)
-    "replaceReferences">: ("hoistedInfoList" ~> "term" ~>
-      Rewriting.rewriteTerm
-        @@ ("recurse" ~> "t" ~>
-          cases _Term (var "t")
-            (Just $ var "recurse" @@ var "t") [
-            _Term_variable>>: "varName" ~>
-              -- Check if this variable is one of our hoisted bindings
-              "matchingInfo" <~ Lists.filter ("info" ~> Equality.equal (var "varName") (var "getInfoName" @@ var "info")) (var "hoistedInfoList") $
-              Logic.ifElse (Lists.null (var "matchingInfo"))
-                (var "t")  -- Not a hoisted binding, leave unchanged
-                -- Replace with type applications and term applications to captured variables
-                ("info" <~ Lists.head (var "matchingInfo") $
-                 "capturedTermVars" <~ var "getInfoCapturedTermVars" @@ var "info" $
-                 "capturedTypeVars" <~ var "getInfoCapturedTypeVars" @@ var "info" $
-                 -- First apply type arguments for captured type variables
-                 "withTypeApps" <~ Lists.foldl
-                   ("fn" ~> "typeVarName" ~>
-                     Core.termTypeApplication $ Core.typeApplicationTerm (var "fn") (Core.typeVariable $ var "typeVarName"))
-                   (Core.termVariable $ var "varName")
-                   (var "capturedTypeVars") $
-                 -- Then apply term arguments for captured term variables
-                 Lists.foldl
-                   ("fn" ~> "capturedName" ~>
-                     Core.termApplication $ Core.application (var "fn") (Core.termVariable $ var "capturedName"))
-                   (var "withTypeApps")
-                   (var "capturedTermVars"))])
-        @@ var "term"),
+        "boundTermVariables" <~ Sets.union
+          (Typing.typeContextLambdaVariables $ var "cx")
+          (Typing.typeContextLetVariables $ var "cx") $
+        "freeVariablesInEachBinding" <~ Lists.map
+          ("b" ~> Sets.toList $ Sets.intersection
+            (var "boundTermVariables")
+            (Rewriting.freeVariablesInTerm @@ (Core.bindingTerm $ var "b")))
+          (var "hoistUs") $
+        "bindingDependencies" <~ Lists.map
+          ("vars" ~> Lists.partition
+            ("v" ~> Sets.member (var "v") (Sets.fromList $ var "hoistedBindingNames"))
+            (var "vars"))
+          (var "freeVariablesInEachBinding") $
+        "bindingEdges" <~ Lists.zip
+          (var "hoistedBindingNames")
+          (Lists.map (unaryFunction Pairs.first) (var "bindingDependencies")) $
+        "bindingImmediateCapturedVars" <~ Lists.zip
+          (var "hoistedBindingNames")
+          (Lists.map (unaryFunction Pairs.second) (var "bindingDependencies")) $
+        "capturedVarsMap" <~ Maps.fromList (Sorting.propagateTags @@ var "bindingEdges" @@ var "bindingImmediateCapturedVars") $
+        "bindingsWithCapturedVars" <~ Lists.map
+          ("b" ~> pair (var "b") $ optCases (Maps.lookup (Core.bindingName $ var "b") (var "capturedVarsMap"))
+            (list ([] :: [TTerm Name]))
+            ("vars" ~> Sets.toList $ Sets.difference (var "vars") (var "polyLetVariables")))
+          (var "hoistUs") $
 
-    -- Helper to extract name from hoisted info tuple (5-tuple: name, term, capturedTermVars, capturedTypeVars, type)
-    "getInfoName">: ("info" ~>
-      Pairs.first (var "info")),
+        -- Now hoist each binding, keeping track of the names used so far. We get back a list of
+        -- top-level bindings along with replacement terms for each bound name.
+        "hoistPairsAndNames" <~ Lists.foldl
+          (var "hoistOne" @@ var "prefix" @@ var "cx")
+          (pair (list ([] :: [TTerm (Binding, Term)])) (var "alreadyUsedNames"))
+          (var "bindingsWithCapturedVars") $
+        "hoistPairs" <~ Lists.reverse (Pairs.first $ var "hoistPairsAndNames") $
+        "hoistedBindings" <~ Lists.map (unaryFunction Pairs.first) (var "hoistPairs") $
+        "replacements" <~ Lists.map (unaryFunction Pairs.second) (var "hoistPairs") $
+        "finalUsedNames" <~ Pairs.second (var "hoistPairsAndNames") $
+        "subst" <~ (Typing.termSubst $ Maps.fromList $ Lists.zip
+          (Lists.map (unaryFunction Core.bindingName) (var "hoistUs"))
+          (var "replacements")) $
 
-    -- Helper to extract captured term vars from hoisted info tuple
-    "getInfoCapturedTermVars">: ("info" ~>
-      Pairs.first (Pairs.second (Pairs.second (var "info")))),
+        -- Finally, substitute all occurrences of the bound names with the replacement terms
+        "bodySubst" <~ Substitution.substituteInTerm @@ var "subst" @@ var "body" $
+        "keepUsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "keepUs") $
+        "hoistedBindingsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "hoistedBindings") $
+        "bindingsSoFarSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "bindingsSoFar") $
 
-    -- Helper to extract captured type vars from hoisted info tuple
-    "getInfoCapturedTypeVars">: ("info" ~>
-      Pairs.first (Pairs.second (Pairs.second (Pairs.second (var "info")))))] $
+        -- Augment bindings from inner lets with any new free variables introduced by substitution
+        "augmentResult" <~ augmentBindingsWithNewFreeVars @@ var "cx" @@ (Sets.difference (var "boundTermVariables") (var "polyLetVariables")) @@ var "bindingsSoFarSubst" $
+        "bindingsSoFarAugmented" <~ Pairs.first (var "augmentResult") $
+        "augmentSubst" <~ Pairs.second (var "augmentResult") $
 
-  -- Process all top-level bindings (no type variables or lambda variables in scope at top level)
-  "emptyTypeVars" <~ list ([] :: [TTerm Name]) $
-  "emptyLambdaVars" <~ list ([] :: [TTerm (Name, Y.Maybe Type)]) $
-  "result" <~ Lists.foldl
-    (var "processBinding" @@ var "emptyTypeVars" @@ var "emptyLambdaVars")
-    (pair (var "emptyHoisted") (pair (var "topLevelNames") (list ([] :: [TTerm Binding]))))
-    (Core.letBindings $ var "let0") $
-  "hoistedInfo" <~ Lists.reverse (Pairs.first $ var "result") $
-  "reservedNames" <~ Pairs.first (Pairs.second $ var "result") $
-  "keptBindings" <~ Lists.reverse (Pairs.second (Pairs.second $ var "result")) $
+        -- Apply the augment substitution to update references in other bindings and body
+        "hoistedBindingsFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "hoistedBindingsSubst") $
+        "bindingsSoFarFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "bindingsSoFarAugmented") $
+        "bodyFinal" <~ Substitution.substituteInTerm @@ var "augmentSubst" @@ var "bodySubst" $
+        "keepUsFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "keepUsSubst") $
 
-  -- Process the body
-  "bodyResult" <~ var "processTermForHoisting" @@ var "emptyTypeVars" @@ var "emptyLambdaVars" @@ var "reservedNames" @@ (Core.letBody $ var "let0") $
-  "hoistedFromBody" <~ Lists.reverse (Pairs.first $ var "bodyResult") $
-  "processedBody" <~ Pairs.second (Pairs.second $ var "bodyResult") $
+        "finalTerm" <~ Logic.ifElse (Lists.null (var "keepUsFinal"))
+          (var "bodyFinal")
+          (Core.termLet $ Core.let_ (var "keepUsFinal") (var "bodyFinal")) $
 
-  -- Combine all hoisted info
-  "allHoistedInfo" <~ Lists.concat2 (var "hoistedInfo") (var "hoistedFromBody") $
-
-  -- Convert hoisted info to bindings (name, wrappedTerm, type)
-  -- The 5-tuple is: (name, wrappedTerm, capturedTermVars, capturedTypeVars, wrappedType)
-  "hoistedBindings" <~ Lists.map
-    ("info" ~>
-      "name" <~ var "getInfoName" @@ var "info" $
-      "wrappedTerm" <~ Pairs.first (Pairs.second (var "info")) $
-      -- wrappedType is the 5th element: second.second.second.second
-      "wrappedType" <~ Pairs.second (Pairs.second (Pairs.second (Pairs.second (var "info")))) $
-      Core.binding (var "name") (var "wrappedTerm") (var "wrappedType"))
-    (var "allHoistedInfo") $
-
-  -- No need to replace references at the outer level because all references
-  -- have already been replaced during the recursive processing
-
-  -- Combine: hoisted bindings first, then kept bindings
-  "allBindings" <~ Lists.concat2 (var "hoistedBindings") (var "keptBindings") $
-
-  Core.let_ (var "allBindings") (var "processedBody")
+        pair
+          (pair
+            (Lists.concat $ list [var "previouslyFinishedBindings", var "hoistedBindingsFinal", var "bindingsSoFarFinal"])
+            (var "finalUsedNames"))
+          (var "finalTerm")]) $
+  "cx1" <~ Schemas.extendTypeContextForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
+  -- Each binding becomes a list of bindings: the original one with substitutions in its body,
+  -- as well as hoisted bindings from any level. The hoisted bindings share the original binding's namespace.
+  -- Since each top-level binding has exclusive access to its hoisted bindings, it can be processed individually.
+  "forActiveBinding" <~ ("b" ~>
+    -- Note: no possibility of name collisions between groups of hoisted bindings, because the names of the parent
+    -- bindings are unique.
+    "prefix" <~ (Strings.cat2 (Core.unName (Core.bindingName $ var "b")) (string "_")) $
+    "init" <~ pair (list ([] :: [TTerm Binding])) (Sets.singleton $ Core.bindingName $ var "b") $
+    "resultPair" <~ rewriteAndFoldTermWithTypeContext
+      @@ (var "rewrite" @@ var "prefix") @@ var "cx1" @@ var "init" @@ (Core.bindingTerm $ var "b") $
+    "resultBindings" <~ Pairs.first (Pairs.first (var "resultPair")) $
+    "resultTerm" <~ Pairs.second (var "resultPair") $
+    Lists.cons (Core.bindingWithTerm (var "b") (var "resultTerm")) (var "resultBindings")) $
+  "forBinding" <~ ("b" ~> Logic.ifElse (var "isParentBinding" @@ var "b")
+    (var "forActiveBinding" @@ var "b")
+    (list [var "b"])) $
+  Core.let_
+    (Lists.concat $ Lists.map (var "forBinding") $ Core.letBindings $ var "let0")
+    -- Original let body; hoisting more deeply nested bindings does not introduce additional variables into the body,
+    -- and we do not hoist bindings from the body itself.
+    -- This function is primarily intended for module-level transformations into targets like Java,
+    -- in which we only care about the bindings of a whole-graph let term, while discarding the trivial let body.
+    (Core.letBody $ var "let0")
 
 -- | Transform a let-term by pulling all polymorphic let bindings to the top level
-hoistPolymorphicLetBindings :: TBinding (Let -> Let)
+hoistPolymorphicLetBindings :: TBinding ((Binding -> Bool) -> Let -> Let)
 hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
   doc ("Transform a let-term by pulling all polymorphic let bindings to the top level."
     <> " This is useful to ensure that polymorphic bindings are not nested within other terms,"
@@ -491,7 +411,41 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
     <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
-  hoistLetBindings @@ false
+  "isParentBinding" ~> "let0" ~>
+  -- Create an empty TypeContext
+  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
+  "emptyCx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
+  hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "emptyCx" @@ var "let0"
+
+hoistLetBindingsWithContext :: TBinding ((Binding -> Bool) -> TypeContext -> Let -> Let)
+hoistLetBindingsWithContext = define "hoistLetBindingsWithContext" $
+  doc ("Transform a let-term by pulling polymorphic let bindings to the top level, using TypeContext."
+    <> " A binding is hoisted if:"
+    <> " (1) It is polymorphic (has non-empty typeSchemeVariables), OR"
+    <> " (2) Its type uses type variables from the TypeContext (i.e., from enclosing type lambdas)."
+    <> " Bindings which are already at the top level are not hoisted."
+    <> " If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope,"
+    <> " the binding is wrapped in lambdas for those variables, and references are replaced"
+    <> " with applications."
+    <> " If a hoisted binding uses type variables from the context, those type variables are"
+    <> " added to the binding's type scheme."
+    <> " Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+  "isParentBinding" ~> "cx" ~> "let0" ~>
+  hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "cx" @@ var "let0"
+
+hoistAllLetBindings :: TBinding (Let -> Let)
+hoistAllLetBindings = define "hoistAllLetBindings" $
+  doc ("Transform a let-term by pulling ALL let bindings to the top level."
+    <> " This is useful for targets like Java that don't support nested let expressions at all."
+    <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
+    <> " the binding is wrapped in lambdas for those variables, and references are replaced"
+    <> " with applications."
+    <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+  "let0" ~>
+  -- Create an empty TypeContext
+  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
+  "emptyCx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
+  hoistLetBindingsWithPredicate @@ constant true @@ shouldHoistAll @@ var "emptyCx" @@ var "let0"
 
 hoistCaseStatements :: TBinding (TypeContext -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
@@ -509,8 +463,8 @@ hoistCaseStatementsInGraph = define "hoistCaseStatementsInGraph" $
     <> " It hoists case statements and their applied arguments into let bindings.") $
   "graph" ~>
   -- Create an empty type context (no lambda variables to track since we're pre-inference)
-  "emptyIx" <~ Typing.inferenceContext (Phantoms.map M.empty) (Phantoms.map M.empty) (Phantoms.map M.empty) (Phantoms.map M.empty) false $
-  "emptyTx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty (var "emptyIx") $
+  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
+  "emptyTx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
   -- Convert graph to a term, apply hoisting, convert back
   "gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
   "gterm1" <~ hoistCaseStatements @@ var "emptyTx" @@ var "gterm0" $

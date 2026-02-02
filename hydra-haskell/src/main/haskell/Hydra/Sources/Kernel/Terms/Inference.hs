@@ -210,10 +210,10 @@ emptyInferenceContext :: TBinding InferenceContext
 emptyInferenceContext = define "emptyInferenceContext" $
   doc "An empty inference context" $
   Typing.inferenceContext
-    (Phantoms.map M.empty)
-    (Phantoms.map M.empty)
-    (Phantoms.map M.empty)
-    (Phantoms.map M.empty)
+    (Maps.empty)
+    (Maps.empty)
+    (Maps.empty)
+    (Maps.empty)
     false
 
 extendContext :: TBinding ([(Name, TypeScheme)] -> InferenceContext -> InferenceContext)
@@ -274,7 +274,13 @@ generalize :: TBinding (InferenceContext -> Type -> TypeScheme)
 generalize = define "generalize" $
   doc "Generalize a type to a type scheme" $
   "cx" ~> "typ" ~>
-  "vars" <~ Lists.nub (Lists.filter (isUnbound @@ var "cx") $
+  -- IMPORTANT: freeVariablesInTypeOrdered returns ALL names from Type_variable positions,
+  -- including qualified type names (like hydra.compute.Flow) which are NOT actual type variables.
+  -- We must filter these out to avoid quantifying over type names.
+  "isTypeVarName" <~ ("name" ~>
+    "parts" <~ Strings.splitOn (string ".") (Core.unName $ var "name") $
+    Equality.lte (Lists.length $ var "parts") (int32 1)) $
+  "vars" <~ Lists.nub (Lists.filter ("v" ~> Logic.and (isUnbound @@ var "cx" @@ var "v") (var "isTypeVarName" @@ var "v")) $
      Rewriting.freeVariablesInTypeOrdered @@ var "typ") $
   -- Extract constraints for the generalized variables from the context
   "allConstraints" <~ Typing.inferenceContextClassConstraints (var "cx") $
@@ -292,11 +298,8 @@ inferGraphTypes = define "inferGraphTypes" $
   "fromLetTerm" <~ ("l" ~>
     "bindings" <~ Core.letBindings (var "l") $
     "body" <~ Core.letBody (var "l") $
-    "fromBinding" <~ ("b" ~> pair
-      (Core.bindingName $ var "b")
-      (var "b")) $
     Graph.graph
-      (Maps.fromList $ Lists.map (var "fromBinding") (var "bindings"))
+      (var "bindings")
       (Maps.empty)
       (Maps.empty)
       (var "body")
@@ -308,7 +311,7 @@ inferGraphTypes = define "inferGraphTypes" $
       (Core.bindingTerm $ var "el")
       (Core.bindingType $ var "el")) $  -- Preserve original TypeScheme with its constraints
     Core.termLet $ Core.let_
-      (Lists.map (var "toBinding") $ Maps.elems $ Graph.graphElements $ var "g")
+      (Lists.map (var "toBinding") $ Graph.graphElements $ var "g")
       (Graph.graphBody $ var "g")) $
   "forFinal" <~ ("finalized" ~> cases _Term (var "finalized")
     Nothing [
@@ -469,7 +472,9 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
     ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
     (var "sfields")) $
   "dfltConstraints" <~ Monads.maybeToList @@ (Maybes.map
-    ("r" ~> Typing.typeConstraint (var "cod") (Typing.inferenceResultType $ var "r") (string "match default"))
+    ("r" ~> Typing.typeConstraint (var "cod")
+      (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
+      (string "match default"))
     (var "dfltResult")) $
   "caseConstraints" <~ Maybes.cat (Lists.zipWith
     ("fname" ~> "itype" ~> Maybes.map
@@ -649,11 +654,11 @@ inferTypeOfLet = define "inferTypeOfLet" $
       "nonzero" <~ ("term" ~> cases _Term (var "term") Nothing [
         _Term_let>>: "l" ~>
           "bs" <~ Core.letBindings (var "l") $
-          "e" <~ Core.letBody (var "l") $
+          "letBody" <~ Core.letBody (var "l") $
           var "helper" @@
             (Math.sub (var "level") (int32 1)) @@
             (Lists.concat $ list [var "bs", var "bins"]) @@
-            (var "e")]) $
+            (var "letBody")]) $
       Logic.ifElse (Equality.equal (var "level") (int32 0))
         (pair (var "bins") (var "term"))
         (var "nonzero" @@ var "term")) $
@@ -790,16 +795,18 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
     "name" <~ Pairs.first (var "nameTsPair") $
     "ts" <~ Pairs.second (var "nameTsPair") $
 
+    -- Apply body substitution to the type scheme FIRST to get final variable names and constraints.
+    -- This must happen before creating the type lambdas so the parameter names match the final type scheme.
+    "finalTs" <~ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts" $
+
     -- First, substitute polymorphic references in the term
-    -- Then wrap in type lambdas for each variable in the type scheme.
+    -- Then wrap in type lambdas for each variable in the FINAL type scheme.
+    -- IMPORTANT: We use finalTs.variables (not ts.variables) so the TypeLambda parameters match the type scheme.
     -- Note: this is the only place -- at the top level of bound terms -- where inference creates type lambda terms.
     "typeLambdaTerm" <~ Lists.foldl
       ("b" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "b"))
       (Substitution.substituteInTerm @@ var "st1" @@ var "term")
-      (Lists.reverse $ Core.typeSchemeVariables $ var "ts") $
-
-    -- Apply body substitution to the type scheme to get final variable names and constraints
-    "finalTs" <~ Substitution.substInTypeScheme @@ var "sbody" @@ var "ts" $
+      (Lists.reverse $ Core.typeSchemeVariables $ var "finalTs") $
 
     -- Apply remaining substitutions (senv and s2) to the wrapped term
     Core.binding (var "name")
@@ -1132,7 +1139,7 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst"))
     @@ list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of wrapper")]
 
-inferTypesOfTemporaryBindings :: TBinding (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], TypeSubst)))
+inferTypesOfTemporaryBindings :: TBinding (InferenceContext -> [Binding] -> Flow s ([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))))
 -- | Returns: (terms, (types, (subst, constraints)))
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings. Returns a 4-tuple of (terms, types, substitution, accumulated constraints)" $
@@ -1204,17 +1211,16 @@ initialTypeContext :: TBinding (Graph -> Flow s TypeContext)
 initialTypeContext = define "initialTypeContext" $
   doc "Create an initial type context from a graph" $
   "g" ~>
-  "toPair" <~ ("pair" ~>
-    "name" <~ Pairs.first (var "pair") $
-    "el"  <~ Pairs.second (var "pair") $
+  "toPair" <~ ("el" ~>
+    "name" <~ Core.bindingName (var "el") $
     optCases (Core.bindingType $ var "el")
       (Flows.fail $ (string "untyped element: ") ++ Core.unName (var "name"))
       ("ts" ~> produce $ pair (var "name") (Schemas.typeSchemeToFType @@ var "ts"))) $
   "ix" <<~ Schemas.graphToInferenceContext @@ var "g" $
   "types" <<~ Flows.map
     (unaryFunction Maps.fromList)
-    (Flows.mapList (var "toPair") (Maps.toList $ Graph.graphElements $ var "g")) $
-  produce $ Typing.typeContext (var "types") Maps.empty Sets.empty Sets.empty (var "ix")
+    (Flows.mapList (var "toPair") (Graph.graphElements $ var "g")) $
+  produce $ Typing.typeContext (var "types") Maps.empty Sets.empty Sets.empty Sets.empty (var "ix")
 
 isUnbound :: TBinding (InferenceContext -> Name -> Bool)
 isUnbound = define "isUnbound" $

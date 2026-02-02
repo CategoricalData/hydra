@@ -55,7 +55,6 @@ import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
@@ -64,7 +63,7 @@ ns = Namespace "hydra.unification"
 
 module_ :: Module
 module_ = Module ns elements
-    [ShowCore.ns, Substitution.ns]
+    [Rewriting.ns, ShowCore.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Utilities for type unification.")
   where

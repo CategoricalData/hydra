@@ -155,9 +155,8 @@ elementsToGraph :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
   doc "Create a graph from a parent graph, optional schema, and list of element bindings" $
   "parent" ~> "schema" ~> "elements" ~>
-  "toPair" <~ ("el" ~> pair (Core.bindingName (var "el")) (var "el")) $
   Graph.graph
-    (Maps.fromList (Lists.map (var "toPair") (var "elements")))
+    (var "elements")
     (Graph.graphEnvironment (var "parent"))
     (Graph.graphTypes (var "parent"))
     (Graph.graphBody (var "parent"))
@@ -168,7 +167,7 @@ emptyGraph :: TBinding Graph
 emptyGraph = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema, and an arbitrary body." $
   Graph.graph
-    Maps.empty
+    (list ([] :: [TTerm Binding]))
     Maps.empty
     Maps.empty
     (Core.termLiteral (Core.literalString (string "empty graph")))
@@ -179,13 +178,7 @@ extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
 extendGraphWithBindings = define "extendGraphWithBindings" $
   doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
-  "toEl" <~ ("binding" ~>
-    "name" <~ Core.bindingName (var "binding") $
-    "term" <~ Core.bindingTerm (var "binding") $
-    "mts" <~ Core.bindingType (var "binding") $
-    pair (var "name") (Core.binding (var "name") (var "term") (var "mts"))) $
-  "newEls" <~ Maps.fromList (Lists.map (var "toEl") (var "bindings")) $
-  Graph.graphWithElements (var "g") (Maps.union (var "newEls") (Graph.graphElements (var "g")))
+  Graph.graphWithElements (var "g") (Lists.concat2 (var "bindings") (Graph.graphElements (var "g")))
 
 fieldsOf :: TBinding (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
@@ -208,7 +201,7 @@ getField = define "getField" $
 
 lookupElement :: TBinding (Graph -> Name -> Maybe Binding)
 lookupElement = define "lookupElement" $
-  "g" ~> "name" ~> Maps.lookup (var "name") (Graph.graphElements (var "g"))
+  "g" ~> "name" ~> Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "name")) (Graph.graphElements (var "g"))
 
 lookupPrimitive :: TBinding (Graph -> Name -> Maybe Primitive)
 lookupPrimitive = define "lookupPrimitive" $
@@ -277,7 +270,7 @@ requireElement = define "requireElement" $
   "err" <~ ("g" ~> Flows.fail (
     (string "no such element: ") ++ (Core.unName (var "name")) ++
     (string ". Available elements: {") ++
-    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map ("el" ~> Core.unName (Core.bindingName (var "el"))) (Maps.elems (Graph.graphElements (var "g")))))) ++
+    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map ("el" ~> Core.unName (Core.bindingName (var "el"))) (Graph.graphElements (var "g"))))) ++
     (string "}"))) $
   "mel" <<~ dereferenceElement @@ var "name" $
   Maybes.maybe
@@ -326,7 +319,7 @@ resolveTerm = define "resolveTerm" $
   Maybes.maybe
     (produce nothing)
     (var "recurse")
-    (Maps.lookup (var "name") (Graph.graphElements (var "g")))
+    (Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "name")) (Graph.graphElements (var "g")))
 
 schemaContext :: TBinding (Graph -> Graph)
 schemaContext = define "schemaContext" $

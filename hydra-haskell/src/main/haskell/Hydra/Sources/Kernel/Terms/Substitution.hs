@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.Substitution where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  composeTypeSubst, composeTypeSubstNonEmpty, composeTypeSubstList, idTypeSubst, singletonTypeSubst,
+  composeTypeSubst, composeTypeSubstNonEmpty, composeTypeSubstList, idTypeSubst, singletonTypeSubst, substituteInBinding,
   substituteInConstraint, substituteInConstraints, substInClassConstraints, substInContext, substituteInTerm,
   substInType, substInTypeNonEmpty, substInTypeScheme, substTypesInTerm)
 import Hydra.Sources.Libraries
@@ -74,6 +74,7 @@ module_ = Module ns elements
      toBinding composeTypeSubstList,
      toBinding idTypeSubst,
      toBinding singletonTypeSubst,
+     toBinding substituteInBinding,
      toBinding substituteInConstraint,
      toBinding substituteInConstraints,
      toBinding substInClassConstraints,
@@ -123,6 +124,11 @@ singletonTypeSubst :: TBinding (Name -> Type -> TypeSubst)
 singletonTypeSubst = define "singletonTypeSubst" $
   doc "Create a type substitution with a single variable mapping" $
   lambdas ["v", "t"] $ Typing.typeSubst $ Maps.singleton (var "v") (var "t")
+
+substituteInBinding :: TBinding (TermSubst -> Binding -> Binding)
+substituteInBinding = define "substituteInBinding" $
+  doc "Apply a term substitution to a binding" $
+  "subst" ~> "b" ~> Core.bindingWithTerm (var "b") (substituteInTerm @@ var "subst" @@ (Core.bindingTerm $ var "b"))
 
 substituteInConstraint :: TBinding (TypeSubst -> TypeConstraint -> TypeConstraint)
 substituteInConstraint = define "substituteInConstraint" $

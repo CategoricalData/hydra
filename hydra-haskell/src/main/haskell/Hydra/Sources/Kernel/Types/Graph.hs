@@ -29,10 +29,9 @@ graph :: Binding
 graph = define "Graph" $
   doc "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph" $
   T.record [
-    -- TODO: remove this; replace it with 'environment'
     "elements">:
       doc "All of the elements in the graph" $
-      T.map Core.name Core.binding,
+      T.list Core.binding,
     "environment">:
       doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
       T.map Core.name (T.maybe Core.term),
