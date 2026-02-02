@@ -59,7 +59,8 @@ public class Compare extends PrimitiveFunction {
      * @param left the first value
      * @return a function that takes the second value and returns the comparison result
      */
-    public static <A extends Comparable<A>> Function<A, Comparison> apply(A left) {
+    @SuppressWarnings("unchecked")
+    public static <A> Function<A, Comparison> apply(A left) {
         return right -> apply(left, right);
     }
 
@@ -70,8 +71,9 @@ public class Compare extends PrimitiveFunction {
      * @param right the second value
      * @return the comparison result
      */
-    public static <A extends Comparable<A>> Comparison apply(A left, A right) {
-        int cmp = left.compareTo(right);
+    @SuppressWarnings("unchecked")
+    public static <A> Comparison apply(A left, A right) {
+        int cmp = ((Comparable) left).compareTo(right);
         if (cmp < 0) {
             return new Comparison.LessThan(true);
         } else if (cmp > 0) {

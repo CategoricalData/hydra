@@ -47,16 +47,16 @@ public class BinaryToString extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.string(args.get(0)),
-            (Function<String, Term>) s -> Terms.string(apply(s)));
+        return args -> Flows.map(Expect.binary(args.get(0)),
+            (Function<String, Term>) s -> Terms.string(s));
     }
 
     /**
-     * Converts binary data to a string (identity function).
-     * @param binary the binary data as a string
-     * @return the same string value
+     * Converts binary data to a string.
+     * @param binary the binary data as a byte array
+     * @return the string representation
      */
-    public static String apply(String binary) {
-        return binary;
+    public static String apply(byte[] binary) {
+        return new String(binary, java.nio.charset.StandardCharsets.UTF_8);
     }
 }

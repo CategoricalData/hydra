@@ -52,25 +52,27 @@ public class SortOn extends PrimitiveFunction {
     /**
      * Sorts by the result of applying the function.
      * @param <X> the element type
-     * @param <Y> the key type, which must be comparable
+     * @param <Y> the key type (expected to be Comparable at runtime)
      * @param f the function to extract the sort key
      * @return a function that sorts a list by the extracted key
      */
-    public static <X, Y extends Comparable<Y>> Function<List<X>, List<X>> apply(Function<X, Y> f) {
+    @SuppressWarnings("unchecked")
+    public static <X, Y> Function<List<X>, List<X>> apply(Function<X, Y> f) {
         return lst -> apply(f, lst);
     }
 
     /**
      * Sorts by the result of applying the function.
      * @param <X> the element type
-     * @param <Y> the key type, which must be comparable
+     * @param <Y> the key type (expected to be Comparable at runtime)
      * @param f the function to extract the sort key
      * @param lst the list to sort
      * @return the sorted list
      */
-    public static <X, Y extends Comparable<Y>> List<X> apply(Function<X, Y> f, List<X> lst) {
+    @SuppressWarnings("unchecked")
+    public static <X, Y> List<X> apply(Function<X, Y> f, List<X> lst) {
         List<X> result = new ArrayList<>(lst);
-        result.sort(Comparator.comparing(f));
+        result.sort(Comparator.comparing(x -> (Comparable) f.apply(x)));
         return result;
     }
 }

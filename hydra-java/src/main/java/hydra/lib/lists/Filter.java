@@ -52,17 +52,17 @@ public class Filter extends PrimitiveFunction {
      * @return a function that filters a list by the predicate
      */
     public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
-        return lst -> apply(pred, lst);
+        return lst -> apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
     /**
      * Filters a list, keeping only elements that satisfy the predicate.
      * @param <X> the element type
-     * @param pred the predicate to test elements
+     * @param pred the predicate as a Function (used by generated code)
      * @param lst the list to filter
      * @return a new list containing only elements for which the predicate returns true
      */
-    public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
-        return lst.stream().filter(pred).collect(Collectors.toList());
+    public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
+        return lst.stream().filter(x -> pred.apply(x)).collect(Collectors.toList());
     }
 }

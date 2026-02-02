@@ -46,7 +46,8 @@ public class Gt extends PrimitiveFunction {
      * @param left the first value
      * @return a function that takes the second value and returns true if left &gt; right
      */
-    public static <A extends Comparable<A>> Function<A, Boolean> apply(A left) {
+    @SuppressWarnings("unchecked")
+    public static <A> Function<A, Boolean> apply(A left) {
         return right -> apply(left, right);
     }
 
@@ -57,7 +58,8 @@ public class Gt extends PrimitiveFunction {
      * @param right the second value
      * @return true if left &gt; right
      */
-    public static <A extends Comparable<A>> Boolean apply(A left, A right) {
-        return left.compareTo(right) > 0;
+    @SuppressWarnings("unchecked")
+    public static <A> Boolean apply(A left, A right) {
+        return ((Comparable) left).compareTo(right) > 0;
     }
 }

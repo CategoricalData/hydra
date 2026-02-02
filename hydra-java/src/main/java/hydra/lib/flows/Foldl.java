@@ -80,4 +80,13 @@ public class Foldl extends PrimitiveFunction {
         }
         return result;
     }
+
+    public static <S, A, B> Function<A, Function<List<B>, Flow<S, A>>> apply(
+            Function<A, Function<B, Flow<S, A>>> f) {
+        return initial -> list -> apply(f, initial, list);
+    }
+
+    public static <S, A, B> Flow<S, A> apply(Function<A, Function<B, Flow<S, A>>> f, A initial, List<B> list) {
+        return apply((A a, B b) -> f.apply(a).apply(b), initial, list);
+    }
 }

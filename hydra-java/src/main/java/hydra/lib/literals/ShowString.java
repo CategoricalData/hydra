@@ -11,7 +11,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
-import org.apache.commons.text.StringEscapeUtils;
+
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -54,6 +54,29 @@ public class ShowString extends PrimitiveFunction {
      * @return the quoted and escaped string literal
      */
     public static String apply(String value) {
-        return "\"" + StringEscapeUtils.escapeJava(value) + "\"";
+        return "\"" + escapeJava(value) + "\"";
+    }
+
+    private static String escapeJava(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            switch (c) {
+                case '\\': sb.append("\\\\"); break;
+                case '"': sb.append("\\\""); break;
+                case '\n': sb.append("\\n"); break;
+                case '\r': sb.append("\\r"); break;
+                case '\t': sb.append("\\t"); break;
+                case '\b': sb.append("\\b"); break;
+                case '\f': sb.append("\\f"); break;
+                default:
+                    if (c < 0x20) {
+                        sb.append(String.format("\\u%04x", (int) c));
+                    } else {
+                        sb.append(c);
+                    }
+            }
+        }
+        return sb.toString();
     }
 }
