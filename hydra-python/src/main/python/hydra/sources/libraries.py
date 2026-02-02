@@ -309,6 +309,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "filter"), Just(eval_lists.filter), ["a"],
         prims.function(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
+    # prim2: find :: (a -> Bool) -> [a] -> Maybe a
+    primitives[qname(namespace, "find")] = prims.prim2_interp(
+        qname(namespace, "find"), Just(eval_lists.find), ["a"],
+        prims.function(a, prims.boolean()), prims.list_(a), prims.optional(a)
+    )
     # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
     primitives[qname(namespace, "foldl")] = prims.prim3_interp(
         qname(namespace, "foldl"), Just(eval_lists.foldl), ["b", "a"],
@@ -359,6 +364,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "null")] = prims.prim1(
         qname(namespace, "null"), lists.null, ["a"],
         prims.list_(a), prims.boolean()
+    )
+    # prim2: partition :: (a -> Bool) -> [a] -> ([a], [a])
+    primitives[qname(namespace, "partition")] = prims.prim2_interp(
+        qname(namespace, "partition"), Just(eval_lists.partition), ["a"],
+        prims.function(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
     )
     # prim1: pure :: a -> [a]
     primitives[qname(namespace, "pure")] = prims.prim1(

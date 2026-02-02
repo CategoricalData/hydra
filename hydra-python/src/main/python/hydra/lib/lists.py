@@ -70,6 +70,14 @@ def filter(f: Callable[[A], bool], values: Sequence[A]) -> frozenlist[A]:
     return tuple(v for v in values if f(v))
 
 
+def find(predicate: Callable[[A], bool], values: Sequence[A]) -> Maybe[A]:
+    """Find the first element matching a predicate."""
+    for v in values:
+        if predicate(v):
+            return Just(v)
+    return Nothing()
+
+
 def foldl(f: Callable[[B, A], B], initial: B, values: Sequence[A]) -> B:
     """Fold a list from the left."""
     return reduce(f, values, initial)
@@ -149,6 +157,21 @@ def nub(values: Sequence[A]) -> frozenlist[A]:
 def null(values: Sequence[Any]) -> bool:
     """Check if a list is empty."""
     return len(values) == 0
+
+
+def partition(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlist[A], frozenlist[A]]:
+    """Partition a list based on a predicate.
+
+    Returns (elements satisfying predicate, elements not satisfying predicate).
+    """
+    yes: list[A] = []
+    no: list[A] = []
+    for v in values:
+        if predicate(v):
+            yes.append(v)
+        else:
+            no.append(v)
+    return (tuple(yes), tuple(no))
 
 
 def pure(value: A) -> frozenlist[A]:
