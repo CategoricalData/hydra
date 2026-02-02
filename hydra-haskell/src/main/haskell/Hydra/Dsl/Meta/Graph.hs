@@ -17,7 +17,7 @@ comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 comparisonGreaterThan :: TTerm Comparison
 comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
 
-graph :: TTerm (M.Map Name Binding)
+graph :: TTerm [Binding]
     -> TTerm (M.Map Name (Maybe Term))
     -> TTerm (M.Map Name TypeScheme)
     -> TTerm Term
@@ -32,7 +32,7 @@ graph elements environment types body primitives schema = record _Graph [
     _Graph_primitives>>: primitives,
     _Graph_schema>>: schema]
 
-graphElements :: TTerm Graph -> TTerm (M.Map Name Binding)
+graphElements :: TTerm Graph -> TTerm [Binding]
 graphElements g = project _Graph _Graph_elements @@ g
 
 graphEnvironment :: TTerm Graph -> TTerm (M.Map Name (Maybe Term))
@@ -50,7 +50,7 @@ graphPrimitives g = project _Graph _Graph_primitives @@ g
 graphSchema :: TTerm Graph -> TTerm (Maybe Graph)
 graphSchema g = project _Graph _Graph_schema @@ g
 
-graphWithElements :: TTerm Graph -> TTerm (M.Map Name Binding) -> TTerm Graph
+graphWithElements :: TTerm Graph -> TTerm [Binding] -> TTerm Graph
 graphWithElements g newElements = graph
     newElements
     (Hydra.Dsl.Meta.Graph.graphEnvironment g)
