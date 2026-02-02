@@ -6,6 +6,7 @@ module Hydra.Ext.Staging.CoderUtils where
 import Hydra.Kernel
 import Hydra.Typing
 import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Show.Core as ShowCore
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -97,17 +98,20 @@ analyzeFunctionTermWith forBinding getTC setTC env term = gather True env [] [] 
       where
         finish t = do
           -- Reapply type applications to the body
-          let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
-          -- Try to infer the return type; if it fails, continue without it
-          -- This allows encoding of untyped lambdas in dynamically-typed target languages like Python
-          mtyp <- tryTypeOf (getTC env) t2
+          let t3 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
+
+--          let t2 = L.foldl (\trm typ -> TermTypeApplication $ TypeApplicationTerm trm typ) t tapps
+--          let t3 = L.foldl (\trm var -> TermTypeLambda $ TypeLambda var trm) t2 tparams
+
+          -- Infer the return type
+          typ <- tryTypeOf ("analyzeFunctionTermWith") (getTC env) t3
           return $ FunctionStructure {
             functionStructureTypeParams = L.reverse tparams,
             functionStructureParams = L.reverse args,
             functionStructureBindings = bindings,
-            functionStructureBody = t2,
+            functionStructureBody = t3,
             functionStructureDomains = L.reverse doms,
-            functionStructureCodomain = mtyp,
+            functionStructureCodomain = Just typ,
             functionStructureEnvironment = env}
 
 -- | Analyze a function term without inferring the return type.
@@ -164,14 +168,11 @@ analyzeFunctionTermNoInferWith forBinding getTC setTC env term = gather True env
 -- This is useful for generating code in dynamically-typed languages where
 -- type information is optional (e.g., Python).
 --
--- Note: This function suppresses both the error result AND discards any error
--- messages/traces that were accumulated during the failed typeOf call.
-tryTypeOf :: TypeContext -> Term -> Flow s (Maybe Type)
-tryTypeOf tc term = Flow $ \s t ->
-  let FlowState mResult s' t' = unFlow (typeOf tc [] term) s t
-  in case mResult of
-    Just typ -> FlowState (Just (Just typ)) s' t'  -- Success: preserve new state and trace
-    Nothing -> FlowState (Just Nothing) s t         -- Failure: discard new state and trace to suppress errors
+-- | Infer the type of a term using the given TypeContext.
+-- This is a helper that adds tracing for debugging purposes.
+-- Type inference errors should be fixed, not silently ignored.
+tryTypeOf :: String -> TypeContext -> Term -> Flow s Type
+tryTypeOf msg tc term = withTrace msg $ typeOf tc [] term
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
 bindingMetadata :: TypeContext -> Binding -> Maybe Term
@@ -209,6 +210,15 @@ gatherArgs term args = case deannotateTerm term of
   TermTypeLambda (TypeLambda _ body) -> gatherArgs body args
   TermTypeApplication (TypeApplicationTerm t _) -> gatherArgs t args
   _ -> (term, args)
+
+-- | Like gatherArgs but also collects type arguments from TermTypeApplication nodes.
+--   Returns (fun, args, typeArgs) where typeArgs are in application order.
+gatherArgsWithTypeApps :: Term -> [Term] -> [Type] -> (Term, [Term], [Type])
+gatherArgsWithTypeApps term args tyArgs = case deannotateTerm term of
+  TermApplication (Application lhs rhs) -> gatherArgsWithTypeApps lhs (rhs:args) tyArgs
+  TermTypeLambda (TypeLambda _ body) -> gatherArgsWithTypeApps body args tyArgs
+  TermTypeApplication (TypeApplicationTerm t typ) -> gatherArgsWithTypeApps t args (typ:tyArgs)
+  _ -> (term, args, tyArgs)
 
 isComplexBinding :: TypeContext -> Binding -> Bool
 isComplexBinding tc b@(Binding _ term (Just ts)) = isPolymorphic || isNonNullary || isComplexTerm tc (bindingTerm b)

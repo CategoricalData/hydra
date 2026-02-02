@@ -19,6 +19,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Monads as Monads
+import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -35,7 +36,13 @@ import qualified Data.Maybe as Y
 import Data.String (String)
 
 
-data JavaSymbolClass = JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassUnaryFunction | JavaSymbolLocalVariable
+data JavaSymbolClass =
+    JavaSymbolClassConstant
+  | JavaSymbolClassNullaryFunction
+  -- | A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters.
+  | JavaSymbolClassHoistedLambda Int
+  | JavaSymbolClassUnaryFunction
+  | JavaSymbolLocalVariable
 
 data JavaEnvironment = JavaEnvironment {
   javaEnvironmentAliases :: Aliases,
@@ -89,6 +96,517 @@ boundTypeVariables typ = case typ of
   TypeForall (ForallType v body) -> v:(boundTypeVariables body)
   _ -> []
 
+-- | Recursively apply a type substitution
+applySubstFull :: M.Map Name Type -> Type -> Type
+applySubstFull s t = case deannotateType t of
+  TypeVariable v -> M.findWithDefault t v s
+  TypeFunction (FunctionType d c) ->
+    TypeFunction $ FunctionType (applySubstFull s d) (applySubstFull s c)
+  TypeApplication (ApplicationType l r) ->
+    TypeApplication $ ApplicationType (applySubstFull s l) (applySubstFull s r)
+  TypeList t' -> TypeList (applySubstFull s t')
+  TypeSet t' -> TypeSet (applySubstFull s t')
+  TypeMaybe t' -> TypeMaybe (applySubstFull s t')
+  TypeMap (MapType k v) -> TypeMap $ MapType (applySubstFull s k) (applySubstFull s v)
+  TypePair (PairType l r) -> TypePair $ PairType (applySubstFull s l) (applySubstFull s r)
+  TypeEither (EitherType l r) -> TypeEither $ EitherType (applySubstFull s l) (applySubstFull s r)
+  TypeForall (ForallType n b) -> TypeForall $ ForallType n (applySubstFull (M.delete n s) b)
+  other -> other
+
+-- | Peel expected argument types from a type scheme body using a substitution
+peelExpectedTypes :: M.Map Name Type -> Int -> Type -> [Type]
+peelExpectedTypes _ 0 _ = []
+peelExpectedTypes subst n t = case deannotateType t of
+  TypeFunction (FunctionType d c) -> applySubstFull subst d : peelExpectedTypes subst (n-1) c
+  _ -> []
+
+-- | Propagate a correct type annotation through a term. Sets the type annotation on the term
+-- and, for lambdas, also recursively annotates the body with the codomain type.
+propagateType :: Type -> Term -> Term
+propagateType typ term = case deannotateTerm term of
+    TermFunction (FunctionLambda (Lambda param mdom body)) ->
+      let annotated = setTermAnnotation key_type (Just $ EncodeCore.type_ typ) term
+      in case deannotateType typ of
+           TypeFunction (FunctionType _ cod) ->
+             propagateIntoLambda cod annotated
+           _ -> annotated
+    TermLet (Let bindings body) ->
+      -- For let expressions, the type of the let = type of its body.
+      -- Propagate the type into the body.
+      setTermAnnotation key_type (Just $ EncodeCore.type_ typ) $
+        rebuildLet term bindings (propagateType typ body)
+    _ -> setTermAnnotation key_type (Just $ EncodeCore.type_ typ) term
+  where
+    -- Propagate the codomain type into a lambda's body, traversing through annotations
+    propagateIntoLambda cod t = case t of
+      TermAnnotated (AnnotatedTerm inner ann) ->
+        TermAnnotated $ AnnotatedTerm (propagateIntoLambda cod inner) ann
+      TermFunction (FunctionLambda (Lambda param mdom body)) ->
+        TermFunction $ FunctionLambda $ Lambda param mdom (propagateType cod body)
+      _ -> t
+    -- Rebuild a let expression with a new body, preserving annotations
+    rebuildLet t bindings newBody = case t of
+      TermAnnotated (AnnotatedTerm inner ann) ->
+        TermAnnotated $ AnnotatedTerm (rebuildLet inner bindings newBody) ann
+      TermLet _ -> TermLet $ Let bindings newBody
+      _ -> t
+
+-- | Build a type variable substitution by structurally matching a "fresh" type (from inference
+-- annotations) against a "canonical" type (from the type scheme). When both types have a
+-- TypeVariable at the same structural position, maps the fresh name to the canonical name.
+-- Only includes mappings where the names actually differ.
+buildTypeVarSubst :: S.Set Name -> Type -> Type -> M.Map Name Name
+buildTypeVarSubst schemeVarSet freshTyp canonTyp = go (deannotateType freshTyp) (deannotateType canonTyp)
+  where
+    go (TypeVariable fn) (TypeVariable cn)
+      | fn /= cn && S.member cn schemeVarSet = M.singleton fn cn
+    go (TypeFunction (FunctionType fd fc)) (TypeFunction (FunctionType cd cc)) =
+      M.union (go (deannotateType fd) (deannotateType cd)) (go (deannotateType fc) (deannotateType cc))
+    go (TypeApplication (ApplicationType fl fr)) (TypeApplication (ApplicationType cl cr)) =
+      M.union (go (deannotateType fl) (deannotateType cl)) (go (deannotateType fr) (deannotateType cr))
+    go (TypeList ft) (TypeList ct) = go (deannotateType ft) (deannotateType ct)
+    go (TypeSet ft) (TypeSet ct) = go (deannotateType ft) (deannotateType ct)
+    go (TypeMaybe ft) (TypeMaybe ct) = go (deannotateType ft) (deannotateType ct)
+    go (TypeMap (MapType fk fv)) (TypeMap (MapType ck cv)) =
+      M.union (go (deannotateType fk) (deannotateType ck)) (go (deannotateType fv) (deannotateType cv))
+    go (TypePair (PairType fl fr)) (TypePair (PairType cl cr)) =
+      M.union (go (deannotateType fl) (deannotateType cl)) (go (deannotateType fr) (deannotateType cr))
+    go (TypeEither (EitherType fl fr)) (TypeEither (EitherType cl cr)) =
+      M.union (go (deannotateType fl) (deannotateType cl)) (go (deannotateType fr) (deannotateType cr))
+    go (TypeForall (ForallType _ fb)) (TypeForall (ForallType _ cb)) =
+      go (deannotateType fb) (deannotateType cb)
+    go (TypeForall (ForallType _ fb)) ct = go (deannotateType fb) ct
+    go ft (TypeForall (ForallType _ cb)) = go ft (deannotateType cb)
+    go _ _ = M.empty
+
+-- | Build a mapping from scheme type variables to actual types by structurally matching
+-- a scheme type against an actual type. Only maps variables that are in the schemeVarSet.
+buildTypeSubst :: S.Set Name -> Type -> Type -> M.Map Name Type
+buildTypeSubst schemeVarSet schemeType actualType = go (deannotateType schemeType) (deannotateType actualType)
+  where
+    go (TypeVariable v) actual | S.member v schemeVarSet = M.singleton v actual
+    go (TypeFunction (FunctionType sd sc)) (TypeFunction (FunctionType ad ac)) =
+      M.union (go (deannotateType sd) (deannotateType ad)) (go (deannotateType sc) (deannotateType ac))
+    go (TypeApplication (ApplicationType sl sr)) (TypeApplication (ApplicationType al ar)) =
+      M.union (go (deannotateType sl) (deannotateType al)) (go (deannotateType sr) (deannotateType ar))
+    go (TypeList st) (TypeList at') = go (deannotateType st) (deannotateType at')
+    go (TypeSet st) (TypeSet at') = go (deannotateType st) (deannotateType at')
+    go (TypeMaybe st) (TypeMaybe at') = go (deannotateType st) (deannotateType at')
+    go (TypeMap (MapType sk sv)) (TypeMap (MapType ak av)) =
+      M.union (go (deannotateType sk) (deannotateType ak)) (go (deannotateType sv) (deannotateType av))
+    go (TypePair (PairType sl sr)) (TypePair (PairType al ar)) =
+      M.union (go (deannotateType sl) (deannotateType al)) (go (deannotateType sr) (deannotateType ar))
+    go (TypeEither (EitherType sl sr)) (TypeEither (EitherType al ar)) =
+      M.union (go (deannotateType sl) (deannotateType al)) (go (deannotateType sr) (deannotateType ar))
+    go (TypeForall (ForallType _ sb)) at' = go (deannotateType sb) at'
+    go st (TypeForall (ForallType _ ab)) = go st (deannotateType ab)
+    go _ _ = M.empty
+
+-- | Compute corrected type applications for a function call by looking up the callee's
+-- type scheme and building a substitution from argument types. The IR's type applications
+-- can be in the wrong order due to normalizeTypeVariablesInTerm renumbering.
+-- The approach: build a mapping from scheme type variables to actual types using argument
+-- type matching, then fill in remaining variables from the IR's type apps.
+correctTypeApps :: TypeContext -> Name -> [Term] -> [Type] -> Flow Graph [Type]
+correctTypeApps tc name args fallbackTypeApps = do
+    mel <- dereferenceElement name
+    case mel of
+      Nothing -> return fallbackTypeApps
+      Just el -> case bindingType el of
+        Nothing -> return fallbackTypeApps
+        Just ts -> do
+          let schemeType = typeSchemeType ts
+              -- Filter scheme vars to only those used in the scheme type,
+              -- matching the filtering done in encodeTermDefinition.
+              allSchemeVars = L.filter (\(Name n) -> not ('.' `elem` n)) $ typeSchemeVariables ts
+              schemeTypeVars = collectTypeVars schemeType
+              usedFlags = fmap (\v -> S.member v schemeTypeVars) allSchemeVars
+              usedSchemeVars = [v | (v, True) <- L.zip allSchemeVars usedFlags]
+              -- Detect accumulator unification (matching encodeTermDefinition)
+              countParams t = case deannotateType t of
+                TypeFunction (FunctionType _ c) -> 1 + countParams c
+                _ -> 0
+              nParams = countParams schemeType
+              peelDoms2 0 t = ([], t)
+              peelDoms2 n t = case deannotateType t of
+                TypeFunction (FunctionType d c) -> let (ds, r) = peelDoms2 (n-1) c in (d:ds, r)
+                _ -> ([], t)
+              (calleeDoms, calleeCod) = peelDoms2 nParams schemeType
+              overgenSubst = detectAccumulatorUnification calleeDoms calleeCod usedSchemeVars
+              -- Apply both phantom and overgen filtering
+              keepFlags = fmap (\v -> S.member v schemeTypeVars && not (M.member v overgenSubst)) allSchemeVars
+              schemeVars = [v | (v, True) <- L.zip allSchemeVars keepFlags]
+              -- Also filter the fallback type args to match
+              filteredFallback0 = if L.length allSchemeVars == L.length fallbackTypeApps
+                then [t | (t, True) <- L.zip fallbackTypeApps keepFlags]
+                else fallbackTypeApps
+              -- Apply overgen substitution to the filtered type args
+              filteredFallback = if M.null overgenSubst then filteredFallback0
+                else fmap (substituteTypeVarsWithTypes overgenSubst) filteredFallback0
+          if L.null schemeVars || L.length schemeVars /= L.length filteredFallback
+            then return filteredFallback
+            else do
+              let fallbackTypeApps = filteredFallback
+              let schemeVarSet = S.fromList schemeVars
+                  -- Build the substitution that the IR's type apps imply
+                  irSubst = M.fromList $ L.zip schemeVars fallbackTypeApps
+                  -- Peel domain types from the scheme type
+                  peelDoms 0 t = ([], t)
+                  peelDoms n t = case deannotateType t of
+                    TypeFunction (FunctionType d c) -> let (ds, r) = peelDoms (n-1) c in (d:ds, r)
+                    _ -> ([], t)
+                  (schemeDoms, _schemeCod) = peelDoms (L.length args) schemeType
+              -- For each argument, try to get its type from annotations (cheap).
+              -- If annotation is not available, trust the IR order. This avoids expensive
+              -- type inference that can cause slowdowns in interpreted mode (GHCi).
+              mArgTypes <- CM.mapM (\arg -> getType (termAnnotationInternal arg)) args
+              if not (L.all Y.isJust mArgTypes)
+                then return fallbackTypeApps  -- Can't verify without inference; trust the IR
+                else do
+                  let argTypes = Y.catMaybes mArgTypes
+                  -- Apply the IR substitution to each scheme domain type and check consistency
+                  let applySubst subst t = case deannotateType t of
+                        TypeVariable v -> M.findWithDefault t v subst
+                        _ -> t  -- Only substitute top-level type variables for simplicity
+                  let irDoms = fmap (applySubst irSubst) schemeDoms
+                  -- Check if the IR domains match the argument types
+                  let domsMatch = L.all (\(irDom, argType) ->
+                        typesMatch (deannotateType irDom) (deannotateType argType)) (L.zip irDoms argTypes)
+                  if domsMatch
+                    then return fallbackTypeApps  -- IR is correct, no need to fix
+                    else do
+                      -- IR is wrong; try to build correct mapping from argument types directly.
+                      let argSubst = M.fromList $ concatMap (\(sdom, argType) ->
+                            case deannotateType sdom of
+                              TypeVariable v | S.member v schemeVarSet -> [(v, argType)]
+                              _ -> []
+                            ) (L.zip schemeDoms argTypes)
+                      let resolvedVars = M.keysSet argSubst
+                          unresolvedVars = L.filter (\v -> not $ S.member v resolvedVars) schemeVars
+                          usedTypes = S.fromList $ M.elems argSubst
+                          unusedIrTypes = L.filter (\t -> not $ S.member t usedTypes) fallbackTypeApps
+                          remainingSubst = M.fromList $ L.zip unresolvedVars unusedIrTypes
+                          fullSubst = M.union argSubst remainingSubst
+                      let result = fmap (\v -> M.findWithDefault (TypeVariable v) v fullSubst) schemeVars
+                      return result
+  where
+    typesMatch (TypeVariable a) (TypeVariable b) = a == b
+    typesMatch (TypeWrap a) (TypeWrap b) = wrappedTypeTypeName a == wrappedTypeTypeName b
+    typesMatch _ _ = True  -- Allow structural matches to pass
+
+-- | Build a type variable substitution by walking a term and comparing lambda domain types
+-- (which are normalized by normalizeTypeVariablesInTerm) against the annotation map types
+-- (which are NOT normalized). This recovers the fresh→canonical mapping.
+buildSubstFromAnnotations :: S.Set Name -> Term -> Flow Graph (M.Map Name Name)
+buildSubstFromAnnotations schemeVarSet term = do
+    g <- getState
+    return $ go g term
+  where
+    go g term = case term of
+      TermAnnotated (AnnotatedTerm body anns) ->
+        let bodySubst = go g body
+            annSubst = case M.lookup key_type anns of
+              Nothing -> M.empty
+              Just typeTerm -> case DecodeCore.type_ g typeTerm of
+                Left _ -> M.empty
+                Right annType -> case deannotateTerm body of
+                  TermFunction (FunctionLambda (Lambda _ (Just dom) _)) ->
+                    -- Match the annotation's function type domain against the lambda's normalized domain
+                    case deannotateType annType of
+                      TypeFunction (FunctionType annDom _) ->
+                        buildTypeVarSubst schemeVarSet annDom dom
+                      _ -> M.empty
+                  _ -> M.empty
+        in M.union annSubst bodySubst
+      TermApplication (Application lhs rhs) -> M.union (go g lhs) (go g rhs)
+      TermFunction (FunctionLambda (Lambda _ _ body)) -> go g body
+      TermFunction (FunctionElimination (EliminationUnion (CaseStatement _ mdef cases))) ->
+        let defSubst = maybe M.empty (go g) mdef
+            caseSubsts = M.unions $ fmap (go g . fieldTerm) cases
+        in M.union defSubst caseSubsts
+      TermLet (Let bindings body) ->
+        M.union (M.unions $ fmap (go g . bindingTerm) bindings) (go g body)
+      TermList terms -> M.unions $ fmap (go g) terms
+      TermMaybe (Just t) -> go g t
+      TermPair (a, b) -> M.union (go g a) (go g b)
+      TermRecord (Record _ fields) -> M.unions $ fmap (go g . fieldTerm) fields
+      TermSet terms -> M.unions $ fmap (go g) $ S.toList terms
+      TermTypeApplication (TypeApplicationTerm body _) -> go g body
+      TermTypeLambda (TypeLambda _ body) -> go g body
+      TermEither (Left t) -> go g t
+      TermEither (Right t) -> go g t
+      _ -> M.empty
+
+-- | Collect all type variable names from a type
+collectTypeVars :: Type -> S.Set Name
+collectTypeVars typ = go (deannotateType typ)
+  where
+    go t = case t of
+      TypeVariable name -> S.singleton name
+      TypeFunction (FunctionType d c) -> S.union (go $ deannotateType d) (go $ deannotateType c)
+      TypeApplication (ApplicationType l r) -> S.union (go $ deannotateType l) (go $ deannotateType r)
+      TypeList t' -> go (deannotateType t')
+      TypeSet t' -> go (deannotateType t')
+      TypeMaybe t' -> go (deannotateType t')
+      TypeMap (MapType k v) -> S.union (go $ deannotateType k) (go $ deannotateType v)
+      TypePair (PairType l r) -> S.union (go $ deannotateType l) (go $ deannotateType r)
+      TypeEither (EitherType l r) -> S.union (go $ deannotateType l) (go $ deannotateType r)
+      TypeForall (ForallType _ b) -> go (deannotateType b)
+      _ -> S.empty
+
+-- | Substitute type variables with types (more general than substituteTypeVariables which maps Name->Name).
+substituteTypeVarsWithTypes :: M.Map Name Type -> Type -> Type
+substituteTypeVarsWithTypes subst = rewrite
+  where
+    rewrite t = case deannotateType t of
+      TypeVariable v -> case M.lookup v subst of
+        Just replacement -> replacement
+        Nothing -> t
+      TypeFunction (FunctionType d c) -> TypeFunction (FunctionType (rewrite d) (rewrite c))
+      TypePair (PairType a b) -> TypePair (PairType (rewrite a) (rewrite b))
+      TypeApplication (ApplicationType f a) -> TypeApplication (ApplicationType (rewrite f) (rewrite a))
+      TypeList inner -> TypeList (rewrite inner)
+      TypeSet inner -> TypeSet (rewrite inner)
+      TypeMaybe inner -> TypeMaybe (rewrite inner)
+      TypeMap (MapType k v) -> TypeMap (MapType (rewrite k) (rewrite v))
+      TypeEither (EitherType l r) -> TypeEither (EitherType (rewrite l) (rewrite r))
+      TypeForall (ForallType param body) -> TypeForall (ForallType param (rewrite body))
+      _ -> t
+
+-- | Apply a type substitution to all type annotations in a term.
+-- This walks the term structure and, for each TermAnnotated node,
+-- replaces the "type" annotation (if present) with the substituted version.
+-- Also updates lambda domains and type applications.
+applyOvergenSubstToTermAnnotations :: M.Map Name Type -> Term -> Flow Graph Term
+applyOvergenSubstToTermAnnotations subst term0 = do
+    cx <- Monads.getState
+    return $ go cx term0
+  where
+    go cx term = case term of
+      TermAnnotated (AnnotatedTerm inner ann) ->
+        let ann' = case M.lookup key_type ann of
+              Just typeTerm -> case DecodeCore.type_ cx typeTerm of
+                Right t ->
+                  let t' = substituteTypeVarsWithTypes subst t
+                  in M.insert key_type (EncodeCore.type_ t') ann
+                Left _ -> ann  -- couldn't decode, leave as-is
+              Nothing -> ann
+        in TermAnnotated (AnnotatedTerm (go cx inner) ann')
+      TermApplication (Application lhs rhs) ->
+        TermApplication (Application (go cx lhs) (go cx rhs))
+      TermFunction (FunctionLambda (Lambda param mdom body)) ->
+        TermFunction (FunctionLambda (Lambda param (fmap (substituteTypeVarsWithTypes subst) mdom) (go cx body)))
+      TermFunction (FunctionElimination elm) -> case elm of
+        EliminationUnion cs -> TermFunction (FunctionElimination (EliminationUnion (CaseStatement
+          (caseStatementTypeName cs)
+          (fmap (go cx) (caseStatementDefault cs))
+          (fmap (\f -> Field (fieldName f) (go cx (fieldTerm f))) (caseStatementCases cs)))))
+        _ -> term
+      TermLet (Let bindings body) ->
+        TermLet (Let (fmap (\b -> Binding (bindingName b) (go cx (bindingTerm b)) (bindingType b)) bindings) (go cx body))
+      TermTypeApplication (TypeApplicationTerm body typ) ->
+        TermTypeApplication (TypeApplicationTerm (go cx body) (substituteTypeVarsWithTypes subst typ))
+      TermTypeLambda (TypeLambda param body) ->
+        TermTypeLambda (TypeLambda param (go cx body))
+      _ -> term
+
+-- | Detect over-generalized type variables in a scheme type.
+-- After hoisting, inference may create separate type variables for what should be the
+-- same type. This function detects several patterns:
+-- 1. Accumulator fold: param1 returns (V,...), param2 returns (W,...) with same input V
+-- 2. Context threading: param1 is V->...->V, param2 is V->...->W (W should = V)
+-- 3. Dangling codomain: type var in codomain not in any domain
+-- Returns a substitution mapping redundant vars to their canonical equivalents.
+detectAccumulatorUnification :: [Type] -> Type -> [Name] -> M.Map Name Type
+detectAccumulatorUnification doms cod tparams =
+    let -- Extract input/output type variable pairs from function-typed parameters.
+        -- For a param like (A -> ... -> (B, ...)), extract (A, B) where B is
+        -- the first element of a pair return type.
+        extractInOutPair :: Type -> [(Name, Name)]
+        extractInOutPair t = case deannotateType t of
+          TypeFunction (FunctionType d c) ->
+            case deannotateType d of
+              TypeVariable inVar ->
+                let retType = unwrapReturnType c
+                in case deannotateType retType of
+                  -- Pair first element: V -> ... -> (W, ...)
+                  TypePair (PairType first _) -> case deannotateType first of
+                    TypeVariable outVar -> [(inVar, outVar)]
+                    _ -> []
+                  _ -> []
+              _ -> []
+          _ -> []
+        -- Extract input/output pairs for direct variable returns in
+        -- "context extension" functions: functions of shape ... -> V -> X -> V (or W)
+        -- where V is a type variable, X is a concrete type, and the return is V or W.
+        -- Also handles leading non-variable arguments by skipping them.
+        -- Only matches when there's exactly one concrete-typed argument between the
+        -- variable input and the variable return (the "extension target" type).
+        tparamSet = S.fromList tparams
+        extractDirectReturn :: Type -> [(Name, Name)]
+        extractDirectReturn t = go t
+          where
+            go t = case deannotateType t of
+              TypeFunction (FunctionType d c) ->
+                case deannotateType d of
+                  TypeVariable inVar | S.member inVar tparamSet ->
+                    -- After the type-param input, expect: X -> V
+                    -- where X is NOT a type parameter (could be a concrete named type)
+                    -- and V is a type parameter variable.
+                    case deannotateType c of
+                      TypeFunction (FunctionType midArg retPart) ->
+                        case deannotateType midArg of
+                          TypeVariable midVar | S.member midVar tparamSet -> []  -- middle is a type param, not a concrete type
+                          _ -> case deannotateType retPart of
+                            TypeVariable outVar | S.member outVar tparamSet -> [(inVar, outVar)]
+                            _ -> []
+                      _ -> []
+                  -- Skip non-type-param leading domains and continue
+                  _ -> go c
+              _ -> []
+        -- Unwrap nested function types to get the final return type
+        unwrapReturnType t = case deannotateType t of
+          TypeFunction (FunctionType _ c) -> unwrapReturnType c
+          -- Also look through Flow/monadic wrappers
+          TypeApplication (ApplicationType _ inner) -> unwrapReturnType inner
+          _ -> t
+        -- Helper: convert Name->Name map to Name->Type map (wrapping values as TypeVariable)
+        toTypeMap :: M.Map Name Name -> M.Map Name Type
+        toTypeMap = M.map TypeVariable
+        -- Collect all input/output pairs (pair-based)
+        allPairs = concatMap extractInOutPair doms
+        -- Group by input variable: for each input var, collect all output vars
+        groupedByInput = L.foldl' (\m (inv, outv) ->
+          M.insertWith (++) inv [outv] m) M.empty allPairs
+        -- For each group, if there's a "self-referencing" pair (in == out) and other
+        -- pairs with different output vars, substitute those other vars to the self-ref var
+        selfRefSubst = M.foldlWithKey' (\subst inVar outVars ->
+          if inVar `elem` outVars
+            then L.foldl' (\s v -> if v /= inVar then M.insert v inVar s else s) subst outVars
+            else subst) M.empty groupedByInput
+        -- Direct return self-ref detection (for context-threading patterns like Hoisting).
+        -- Only unify V -> ... -> W to V when:
+        -- 1. There are at least 2 self-refs (V -> ... -> V) for the same input var
+        -- 2. The non-self var W doesn't appear in any domain type as an input var
+        --    (i.e., W is only used as a return type, not as an input to any function param)
+        -- This prevents false positives where W is genuinely a different type.
+        directPairs = concatMap extractDirectReturn doms
+        groupedDirect = L.foldl' (\m (inv, outv) ->
+          M.insertWith (++) inv [outv] m) M.empty directPairs
+        -- Collect all input vars from direct return patterns
+        directInputVars = S.fromList $ fmap fst directPairs
+        -- Also protect the codomain variable: if the method returns V directly,
+        -- don't substitute V (it's the result type, not a context type).
+        codVar = case deannotateType cod of
+          TypeVariable v -> Just v
+          _ -> Nothing
+        directRefSubst = M.foldlWithKey' (\subst inVar outVars ->
+          let selfRefCount = L.length $ L.filter (== inVar) outVars
+              nonSelfVars = L.filter (/= inVar) outVars
+              -- Only substitute vars that:
+              -- 1. Don't appear as input vars in other patterns
+              -- 2. Are not the codomain variable (the function's return type)
+              safeNonSelfVars = L.filter (\v ->
+                not (S.member v directInputVars) &&
+                codVar /= Just v) nonSelfVars
+          in if selfRefCount >= 2 && not (L.null safeNonSelfVars)
+            then L.foldl' (\s v -> M.insert v inVar s) subst safeNonSelfVars
+            else subst) M.empty groupedDirect
+        -- Extract the type variable from the first element of a pair type
+        findPairFirst t = case deannotateType t of
+          TypePair (PairType first _) -> case deannotateType first of
+            TypeVariable v -> Just v
+            _ -> Nothing
+          _ -> Nothing
+        -- Check the codomain for vars that should be unified
+        codSubst = case findPairFirst cod of
+          Just codVar | not (M.member codVar selfRefSubst) ->
+            let selfRefVars = [inVar | (inVar, outVars) <- M.toList groupedByInput, inVar `elem` outVars]
+            in case selfRefVars of
+              (refVar:_) | codVar /= refVar -> M.singleton codVar refVar
+              _ -> M.empty
+          _ -> M.empty
+        -- Dangling codomain vars: type vars in codomain but not in any domain
+        domVars = S.unions $ fmap collectTypeVars doms
+        danglingSubst = case findPairFirst cod of
+          Just codVar | not (S.member codVar domVars) ->
+            let selfRefVars = [inVar | (inVar, outVars) <- M.toList groupedByInput, inVar `elem` outVars]
+            in case selfRefVars of
+              (refVar:_) -> M.singleton codVar (TypeVariable refVar)
+              [] -> M.empty
+          _ -> M.empty
+    in M.unions [toTypeMap selfRefSubst, toTypeMap codSubst, danglingSubst,
+                 toTypeMap directRefSubst]
+
+-- | Filter type arguments to remove those at positions corresponding to phantom
+-- scheme variables (variables in the scheme's variable list that don't appear in
+-- the scheme's actual type). This keeps call-site type args consistent with the
+-- callee's declaration, which has already been filtered by encodeTermDefinition.
+filterPhantomTypeArgs :: Name -> [Type] -> Flow Graph [Type]
+filterPhantomTypeArgs calleeName allTypeArgs = do
+    mel <- dereferenceElement calleeName
+    case mel of
+      Nothing -> return allTypeArgs
+      Just el -> case bindingType el of
+        Nothing -> return allTypeArgs
+        Just ts -> do
+          let isSimpleName (Name n) = not ('.' `elem` n)
+              schemeVars = L.filter isSimpleName $ typeSchemeVariables ts
+              schemeTypeVars = collectTypeVars (typeSchemeType ts)
+              -- Filter phantom vars (not used in scheme type)
+              usedFlags = fmap (\v -> S.member v schemeTypeVars) schemeVars
+              -- Also detect accumulator unification for the callee's scheme
+              schemeType = typeSchemeType ts
+              numSchemeVars = L.length schemeVars
+              peelDoms n t
+                | n <= 0 = ([], t)
+                | otherwise = case deannotateType t of
+                    TypeFunction (FunctionType d c) ->
+                      let (ds, cod) = peelDoms (n - 1) c in (d:ds, cod)
+                    _ -> ([], t)
+              -- Count parameters by looking at the scheme type's function structure
+              countParams t = case deannotateType t of
+                TypeFunction (FunctionType _ c) -> 1 + countParams c
+                _ -> 0
+              nParams = countParams schemeType
+              (calleeDoms, calleeCod) = peelDoms nParams schemeType
+              overgenSubst = detectAccumulatorUnification calleeDoms calleeCod schemeVars
+              -- A var should be kept if: used in scheme AND not substituted away by overgen
+              keepFlags = fmap (\v -> S.member v schemeTypeVars && not (M.member v overgenSubst)) schemeVars
+          if L.length schemeVars /= L.length allTypeArgs
+            then return allTypeArgs  -- Length mismatch; don't filter
+            else do
+              -- Apply the overgen substitution to the kept type args
+              let filtered = [t | (t, keep) <- L.zip allTypeArgs keepFlags, keep]
+              if not (M.null overgenSubst)
+                then return $ fmap (substituteTypeVarsWithTypes overgenSubst) filtered
+                else return filtered
+
+-- | Apply a lambda cast if the type is safe (doesn't contain potentially wrong type variables).
+-- A cast is safe if all type variables that would be rendered as Java type variables are
+-- "trusted" — they appear in the enclosing method's parameter types. Type variables from
+-- inference annotations that don't match trusted vars might be wrong (e.g., t10 from a
+-- fresh instantiation being rendered as T10 instead of the correct T0).
+applyCastIfSafe :: Aliases -> Type -> Java.Expression -> Flow Graph Java.Expression
+applyCastIfSafe aliases castType expr = do
+  let trusted = aliasesTrustedTypeVars aliases
+      inScope = aliasesInScopeTypeParams aliases
+      -- Collect type variables in the cast type that would be rendered as Java type variables
+      castVars = collectTypeVars castType
+      javaTypeVars = S.filter (\v -> S.member v inScope || isLambdaBoundVariable v) castVars
+      -- A cast is safe if all Java type variables are trusted (appear in method params)
+      -- or if there are no trusted vars to check against (e.g., top-level context)
+      isSafe = S.null trusted || S.null javaTypeVars || S.isSubsetOf javaTypeVars trusted
+  if isSafe
+    then do
+      jtype <- encodeType aliases S.empty castType
+      rt <- javaTypeToJavaReferenceType jtype
+      return $ javaCastExpressionToJavaExpression $
+        javaCastExpression rt (javaExpressionToJavaUnaryExpression expr)
+    else return expr  -- Skip cast: type vars might be wrong
+
+-- | Check if a type contains any type variables that would be rendered as Java type variables
+-- (i.e., they are in scope or pass isLambdaBoundVariable). Used to decide whether a lambda
 -- | Try to infer the function type from the function structure when type annotations are unavailable.
 -- For lambdas with domain annotations, we can extract the domain type.
 -- The codomain is inferred from the body's type annotation if available.
@@ -165,15 +683,28 @@ classifyDataReference name = do
 
 classifyDataTerm :: TypeScheme -> Term -> JavaSymbolClass
 classifyDataTerm ts term = if isLambda term
-    then JavaSymbolClassUnaryFunction
-    else if hasTypeParameters || isUnsupportedVariant
-      then JavaSymbolClassNullaryFunction
-      else JavaSymbolClassConstant
+    then case countLambdaParams term of
+      n | n > 1 -> JavaSymbolClassHoistedLambda n
+      _ -> JavaSymbolClassUnaryFunction
+    else if hasTypeParameters
+      then case countLambdaParams (stripTypeLambdas term) of
+        n | n > 0 -> JavaSymbolClassHoistedLambda n
+        _ -> JavaSymbolClassNullaryFunction
+      else if isUnsupportedVariant
+        then JavaSymbolClassNullaryFunction
+        else JavaSymbolClassConstant
   where
     hasTypeParameters = not $ L.null $ typeSchemeVariables ts
     isUnsupportedVariant = case deannotateTerm term of
       TermLet _ -> True
       _ -> False
+    stripTypeLambdas t = case deannotateTerm t of
+      TermTypeLambda (TypeLambda _ body) -> stripTypeLambdas body
+      _ -> t
+    countLambdaParams t = case deannotateTerm t of
+      TermFunction (FunctionLambda (Lambda _ _ body)) -> 1 + countLambdaParams body
+      TermLet (Let _ body) -> countLambdaParams body
+      _ -> 0
 
 commentsFromElement :: Binding -> Flow Graph (Maybe String)
 commentsFromElement = getTermDescription . bindingTerm
@@ -449,34 +980,100 @@ encodeApplication env app@(Application lhs rhs) = do
     -- Get the function's arity from its type
     -- Try to get type from annotations first (works better with hoisted terms)
     mfunTyp <- getType (termAnnotationInternal fun)
-    mfunTyp2 <- case mfunTyp of
-      Just t -> pure $ Just t
-      Nothing -> tryTypeOf tc fun
-    -- If we can't determine the type, assume arity 1 (single argument function)
-    let arity = maybe 1 typeArity mfunTyp2
-    -- Split arguments based on arity
-    let hargs = L.take arity args  -- Head arguments: pass directly
-        rargs = L.drop arity args  -- Remaining arguments: apply via .apply()
-    -- Generate the initial call with head arguments
+    funTyp <- case mfunTyp of
+      Just t -> pure t
+      Nothing -> tryTypeOf "1" tc fun
+    let arity = typeArity funTyp
+    -- Annotate lambda arguments with expected types from the callee's type scheme.
+    -- This fixes incorrect type annotations created by normalizeTypeVariablesInTerm.
+    let calleeName = case deannotateTerm fun of
+          TermFunction (FunctionPrimitive n) -> Just n
+          TermVariable n -> Just n
+          _ -> Nothing
+    annotatedArgs <- case calleeName of
+      Nothing -> return args
+      Just cname -> annotateLambdaArgs cname typeApps args
+    -- Generate the initial call and apply remaining arguments
     -- gatherArgs already stripped type applications, just remove any remaining annotations
-    initialCall <- case deannotateTerm fun of
+    case deannotateTerm fun of
       TermFunction f -> case f of
-        FunctionPrimitive name -> functionCall env True name hargs
+        FunctionPrimitive name -> do
+          let hargs = L.take arity annotatedArgs
+              rargs = L.drop arity annotatedArgs
+          initialCall <- functionCall env True name hargs []
+          applyRemaining initialCall rargs
         _ -> fallback
       TermVariable name ->
-        -- Check if this is a recursive let-bound variable
+        -- Check if this is a recursive let-bound variable (and not shadowed by a lambda parameter)
         -- Recursive variables need curried construction with .get()
-        if isRecursiveVariable aliases name
+        if isRecursiveVariable aliases name && not (isLambdaBoundIn name (aliasesLambdaVars aliases))
           then fallback  -- Use curried construction for recursive bindings
-          else functionCall env False name hargs  -- Direct call for library functions
+          else do
+            -- For hoisted methods, the method's parameter count may be less than typeArity
+            -- because the method returns a function. Use the method arity for the split.
+            symClass <- classifyDataReference name
+            let methodArity = case symClass of
+                  JavaSymbolClassHoistedLambda n -> n
+                  _ -> arity
+            let hargs = L.take methodArity annotatedArgs
+                rargs = L.drop methodArity annotatedArgs
+            -- Filter type applications: drop all type args if any references
+            -- a type variable not in scope (e.g. phantom vars from over-generalized schemes).
+            -- Also check that in-scope vars are trusted.
+            let trusted = aliasesTrustedTypeVars aliases
+                inScope = aliasesInScopeTypeParams aliases
+                filteredTypeApps = if S.null trusted || S.null inScope then []
+                  else let allVars = S.unions $ fmap collectTypeVars typeApps
+                       in if not (S.isSubsetOf allVars inScope) then []
+                          else if S.isSubsetOf allVars trusted then typeApps else []
+            -- Correct the type application ordering by unifying with the callee's type scheme.
+            -- The IR's type applications can be in the wrong order due to normalizeTypeVariablesInTerm.
+            safeTypeApps <- if L.null filteredTypeApps then return []
+              else do
+                result <- correctTypeApps tc name hargs filteredTypeApps
+                return result
+            -- Filter phantom type args: remove type args at positions corresponding to
+            -- scheme variables that don't appear in the callee's actual type.
+            finalTypeApps <- filterPhantomTypeArgs name safeTypeApps
+            initialCall <- functionCall env False name hargs finalTypeApps
+            applyRemaining initialCall rargs
       _ -> fallback
-    -- Apply remaining arguments via .apply() for partial application
-    applyRemaining initialCall rargs
   where
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
     encode = encodeTerm env
-    (fun, args) = gatherArgs (TermApplication app) []
+    (fun, args, typeApps) = gatherArgsWithTypeApps (TermApplication app) [] []
+
+    -- | Annotate lambda arguments with expected types computed from the callee's type scheme
+    -- and type applications. This corrects type annotations that normalizeTypeVariablesInTerm
+    -- may have made inconsistent with the outer scope.
+    annotateLambdaArgs :: Name -> [Type] -> [Term] -> Flow Graph [Term]
+    annotateLambdaArgs cname tApps argTerms = if L.null tApps then return argTerms
+      else do
+        -- Look up the type scheme from either elements or primitives
+        mts <- do
+          mel <- dereferenceElement cname
+          case mel of
+            Just el -> return $ bindingType el
+            Nothing -> do
+              g <- Monads.getState
+              return $ fmap primitiveType $ M.lookup cname (graphPrimitives g)
+        case mts of
+          Nothing -> return argTerms
+          Just ts -> do
+            let schemeType = typeSchemeType ts
+                -- Filter scheme vars to only those used in the scheme type,
+                -- matching the filtering done in encodeTermDefinition.
+                schemeTypeVars = collectTypeVars schemeType
+                schemeVars = L.filter (\v -> S.member v schemeTypeVars) $ typeSchemeVariables ts
+            if L.null schemeVars || L.length schemeVars /= L.length tApps
+              then return argTerms
+              else do
+                let subst = M.fromList $ L.zip schemeVars tApps
+                    expectedTypes = peelExpectedTypes subst (L.length argTerms) schemeType
+                return $ L.zipWith (\arg mExpected ->
+                      propagateType mExpected arg
+                  ) argTerms (expectedTypes ++ repeat (TypeVariable $ Name "unused"))
 
     -- Apply remaining arguments one at a time using .apply()
     applyRemaining exp remArgs = case remArgs of
@@ -486,28 +1083,32 @@ encodeApplication env app@(Application lhs rhs) = do
         applyRemaining (apply exp jarg) r
 
     fallback = withTrace "fallback" $ do
---        if Y.isNothing (getTermType lhs)
---          -- then fail $ "app: " ++ ShowCore.term (TermApplication app)
---          then fail $ "lhs: " ++ ShowCore.term lhs
---          else pure ()
-
         -- Try to get type from annotations first (works better with hoisted terms)
         mt <- getType (termAnnotationInternal lhs)
-        mt2 <- case mt of
-          Just typ -> pure $ Just typ
-          Nothing -> tryTypeOf tc lhs
-        -- Get domain and codomain, with fallback to Object types if type unknown
-        let objType = TypeVariable $ Name "java.lang.Object"
-        (dom, cod) <- case mt2 of
-            Just t -> case deannotateTypeParameters $ deannotateType t of
-              TypeFunction (FunctionType dom cod) -> pure (dom, cod)
-              _ -> pure (objType, objType)  -- Fallback for non-function types
-            Nothing -> pure (objType, objType)  -- Fallback when type inference fails
+        t <- case mt of
+          Just typ -> pure typ
+          Nothing -> tryTypeOf "2" tc lhs
+        -- Get domain and codomain
+        (dom, cod) <- case deannotateTypeParameters $ deannotateType t of
+          TypeFunction (FunctionType dom cod) -> pure (dom, cod)
+          t2 -> fail $ "Unexpected type: " ++ ShowCore.type_ t2
         case deannotateTerm lhs of
           TermFunction f -> case f of
             FunctionElimination e -> do
                 jarg <- encode rhs
-                encodeElimination env (Just jarg) dom cod e
+                -- If dom has no type args, try to get a richer type from the argument (rhs).
+                -- This handles cases where the elimination type annotation loses type parameters
+                -- (e.g., ParseResult instead of ParseResult<T0>).
+                enrichedDom <- if not (L.null $ javaTypeArgumentsForType dom) then return dom
+                  else do
+                    mrt <- getType (termAnnotationInternal rhs)
+                    case mrt of
+                      Just rt | not (L.null $ javaTypeArgumentsForType rt) -> return rt
+                      _ -> do
+                        rt <- tryTypeOf "dom-enrich" tc rhs
+                        if not (L.null $ javaTypeArgumentsForType rt) then return rt
+                        else return dom
+                encodeElimination env (Just jarg) enrichedDom cod e
             _ -> defaultExpression
           _ -> defaultExpression
       where
@@ -529,7 +1130,8 @@ encodeDefinitions mod defs = do
                 javaEnvironmentAliases = aliases,
                 javaEnvironmentTypeContext = tc}
     let pkg = javaPackageDeclaration $ moduleNamespace mod
-    typeUnits <- CM.mapM (encodeTypeDefinition pkg aliases) typeDefs
+    let nonTypedefDefs = L.filter (not . isTypedef) typeDefs
+    typeUnits <- CM.mapM (encodeTypeDefinition pkg aliases) nonTypedefDefs
     termUnits <- if L.null termDefs
       then return []
       else do
@@ -540,6 +1142,16 @@ encodeDefinitions mod defs = do
   where
     (typeDefs, termDefs) = partitionDefinitions defs
     aliases = importAliasesForModule mod
+    -- A typedef is a type definition that is not a record, union, or wrap type.
+    -- For example: Vertex = int32. These are treated as transparent aliases in Java.
+    isTypedef (TypeDefinition _ typ) = case stripForallsAndAnnotations typ of
+      TypeRecord _ -> False
+      TypeUnion _ -> False
+      TypeWrap _ -> False
+      _ -> True
+    stripForallsAndAnnotations t = case deannotateType t of
+      TypeForall (ForallType _ body) -> stripForallsAndAnnotations body
+      other -> other
 
 encodeElimination :: JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Flow Graph Java.Expression
 encodeElimination env marg dom cod elm = case elm of
@@ -548,7 +1160,7 @@ encodeElimination env marg dom cod elm = case elm of
       jexp <- case marg of
         Nothing -> pure $ javaLambda var jbody
           where
-            var = Name "rec"
+            var = Name "projected"
             jbody = javaExpressionNameToJavaExpression $
               fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unName fname)
         Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unName fname)
@@ -560,19 +1172,20 @@ encodeElimination env marg dom cod elm = case elm of
         Nothing -> do
           g <- getState
           let lhs = TermFunction $ FunctionElimination elm
-          let var = "u"
-          encodeTerm env $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
+          let var = Name "u"
+          let typedLambda = TermFunction $ FunctionLambda $ Lambda var (Just dom) $
+                TermApplication $ Application lhs (TermVariable var)
+          encodeTerm env typedLambda
           -- TODO: default value
         Just jarg -> applyElimination jarg
       where
         applyElimination jarg = do
             let prim = javaExpressionToJavaPrimary jarg
-            let consId = innerClassRef aliases tname $ case def of
-                  Nothing -> visitorName
-                  Just _ -> partialVisitorName
+            let consId = innerClassRef aliases tname partialVisitorName
             jcod <- encodeType aliases S.empty cod
             rt <- javaTypeToJavaReferenceType jcod
-            let targs = typeArgsOrDiamond $ javaTypeArgumentsForType dom ++ [Java.TypeArgumentReference rt]
+            domArgs <- domTypeArgs dom
+            let targs = typeArgsOrDiamond $ domArgs ++ [Java.TypeArgumentReference rt]
             otherwiseBranches <- case def of
               Nothing -> pure []
               Just d -> do
@@ -584,8 +1197,41 @@ encodeElimination env marg dom cod elm = case elm of
             return $ javaMethodInvocationToJavaExpression $
               methodInvocation (Just $ Right prim) (Java.Identifier acceptMethodName) [visitor]
           where
+            -- Extract Java type arguments from dom, using actual type application args
+            -- (e.g., ParseResult<Function<T0,T1>> -> [Function<T0,T1>]) rather than free vars.
+            domTypeArgs d = case extractTypeApplicationArgs (deannotateType d) of
+              args@(_:_) -> CM.mapM (\t -> do
+                jt <- encodeType aliases S.empty t
+                rt <- javaTypeToJavaReferenceType jt
+                return $ Java.TypeArgumentReference rt) args
+              [] -> return $ javaTypeArgumentsForType d
+
+            -- Annotate a term body with the expected codomain type, propagating through
+            -- applications so that inner type-applied subterms also get correct annotations.
+            -- This fixes cases where inference over-generalizes type variables in hoisted
+            -- bindings, causing inner casts to use the wrong type variable.
+            annotateBodyWithCod typ term = case term of
+              -- For type applications, annotate the whole thing with the expected type
+              TermTypeApplication _ -> setTermAnnotation key_type (Just $ EncodeCore.type_ typ) term
+              -- For applications like Pure.apply(arg), annotate the application with the
+              -- overall type, and also annotate arguments that have type applications
+              TermApplication (Application lhs rhs) ->
+                let annotatedRhs = case deannotateTerm rhs of
+                      TermTypeApplication _ -> annotateBodyWithCod (extractArgType lhs typ) rhs
+                      _ -> rhs
+                in setTermAnnotation key_type (Just $ EncodeCore.type_ typ) $
+                   TermApplication $ Application lhs annotatedRhs
+              -- Default: just annotate the outermost term
+              _ -> setTermAnnotation key_type (Just $ EncodeCore.type_ typ) term
+
+            -- Try to extract the argument type from a function application.
+            -- For a function like Pure :: a -> Flow s a with return type Flow s a,
+            -- the argument type is a (the second type parameter of Flow).
+            extractArgType _ (TypeApplication (ApplicationType (TypeApplication (ApplicationType _ _)) argType)) = argType
+            extractArgType _ typ = typ
+
             otherwiseBranch jcod d = do
-              targs <- javaTypeArgumentsForNamedType tname
+              targs <- domTypeArgs dom
               let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname Nothing
               let mods = [Java.MethodModifierPublic]
               let anns = [overrideAnnotation]
@@ -594,7 +1240,10 @@ encodeElimination env marg dom cod elm = case elm of
               -- Analyze the term for bindings (handles nested lets)
               fs <- analyzeJavaFunction env d
               let bindings = functionStructureBindings fs
-                  innerBody = functionStructureBody fs
+                  rawBody = functionStructureBody fs
+                  -- Annotate the body with the case codomain type to override type application
+                  -- casts that may use a different type variable when inference over-generalizes.
+                  innerBody = annotateBodyWithCod cod rawBody
                   env2 = functionStructureEnvironment fs
               -- Convert bindings to Java block statements
               (bindingStmts, env3) <- bindingsToStatements env2 bindings
@@ -605,7 +1254,17 @@ encodeElimination env marg dom cod elm = case elm of
               return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just allStmts)
 
             visitBranch jcod field = do
-              targs <- javaTypeArgumentsForNamedType tname
+              -- Extract type arguments from the dom type. Use actual type application args
+              -- when available (to handle complex types like ParseResult<Function<T0,T1>>),
+              -- falling back to javaTypeArgumentsForType for simple type variable args.
+              targs <- case extractTypeApplicationArgs (deannotateType dom) of
+                args@(_:_) -> do
+                  jargs <- CM.mapM (\t -> do
+                    jt <- encodeType aliases S.empty t
+                    rt <- javaTypeToJavaReferenceType jt
+                    return $ Java.TypeArgumentReference rt) args
+                  return jargs
+                [] -> return $ javaTypeArgumentsForType dom
               let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname (Just $ capitalize $ unName $ fieldName field)
               let mods = [Java.MethodModifierPublic]
               let anns = [overrideAnnotation]
@@ -652,29 +1311,17 @@ encodeFunction env dom cod fun = case fun of
       -- If it is, encode it recursively to create nested Java lambdas
       case deannotateTerm body of
         TermFunction (FunctionLambda innerLam) -> do
-          -- Body is another lambda - recursively encode it
-          -- The type of body is a function type, so we need to extract dom' and cod'
-          -- Try to get type from annotations first (works better with hoisted terms)
-          mbodyTyp <- getType (termAnnotationInternal body)
-          mbodyTyp2 <- case mbodyTyp of
-            Just t -> pure $ Just t
-            Nothing -> tryTypeOf (javaEnvironmentTypeContext env2) body
-          case mbodyTyp2 of
-            Nothing -> do
-              -- Fallback: use Object -> Object and let the inner encoding figure it out
-              let objType = TypeVariable $ Name "java.lang.Object"
-              warn "Could not determine type for inner lambda body, using Object -> Object fallback" $
-                encodeFunction env2 objType objType (FunctionLambda innerLam)
-            Just bodyTyp -> case deannotateType bodyTyp of
-              TypeFunction (FunctionType dom' cod') -> do
-                innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
-                let lam' = javaLambda var innerJavaLambda
-                -- Apply cast
-                jtype <- encodeType aliases S.empty (TypeFunction $ FunctionType dom cod)
-                rt <- javaTypeToJavaReferenceType jtype
-                return $ javaCastExpressionToJavaExpression $
-                  javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
-              _ -> fail $ "expected function type for lambda body, but got: " ++ show bodyTyp
+          -- Body is another lambda - recursively encode it.
+          -- Use `cod` (the codomain of the current lambda) directly as the body's type.
+          -- This preserves canonical type variable names from the method's type scheme,
+          -- avoiding fresh variable names that `typeOf` would create via instantiateTypeScheme.
+          case deannotateType cod of
+            TypeFunction (FunctionType dom' cod') -> do
+              innerJavaLambda <- encodeFunction env2 dom' cod' (FunctionLambda innerLam)
+              let lam' = javaLambda var innerJavaLambda
+              -- Apply cast only if the type variables are safe (from method's formal params)
+              applyCastIfSafe aliases (TypeFunction $ FunctionType dom cod) lam'
+            _ -> fail $ "expected function type for lambda body, but got: " ++ show cod
         _ -> do
           -- Body is not a lambda - analyze and encode normally
           fs <- withTrace "analyze function body" $ analyzeJavaFunction env2 body
@@ -691,18 +1338,32 @@ encodeFunction env dom cod fun = case fun of
               let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
               return $ javaLambdaFromBlock var $ Java.Block $ bindingStmts ++ [returnSt]
 
-          -- Apply cast
+          -- Apply cast only if the type variables are safe (from method's formal params)
+          applyCastIfSafe aliases (TypeFunction $ FunctionType dom cod) lam'
+    FunctionPrimitive name -> do
+      let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
+      let suffix = "." ++ applyMethodName
+      let className = take (length classWithApply - length suffix) classWithApply
+      -- For single-arg functions, use a method reference like ClassName::apply
+      -- For multi-arg functions, generate a curried lambda wrapper since generated
+      -- static methods take uncurried parameters
+      let arity = typeArity (TypeFunction $ FunctionType dom cod)
+      if arity <= 1
+        then return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
+        else do
+          -- Generate curried lambda: p0 -> p1 -> ... -> ClassName.apply(p0, p1, ...)
+          let paramNames = [Name ("p" ++ show i) | i <- [0..arity-1]]
+          let paramExprs = javaIdentifierToJavaExpression . variableToJavaIdentifier <$> paramNames
+          let classId = Java.Identifier className
+          let call = javaMethodInvocationToJavaExpression $
+                methodInvocationStatic classId (Java.Identifier applyMethodName) paramExprs
+          let buildCurried [] inner = inner
+              buildCurried (p:ps) inner = javaLambda p (buildCurried ps inner)
+          -- Add a cast to the curried function type
           jtype <- encodeType aliases S.empty (TypeFunction $ FunctionType dom cod)
           rt <- javaTypeToJavaReferenceType jtype
           return $ javaCastExpressionToJavaExpression $
-            javaCastExpression rt (javaExpressionToJavaUnaryExpression lam')
-    FunctionPrimitive name -> do
-      -- For function primitives, generate a method reference like ClassName::apply
-      let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
-      -- elementJavaIdentifier with isPrim=True adds ".apply", but we want "::apply" for method references
-      let suffix = "." ++ applyMethodName
-      let className = take (length classWithApply - length suffix) classWithApply
-      return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
+            javaCastExpression rt (javaExpressionToJavaUnaryExpression $ buildCurried paramNames call)
     _ -> pure $ encodeLiteral $ LiteralString $
       "Unimplemented function variant: " ++ show (functionVariant fun)
   where
@@ -721,23 +1382,32 @@ encodeLiteral lit = case lit of
           (javaConstructorName (Java.Identifier "java.math.BigDecimal") Nothing)
           [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigfloat v ++ "\""]
           Nothing
-        FloatValueFloat32 v -> litExp $ Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ realToFrac v
+        FloatValueFloat32 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeFloatingPoint Java.FloatingPointTypeFloat) $ litExp $
+              Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ realToFrac v
         FloatValueFloat64 v -> litExp $ Java.LiteralFloatingPoint $ Java.FloatingPointLiteral v
     LiteralInteger i -> case i of
         IntegerValueBigint v -> javaConstructorCall
           (javaConstructorName (Java.Identifier "java.math.BigInteger") Nothing)
           [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigint v ++ "\""]
           Nothing
-        IntegerValueInt8 v -> litExp $ integer $ fromIntegral v -- byte
-        IntegerValueInt16 v -> litExp $ integer $ fromIntegral v -- short
-        IntegerValueInt32 v -> litExp $ integer $ fromIntegral v -- int
-        IntegerValueInt64 v -> litExp $ integer $ fromIntegral v -- long
-        IntegerValueUint16 v -> litExp $ Java.LiteralCharacter $ fromIntegral v -- char
+        IntegerValueInt8 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeByte) $ litExp $ integer $ fromIntegral v
+        IntegerValueInt16 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeShort) $ litExp $ integer $ fromIntegral v
+        IntegerValueInt32 v -> litExp $ integer $ fromIntegral v
+        IntegerValueInt64 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeLong) $ litExp $ integer $ fromIntegral v
+        IntegerValueUint8 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeShort) $ litExp $ integer $ fromIntegral v
+        IntegerValueUint16 v -> litExp $ Java.LiteralCharacter $ fromIntegral v
+        IntegerValueUint32 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeLong) $ litExp $ integer $ fromIntegral v
+        IntegerValueUint64 v -> javaConstructorCall
+          (javaConstructorName (Java.Identifier "java.math.BigInteger") Nothing)
+          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigint (fromIntegral v) ++ "\""]
+          Nothing
       where
         integer = Java.LiteralInteger . Java.IntegerLiteral
     LiteralString s -> litExp $ javaString s
   where
     litExp = javaLiteralToJavaExpression
+    primCast pt expr = javaCastExpressionToJavaExpression $
+      javaCastPrimitive pt (javaExpressionToJavaUnaryExpression expr)
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
 --       to build function types, parameterized types, etc.
@@ -756,8 +1426,10 @@ encodeLiteralType lt = case lt of
       IntegerTypeInt16 -> simple "Short"
       IntegerTypeInt32 -> simple "Integer"
       IntegerTypeInt64 -> simple "Long"
+      IntegerTypeUint8 -> simple "Short"
       IntegerTypeUint16 -> simple "Character"
-      _ -> fail $ "unexpected integer type: " ++ show it
+      IntegerTypeUint32 -> simple "Long"
+      IntegerTypeUint64 -> pure $ javaRefType [] (Just $ javaPackageName ["java", "math"]) "BigInteger"
     LiteralTypeString -> simple "String"
     _ -> fail $ "unexpected literal type: " ++ show lt
   where
@@ -832,35 +1504,17 @@ encodeTerm env term0 = encodeInternal [] [] term0
           -- Fall back to typeOf only if annotation not available
           let combinedAnns = M.unions anns
           mt <- getType combinedAnns
-          mtyp <- case mt of
-            Just typ -> pure $ Just typ
+          typ <- case mt of
+            Just t -> pure t
             Nothing -> do
               -- Try to infer the type from the function structure before falling back to typeOf
               case tryInferFunctionType f of
-                Just inferredType -> pure $ Just inferredType
-                Nothing -> do
-                  -- typeOf might fail after hoisting if type context is inconsistent
-                  -- Use tryTypeOf to safely attempt type inference
-                  tryTypeOf tc term0
-          case mtyp of
-            Just t -> case deannotateType t of
-              TypeFunction (FunctionType dom cod) -> do
-                encodeFunction env dom cod f
-              _ -> case f of
-                -- Lambdas are always functions, even if the type doesn't look like one
-                -- This can happen after hoisting when type annotations are inconsistent
-                FunctionLambda _ -> do
-                  let objType = TypeVariable $ Name "java.lang.Object"
-                  warn "Lambda has non-function type, using Object -> Object fallback" $
-                    encodeFunction env objType objType f
-                -- For primitives and other non-lambda functions, encodeNullaryConstant is appropriate
-                _ -> encodeNullaryConstant env t f
-            Nothing -> do
-              -- Last resort: try to encode with Object -> Object type
-              -- This happens when hoisting disrupts type annotations
-              let objType = TypeVariable $ Name "java.lang.Object"
-              warn "Could not determine type for function, using Object -> Object fallback" $
-                encodeFunction env objType objType f
+                Just inferredType -> pure inferredType
+                Nothing -> tryTypeOf "4" tc term0
+          case deannotateType typ of
+            TypeFunction (FunctionType dom cod) -> do
+              encodeFunction env dom cod f
+            _ -> encodeNullaryConstant env typ f
 
         TermLet lt -> withTrace "encode let as lambda application" $ do
           -- Convert let x1=e1, x2=e2 in body to ((x1) -> ((x2) -> body).apply(e2)).apply(e1)
@@ -913,12 +1567,24 @@ encodeTerm env term0 = encodeInternal [] [] term0
           jterm1 <- encode t1
           jterm2 <- encode t2
           let tupleTypeName = "hydra.util.Tuple.Tuple2"
-          return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) Nothing) [jterm1, jterm2] Nothing
+          -- Use type args from outer type applications for generic Tuple2 constructor
+          mtargs <- if L.null tyapps
+            then return Nothing
+            else do
+              rts <- CM.mapM javaTypeToJavaReferenceType tyapps
+              return $ Just $ Java.TypeArgumentsOrDiamondArguments $ fmap Java.TypeArgumentReference rts
+          return $ javaConstructorCall (javaConstructorName (Java.Identifier tupleTypeName) mtargs) [jterm1, jterm2] Nothing
 
         TermRecord (Record name fields) -> do
           fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
           let consId = nameToJavaName aliases name
-          return $ javaConstructorCall (javaConstructorName consId Nothing) fieldExprs Nothing
+          -- Use type arguments from outer type applications to avoid raw generic constructors
+          mtargs <- if L.null tyapps
+            then return Nothing
+            else do
+              rts <- CM.mapM javaTypeToJavaReferenceType tyapps
+              return $ Just $ Java.TypeArgumentsOrDiamondArguments $ fmap Java.TypeArgumentReference rts
+          return $ javaConstructorCall (javaConstructorName consId mtargs) fieldExprs Nothing
 
         TermSet s -> do
           jels <- CM.mapM encode $ S.toList s
@@ -930,22 +1596,94 @@ encodeTerm env term0 = encodeInternal [] [] term0
             methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
         TermTypeApplication (TypeApplicationTerm body atyp) -> do
-          -- Type applications in Java require casting to the appropriate type
-          -- We encode the body (stripping type applications) and cast it to the inferred type
+          -- Type applications in Java may require casting to the appropriate type
           -- Try to get type from annotations first (works better with hoisted terms)
           let combinedAnns = M.unions anns
           mtyp <- getType combinedAnns
-          mtyp2 <- case mtyp of
-            Just t -> pure $ Just t
-            Nothing -> tryTypeOf tc term0
-          -- Fallback to Object if type inference fails
-          let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp2
-          jtype <- encodeType aliases S.empty typ
+          typ <- case mtyp of
+            Just t -> pure t
+            Nothing -> tryTypeOf "5" tc term0
+          let (innermostBody0, allTypeArgs0) = collectTypeApps0 body [atyp]
+          -- Try to reconstruct the correct type from the innermost body's annotation
+          -- and the type applications, since the annotation on the outer TermTypeApplication
+          -- may have stale type variables (not updated by normalizeTypeVariablesInTerm)
+          correctedTyp <- correctCastType innermostBody0 allTypeArgs0 typ
           jatyp <- encodeType aliases S.empty atyp
-          jbody <- encodeInternal anns (jatyp:tyapps) body
-          rt <- javaTypeToJavaReferenceType jtype
-          return $ javaCastExpressionToJavaExpression $
-            javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
+          -- Collect all type arguments from nested type applications
+          let (innermostBody, allTypeArgs) = collectTypeApps body [atyp]
+          -- When the innermost body is a variable that maps to a nullary static method,
+          -- generate explicit type witnesses (e.g. Monads.<Graph>getState()) instead of
+          -- a cast, which Java can't resolve for methods with unconstrained type params.
+          case innermostBody of
+            TermVariable varName -> do
+              cls <- classifyDataReference varName
+              case cls of
+                JavaSymbolClassNullaryFunction -> do
+                  let QualifiedName mns localName = qualifyName varName
+                  case mns of
+                    Just ns -> do
+                      let classId = nameToJavaName aliases $ unqualifyName $ QualifiedName mns (elementsClassName ns)
+                      let methodId = Java.Identifier $ sanitizeJavaName localName
+                      filteredTypeArgs <- filterPhantomTypeArgs varName allTypeArgs
+                      jTypeArgs <- CM.mapM (\t -> do
+                        jt <- encodeType aliases S.empty t
+                        rt <- javaTypeToJavaReferenceType jt
+                        return $ Java.TypeArgumentReference rt) filteredTypeArgs
+                      return $ javaMethodInvocationToJavaExpression $
+                        methodInvocationStaticWithTypeArgs classId methodId jTypeArgs []
+                    Nothing -> fallbackCast jatyp body correctedTyp
+                JavaSymbolClassHoistedLambda arity -> do
+                  let QualifiedName mns localName = qualifyName varName
+                  case mns of
+                    Just ns -> do
+                      let classId = nameToJavaName aliases $ unqualifyName $ QualifiedName mns (elementsClassName ns)
+                      let methodId = Java.Identifier $ sanitizeJavaName localName
+                      filteredTypeArgs <- filterPhantomTypeArgs varName allTypeArgs
+                      jTypeArgs <- CM.mapM (\t -> do
+                        jt <- encodeType aliases S.empty t
+                        rt <- javaTypeToJavaReferenceType jt
+                        return $ Java.TypeArgumentReference rt) filteredTypeArgs
+                      let paramNames = [Name ("p" ++ show i) | i <- [0..arity-1]]
+                      let paramIds = variableToJavaIdentifier <$> paramNames
+                      let paramExprs = javaIdentifierToJavaExpression <$> paramIds
+                      let call = javaMethodInvocationToJavaExpression $
+                            methodInvocationStaticWithTypeArgs classId methodId jTypeArgs paramExprs
+                      let buildCurried [] inner = inner
+                          buildCurried (p:ps) inner = javaLambda p (buildCurried ps inner)
+                      return $ buildCurried paramNames call
+                    Nothing -> fallbackCast jatyp body correctedTyp
+                _ -> fallbackCast jatyp body correctedTyp
+            _ -> fallbackCast jatyp body correctedTyp
+            _ -> fallbackCast jatyp body correctedTyp
+          where
+            collectTypeApps t acc = case deannotateTerm t of
+              TermTypeApplication (TypeApplicationTerm inner innerTyp) ->
+                collectTypeApps inner (innerTyp : acc)
+              other -> (other, acc)
+            collectTypeApps0 t acc = case deannotateTerm t of
+              TermTypeApplication (TypeApplicationTerm inner innerTyp) ->
+                collectTypeApps0 inner (innerTyp : acc)
+              _ -> (t, acc)
+            -- Correct the cast type by building a substitution that maps old
+            -- (stale) type variables to the correct (renamed) ones. We do this by
+            -- comparing the type variables that appear in the annotation type with
+            -- the actual type arguments from the TermTypeApplication chain.
+            correctCastType innerBody typeArgs fallback = do
+              case deannotateTerm innerBody of
+                -- For pair terms with exactly 2 type args, reconstruct the pair type
+                -- from the type args (which are correctly renamed by normalizeTypeVariablesInTerm)
+                -- instead of using the annotation type (which may have stale variable names).
+                TermPair _ | L.length typeArgs == 2 ->
+                  return $ TypePair $ PairType (typeArgs !! 0) (typeArgs !! 1)
+                _ -> return fallback
+            fallbackCast jatyp body typ = do
+              -- Also re-annotate the body with the corrected type so inner casts are correct
+              let annotatedBody = setTermAnnotation key_type (Just $ EncodeCore.type_ typ) body
+              jbody <- encodeInternal anns (jatyp:tyapps) annotatedBody
+              jtype <- encodeType aliases S.empty typ
+              rt <- javaTypeToJavaReferenceType jtype
+              return $ javaCastExpressionToJavaExpression $
+                javaCastExpression rt (javaExpressionToJavaUnaryExpression jbody)
 
         TermTypeLambda tl@(TypeLambda v body) -> withTypeLambda env tl $ \env2 -> do
           -- When entering a type lambda body, extract the body type from the forall
@@ -994,13 +1732,31 @@ bindingsToStatements env bindings = if L.null bindings
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
 
-    -- Flatten nested lets: if a binding's value is a TermLet, expand it into multiple bindings
-    flattenedBindings = L.concatMap flattenOne bindings
+    -- Flatten nested lets: if a binding's value is a TermLet, expand it into multiple bindings.
+    -- After flattening, deduplicate binding names that collide with in-scope variables
+    -- from enclosing scopes (to satisfy Java's lambda shadowing restriction).
+    flattenedBindings = dedup (aliasesInScopeJavaVars aliases) $ L.concatMap flattenOne bindings
       where
         flattenOne (Binding name term mts) = case deannotateTerm term of
           TermLet (Let innerBindings body) -> flattenBindings innerBindings ++ [Binding name body mts]
           _ -> [Binding name term mts]
         flattenBindings bs = L.concatMap flattenOne bs
+
+        -- Deduplicate: rename binding names that collide with inScope or earlier siblings
+        dedup inScope [] = []
+        dedup inScope (Binding name term mts : rest)
+          | S.member name inScope =
+              let newName = freshName name inScope
+                  subst = M.singleton name newName
+                  -- Only substitute in the terms that reference this binding:
+                  -- the rest of the flattened list up to (and including) the parent binding
+                  rest' = L.map (\(Binding n t ts') ->
+                    Binding n (substituteVariables subst t) ts') rest
+              in Binding newName term mts : dedup (S.insert newName inScope) rest'
+          | otherwise = Binding name term mts : dedup (S.insert name inScope) rest
+
+        freshName (Name base) avoid = L.head $ L.filter (`S.notMember` avoid)
+          [Name (base ++ show i) | i <- [(2::Int)..]]
 
     -- Extend TypeContext with flattened bindings so they can reference each other
     tcExtended = extendTypeContextForLet bindingMetadata tc (Let flattenedBindings (TermVariable $ Name "dummy"))
@@ -1016,11 +1772,13 @@ bindingsToStatements env bindings = if L.null bindings
             Just deps -> if S.member name deps then [name] else []
           _ -> names  -- Mutually recursive group
 
-    -- Create environment with recursive vars marked in aliases
-    aliasesWithRecursive = aliases { aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars }
+    -- Create environment with recursive vars marked in aliases and binding names in scope
+    aliasesExtended = aliases {
+      aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars,
+      aliasesInScopeJavaVars = S.union (aliasesInScopeJavaVars aliases) bindingVars }
     envExtended = env {
       javaEnvironmentTypeContext = tcExtended,
-      javaEnvironmentAliases = aliasesWithRecursive
+      javaEnvironmentAliases = aliasesExtended
     }
 
     -- Build dependency graph
@@ -1045,12 +1803,10 @@ bindingsToStatements env bindings = if L.null bindings
         let binding = L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
         let value = bindingTerm binding
         -- Use the binding's type scheme if available, otherwise infer from the term
-        mtyp <- case bindingType binding of
-          Just ts -> pure $ Just $ typeSchemeType ts
-          Nothing -> tryTypeOf tcExtended value
-        -- Fallback to Object if type inference fails
-        let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp
-        jtype <- encodeType aliasesWithRecursive S.empty typ
+        typ <- case bindingType binding of
+          Just ts -> pure $ typeSchemeType ts
+          Nothing -> tryTypeOf "6" tcExtended value
+        jtype <- encodeType aliasesExtended S.empty typ
         let id = variableToJavaIdentifier name
         let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
         let arid = Java.Identifier "java.util.concurrent.atomic.AtomicReference"
@@ -1060,7 +1816,7 @@ bindingsToStatements env bindings = if L.null bindings
         let ci = Java.ClassOrInterfaceTypeToInstantiate [aid] (Just targs)
         let body = javaConstructorCall ci [] Nothing
         let artype = javaRefType [rt] (Just pkg) "AtomicReference"
-        return $ Just $ variableDeclarationStatement aliasesWithRecursive artype id body
+        return $ Just $ variableDeclarationStatement aliasesExtended artype id body
       else pure Nothing
 
     -- Declare or set binding value
@@ -1068,12 +1824,10 @@ bindingsToStatements env bindings = if L.null bindings
       let binding = L.head $ L.filter (\b -> bindingName b == name) flattenedBindings
       let value = bindingTerm binding
       -- Use the binding's type scheme if available, otherwise infer from the term
-      mtyp <- case bindingType binding of
-        Just ts -> pure $ Just $ typeSchemeType ts
-        Nothing -> tryTypeOf tcExtended value
-      -- Fallback to Object if type inference fails
-      let typ = maybe (TypeVariable $ Name "java.lang.Object") id mtyp
-      jtype <- encodeType aliasesWithRecursive S.empty typ
+      typ <- case bindingType binding of
+        Just ts -> pure $ typeSchemeType ts
+        Nothing -> tryTypeOf "7" tcExtended value
+      jtype <- encodeType aliasesExtended S.empty typ
       let id = variableToJavaIdentifier name
       -- Annotate the value with its type so that nested encoding can find it
       let annotatedValue = setTermAnnotation key_type (Just $ EncodeCore.type_ typ) value
@@ -1081,7 +1835,7 @@ bindingsToStatements env bindings = if L.null bindings
       return $ if S.member name recursiveVars
         then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
           methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
-        else variableDeclarationStatement aliasesWithRecursive jtype id rhs
+        else variableDeclarationStatement aliasesExtended jtype id rhs
 
 -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
 -- These functions must be capable of handling various combinations of let and lambda terms:
@@ -1089,39 +1843,162 @@ bindingsToStatements env bindings = if L.null bindings
 -- * Lambdas with nested let terms, such as \x y -> let z = x + y in z + 42
 -- * Let terms with nested lambdas, such as let z = 42 in \x y -> x + y + z
 encodeTermDefinition :: JavaEnvironment -> TermDefinition -> Flow Graph Java.InterfaceMemberDeclaration
-encodeTermDefinition env (TermDefinition name term ts) = withTrace ("encode term definition \"" ++ unName name ++ "\"") $ do
-
+encodeTermDefinition env (TermDefinition name term0 ts) = withTrace ("encode term definition \"" ++ unName name ++ "\"") $ do
+    -- Unshadow variables to avoid Java lambda shadowing restrictions
+    let term = unshadowVariables term0
     fs <- withTrace "analyze function term for term assignment" $ analyzeJavaFunction env term
     -- Use type scheme variables as the authoritative source for type parameters.
     -- This is critical for hoisted polymorphic bindings where TermTypeLambda nodes
     -- may have been stripped but the TypeScheme still contains the type variables.
-    let schemeVars = typeSchemeVariables ts
+    -- Filter out qualified names from type scheme variables - these are type names, not type variables
+    -- Type variables should be simple names like "t0", "s", "x", not qualified names like "Hydra.compute.Flow"
+    let isSimpleName (Name n) = not ('.' `elem` n)
+        schemeVars = L.filter isSimpleName $ typeSchemeVariables ts
         termVars = functionStructureTypeParams fs
-        tparams = if L.null schemeVars then termVars else schemeVars
+        -- Filter scheme vars to only those actually used in the scheme type.
+        -- Inference can over-generalize hoisted bindings, adding phantom type variables
+        -- that appear in the scheme's variable list but not in the actual type.
+        schemeTypeVars = collectTypeVars (typeSchemeType ts)
+        usedSchemeVars = L.filter (\v -> S.member v schemeTypeVars) schemeVars
+        tparams = if L.null usedSchemeVars then termVars else usedSchemeVars
         params = functionStructureParams fs
         bindings = functionStructureBindings fs
         body = functionStructureBody fs
         doms = functionStructureDomains fs
         env2 = functionStructureEnvironment fs
-    cod <- case functionStructureCodomain fs of
-      Just c -> return c
-      Nothing -> do
-        -- Fallback to Object return type if type inference fails
-        -- This can happen after hoisting disrupts type annotations
-        warn "Using Object return type fallback due to type inference failure" $
-          pure $ TypeVariable $ Name "java.lang.Object"
-    let jparams = fmap toParam tparams
-        aliases2 = javaEnvironmentAliases env2
+    -- Derive the codomain from the TypeScheme, which is authoritative.
+    -- We avoid using the body-inferred codomain (functionStructureCodomain) because
+    -- the type checker treats free type variables as wildcards, which can pick the wrong
+    -- branch type in case expressions (e.g., returning (t0, X) instead of (t1, X)).
+    let schemeType = typeSchemeType ts
+        numParams = L.length params
+        -- Peel domain types from the scheme type to get individual canonical domains
+        peelDomainsAndCod n t
+          | n <= 0 = ([], t)
+          | otherwise = case deannotateType t of
+              TypeFunction (FunctionType d c) -> let (ds, cod') = peelDomainsAndCod (n - 1) c in (d:ds, cod')
+              _ -> ([], t)  -- Can't peel further
+        (schemeDoms, cod) = peelDomainsAndCod numParams schemeType
+        schemeVarSet = S.fromList tparams
+    -- Build a substitution by walking the body and matching annotation types (which have
+    -- stale fresh variable names) against lambda domain types (which are normalized).
+    typeVarSubst <- if L.null tparams
+      then return M.empty
+      else do
+        buildSubstFromAnnotations schemeVarSet term
+    -- Fix over-generalized type variables in the scheme type.
+    -- After hoisting, inference may create separate type variables (e.g. T0, T1) for what
+    -- should be the same type. Detect "accumulator pattern" unification: if two type vars
+    -- appear as the first element of a pair return type in different function parameters
+    -- with the same input type, they should be unified.
+    let overgenSubst = detectAccumulatorUnification schemeDoms cod tparams
+        -- Extract the Name->Name portion for aliasesTypeVarSubst (variable-to-variable only)
+        overgenVarSubst = M.mapMaybe (\t -> case t of TypeVariable n -> Just n; _ -> Nothing) overgenSubst
+        fixedCod = if M.null overgenSubst then cod
+                   else substituteTypeVarsWithTypes overgenSubst cod
+        fixedDoms = if M.null overgenSubst then schemeDoms
+                   else fmap (substituteTypeVarsWithTypes overgenSubst) schemeDoms
+        fixedTparams = if M.null overgenSubst then tparams
+                   else L.filter (\v -> not $ M.member v overgenSubst) tparams
+    let constraints = Y.fromMaybe M.empty (typeSchemeConstraints ts)
+        jparams = fmap (toParam constraints) fixedTparams
+        -- Update aliases to include method type parameters in scope
+        -- This allows inner binding types to properly handle type variables
+        aliases2base = javaEnvironmentAliases env2
+        -- Also add lambda params (including hoisted captures) to aliasesLambdaVars
+        -- This ensures that references to captured functions use .apply() instead of static calls
+        -- Compute trusted type variables: those that appear in the method's formal parameter types
+        -- and codomain. Lambda casts should only use these variables.
+        trustedVars = S.unions $ fmap collectTypeVars (fixedDoms ++ [fixedCod])
+        fixedSchemeVarSet = S.fromList fixedTparams
+        aliases2 = aliases2base {
+          aliasesInScopeTypeParams = fixedSchemeVarSet,
+          aliasesLambdaVars = S.union (aliasesLambdaVars aliases2base) (S.fromList params),
+          aliasesTypeVarSubst = M.union overgenVarSubst typeVarSubst,
+          aliasesTrustedTypeVars = S.intersection trustedVars fixedSchemeVarSet,
+          aliasesMethodCodomain = Just fixedCod }
+        env2WithTypeParams = env2 { javaEnvironmentAliases = aliases2 }
 
     -- Convert bindings to Java block statements
-    (bindingStmts, env3) <- bindingsToStatements env2 bindings
+    (bindingStmts, env3) <- bindingsToStatements env2WithTypeParams bindings
 
-    -- Annotate the body with its type so that nested encoding can find it
-    let annotatedBody = setTermAnnotation key_type (Just $ EncodeCore.type_ cod) body
+    -- Apply overgenSubst to the body's type annotations so that intermediate lambda
+    -- casts use the corrected types rather than stale over-generalized variables.
+    body' <- if M.null overgenSubst then return body
+             else applyOvergenSubstToTermAnnotations overgenSubst body
 
-    if (L.null tparams && L.null params && L.null bindings)
+    -- Annotate the body with its type so that nested encoding can find it.
+    -- For applications where the LHS is a case statement, also annotate the LHS with
+    -- the correct function type using the TypeScheme's codomain. This fixes type variable
+    -- mismatches where the type checker picks the wrong branch type for the codomain.
+    -- Also propagate expected types through application chains: for f(a1)(a2)...
+    -- annotate f with arg1_type -> arg2_type -> ... -> resultType.
+    let annotateAppLhs appLhs = case deannotateTerm appLhs of
+          TermFunction (FunctionElimination (EliminationUnion cs)) ->
+            let dom = Schemas.nominalApplication (caseStatementTypeName cs) []
+                funType = TypeFunction $ FunctionType dom fixedCod
+            in setTermAnnotation key_type (Just $ EncodeCore.type_ funType) appLhs
+          _ -> appLhs
+        -- Collect the domain annotations from a chain of nested lambdas.
+        -- Returns (domains, body) where domains are the annotated domain types.
+        collectLambdaDomains :: Term -> ([Type], Term)
+        collectLambdaDomains t = case deannotateTerm t of
+          TermFunction (FunctionLambda (Lambda _ (Just dom) innerBody)) ->
+            let (ds, b) = collectLambdaDomains innerBody in (dom:ds, b)
+          _ -> ([], t)
+        -- For an application chain f(a1)(a2)...(aN) with known result type R,
+        -- annotate f with its expected type by examining f's lambda structure.
+        -- If f is a lambda with M params and N <= M args are applied,
+        -- f's type = dom(p1) -> ... -> dom(pM) -> bodyReturnType
+        -- where bodyReturnType is obtained by peeling (M-N) domains from R.
+        propagateTypesInAppChain :: Type -> Term -> Term
+        propagateTypesInAppChain resultType t =
+          -- Flatten the application chain
+          let (args, fun) = flattenApps t []
+              -- If fun is a lambda, compute its type from domain annotations
+              lambdaDoms = fst $ collectLambdaDomains fun
+              nArgs = L.length args
+              nLambdaDoms = L.length lambdaDoms
+          in if nLambdaDoms > 0 && nArgs > 0
+            then
+              -- Compute bodyReturnType by peeling the excess lambda domains from resultType.
+              -- resultType = dom(v_{nArgs+1}) -> ... -> dom(v_M) -> bodyReturnType
+              -- So peel (M-N) function types from resultType to get bodyReturnType.
+              let peelN n typ
+                    | n <= 0 = typ
+                    | otherwise = case deannotateType typ of
+                        TypeFunction (FunctionType _ c) -> peelN (n - 1) c
+                        _ -> typ
+                  bodyRetType = peelN (nLambdaDoms - nArgs) resultType
+                  -- Build the full lambda type: dom(v1) -> dom(v2) -> ... -> dom(vM) -> bodyRetType
+                  funType = L.foldr (\d c -> TypeFunction $ FunctionType d c) bodyRetType lambdaDoms
+                  -- Now annotate f and rebuild the application chain with correct intermediate types
+                  annotatedFun = setTermAnnotation key_type (Just $ EncodeCore.type_ funType) fun
+                  -- Build intermediate application types by peeling domains from funType
+                  -- After applying arg_i, the remaining type is dom(v_{i+2}) -> ... -> bodyRetType
+                  rebuildApps f [] _ = f
+                  rebuildApps f (arg:rest) fType = case deannotateType fType of
+                    TypeFunction (FunctionType _ remainingType) ->
+                      let app = TermApplication $ Application f arg
+                          annotatedApp = setTermAnnotation key_type (Just $ EncodeCore.type_ remainingType) app
+                      in rebuildApps annotatedApp rest remainingType
+                    _ -> L.foldl (\acc a -> TermApplication $ Application acc a) f (arg:rest)
+              in rebuildApps annotatedFun args funType
+            else
+              -- Not a lambda function or no args - fall back to simple annotation
+              case deannotateTerm t of
+                TermApplication (Application lhs rhs) ->
+                  setTermAnnotation key_type (Just $ EncodeCore.type_ resultType) $
+                    TermApplication $ Application (annotateAppLhs lhs) rhs
+                _ -> setTermAnnotation key_type (Just $ EncodeCore.type_ resultType) t
+        flattenApps t acc = case deannotateTerm t of
+          TermApplication (Application lhs rhs) -> flattenApps lhs (rhs:acc)
+          _ -> (acc, t)
+        annotatedBody = propagateTypesInAppChain fixedCod body'
+
+    if (L.null fixedTparams && L.null params && L.null bindings)
       then do -- Special case: constant field
-        jtype <- Java.UnannType <$> encodeType aliases2 S.empty cod
+        jtype <- Java.UnannType <$> encodeType aliases2 S.empty fixedCod
         jbody <- encodeTerm env3 annotatedBody
         let mods = []
         let var = javaVariableDeclarator (javaVariableName name) $ Just $ Java.VariableInitializerExpression jbody
@@ -1130,8 +2007,8 @@ encodeTermDefinition env (TermDefinition name term ts) = withTrace ("encode term
         jformalParams <- mapM (\(dom, param) -> do
             jdom <- encodeType aliases2 S.empty dom
             return $ javaTypeToJavaFormalParameter jdom (Name $ unName param)
-          ) (L.zip doms params)
-        result <- javaTypeToJavaResult <$> encodeType aliases2 S.empty cod
+          ) (L.zip fixedDoms params)
+        result <- javaTypeToJavaResult <$> encodeType aliases2 S.empty fixedCod
         jbody <- encodeTerm env3 annotatedBody
         let mods = [Java.InterfaceMethodModifierStatic]
         let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
@@ -1139,7 +2016,9 @@ encodeTermDefinition env (TermDefinition name term ts) = withTrace ("encode term
   where
     tc = javaEnvironmentTypeContext env
     jname = sanitizeJavaName $ decapitalize $ localNameOf name
-    toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
+    toParam constraints name@(Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) bound
+      where
+        bound = Nothing
 
 encodeType :: Aliases -> S.Set Name -> Type -> Flow Graph Java.Type
 encodeType aliases boundVars t =  case deannotateType t of
@@ -1185,18 +2064,49 @@ encodeType aliases boundVars t =  case deannotateType t of
       return $ javaRefType [jst] javaUtilPackageName "Set"
     TypeUnion (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
-    TypeVariable name -> pure $ forReference name
+    TypeVariable name0 -> do
+      -- Apply type variable substitution (maps fresh inference vars to canonical scheme vars)
+      let name = Y.fromMaybe name0 $ M.lookup name0 (aliasesTypeVarSubst aliases)
+      -- Check if this is a typedef (type alias) that should be resolved transparently
+      resolved <- resolveIfTypedef name
+      case resolved of
+        Just resolvedType -> encode resolvedType
+        Nothing -> pure $ forReference name
     TypeWrap (WrappedType name _) -> pure $ forReference name
     _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
-    forReference name = if unName name == "java.lang.Object"
-        then javaRefType [] javaLangPackageName "Object"  -- Special case for Object fallback
+    inScopeTypeParams = aliasesInScopeTypeParams aliases
+    -- A type variable is in scope if:
+    -- 1. It's explicitly bound (from a forall in the type itself), OR
+    -- 2. It's a method type parameter (in aliasesInScopeTypeParams)
+    isInScope name = S.member name boundVars || S.member name inScopeTypeParams
+    forReference name = if isInScope name
+        then variableReference name
+        -- Lambda-bound heuristic for backward compatibility
         else if isLambdaBoundVariable name
         then variableReference name
         else nameReference name
     nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
     variableReference name = Java.TypeReference $ javaTypeVariable $ unName name
     encode = encodeType aliases boundVars
+    -- Resolve a TypeVariable name if it refers to a typedef (simple type alias like Vertex = int32).
+    -- Returns Nothing for records, unions, wraps, polymorphic types, or unknown names.
+    resolveIfTypedef name
+      | isInScope name = return Nothing
+      | isLambdaBoundVariable name = return Nothing
+      | otherwise = do
+          g <- getState
+          ix <- Schemas.graphToInferenceContext g
+          let schemaTypes = inferenceContextSchemaTypes ix
+          case M.lookup name schemaTypes of
+            Nothing -> return Nothing
+            Just ts
+              | not (L.null (typeSchemeVariables ts)) -> return Nothing  -- polymorphic, not a simple typedef
+              | otherwise -> case deannotateType (typeSchemeType ts) of
+                  TypeRecord _ -> return Nothing
+                  TypeUnion _ -> return Nothing
+                  TypeWrap _ -> return Nothing
+                  _ -> return $ Just (typeSchemeType ts)
     unit = return $ javaRefType [] javaLangPackageName "Void"
 
 encodeTypeDefinition :: Java.PackageDeclaration -> Aliases -> TypeDefinition -> Flow Graph (Name, Java.CompilationUnit)
@@ -1232,17 +2142,50 @@ encodeVariable env name =
       return $ javaFieldAccessToJavaExpression $ Java.FieldAccess
         (Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary instanceExpr)
         (javaIdentifier valueFieldName)
-    else if isRecursiveVariable aliases name
+    else if isRecursiveVariable aliases name && not (isLambdaBoundIn name (aliasesLambdaVars aliases))
     then return $ javaMethodInvocationToJavaExpression $
       methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
+    -- Lambda-bound variables (including hoisted captures with qualified names) use sanitized names
+    -- Use isLambdaBoundIn to match both exact names and local parts of qualified names
+    -- IMPORTANT: When the parameter was declared with a qualified name like
+    -- "hydra/unification.Unification.unifyTypeConstraints", the Java parameter name becomes
+    -- "hydra_unification_unifyTypeConstraints" (sanitized full name). So we must use the FULL name
+    -- (not the local name) when encoding the reference, to match the parameter declaration.
+    -- If the name is in lambdaVars directly, use it as-is; otherwise if only the local part matches,
+    -- we need to find the actual parameter name that was declared.
+    else if isLambdaBoundIn name (aliasesLambdaVars aliases)
+    then do
+      -- Find the actual name from lambdaVars that matches this reference
+      let actualName = findMatchingLambdaVar name (aliasesLambdaVars aliases)
+      return $ javaIdentifierToJavaExpression $ variableToJavaIdentifier actualName
     else do
       cls <- classifyDataReference name
-      return $ case cls of
-        JavaSymbolLocalVariable -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
-        JavaSymbolClassConstant -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
-        JavaSymbolClassNullaryFunction -> javaMethodInvocationToJavaExpression $
-          methodInvocation Nothing (elementJavaIdentifier False False aliases name) []
-        JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
+      case cls of
+        JavaSymbolClassHoistedLambda arity -> do
+          -- Generate curried lambda wrapper for hoisted method without type args
+          let paramNames = [Name ("p" ++ show i) | i <- [0..arity-1]]
+          let paramExprs = javaIdentifierToJavaExpression . variableToJavaIdentifier <$> paramNames
+          let call = javaMethodInvocationToJavaExpression $
+                methodInvocation Nothing (elementJavaIdentifier False False aliases name) paramExprs
+          let buildCurried [] inner = inner
+              buildCurried (p:ps) inner = javaLambda p (buildCurried ps inner)
+          let lam = buildCurried paramNames call
+          -- Try to cast the lambda to the function's curried type to help Java's type inference
+          mel <- dereferenceElement name
+          case mel of
+            Just el | Just ts <- bindingType el -> do
+              let typ = typeSchemeType ts
+              jtype <- encodeType aliases S.empty typ
+              rt <- javaTypeToJavaReferenceType jtype
+              return $ javaCastExpressionToJavaExpression $
+                javaCastExpression rt (javaExpressionToJavaUnaryExpression lam)
+            _ -> return lam
+        _ -> return $ case cls of
+          JavaSymbolLocalVariable -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
+          JavaSymbolClassConstant -> javaIdentifierToJavaExpression $ elementJavaIdentifier False False aliases name
+          JavaSymbolClassNullaryFunction -> javaMethodInvocationToJavaExpression $
+            methodInvocation Nothing (elementJavaIdentifier False False aliases name) []
+          JavaSymbolClassUnaryFunction -> javaIdentifierToJavaExpression $ elementJavaIdentifier False True aliases name
   where
     aliases = javaEnvironmentAliases env
     jid = javaIdentifier $ unName name
@@ -1258,14 +2201,10 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases S.empty ft
   return $ javaTypeToJavaFormalParameter jt fname
 
-functionCall :: JavaEnvironment -> Bool -> Name -> [Term] -> Flow Graph Java.Expression
-functionCall env isPrim name args = do
---    if name == Name "hydra.lib.maybes.maybe"
---    then fail $ "args: " ++ L.intercalate ", " (fmap ShowCore.term args)
---    else pure ()
-
+functionCall :: JavaEnvironment -> Bool -> Name -> [Term] -> [Type] -> Flow Graph Java.Expression
+functionCall env isPrim name args typeApps = do
     -- When there are no arguments and it's a primitive, use a method reference instead of calling .apply()
-    if isPrim && L.null args
+    if isPrim && L.null args && not isLambdaBound
     then do
       -- Generate method reference like ClassName::apply
       let Java.Identifier classWithApply = elementJavaIdentifier True False aliases name
@@ -1274,18 +2213,47 @@ functionCall env isPrim name args = do
       return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
     else do
       jargs <- CM.mapM (encodeTerm env) args
-      if isLocalVariable name
+      -- Check if this is a local variable OR a lambda-bound variable (from hoisted captures)
+      -- Use isLambdaBoundIn to match both exact names and local parts of qualified names
+      if isLocalVariable name || isLambdaBound
         then do
-          -- Local variables use .apply() with all arguments at once (like Python)
-          prim <- javaExpressionToJavaPrimary <$> encodeVariable env name
-          return $ javaMethodInvocationToJavaExpression $
-            methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
+          -- Local/lambda-bound variables hold curried functions, so apply arguments one at a time
+          -- Example: joinOne.apply(arg1).apply(arg2) instead of joinOne.apply(arg1, arg2)
+          baseExpr <- encodeVariable env name
+          return $ L.foldl' applySingle baseExpr jargs
         else do
           -- Module-level functions (both primitives and generated) take all args directly
-          let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
-          return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+          -- Include type witnesses from type applications to help Java infer return-only type params.
+          -- If no type applications are present, check if the method has type parameters that
+          -- can't be inferred from arguments (return-only type params). If so, add witnesses
+          -- from the method's type scheme using the in-scope type variables.
+          let effectiveTypeApps = typeApps
+          if L.null effectiveTypeApps
+            then do
+              let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+              return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+            else do
+              let QualifiedName mns localName = qualifyName name
+              case mns of
+                Just ns -> do
+                  let classId = nameToJavaName aliases $ unqualifyName $ QualifiedName mns (elementsClassName ns)
+                  let methodId = if isPrim
+                        then Java.Identifier $ (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName mns (capitalize localName)) ++ "." ++ applyMethodName
+                        else Java.Identifier $ sanitizeJavaName localName
+                  jTypeArgs <- CM.mapM (\t -> do
+                    jt <- encodeType aliases S.empty t
+                    rt <- javaTypeToJavaReferenceType jt
+                    return $ Java.TypeArgumentReference rt) effectiveTypeApps
+                  return $ javaMethodInvocationToJavaExpression $
+                    methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs
+                Nothing -> do
+                  let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+                  return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
   where
     aliases = javaEnvironmentAliases env
+    isLambdaBound = isLambdaBoundIn name (aliasesLambdaVars aliases)
+    applySingle exp jarg = javaMethodInvocationToJavaExpression $
+      methodInvocation (Just $ Right $ javaExpressionToJavaPrimary exp) (Java.Identifier applyMethodName) [jarg]
 
 getCodomain :: M.Map Name Term -> Flow Graph Type
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
@@ -1318,11 +2286,57 @@ interfaceTypes isSer = if isSer then [javaSerializableType] else []
 isLambdaBoundVariable :: Name -> Bool
 isLambdaBoundVariable (Name v) = L.length v <= 4
 
+-- | Check if a name (possibly qualified) is lambda-bound.
+-- Lambda-bound variables may be stored with qualified names (hoisted captures) or simple names.
+-- References in the term may also use either form.
+-- We need to match both the exact name AND the local part of qualified names.
+isLambdaBoundIn :: Name -> S.Set Name -> Bool
+isLambdaBoundIn name lambdaVars =
+    S.member name lambdaVars
+    -- For qualified names, check if any qualified lambda var has the same local name.
+    -- Only match against other qualified lambda vars (hoisted captures), never against
+    -- simple lambda vars, to avoid confusing module-level functions with local parameters.
+    || (isQualified name && any (\lv -> isQualified lv && localNameOf lv == localNameOf name) (S.toList lambdaVars))
+    -- For unqualified names, check if the local name is in lambdaVars
+    || (not (isQualified name) && S.member (Name $ localNameOf name) lambdaVars)
+  where
+    isQualified n = Y.isJust $ qualifiedNameNamespace $ qualifyName n
+
+-- | Find the actual lambda variable name that matches a given reference.
+-- This handles the case where the parameter was declared with a qualified name
+-- (e.g., "hydra/unification.Unification.unifyTypeConstraints") but the reference
+-- might use a simpler name or the same qualified name.
+-- Returns the name as it appears in lambdaVars, which determines the Java parameter name.
+findMatchingLambdaVar :: Name -> S.Set Name -> Name
+findMatchingLambdaVar name lambdaVars
+    -- If the exact name is in lambdaVars, use it
+    | S.member name lambdaVars = name
+    -- For qualified names, find a matching qualified lambda var
+    | isQualified = case L.find (\lv -> isQualifiedName lv && localNameOf lv == localNameOf name) (S.toList lambdaVars) of
+        Just lv -> lv
+        Nothing -> name
+    -- For unqualified names, check if the local part is in lambdaVars as a simple name
+    | S.member (Name $ localNameOf name) lambdaVars = Name $ localNameOf name
+    | otherwise = name  -- Fallback
+  where
+    isQualified = Y.isJust $ qualifiedNameNamespace $ qualifyName name
+    isQualifiedName n = Y.isJust $ qualifiedNameNamespace $ qualifyName n
+
 isLocalVariable :: Name -> Bool
 isLocalVariable name = Y.isNothing $ qualifiedNameNamespace $ qualifyName name
 
 isRecursiveVariable :: Aliases -> Name -> Bool
 isRecursiveVariable aliases name = S.member name (aliasesRecursiveVars aliases)
+
+-- | Extract type arguments from a type application chain.
+--   e.g. (ParseResult @ (Function T0 T1)) -> [Function T0 T1]
+--        (Map @ K @ V) -> [K, V]
+--        ParseResult -> []
+extractTypeApplicationArgs :: Type -> [Type]
+extractTypeApplicationArgs = L.reverse . go
+  where
+    go (TypeApplication (ApplicationType base arg)) = arg : go base
+    go _ = []
 
 javaTypeArgumentsForNamedType :: Name -> Flow Graph [Java.TypeArgument]
 javaTypeArgumentsForNamedType tname = do
@@ -1379,7 +2393,15 @@ typeArgsOrDiamond args = if supportsDiamondOperator javaFeatures
   else Java.TypeArgumentsOrDiamondArguments args
 
 withLambda :: JavaEnvironment -> Lambda -> (JavaEnvironment -> Flow s a) -> Flow s a
-withLambda = withLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
+withLambda env (Lambda var mdom body) k = do
+  -- Use the standard withLambdaContext to update the TypeContext
+  let updateTc tc e = e { javaEnvironmentTypeContext = tc }
+  withLambdaContext javaEnvironmentTypeContext updateTc env (Lambda var mdom body) $ \env1 -> do
+    -- Additionally, record the lambda parameter in aliasesLambdaVars
+    let aliases = javaEnvironmentAliases env1
+    let aliases' = aliases { aliasesLambdaVars = S.insert var (aliasesLambdaVars aliases) }
+    let env2 = env1 { javaEnvironmentAliases = aliases' }
+    k env2
 
 withTypeLambda :: JavaEnvironment -> TypeLambda -> (JavaEnvironment -> Flow s a) -> Flow s a
 withTypeLambda = withTypeLambdaContext javaEnvironmentTypeContext (\tc e -> e { javaEnvironmentTypeContext = tc })
