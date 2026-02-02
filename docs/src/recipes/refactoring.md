@@ -23,7 +23,7 @@ Changes to kernel code must be propagated to all of these locations.
 | **Delete module** | Remove from registry → Delete source → Update references → Regenerate |
 | **Move element** | Add to new location → Update references → Remove from old → Regenerate |
 | **Rename element** | Update name in source → Update all references → Regenerate |
-| **Move/rename module** | See [detailed section](#moving-or-renaming-modules) |
+| **Move/rename module** | See [detailed section](#moving-or-renaming-modules) and [Refactoring Namespaces](refactoring-namespaces.md) |
 
 ## Prerequisites
 
@@ -300,6 +300,8 @@ grep -rn 'hydra.mymodule.myOldName' src/
 
 ## Moving or Renaming Modules
 
+> **Note**: This section provides an overview of namespace refactoring. For a comprehensive, step-by-step guide with detailed examples (especially for decoder/encoder modules and multi-repository coordination), see [Refactoring Hydra Namespaces](refactoring-namespaces.md).
+
 This is the most complex refactoring operation. A Hydra namespace like `hydra.foo` corresponds to:
 - A Haskell source module (e.g., `Hydra/Sources/Kernel/Terms/Foo.hs`)
 - Generated Haskell code (e.g., `Hydra/Foo.hs`)
@@ -536,3 +538,172 @@ The `hydra.reduction` module contained hoisting functions (`hoistSubterms`, `hoi
 **Generated:**
 - `src/gen-main/haskell/Hydra/Hoisting.hs` (generated implementation)
 - `src/gen-main/json/hydra/hoisting.json` (JSON kernel)
+
+---
+
+## Example: Changing Graph.elements from Map to List
+
+This section documents a deep type change to the Hydra kernel: changing `Graph.elements` from `map<Name, Binding>` to `list<Binding>` to preserve element order in graphs.
+
+### Context
+
+The `Graph` type had an `elements` field of type `Map<Name, Binding>`. This caused element order to be non-deterministic (sorted by Name), which was undesirable when element ordering matters (e.g., for code generation output stability). The change preserves insertion order by using a list instead.
+
+### The Bootstrap Challenge
+
+This change is particularly complex because:
+1. **Generated files depend on source files** that define the types
+2. **Source files (DSL)** use generated types to construct terms
+3. Changing a fundamental type like `Graph` affects both sides
+
+The solution is to update files in the correct order:
+1. First update generated files (`gen-main`) to make them compile with the new type
+2. Then update source files (`Sources`) to generate the correct definitions
+3. Regenerate to verify consistency
+
+### Adding a New Primitive
+
+When changing from `Map.lookup` to a list-based lookup, we needed a `Lists.find` primitive that didn't exist. Adding a primitive requires updates to **six files**:
+
+1. **`Hydra.Lib.Lists`** - The actual Haskell implementation:
+   ```haskell
+   find :: (a -> Bool) -> [a] -> Maybe a
+   find = L.find
+   ```
+
+2. **`Hydra.Staging.Lib.Names`** - The primitive name constant:
+   ```haskell
+   _lists_find = qname _hydra_lib_lists "find" :: Name
+   ```
+
+3. **`Hydra.Sources.Libraries`** - The primitive registration:
+   ```haskell
+   prim2Eval _lists_find EvalLists.find [_x] (function x_ boolean) (list x_) (optional x_),
+   ```
+
+4. **`Hydra.Sources.Eval.Lib.Lists`** - The interpreter-friendly definition:
+   ```haskell
+   find_ :: TBinding (Term -> Term -> Flow s Term)
+   find_ = define "find" $ ...
+   ```
+
+5. **`Hydra.Dsl.Meta.Lib.Lists`** - The DSL helper:
+   ```haskell
+   find :: TTerm (a -> Bool) -> TTerm [a] -> TTerm (Maybe a)
+   find = primitive2 _lists_find
+   ```
+
+6. **`Hydra.Eval.Lib.Lists` (generated)** - Initially copy from source, then regenerate
+
+### Common Map-to-List Conversion Patterns
+
+| Map Operation | List Equivalent |
+|--------------|-----------------|
+| `Maps.lookup name map` | `Lists.find (\b -> bindingName b == name) list` |
+| `Maps.elems map` | Direct list access (no wrapper needed) |
+| `Maps.fromList pairs` | The list itself |
+| `Maps.union m1 m2` | `Lists.concat2 l1 l2` |
+| `Maps.empty` | `list []` (empty list) |
+
+### Steps Performed
+
+1. **Updated type definition** in `Hydra/Sources/Kernel/Types/Graph.hs`:
+   ```haskell
+   -- From:
+   graphElements :: T.map Core.name Core.binding
+   -- To:
+   graphElements :: T.list Core.binding
+   ```
+
+2. **Updated generated type** in `Hydra/Graph.hs` (gen-main):
+   ```haskell
+   -- From:
+   graphElements :: (M.Map Core.Name Core.Binding)
+   -- To:
+   graphElements :: [Core.Binding]
+   ```
+
+3. **Updated DSL helpers** in `Hydra/Dsl/Meta/Graph.hs`:
+   ```haskell
+   -- Updated function signatures to use [Binding] instead of M.Map Name Binding
+   graph :: ...
+   graphElements :: TTerm Graph -> TTerm [Binding]
+   graphWithElements :: [Binding] -> TTerm Graph
+   ```
+
+4. **Added Lists.find primitive** (see above)
+
+5. **Updated kernel source files** - Key changes:
+   - `Lexical.hs`: `lookupElement` uses `Lists.find` instead of `Maps.lookup`
+   - `Schemas.hs`: `typesToElements` returns `[Binding]` instead of `M.Map Name Binding`
+   - `Adapt/Simple.hs`: Element manipulation uses list operations
+   - Many files: Removed `Maps.elems` wrapper around `graphElements`
+
+6. **Updated hydra-ext files**:
+   - `Python/Coder.hs`: Changed element lookup pattern
+   - `Analysis/Dependencies.hs`, `Summaries.hs`, `AvroWorkflows.hs`: Removed `M.elems` wrappers
+
+### DSL Equality in Source Files
+
+When writing predicates in Hydra DSL source files, use `Equality.equal` instead of backtick operators:
+
+```haskell
+-- Correct:
+Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "name")) elements
+
+-- Incorrect (won't compile in DSL):
+Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
+```
+
+### Files Changed
+
+**Types (Sources + Generated):**
+- `Hydra/Sources/Kernel/Types/Graph.hs` - Type definition source
+- `Hydra/Graph.hs` (gen-main) - Generated type
+
+**DSL Helpers:**
+- `Hydra/Dsl/Meta/Graph.hs` - Graph construction helpers
+
+**New Primitive (6 files):**
+- `Hydra/Lib/Lists.hs`
+- `Hydra/Staging/Lib/Names.hs`
+- `Hydra/Sources/Libraries.hs`
+- `Hydra/Sources/Eval/Lib/Lists.hs`
+- `Hydra/Dsl/Meta/Lib/Lists.hs`
+- `Hydra/Eval/Lib/Lists.hs` (generated)
+
+**Kernel Terms (Sources + Generated):**
+- `Hydra/Sources/Kernel/Terms/Lexical.hs` + `Hydra/Lexical.hs`
+- `Hydra/Sources/Kernel/Terms/Schemas.hs` + `Hydra/Schemas.hs`
+- `Hydra/Sources/Kernel/Terms/Inference.hs` + `Hydra/Inference.hs`
+- `Hydra/Sources/Kernel/Terms/Templates.hs` + `Hydra/Templates.hs`
+- `Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` + `Hydra/Adapt/Simple.hs`
+- `Hydra/Sources/Kernel/Terms/Show/Graph.hs` + `Hydra/Show/Graph.hs`
+- `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
+
+**hydra-ext:**
+- `Hydra/Ext/Staging/Python/Coder.hs`
+- `Hydra/Ext/Staging/Python/TestCodec.hs`
+- `Hydra/Ext/Tools/Analysis/Dependencies.hs`
+- `Hydra/Ext/Tools/Analysis/Summaries.hs`
+- `Hydra/Ext/Tools/AvroWorkflows.hs`
+
+**Other:**
+- `hydra-haskell/src/exec/verify-json-kernel/Main.hs`
+- `Hydra/Generation.hs`
+
+### Key Lessons
+
+1. **Update gen-main first**: When changing fundamental types, update generated files first so the project compiles, then update source files.
+
+2. **Adding primitives is multi-file**: Plan for updating 6 files when adding a new primitive function.
+
+3. **Watch for transitive dependencies**: A type change in `Graph` propagates through many modules that use `graphElements`.
+
+4. **DSL has its own syntax**: The Hydra DSL uses `Equality.equal` and similar functions, not Haskell infix operators.
+
+5. **Return types matter**: Functions like `typesToElements` that return the changed type need signature updates in both source and generated files.
+
+6. **Test incrementally**: Build after each major file change to catch errors early rather than facing many errors at once.
+
+7. **Pre-existing bugs may surface**: Regeneration may reveal pre-existing issues (e.g., missing type constraints). Be prepared to restore files from git if regeneration introduces unrelated problems.

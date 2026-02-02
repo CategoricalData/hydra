@@ -8,6 +8,8 @@ A step-by-step guide for adding new primitive functions and constants to Hydra's
 - Understanding of the target language implementations (Haskell, Java, Python)
 - Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
 
+**Important:** Every new primitive must include test cases in the common test suite. Tests ensure consistent behavior across all language implementations and catch regressions. Adding a primitive without tests is incomplete work.
+
 ## Overview
 
 Primitive functions are native implementations of operations which may not be expressible in Hydra's term language. They bridge Hydra to the host language's capabilities. Each primitive must be:
@@ -153,6 +155,8 @@ evalLibModules = [
 ```
 
 3. Generate the Haskell runtime code. The generated module goes in `/hydra-haskell/src/gen-main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+
+   **Note:** The generated eval module is a bootstrap file. If you add a new eval element, you may need to manually add the function to the generated file initially, then regenerate. The export list in the generated file must include your new function for the `Libraries.hs` import to work.
 
 4. Update the primitive registration in `Libraries.hs` to use `prim3Eval` instead of `prim3`:
 
@@ -374,7 +378,7 @@ pytest
 
 ### Common test suite
 
-All primitives should have test cases in the common test suite, which ensures consistent behavior across all language implementations. Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
+**All primitives must have test cases in the common test suite.** This ensures consistent behavior across all language implementations and prevents regressions. Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
 
 **Adding test cases:**
 
@@ -394,17 +398,23 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 
 3. Add the test group to the `allTests` binding in the same file
 
-4. Regenerate the test suite for all implementations (see [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) for details):
+4. **Regenerate the test suite for all implementations** (this step is required!):
 ```bash
-# From hydra-haskell
-./bin/update-kernel-tests.sh
+# From hydra-haskell - regenerate kernel tests and generation tests
+stack exec update-kernel-tests
+stack exec update-generation-tests
 
 # From hydra-ext (for Java and Python)
-./bin/update-java-kernel.sh
-./bin/update-python-kernel.sh
+stack exec update-python-generation-tests
 ```
 
 5. Run tests in each language to verify the new test cases pass
+
+**Test coverage guidelines:**
+- Include edge cases: empty collections, single elements, boundary values
+- Test both positive and negative cases (e.g., element present vs absent)
+- For higher-order primitives, test with different predicate/function behaviors
+- Look at similar existing primitives for test patterns to follow
 
 ## Checklist
 
@@ -412,23 +422,23 @@ When adding a new primitive function:
 
 - [ ] **Haskell**
   - [ ] Implementation in `Hydra.Lib.<Library>`
-  - [ ] Name constant in `Hydra.Sources.Libraries`
-  - [ ] Registration in `hydraLib<Library>` list
+  - [ ] Name constant in `Hydra.Staging.Lib.Names` (e.g., `_lists_partition`)
+  - [ ] Registration in `hydraLib<Library>` list in `Libraries.hs`
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
   - [ ] **(If higher-order)** Eval element in `Hydra.Sources.Eval.Lib.<Library>`
-  - [ ] **(If higher-order)** Generated runtime in `Hydra.Eval.Lib.<Library>`
+  - [ ] **(If higher-order)** Generated runtime in `Hydra.Eval.Lib.<Library>` (may need manual bootstrap)
   - [ ] **(If higher-order)** Use `primNEval` instead of `primN` in registration
 - [ ] **Java**
   - [ ] PrimitiveFunction class in `hydra.lib.<library>`
   - [ ] Import and registration in `Libraries.java`
 - [ ] **Python**
   - [ ] Function implementation in `hydra.lib.<library>`
-  - [ ] Registration in `hydra.sources.libraries` (when pattern finalized)
-  - [ ] DSL wrapper (pattern to be finalized)
-- [ ] **Common Test Suite**
+  - [ ] **(If higher-order)** Eval implementation in `hydra.eval.lib.<library>`
+  - [ ] Registration in `hydra.sources.libraries`
+- [ ] **Common Test Suite** (required!)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
-  - [ ] Kernel tests regenerated for all implementations
+  - [ ] Kernel and generation tests regenerated (`stack exec update-kernel-tests && stack exec update-generation-tests`)
 - [ ] **Tests pass** in all three languages
 - [ ] **Documentation** updated if needed
 
@@ -443,6 +453,8 @@ When adding a new primitive function:
 3. **Missing imports**: Don't forget to import the implementation module in the registry
 
 4. **Registry order**: List primitives in alphabetical order for consistency
+
+5. **Forgetting test group registration**: After adding test cases to a subgroup (e.g., `listsFind`), remember to also add it to the `allTests` list in the same file. Both steps are required for tests to run.
 
 ## Example: Adding a complete primitive
 
