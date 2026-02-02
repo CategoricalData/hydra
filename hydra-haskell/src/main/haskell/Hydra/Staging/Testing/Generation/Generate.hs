@@ -146,7 +146,7 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       let graph = modulesToGraph (mainModules ++ testModules) $ modules ++ extraModules
 --      let graph = bootstrapGraph
 
---      putStrLn $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (M.elems $ graphElements graph)) ++ "}"
+--      putStrLn $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (graphElements graph)) ++ "}"
 
       -- Generate using the provided test generator, writing files incrementally
       result <- runFlowWithGraph graph $ generateAllModuleTestsIncremental testGen outDir moduleTestPairs writeFilePair

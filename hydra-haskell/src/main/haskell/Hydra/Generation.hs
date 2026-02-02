@@ -108,8 +108,8 @@ generateSources printDefinitions lang doExpand doHoistCaseStatements doHoistPoly
         if L.null termModulesToGenerate
           then pure []
           else withTrace "generate term modules" $ do
-            let nameLists = fmap (fmap bindingName . moduleElements) termModulesToGenerate
-            (g1, defLists) <- dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph nameLists
+            let namespaces = fmap moduleNamespace termModulesToGenerate
+            (g1, defLists) <- dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph namespaces
             withState g1 $ do
               -- Refresh modules with elements from the inferred graph (which have type annotations)
               let refreshedMods = refreshModule (graphElements g1) <$> termModulesToGenerate
@@ -119,7 +119,7 @@ generateSources printDefinitions lang doExpand doHoistCaseStatements doHoistPoly
         forEachModule m defs = withTrace ("term module " ++ unNamespace (moduleNamespace m)) $
           printDefinitions m (fmap DefinitionTerm defs)
         refreshModule els m = m {
-          moduleElements = Y.catMaybes ((\e -> M.lookup (bindingName e) els) <$> moduleElements m)}
+          moduleElements = Y.catMaybes ((\e -> L.find (\b -> bindingName b == bindingName e) els) <$> moduleElements m)}
 
     writePair (path, s) = do
         let fullPath = FP.combine basePath path
@@ -237,8 +237,8 @@ writeYaml basePath universeModules modulesToGenerate = do
           then pure []
           else withTrace "generate YAML files" $ do
             let g0 = modulesToGraph completeUniverse completeUniverse  -- Use complete universe for full dependency resolution
-                nameLists = fmap (fmap bindingName . moduleElements) dataModules
-            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0 nameLists
+                namespaces = fmap moduleNamespace dataModules
+            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0 namespaces
             withState g1 $ do
               maps <- CM.zipWithM forEachModule dataModules defLists
               return $ L.concat (M.toList <$> maps)
@@ -254,7 +254,7 @@ writeYaml basePath universeModules modulesToGenerate = do
 -- | Generate the lexicon content from a graph
 generateLexicon :: Graph -> Flow Graph String
 generateLexicon graph = do
-  let bindings = M.elems $ graphElements graph
+  let bindings = graphElements graph
       primitives = M.elems $ graphPrimitives graph
       (typeBindings, termBindings) = L.partition isNativeType bindings
       sortedPrimitives = L.sortBy comparePrimitiveNames primitives
@@ -335,7 +335,8 @@ moduleToSourceModule m = Module {
     moduleBinding = Binding {
       bindingName = Name $ unNamespace sourceNamespace ++ ".module_",
       bindingTerm = EncodeModule.module_ m,
-      bindingType = Just $ TypeScheme [] (TypeVariable $ Name "hydra.module.Module") Nothing
+      -- Let inference determine the type rather than using TypeVariable with a qualified name
+      bindingType = Nothing
     }
 
 ----------------------------------------
