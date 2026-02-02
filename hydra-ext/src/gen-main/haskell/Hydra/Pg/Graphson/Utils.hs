@@ -24,7 +24,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-elementsToVerticesWithAdjacentEdges :: (Ord t0) => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
+elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =  
   let partitioned = (Lists.foldl (\acc -> \el -> (\x -> case x of
           Model_.ElementVertex v1 -> (Lists.cons v1 (Pairs.first acc), (Pairs.second acc))
@@ -95,5 +95,5 @@ encodeTermValue term = ((\x -> case x of
   Core.TermUnit -> (Flows.pure Syntax.ValueNull)
   _ -> (Flows.fail "unsupported term variant for GraphSON encoding")) (Rewriting.deannotateTerm term))
 
-pgElementsToGraphson :: (Ord t0) => ((t0 -> Compute.Flow t1 Syntax.Value) -> [Model_.Element t0] -> Compute.Flow t1 [Model.Value])
+pgElementsToGraphson :: Ord t0 => ((t0 -> Compute.Flow t1 Syntax.Value) -> [Model_.Element t0] -> Compute.Flow t1 [Model.Value])
 pgElementsToGraphson encodeValue els = (Flows.mapList (Construct.pgVertexWithAdjacentEdgesToJson encodeValue) (elementsToVerticesWithAdjacentEdges els))

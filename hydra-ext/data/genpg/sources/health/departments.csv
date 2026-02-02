@@ -1,0 +1,11 @@
+department_id,department_name,location,head_doctor_id,founded_date,budget,is_teaching,max_capacity
+1,General Surgery,Building A - Floor 3,2,2005-01-15,1500000,true,60
+2,Diagnostics,Building B - Floor 1,1,2007-03-22,1250000,true,25
+3,Internal Medicine,Building A - Floor 2,3,2005-01-15,1350000,true,100
+4,Neurology,Building C - Floor 4,4,2008-08-10,1750000,true,40
+5,Cardiology,Building A - Floor 4,5,2006-11-30,2000000,true,50
+6,Pediatrics,Building D - Floor 1,6,2009-05-18,1150000,true,80
+7,Emergency Medicine,Building E - Floor 1,7,2005-01-15,2250000,false,150
+8,Orthopedics,Building C - Floor 2,8,2010-10-05,1650000,true,45
+9,Plastic Surgery,Building B - Floor 3,11,2012-07-12,1000000,false,20
+10,Oncology,Building A - Floor 5,,2014-09-28,1850000,true,55
