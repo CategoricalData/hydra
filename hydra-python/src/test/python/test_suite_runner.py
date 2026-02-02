@@ -323,8 +323,9 @@ def build_test_graph() -> hydra.graph.Graph:
     )
 
     # Create the schema graph with test types
+    # Note: elements is now a list of Bindings, not a Map Name Binding
     schema_graph = hydra.graph.Graph(
-        elements=FrozenDict(type_bindings),
+        elements=tuple(type_bindings.values()),
         environment=FrozenDict({}),
         types=FrozenDict({}),
         body=hydra.core.TermLiteral(hydra.core.LiteralString("schema")),
@@ -355,8 +356,9 @@ def build_test_graph() -> hydra.graph.Graph:
     primitives = hydra.sources.libraries.standard_library()
 
     # Create the main test graph with schema and primitives
+    # Note: elements is now a list of Bindings, not a Map Name Binding
     return hydra.graph.Graph(
-        elements=FrozenDict(term_bindings),
+        elements=tuple(term_bindings.values()),
         environment=FrozenDict({}),
         types=FrozenDict({}),
         body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
@@ -1147,7 +1149,7 @@ def run_hoist_subterms_test(test_case: hydra.testing.HoistSubtermsTestCase) -> N
         FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
     )
     empty_type_context = hydra.typing.TypeContext(
-        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), empty_inference_context
+        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), frozenset(), empty_inference_context
     )
 
     # Build the predicate function based on the predicate type
@@ -1182,7 +1184,7 @@ def run_hoist_case_statements_test(test_case: hydra.testing.HoistCaseStatementsT
         FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
     )
     empty_type_context = hydra.typing.TypeContext(
-        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), empty_inference_context
+        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), frozenset(), empty_inference_context
     )
 
     result = hydra.hoisting.hoist_case_statements(empty_type_context, test_case.input)
@@ -1196,8 +1198,8 @@ def run_hoist_case_statements_test(test_case: hydra.testing.HoistCaseStatementsT
 
 def run_hoist_let_bindings_test(test_case: hydra.testing.HoistLetBindingsTestCase) -> None:
     """Execute a hoist let bindings test with hoistAll=True."""
-    # hoistLetBindings with True hoists ALL nested bindings, not just polymorphic ones
-    result = hydra.hoisting.hoist_let_bindings(True, test_case.input)
+    # hoist_all_let_bindings hoists ALL nested bindings, not just polymorphic ones
+    result = hydra.hoisting.hoist_all_let_bindings(test_case.input)
 
     assert result == test_case.output, (
         f"Hoist let bindings failed:\n"
@@ -1208,7 +1210,7 @@ def run_hoist_let_bindings_test(test_case: hydra.testing.HoistLetBindingsTestCas
 
 def run_hoist_polymorphic_let_bindings_test(test_case: hydra.testing.HoistPolymorphicLetBindingsTestCase) -> None:
     """Execute a hoist polymorphic let bindings test."""
-    result = hydra.hoisting.hoist_polymorphic_let_bindings(test_case.input)
+    result = hydra.hoisting.hoist_polymorphic_let_bindings(lambda _: True, test_case.input)
 
     assert result == test_case.output, (
         f"Hoist polymorphic let bindings failed:\n"
