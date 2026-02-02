@@ -32,7 +32,7 @@ decodeList elemDecoder g term = (Eithers.bind (Eithers.bimap (\x -> Util.Decodin
   Core.TermList v1 -> (Eithers.mapList (elemDecoder g) v1)
   _ -> (Left (Util.DecodingError "expected list"))) stripped))
 
-decodeMap :: (Ord t0) => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Util.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (M.Map t0 t1))
+decodeMap :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Util.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (M.Map t0 t1))
 decodeMap keyDecoder valDecoder g term = (Eithers.bind (Eithers.bimap (\x -> Util.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> (\x -> case x of
   Core.TermMap v1 -> (Eithers.map Maps.fromList (Eithers.mapList (\kv -> Eithers.bind (keyDecoder g (Pairs.first kv)) (\k -> Eithers.map (\v -> (k, v)) (valDecoder g (Pairs.second kv)))) (Maps.toList v1)))
   _ -> (Left (Util.DecodingError "expected map"))) stripped))
@@ -47,7 +47,7 @@ decodePair firstDecoder secondDecoder g term = (Eithers.bind (Eithers.bimap (\x 
   Core.TermPair v1 -> (Eithers.bind (firstDecoder g (Pairs.first v1)) (\f -> Eithers.map (\s -> (f, s)) (secondDecoder g (Pairs.second v1))))
   _ -> (Left (Util.DecodingError "expected pair"))) stripped))
 
-decodeSet :: (Ord t0) => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (S.Set t0))
+decodeSet :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (S.Set t0))
 decodeSet elemDecoder g term = (Eithers.bind (Eithers.bimap (\x -> Util.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> (\x -> case x of
   Core.TermSet v1 -> (Eithers.map Sets.fromList (Eithers.mapList (elemDecoder g) (Sets.toList v1)))
   _ -> (Left (Util.DecodingError "expected set"))) stripped))

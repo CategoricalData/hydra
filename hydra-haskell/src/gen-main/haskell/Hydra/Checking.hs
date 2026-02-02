@@ -4,6 +4,7 @@
 
 module Hydra.Checking where
 
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -36,7 +37,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-allEqual :: (Eq t0) => ([t0] -> Bool)
+allEqual :: Eq t0 => ([t0] -> Bool)
 allEqual els = (Logic.ifElse (Lists.null els) True (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal t (Lists.head els))) True (Lists.tail els)))
 
 applyTypeArgumentsToType :: (Typing.TypeContext -> [Core.Type] -> Core.Type -> Compute.Flow t0 Core.Type)
@@ -279,6 +280,7 @@ typeOfLambda tx typeArgs l =
           Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
           Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tx),
           Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
+          Typing.typeContextLetVariables = (Typing.typeContextLetVariables tx),
           Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}) [] body) (\cod -> Flows.bind (checkTypeVariables tx cod) (\_ -> Flows.pure (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = dom,
           Core.functionTypeCodomain = cod}))))))) mdom) (\tbody -> applyTypeArgumentsToType tx typeArgs tbody))
@@ -302,6 +304,7 @@ typeOfLet tx typeArgs letTerm =
                     Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
                     Typing.typeContextTypeVariables = (Typing.typeContextTypeVariables tx),
                     Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
+                    Typing.typeContextLetVariables = (Typing.typeContextLetVariables tx),
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
             in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
               "binding types disagree: ",
@@ -406,6 +409,7 @@ typeOfTypeLambda tx typeArgs tl =
                 Typing.typeContextMetadata = (Typing.typeContextMetadata tx),
                 Typing.typeContextTypeVariables = (Sets.insert v vars),
                 Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
+                Typing.typeContextLetVariables = (Typing.typeContextLetVariables tx),
                 Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
         in (Flows.bind (typeOf tx2 [] body) (\t1 -> Flows.bind (checkTypeVariables tx2 t1) (\_ -> applyTypeArgumentsToType tx typeArgs (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = v,
@@ -428,12 +432,16 @@ typeOfUnwrap tx typeArgs tname = (Flows.bind (Schemas.requireSchemaType (Typing.
           Core.functionTypeCodomain = swrapped})))))))
 
 typeOfVariable :: (Typing.TypeContext -> [Core.Type] -> Core.Name -> Compute.Flow t0 Core.Type)
-typeOfVariable tx typeArgs name = (Flows.bind (Maybes.maybe (Flows.fail (Strings.cat [
-  "unbound variable: ",
-  Core.unName name,
-  ". Variables: {",
-  Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
-  "}"])) Schemas.instantiateType (Maps.lookup name (Typing.typeContextTypes tx))) (\t -> applyTypeArgumentsToType tx typeArgs t))
+typeOfVariable tx typeArgs name =  
+  let rawType = (Maps.lookup name (Typing.typeContextTypes tx))
+  in  
+    let failMsg = (Flows.fail (Strings.cat [
+            "unbound variable: ",
+            Core.unName name,
+            ". Variables: {",
+            Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
+            "}"]))
+    in (Flows.bind (Maybes.maybe failMsg (\t -> Logic.ifElse (Lists.null typeArgs) (Schemas.instantiateType t) (Flows.pure t)) rawType) (\t -> applyTypeArgumentsToType tx typeArgs t))
 
 typeOfWrappedTerm :: (Typing.TypeContext -> [Core.Type] -> Core.WrappedTerm -> Compute.Flow t0 Core.Type)
 typeOfWrappedTerm tx typeArgs wt =  
@@ -450,14 +458,32 @@ containsInScopeTypeVars tx t =
     let freeVars = (Rewriting.freeVariablesInTypeSimple t)
     in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
 
--- | Check whether a list of types are effectively equal, disregarding type aliases
+-- | Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables.
+normalizeTypeFreeVars :: (Core.Type -> Core.Type)
+normalizeTypeFreeVars typ =  
+  let collectVars = (\acc -> \t -> (\x -> case x of
+          Core.TypeVariable v1 -> (Logic.ifElse (Maps.member v1 acc) acc (Maps.insert v1 (Core.Name (Strings.cat2 "_tv" (Literals.showInt32 (Maps.size acc)))) acc))
+          _ -> acc) t)
+  in  
+    let subst = (Rewriting.foldOverType Coders.TraversalOrderPre collectVars Maps.empty typ)
+    in (Rewriting.substituteTypeVariables subst typ)
+
+-- | Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.
 typesAllEffectivelyEqual :: (Typing.TypeContext -> [Core.Type] -> Bool)
 typesAllEffectivelyEqual tx tlist =  
   let types = (Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext tx))
-  in (allEqual (Lists.map (Rewriting.replaceTypedefs types) tlist))
+  in  
+    let containsFreeVar = (\t ->  
+            let allVars = (Rewriting.freeVariablesInTypeSimple t)
+            in  
+              let schemaNames = (Sets.fromList (Maps.keys types))
+              in (Logic.not (Sets.null (Sets.difference allVars schemaNames))))
+    in  
+      let anyContainsFreeVar = (Lists.foldl (\acc -> \t -> Logic.or acc (containsFreeVar t)) False tlist)
+      in (Logic.ifElse anyContainsFreeVar True (Logic.ifElse (allEqual (Lists.map (\t -> normalizeTypeFreeVars t) tlist)) True (allEqual (Lists.map (\t -> normalizeTypeFreeVars (Rewriting.deannotateTypeRecursive (Rewriting.replaceTypedefs types t))) tlist))))
 
 -- | Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards
 typesEffectivelyEqual :: (Typing.TypeContext -> Core.Type -> Core.Type -> Bool)
 typesEffectivelyEqual tx t1 t2 = (Logic.or (containsInScopeTypeVars tx t1) (Logic.or (containsInScopeTypeVars tx t2) (typesAllEffectivelyEqual tx [
-  Schemas.fullyStripType t1,
-  (Schemas.fullyStripType t2)])))
+  Schemas.fullyStripAndNormalizeType t1,
+  (Schemas.fullyStripAndNormalizeType t2)])))

@@ -186,6 +186,20 @@ lambda l =
           ".",
           (term body)])
 
+-- | Show a let expression as a string
+let_ :: (Core.Let -> String)
+let_ l =  
+  let bindings = (Core.letBindings l)
+  in  
+    let env = (Core.letBody l)
+    in  
+      let bindingStrs = (Lists.map binding bindings)
+      in (Strings.cat [
+        "let ",
+        Strings.intercalate ", " bindingStrs,
+        " in ",
+        (term env)])
+
 list :: ((t0 -> String) -> [t0] -> String)
 list f xs =  
   let elementStrs = (Lists.map f xs)
@@ -240,17 +254,7 @@ term t =
       term r,
       ")"]) v1)
     Core.TermFunction v1 -> (function v1)
-    Core.TermLet v1 ->  
-      let bindings = (Core.letBindings v1)
-      in  
-        let env = (Core.letBody v1)
-        in  
-          let bindingStrs = (Lists.map binding bindings)
-          in (Strings.cat [
-            "let ",
-            Strings.intercalate ", " bindingStrs,
-            " in ",
-            (term env)])
+    Core.TermLet v1 -> (let_ v1)
     Core.TermList v1 ->  
       let termStrs = (Lists.map term v1)
       in (Strings.cat [

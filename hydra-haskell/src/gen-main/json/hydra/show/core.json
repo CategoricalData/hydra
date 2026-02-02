@@ -1033,6 +1033,75 @@
                 "parameter": "l"}}}}},
       "type": null},
     {
+      "name": "hydra.show.core.let",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Show a let expression as a string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "bindings",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "l"},
+                            "function": {
+                              "function": {
+                                "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
+                        "type": null}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "env",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "l"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
+                            "type": null}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "bindingStrs",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "bindings"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.show.core.binding"},
+                                        "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                                "type": null}],
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "list": [
+                                    {"literal": {"string": "let "}},
+                                    {
+                                      "application": {
+                                        "argument": {"variable": "bindingStrs"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": ", "}},
+                                            "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                    {"literal": {"string": " in "}},
+                                    {
+                                      "application": {
+                                        "argument": {"variable": "env"},
+                                        "function": {"variable": "hydra.show.core.term"}}}]},
+                                "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}}}},
+                "domain": null,
+                "parameter": "l"}}}}},
+      "type": null},
+    {
       "name": "hydra.show.core.list",
       "term": {
         "annotated": {
@@ -1450,60 +1519,9 @@
                                       "function": {
                                         "lambda": {
                                           "body": {
-                                            "let": {
-                                              "bindings": [
-                                                {
-                                                  "name": "bindings",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "l"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
-                                                  "type": null}],
-                                              "body": {
-                                                "let": {
-                                                  "bindings": [
-                                                    {
-                                                      "name": "env",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "l"},
-                                                          "function": {
-                                                            "function": {
-                                                              "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
-                                                      "type": null}],
-                                                  "body": {
-                                                    "let": {
-                                                      "bindings": [
-                                                        {
-                                                          "name": "bindingStrs",
-                                                          "term": {
-                                                            "application": {
-                                                              "argument": {"variable": "bindings"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "hydra.show.core.binding"},
-                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                          "type": null}],
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "list": [
-                                                              {"literal": {"string": "let "}},
-                                                              {
-                                                                "application": {
-                                                                  "argument": {"variable": "bindingStrs"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {"literal": {"string": ", "}},
-                                                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                              {"literal": {"string": " in "}},
-                                                              {
-                                                                "application": {
-                                                                  "argument": {"variable": "env"},
-                                                                  "function": {"variable": "hydra.show.core.term"}}}]},
-                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}}}},
+                                            "application": {
+                                              "argument": {"variable": "l"},
+                                              "function": {"variable": "hydra.show.core.let"}}},
                                           "domain": null,
                                           "parameter": "l"}}}},
                                   {

@@ -24,7 +24,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-adjacencyListsToGraph :: (Ord t0) => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
+adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
 adjacencyListsToGraph edges0 =  
   let sortedEdges = (Lists.sortOn Pairs.first edges0)
   in  

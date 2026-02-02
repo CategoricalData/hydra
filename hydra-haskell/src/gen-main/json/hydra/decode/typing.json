@@ -954,22 +954,46 @@
                                                                                                         "function": {
                                                                                                           "lambda": {
                                                                                                             "body": {
-                                                                                                              "either": {
-                                                                                                                "@right": {
-                                                                                                                  "record": {
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "types", "term": {"variable": "field_types"}},
-                                                                                                                      {"name": "metadata", "term": {"variable": "field_metadata"}},
-                                                                                                                      {"name": "typeVariables", "term": {"variable": "field_typeVariables"}},
-                                                                                                                      {
-                                                                                                                        "name": "lambdaVariables",
-                                                                                                                        "term": {"variable": "field_lambdaVariables"}},
-                                                                                                                      {
-                                                                                                                        "name": "inferenceContext",
-                                                                                                                        "term": {"variable": "field_inferenceContext"}}],
-                                                                                                                    "typeName": "hydra.typing.TypeContext"}}}},
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "function": {
+                                                                                                                    "lambda": {
+                                                                                                                      "body": {
+                                                                                                                        "either": {
+                                                                                                                          "@right": {
+                                                                                                                            "record": {
+                                                                                                                              "fields": [
+                                                                                                                                {"name": "types", "term": {"variable": "field_types"}},
+                                                                                                                                {"name": "metadata", "term": {"variable": "field_metadata"}},
+                                                                                                                                {"name": "typeVariables", "term": {"variable": "field_typeVariables"}},
+                                                                                                                                {
+                                                                                                                                  "name": "lambdaVariables",
+                                                                                                                                  "term": {"variable": "field_lambdaVariables"}},
+                                                                                                                                {"name": "letVariables", "term": {"variable": "field_letVariables"}},
+                                                                                                                                {
+                                                                                                                                  "name": "inferenceContext",
+                                                                                                                                  "term": {"variable": "field_inferenceContext"}}],
+                                                                                                                              "typeName": "hydra.typing.TypeContext"}}}},
+                                                                                                                      "domain": null,
+                                                                                                                      "parameter": "field_inferenceContext"}}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "cx"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "fieldMap"},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "hydra.decode.typing.inferenceContext"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"literal": {"string": "inferenceContext"}},
+                                                                                                                                    "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
+                                                                                                                    "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
                                                                                                             "domain": null,
-                                                                                                            "parameter": "field_inferenceContext"}}},
+                                                                                                            "parameter": "field_letVariables"}}},
                                                                                                       "function": {
                                                                                                         "application": {
                                                                                                           "argument": {
@@ -980,10 +1004,13 @@
                                                                                                                   "argument": {"variable": "fieldMap"},
                                                                                                                   "function": {
                                                                                                                     "application": {
-                                                                                                                      "argument": {"variable": "hydra.decode.typing.inferenceContext"},
+                                                                                                                      "argument": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "hydra.decode.core.name"},
+                                                                                                                          "function": {"variable": "hydra.extract.helpers.decodeSet"}}},
                                                                                                                       "function": {
                                                                                                                         "application": {
-                                                                                                                          "argument": {"literal": {"string": "inferenceContext"}},
+                                                                                                                          "argument": {"literal": {"string": "letVariables"}},
                                                                                                                           "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
                                                                                                           "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
                                                                                                   "domain": null,

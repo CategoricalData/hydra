@@ -29,6 +29,17 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Apply a term-level function inside any leading type lambdas
+applyInsideTypeLambdasAndAnnotations :: ((Core.Term -> Core.Term) -> Core.Term -> Core.Term)
+applyInsideTypeLambdasAndAnnotations f term0 = ((\x -> case x of
+  Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+    Core.annotatedTermBody = (applyInsideTypeLambdasAndAnnotations f (Core.annotatedTermBody v1)),
+    Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
+  Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
+    Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+    Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v1))}))
+  _ -> (f term0)) term0)
+
 -- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
 deannotateAndDetypeTerm t = ((\x -> case x of
@@ -92,6 +103,7 @@ detypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
+-- | Flatten nested let expressions
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
   let rewriteBinding = (\binding ->  
@@ -158,7 +170,7 @@ flattenLetTerms term =
               in  
                 let innerBody = (Core.letBody v1)
                 in (flattenBodyLet (Lists.concat2 bindings innerBindings) innerBody)
-            _ -> (bindings, body)) body)
+            _ -> (Lists.concat2 [] bindings, body)) body)
     in  
       let flatten = (\recurse -> \term ->  
               let rewritten = (recurse term)
@@ -168,7 +180,7 @@ flattenLetTerms term =
                   in  
                     let body = (Core.letBody v1)
                     in  
-                      let forResult = (\hr -> Lists.cons (Pairs.first hr) (Pairs.second hr))
+                      let forResult = (\hr -> Lists.concat2 (Pairs.second hr) (Lists.pure (Pairs.first hr)))
                       in  
                         let flattenedBindings = (Lists.concat (Lists.map (\arg_ -> forResult (rewriteBinding arg_)) bindings))
                         in  
@@ -478,6 +490,25 @@ removeTypeAnnotations typ =
             _ -> rewritten) rewritten))
   in (rewriteType remove typ)
 
+-- | Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations
+removeTypeAnnotationsFromTerm :: (Core.Term -> Core.Term)
+removeTypeAnnotationsFromTerm term =  
+  let strip = (\recurse -> \term ->  
+          let rewritten = (recurse term)
+          in  
+            let stripBinding = (\b -> Core.Binding {
+                    Core.bindingName = (Core.bindingName b),
+                    Core.bindingTerm = (Core.bindingTerm b),
+                    Core.bindingType = Nothing})
+            in ((\x -> case x of
+              Core.TermLet v1 -> (Core.TermLet (Core.Let {
+                Core.letBindings = (Lists.map stripBinding (Core.letBindings v1)),
+                Core.letBody = (Core.letBody v1)}))
+              Core.TermTypeApplication v1 -> (Core.typeApplicationTermBody v1)
+              Core.TermTypeLambda v1 -> (Core.typeLambdaBody v1)
+              _ -> rewritten) rewritten))
+  in (rewriteTerm strip term)
+
 -- | Strip type annotations from terms while preserving other annotations
 removeTypesFromTerm :: (Core.Term -> Core.Term)
 removeTypesFromTerm term =  
@@ -534,7 +565,9 @@ replaceTypedefs types typ0 =
   let rewrite = (\recurse -> \typ ->  
           let dflt = (recurse typ)
           in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (rewrite recurse (Core.annotatedTypeBody v1))
+            Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v1)),
+              Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
             Core.TypeRecord _ -> typ
             Core.TypeUnion _ -> typ
             Core.TypeVariable v1 ->  
@@ -1638,7 +1671,7 @@ typeNamesInType typ0 =
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
--- | Unshadow lambda-bound variables in a term
+-- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term
 unshadowVariables :: (Core.Term -> Core.Term)
 unshadowVariables term0 =  
   let rewrite = (\recurse -> \m -> \term ->  
@@ -1665,6 +1698,9 @@ unshadowVariables term0 =
                             Core.lambdaDomain = domain,
                             Core.lambdaBody = (Pairs.second (rewrite recurse m2 body))})))) (Maps.lookup v m)))
               _ -> dflt) v1)
+            Core.TermLet v1 ->  
+              let m2 = (Lists.foldl (\acc -> \b -> Maps.insert (Core.bindingName b) 1 acc) m (Core.letBindings v1))
+              in (recurse m2 term)
             Core.TermVariable v1 -> (m, (Core.TermVariable (Maybes.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
             _ -> dflt) term))
   in (Pairs.second (rewriteAndFoldTerm rewrite Maps.empty term0))

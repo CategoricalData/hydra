@@ -57,6 +57,15 @@ filter predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
       Core.applicationArgument = (Core.TermList (Lists.pure el))})),
     Core.applicationArgument = (Core.TermList [])})) elements))}))))
 
+find :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
+find predTerm listTerm = (Flows.pure (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
+  Core.applicationArgument = (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
+      Core.applicationArgument = predTerm})),
+    Core.applicationArgument = listTerm}))})))
+
 -- | Interpreter-friendly left fold for List terms.
 foldl :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
@@ -70,6 +79,40 @@ map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 map funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
   Core.applicationFunction = funTerm,
   Core.applicationArgument = el})) acc) [] elements)))))
+
+-- | Interpreter-friendly partition for List terms.
+partition :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
+partition predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->  
+  let initialState = (Core.TermPair (Core.TermList [], (Core.TermList [])))
+  in  
+    let finalState = (Lists.foldl (\acc -> \el ->  
+            let yeses = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                    Core.applicationArgument = acc}))
+            in  
+              let nos = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                      Core.applicationArgument = acc}))
+              in (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = predTerm,
+                      Core.applicationArgument = el}))})),
+                  Core.applicationArgument = (Core.TermPair (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                      Core.applicationArgument = yeses})),
+                    Core.applicationArgument = (Core.TermList [
+                      el])}), nos))})),
+                Core.applicationArgument = (Core.TermPair (yeses, (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                    Core.applicationArgument = nos})),
+                  Core.applicationArgument = (Core.TermList [
+                    el])}))))}))) initialState elements)
+    in (Flows.pure finalState)))
 
 -- | Interpreter-friendly sortOn for List terms.
 sortOn :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)

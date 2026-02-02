@@ -38,28 +38,28 @@ expectString value = ((\x -> case x of
   Model.ValueString v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "JSON string" (showValue value))) value)
 
-opt :: (Ord t0) => (t0 -> M.Map t0 t1 -> Maybe t1)
+opt :: Ord t0 => (t0 -> M.Map t0 t1 -> Maybe t1)
 opt fname m = (Maps.lookup fname m)
 
-optArray :: (Ord t0) => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe [Model.Value]))
+optArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe [Model.Value]))
 optArray fname m = (Maybes.maybe (Flows.pure Nothing) (\a -> Flows.map Maybes.pure (expectArray a)) (opt fname m))
 
-optString :: (Ord t0) => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe String))
+optString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe String))
 optString fname m = (Maybes.maybe (Flows.pure Nothing) (\s -> Flows.map Maybes.pure (expectString s)) (opt fname m))
 
-require :: (Ord t0) => (t0 -> M.Map t0 t1 -> Compute.Flow t2 t1)
+require :: Ord t0 => (t0 -> M.Map t0 t1 -> Compute.Flow t2 t1)
 require fname m = (Maybes.maybe (Flows.fail (Strings.cat [
   "required attribute ",
   showValue fname,
   " not found"])) (\value -> Flows.pure value) (Maps.lookup fname m))
 
-requireArray :: (Ord t0) => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 [Model.Value])
+requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 [Model.Value])
 requireArray fname m = (Flows.bind (require fname m) expectArray)
 
-requireNumber :: (Ord t0) => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 Double)
+requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 Double)
 requireNumber fname m = (Flows.bind (require fname m) expectNumber)
 
-requireString :: (Ord t0) => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 String)
+requireString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 String)
 requireString fname m = (Flows.bind (require fname m) expectString)
 
 showValue :: (t0 -> String)

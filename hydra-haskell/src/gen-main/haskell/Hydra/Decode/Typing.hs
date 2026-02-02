@@ -69,12 +69,13 @@ typeContext :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing.Typ
 typeContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  
     let fieldMap = (Helpers.toFieldMap v1)
-    in (Eithers.bind (Helpers.requireField "types" (Helpers.decodeMap Core_.name Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Helpers.requireField "metadata" (Helpers.decodeMap Core_.name Core_.term) fieldMap cx) (\field_metadata -> Eithers.bind (Helpers.requireField "typeVariables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_typeVariables -> Eithers.bind (Helpers.requireField "lambdaVariables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_lambdaVariables -> Eithers.bind (Helpers.requireField "inferenceContext" inferenceContext fieldMap cx) (\field_inferenceContext -> Right (Typing.TypeContext {
+    in (Eithers.bind (Helpers.requireField "types" (Helpers.decodeMap Core_.name Core_.type_) fieldMap cx) (\field_types -> Eithers.bind (Helpers.requireField "metadata" (Helpers.decodeMap Core_.name Core_.term) fieldMap cx) (\field_metadata -> Eithers.bind (Helpers.requireField "typeVariables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_typeVariables -> Eithers.bind (Helpers.requireField "lambdaVariables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_lambdaVariables -> Eithers.bind (Helpers.requireField "letVariables" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_letVariables -> Eithers.bind (Helpers.requireField "inferenceContext" inferenceContext fieldMap cx) (\field_inferenceContext -> Right (Typing.TypeContext {
       Typing.typeContextTypes = field_types,
       Typing.typeContextMetadata = field_metadata,
       Typing.typeContextTypeVariables = field_typeVariables,
       Typing.typeContextLambdaVariables = field_lambdaVariables,
-      Typing.typeContextInferenceContext = field_inferenceContext})))))))
+      Typing.typeContextLetVariables = field_letVariables,
+      Typing.typeContextInferenceContext = field_inferenceContext}))))))))
   _ -> (Left (Util.DecodingError "expected record of type hydra.typing.TypeContext"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeSubst :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing.TypeSubst)

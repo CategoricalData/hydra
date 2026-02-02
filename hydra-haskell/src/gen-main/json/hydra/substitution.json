@@ -203,6 +203,59 @@
                 "parameter": "v"}}}}},
       "type": null},
     {
+      "name": "hydra.substitution.substituteInBinding",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Apply a term substitution to a binding"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "b"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}}},
+                            {
+                              "name": "term",
+                              "term": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "b"},
+                                      "function": {
+                                        "function": {
+                                          "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "subst"},
+                                      "function": {"variable": "hydra.substitution.substituteInTerm"}}}}}},
+                            {
+                              "name": "type",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "b"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}}}],
+                          "typeName": "hydra.core.Binding"}},
+                      "domain": null,
+                      "parameter": "b"}}},
+                "domain": null,
+                "parameter": "subst"}}}}},
+      "type": null},
+    {
       "name": "hydra.substitution.substituteInConstraint",
       "term": {
         "annotated": {

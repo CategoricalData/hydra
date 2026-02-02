@@ -1248,7 +1248,7 @@
             "parameter": "v"}}},
       "type": [
         {
-          "constraints": [[{"@key": "v", "@value": {"classes": ["hydra.typeclass.Ord"]}}]],
+          "constraints": [[{"@key": "v", "@value": {"classes": ["ordering"]}}]],
           "type": {
             "function": {
               "codomain": {

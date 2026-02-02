@@ -13735,7 +13735,7 @@
                                                                             "application": {
                                                                               "argument": {
                                                                                 "wrap": {
-                                                                                  "body": {"literal": {"string": "hydra.typeclass.Ord"}},
+                                                                                  "body": {"literal": {"string": "ordering"}},
                                                                                   "typeName": "hydra.core.Name"}},
                                                                               "function": {"function": {"primitive": "hydra.lib.sets.singleton"}}}}}],
                                                                       "typeName": "hydra.core.TypeVariableMetadata"}}}},
