@@ -430,26 +430,6 @@ unwrap = TTerm . Terms.unwrap
 var :: String -> TTerm a
 var v = TTerm $ Terms.var v
 
--- | Associate the Eq type class with the inferred type of a term
--- Example: withEq "t0" myTerm
-withEq :: String -> TTerm a -> TTerm a
-withEq v = withTypeClasses $ M.fromList [(Name v, S.singleton TypeClassEquality)]
-
--- | Associate the Ord type class with the inferred type of a term
--- Example: withOrd "t0" myTerm
-withOrd :: String -> TTerm a -> TTerm a
-withOrd v = withOrds [v]
-
-withOrds :: [String] -> TTerm a -> TTerm a
-withOrds vs = withTypeClasses $ M.fromList $ fmap toPair vs
-  where
-    toPair v = (Name v, S.singleton TypeClassOrdering)
-
--- | Associate type classes with the inferred type of a term
--- Example: withTypeClasses (M.fromList [(Name "t0", S.singleton TypeClassOrdering)]) myTerm
-withTypeClasses :: M.Map Name (S.Set TypeClass) -> TTerm a -> TTerm a
-withTypeClasses classes (TTerm term) = TTerm $ setTypeClasses classes term
-
 -- | Create a wrapped term (instance of a newtype)
 -- Example: wrap (Name "Email") (string "user@example.com")
 -- Note: the phantom types provide no guarantee of type safety in this case
