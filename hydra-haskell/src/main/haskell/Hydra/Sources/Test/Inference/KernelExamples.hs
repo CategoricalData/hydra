@@ -49,4 +49,56 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
             @@ (primitive _strings_null @@ var "s")
             @@ (var "s")
             @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_tail @@ var "list"))))
-        (T.functionMany [T.function T.string T.string, T.string, T.string])]]
+        (T.functionMany [T.function T.string T.string, T.string, T.string])],
+
+    -- Simplified reproduction of fullyStripAndNormalizeType's 'go' binding using ifElse.
+    -- Tests that inference gives go a monomorphic type when all types are constrained
+    -- by primitive calls (Maps.insert, Math.add).
+    subgroup "Recursive let with pair return (ifElse)" [
+      expectMono 2 [tag_disabledForMinimalInference]
+        (lambda "input" $ lets [
+          "go">:
+            lambda "depth" $ lambda "subst" $ lambda "s" $
+              primitive _logic_ifElse
+                @@ (primitive _strings_null @@ var "s")
+                @@ (pair (var "subst") (var "s"))
+                @@ (var "go"
+                      @@ (primitive _math_add @@ var "depth" @@ int32 1)
+                      @@ (primitive _maps_insert @@ string "key" @@ string "val" @@ var "subst")
+                      @@ var "s")] $
+          lets [
+            "result">: var "go" @@ int32 0 @@ primitive _maps_empty @@ var "input",
+            "subst">: primitive _pairs_first @@ var "result",
+            "body">: primitive _pairs_second @@ var "result"] $
+          pair (var "subst") (var "body"))
+        (T.function T.string
+          (T.pair (T.map T.string T.string) T.string))],
+
+    -- Closer reproduction of fullyStripAndNormalizeType's 'go' binding using
+    -- case/match on the Type union (with a default case).
+    -- The default case returns (subst, t) directly; the forall case recurses
+    -- with Maps.insert constraining subst to Map Name Name.
+    -- This tests whether union elimination with a default case causes
+    -- inference to over-generalize the pair-first type variable.
+    subgroup "Recursive let with pair return (case on Type)" [
+      expectMono 3 [tag_disabledForMinimalInference]
+        (lambda "typ" $ lets [
+          "go">:
+            lambda "depth" $ lambda "subst" $ lambda "t" $
+              Terms.match (Core.nameLift _Type) (just $ pair (var "subst") (var "t")) [
+                _Type_forall >>: lambda "ft" $
+                  var "go"
+                    @@ (primitive _math_add @@ var "depth" @@ int32 1)
+                    @@ (primitive _maps_insert
+                          @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_parameter) @@ var "ft")
+                          @@ (Terms.wrap (Core.nameLift _Name) (primitive _strings_cat2 @@ string "_" @@ (primitive _literals_showInt32 @@ var "depth")))
+                          @@ var "subst")
+                    @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_body) @@ var "ft")]
+              @@ var "t"] $
+          lets [
+            "result">: var "go" @@ int32 0 @@ primitive _maps_empty @@ var "typ"] $
+          pair (primitive _pairs_first @@ var "result") (primitive _pairs_second @@ var "result"))
+        -- Expected: Type -> (Map Name Name, Type)
+        -- Named types appear as TypeVariable in schemes (e.g., hydra.core.Name, hydra.core.Type)
+        (T.function (T.variable "hydra.core.Type")
+          (T.pair (T.map (T.variable "hydra.core.Name") (T.variable "hydra.core.Name")) (T.variable "hydra.core.Type")))]]

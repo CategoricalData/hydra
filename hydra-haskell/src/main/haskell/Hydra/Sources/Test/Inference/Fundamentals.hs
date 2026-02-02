@@ -322,7 +322,126 @@ testGroupForLet = define "testGroupForLet" $
           "foo">: var "bar",
           "bar">: var "foo"] $
           pair (var "foo") (var "bar"))
-        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1"))]]
+        ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1"))],
+
+    -- Over-generalization of hoisted let-bindings.
+    -- When a nested let-binding is hoisted to a sibling, its type may be generalized
+    -- beyond what the usage context constrains.
+    subgroup "Over-generalization of hoisted let-bindings" [
+      -- Nested: \g. \val. let r = g val in g (fst r)
+      -- g is constrained: fst(g val) is used as input to g, so g : a -> (a, b)
+      -- f : forall a b. (a -> (a, b)) -> a -> (a, b)
+      expectPoly 1 []
+        (lambda "g" $ lambda "val" $
+          lets ["r">: var "g" @@ var "val"] $
+            var "g" @@ (primitive _pairs_first @@ var "r"))
+        ["t0", "t1"] (T.function
+          (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))
+          (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))),
+
+      -- Hoisted: let helper = \g. \val. g val; f = \g. \val. g (fst (helper g val)) in f
+      -- helper generalizes to forall a b. (a -> b) -> a -> b, losing the constraint b = (a, c).
+      -- So f gets: forall a b c. (a -> (b, c)) -> a -> (b, c) -- 3 vars instead of 2.
+      -- This test documents the CURRENT behavior (over-generalized).
+      -- TODO: if inference is improved, update to match test 1 above.
+      expectPoly 2 []
+        (lets [
+          "helper">: lambda "g" $ lambda "val" $ var "g" @@ var "val",
+          "f">: lambda "g" $ lambda "val" $
+            var "g" @@ (primitive _pairs_first @@ (var "helper" @@ var "g" @@ var "val"))] $
+          var "f")
+        ["t0", "t1"] (T.function
+          (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))
+          (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t1")))),
+
+      -- Chain of captures: forField takes rec as a parameter, uses fst of result.
+      -- forField = \rec. \val. \x. let r = rec val x in (fst r, x)
+      -- Independently, forField : forall a b c d. (a -> b -> (c, d)) -> a -> b -> (c, b)
+      -- This is correct: the constraint c=a only exists at the call site, not in forField itself.
+      -- This pattern occurs in rewriteAndFoldTerm where hoisted bindings are more polymorphic
+      -- than how they are used. The Java coder must handle this discrepancy.
+      expectPoly 3 []
+        (lets [
+          "forField">: lambda "rec" $ lambda "val" $ lambda "x" $
+            lets ["r">: var "rec" @@ var "val" @@ var "x"] $
+              pair (primitive _pairs_first @@ var "r") (var "x"),
+          "main">: lambda "rec" $ lambda "val" $ lambda "x" $
+            var "forField" @@ var "rec" @@ var "val" @@ var "x"] $
+          var "main")
+        ["t0", "t1", "t2", "t3"] (T.function
+          (T.functionMany [T.var "t0", T.var "t1", T.pair (T.var "t2") (T.var "t3")])
+          (T.functionMany [T.var "t0", T.var "t1", T.pair (T.var "t2") (T.var "t1")])),
+
+      -- Models the rewriteAndFoldTerm_r pattern: a case/if expression where one branch
+      -- uses a helper's result and the other uses the direct value. Both branches must
+      -- return the same type, which should unify the helper's accumulator type with the
+      -- direct value's type.
+      -- helper = \f. \val. f val               -- helper: forall a b. (a -> b) -> a -> b
+      -- main = \f. \val. \b. ifElse b (helper f val) (val, 0)
+      --   branch 1: helper f val => instantiates to (a -> b) -> a -> b, result b
+      --   branch 2: (val, 0) => (a, Int)
+      --   unify b = (a, Int), so helper f val : (a, Int)
+      --   main : forall a. (a -> (a, Int)) -> a -> Bool -> (a, Int)  -- 1 var
+      expectPoly 4 []
+        (lets [
+          "helper">: lambda "f" $ lambda "val" $ var "f" @@ var "val",
+          "main">: lambda "f" $ lambda "val" $ lambda "b" $
+            primitive _logic_ifElse @@ var "b"
+              @@ (var "helper" @@ var "f" @@ var "val")
+              @@ (pair (var "val") (int32 0))] $
+          var "main")
+        ["t0"] (T.functionMany [
+          T.function (T.var "t0") (T.pair (T.var "t0") T.int32),
+          T.var "t0",
+          T.boolean,
+          T.pair (T.var "t0") T.int32]),
+
+      -- Closer to rewriteAndFoldTerm_r: forField has rec as lambda param (not sibling reference).
+      -- forField = \rec. \val. let r = rec val in (fst r, snd r)
+      --   rec: a -> (b, c), val: a, r: (b, c), result: (b, c) -- 3 vars
+      -- main = \rec. \val. \b. ifElse b (forField rec val) (val, 0)
+      --   branch 1: forField rec val => fresh instance of forField, result (b', c')
+      --   branch 2: (val, 0) => (a, Int)
+      --   unify (b', c') = (a, Int) => b' = a, c' = Int
+      --   also a = a (from rec's first arg), so rec: a -> (a, Int)
+      --   main: forall a. (a -> (a, Int)) -> a -> Bool -> (a, Int)  -- 1 var
+      expectPoly 5 []
+        (lets [
+          "forField">: lambda "rec" $ lambda "val" $
+            lets ["r">: var "rec" @@ var "val"] $
+              pair (primitive _pairs_first @@ var "r") (primitive _pairs_second @@ var "r"),
+          "main">: lambda "rec" $ lambda "val" $ lambda "b" $
+            primitive _logic_ifElse @@ var "b"
+              @@ (var "forField" @@ var "rec" @@ var "val")
+              @@ (pair (var "val") (int32 0))] $
+          var "main")
+        ["t0"] (T.functionMany [
+          T.function (T.var "t0") (T.pair (T.var "t0") T.int32),
+          T.var "t0",
+          T.boolean,
+          T.pair (T.var "t0") T.int32]),
+
+      -- Models the full rewriteAndFoldTerm_r pattern with an intermediate sibling "rcases".
+      -- rcases = \forFields. \val. forFields val  -- rcases: forall a b. (a -> b) -> a -> b
+      -- r = \forFields. \val. \b. ifElse b (rcases forFields val) (val, 0)
+      --   branch 1: rcases forFields val. forFields: a -> b, val: a => result: b
+      --     instantiate rcases: (a' -> b') -> a' -> b'. a' = a, b' = b. result: b
+      --   branch 2: (val, 0) = (a, Int)
+      --   unify b = (a, Int) => forFields: a -> (a, Int)
+      --   r: forall a. (a -> (a, Int)) -> a -> Bool -> (a, Int)  -- 1 var
+      expectPoly 6 []
+        (lets [
+          "rcases">: lambda "forFields" $ lambda "val" $ var "forFields" @@ var "val",
+          "r">: lambda "forFields" $ lambda "val" $ lambda "b" $
+            primitive _logic_ifElse @@ var "b"
+              @@ (var "rcases" @@ var "forFields" @@ var "val")
+              @@ (pair (var "val") (int32 0))] $
+          var "r")
+        ["t0"] (T.functionMany [
+          T.function (T.var "t0") (T.pair (T.var "t0") T.int32),
+          T.var "t0",
+          T.boolean,
+          T.pair (T.var "t0") T.int32])]]
   where
     s = primitive _math_negate
     p = primitive _math_negate
