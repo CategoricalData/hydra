@@ -3,6 +3,7 @@ package hydra;
 import hydra.ext.org.yaml.model.Node;
 import hydra.ext.org.yaml.model.Scalar;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,7 +88,7 @@ public class VisitorTest {
             return instance.value.accept(new Scalar.PartialVisitor<Boolean>() {
                 @Override
                 public Boolean visit(Scalar.Float_ instance) {
-                    return instance.value.equals(String.valueOf(42.0));
+                    return instance.value.compareTo(BigDecimal.valueOf(42.0)) == 0;
                 }
 
                 @Override
@@ -130,7 +131,7 @@ public class VisitorTest {
         }
 
         static Node float_(double value) {
-            return new Node.Scalar(new Scalar.Float_(String.valueOf(value)));
+            return new Node.Scalar(new Scalar.Float_(BigDecimal.valueOf(value)));
         }
 
         static Node int_(int value) {
