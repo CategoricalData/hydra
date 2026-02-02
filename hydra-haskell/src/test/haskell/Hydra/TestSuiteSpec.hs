@@ -149,12 +149,12 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
         output
     TestCaseHoistPolymorphicLetBindings (HoistPolymorphicLetBindingsTestCase input output) ->
       H.it "hoist polymorphic let bindings" $ H.shouldBe
-        (Hoisting.hoistPolymorphicLetBindings input)
-        output
+        (ShowCore.let_ $ Hoisting.hoistPolymorphicLetBindings (const True) input)
+        (ShowCore.let_ output)
     TestCaseHoistLetBindings (HoistLetBindingsTestCase input output) ->
       H.it "hoist all let bindings" $ H.shouldBe
-        (Hoisting.hoistLetBindings True input)
-        output
+        (ShowCore.let_ $ Hoisting.hoistAllLetBindings input)
+        (ShowCore.let_ output)
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
@@ -301,6 +301,6 @@ runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyType
       _ -> False
 
 emptyTypeContext :: TypeContext
-emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty emptyInferenceContext
+emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty S.empty emptyInferenceContext
   where
     emptyInferenceContext = InferenceContext M.empty M.empty M.empty M.empty False

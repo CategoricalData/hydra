@@ -143,11 +143,12 @@ eval :: Term -> Flow Graph Term
 eval = reduceTerm True
 
 expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
-expectEtaExpansionResult desc input output = H.it "eta expansion" $ shouldSucceedWith
-  (do
-    tx <- graphToTypeContext testGraph
-    etaExpandTypedTerm tx input)
-  output
+expectEtaExpansionResult desc input output = H.it "eta expansion" $ do
+  tx <- fromTestFlow desc $ graphToTypeContext testGraph
+  -- Use the original etaExpandTypedTerm (monadic) instead of etaExpandTermNew (pure)
+  -- to test the production code path
+  result <- fromTestFlow desc $ etaExpandTypedTerm tx input
+  result `H.shouldBe` output
 
 expectFailure :: (a -> String) -> String -> Flow () a -> H.Expectation
 expectFailure print desc f = case my of
@@ -189,7 +190,7 @@ expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
 expectTypeCheckingResult desc input outputTerm outputType = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
     cx <- graphToInferenceContext testGraph
-    let tx = TypeContext M.empty M.empty S.empty S.empty cx
+    let tx = TypeContext M.empty M.empty S.empty S.empty S.empty cx
 
     -- typeOf is always called on System F terms
     (iterm, ts) <- inferTypeOf cx input
