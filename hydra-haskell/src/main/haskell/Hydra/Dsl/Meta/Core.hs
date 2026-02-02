@@ -447,6 +447,9 @@ typeLambdaParameter ta = Phantoms.project _TypeLambda _TypeLambda_parameter @@ t
 typeLambdaBody :: TTerm TypeLambda -> TTerm Term
 typeLambdaBody ta = Phantoms.project _TypeLambda _TypeLambda_body @@ ta
 
+typeLambdaWithBody :: TTerm TypeLambda -> TTerm Term -> TTerm TypeLambda
+typeLambdaWithBody tl body = typeLambda (Phantoms.project _TypeLambda _TypeLambda_parameter @@ tl) body
+
 typeAnnotated :: TTerm AnnotatedType -> TTerm Type
 typeAnnotated = inject _Type _Type_annotated
 
