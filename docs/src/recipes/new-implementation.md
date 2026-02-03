@@ -220,6 +220,8 @@ Examples for existing implementations:
 
 Once you have generated the sources, make sure they compile.
 If not, iterate on your coder and/or serializer.
+Expect many iterations: compilation errors often point to gaps in the coder's handling of specific type or term patterns (e.g. lambda cast types, polymorphic method signatures, type annotations on intermediate expressions).
+Type inference issues in the Hydra kernel can also surface as codegen errors; if a generated type looks wrong, trace the issue back to the inferred type annotations on the Hydra IR before assuming the coder is at fault.
 
 ## Step 7: Implement standard primitives
 
@@ -253,6 +255,9 @@ See [Graph.hs:57](https://github.com/CategoricalData/hydra/blob/main/hydra-haske
 
 Note that while in principle, every Hydra implementation ought to implement every primitive in the standard library, currently there are small differences (a handful of primitives are not yet implemented in all languages).
 At a bare minimum, all of the primitives which are referenced in the Hydra kernel need to be implemented.
+
+**Important**: Simply having implementation files is not enough — each primitive must also be *registered* in a central registry (e.g. `Libraries.java` in Java) so it can be looked up by name at runtime.
+Periodically compare your registry against the authoritative list in [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
 
 ## Step 8: Implement essential utilities
 
@@ -288,6 +293,9 @@ Add these later as your applications need them:
 - Haskell: [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Generation.hs)
 
 Your application will tell you what's missing through compile/runtime errors. Implement utilities as needed.
+
+**Maintaining hand-written code**: As the generated API evolves (e.g. method signatures change from curried to uncurried, packages are reorganized), any hand-written code — including test files and utilities — must be updated to match.
+When the generated code is regenerated, run the full build (not just compilation) to catch test-level breakage early.
 
 ## Step 9: Create a test runner
 
