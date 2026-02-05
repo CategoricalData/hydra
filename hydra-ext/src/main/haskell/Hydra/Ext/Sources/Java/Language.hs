@@ -89,10 +89,10 @@ import qualified Data.Maybe                                 as Y
 
 
 javaLanguageDefinition :: String -> TTerm a -> TBinding a
-javaLanguageDefinition = definitionInModule javaLanguageModule
+javaLanguageDefinition = definitionInModule module_
 
-javaLanguageModule :: Module
-javaLanguageModule = Module (Namespace "hydra.ext.java.language")
+module_ :: Module
+module_ = Module (Namespace "hydra.ext.java.language")
   [toBinding javaMaxTupleLength, toBinding javaLanguage, toBinding reservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
@@ -145,6 +145,7 @@ javaLanguage = javaLanguageDefinition "javaLanguage" $
     Variants.termVariantRecord,
     Variants.termVariantSet,
     Variants.termVariantUnion,
+    Variants.termVariantUnit,
     Variants.termVariantVariable,
     Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [
@@ -161,6 +162,7 @@ javaLanguage = javaLanguageDefinition "javaLanguage" $
     Variants.typeVariantRecord,
     Variants.typeVariantSet,
     Variants.typeVariantUnion,
+    Variants.typeVariantUnit,
     Variants.typeVariantVariable,
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
