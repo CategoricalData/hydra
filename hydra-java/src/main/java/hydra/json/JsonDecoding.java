@@ -566,7 +566,7 @@ public abstract class JsonDecoding {
                 if (mapping == null) {
                     throw new JsonDecodingException("unexpected union value: " + instance.value);
                 } else {
-                    return mapping.apply(new Value.Null(false));
+                    return mapping.apply(new Value.Null());
                 }
             }
         });
