@@ -200,18 +200,16 @@ curlyBracesList = define "curlyBracesList" $
 customIndentBlock :: TBinding (String -> [Expr] -> Expr)
 customIndentBlock = define "customIndentBlock" $
   "idt" ~> "els" ~>
-    "head" <~ Lists.head (var "els") $
-    "rest" <~ Lists.tail (var "els") $
     "idtOp" <~ (Ast.op
       (sym @@ string "")
       (Ast.padding Ast.wsSpace (Ast.wsBreakAndIndent $ var "idt"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Logic.ifElse (Lists.null $ var "els")
-      (cst @@ string "")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
-        (Lists.head $ var "els")
-        (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ var "rest")))
+    Maybes.maybe (cst @@ string "")
+      ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
+        (var "head")
+        (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
+      (Lists.safeHead $ var "els")
 
 customIndent :: TBinding (String -> String -> String)
 customIndent = define "customIndent" $
@@ -376,14 +374,10 @@ orOp = define "orOp" $
 orSep :: TBinding (BlockStyle -> [Expr] -> Expr)
 orSep = define "orSep" $
   "style" ~> "l" ~>
-    "h" <~ Lists.head (var "l") $
-    "r" <~ Lists.tail (var "l") $
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
-    Logic.ifElse (Lists.null $ var "l")
-      (cst @@ string "")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
-        (Lists.head $ var "l")
-        (ifx @@ (orOp @@ var "newlines") @@ var "h" @@ (orSep @@ var "style" @@ var "r")))
+    Maybes.maybe (cst @@ string "")
+      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+      (Lists.safeHead $ var "l")
 
 parenList :: TBinding (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
@@ -527,13 +521,9 @@ semicolonSep = define "semicolonSep" $
 sep :: TBinding (Op -> [Expr] -> Expr)
 sep = define "sep" $
   "op" ~> "els" ~>
-    "h" <~ Lists.head (var "els") $
-    "r" <~ Lists.tail (var "els") $
-    Logic.ifElse (Lists.null $ var "els")
-      (cst @@ string "")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
-        (Lists.head $ var "els")
-        (ifx @@ var "op" @@ var "h" @@ (sep @@ var "op" @@ var "r")))
+    Maybes.maybe (cst @@ string "")
+      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
+      (Lists.safeHead $ var "els")
 
 spaceSep :: TBinding ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
@@ -554,8 +544,6 @@ sym = define "sym" $
 symbolSep :: TBinding (String -> BlockStyle -> [Expr] -> Expr)
 symbolSep = define "symbolSep" $
   "symb" ~> "style" ~> "l" ~>
-    "h" <~  Lists.head (var "l") $
-    "r" <~ Lists.tail (var "l") $
     "breakCount" <~ (Lists.length $ Lists.filter identity $ list [
       Ast.blockStyleNewlineBeforeContent $ var "style",
       Ast.blockStyleNewlineAfterContent $ var "style"]) $
@@ -569,11 +557,9 @@ symbolSep = define "symbolSep" $
       (Ast.padding Ast.wsNone (var "break"))
       (Ast.precedence $ int32 0)
       Ast.associativityNone) $
-    Logic.ifElse (Lists.null $ var "l")
-      (cst @@ string "")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "l") (int32 1))
-        (Lists.head $ var "l")
-        (ifx @@ var "commaOp" @@ var "h" @@ (symbolSep @@ var "symb" @@ var "style" @@ var "r")))
+    Maybes.maybe (cst @@ string "")
+      ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
+      (Lists.safeHead $ var "l")
 
 tabIndent :: TBinding (Expr -> Expr)
 tabIndent = define "tabIndent" $
