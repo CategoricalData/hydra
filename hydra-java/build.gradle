@@ -38,6 +38,13 @@ compileJava {
     dependsOn generateGrammarSource
 }
 
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
