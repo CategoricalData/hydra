@@ -74,6 +74,7 @@ module_ = Module ns elements
      toBinding choice,
      toBinding eof,
      toBinding fail,
+     toBinding lazy,
      toBinding many,
      toBinding map,
      toBinding optional,
@@ -182,6 +183,16 @@ fail = define "fail" $
     Parsing.parser ("input" ~>
       Parsing.parseResultFailure (Parsing.parseError (var "msg") (var "input")))
 
+-- | Create a parser that defers construction of another parser until parsing time.
+-- This is essential for breaking recursive parser definitions.
+lazy :: TBinding ((() -> Parser a) -> Parser a)
+lazy = define "lazy" $
+  doc ("Create a parser that defers construction of another parser until parsing time."
+    <> " This is essential for breaking recursive parser definitions.") $
+  "f" ~>
+  Parsing.parser ("input" ~>
+    Parsing.runParser (var "f" @@ unit) (var "input"))
+
 -- | Parse zero or more occurrences
 many :: TBinding (Parser a -> Parser [a])
 many = define "many" $
@@ -234,13 +245,14 @@ satisfy = define "satisfy" $
   "pred" ~>
   "parse" <~ ("input" ~>
     "codes" <~ Strings.toList (var "input") $
-    "c" <~ Lists.head (var "codes") $
-    "rest" <~ Strings.fromList (Lists.tail (var "codes")) $
-    Logic.ifElse (Strings.null (var "input"))
+    Maybes.maybe
       (Parsing.parseResultFailure (Parsing.parseError (string "unexpected end of input") (var "input")))
-      (Logic.ifElse (var "pred" @@ var "c")
+      ("c" ~>
+       "rest" <~ Strings.fromList (Lists.drop (int32 1) (var "codes")) $
+       Logic.ifElse (var "pred" @@ var "c")
          (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))
-         (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))) $
+         (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))
+      (Lists.safeHead $ var "codes")) $
   Parsing.parser (var "parse")
 
 -- | Parse zero or more occurrences separated by a separator
