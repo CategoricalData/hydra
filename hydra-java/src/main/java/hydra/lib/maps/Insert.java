@@ -11,7 +11,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -89,7 +88,7 @@ public class Insert extends PrimitiveFunction {
      * @return the updated map
      */
     public static <K, V> Map<K, V> apply(K k, V v, Map<K, V> before) {
-        Map<K, V> after = new HashMap<>(before);
+        Map<K, V> after = FromList.orderedMap(before);
         after.put(k, v);
         return after;
     }

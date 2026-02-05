@@ -57,8 +57,6 @@ public class Singleton extends PrimitiveFunction {
      * @return a new set containing only the specified element
      */
     public static <X> Set<X> apply(X elem) {
-        Set<X> newSet = new HashSet<>();
-        newSet.add(elem);
-        return newSet;
+        return FromList.orderedSet(java.util.List.of(elem));
     }
 }

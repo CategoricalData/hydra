@@ -41,12 +41,29 @@ public class SortOn extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Flows::pure, args.get(1)),
-            (Function<List<Term>, Term>) lst -> {
-                // Term-level sorting is complex
-                // The static apply() provides the actual logic
-                return Terms.list(lst);
+        return args -> {
+            Term f = args.get(0);
+            return Flows.bind(Expect.list(Flows::pure, args.get(1)), lst -> {
+                // Compute sort keys for each element
+                Flow<Graph, List<hydra.util.Tuple.Tuple2<Term, Term>>> pairsFlow = pure(new ArrayList<>());
+                for (Term element : lst) {
+                    Term application = Terms.apply(f, element);
+                    pairsFlow = Flows.bind(pairsFlow, acc ->
+                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), key -> {
+                            acc.add(new hydra.util.Tuple.Tuple2<>(key, element));
+                            return acc;
+                        }));
+                }
+                return Flows.map(pairsFlow, pairs -> {
+                    pairs.sort((a, b) -> hydra.lib.equality.Compare.compareTerms(a.object1, b.object1));
+                    List<Term> sorted = new ArrayList<>();
+                    for (hydra.util.Tuple.Tuple2<Term, Term> p : pairs) {
+                        sorted.add(p.object2);
+                    }
+                    return Terms.list(sorted);
+                });
             });
+        };
     }
 
     /**

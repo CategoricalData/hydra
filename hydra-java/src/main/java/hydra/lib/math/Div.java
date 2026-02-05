@@ -73,6 +73,6 @@ public class Div extends PrimitiveFunction {
      * @return the quotient
      */
     public static Integer apply(Integer dividend, Integer divisor) {
-        return (dividend / divisor);
+        return Math.floorDiv(dividend, divisor);
     }
 }

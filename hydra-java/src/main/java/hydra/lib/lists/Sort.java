@@ -39,9 +39,9 @@ public class Sort extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)),
             (Function<List<Term>, Term>) lst -> {
-                // Term-level sorting is complex
-                // The static apply() provides the actual logic for comparable types
-                return Terms.list(lst);
+                List<Term> sorted = new ArrayList<>(lst);
+                sorted.sort(hydra.lib.equality.Compare::compareTerms);
+                return Terms.list(sorted);
             });
     }
 

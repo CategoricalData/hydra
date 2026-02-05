@@ -11,9 +11,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -58,7 +59,36 @@ public class FromList extends PrimitiveFunction {
      * @param arg the list of elements
      * @return a set containing all unique elements from the list
      */
+    @SuppressWarnings("unchecked")
     public static <X> Set<X> apply(List<X> arg) {
-        return new HashSet<>(arg);
+        return orderedSet(arg);
+    }
+
+    /**
+     * Creates an ordered set from elements. Uses TreeSet when elements are Comparable
+     * (matching Haskell's Data.Set behavior), otherwise LinkedHashSet for insertion order.
+     */
+    @SuppressWarnings("unchecked")
+    static <X> Set<X> orderedSet(java.util.Collection<X> elements) {
+        if (elements.isEmpty()) {
+            return new LinkedHashSet<>();
+        }
+        // Check if elements are Comparable
+        for (X elem : elements) {
+            if (elem != null) {
+                if (elem instanceof Comparable) {
+                    try {
+                        TreeSet<X> result = new TreeSet<>((a, b) -> ((Comparable<X>) a).compareTo(b));
+                        result.addAll(elements);
+                        return result;
+                    } catch (ClassCastException e) {
+                        return new LinkedHashSet<>(elements);
+                    }
+                } else {
+                    return new LinkedHashSet<>(elements);
+                }
+            }
+        }
+        return new LinkedHashSet<>(elements);
     }
 }

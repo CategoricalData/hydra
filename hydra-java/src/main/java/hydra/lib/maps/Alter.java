@@ -58,7 +58,8 @@ public class Alter extends PrimitiveFunction {
             Term f = args.get(0);
             Maybe<Term> currentValue = Lookup.apply(key, mp);
             Term newOptValue = Terms.apply(f, Terms.optional(currentValue));
-            return bind(Expect.optional(Flows::pure, newOptValue), newValue -> {
+            return bind(hydra.reduction.Reduction.reduceTerm(true, newOptValue), reduced ->
+            bind(Expect.optional(Flows::pure, reduced), newValue -> {
                 Map<Term, Term> result = new HashMap<>(mp);
                 if (newValue.isJust()) {
                     result.put(key, newValue.fromJust());
@@ -66,7 +67,7 @@ public class Alter extends PrimitiveFunction {
                     result.remove(key);
                 }
                 return pure(Terms.map(result));
-            });
+            }));
         });
     }
 
@@ -92,7 +93,7 @@ public class Alter extends PrimitiveFunction {
      * @return the modified map
      */
     public static <K, V> Map<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, Map<K, V> mp) {
-        Map<K, V> result = new HashMap<>(mp);
+        Map<K, V> result = FromList.orderedMap(mp);
         Maybe<V> currentValue = Lookup.apply(key, mp);
         Maybe<V> newValue = f.apply(currentValue);
         if (newValue.isJust()) {

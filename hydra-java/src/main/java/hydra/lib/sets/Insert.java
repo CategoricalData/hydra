@@ -69,8 +69,8 @@ public class Insert extends PrimitiveFunction {
      * @return a new set with the element added
      */
     public static <X> Set<X> apply(X elem, Set<X> arg) {
-        Set<X> newSet = new HashSet<>(arg);
-        newSet.add(elem);
-        return newSet;
+        java.util.LinkedHashSet<X> combined = new java.util.LinkedHashSet<>(arg);
+        combined.add(elem);
+        return FromList.orderedSet(combined);
     }
 }

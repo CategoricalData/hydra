@@ -55,6 +55,11 @@ public class Equal extends PrimitiveFunction {
      * @return true if equal, false otherwise
      */
     public static <A> boolean apply(A left, A right) {
+        // Special handling for BigDecimal: use compareTo for scale-insensitive comparison
+        // (e.g., 42.0 and 42 should be equal)
+        if (left instanceof java.math.BigDecimal && right instanceof java.math.BigDecimal) {
+            return ((java.math.BigDecimal) left).compareTo((java.math.BigDecimal) right) == 0;
+        }
         return left.equals(right);
     }
 }

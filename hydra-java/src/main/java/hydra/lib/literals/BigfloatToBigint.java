@@ -13,6 +13,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.function.Function;
 
@@ -56,6 +57,6 @@ public class BigfloatToBigint extends PrimitiveFunction {
      * @return the BigInteger representation of the value
      */
     public static BigInteger apply(BigDecimal value) {
-        return value.toBigInteger();
+        return value.setScale(0, RoundingMode.HALF_EVEN).toBigInteger();
     }
 }

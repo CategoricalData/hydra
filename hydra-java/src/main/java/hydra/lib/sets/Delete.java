@@ -39,7 +39,7 @@ public class Delete extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("x", function("x", set("x")));
+        return scheme("x", function(Types.var("x"), set("x"), set("x")));
     }
 
     /**
@@ -69,8 +69,8 @@ public class Delete extends PrimitiveFunction {
      * @return a new set with the element removed
      */
     public static <X> Set<X> apply(X elem, Set<X> arg) {
-        Set<X> newSet = new HashSet<>(arg);
+        java.util.LinkedHashSet<X> newSet = new java.util.LinkedHashSet<>(arg);
         newSet.remove(elem);
-        return newSet;
+        return FromList.orderedSet(newSet);
     }
 }

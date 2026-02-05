@@ -11,11 +11,13 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static hydra.dsl.Flows.bind;
 import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
@@ -38,11 +40,28 @@ public class Filter extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Flows::pure, args.get(1)),
-            (Function<List<Term>, Term>) lst -> {
-                // Simplified implementation - the static apply() provides the actual logic
-                return Terms.list(lst);
+        return args -> {
+            Term pred = args.get(0);
+            return bind(Expect.list(Flows::pure, args.get(1)), lst -> {
+                // Apply predicate to each element and collect results
+                Flow<Graph, List<Term>> filtered = pure(new ArrayList<>());
+                for (Term element : lst) {
+                    Term application = Terms.apply(pred, element);
+                    filtered = bind(filtered, acc ->
+                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+                            bind(Expect.boolean_(reduced), b -> {
+                                if (b) {
+                                    List<Term> newAcc = new ArrayList<>(acc);
+                                    newAcc.add(element);
+                                    return pure(newAcc);
+                                } else {
+                                    return pure(acc);
+                                }
+                            })));
+                }
+                return Flows.map(filtered, Terms::list);
             });
+        };
     }
 
     /**

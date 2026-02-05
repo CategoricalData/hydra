@@ -52,17 +52,27 @@ public class Filter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
-            // Simplified implementation - filter at term level is complex
-            // The static apply() method provides the actual filtering logic
-            Map<Term, Term> result = new HashMap<>();
-            for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                // In a full implementation, we'd need to evaluate the predicate
-                // For now, we pass through all entries
-                result.put(entry.getKey(), entry.getValue());
-            }
-            return pure(Terms.map(result));
-        });
+        return args -> {
+            Term pred = args.get(0);
+            return bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
+                // Evaluate predicate on each value, keeping entries where predicate returns true
+                Flow<Graph, Map<Term, Term>> resultFlow = pure(new HashMap<>());
+                for (Map.Entry<Term, Term> entry : mp.entrySet()) {
+                    Term application = Terms.apply(pred, entry.getValue());
+                    final Term key = entry.getKey();
+                    final Term value = entry.getValue();
+                    resultFlow = bind(resultFlow, acc ->
+                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+                            bind(Expect.boolean_(reduced), b -> {
+                                if (b) {
+                                    acc.put(key, value);
+                                }
+                                return pure(acc);
+                            })));
+                }
+                return Flows.map(resultFlow, Terms::map);
+            });
+        };
     }
 
     /**
@@ -73,6 +83,17 @@ public class Filter extends PrimitiveFunction {
      * @return a function that takes a map and returns the filtered map
      */
     public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Predicate<V> pred) {
+        return mp -> apply((Function<V, Boolean>) v -> pred.test(v), mp);
+    }
+
+    /**
+     * Filters entries where values match predicate (as Function).
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param pred the predicate as a Function (used by generated code)
+     * @return a function that takes a map and returns the filtered map
+     */
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Function<V, Boolean> pred) {
         return mp -> apply(pred, mp);
     }
 
@@ -85,12 +106,24 @@ public class Filter extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Predicate<V> pred, Map<K, V> mp) {
-        Map<K, V> result = new HashMap<>();
+        return apply((Function<V, Boolean>) v -> pred.test(v), mp);
+    }
+
+    /**
+     * Filters entries where values match predicate (as Function).
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param pred the predicate as a Function (used by generated code)
+     * @param mp the map to filter
+     * @return the filtered map
+     */
+    public static <K, V> Map<K, V> apply(Function<V, Boolean> pred, Map<K, V> mp) {
+        Map<K, V> result = new java.util.LinkedHashMap<>();
         for (Map.Entry<K, V> entry : mp.entrySet()) {
-            if (pred.test(entry.getValue())) {
+            if (pred.apply(entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return result;
+        return FromList.orderedMap(result);
     }
 }

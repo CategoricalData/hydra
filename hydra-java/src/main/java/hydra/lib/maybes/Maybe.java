@@ -38,7 +38,9 @@ public class Maybe extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("a", "b", function("b", function(function("a", "b"), function(optional("a"), "b"))));
+        // Variables are listed in order of first appearance in type: b -> (a -> b) -> optional<a> -> b
+        // b appears first, then a
+        return scheme("b", "a", function("b", function(function("a", "b"), function(optional("a"), "b"))));
     }
 
     /**

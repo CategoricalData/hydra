@@ -46,7 +46,7 @@ public class ShowUint8 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.int16(args.get(0)),
+        return args -> Flows.map(Expect.uint8(args.get(0)),
             (Function<Short, Term>) s -> Terms.string(apply(s)));
     }
 

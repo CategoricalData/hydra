@@ -54,6 +54,6 @@ public class Length extends PrimitiveFunction {
      * @return the length of the string
      */
     public static int apply(String s) {
-        return s.length();
+        return s.codePointCount(0, s.length());
     }
 }

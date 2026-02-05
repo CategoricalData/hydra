@@ -71,34 +71,26 @@ public class SplitOn extends PrimitiveFunction {
     public static List<String> apply(String delim, String string) {
         List<String> parts = new ArrayList<>();
 
-        if (delim.length() == 0) {
+        if (delim.isEmpty()) {
             parts.add("");
-            for (int i = 0; i < string.length(); i++) {
-                parts.add(string.substring(i, i + 1));
+            int i = 0;
+            while (i < string.length()) {
+                int cp = string.codePointAt(i);
+                int charCount = Character.charCount(cp);
+                parts.add(string.substring(i, i + charCount));
+                i += charCount;
             }
         } else {
-            byte[] delimBytes = delim.getBytes();
-            byte[] stringBytes = string.getBytes();
-
             int k = 0;
-            for (int i = 0; i <= stringBytes.length - delimBytes.length; i++) {
-                boolean match = true;
-
-                for (int j = 0; j < delimBytes.length; j++) {
-                    if (stringBytes[i + j] != delimBytes[j]) {
-                        match = false;
-                        break;
-                    }
+            int delimLen = delim.length();
+            while (true) {
+                int idx = string.indexOf(delim, k);
+                if (idx < 0) {
+                    break;
                 }
-
-                if (match) {
-                    parts.add(string.substring(k, i));
-                    i += delimBytes.length;
-                    k = i;
-                    i--;
-                }
+                parts.add(string.substring(k, idx));
+                k = idx + delimLen;
             }
-
             parts.add(string.substring(k));
         }
 

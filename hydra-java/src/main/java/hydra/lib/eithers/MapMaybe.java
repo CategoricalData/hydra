@@ -4,6 +4,9 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.dsl.Expect;
+import hydra.dsl.Flows;
+import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
@@ -11,6 +14,8 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.function.Function;
 
+import static hydra.dsl.Flows.bind;
+import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.either;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
@@ -39,7 +44,27 @@ public class MapMaybe extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            throw new UnsupportedOperationException("MapMaybe primitive not yet implemented for term evaluation");
+            Term fn = args.get(0);
+            return bind(Expect.optional(Flows::pure, args.get(1)), maybe -> {
+                if (maybe.isNothing()) {
+                    // Nothing -> Right(Nothing)
+                    return pure(new Term.Either(new hydra.util.Either.Right<>(
+                        new Term.Maybe(Maybe.nothing()))));
+                }
+                Term val = maybe.fromJust();
+                Term application = Terms.apply(fn, val);
+                return bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+                    bind(Expect.<Graph, Term, Term>either(reduced), e -> {
+                        if (e.isLeft()) {
+                            return pure(new Term.Either(new hydra.util.Either.Left<>(
+                                ((hydra.util.Either.Left<Term, Term>) e).value)));
+                        } else {
+                            return pure(new Term.Either(new hydra.util.Either.Right<>(
+                                new Term.Maybe(Maybe.just(
+                                    ((hydra.util.Either.Right<Term, Term>) e).value)))));
+                        }
+                    }));
+            });
         };
     }
 
@@ -52,7 +77,6 @@ public class MapMaybe extends PrimitiveFunction {
         if (maybe.isNothing()) {
             return new hydra.util.Either.Right<>(Maybe.nothing());
         } else {
-            // Use orElse(null) to extract the value since Maybe has no direct getter
             A val = maybe.orElse(null);
             hydra.util.Either<Z, B> result = fn.apply(val);
             if (result.isLeft()) {

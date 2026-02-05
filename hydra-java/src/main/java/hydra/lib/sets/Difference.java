@@ -71,8 +71,8 @@ public class Difference extends PrimitiveFunction {
      * @return a new set containing elements in s1 but not in s2
      */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        Set<X> newSet = new HashSet<>(s1);
+        java.util.LinkedHashSet<X> newSet = new java.util.LinkedHashSet<>(s1);
         newSet.removeAll(s2);
-        return newSet;
+        return FromList.orderedSet(newSet);
     }
 }

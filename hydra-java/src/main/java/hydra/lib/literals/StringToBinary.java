@@ -48,15 +48,15 @@ public class StringToBinary extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.string(args.get(0)),
-            (Function<String, Term>) s -> Terms.string(s));
+            (Function<String, Term>) s -> new Term.Literal(new hydra.core.Literal.Binary(apply(s))));
     }
 
     /**
-     * Converts a string to binary data.
-     * @param str the string to convert
-     * @return the byte array representation
+     * Converts a base64-encoded string to binary data.
+     * @param str the base64-encoded string to convert
+     * @return the decoded byte array
      */
     public static byte[] apply(String str) {
-        return str.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        return java.util.Base64.getDecoder().decode(str);
     }
 }

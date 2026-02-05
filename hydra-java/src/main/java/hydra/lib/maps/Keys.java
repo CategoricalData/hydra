@@ -52,7 +52,11 @@ public class Keys extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
             Flow<Graph, Map<Term, Term>> r = Expect.map(Flows::pure, Flows::pure, args.get(0));
-            return Flows.map(r, map -> Terms.list(apply(map)));
+            return Flows.map(r, map -> {
+                List<Term> keys = new ArrayList<>(map.keySet());
+                keys.sort(hydra.lib.equality.Compare::compareTerms);
+                return Terms.list(keys);
+            });
         };
     }
 
@@ -63,7 +67,16 @@ public class Keys extends PrimitiveFunction {
      * @param map the map
      * @return the keys
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> List<K> apply(Map<K, V> map) {
-        return new ArrayList<K>(map.keySet());
+        List<K> keys = new ArrayList<>(map.keySet());
+        if (!keys.isEmpty()) {
+            if (keys.get(0) instanceof Comparable) {
+                keys.sort((a, b) -> ((Comparable<K>) a).compareTo(b));
+            } else if (keys.get(0) instanceof Term) {
+                keys.sort((a, b) -> hydra.lib.equality.Compare.compareTerms((Term) a, (Term) b));
+            }
+        }
+        return keys;
     }
 }

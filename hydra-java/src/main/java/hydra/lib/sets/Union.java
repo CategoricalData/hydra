@@ -71,8 +71,8 @@ public class Union extends PrimitiveFunction {
      * @return a new set containing all elements from both sets
      */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        Set<X> newSet = new HashSet<>(s1);
-        newSet.addAll(s2);
-        return newSet;
+        java.util.LinkedHashSet<X> combined = new java.util.LinkedHashSet<>(s1);
+        combined.addAll(s2);
+        return FromList.orderedSet(combined);
     }
 }

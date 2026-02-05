@@ -47,16 +47,25 @@ public class BinaryToString extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.binary(args.get(0)),
-            (Function<String, Term>) s -> Terms.string(s));
+        return args -> {
+            Term term = args.get(0);
+            if (term instanceof Term.Literal) {
+                hydra.core.Literal lit = ((Term.Literal) term).value;
+                if (lit instanceof hydra.core.Literal.Binary) {
+                    byte[] bytes = ((hydra.core.Literal.Binary) lit).value;
+                    return Flows.pure(Terms.string(apply(bytes)));
+                }
+            }
+            return Flows.fail("expected binary literal");
+        };
     }
 
     /**
-     * Converts binary data to a string.
+     * Converts binary data to a base64-encoded string.
      * @param binary the binary data as a byte array
-     * @return the string representation
+     * @return the base64-encoded string
      */
     public static String apply(byte[] binary) {
-        return new String(binary, java.nio.charset.StandardCharsets.UTF_8);
+        return java.util.Base64.getEncoder().encodeToString(binary);
     }
 }

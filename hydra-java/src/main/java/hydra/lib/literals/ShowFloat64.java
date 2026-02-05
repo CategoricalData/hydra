@@ -56,6 +56,6 @@ public class ShowFloat64 extends PrimitiveFunction {
      * @return the string representation of the value
      */
     public static String apply(Double value) {
-        return Double.toString(value);
+        return ShowFloat.showFloat(value);
     }
 }

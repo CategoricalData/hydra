@@ -57,6 +57,6 @@ public class ShowBigfloat extends PrimitiveFunction {
      * @return the string representation of the value
      */
     public static String apply(BigDecimal value) {
-        return value.toString();
+        return ShowFloat.showFloat(value.doubleValue());
     }
 }

@@ -20,6 +20,7 @@ import static hydra.dsl.Terms.lambda;
 import static hydra.dsl.Terms.project;
 import static hydra.dsl.Terms.unwrap;
 import static hydra.dsl.Terms.variable;
+import static hydra.dsl.Terms.wrap;
 
 
 /**
@@ -41,13 +42,13 @@ public class Map extends PrimitiveFunction {
         return args -> {
             Term mapping = args.get(0);
             Term input = args.get(1);
-            Term output = lambda("s", "t",
+            Term output = wrap(Flow.TYPE_NAME, lambda("s", "t",
                     app(lambda("q", flowState(
                                     app(Maybes.map(), mapping, app(project(FlowState.TYPE_NAME, "value"),
                                             variable("q"))),
                                     app(project(FlowState.TYPE_NAME, "state"), variable("q")),
                                     app(project(FlowState.TYPE_NAME, "trace"), variable("q")))),
-                            (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t")))));
+                            (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t"))))));
             return Flows.pure(output);
         };
     }

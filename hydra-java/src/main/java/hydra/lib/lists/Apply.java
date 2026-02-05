@@ -36,21 +36,23 @@ public class Apply extends PrimitiveFunction {
                 function(list(function("a", "b")), list("a"), list("b")));
     }
 
-    // Note: this implementation does not use apply(),
-    //       as actually applying the mapping function would require beta reduction,
-    //       which would make the mapping function monadic.
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map2(Expect.list(Flows::pure, args.get(0)), Expect.list(Flows::pure, args.get(1)),
-                (BiFunction<List<Term>, List<Term>, Term>) (functions, arguments) -> {
-                    List<Term> apps = new LinkedList<>();
-                    for (Term f : functions) {
-                        for (Term a : arguments) {
-                            apps.add(Terms.apply(f, a));
-                        }
+        return args -> Flows.bind(Expect.list(Flows::pure, args.get(0)), functions ->
+            Flows.bind(Expect.list(Flows::pure, args.get(1)), arguments -> {
+                Flow<Graph, List<Term>> resultFlow = Flows.pure(new LinkedList<>());
+                for (Term f : functions) {
+                    for (Term a : arguments) {
+                        Term application = Terms.apply(f, a);
+                        resultFlow = Flows.bind(resultFlow, acc ->
+                            Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), result -> {
+                                acc.add(result);
+                                return acc;
+                            }));
                     }
-                    return Terms.list(apps);
-                });
+                }
+                return Flows.map(resultFlow, Terms::list);
+            }));
     }
 
     /**

@@ -11,7 +11,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -61,10 +61,10 @@ public class Unions extends PrimitiveFunction {
      * @return a new set containing all elements from all input sets
      */
     public static <X> Set<X> apply(List<Set<X>> sets) {
-        Set<X> result = new HashSet<>();
+        Set<X> combined = new LinkedHashSet<>();
         for (Set<X> s : sets) {
-            result.addAll(s);
+            combined.addAll(s);
         }
-        return result;
+        return FromList.orderedSet(combined);
     }
 }

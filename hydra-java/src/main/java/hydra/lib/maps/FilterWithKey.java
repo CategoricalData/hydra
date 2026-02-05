@@ -53,15 +53,26 @@ public class FilterWithKey extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
-            Map<Term, Term> result = new HashMap<>();
-            for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                Term predResult = Terms.apply(Terms.apply(args.get(0), entry.getKey()), entry.getValue());
-                // Simplified implementation
-                result.put(entry.getKey(), entry.getValue());
-            }
-            return pure(Terms.map(result));
-        });
+        return args -> {
+            Term pred = args.get(0);
+            return bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
+                Flow<Graph, Map<Term, Term>> resultFlow = pure(new HashMap<>());
+                for (Map.Entry<Term, Term> entry : mp.entrySet()) {
+                    Term application = Terms.apply(Terms.apply(pred, entry.getKey()), entry.getValue());
+                    final Term key = entry.getKey();
+                    final Term value = entry.getValue();
+                    resultFlow = bind(resultFlow, acc ->
+                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+                            bind(Expect.boolean_(reduced), b -> {
+                                if (b) {
+                                    acc.put(key, value);
+                                }
+                                return pure(acc);
+                            })));
+                }
+                return Flows.map(resultFlow, Terms::map);
+            });
+        };
     }
 
     /**
@@ -84,12 +95,12 @@ public class FilterWithKey extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
-        Map<K, V> result = new HashMap<>();
+        Map<K, V> result = new java.util.LinkedHashMap<>();
         for (Map.Entry<K, V> entry : mp.entrySet()) {
             if (pred.apply(entry.getKey()).apply(entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return result;
+        return FromList.orderedMap(result);
     }
 }

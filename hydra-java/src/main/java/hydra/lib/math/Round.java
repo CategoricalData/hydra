@@ -57,6 +57,8 @@ public class Round extends PrimitiveFunction {
      * @return the rounded value
      */
     public static BigInteger apply(Double x) {
-        return BigInteger.valueOf(Math.round(x));
+        return java.math.BigDecimal.valueOf(x)
+            .setScale(0, java.math.RoundingMode.HALF_EVEN)
+            .toBigIntegerExact();
     }
 }

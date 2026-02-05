@@ -67,6 +67,6 @@ public class CharAt extends PrimitiveFunction {
      * @return the code point of the character at the index
      */
     public static Integer apply(Integer index, String s) {
-        return (int) s.charAt(index);
+        return s.codePointAt(s.offsetByCodePoints(0, index));
     }
 }

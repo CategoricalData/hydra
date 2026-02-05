@@ -11,6 +11,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
@@ -37,7 +38,7 @@ public class IfElse extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return scheme("a",
-            function(var("a"), var("a"), boolean_(), var("a")));
+            function(boolean_(), var("a"), var("a"), var("a")));
     }
 
     /**
@@ -80,5 +81,14 @@ public class IfElse extends PrimitiveFunction {
      */
     public static <X> X apply(boolean condition, X ifBranch, X elseBranch) {
         return condition ? ifBranch : elseBranch;
+    }
+
+    /**
+     * Selects between two lazily-evaluated branches based on a boolean condition.
+     * Only the chosen branch's supplier is invoked, providing short-circuit evaluation
+     * semantics matching Haskell's lazy ifElse.
+     */
+    public static <X> X lazy(boolean condition, Supplier<X> ifBranch, Supplier<X> elseBranch) {
+        return condition ? ifBranch.get() : elseBranch.get();
     }
 }
