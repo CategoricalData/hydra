@@ -212,6 +212,8 @@ def fresh_names(n: int) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Name]]:
     return hydra.lib.flows.sequence(hydra.lib.lists.replicate(n, fresh_name()))
 
 def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison."""
+    
     def go(depth: int, subst2: FrozenDict[hydra.core.Name, hydra.core.Name], t: hydra.core.Type) -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
         match hydra.rewriting.deannotate_type(t):
             case hydra.core.TypeForall(value=ft):
@@ -226,10 +228,10 @@ def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
             case _:
                 return (subst2, t)
     @lru_cache(1)
-    def result() -> tuple[T1, hydra.core.Type]:
+    def result() -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
         return go(0, hydra.lib.maps.empty(), typ)
     @lru_cache(1)
-    def subst() -> T1:
+    def subst() -> FrozenDict[hydra.core.Name, hydra.core.Name]:
         return hydra.lib.pairs.first(result())
     @lru_cache(1)
     def body() -> hydra.core.Type:

@@ -100,13 +100,13 @@ def json_string() -> hydra.parsing.Parser[hydra.json.model.Value]:
 def json_array() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON array."""
     
-    return hydra.parsers.map((lambda x: cast(hydra.json.model.Value, hydra.json.model.ValueArray(x))), hydra.parsers.between(token(hydra.parsers.char(91)), token(hydra.parsers.char(93)), hydra.parsers.sep_by(json_value(), token(hydra.parsers.char(44)))))
+    return hydra.parsers.map((lambda x: cast(hydra.json.model.Value, hydra.json.model.ValueArray(x))), hydra.parsers.between(token(hydra.parsers.char(91)), token(hydra.parsers.char(93)), hydra.parsers.sep_by(hydra.parsers.lazy((lambda _: json_value())), token(hydra.parsers.char(44)))))
 
 @lru_cache(1)
 def json_key_value() -> hydra.parsing.Parser[tuple[str, hydra.json.model.Value]]:
     r"""Parse a JSON object key-value pair."""
     
-    return hydra.parsers.bind(token(hydra.parsers.bind(hydra.parsers.char(34), (lambda _: hydra.parsers.bind(hydra.parsers.many(json_string_char()), (lambda chars: hydra.parsers.bind(hydra.parsers.char(34), (lambda _2: hydra.parsers.pure(hydra.lib.strings.from_list(chars))))))))), (lambda key: hydra.parsers.bind(token(hydra.parsers.char(58)), (lambda _: hydra.parsers.map((lambda v: (key, v)), json_value())))))
+    return hydra.parsers.bind(token(hydra.parsers.bind(hydra.parsers.char(34), (lambda _: hydra.parsers.bind(hydra.parsers.many(json_string_char()), (lambda chars: hydra.parsers.bind(hydra.parsers.char(34), (lambda _2: hydra.parsers.pure(hydra.lib.strings.from_list(chars))))))))), (lambda key: hydra.parsers.bind(token(hydra.parsers.char(58)), (lambda _: hydra.parsers.map((lambda v: (key, v)), hydra.parsers.lazy((lambda _2: json_value())))))))
 
 @lru_cache(1)
 def json_object() -> hydra.parsing.Parser[hydra.json.model.Value]:

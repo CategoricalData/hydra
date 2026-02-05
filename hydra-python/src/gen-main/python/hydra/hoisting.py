@@ -73,6 +73,19 @@ def binding_uses_context_type_vars(cx: hydra.typing.TypeContext, binding: hydra.
     
     return hydra.lib.maybes.maybe(False, (lambda ts: (free_in_type := hydra.rewriting.free_variables_in_type(ts.type), context_type_vars := cx.type_variables, hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(free_in_type, context_type_vars))))[2]), binding.type)
 
+def count_var_occurrences(name: hydra.core.Name, term: hydra.core.Term) -> int:
+    r"""Count the number of occurrences of a variable name in a term. Assumes no variable shadowing."""
+    
+    @lru_cache(1)
+    def child_count() -> int:
+        return hydra.lib.lists.foldl((lambda acc, t: hydra.lib.math.add(acc, count_var_occurrences(name, t))), 0, hydra.rewriting.subterms(term))
+    match term:
+        case hydra.core.TermVariable(value=v):
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(v, name), (lambda : hydra.lib.math.add(1, child_count())), (lambda : child_count()))
+        
+        case _:
+            return child_count()
+
 def rewrite_and_fold_term_with_type_context(f: Callable[[
   Callable[[T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
   hydra.typing.TypeContext,
@@ -255,20 +268,49 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                 def final_used_names() -> frozenset[hydra.core.Name]:
                     return hydra.lib.pairs.second(hoist_pairs_and_names())
                 @lru_cache(1)
-                def subst() -> hydra.core.Type:
-                    return hydra.typing.TermSubst(hydra.lib.maps.from_list(hydra.lib.lists.zip(hydra.lib.lists.map((lambda v1: v1.name), hoist_us()), replacements())))
+                def hoist_name_replacement_pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Term]]:
+                    return hydra.lib.lists.zip(hydra.lib.lists.map((lambda v1: v1.name), hoist_us()), replacements())
+                @lru_cache(1)
+                def hoist_binding_map() -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
+                    return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b)), hoist_us()))
+                def is_cacheable(name: hydra.core.Name) -> bool:
+                    @lru_cache(1)
+                    def multi_ref() -> bool:
+                        return hydra.lib.equality.gte(count_var_occurrences(name, body()), 2)
+                    @lru_cache(1)
+                    def is_poly() -> bool:
+                        return hydra.lib.maybes.maybe(False, (lambda b: binding_is_polymorphic(b)), hydra.lib.maps.lookup(name, hoist_binding_map()))
+                    return hydra.lib.logic.and_(multi_ref(), hydra.lib.logic.not_(is_poly()))
+                @lru_cache(1)
+                def single_ref_pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Term]]:
+                    return hydra.lib.lists.filter((lambda p: hydra.lib.logic.not_(is_cacheable(hydra.lib.pairs.first(p)))), hoist_name_replacement_pairs())
+                @lru_cache(1)
+                def multi_ref_pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Term]]:
+                    return hydra.lib.lists.filter((lambda p: is_cacheable(hydra.lib.pairs.first(p))), hoist_name_replacement_pairs())
+                @lru_cache(1)
+                def full_subst() -> hydra.core.Type:
+                    return hydra.typing.TermSubst(hydra.lib.maps.from_list(hoist_name_replacement_pairs()))
+                @lru_cache(1)
+                def body_only_subst() -> hydra.core.Type:
+                    return hydra.typing.TermSubst(hydra.lib.maps.from_list(single_ref_pairs()))
                 @lru_cache(1)
                 def body_subst() -> hydra.core.Type:
-                    return hydra.substitution.substitute_in_term(subst(), body())
+                    return hydra.substitution.substitute_in_term(body_only_subst(), body())
+                @lru_cache(1)
+                def cache_bindings() -> frozenlist[hydra.core.Binding]:
+                    return hydra.lib.lists.map((lambda p: hydra.core.Binding(hydra.lib.pairs.first(p), hydra.lib.pairs.second(p), Nothing())), multi_ref_pairs())
+                @lru_cache(1)
+                def body_with_cache() -> hydra.core.Type:
+                    return hydra.lib.logic.if_else(hydra.lib.lists.null(cache_bindings()), (lambda : body_subst()), (lambda : cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(cache_bindings(), body_subst())))))
                 @lru_cache(1)
                 def keep_us_subst() -> frozenlist[hydra.core.Binding]:
-                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(subst(), v1)), keep_us())
+                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(full_subst(), v1)), keep_us())
                 @lru_cache(1)
                 def hoisted_bindings_subst() -> frozenlist[hydra.core.Binding]:
-                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(subst(), v1)), hoisted_bindings())
+                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(full_subst(), v1)), hoisted_bindings())
                 @lru_cache(1)
                 def bindings_so_far_subst() -> frozenlist[hydra.core.Binding]:
-                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(subst(), v1)), bindings_so_far())
+                    return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(full_subst(), v1)), bindings_so_far())
                 @lru_cache(1)
                 def augment_result() -> tuple[frozenlist[hydra.core.Binding], hydra.typing.TermSubst]:
                     return augment_bindings_with_new_free_vars(cx, hydra.lib.sets.difference(bound_term_variables(), poly_let_variables()), bindings_so_far_subst())
@@ -286,7 +328,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                     return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(augment_subst(), v1)), bindings_so_far_augmented())
                 @lru_cache(1)
                 def body_final() -> hydra.core.Type:
-                    return hydra.substitution.substitute_in_term(augment_subst(), body_subst())
+                    return hydra.substitution.substitute_in_term(augment_subst(), body_with_cache())
                 @lru_cache(1)
                 def keep_us_final() -> frozenlist[hydra.core.Binding]:
                     return hydra.lib.lists.map((lambda v1: hydra.substitution.substitute_in_binding(augment_subst(), v1)), keep_us_subst())
