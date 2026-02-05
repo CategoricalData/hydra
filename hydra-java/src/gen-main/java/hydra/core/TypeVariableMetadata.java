@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Metadata associated with a type variable, including typeclass constraints
  */
-public class TypeVariableMetadata implements Serializable {
+public class TypeVariableMetadata implements Serializable, Comparable<TypeVariableMetadata> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeVariableMetadata");
   
   public static final hydra.core.Name FIELD_NAME_CLASSES = new hydra.core.Name("classes");
@@ -18,7 +18,6 @@ public class TypeVariableMetadata implements Serializable {
   public final java.util.Set<hydra.core.Name> classes;
   
   public TypeVariableMetadata (java.util.Set<hydra.core.Name> classes) {
-    java.util.Objects.requireNonNull((classes));
     this.classes = classes;
   }
   
@@ -28,11 +27,21 @@ public class TypeVariableMetadata implements Serializable {
       return false;
     }
     TypeVariableMetadata o = (TypeVariableMetadata) (other);
-    return classes.equals(o.classes);
+    return java.util.Objects.equals(
+      this.classes,
+      o.classes);
   }
   
   @Override
   public int hashCode() {
-    return 2 * classes.hashCode();
+    return 2 * java.util.Objects.hashCode(classes);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TypeVariableMetadata other) {
+    return Integer.compare(
+      classes.hashCode(),
+      other.classes.hashCode());
   }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A type expression together with free type variables occurring in the expression
  */
-public class TypeScheme implements Serializable {
+public class TypeScheme implements Serializable, Comparable<TypeScheme> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeScheme");
   
   public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
@@ -32,9 +32,6 @@ public class TypeScheme implements Serializable {
   public final hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints;
   
   public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type type, hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints) {
-    java.util.Objects.requireNonNull((variables));
-    java.util.Objects.requireNonNull((type));
-    java.util.Objects.requireNonNull((constraints));
     this.variables = variables;
     this.type = type;
     this.constraints = constraints;
@@ -46,26 +43,48 @@ public class TypeScheme implements Serializable {
       return false;
     }
     TypeScheme o = (TypeScheme) (other);
-    return variables.equals(o.variables) && type.equals(o.type) && constraints.equals(o.constraints);
+    return java.util.Objects.equals(
+      this.variables,
+      o.variables) && java.util.Objects.equals(
+      this.type,
+      o.type) && java.util.Objects.equals(
+      this.constraints,
+      o.constraints);
   }
   
   @Override
   public int hashCode() {
-    return 2 * variables.hashCode() + 3 * type.hashCode() + 5 * constraints.hashCode();
+    return 2 * java.util.Objects.hashCode(variables) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(constraints);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TypeScheme other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      variables.hashCode(),
+      other.variables.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (type)).compareTo(other.type);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      constraints.hashCode(),
+      other.constraints.hashCode());
   }
   
   public TypeScheme withVariables(java.util.List<hydra.core.Name> variables) {
-    java.util.Objects.requireNonNull((variables));
     return new TypeScheme(variables, type, constraints);
   }
   
   public TypeScheme withType(hydra.core.Type type) {
-    java.util.Objects.requireNonNull((type));
     return new TypeScheme(variables, type, constraints);
   }
   
   public TypeScheme withConstraints(hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints) {
-    java.util.Objects.requireNonNull((constraints));
     return new TypeScheme(variables, type, constraints);
   }
 }

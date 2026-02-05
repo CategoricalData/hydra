@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An error which occurred while parsing
  */
-public class ParseError implements Serializable {
+public class ParseError implements Serializable, Comparable<ParseError> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.parsing.ParseError");
   
   public static final hydra.core.Name FIELD_NAME_MESSAGE = new hydra.core.Name("message");
@@ -25,8 +25,6 @@ public class ParseError implements Serializable {
   public final String remainder;
   
   public ParseError (String message, String remainder) {
-    java.util.Objects.requireNonNull((message));
-    java.util.Objects.requireNonNull((remainder));
     this.message = message;
     this.remainder = remainder;
   }
@@ -37,21 +35,34 @@ public class ParseError implements Serializable {
       return false;
     }
     ParseError o = (ParseError) (other);
-    return message.equals(o.message) && remainder.equals(o.remainder);
+    return java.util.Objects.equals(
+      this.message,
+      o.message) && java.util.Objects.equals(
+      this.remainder,
+      o.remainder);
   }
   
   @Override
   public int hashCode() {
-    return 2 * message.hashCode() + 3 * remainder.hashCode();
+    return 2 * java.util.Objects.hashCode(message) + 3 * java.util.Objects.hashCode(remainder);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ParseError other) {
+    int cmp = 0;
+    cmp = ((Comparable) (message)).compareTo(other.message);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (remainder)).compareTo(other.remainder);
   }
   
   public ParseError withMessage(String message) {
-    java.util.Objects.requireNonNull((message));
     return new ParseError(message, remainder);
   }
   
   public ParseError withRemainder(String remainder) {
-    java.util.Objects.requireNonNull((remainder));
     return new ParseError(message, remainder);
   }
 }

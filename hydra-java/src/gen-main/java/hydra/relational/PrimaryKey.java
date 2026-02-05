@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A primary key of a relation, specified either as a single column, or as a list of columns
  */
-public class PrimaryKey implements Serializable {
+public class PrimaryKey implements Serializable, Comparable<PrimaryKey> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.PrimaryKey");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class PrimaryKey implements Serializable {
   public final java.util.List<hydra.relational.ColumnName> value;
   
   public PrimaryKey (java.util.List<hydra.relational.ColumnName> value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,21 @@ public class PrimaryKey implements Serializable {
       return false;
     }
     PrimaryKey o = (PrimaryKey) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(PrimaryKey other) {
+    return Integer.compare(
+      value.hashCode(),
+      other.value.hashCode());
   }
 }

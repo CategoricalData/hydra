@@ -47,16 +47,12 @@ public abstract class StarOrYieldItems implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Star)) {
-        return false;
-      }
-      Star o = (Star) (other);
-      return value.equals(o.value);
+      return other instanceof Star;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -79,12 +75,12 @@ public abstract class StarOrYieldItems implements Serializable {
         return false;
       }
       Items o = (Items) (other);
-      return value.equals(o.value);
+      return other instanceof StarOrYieldItems;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

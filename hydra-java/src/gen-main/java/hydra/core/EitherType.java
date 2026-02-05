@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A type which provides a choice between a 'left' type and a 'right' type
  */
-public class EitherType implements Serializable {
+public class EitherType implements Serializable, Comparable<EitherType> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.EitherType");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
@@ -25,8 +25,6 @@ public class EitherType implements Serializable {
   public final hydra.core.Type right;
   
   public EitherType (hydra.core.Type left, hydra.core.Type right) {
-    java.util.Objects.requireNonNull((left));
-    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,21 +35,34 @@ public class EitherType implements Serializable {
       return false;
     }
     EitherType o = (EitherType) (other);
-    return left.equals(o.left) && right.equals(o.right);
+    return java.util.Objects.equals(
+      this.left,
+      o.left) && java.util.Objects.equals(
+      this.right,
+      o.right);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode();
+    return 2 * java.util.Objects.hashCode(left) + 3 * java.util.Objects.hashCode(right);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EitherType other) {
+    int cmp = 0;
+    cmp = ((Comparable) (left)).compareTo(other.left);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (right)).compareTo(other.right);
   }
   
   public EitherType withLeft(hydra.core.Type left) {
-    java.util.Objects.requireNonNull((left));
     return new EitherType(left, right);
   }
   
   public EitherType withRight(hydra.core.Type right) {
-    java.util.Objects.requireNonNull((right));
     return new EitherType(left, right);
   }
 }

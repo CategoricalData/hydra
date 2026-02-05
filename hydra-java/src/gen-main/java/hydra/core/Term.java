@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A data term
  */
-public abstract class Term implements Serializable {
+public abstract class Term implements Serializable, Comparable<Term> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Term");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
@@ -175,7 +175,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.AnnotatedTerm value;
     
     public Annotated (hydra.core.AnnotatedTerm value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -185,12 +184,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Annotated o = (Annotated) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Annotated o = (Annotated) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -206,7 +218,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Application value;
     
     public Application (hydra.core.Application value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -216,12 +227,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Application o = (Application) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Application o = (Application) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -237,7 +261,6 @@ public abstract class Term implements Serializable {
     public final hydra.util.Either<hydra.core.Term, hydra.core.Term> value;
     
     public Either (hydra.util.Either<hydra.core.Term, hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -247,12 +270,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       Either o = (Either) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Either o = (Either) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -268,7 +306,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Function value;
     
     public Function (hydra.core.Function value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -278,12 +315,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Function o = (Function) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Function o = (Function) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -299,7 +349,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Let value;
     
     public Let (hydra.core.Let value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -309,12 +358,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Let o = (Let) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Let o = (Let) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -330,7 +392,6 @@ public abstract class Term implements Serializable {
     public final java.util.List<hydra.core.Term> value;
     
     public List (java.util.List<hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -340,12 +401,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       List o = (List) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      List o = (List) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -361,7 +437,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Literal value;
     
     public Literal (hydra.core.Literal value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -371,12 +446,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Literal o = (Literal) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Literal o = (Literal) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -392,7 +480,6 @@ public abstract class Term implements Serializable {
     public final java.util.Map<hydra.core.Term, hydra.core.Term> value;
     
     public Map (java.util.Map<hydra.core.Term, hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -402,12 +489,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       Map o = (Map) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Map o = (Map) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -423,7 +525,6 @@ public abstract class Term implements Serializable {
     public final hydra.util.Maybe<hydra.core.Term> value;
     
     public Maybe (hydra.util.Maybe<hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -433,12 +534,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       Maybe o = (Maybe) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Maybe o = (Maybe) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -454,7 +570,6 @@ public abstract class Term implements Serializable {
     public final hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value;
     
     public Pair (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -464,12 +579,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       Pair o = (Pair) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Pair o = (Pair) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -485,7 +615,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Record value;
     
     public Record (hydra.core.Record value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -495,12 +624,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Record o = (Record) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -516,7 +658,6 @@ public abstract class Term implements Serializable {
     public final java.util.Set<hydra.core.Term> value;
     
     public Set (java.util.Set<hydra.core.Term> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -526,12 +667,27 @@ public abstract class Term implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Set o = (Set) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -547,7 +703,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.TypeApplicationTerm value;
     
     public TypeApplication (hydra.core.TypeApplicationTerm value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -557,12 +712,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       TypeApplication o = (TypeApplication) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      TypeApplication o = (TypeApplication) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -578,7 +746,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.TypeLambda value;
     
     public TypeLambda (hydra.core.TypeLambda value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -588,12 +755,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       TypeLambda o = (TypeLambda) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      TypeLambda o = (TypeLambda) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -609,7 +789,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Injection value;
     
     public Union (hydra.core.Injection value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -619,12 +798,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Union o = (Union) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -637,11 +829,8 @@ public abstract class Term implements Serializable {
    * A unit value; a term with no value
    */
   public static final class Unit extends hydra.core.Term implements Serializable {
-    public final Boolean value;
+    public Unit () {
     
-    public Unit (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -650,12 +839,22 @@ public abstract class Term implements Serializable {
         return false;
       }
       Unit o = (Unit) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -671,7 +870,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -681,12 +879,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Variable o = (Variable) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Variable o = (Variable) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -702,7 +913,6 @@ public abstract class Term implements Serializable {
     public final hydra.core.WrappedTerm value;
     
     public Wrap (hydra.core.WrappedTerm value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -712,12 +922,25 @@ public abstract class Term implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Wrap o = (Wrap) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

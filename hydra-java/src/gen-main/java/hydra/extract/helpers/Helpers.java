@@ -159,7 +159,7 @@ public interface Helpers {
       })));
   }
   
-  static hydra.util.Either<hydra.util.DecodingError, Boolean> decodeUnit(hydra.graph.Graph g, hydra.core.Term term) {
+  static hydra.util.Either<hydra.util.DecodingError, java.lang.Void> decodeUnit(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
         (java.util.function.Function<String, hydra.util.DecodingError>) (x -> new hydra.util.DecodingError((x))),
@@ -167,15 +167,15 @@ public interface Helpers {
         hydra.lexical.Lexical.stripAndDereferenceTermEither(
           (g),
           (term))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, Boolean>>) (stripped -> ((stripped)).accept(new hydra.core.Term.PartialVisitor<>() {
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, java.lang.Void>>) (stripped -> ((stripped)).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Either<hydra.util.DecodingError, Boolean> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.util.DecodingError, Boolean>) ((hydra.util.Either<hydra.util.DecodingError, Boolean>) (hydra.util.Either.<hydra.util.DecodingError, Boolean>left(new hydra.util.DecodingError("expected a unit value"))));
+        public hydra.util.Either<hydra.util.DecodingError, java.lang.Void> otherwise(hydra.core.Term instance) {
+          return (hydra.util.Either<hydra.util.DecodingError, java.lang.Void>) ((hydra.util.Either<hydra.util.DecodingError, java.lang.Void>) (hydra.util.Either.<hydra.util.DecodingError, java.lang.Void>left(new hydra.util.DecodingError("expected a unit value"))));
         }
         
         @Override
-        public hydra.util.Either<hydra.util.DecodingError, Boolean> visit(hydra.core.Term.Unit ignored) {
-          return (hydra.util.Either<hydra.util.DecodingError, Boolean>) ((hydra.util.Either<hydra.util.DecodingError, Boolean>) (hydra.util.Either.<hydra.util.DecodingError, Boolean>right(true)));
+        public hydra.util.Either<hydra.util.DecodingError, java.lang.Void> visit(hydra.core.Term.Unit ignored) {
+          return (hydra.util.Either<hydra.util.DecodingError, java.lang.Void>) ((hydra.util.Either<hydra.util.DecodingError, java.lang.Void>) (hydra.util.Either.<hydra.util.DecodingError, java.lang.Void>right(null)));
         }
       })));
   }

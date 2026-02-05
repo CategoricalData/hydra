@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
  */
-public class TestCaseWithMetadata implements Serializable {
+public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWithMetadata> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCaseWithMetadata");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -39,10 +39,6 @@ public class TestCaseWithMetadata implements Serializable {
   public final java.util.List<hydra.testing.Tag> tags;
   
   public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, hydra.util.Maybe<String> description, java.util.List<hydra.testing.Tag> tags) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((case_));
-    java.util.Objects.requireNonNull((description));
-    java.util.Objects.requireNonNull((tags));
     this.name = name;
     this.case_ = case_;
     this.description = description;
@@ -55,31 +51,58 @@ public class TestCaseWithMetadata implements Serializable {
       return false;
     }
     TestCaseWithMetadata o = (TestCaseWithMetadata) (other);
-    return name.equals(o.name) && case_.equals(o.case_) && description.equals(o.description) && tags.equals(o.tags);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.case_,
+      o.case_) && java.util.Objects.equals(
+      this.description,
+      o.description) && java.util.Objects.equals(
+      this.tags,
+      o.tags);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * case_.hashCode() + 5 * description.hashCode() + 7 * tags.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(case_) + 5 * java.util.Objects.hashCode(description) + 7 * java.util.Objects.hashCode(tags);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TestCaseWithMetadata other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (case_)).compareTo(other.case_);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      description.hashCode(),
+      other.description.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      tags.hashCode(),
+      other.tags.hashCode());
   }
   
   public TestCaseWithMetadata withName(String name) {
-    java.util.Objects.requireNonNull((name));
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
   
   public TestCaseWithMetadata withCase(hydra.testing.TestCase case_) {
-    java.util.Objects.requireNonNull((case_));
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
   
   public TestCaseWithMetadata withDescription(hydra.util.Maybe<String> description) {
-    java.util.Objects.requireNonNull((description));
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
   
   public TestCaseWithMetadata withTags(java.util.List<hydra.testing.Tag> tags) {
-    java.util.Objects.requireNonNull((tags));
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
 }

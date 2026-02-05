@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The identifier of a literal constructor
  */
-public abstract class LiteralVariant implements Serializable {
+public abstract class LiteralVariant implements Serializable, Comparable<LiteralVariant> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.LiteralVariant");
   
   public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
@@ -65,11 +65,8 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Binary extends hydra.variants.LiteralVariant implements Serializable {
-    public final Boolean value;
+    public Binary () {
     
-    public Binary (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -78,12 +75,22 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Binary o = (Binary) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -93,11 +100,8 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Boolean_ extends hydra.variants.LiteralVariant implements Serializable {
-    public final Boolean value;
+    public Boolean_ () {
     
-    public Boolean_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -106,12 +110,22 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -121,11 +135,8 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Float_ extends hydra.variants.LiteralVariant implements Serializable {
-    public final Boolean value;
+    public Float_ () {
     
-    public Float_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -134,12 +145,22 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Float_ o = (Float_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -149,11 +170,8 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class Integer_ extends hydra.variants.LiteralVariant implements Serializable {
-    public final Boolean value;
+    public Integer_ () {
     
-    public Integer_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -162,12 +180,22 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       Integer_ o = (Integer_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -177,11 +205,8 @@ public abstract class LiteralVariant implements Serializable {
   }
   
   public static final class String_ extends hydra.variants.LiteralVariant implements Serializable {
-    public final Boolean value;
+    public String_ () {
     
-    public String_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -190,12 +215,22 @@ public abstract class LiteralVariant implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

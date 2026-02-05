@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Operator precedence
  */
-public class Precedence implements Serializable {
+public class Precedence implements Serializable, Comparable<Precedence> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Precedence");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class Precedence implements Serializable {
   public final Integer value;
   
   public Precedence (Integer value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,19 @@ public class Precedence implements Serializable {
       return false;
     }
     Precedence o = (Precedence) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Precedence other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

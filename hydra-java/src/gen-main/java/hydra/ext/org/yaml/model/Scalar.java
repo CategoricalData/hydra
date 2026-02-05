@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
-public abstract class Scalar implements Serializable {
+public abstract class Scalar implements Serializable, Comparable<Scalar> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.yaml.model.Scalar");
   
   public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
@@ -71,7 +71,6 @@ public abstract class Scalar implements Serializable {
     public final Boolean value;
     
     public Bool (Boolean value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -81,12 +80,25 @@ public abstract class Scalar implements Serializable {
         return false;
       }
       Bool o = (Bool) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Scalar other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Bool o = (Bool) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -102,7 +114,6 @@ public abstract class Scalar implements Serializable {
     public final java.math.BigDecimal value;
     
     public Float_ (java.math.BigDecimal value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -112,12 +123,23 @@ public abstract class Scalar implements Serializable {
         return false;
       }
       Float_ o = (Float_) (other);
-      return value.equals(o.value);
+      return this.value.compareTo(o.value) == 0;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Scalar other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Float_ o = (Float_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -133,7 +155,6 @@ public abstract class Scalar implements Serializable {
     public final java.math.BigInteger value;
     
     public Int (java.math.BigInteger value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -143,12 +164,23 @@ public abstract class Scalar implements Serializable {
         return false;
       }
       Int o = (Int) (other);
-      return value.equals(o.value);
+      return this.value.compareTo(o.value) == 0;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Scalar other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Int o = (Int) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -161,11 +193,8 @@ public abstract class Scalar implements Serializable {
    * Represents the lack of a value
    */
   public static final class Null extends hydra.ext.org.yaml.model.Scalar implements Serializable {
-    public final Boolean value;
+    public Null () {
     
-    public Null (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -174,12 +203,22 @@ public abstract class Scalar implements Serializable {
         return false;
       }
       Null o = (Null) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Scalar other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -195,7 +234,6 @@ public abstract class Scalar implements Serializable {
     public final String value;
     
     public Str (String value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -205,12 +243,25 @@ public abstract class Scalar implements Serializable {
         return false;
       }
       Str o = (Str) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Scalar other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Str o = (Str) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which normalizes type variables in a term (renaming them to t0, t1, t2, etc.) and compares the result with the expected term
  */
-public class NormalizeTypeVariablesTestCase implements Serializable {
+public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<NormalizeTypeVariablesTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.NormalizeTypeVariablesTestCase");
   
   public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
@@ -25,8 +25,6 @@ public class NormalizeTypeVariablesTestCase implements Serializable {
   public final hydra.core.Term output;
   
   public NormalizeTypeVariablesTestCase (hydra.core.Term input, hydra.core.Term output) {
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((output));
     this.input = input;
     this.output = output;
   }
@@ -37,21 +35,34 @@ public class NormalizeTypeVariablesTestCase implements Serializable {
       return false;
     }
     NormalizeTypeVariablesTestCase o = (NormalizeTypeVariablesTestCase) (other);
-    return input.equals(o.input) && output.equals(o.output);
+    return java.util.Objects.equals(
+      this.input,
+      o.input) && java.util.Objects.equals(
+      this.output,
+      o.output);
   }
   
   @Override
   public int hashCode() {
-    return 2 * input.hashCode() + 3 * output.hashCode();
+    return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(NormalizeTypeVariablesTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (input)).compareTo(other.input);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (output)).compareTo(other.output);
   }
   
   public NormalizeTypeVariablesTestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
     return new NormalizeTypeVariablesTestCase(input, output);
   }
   
   public NormalizeTypeVariablesTestCase withOutput(hydra.core.Term output) {
-    java.util.Objects.requireNonNull((output));
     return new NormalizeTypeVariablesTestCase(input, output);
   }
 }

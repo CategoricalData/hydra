@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A graph of accessor nodes and edges, representing term access patterns
  */
-public class AccessorGraph implements Serializable {
+public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorGraph");
   
   public static final hydra.core.Name FIELD_NAME_NODES = new hydra.core.Name("nodes");
@@ -25,8 +25,6 @@ public class AccessorGraph implements Serializable {
   public final java.util.List<hydra.accessors.AccessorEdge> edges;
   
   public AccessorGraph (java.util.List<hydra.accessors.AccessorNode> nodes, java.util.List<hydra.accessors.AccessorEdge> edges) {
-    java.util.Objects.requireNonNull((nodes));
-    java.util.Objects.requireNonNull((edges));
     this.nodes = nodes;
     this.edges = edges;
   }
@@ -37,21 +35,38 @@ public class AccessorGraph implements Serializable {
       return false;
     }
     AccessorGraph o = (AccessorGraph) (other);
-    return nodes.equals(o.nodes) && edges.equals(o.edges);
+    return java.util.Objects.equals(
+      this.nodes,
+      o.nodes) && java.util.Objects.equals(
+      this.edges,
+      o.edges);
   }
   
   @Override
   public int hashCode() {
-    return 2 * nodes.hashCode() + 3 * edges.hashCode();
+    return 2 * java.util.Objects.hashCode(nodes) + 3 * java.util.Objects.hashCode(edges);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AccessorGraph other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      nodes.hashCode(),
+      other.nodes.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      edges.hashCode(),
+      other.edges.hashCode());
   }
   
   public AccessorGraph withNodes(java.util.List<hydra.accessors.AccessorNode> nodes) {
-    java.util.Objects.requireNonNull((nodes));
     return new AccessorGraph(nodes, edges);
   }
   
   public AccessorGraph withEdges(java.util.List<hydra.accessors.AccessorEdge> edges) {
-    java.util.Objects.requireNonNull((edges));
     return new AccessorGraph(nodes, edges);
   }
 }

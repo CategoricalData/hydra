@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A function which maps from a term to a particular immediate subterm
  */
-public abstract class TermAccessor implements Serializable {
+public abstract class TermAccessor implements Serializable, Comparable<TermAccessor> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.TermAccessor");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED_BODY = new hydra.core.Name("annotatedBody");
@@ -188,11 +188,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the body of an annotated term
    */
   public static final class AnnotatedBody extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public AnnotatedBody () {
     
-    public AnnotatedBody (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -201,12 +198,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       AnnotatedBody o = (AnnotatedBody) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -219,11 +226,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the function of an application term
    */
   public static final class ApplicationFunction extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public ApplicationFunction () {
     
-    public ApplicationFunction (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -232,12 +236,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       ApplicationFunction o = (ApplicationFunction) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -250,11 +264,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the argument of an application term
    */
   public static final class ApplicationArgument extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public ApplicationArgument () {
     
-    public ApplicationArgument (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -263,12 +274,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       ApplicationArgument o = (ApplicationArgument) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -281,11 +302,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the body of a lambda term
    */
   public static final class LambdaBody extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public LambdaBody () {
     
-    public LambdaBody (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -294,12 +312,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       LambdaBody o = (LambdaBody) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -312,11 +340,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the default case of a union elimination
    */
   public static final class UnionCasesDefault extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public UnionCasesDefault () {
     
-    public UnionCasesDefault (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -325,12 +350,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       UnionCasesDefault o = (UnionCasesDefault) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -346,7 +381,6 @@ public abstract class TermAccessor implements Serializable {
     public final hydra.core.Name value;
     
     public UnionCasesBranch (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -356,12 +390,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       UnionCasesBranch o = (UnionCasesBranch) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      UnionCasesBranch o = (UnionCasesBranch) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -374,11 +421,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the body of a let term
    */
   public static final class LetBody extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public LetBody () {
     
-    public LetBody (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -387,12 +431,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       LetBody o = (LetBody) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -408,7 +462,6 @@ public abstract class TermAccessor implements Serializable {
     public final hydra.core.Name value;
     
     public LetBinding (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -418,12 +471,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       LetBinding o = (LetBinding) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      LetBinding o = (LetBinding) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -439,7 +505,6 @@ public abstract class TermAccessor implements Serializable {
     public final Integer value;
     
     public ListElement (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -449,12 +514,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       ListElement o = (ListElement) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      ListElement o = (ListElement) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -470,7 +548,6 @@ public abstract class TermAccessor implements Serializable {
     public final Integer value;
     
     public MapKey (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -480,12 +557,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       MapKey o = (MapKey) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      MapKey o = (MapKey) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -501,7 +591,6 @@ public abstract class TermAccessor implements Serializable {
     public final Integer value;
     
     public MapValue (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -511,12 +600,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       MapValue o = (MapValue) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      MapValue o = (MapValue) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -529,11 +631,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the term inside a Just value
    */
   public static final class MaybeTerm extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public MaybeTerm () {
     
-    public MaybeTerm (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -542,12 +641,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       MaybeTerm o = (MaybeTerm) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -563,7 +672,6 @@ public abstract class TermAccessor implements Serializable {
     public final Integer value;
     
     public ProductTerm (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -573,12 +681,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       ProductTerm o = (ProductTerm) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      ProductTerm o = (ProductTerm) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -594,7 +715,6 @@ public abstract class TermAccessor implements Serializable {
     public final hydra.core.Name value;
     
     public RecordField (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -604,12 +724,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       RecordField o = (RecordField) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      RecordField o = (RecordField) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -625,7 +758,6 @@ public abstract class TermAccessor implements Serializable {
     public final Integer value;
     
     public SetElement (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -635,12 +767,25 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       SetElement o = (SetElement) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SetElement o = (SetElement) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -653,11 +798,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the term inside a sum variant
    */
   public static final class SumTerm extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public SumTerm () {
     
-    public SumTerm (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -666,12 +808,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       SumTerm o = (SumTerm) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -684,11 +836,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the body of a type lambda term
    */
   public static final class TypeLambdaBody extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public TypeLambdaBody () {
     
-    public TypeLambdaBody (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -697,12 +846,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       TypeLambdaBody o = (TypeLambdaBody) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -715,11 +874,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the term being applied to a type
    */
   public static final class TypeApplicationTerm extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public TypeApplicationTerm () {
     
-    public TypeApplicationTerm (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -728,12 +884,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       TypeApplicationTerm o = (TypeApplicationTerm) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -746,11 +912,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the term inside a union injection
    */
   public static final class InjectionTerm extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public InjectionTerm () {
     
-    public InjectionTerm (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -759,12 +922,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       InjectionTerm o = (InjectionTerm) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -777,11 +950,8 @@ public abstract class TermAccessor implements Serializable {
    * Access the term inside a wrapped term
    */
   public static final class WrappedTerm extends hydra.accessors.TermAccessor implements Serializable {
-    public final Boolean value;
+    public WrappedTerm () {
     
-    public WrappedTerm (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -790,12 +960,22 @@ public abstract class TermAccessor implements Serializable {
         return false;
       }
       WrappedTerm o = (WrappedTerm) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermAccessor other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

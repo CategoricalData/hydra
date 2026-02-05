@@ -2,10 +2,12 @@
 
 package hydra.relational;
 
+import java.io.Serializable;
+
 /**
  * An abstract specification of the domain represented by a column in a relation; a role
  */
-public class ColumnSchema<T> {
+public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.ColumnSchema");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -23,8 +25,6 @@ public class ColumnSchema<T> {
   public final T domain;
   
   public ColumnSchema (hydra.relational.ColumnName name, T domain) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((domain));
     this.name = name;
     this.domain = domain;
   }
@@ -35,21 +35,34 @@ public class ColumnSchema<T> {
       return false;
     }
     ColumnSchema o = (ColumnSchema) (other);
-    return name.equals(o.name) && domain.equals(o.domain);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.domain,
+      o.domain);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * domain.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(domain);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ColumnSchema other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (domain)).compareTo(other.domain);
   }
   
   public ColumnSchema withName(hydra.relational.ColumnName name) {
-    java.util.Objects.requireNonNull((name));
     return new ColumnSchema(name, domain);
   }
   
   public ColumnSchema withDomain(T domain) {
-    java.util.Objects.requireNonNull((domain));
     return new ColumnSchema(name, domain);
   }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which applies a fold operation over a term and compares the result
  */
-public class FoldOverTermTestCase implements Serializable {
+public class FoldOverTermTestCase implements Serializable, Comparable<FoldOverTermTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.FoldOverTermTestCase");
   
   public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
@@ -39,10 +39,6 @@ public class FoldOverTermTestCase implements Serializable {
   public final hydra.core.Term output;
   
   public FoldOverTermTestCase (hydra.core.Term input, hydra.coders.TraversalOrder traversalOrder, hydra.testing.FoldOperation operation, hydra.core.Term output) {
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((traversalOrder));
-    java.util.Objects.requireNonNull((operation));
-    java.util.Objects.requireNonNull((output));
     this.input = input;
     this.traversalOrder = traversalOrder;
     this.operation = operation;
@@ -55,31 +51,54 @@ public class FoldOverTermTestCase implements Serializable {
       return false;
     }
     FoldOverTermTestCase o = (FoldOverTermTestCase) (other);
-    return input.equals(o.input) && traversalOrder.equals(o.traversalOrder) && operation.equals(o.operation) && output.equals(o.output);
+    return java.util.Objects.equals(
+      this.input,
+      o.input) && java.util.Objects.equals(
+      this.traversalOrder,
+      o.traversalOrder) && java.util.Objects.equals(
+      this.operation,
+      o.operation) && java.util.Objects.equals(
+      this.output,
+      o.output);
   }
   
   @Override
   public int hashCode() {
-    return 2 * input.hashCode() + 3 * traversalOrder.hashCode() + 5 * operation.hashCode() + 7 * output.hashCode();
+    return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(traversalOrder) + 5 * java.util.Objects.hashCode(operation) + 7 * java.util.Objects.hashCode(output);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(FoldOverTermTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (input)).compareTo(other.input);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (traversalOrder)).compareTo(other.traversalOrder);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (operation)).compareTo(other.operation);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (output)).compareTo(other.output);
   }
   
   public FoldOverTermTestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
     return new FoldOverTermTestCase(input, traversalOrder, operation, output);
   }
   
   public FoldOverTermTestCase withTraversalOrder(hydra.coders.TraversalOrder traversalOrder) {
-    java.util.Objects.requireNonNull((traversalOrder));
     return new FoldOverTermTestCase(input, traversalOrder, operation, output);
   }
   
   public FoldOverTermTestCase withOperation(hydra.testing.FoldOperation operation) {
-    java.util.Objects.requireNonNull((operation));
     return new FoldOverTermTestCase(input, traversalOrder, operation, output);
   }
   
   public FoldOverTermTestCase withOutput(hydra.core.Term output) {
-    java.util.Objects.requireNonNull((output));
     return new FoldOverTermTestCase(input, traversalOrder, operation, output);
   }
 }

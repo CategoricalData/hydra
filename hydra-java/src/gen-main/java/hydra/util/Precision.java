@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Numeric precision: arbitrary precision, or precision to a specified number of bits
  */
-public abstract class Precision implements Serializable {
+public abstract class Precision implements Serializable, Comparable<Precision> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.Precision");
   
   public static final hydra.core.Name FIELD_NAME_ARBITRARY = new hydra.core.Name("arbitrary");
@@ -44,11 +44,8 @@ public abstract class Precision implements Serializable {
    * Arbitrary precision
    */
   public static final class Arbitrary extends hydra.util.Precision implements Serializable {
-    public final Boolean value;
+    public Arbitrary () {
     
-    public Arbitrary (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -57,12 +54,22 @@ public abstract class Precision implements Serializable {
         return false;
       }
       Arbitrary o = (Arbitrary) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Precision other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -78,7 +85,6 @@ public abstract class Precision implements Serializable {
     public final Integer value;
     
     public Bits (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,12 +94,25 @@ public abstract class Precision implements Serializable {
         return false;
       }
       Bits o = (Bits) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Precision other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Bits o = (Bits) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A path with a regex quantifier
  */
-public class RegexSequence implements Serializable {
+public class RegexSequence implements Serializable, Comparable<RegexSequence> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexSequence");
   
   public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
@@ -25,8 +25,6 @@ public class RegexSequence implements Serializable {
   public final hydra.query.RegexQuantifier quantifier;
   
   public RegexSequence (hydra.query.Path path, hydra.query.RegexQuantifier quantifier) {
-    java.util.Objects.requireNonNull((path));
-    java.util.Objects.requireNonNull((quantifier));
     this.path = path;
     this.quantifier = quantifier;
   }
@@ -37,21 +35,34 @@ public class RegexSequence implements Serializable {
       return false;
     }
     RegexSequence o = (RegexSequence) (other);
-    return path.equals(o.path) && quantifier.equals(o.quantifier);
+    return java.util.Objects.equals(
+      this.path,
+      o.path) && java.util.Objects.equals(
+      this.quantifier,
+      o.quantifier);
   }
   
   @Override
   public int hashCode() {
-    return 2 * path.hashCode() + 3 * quantifier.hashCode();
+    return 2 * java.util.Objects.hashCode(path) + 3 * java.util.Objects.hashCode(quantifier);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(RegexSequence other) {
+    int cmp = 0;
+    cmp = ((Comparable) (path)).compareTo(other.path);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (quantifier)).compareTo(other.quantifier);
   }
   
   public RegexSequence withPath(hydra.query.Path path) {
-    java.util.Objects.requireNonNull((path));
     return new RegexSequence(path, quantifier);
   }
   
   public RegexSequence withQuantifier(hydra.query.RegexQuantifier quantifier) {
-    java.util.Objects.requireNonNull((quantifier));
     return new RegexSequence(path, quantifier);
   }
 }

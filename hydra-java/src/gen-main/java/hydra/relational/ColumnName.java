@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
  */
-public class ColumnName implements Serializable {
+public class ColumnName implements Serializable, Comparable<ColumnName> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.ColumnName");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class ColumnName implements Serializable {
   public final String value;
   
   public ColumnName (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,19 @@ public class ColumnName implements Serializable {
       return false;
     }
     ColumnName o = (ColumnName) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ColumnName other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

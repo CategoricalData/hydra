@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A corresponding elimination for an introduction term
  */
-public abstract class Elimination implements Serializable {
+public abstract class Elimination implements Serializable, Comparable<Elimination> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Elimination");
   
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
@@ -55,7 +55,6 @@ public abstract class Elimination implements Serializable {
     public final hydra.core.Projection value;
     
     public Record (hydra.core.Projection value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -65,12 +64,25 @@ public abstract class Elimination implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Elimination other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Record o = (Record) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -86,7 +98,6 @@ public abstract class Elimination implements Serializable {
     public final hydra.core.CaseStatement value;
     
     public Union (hydra.core.CaseStatement value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -96,12 +107,25 @@ public abstract class Elimination implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Elimination other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Union o = (Union) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -117,7 +141,6 @@ public abstract class Elimination implements Serializable {
     public final hydra.core.Name value;
     
     public Wrap (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,12 +150,25 @@ public abstract class Elimination implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Elimination other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Wrap o = (Wrap) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

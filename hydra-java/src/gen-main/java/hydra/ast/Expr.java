@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An abstract expression
  */
-public abstract class Expr implements Serializable {
+public abstract class Expr implements Serializable, Comparable<Expr> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Expr");
   
   public static final hydra.core.Name FIELD_NAME_CONST = new hydra.core.Name("const");
@@ -63,7 +63,6 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.Symbol value;
     
     public Const (hydra.ast.Symbol value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -73,12 +72,25 @@ public abstract class Expr implements Serializable {
         return false;
       }
       Const o = (Const) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expr other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Const o = (Const) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -94,7 +106,6 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.IndentedExpression value;
     
     public Indent (hydra.ast.IndentedExpression value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -104,12 +115,25 @@ public abstract class Expr implements Serializable {
         return false;
       }
       Indent o = (Indent) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expr other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Indent o = (Indent) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -125,7 +149,6 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.OpExpr value;
     
     public Op (hydra.ast.OpExpr value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -135,12 +158,25 @@ public abstract class Expr implements Serializable {
         return false;
       }
       Op o = (Op) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expr other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Op o = (Op) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -156,7 +192,6 @@ public abstract class Expr implements Serializable {
     public final hydra.ast.BracketExpr value;
     
     public Brackets (hydra.ast.BracketExpr value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -166,12 +201,25 @@ public abstract class Expr implements Serializable {
         return false;
       }
       Brackets o = (Brackets) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expr other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Brackets o = (Brackets) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

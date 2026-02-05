@@ -2,10 +2,12 @@
 
 package hydra.parsing;
 
+import java.io.Serializable;
+
 /**
  * The result of a parse operation
  */
-public abstract class ParseResult<A> {
+public abstract class ParseResult<A> implements Serializable, Comparable<ParseResult<A>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.parsing.ParseResult");
   
   public static final hydra.core.Name FIELD_NAME_SUCCESS = new hydra.core.Name("success");
@@ -41,11 +43,10 @@ public abstract class ParseResult<A> {
   /**
    * A successful parse, with a value and the remaining unparsed input
    */
-  public static final class Success<A> extends hydra.parsing.ParseResult<A> {
+  public static final class Success<A> extends hydra.parsing.ParseResult<A> implements Serializable {
     public final hydra.parsing.ParseSuccess<A> value;
     
     public Success (hydra.parsing.ParseSuccess<A> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -55,12 +56,25 @@ public abstract class ParseResult<A> {
         return false;
       }
       Success o = (Success) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ParseResult other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Success o = (Success) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -72,11 +86,10 @@ public abstract class ParseResult<A> {
   /**
    * A failed parse, with an error message and the remaining input
    */
-  public static final class Failure<A> extends hydra.parsing.ParseResult<A> {
+  public static final class Failure<A> extends hydra.parsing.ParseResult<A> implements Serializable {
     public final hydra.parsing.ParseError value;
     
     public Failure (hydra.parsing.ParseError value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -86,12 +99,25 @@ public abstract class ParseResult<A> {
         return false;
       }
       Failure o = (Failure) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ParseResult other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Failure o = (Failure) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A type definition for a table, including column names and types
  */
-public class TableType implements Serializable {
+public class TableType implements Serializable, Comparable<TableType> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.tabular.TableType");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -19,8 +19,6 @@ public class TableType implements Serializable {
   public final java.util.List<hydra.tabular.ColumnType> columns;
   
   public TableType (hydra.relational.RelationName name, java.util.List<hydra.tabular.ColumnType> columns) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((columns));
     this.name = name;
     this.columns = columns;
   }
@@ -31,21 +29,36 @@ public class TableType implements Serializable {
       return false;
     }
     TableType o = (TableType) (other);
-    return name.equals(o.name) && columns.equals(o.columns);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.columns,
+      o.columns);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * columns.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(columns);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TableType other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      columns.hashCode(),
+      other.columns.hashCode());
   }
   
   public TableType withName(hydra.relational.RelationName name) {
-    java.util.Objects.requireNonNull((name));
     return new TableType(name, columns);
   }
   
   public TableType withColumns(java.util.List<hydra.tabular.ColumnType> columns) {
-    java.util.Objects.requireNonNull((columns));
     return new TableType(name, columns);
   }
 }

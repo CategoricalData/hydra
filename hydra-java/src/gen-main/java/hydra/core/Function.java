@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A function
  */
-public abstract class Function implements Serializable {
+public abstract class Function implements Serializable, Comparable<Function> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Function");
   
   public static final hydra.core.Name FIELD_NAME_ELIMINATION = new hydra.core.Name("elimination");
@@ -55,7 +55,6 @@ public abstract class Function implements Serializable {
     public final hydra.core.Elimination value;
     
     public Elimination (hydra.core.Elimination value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -65,12 +64,25 @@ public abstract class Function implements Serializable {
         return false;
       }
       Elimination o = (Elimination) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Function other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Elimination o = (Elimination) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -86,7 +98,6 @@ public abstract class Function implements Serializable {
     public final hydra.core.Lambda value;
     
     public Lambda (hydra.core.Lambda value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -96,12 +107,25 @@ public abstract class Function implements Serializable {
         return false;
       }
       Lambda o = (Lambda) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Function other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Lambda o = (Lambda) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -117,7 +141,6 @@ public abstract class Function implements Serializable {
     public final hydra.core.Name value;
     
     public Primitive (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,12 +150,25 @@ public abstract class Function implements Serializable {
         return false;
       }
       Primitive o = (Primitive) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Function other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Primitive o = (Primitive) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

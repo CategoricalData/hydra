@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Matching open and close bracket symbols
  */
-public class Brackets implements Serializable {
+public class Brackets implements Serializable, Comparable<Brackets> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Brackets");
   
   public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
@@ -25,8 +25,6 @@ public class Brackets implements Serializable {
   public final hydra.ast.Symbol close;
   
   public Brackets (hydra.ast.Symbol open, hydra.ast.Symbol close) {
-    java.util.Objects.requireNonNull((open));
-    java.util.Objects.requireNonNull((close));
     this.open = open;
     this.close = close;
   }
@@ -37,21 +35,34 @@ public class Brackets implements Serializable {
       return false;
     }
     Brackets o = (Brackets) (other);
-    return open.equals(o.open) && close.equals(o.close);
+    return java.util.Objects.equals(
+      this.open,
+      o.open) && java.util.Objects.equals(
+      this.close,
+      o.close);
   }
   
   @Override
   public int hashCode() {
-    return 2 * open.hashCode() + 3 * close.hashCode();
+    return 2 * java.util.Objects.hashCode(open) + 3 * java.util.Objects.hashCode(close);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Brackets other) {
+    int cmp = 0;
+    cmp = ((Comparable) (open)).compareTo(other.open);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (close)).compareTo(other.close);
   }
   
   public Brackets withOpen(hydra.ast.Symbol open) {
-    java.util.Objects.requireNonNull((open));
     return new Brackets(open, close);
   }
   
   public Brackets withClose(hydra.ast.Symbol close) {
-    java.util.Objects.requireNonNull((close));
     return new Brackets(open, close);
   }
 }

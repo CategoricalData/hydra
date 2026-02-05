@@ -40,27 +40,27 @@ public interface Accessors {
     return ((v1)).accept(new hydra.accessors.TermAccessor.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.AnnotatedBody y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("annotatedBody"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("annotatedBody"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.ApplicationFunction y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("applicationFunction"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("applicationFunction"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.ApplicationArgument y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("applicationArgument"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("applicationArgument"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.LambdaBody y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("lambdaBody"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("lambdaBody"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.UnionCasesDefault y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("unionCasesDefault"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("unionCasesDefault"), new hydra.core.Term.Unit())));
       }
       
       @Override
@@ -70,7 +70,7 @@ public interface Accessors {
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.LetBody y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("letBody"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("letBody"), new hydra.core.Term.Unit())));
       }
       
       @Override
@@ -95,7 +95,7 @@ public interface Accessors {
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.MaybeTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("maybeTerm"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("maybeTerm"), new hydra.core.Term.Unit())));
       }
       
       @Override
@@ -115,27 +115,27 @@ public interface Accessors {
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.SumTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("sumTerm"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("sumTerm"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.TypeLambdaBody y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("typeLambdaBody"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("typeLambdaBody"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.TypeApplicationTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("typeApplicationTerm"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("typeApplicationTerm"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.InjectionTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("injectionTerm"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("injectionTerm"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.accessors.TermAccessor.WrappedTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("wrappedTerm"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.accessors.TermAccessor"), new hydra.core.Field(new hydra.core.Name("wrappedTerm"), new hydra.core.Term.Unit())));
       }
     });
   }

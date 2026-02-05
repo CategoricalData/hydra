@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Indicates either the 'out' or the 'in' direction of a coder
  */
-public abstract class CoderDirection implements Serializable {
+public abstract class CoderDirection implements Serializable, Comparable<CoderDirection> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.CoderDirection");
   
   public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
@@ -41,11 +41,8 @@ public abstract class CoderDirection implements Serializable {
   }
   
   public static final class Encode extends hydra.coders.CoderDirection implements Serializable {
-    public final Boolean value;
+    public Encode () {
     
-    public Encode (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -54,12 +51,22 @@ public abstract class CoderDirection implements Serializable {
         return false;
       }
       Encode o = (Encode) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(CoderDirection other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -69,11 +76,8 @@ public abstract class CoderDirection implements Serializable {
   }
   
   public static final class Decode extends hydra.coders.CoderDirection implements Serializable {
-    public final Boolean value;
+    public Decode () {
     
-    public Decode (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -82,12 +86,22 @@ public abstract class CoderDirection implements Serializable {
         return false;
       }
       Decode o = (Decode) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(CoderDirection other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

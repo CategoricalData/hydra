@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A header row, containing column names (but no types or data)
  */
-public class HeaderRow implements Serializable {
+public class HeaderRow implements Serializable, Comparable<HeaderRow> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.tabular.HeaderRow");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class HeaderRow implements Serializable {
   public final java.util.List<String> value;
   
   public HeaderRow (java.util.List<String> value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,21 @@ public class HeaderRow implements Serializable {
       return false;
     }
     HeaderRow o = (HeaderRow) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(HeaderRow other) {
+    return Integer.compare(
+      value.hashCode(),
+      other.value.hashCode());
   }
 }

@@ -21,27 +21,27 @@ public interface Util {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>(new hydra.core.Name("camel"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.Camel((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.Camel()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>(new hydra.core.Name("pascal"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.Pascal((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.Pascal()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>(new hydra.core.Name("lowerSnake"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.LowerSnake((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.LowerSnake()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>>(new hydra.core.Name("upperSnake"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.UpperSnake((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.CaseConvention>) (t -> new hydra.util.CaseConvention.UpperSnake()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>) ((hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>) (hydra.util.Either.<hydra.util.DecodingError, hydra.util.CaseConvention>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -51,7 +51,7 @@ public interface Util {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>, hydra.util.Either<hydra.util.DecodingError, hydra.util.CaseConvention>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -74,22 +74,22 @@ public interface Util {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>(new hydra.core.Name("lessThan"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.Comparison>) (t -> new hydra.util.Comparison.LessThan((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.Comparison>) (t -> new hydra.util.Comparison.LessThan()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>(new hydra.core.Name("equalTo"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.Comparison>) (t -> new hydra.util.Comparison.EqualTo((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.Comparison>) (t -> new hydra.util.Comparison.EqualTo()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>>(new hydra.core.Name("greaterThan"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.Comparison>) (t -> new hydra.util.Comparison.GreaterThan((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.Comparison>) (t -> new hydra.util.Comparison.GreaterThan()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>) ((hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>) (hydra.util.Either.<hydra.util.DecodingError, hydra.util.Comparison>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -99,7 +99,7 @@ public interface Util {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>, hydra.util.Either<hydra.util.DecodingError, hydra.util.Comparison>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -168,9 +168,9 @@ public interface Util {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>>(new hydra.core.Name("arbitrary"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.util.Precision>) (t -> new hydra.util.Precision.Arbitrary((t))),
+              (java.util.function.Function<java.lang.Void, hydra.util.Precision>) (t -> new hydra.util.Precision.Arbitrary()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -211,7 +211,7 @@ public interface Util {
                 })),
                 hydra.lexical.Lexical.stripAndDereferenceTermEither(
                   (cx),
-                  (input))))))))));
+                  (input)))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>) ((hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>) (hydra.util.Either.<hydra.util.DecodingError, hydra.util.Precision>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -221,7 +221,7 @@ public interface Util {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>, hydra.util.Either<hydra.util.DecodingError, hydra.util.Precision>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

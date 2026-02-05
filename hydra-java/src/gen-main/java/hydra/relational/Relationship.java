@@ -2,10 +2,12 @@
 
 package hydra.relational;
 
+import java.io.Serializable;
+
 /**
  * A domain-unordered (string-indexed, rather than position-indexed) relation
  */
-public class Relationship<V> {
+public class Relationship<V> implements Serializable, Comparable<Relationship<V>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.Relationship");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -13,7 +15,6 @@ public class Relationship<V> {
   public final java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value;
   
   public Relationship (java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -23,11 +24,21 @@ public class Relationship<V> {
       return false;
     }
     Relationship o = (Relationship) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Relationship other) {
+    return Integer.compare(
+      value.hashCode(),
+      other.value.hashCode());
   }
 }

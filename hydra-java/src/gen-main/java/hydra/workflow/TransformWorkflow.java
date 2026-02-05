@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory
  */
-public class TransformWorkflow implements Serializable {
+public class TransformWorkflow implements Serializable, Comparable<TransformWorkflow> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.TransformWorkflow");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -39,10 +39,6 @@ public class TransformWorkflow implements Serializable {
   public final String destDir;
   
   public TransformWorkflow (String name, hydra.workflow.SchemaSpec schemaSpec, String srcDir, String destDir) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((schemaSpec));
-    java.util.Objects.requireNonNull((srcDir));
-    java.util.Objects.requireNonNull((destDir));
     this.name = name;
     this.schemaSpec = schemaSpec;
     this.srcDir = srcDir;
@@ -55,31 +51,54 @@ public class TransformWorkflow implements Serializable {
       return false;
     }
     TransformWorkflow o = (TransformWorkflow) (other);
-    return name.equals(o.name) && schemaSpec.equals(o.schemaSpec) && srcDir.equals(o.srcDir) && destDir.equals(o.destDir);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.schemaSpec,
+      o.schemaSpec) && java.util.Objects.equals(
+      this.srcDir,
+      o.srcDir) && java.util.Objects.equals(
+      this.destDir,
+      o.destDir);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * schemaSpec.hashCode() + 5 * srcDir.hashCode() + 7 * destDir.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(schemaSpec) + 5 * java.util.Objects.hashCode(srcDir) + 7 * java.util.Objects.hashCode(destDir);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TransformWorkflow other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (schemaSpec)).compareTo(other.schemaSpec);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (srcDir)).compareTo(other.srcDir);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (destDir)).compareTo(other.destDir);
   }
   
   public TransformWorkflow withName(String name) {
-    java.util.Objects.requireNonNull((name));
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withSchemaSpec(hydra.workflow.SchemaSpec schemaSpec) {
-    java.util.Objects.requireNonNull((schemaSpec));
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withSrcDir(String srcDir) {
-    java.util.Objects.requireNonNull((srcDir));
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
   
   public TransformWorkflow withDestDir(String destDir) {
-    java.util.Objects.requireNonNull((destDir));
     return new TransformWorkflow(name, schemaSpec, srcDir, destDir);
   }
 }

@@ -21,7 +21,7 @@ public interface Model {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>(new hydra.core.Name("array"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (t -> new hydra.json.model.Value.Array((t))),
               hydra.extract.helpers.Helpers.decodeList(
@@ -59,7 +59,7 @@ public interface Model {
                   (cx),
                   (input)))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>>(new hydra.core.Name("null"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.json.model.Value>) (t -> new hydra.json.model.Value.Null((t))),
+              (java.util.function.Function<java.lang.Void, hydra.json.model.Value>) (t -> new hydra.json.model.Value.Null()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -162,7 +162,7 @@ public interface Model {
                 })),
                 hydra.lexical.Lexical.stripAndDereferenceTermEither(
                   (cx),
-                  (input))))))))));
+                  (input)))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>) ((hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>) (hydra.util.Either.<hydra.util.DecodingError, hydra.json.model.Value>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -172,7 +172,7 @@ public interface Model {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>, hydra.util.Either<hydra.util.DecodingError, hydra.json.model.Value>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

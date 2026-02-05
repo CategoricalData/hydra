@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A subject/predicate/object pattern
  */
-public class TriplePattern implements Serializable {
+public class TriplePattern implements Serializable, Comparable<TriplePattern> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.TriplePattern");
   
   public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
@@ -32,9 +32,6 @@ public class TriplePattern implements Serializable {
   public final hydra.query.Node object;
   
   public TriplePattern (hydra.query.Node subject, hydra.query.Path predicate, hydra.query.Node object) {
-    java.util.Objects.requireNonNull((subject));
-    java.util.Objects.requireNonNull((predicate));
-    java.util.Objects.requireNonNull((object));
     this.subject = subject;
     this.predicate = predicate;
     this.object = object;
@@ -46,26 +43,44 @@ public class TriplePattern implements Serializable {
       return false;
     }
     TriplePattern o = (TriplePattern) (other);
-    return subject.equals(o.subject) && predicate.equals(o.predicate) && object.equals(o.object);
+    return java.util.Objects.equals(
+      this.subject,
+      o.subject) && java.util.Objects.equals(
+      this.predicate,
+      o.predicate) && java.util.Objects.equals(
+      this.object,
+      o.object);
   }
   
   @Override
   public int hashCode() {
-    return 2 * subject.hashCode() + 3 * predicate.hashCode() + 5 * object.hashCode();
+    return 2 * java.util.Objects.hashCode(subject) + 3 * java.util.Objects.hashCode(predicate) + 5 * java.util.Objects.hashCode(object);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TriplePattern other) {
+    int cmp = 0;
+    cmp = ((Comparable) (subject)).compareTo(other.subject);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (predicate)).compareTo(other.predicate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (object)).compareTo(other.object);
   }
   
   public TriplePattern withSubject(hydra.query.Node subject) {
-    java.util.Objects.requireNonNull((subject));
     return new TriplePattern(subject, predicate, object);
   }
   
   public TriplePattern withPredicate(hydra.query.Path predicate) {
-    java.util.Objects.requireNonNull((predicate));
     return new TriplePattern(subject, predicate, object);
   }
   
   public TriplePattern withObject(hydra.query.Node object) {
-    java.util.Objects.requireNonNull((object));
     return new TriplePattern(subject, predicate, object);
   }
 }

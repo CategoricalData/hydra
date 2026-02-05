@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An atomic function as part of a query. When applied to a graph, steps are typed by function types.
  */
-public abstract class Step implements Serializable {
+public abstract class Step implements Serializable, Comparable<Step> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Step");
   
   public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
@@ -55,7 +55,6 @@ public abstract class Step implements Serializable {
     public final hydra.query.Edge value;
     
     public Edge (hydra.query.Edge value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -65,12 +64,25 @@ public abstract class Step implements Serializable {
         return false;
       }
       Edge o = (Edge) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Step other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Edge o = (Edge) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -86,7 +98,6 @@ public abstract class Step implements Serializable {
     public final hydra.core.Projection value;
     
     public Project (hydra.core.Projection value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -96,12 +107,25 @@ public abstract class Step implements Serializable {
         return false;
       }
       Project o = (Project) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Step other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Project o = (Project) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -117,7 +141,6 @@ public abstract class Step implements Serializable {
     public final hydra.query.ComparisonConstraint value;
     
     public Compare (hydra.query.ComparisonConstraint value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,12 +150,25 @@ public abstract class Step implements Serializable {
         return false;
       }
       Compare o = (Compare) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Step other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Compare o = (Compare) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

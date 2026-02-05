@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A regular expression quantifier
  */
-public abstract class RegexQuantifier implements Serializable {
+public abstract class RegexQuantifier implements Serializable, Comparable<RegexQuantifier> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexQuantifier");
   
   public static final hydra.core.Name FIELD_NAME_ONE = new hydra.core.Name("one");
@@ -84,11 +84,8 @@ public abstract class RegexQuantifier implements Serializable {
    * No quantifier; matches a single occurrence
    */
   public static final class One extends hydra.query.RegexQuantifier implements Serializable {
-    public final Boolean value;
+    public One () {
     
-    public One (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -97,12 +94,22 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       One o = (One) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -115,11 +122,8 @@ public abstract class RegexQuantifier implements Serializable {
    * The ? quanifier; matches zero or one occurrence
    */
   public static final class ZeroOrOne extends hydra.query.RegexQuantifier implements Serializable {
-    public final Boolean value;
+    public ZeroOrOne () {
     
-    public ZeroOrOne (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -128,12 +132,22 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       ZeroOrOne o = (ZeroOrOne) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -146,11 +160,8 @@ public abstract class RegexQuantifier implements Serializable {
    * The * quantifier; matches any number of occurrences
    */
   public static final class ZeroOrMore extends hydra.query.RegexQuantifier implements Serializable {
-    public final Boolean value;
+    public ZeroOrMore () {
     
-    public ZeroOrMore (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -159,12 +170,22 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       ZeroOrMore o = (ZeroOrMore) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -177,11 +198,8 @@ public abstract class RegexQuantifier implements Serializable {
    * The + quantifier; matches one or more occurrences
    */
   public static final class OneOrMore extends hydra.query.RegexQuantifier implements Serializable {
-    public final Boolean value;
+    public OneOrMore () {
     
-    public OneOrMore (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -190,12 +208,22 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       OneOrMore o = (OneOrMore) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -211,7 +239,6 @@ public abstract class RegexQuantifier implements Serializable {
     public final Integer value;
     
     public Exactly (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -221,12 +248,25 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       Exactly o = (Exactly) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Exactly o = (Exactly) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -242,7 +282,6 @@ public abstract class RegexQuantifier implements Serializable {
     public final Integer value;
     
     public AtLeast (Integer value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -252,12 +291,25 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       AtLeast o = (AtLeast) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AtLeast o = (AtLeast) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -273,7 +325,6 @@ public abstract class RegexQuantifier implements Serializable {
     public final hydra.query.Range value;
     
     public Range (hydra.query.Range value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -283,12 +334,25 @@ public abstract class RegexQuantifier implements Serializable {
         return false;
       }
       Range o = (Range) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(RegexQuantifier other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Range o = (Range) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

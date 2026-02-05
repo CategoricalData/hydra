@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
-public class Injection implements Serializable {
+public class Injection implements Serializable, Comparable<Injection> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Injection");
   
   public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
@@ -25,8 +25,6 @@ public class Injection implements Serializable {
   public final hydra.core.Field field;
   
   public Injection (hydra.core.Name typeName, hydra.core.Field field) {
-    java.util.Objects.requireNonNull((typeName));
-    java.util.Objects.requireNonNull((field));
     this.typeName = typeName;
     this.field = field;
   }
@@ -37,21 +35,34 @@ public class Injection implements Serializable {
       return false;
     }
     Injection o = (Injection) (other);
-    return typeName.equals(o.typeName) && field.equals(o.field);
+    return java.util.Objects.equals(
+      this.typeName,
+      o.typeName) && java.util.Objects.equals(
+      this.field,
+      o.field);
   }
   
   @Override
   public int hashCode() {
-    return 2 * typeName.hashCode() + 3 * field.hashCode();
+    return 2 * java.util.Objects.hashCode(typeName) + 3 * java.util.Objects.hashCode(field);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Injection other) {
+    int cmp = 0;
+    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (field)).compareTo(other.field);
   }
   
   public Injection withTypeName(hydra.core.Name typeName) {
-    java.util.Objects.requireNonNull((typeName));
     return new Injection(typeName, field);
   }
   
   public Injection withField(hydra.core.Field field) {
-    java.util.Objects.requireNonNull((field));
     return new Injection(typeName, field);
   }
 }

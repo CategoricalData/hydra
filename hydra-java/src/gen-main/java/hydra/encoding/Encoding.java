@@ -19,11 +19,11 @@ public interface Encoding {
   }
   
   static hydra.core.Name encodeBindingName(hydra.core.Name n) {
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(hydra.lib.strings.SplitOn.apply(
         ".",
         ((n)).value)))),
-      new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
+      () -> new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Concat2.apply(
           java.util.List.of(
@@ -34,7 +34,7 @@ public interface Encoding {
               ".",
               ((n)).value))),
             java.util.List.of(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf((n)))))))),
-      new hydra.core.Name(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf((n)))));
+      () -> new hydra.core.Name(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf((n)))));
   }
   
   static hydra.core.Term encodeFieldValue(hydra.core.Name typeName, hydra.core.Name fieldName, hydra.core.Type fieldType) {
@@ -185,10 +185,10 @@ public interface Encoding {
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.module.Module>> encodeModule(hydra.module.Module mod) {
     return hydra.lib.flows.Bind.apply(
       hydra.encoding.Encoding.filterTypeBindings(((mod)).elements),
-      (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply((typeBindings)),
-        hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
-        hydra.lib.flows.Bind.apply(
+        () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
+        () -> hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
             (hydra.encoding.Encoding::encodeBinding),
             (typeBindings)),
@@ -306,7 +306,7 @@ public interface Encoding {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Unit ignored) {
-        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit(true)))))));
+        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))))));
       }
       
       @Override
@@ -343,10 +343,10 @@ public interface Encoding {
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Binding>> isEncodableBinding(hydra.core.Binding b) {
     return hydra.lib.flows.Map.apply(
-      (java.util.function.Function<Boolean, hydra.util.Maybe<hydra.core.Binding>>) (serializable -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<Boolean, hydra.util.Maybe<hydra.core.Binding>>) (serializable -> hydra.lib.logic.IfElse.lazy(
         (serializable),
-        hydra.util.Maybe.just((b)),
-        (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing()))),
+        () -> hydra.util.Maybe.just((b)),
+        () -> (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing()))),
       hydra.schemas.Schemas.isSerializableByName(((b)).name));
   }
   

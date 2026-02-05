@@ -2,10 +2,12 @@
 
 package hydra.phantoms;
 
+import java.io.Serializable;
+
 /**
  * An association of a term with a phantom type
  */
-public class TTerm<A> {
+public class TTerm<A> implements Serializable, Comparable<TTerm<A>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.phantoms.TTerm");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -13,7 +15,6 @@ public class TTerm<A> {
   public final hydra.core.Term value;
   
   public TTerm (hydra.core.Term value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -23,11 +24,19 @@ public class TTerm<A> {
       return false;
     }
     TTerm o = (TTerm) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TTerm other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

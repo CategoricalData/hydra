@@ -21,7 +21,7 @@ public interface Module {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>>(new hydra.core.Name("term"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (t -> new hydra.module.Definition.Term((t))),
               hydra.decode.module.Module.termDefinition(
@@ -31,7 +31,7 @@ public interface Module {
               (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (t -> new hydra.module.Definition.Type((t))),
               hydra.decode.module.Module.typeDefinition(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>) ((hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>) (hydra.util.Either.<hydra.util.DecodingError, hydra.module.Definition>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -41,7 +41,7 @@ public interface Module {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>, hydra.util.Either<hydra.util.DecodingError, hydra.module.Definition>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

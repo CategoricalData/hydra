@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An edge in an accessor graph, connecting two nodes via a path
  */
-public class AccessorEdge implements Serializable {
+public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorEdge");
   
   public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
@@ -32,9 +32,6 @@ public class AccessorEdge implements Serializable {
   public final hydra.accessors.AccessorNode target;
   
   public AccessorEdge (hydra.accessors.AccessorNode source, hydra.accessors.AccessorPath path, hydra.accessors.AccessorNode target) {
-    java.util.Objects.requireNonNull((source));
-    java.util.Objects.requireNonNull((path));
-    java.util.Objects.requireNonNull((target));
     this.source = source;
     this.path = path;
     this.target = target;
@@ -46,26 +43,44 @@ public class AccessorEdge implements Serializable {
       return false;
     }
     AccessorEdge o = (AccessorEdge) (other);
-    return source.equals(o.source) && path.equals(o.path) && target.equals(o.target);
+    return java.util.Objects.equals(
+      this.source,
+      o.source) && java.util.Objects.equals(
+      this.path,
+      o.path) && java.util.Objects.equals(
+      this.target,
+      o.target);
   }
   
   @Override
   public int hashCode() {
-    return 2 * source.hashCode() + 3 * path.hashCode() + 5 * target.hashCode();
+    return 2 * java.util.Objects.hashCode(source) + 3 * java.util.Objects.hashCode(path) + 5 * java.util.Objects.hashCode(target);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AccessorEdge other) {
+    int cmp = 0;
+    cmp = ((Comparable) (source)).compareTo(other.source);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (path)).compareTo(other.path);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (target)).compareTo(other.target);
   }
   
   public AccessorEdge withSource(hydra.accessors.AccessorNode source) {
-    java.util.Objects.requireNonNull((source));
     return new AccessorEdge(source, path, target);
   }
   
   public AccessorEdge withPath(hydra.accessors.AccessorPath path) {
-    java.util.Objects.requireNonNull((path));
     return new AccessorEdge(source, path, target);
   }
   
   public AccessorEdge withTarget(hydra.accessors.AccessorNode target) {
-    java.util.Objects.requireNonNull((target));
     return new AccessorEdge(source, path, target);
   }
 }

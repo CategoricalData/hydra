@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings.
  */
-public abstract class HoistPredicate implements Serializable {
+public abstract class HoistPredicate implements Serializable, Comparable<HoistPredicate> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistPredicate");
   
   public static final hydra.core.Name FIELD_NAME_CASE_STATEMENTS = new hydra.core.Name("caseStatements");
@@ -60,11 +60,8 @@ public abstract class HoistPredicate implements Serializable {
    * Hoist case statements (elimination unions) that appear in non-top-level positions
    */
   public static final class CaseStatements extends hydra.testing.HoistPredicate implements Serializable {
-    public final Boolean value;
+    public CaseStatements () {
     
-    public CaseStatements (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -73,12 +70,22 @@ public abstract class HoistPredicate implements Serializable {
         return false;
       }
       CaseStatements o = (CaseStatements) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(HoistPredicate other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -91,11 +98,8 @@ public abstract class HoistPredicate implements Serializable {
    * Hoist function applications that appear in non-top-level positions
    */
   public static final class Applications extends hydra.testing.HoistPredicate implements Serializable {
-    public final Boolean value;
+    public Applications () {
     
-    public Applications (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -104,12 +108,22 @@ public abstract class HoistPredicate implements Serializable {
         return false;
       }
       Applications o = (Applications) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(HoistPredicate other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -122,11 +136,8 @@ public abstract class HoistPredicate implements Serializable {
    * Hoist list terms that appear in non-top-level positions
    */
   public static final class Lists extends hydra.testing.HoistPredicate implements Serializable {
-    public final Boolean value;
+    public Lists () {
     
-    public Lists (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -135,12 +146,22 @@ public abstract class HoistPredicate implements Serializable {
         return false;
       }
       Lists o = (Lists) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(HoistPredicate other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -153,11 +174,8 @@ public abstract class HoistPredicate implements Serializable {
    * Never hoist anything (identity transformation for let terms)
    */
   public static final class Nothing extends hydra.testing.HoistPredicate implements Serializable {
-    public final Boolean value;
+    public Nothing () {
     
-    public Nothing (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -166,12 +184,22 @@ public abstract class HoistPredicate implements Serializable {
         return false;
       }
       Nothing o = (Nothing) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(HoistPredicate other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

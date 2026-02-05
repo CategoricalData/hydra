@@ -47,16 +47,12 @@ public abstract class MatchOrCreate implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Match)) {
-        return false;
-      }
-      Match o = (Match) (other);
-      return value.equals(o.value);
+      return other instanceof Match;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -75,16 +71,12 @@ public abstract class MatchOrCreate implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Create)) {
-        return false;
-      }
-      Create o = (Create) (other);
-      return value.equals(o.value);
+      return other instanceof Create;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

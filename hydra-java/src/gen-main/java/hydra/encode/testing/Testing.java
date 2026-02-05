@@ -18,12 +18,12 @@ public interface Testing {
     return ((v1)).accept(new hydra.testing.EvaluationStyle.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.EvaluationStyle.Eager y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("eager"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("eager"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.EvaluationStyle.Lazy y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("lazy"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.EvaluationStyle"), new hydra.core.Field(new hydra.core.Name("lazy"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -70,17 +70,17 @@ public interface Testing {
     return ((v1)).accept(new hydra.testing.FoldOperation.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.FoldOperation.SumInt32Literals y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("sumInt32Literals"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("sumInt32Literals"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.FoldOperation.CollectListLengths y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("collectListLengths"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("collectListLengths"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.FoldOperation.CollectLabels y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("collectLabels"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.FoldOperation"), new hydra.core.Field(new hydra.core.Name("collectLabels"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -105,22 +105,22 @@ public interface Testing {
     return ((v1)).accept(new hydra.testing.HoistPredicate.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.HoistPredicate.CaseStatements y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("caseStatements"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("caseStatements"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.HoistPredicate.Applications y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("applications"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("applications"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.HoistPredicate.Lists y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("lists"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("lists"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.HoistPredicate.Nothing y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("nothing"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.HoistPredicate"), new hydra.core.Field(new hydra.core.Name("nothing"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -154,12 +154,12 @@ public interface Testing {
     return ((v1)).accept(new hydra.testing.TermRewriter.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceFooWithBar y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceFooWithBar"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceFooWithBar"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.testing.TermRewriter.ReplaceInt32WithInt64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceInt32WithInt64"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TermRewriter"), new hydra.core.Field(new hydra.core.Name("replaceInt32WithInt64"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -175,7 +175,7 @@ public interface Testing {
     return ((v1)).accept(new hydra.testing.TypeRewriter.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.TypeRewriter.ReplaceStringWithInt32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TypeRewriter"), new hydra.core.Field(new hydra.core.Name("replaceStringWithInt32"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TypeRewriter"), new hydra.core.Field(new hydra.core.Name("replaceStringWithInt32"), new hydra.core.Term.Unit())));
       }
     });
   }

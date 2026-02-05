@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A unique identifier in some context; a string-valued key
  */
-public class Name implements Serializable {
+public class Name implements Serializable, Comparable<Name> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Name");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class Name implements Serializable {
   public final String value;
   
   public Name (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,19 @@ public class Name implements Serializable {
       return false;
     }
     Name o = (Name) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Name other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

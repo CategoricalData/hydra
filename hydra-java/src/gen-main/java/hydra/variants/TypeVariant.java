@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The identifier of a type constructor
  */
-public abstract class TypeVariant implements Serializable {
+public abstract class TypeVariant implements Serializable, Comparable<TypeVariant> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.TypeVariant");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
@@ -153,11 +153,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Annotated extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Annotated () {
     
-    public Annotated (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -166,12 +163,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Annotated o = (Annotated) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -181,11 +188,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Application extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Application () {
     
-    public Application (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -194,12 +198,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Application o = (Application) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -209,11 +223,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Either extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Either () {
     
-    public Either (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -222,12 +233,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Either o = (Either) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -237,11 +258,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Forall extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Forall () {
     
-    public Forall (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -250,12 +268,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Forall o = (Forall) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -265,11 +293,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Function extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Function () {
     
-    public Function (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -278,12 +303,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Function o = (Function) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -293,11 +328,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class List extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public List () {
     
-    public List (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -306,12 +338,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       List o = (List) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -321,11 +363,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Literal extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Literal () {
     
-    public Literal (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -334,12 +373,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Literal o = (Literal) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -349,11 +398,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Map extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Map () {
     
-    public Map (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -362,12 +408,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Map o = (Map) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -377,11 +433,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Maybe extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Maybe () {
     
-    public Maybe (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -390,12 +443,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Maybe o = (Maybe) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -405,11 +468,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Pair extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Pair () {
     
-    public Pair (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -418,12 +478,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Pair o = (Pair) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -433,11 +503,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Record extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Record () {
     
-    public Record (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -446,12 +513,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -461,11 +538,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Set extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Set () {
     
-    public Set (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -474,12 +548,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -489,11 +573,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Union extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Union () {
     
-    public Union (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -502,12 +583,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -517,11 +608,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Unit extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Unit () {
     
-    public Unit (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -530,12 +618,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Unit o = (Unit) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -545,11 +643,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Variable extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Variable () {
     
-    public Variable (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -558,12 +653,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Variable o = (Variable) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -573,11 +678,8 @@ public abstract class TypeVariant implements Serializable {
   }
   
   public static final class Wrap extends hydra.variants.TypeVariant implements Serializable {
-    public final Boolean value;
+    public Wrap () {
     
-    public Wrap (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -586,12 +688,22 @@ public abstract class TypeVariant implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

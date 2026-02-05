@@ -9,22 +9,22 @@ public interface Lexical {
   static hydra.core.Name chooseUniqueName(java.util.Set<hydra.core.Name> reserved, hydra.core.Name name) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, hydra.core.Name>> tryName = new java.util.concurrent.atomic.AtomicReference<>();
     tryName.set((java.util.function.Function<Integer, hydra.core.Name>) (index -> {
-      hydra.core.Name candidate = hydra.lib.logic.IfElse.apply(
+      hydra.util.Lazy<hydra.core.Name> candidate = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           (index),
           1),
-        (name),
-        new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+        () -> (name),
+        () -> new hydra.core.Name(hydra.lib.strings.Cat2.apply(
           ((name)).value,
-          hydra.lib.literals.ShowInt32.apply((index)))));
-      return hydra.lib.logic.IfElse.apply(
+          hydra.lib.literals.ShowInt32.apply((index))))));
+      return hydra.lib.logic.IfElse.lazy(
         hydra.lib.sets.Member.apply(
-          (candidate),
+          candidate.get(),
           (reserved)),
-        (tryName.get()).apply(hydra.lib.math.Add.apply(
+        () -> (tryName.get()).apply(hydra.lib.math.Add.apply(
           (index),
           1)),
-        (candidate));
+        () -> candidate.get());
     }));
     return (tryName.get()).apply(1);
   }
@@ -92,7 +92,9 @@ public interface Lexical {
     return new hydra.graph.Graph((elements), ((parent)).environment, ((parent)).types, ((parent)).body, ((parent)).primitives, (schema));
   }
   
-  hydra.graph.Graph emptyGraph = new hydra.graph.Graph((java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()), (java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), new hydra.core.Term.Literal(new hydra.core.Literal.String_("empty graph")), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.Maybe<hydra.graph.Graph>) (hydra.util.Maybe.<hydra.graph.Graph>nothing()));
+  static hydra.graph.Graph emptyGraph() {
+    return new hydra.graph.Graph((java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()), (java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), new hydra.core.Term.Literal(new hydra.core.Literal.String_("empty graph")), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.Maybe<hydra.graph.Graph>) (hydra.util.Maybe.<hydra.graph.Graph>nothing()));
+  }
   
   static hydra.graph.Graph extendGraphWithBindings(java.util.List<hydra.core.Binding> bindings, hydra.graph.Graph g) {
     return new hydra.graph.Graph(hydra.lib.lists.Concat2.apply(
@@ -213,15 +215,15 @@ public interface Lexical {
       
       @Override
       public hydra.compute.Flow<hydra.graph.Graph, T0> visit(hydra.core.Term.Union injection) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((((injection)).value).typeName).value,
             ((tname)).value),
-          hydra.lexical.Lexical.matchUnion_exp(
+          () -> hydra.lexical.Lexical.matchUnion_exp(
             ((injection)).value,
             hydra.lexical.Lexical.matchUnion_mapping((pairs)),
             (tname)),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "injection for type ",
               ((tname)).value),
@@ -257,18 +259,18 @@ public interface Lexical {
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding> requireElement(hydra.core.Name name) {
     Boolean showAll = false;
-    java.util.function.Function<java.util.List<String>, java.util.List<String>> ellipsis = (java.util.function.Function<java.util.List<String>, java.util.List<String>>) (strings -> hydra.lib.logic.IfElse.apply(
+    java.util.function.Function<java.util.List<String>, java.util.List<String>> ellipsis = (java.util.function.Function<java.util.List<String>, java.util.List<String>>) (strings -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Gt.apply(
           hydra.lib.lists.Length.apply((strings)),
           3),
         hydra.lib.logic.Not.apply((showAll))),
-      hydra.lib.lists.Concat2.apply(
+      () -> hydra.lib.lists.Concat2.apply(
         hydra.lib.lists.Take.apply(
           3,
           (strings)),
         java.util.List.of("...")),
-      (strings)));
+      () -> (strings)));
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.dereferenceElement((name)),
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (mel -> hydra.lib.maybes.Maybe.apply(
@@ -312,15 +314,15 @@ public interface Lexical {
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.TypeScheme> requirePrimitiveType(hydra.typing.TypeContext tx, hydra.core.Name name) {
-    hydra.util.Maybe<hydra.core.TypeScheme> mts = hydra.lib.maps.Lookup.apply(
+    hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> mts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
       (name),
-      (((tx)).inferenceContext).primitiveTypes);
+      (((tx)).inferenceContext).primitiveTypes));
     return hydra.lib.maybes.Maybe.apply(
       hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
         "no such primitive function: ",
         ((name)).value)),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T0, hydra.core.TypeScheme>>) (ts -> hydra.lib.flows.Pure.apply((ts))),
-      (mts));
+      mts.get());
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> requireTerm(hydra.core.Name name) {
@@ -408,7 +410,7 @@ public interface Lexical {
   
   static <T0, T1> hydra.compute.Flow<T1, T0> withEmptyGraph(hydra.compute.Flow<hydra.graph.Graph, T0> v1) {
     return hydra.monads.Monads.withState(
-      (hydra.lexical.Lexical.emptyGraph),
+      hydra.lexical.Lexical.emptyGraph(),
       (v1));
   }
   

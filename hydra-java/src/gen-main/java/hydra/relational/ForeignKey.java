@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A mapping from certain columns of a source relation to primary key columns of a target relation
  */
-public class ForeignKey implements Serializable {
+public class ForeignKey implements Serializable, Comparable<ForeignKey> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.ForeignKey");
   
   public static final hydra.core.Name FIELD_NAME_FOREIGN_RELATION = new hydra.core.Name("foreignRelation");
@@ -25,8 +25,6 @@ public class ForeignKey implements Serializable {
   public final java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys;
   
   public ForeignKey (hydra.relational.RelationName foreignRelation, java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
-    java.util.Objects.requireNonNull((foreignRelation));
-    java.util.Objects.requireNonNull((keys));
     this.foreignRelation = foreignRelation;
     this.keys = keys;
   }
@@ -37,21 +35,36 @@ public class ForeignKey implements Serializable {
       return false;
     }
     ForeignKey o = (ForeignKey) (other);
-    return foreignRelation.equals(o.foreignRelation) && keys.equals(o.keys);
+    return java.util.Objects.equals(
+      this.foreignRelation,
+      o.foreignRelation) && java.util.Objects.equals(
+      this.keys,
+      o.keys);
   }
   
   @Override
   public int hashCode() {
-    return 2 * foreignRelation.hashCode() + 3 * keys.hashCode();
+    return 2 * java.util.Objects.hashCode(foreignRelation) + 3 * java.util.Objects.hashCode(keys);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ForeignKey other) {
+    int cmp = 0;
+    cmp = ((Comparable) (foreignRelation)).compareTo(other.foreignRelation);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      keys.hashCode(),
+      other.keys.hashCode());
   }
   
   public ForeignKey withForeignRelation(hydra.relational.RelationName foreignRelation) {
-    java.util.Objects.requireNonNull((foreignRelation));
     return new ForeignKey(foreignRelation, keys);
   }
   
   public ForeignKey withKeys(java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
-    java.util.Objects.requireNonNull((keys));
     return new ForeignKey(foreignRelation, keys);
   }
 }

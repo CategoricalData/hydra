@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Left and right padding for an operator
  */
-public class Padding implements Serializable {
+public class Padding implements Serializable, Comparable<Padding> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Padding");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
@@ -25,8 +25,6 @@ public class Padding implements Serializable {
   public final hydra.ast.Ws right;
   
   public Padding (hydra.ast.Ws left, hydra.ast.Ws right) {
-    java.util.Objects.requireNonNull((left));
-    java.util.Objects.requireNonNull((right));
     this.left = left;
     this.right = right;
   }
@@ -37,21 +35,34 @@ public class Padding implements Serializable {
       return false;
     }
     Padding o = (Padding) (other);
-    return left.equals(o.left) && right.equals(o.right);
+    return java.util.Objects.equals(
+      this.left,
+      o.left) && java.util.Objects.equals(
+      this.right,
+      o.right);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode();
+    return 2 * java.util.Objects.hashCode(left) + 3 * java.util.Objects.hashCode(right);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Padding other) {
+    int cmp = 0;
+    cmp = ((Comparable) (left)).compareTo(other.left);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (right)).compareTo(other.right);
   }
   
   public Padding withLeft(hydra.ast.Ws left) {
-    java.util.Objects.requireNonNull((left));
     return new Padding(left, right);
   }
   
   public Padding withRight(hydra.ast.Ws right) {
-    java.util.Objects.requireNonNull((right));
     return new Padding(left, right);
   }
 }

@@ -59,12 +59,12 @@ public abstract class BinaryOperator implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return value.equals(o.value);
+      return other instanceof BinaryOperator;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -87,12 +87,12 @@ public abstract class BinaryOperator implements Serializable {
         return false;
       }
       Comparison o = (Comparison) (other);
-      return value.equals(o.value);
+      return other instanceof BinaryOperator;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -111,16 +111,12 @@ public abstract class BinaryOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Power)) {
-        return false;
-      }
-      Power o = (Power) (other);
-      return value.equals(o.value);
+      return other instanceof Power;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

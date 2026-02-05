@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which evaluates (reduces) a given term and compares it with the expected result
  */
-public class EvaluationTestCase implements Serializable {
+public class EvaluationTestCase implements Serializable, Comparable<EvaluationTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.EvaluationTestCase");
   
   public static final hydra.core.Name FIELD_NAME_EVALUATION_STYLE = new hydra.core.Name("evaluationStyle");
@@ -32,9 +32,6 @@ public class EvaluationTestCase implements Serializable {
   public final hydra.core.Term output;
   
   public EvaluationTestCase (hydra.testing.EvaluationStyle evaluationStyle, hydra.core.Term input, hydra.core.Term output) {
-    java.util.Objects.requireNonNull((evaluationStyle));
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((output));
     this.evaluationStyle = evaluationStyle;
     this.input = input;
     this.output = output;
@@ -46,26 +43,44 @@ public class EvaluationTestCase implements Serializable {
       return false;
     }
     EvaluationTestCase o = (EvaluationTestCase) (other);
-    return evaluationStyle.equals(o.evaluationStyle) && input.equals(o.input) && output.equals(o.output);
+    return java.util.Objects.equals(
+      this.evaluationStyle,
+      o.evaluationStyle) && java.util.Objects.equals(
+      this.input,
+      o.input) && java.util.Objects.equals(
+      this.output,
+      o.output);
   }
   
   @Override
   public int hashCode() {
-    return 2 * evaluationStyle.hashCode() + 3 * input.hashCode() + 5 * output.hashCode();
+    return 2 * java.util.Objects.hashCode(evaluationStyle) + 3 * java.util.Objects.hashCode(input) + 5 * java.util.Objects.hashCode(output);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EvaluationTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (evaluationStyle)).compareTo(other.evaluationStyle);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (input)).compareTo(other.input);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (output)).compareTo(other.output);
   }
   
   public EvaluationTestCase withEvaluationStyle(hydra.testing.EvaluationStyle evaluationStyle) {
-    java.util.Objects.requireNonNull((evaluationStyle));
     return new EvaluationTestCase(evaluationStyle, input, output);
   }
   
   public EvaluationTestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
     return new EvaluationTestCase(evaluationStyle, input, output);
   }
   
   public EvaluationTestCase withOutput(hydra.core.Term output) {
-    java.util.Objects.requireNonNull((output));
     return new EvaluationTestCase(evaluationStyle, input, output);
   }
 }

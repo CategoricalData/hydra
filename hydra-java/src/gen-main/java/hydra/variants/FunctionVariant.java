@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The identifier of a function constructor
  */
-public abstract class FunctionVariant implements Serializable {
+public abstract class FunctionVariant implements Serializable, Comparable<FunctionVariant> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.FunctionVariant");
   
   public static final hydra.core.Name FIELD_NAME_ELIMINATION = new hydra.core.Name("elimination");
@@ -49,11 +49,8 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Elimination extends hydra.variants.FunctionVariant implements Serializable {
-    public final Boolean value;
+    public Elimination () {
     
-    public Elimination (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -62,12 +59,22 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Elimination o = (Elimination) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FunctionVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -77,11 +84,8 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Lambda extends hydra.variants.FunctionVariant implements Serializable {
-    public final Boolean value;
+    public Lambda () {
     
-    public Lambda (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -90,12 +94,22 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Lambda o = (Lambda) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FunctionVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -105,11 +119,8 @@ public abstract class FunctionVariant implements Serializable {
   }
   
   public static final class Primitive extends hydra.variants.FunctionVariant implements Serializable {
-    public final Boolean value;
+    public Primitive () {
     
-    public Primitive (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -118,12 +129,22 @@ public abstract class FunctionVariant implements Serializable {
         return false;
       }
       Primitive o = (Primitive) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FunctionVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

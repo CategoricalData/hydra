@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Operator associativity
  */
-public abstract class Associativity implements Serializable {
+public abstract class Associativity implements Serializable, Comparable<Associativity> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Associativity");
   
   public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
@@ -57,11 +57,8 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class None extends hydra.ast.Associativity implements Serializable {
-    public final Boolean value;
+    public None () {
     
-    public None (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -70,12 +67,22 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       None o = (None) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Associativity other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -85,11 +92,8 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Left extends hydra.ast.Associativity implements Serializable {
-    public final Boolean value;
+    public Left () {
     
-    public Left (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -98,12 +102,22 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Left o = (Left) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Associativity other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -113,11 +127,8 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Right extends hydra.ast.Associativity implements Serializable {
-    public final Boolean value;
+    public Right () {
     
-    public Right (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -126,12 +137,22 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Right o = (Right) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Associativity other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -141,11 +162,8 @@ public abstract class Associativity implements Serializable {
   }
   
   public static final class Both extends hydra.ast.Associativity implements Serializable {
-    public final Boolean value;
+    public Both () {
     
-    public Both (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -154,12 +172,22 @@ public abstract class Associativity implements Serializable {
         return false;
       }
       Both o = (Both) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Associativity other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

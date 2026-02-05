@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which performs type checking on a given term and compares the result with an expected annotated term and type
  */
-public class TypeCheckingTestCase implements Serializable {
+public class TypeCheckingTestCase implements Serializable, Comparable<TypeCheckingTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeCheckingTestCase");
   
   public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
@@ -32,9 +32,6 @@ public class TypeCheckingTestCase implements Serializable {
   public final hydra.core.Type outputType;
   
   public TypeCheckingTestCase (hydra.core.Term input, hydra.core.Term outputTerm, hydra.core.Type outputType) {
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((outputTerm));
-    java.util.Objects.requireNonNull((outputType));
     this.input = input;
     this.outputTerm = outputTerm;
     this.outputType = outputType;
@@ -46,26 +43,44 @@ public class TypeCheckingTestCase implements Serializable {
       return false;
     }
     TypeCheckingTestCase o = (TypeCheckingTestCase) (other);
-    return input.equals(o.input) && outputTerm.equals(o.outputTerm) && outputType.equals(o.outputType);
+    return java.util.Objects.equals(
+      this.input,
+      o.input) && java.util.Objects.equals(
+      this.outputTerm,
+      o.outputTerm) && java.util.Objects.equals(
+      this.outputType,
+      o.outputType);
   }
   
   @Override
   public int hashCode() {
-    return 2 * input.hashCode() + 3 * outputTerm.hashCode() + 5 * outputType.hashCode();
+    return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(outputTerm) + 5 * java.util.Objects.hashCode(outputType);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TypeCheckingTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (input)).compareTo(other.input);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (outputTerm)).compareTo(other.outputTerm);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (outputType)).compareTo(other.outputType);
   }
   
   public TypeCheckingTestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }
   
   public TypeCheckingTestCase withOutputTerm(hydra.core.Term outputTerm) {
-    java.util.Objects.requireNonNull((outputTerm));
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }
   
   public TypeCheckingTestCase withOutputType(hydra.core.Type outputType) {
-    java.util.Objects.requireNonNull((outputType));
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }
 }

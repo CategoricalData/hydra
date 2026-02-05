@@ -66,16 +66,12 @@ public abstract class Direction implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Out)) {
-        return false;
-      }
-      Out o = (Out) (other);
-      return value.equals(o.value);
+      return other instanceof Out;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -94,16 +90,12 @@ public abstract class Direction implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof In)) {
-        return false;
-      }
-      In o = (In) (other);
-      return value.equals(o.value);
+      return other instanceof In;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -122,16 +114,12 @@ public abstract class Direction implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Both)) {
-        return false;
-      }
-      Both o = (Both) (other);
-      return value.equals(o.value);
+      return other instanceof Both;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -150,16 +138,12 @@ public abstract class Direction implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Undirected)) {
-        return false;
-      }
-      Undirected o = (Undirected) (other);
-      return value.equals(o.value);
+      return other instanceof Undirected;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

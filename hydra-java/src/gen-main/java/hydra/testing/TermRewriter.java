@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A predefined term rewriter for testing rewriteTerm
  */
-public abstract class TermRewriter implements Serializable {
+public abstract class TermRewriter implements Serializable, Comparable<TermRewriter> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TermRewriter");
   
   public static final hydra.core.Name FIELD_NAME_REPLACE_FOO_WITH_BAR = new hydra.core.Name("replaceFooWithBar");
@@ -44,11 +44,8 @@ public abstract class TermRewriter implements Serializable {
    * Replace all string literal 'foo' with 'bar'
    */
   public static final class ReplaceFooWithBar extends hydra.testing.TermRewriter implements Serializable {
-    public final Boolean value;
+    public ReplaceFooWithBar () {
     
-    public ReplaceFooWithBar (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -57,12 +54,22 @@ public abstract class TermRewriter implements Serializable {
         return false;
       }
       ReplaceFooWithBar o = (ReplaceFooWithBar) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermRewriter other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -75,11 +82,8 @@ public abstract class TermRewriter implements Serializable {
    * Replace all Int32 literals with Int64 literals of the same value
    */
   public static final class ReplaceInt32WithInt64 extends hydra.testing.TermRewriter implements Serializable {
-    public final Boolean value;
+    public ReplaceInt32WithInt64 () {
     
-    public ReplaceInt32WithInt64 (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -88,12 +92,22 @@ public abstract class TermRewriter implements Serializable {
         return false;
       }
       ReplaceInt32WithInt64 o = (ReplaceInt32WithInt64) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermRewriter other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

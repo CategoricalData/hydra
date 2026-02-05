@@ -60,7 +60,7 @@ public interface Workflow {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>(new hydra.core.Name("hydra"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.workflow.HydraSchemaSpec, hydra.workflow.SchemaSpec>) (t -> new hydra.workflow.SchemaSpec.Hydra((t))),
               hydra.decode.workflow.Workflow.hydraSchemaSpec(
@@ -95,10 +95,10 @@ public interface Workflow {
                   (cx),
                   (input)))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>>(new hydra.core.Name("provided"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.workflow.SchemaSpec>) (t -> new hydra.workflow.SchemaSpec.Provided((t))),
+              (java.util.function.Function<java.lang.Void, hydra.workflow.SchemaSpec>) (t -> new hydra.workflow.SchemaSpec.Provided()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.util.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -108,7 +108,7 @@ public interface Workflow {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>, hydra.util.Either<hydra.util.DecodingError, hydra.workflow.SchemaSpec>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

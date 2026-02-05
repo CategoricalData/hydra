@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A data type
  */
-public abstract class Type implements Serializable {
+public abstract class Type implements Serializable, Comparable<Type> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Type");
   
   public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
@@ -159,7 +159,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.AnnotatedType value;
     
     public Annotated (hydra.core.AnnotatedType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -169,12 +168,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Annotated o = (Annotated) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Annotated o = (Annotated) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -190,7 +202,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.ApplicationType value;
     
     public Application (hydra.core.ApplicationType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -200,12 +211,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Application o = (Application) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Application o = (Application) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -221,7 +245,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.EitherType value;
     
     public Either (hydra.core.EitherType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -231,12 +254,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Either o = (Either) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Either o = (Either) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -252,7 +288,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.ForallType value;
     
     public Forall (hydra.core.ForallType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -262,12 +297,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Forall o = (Forall) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Forall o = (Forall) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -283,7 +331,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.FunctionType value;
     
     public Function (hydra.core.FunctionType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -293,12 +340,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Function o = (Function) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Function o = (Function) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -314,7 +374,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.Type value;
     
     public List (hydra.core.Type value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -324,12 +383,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       List o = (List) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      List o = (List) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -345,7 +417,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.LiteralType value;
     
     public Literal (hydra.core.LiteralType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -355,12 +426,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Literal o = (Literal) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Literal o = (Literal) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -376,7 +460,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.MapType value;
     
     public Map (hydra.core.MapType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -386,12 +469,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Map o = (Map) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Map o = (Map) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -407,7 +503,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.Type value;
     
     public Maybe (hydra.core.Type value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -417,12 +512,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Maybe o = (Maybe) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Maybe o = (Maybe) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -438,7 +546,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.PairType value;
     
     public Pair (hydra.core.PairType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -448,12 +555,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Pair o = (Pair) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Pair o = (Pair) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -469,7 +589,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.RowType value;
     
     public Record (hydra.core.RowType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -479,12 +598,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Record o = (Record) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -500,7 +632,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.Type value;
     
     public Set (hydra.core.Type value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -510,12 +641,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Set o = (Set) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -531,7 +675,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.RowType value;
     
     public Union (hydra.core.RowType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -541,12 +684,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Union o = (Union) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -559,11 +715,8 @@ public abstract class Type implements Serializable {
    * The unit type
    */
   public static final class Unit extends hydra.core.Type implements Serializable {
-    public final Boolean value;
+    public Unit () {
     
-    public Unit (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -572,12 +725,22 @@ public abstract class Type implements Serializable {
         return false;
       }
       Unit o = (Unit) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -593,7 +756,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -603,12 +765,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Variable o = (Variable) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Variable o = (Variable) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -624,7 +799,6 @@ public abstract class Type implements Serializable {
     public final hydra.core.WrappedType value;
     
     public Wrap (hydra.core.WrappedType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -634,12 +808,25 @@ public abstract class Type implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Wrap o = (Wrap) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

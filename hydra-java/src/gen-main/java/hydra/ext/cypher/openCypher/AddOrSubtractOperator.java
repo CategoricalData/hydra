@@ -47,16 +47,12 @@ public abstract class AddOrSubtractOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Add)) {
-        return false;
-      }
-      Add o = (Add) (other);
-      return value.equals(o.value);
+      return other instanceof Add;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -75,16 +71,12 @@ public abstract class AddOrSubtractOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Subtract)) {
-        return false;
-      }
-      Subtract o = (Subtract) (other);
-      return value.equals(o.value);
+      return other instanceof Subtract;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

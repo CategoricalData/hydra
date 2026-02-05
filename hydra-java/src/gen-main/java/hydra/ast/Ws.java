@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * One of several classes of whitespace
  */
-public abstract class Ws implements Serializable {
+public abstract class Ws implements Serializable, Comparable<Ws> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Ws");
   
   public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
@@ -68,11 +68,8 @@ public abstract class Ws implements Serializable {
    * No whitespace
    */
   public static final class None extends hydra.ast.Ws implements Serializable {
-    public final Boolean value;
+    public None () {
     
-    public None (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -81,12 +78,22 @@ public abstract class Ws implements Serializable {
         return false;
       }
       None o = (None) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Ws other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -99,11 +106,8 @@ public abstract class Ws implements Serializable {
    * A single space
    */
   public static final class Space extends hydra.ast.Ws implements Serializable {
-    public final Boolean value;
+    public Space () {
     
-    public Space (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -112,12 +116,22 @@ public abstract class Ws implements Serializable {
         return false;
       }
       Space o = (Space) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Ws other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -130,11 +144,8 @@ public abstract class Ws implements Serializable {
    * A line break
    */
   public static final class Break extends hydra.ast.Ws implements Serializable {
-    public final Boolean value;
+    public Break () {
     
-    public Break (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -143,12 +154,22 @@ public abstract class Ws implements Serializable {
         return false;
       }
       Break o = (Break) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Ws other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -164,7 +185,6 @@ public abstract class Ws implements Serializable {
     public final String value;
     
     public BreakAndIndent (String value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -174,12 +194,25 @@ public abstract class Ws implements Serializable {
         return false;
       }
       BreakAndIndent o = (BreakAndIndent) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Ws other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      BreakAndIndent o = (BreakAndIndent) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -192,11 +225,8 @@ public abstract class Ws implements Serializable {
    * Two line breaks
    */
   public static final class DoubleBreak extends hydra.ast.Ws implements Serializable {
-    public final Boolean value;
+    public DoubleBreak () {
     
-    public DoubleBreak (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -205,12 +235,22 @@ public abstract class Ws implements Serializable {
         return false;
       }
       DoubleBreak o = (DoubleBreak) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Ws other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

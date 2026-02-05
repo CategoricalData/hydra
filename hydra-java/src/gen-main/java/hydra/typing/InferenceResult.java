@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The result of applying inference rules to a term.
  */
-public class InferenceResult implements Serializable {
+public class InferenceResult implements Serializable, Comparable<InferenceResult> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.InferenceResult");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
@@ -39,10 +39,6 @@ public class InferenceResult implements Serializable {
   public final java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
   
   public InferenceResult (hydra.core.Term term, hydra.core.Type type, hydra.typing.TypeSubst subst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
-    java.util.Objects.requireNonNull((term));
-    java.util.Objects.requireNonNull((type));
-    java.util.Objects.requireNonNull((subst));
-    java.util.Objects.requireNonNull((classConstraints));
     this.term = term;
     this.type = type;
     this.subst = subst;
@@ -55,31 +51,56 @@ public class InferenceResult implements Serializable {
       return false;
     }
     InferenceResult o = (InferenceResult) (other);
-    return term.equals(o.term) && type.equals(o.type) && subst.equals(o.subst) && classConstraints.equals(o.classConstraints);
+    return java.util.Objects.equals(
+      this.term,
+      o.term) && java.util.Objects.equals(
+      this.type,
+      o.type) && java.util.Objects.equals(
+      this.subst,
+      o.subst) && java.util.Objects.equals(
+      this.classConstraints,
+      o.classConstraints);
   }
   
   @Override
   public int hashCode() {
-    return 2 * term.hashCode() + 3 * type.hashCode() + 5 * subst.hashCode() + 7 * classConstraints.hashCode();
+    return 2 * java.util.Objects.hashCode(term) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(subst) + 7 * java.util.Objects.hashCode(classConstraints);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(InferenceResult other) {
+    int cmp = 0;
+    cmp = ((Comparable) (term)).compareTo(other.term);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (type)).compareTo(other.type);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (subst)).compareTo(other.subst);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      classConstraints.hashCode(),
+      other.classConstraints.hashCode());
   }
   
   public InferenceResult withTerm(hydra.core.Term term) {
-    java.util.Objects.requireNonNull((term));
     return new InferenceResult(term, type, subst, classConstraints);
   }
   
   public InferenceResult withType(hydra.core.Type type) {
-    java.util.Objects.requireNonNull((type));
     return new InferenceResult(term, type, subst, classConstraints);
   }
   
   public InferenceResult withSubst(hydra.typing.TypeSubst subst) {
-    java.util.Objects.requireNonNull((subst));
     return new InferenceResult(term, type, subst, classConstraints);
   }
   
   public InferenceResult withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
-    java.util.Objects.requireNonNull((classConstraints));
     return new InferenceResult(term, type, subst, classConstraints);
   }
 }

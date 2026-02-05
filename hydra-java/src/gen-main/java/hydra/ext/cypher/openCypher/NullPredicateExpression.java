@@ -22,11 +22,11 @@ public class NullPredicateExpression implements Serializable {
       return false;
     }
     NullPredicateExpression o = (NullPredicateExpression) (other);
-    return value.equals(o.value);
+    return other instanceof NullPredicateExpression;
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return getClass().hashCode();
   }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A container for logging and error information
  */
-public class Trace implements Serializable {
+public class Trace implements Serializable, Comparable<Trace> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Trace");
   
   public static final hydra.core.Name FIELD_NAME_STACK = new hydra.core.Name("stack");
@@ -32,9 +32,6 @@ public class Trace implements Serializable {
   public final java.util.Map<hydra.core.Name, hydra.core.Term> other;
   
   public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<hydra.core.Name, hydra.core.Term> other) {
-    java.util.Objects.requireNonNull((stack));
-    java.util.Objects.requireNonNull((messages));
-    java.util.Objects.requireNonNull((other));
     this.stack = stack;
     this.messages = messages;
     this.other = other;
@@ -46,26 +43,50 @@ public class Trace implements Serializable {
       return false;
     }
     Trace o = (Trace) (other);
-    return stack.equals(o.stack) && messages.equals(o.messages) && other.equals(o.other);
+    return java.util.Objects.equals(
+      this.stack,
+      o.stack) && java.util.Objects.equals(
+      this.messages,
+      o.messages) && java.util.Objects.equals(
+      this.other,
+      o.other);
   }
   
   @Override
   public int hashCode() {
-    return 2 * stack.hashCode() + 3 * messages.hashCode() + 5 * other.hashCode();
+    return 2 * java.util.Objects.hashCode(stack) + 3 * java.util.Objects.hashCode(messages) + 5 * java.util.Objects.hashCode(other);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Trace other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      stack.hashCode(),
+      other.stack.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      messages.hashCode(),
+      other.messages.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      other.hashCode(),
+      other.other.hashCode());
   }
   
   public Trace withStack(java.util.List<String> stack) {
-    java.util.Objects.requireNonNull((stack));
     return new Trace(stack, messages, other);
   }
   
   public Trace withMessages(java.util.List<String> messages) {
-    java.util.Objects.requireNonNull((messages));
     return new Trace(stack, messages, other);
   }
   
   public Trace withOther(java.util.Map<hydra.core.Name, hydra.core.Term> other) {
-    java.util.Objects.requireNonNull((other));
     return new Trace(stack, messages, other);
   }
 }

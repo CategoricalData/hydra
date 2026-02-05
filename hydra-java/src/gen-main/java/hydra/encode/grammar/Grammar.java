@@ -52,7 +52,7 @@ public interface Grammar {
       
       @Override
       public hydra.core.Term visit(hydra.grammar.Pattern.Nil y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.grammar.Pattern"), new hydra.core.Field(new hydra.core.Name("nil"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.grammar.Pattern"), new hydra.core.Field(new hydra.core.Name("nil"), new hydra.core.Term.Unit())));
       }
       
       @Override

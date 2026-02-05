@@ -223,29 +223,29 @@ public interface Accessors {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("annotatedBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.AnnotatedBody((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.AnnotatedBody()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("applicationFunction"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.ApplicationFunction((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.ApplicationFunction()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("applicationArgument"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.ApplicationArgument((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.ApplicationArgument()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("lambdaBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.LambdaBody((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.LambdaBody()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("unionCasesDefault"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.UnionCasesDefault((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.UnionCasesDefault()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -255,7 +255,7 @@ public interface Accessors {
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("letBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.LetBody((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.LetBody()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -379,7 +379,7 @@ public interface Accessors {
                   (cx),
                   (input)))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("maybeTerm"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.MaybeTerm((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.MaybeTerm()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -465,30 +465,30 @@ public interface Accessors {
                   (cx),
                   (input)))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("sumTerm"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.SumTerm((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.SumTerm()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("typeLambdaBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.TypeLambdaBody((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.TypeLambdaBody()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("typeApplicationTerm"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.TypeApplicationTerm((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.TypeApplicationTerm()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("injectionTerm"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.InjectionTerm((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.InjectionTerm()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>>(new hydra.core.Name("wrappedTerm"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.WrappedTerm((t))),
+              (java.util.function.Function<java.lang.Void, hydra.accessors.TermAccessor>) (t -> new hydra.accessors.TermAccessor.WrappedTerm()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>) ((hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>) (hydra.util.Either.<hydra.util.DecodingError, hydra.accessors.TermAccessor>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -498,7 +498,7 @@ public interface Accessors {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>, hydra.util.Either<hydra.util.DecodingError, hydra.accessors.TermAccessor>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

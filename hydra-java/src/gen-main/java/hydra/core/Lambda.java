@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A function abstraction (lambda)
  */
-public class Lambda implements Serializable {
+public class Lambda implements Serializable, Comparable<Lambda> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Lambda");
   
   public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
@@ -32,9 +32,6 @@ public class Lambda implements Serializable {
   public final hydra.core.Term body;
   
   public Lambda (hydra.core.Name parameter, hydra.util.Maybe<hydra.core.Type> domain, hydra.core.Term body) {
-    java.util.Objects.requireNonNull((parameter));
-    java.util.Objects.requireNonNull((domain));
-    java.util.Objects.requireNonNull((body));
     this.parameter = parameter;
     this.domain = domain;
     this.body = body;
@@ -46,26 +43,46 @@ public class Lambda implements Serializable {
       return false;
     }
     Lambda o = (Lambda) (other);
-    return parameter.equals(o.parameter) && domain.equals(o.domain) && body.equals(o.body);
+    return java.util.Objects.equals(
+      this.parameter,
+      o.parameter) && java.util.Objects.equals(
+      this.domain,
+      o.domain) && java.util.Objects.equals(
+      this.body,
+      o.body);
   }
   
   @Override
   public int hashCode() {
-    return 2 * parameter.hashCode() + 3 * domain.hashCode() + 5 * body.hashCode();
+    return 2 * java.util.Objects.hashCode(parameter) + 3 * java.util.Objects.hashCode(domain) + 5 * java.util.Objects.hashCode(body);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Lambda other) {
+    int cmp = 0;
+    cmp = ((Comparable) (parameter)).compareTo(other.parameter);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      domain.hashCode(),
+      other.domain.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (body)).compareTo(other.body);
   }
   
   public Lambda withParameter(hydra.core.Name parameter) {
-    java.util.Objects.requireNonNull((parameter));
     return new Lambda(parameter, domain, body);
   }
   
   public Lambda withDomain(hydra.util.Maybe<hydra.core.Type> domain) {
-    java.util.Objects.requireNonNull((domain));
     return new Lambda(parameter, domain, body);
   }
   
   public Lambda withBody(hydra.core.Term body) {
-    java.util.Objects.requireNonNull((body));
     return new Lambda(parameter, domain, body);
   }
 }

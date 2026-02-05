@@ -25,11 +25,11 @@ public class RdfsClass implements Serializable {
       return false;
     }
     RdfsClass o = (RdfsClass) (other);
-    return value.equals(o.value);
+    return other instanceof RdfsClass;
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return getClass().hashCode();
   }
 }

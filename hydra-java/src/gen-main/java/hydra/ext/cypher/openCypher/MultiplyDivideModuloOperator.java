@@ -55,16 +55,12 @@ public abstract class MultiplyDivideModuloOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Multiply)) {
-        return false;
-      }
-      Multiply o = (Multiply) (other);
-      return value.equals(o.value);
+      return other instanceof Multiply;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -83,16 +79,12 @@ public abstract class MultiplyDivideModuloOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Divide)) {
-        return false;
-      }
-      Divide o = (Divide) (other);
-      return value.equals(o.value);
+      return other instanceof Divide;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -111,16 +103,12 @@ public abstract class MultiplyDivideModuloOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Modulo)) {
-        return false;
-      }
-      Modulo o = (Modulo) (other);
-      return value.equals(o.value);
+      return other instanceof Modulo;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

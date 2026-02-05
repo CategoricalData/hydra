@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Any of several indentation styles
  */
-public abstract class IndentStyle implements Serializable {
+public abstract class IndentStyle implements Serializable, Comparable<IndentStyle> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.IndentStyle");
   
   public static final hydra.core.Name FIELD_NAME_ALL_LINES = new hydra.core.Name("allLines");
@@ -47,7 +47,6 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public AllLines (String value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -57,12 +56,25 @@ public abstract class IndentStyle implements Serializable {
         return false;
       }
       AllLines o = (AllLines) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(IndentStyle other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AllLines o = (AllLines) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -78,7 +90,6 @@ public abstract class IndentStyle implements Serializable {
     public final String value;
     
     public SubsequentLines (String value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,12 +99,25 @@ public abstract class IndentStyle implements Serializable {
         return false;
       }
       SubsequentLines o = (SubsequentLines) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(IndentStyle other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SubsequentLines o = (SubsequentLines) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

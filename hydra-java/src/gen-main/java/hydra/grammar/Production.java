@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A BNF production
  */
-public class Production implements Serializable {
+public class Production implements Serializable, Comparable<Production> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Production");
   
   public static final hydra.core.Name FIELD_NAME_SYMBOL = new hydra.core.Name("symbol");
@@ -25,8 +25,6 @@ public class Production implements Serializable {
   public final hydra.grammar.Pattern pattern;
   
   public Production (hydra.grammar.Symbol symbol, hydra.grammar.Pattern pattern) {
-    java.util.Objects.requireNonNull((symbol));
-    java.util.Objects.requireNonNull((pattern));
     this.symbol = symbol;
     this.pattern = pattern;
   }
@@ -37,21 +35,34 @@ public class Production implements Serializable {
       return false;
     }
     Production o = (Production) (other);
-    return symbol.equals(o.symbol) && pattern.equals(o.pattern);
+    return java.util.Objects.equals(
+      this.symbol,
+      o.symbol) && java.util.Objects.equals(
+      this.pattern,
+      o.pattern);
   }
   
   @Override
   public int hashCode() {
-    return 2 * symbol.hashCode() + 3 * pattern.hashCode();
+    return 2 * java.util.Objects.hashCode(symbol) + 3 * java.util.Objects.hashCode(pattern);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Production other) {
+    int cmp = 0;
+    cmp = ((Comparable) (symbol)).compareTo(other.symbol);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (pattern)).compareTo(other.pattern);
   }
   
   public Production withSymbol(hydra.grammar.Symbol symbol) {
-    java.util.Objects.requireNonNull((symbol));
     return new Production(symbol, pattern);
   }
   
   public Production withPattern(hydra.grammar.Pattern pattern) {
-    java.util.Objects.requireNonNull((pattern));
     return new Production(symbol, pattern);
   }
 }

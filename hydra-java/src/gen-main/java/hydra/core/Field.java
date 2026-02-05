@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A name/term pair
  */
-public class Field implements Serializable {
+public class Field implements Serializable, Comparable<Field> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Field");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -25,8 +25,6 @@ public class Field implements Serializable {
   public final hydra.core.Term term;
   
   public Field (hydra.core.Name name, hydra.core.Term term) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((term));
     this.name = name;
     this.term = term;
   }
@@ -37,21 +35,34 @@ public class Field implements Serializable {
       return false;
     }
     Field o = (Field) (other);
-    return name.equals(o.name) && term.equals(o.term);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.term,
+      o.term);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * term.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(term);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Field other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (term)).compareTo(other.term);
   }
   
   public Field withName(hydra.core.Name name) {
-    java.util.Objects.requireNonNull((name));
     return new Field(name, term);
   }
   
   public Field withTerm(hydra.core.Term term) {
-    java.util.Objects.requireNonNull((term));
     return new Field(name, term);
   }
 }
