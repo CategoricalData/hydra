@@ -159,6 +159,73 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     return bindings
 
 
+def _load_kernel_type_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
+    """
+    Load kernel type bindings from the generated sources modules.
+
+    This loads bindings from hydra.sources.* modules which contain the type-level
+    kernel definitions (hydra.core.Type, hydra.core.Name, etc.). These are added
+    to the schema graph so that inference tests can reference kernel types.
+
+    This mirrors how Haskell includes kernelTypesModules in testSchemaGraph:
+        kernelElements = L.concat $ fmap moduleElements kernelTypesModules
+
+    Returns:
+        Dictionary mapping binding names to Binding objects
+    """
+    bindings = {}
+
+    # Import the kernel type sources modules
+    # These match kernelTypesModules in Hydra.Sources.Kernel.Types.All
+    kernel_type_source_modules = [
+        "hydra.sources.accessors",
+        "hydra.sources.ast",
+        "hydra.sources.classes",
+        "hydra.sources.coders",
+        "hydra.sources.compute",
+        "hydra.sources.constraints",
+        "hydra.sources.core",       # Contains hydra.core.Type, hydra.core.Name, etc.
+        "hydra.sources.grammar",
+        "hydra.sources.graph",
+        "hydra.sources.json.model",
+        "hydra.sources.module",
+        "hydra.sources.parsing",
+        "hydra.sources.phantoms",
+        "hydra.sources.query",
+        "hydra.sources.relational",
+        "hydra.sources.tabular",
+        "hydra.sources.testing",
+        "hydra.sources.topology",
+        "hydra.sources.typing",
+        "hydra.sources.util",
+        "hydra.sources.variants",
+        "hydra.sources.workflow",
+    ]
+
+    for module_name in kernel_type_source_modules:
+        try:
+            # Dynamically import the module
+            import importlib
+            source_module = importlib.import_module(module_name)
+
+            # Call module() to get the Module object
+            mod = source_module.module()
+
+            # Extract bindings from the module
+            for binding in mod.elements:
+                bindings[binding.name] = binding
+
+        except ImportError as e:
+            # Module not yet generated - skip silently
+            pass
+        except Exception as e:
+            # Log but don't fail - allows tests to run with partial kernel
+            import sys
+            print(f"Warning: Failed to load {module_name}: {e}", file=sys.stderr)
+
+    return bindings
+
+
 def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case is marked as disabled."""
     disabled_tag = hydra.testing.Tag("disabled")
@@ -322,10 +389,18 @@ def build_test_graph() -> hydra.graph.Graph:
         type=Just(coder_type_scheme)  # Reuse the same scheme for Type
     )
 
-    # Create the schema graph with test types
+    # Load kernel type bindings (hydra.core.Type, hydra.core.Name, etc.)
+    # This mirrors how Haskell includes kernelTypesModules in testSchemaGraph:
+    #   kernelElements = L.concat $ fmap moduleElements kernelTypesModules
+    kernel_types = _load_kernel_type_bindings()
+
+    # Merge test types with kernel types (test types take precedence)
+    all_type_bindings = {**kernel_types, **type_bindings}
+
+    # Create the schema graph with test types and kernel types
     # Note: elements is now a list of Bindings, not a Map Name Binding
     schema_graph = hydra.graph.Graph(
-        elements=tuple(type_bindings.values()),
+        elements=tuple(all_type_bindings.values()),
         environment=FrozenDict({}),
         types=FrozenDict({}),
         body=hydra.core.TermLiteral(hydra.core.LiteralString("schema")),
