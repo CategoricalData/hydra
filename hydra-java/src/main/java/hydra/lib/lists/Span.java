@@ -40,11 +40,29 @@ public class Span extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Flows::pure, args.get(1)),
-            (Function<List<Term>, Term>) lst -> {
-                // Simplified implementation - the static apply() provides the actual logic
-                return Terms.pair(Terms.list(List.of()), Terms.list(lst));
-            });
+        return args -> {
+            Term pred = args.get(0);
+            return Flows.bind(Expect.list(Flows::pure, args.get(1)), lst ->
+                spanFlow(pred, lst, 0));
+        };
+    }
+
+    private static Flow<Graph, Term> spanFlow(Term pred, List<Term> lst, int index) {
+        if (index >= lst.size()) {
+            return pure(Terms.pair(Terms.list(lst), Terms.list(List.of())));
+        }
+        Term element = lst.get(index);
+        Term application = Terms.apply(pred, element);
+        return Flows.bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+            Flows.bind(Expect.boolean_(reduced), b -> {
+                if (b) {
+                    return spanFlow(pred, lst, index + 1);
+                } else {
+                    return pure(Terms.pair(
+                        Terms.list(new ArrayList<>(lst.subList(0, index))),
+                        Terms.list(new ArrayList<>(lst.subList(index, lst.size())))));
+                }
+            }));
     }
 
     /**

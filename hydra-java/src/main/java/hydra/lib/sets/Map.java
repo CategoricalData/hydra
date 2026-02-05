@@ -52,7 +52,7 @@ public class Map extends PrimitiveFunction {
         return args -> {
             Term mapping = args.get(0);
             return Flows.map(Expect.set(Flows::pure, args.get(1)),
-                arg -> Terms.set(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toSet())));
+                arg -> Terms.set(FromList.orderedSet(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toList()))));
         };
     }
 
@@ -76,6 +76,7 @@ public class Map extends PrimitiveFunction {
      * @return a new set with the function applied to all elements
      */
     public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
-        return arg.stream().map(mapping).collect(Collectors.toSet());
+        java.util.List<Y> mapped = arg.stream().map(mapping).collect(Collectors.toList());
+        return FromList.orderedSet(mapped);
     }
 }

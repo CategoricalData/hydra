@@ -11,7 +11,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -50,7 +49,7 @@ public class Delete extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
             Term key = args.get(0);
-            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
+            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(1)),
                     before -> Terms.map(apply(key, before)));
         };
     }
@@ -75,7 +74,7 @@ public class Delete extends PrimitiveFunction {
      * @return the updated map
      */
     public static <K, V> Map<K, V> apply(K k, Map<K, V> before) {
-        Map<K, V> after = new HashMap<>(before);
+        Map<K, V> after = FromList.orderedMap(before);
         after.remove(k);
         return after;
     }

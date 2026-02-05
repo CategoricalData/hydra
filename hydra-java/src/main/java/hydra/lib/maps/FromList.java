@@ -11,8 +11,10 @@ import hydra.tools.PrimitiveFunction;
 import hydra.util.Tuple;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 import static hydra.dsl.Expect.list;
@@ -62,11 +64,53 @@ public class FromList extends PrimitiveFunction {
      * @param pairs the list of key-value pairs
      * @return a map constructed from the pairs
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> apply(List<Tuple.Tuple2<K, V>> pairs) {
-        Map<K, V> mp = new HashMap<>();
+        if (pairs.isEmpty()) {
+            return new LinkedHashMap<>();
+        }
+        // Check first key to determine map type
+        K firstKey = pairs.get(0).object1;
+        Map<K, V> mp;
+        if (firstKey instanceof Comparable) {
+            try {
+                mp = new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
+            } catch (ClassCastException e) {
+                mp = new LinkedHashMap<>();
+            }
+        } else {
+            mp = new LinkedHashMap<>();
+        }
         for (Tuple.Tuple2<K, V> pair : pairs) {
             mp.put(pair.object1, pair.object2);
         }
         return mp;
+    }
+
+    /**
+     * Creates an ordered map from an existing map.
+     * Uses TreeMap when keys are Comparable (matching Haskell's Data.Map behavior).
+     */
+    @SuppressWarnings("unchecked")
+    static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
+        if (source.isEmpty()) {
+            return new LinkedHashMap<>();
+        }
+        for (K key : source.keySet()) {
+            if (key != null) {
+                if (key instanceof Comparable) {
+                    try {
+                        TreeMap<K, V> result = new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
+                        result.putAll(source);
+                        return result;
+                    } catch (ClassCastException e) {
+                        return new LinkedHashMap<>(source);
+                    }
+                } else {
+                    return new LinkedHashMap<>(source);
+                }
+            }
+        }
+        return new LinkedHashMap<>(source);
     }
 }

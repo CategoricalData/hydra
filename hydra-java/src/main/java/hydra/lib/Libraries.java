@@ -269,7 +269,7 @@ public class Libraries {
                 new hydra.lib.math.Min(),
                 new hydra.lib.math.Mod(),
                 new hydra.lib.math.Mul(),
-                new hydra.lib.math.Neg(),
+                new hydra.lib.math.Negate(),
                 new hydra.lib.math.Odd(),
                 new hydra.lib.math.Pi(),
                 new hydra.lib.math.Pow(),
@@ -348,4 +348,5 @@ public class Libraries {
                 new hydra.lib.strings.ToUpper(),
                 new hydra.lib.strings.Unlines());
     }
+
 }

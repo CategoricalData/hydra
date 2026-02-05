@@ -56,6 +56,6 @@ public class ShowFloat32 extends PrimitiveFunction {
      * @return the string representation of the value
      */
     public static String apply(Float value) {
-        return Float.toString(value);
+        return ShowFloat.showFloat32(value);
     }
 }

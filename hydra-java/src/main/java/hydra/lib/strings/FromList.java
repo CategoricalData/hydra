@@ -60,7 +60,7 @@ public class FromList extends PrimitiveFunction {
     public static String apply(List<Integer> list) {
         StringBuilder sb = new StringBuilder();
         for (Integer i : list) {
-            sb.append((char) i.intValue());
+            sb.appendCodePoint(i);
         }
         return sb.toString();
     }

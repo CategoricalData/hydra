@@ -34,8 +34,7 @@ public class Lte extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> {
-            // Simple comparison based on term structure
-            int cmp = args.get(0).toString().compareTo(args.get(1).toString());
+            int cmp = Compare.compareTerms(args.get(0), args.get(1));
             return Flows.pure(Terms.boolean_(cmp <= 0));
         };
     }

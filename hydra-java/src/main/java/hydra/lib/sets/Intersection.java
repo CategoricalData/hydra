@@ -71,8 +71,8 @@ public class Intersection extends PrimitiveFunction {
      * @return a new set containing elements common to both sets
      */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        Set<X> newSet = new HashSet<>(s1);
+        java.util.LinkedHashSet<X> newSet = new java.util.LinkedHashSet<>(s1);
         newSet.retainAll(s2);
-        return newSet;
+        return FromList.orderedSet(newSet);
     }
 }

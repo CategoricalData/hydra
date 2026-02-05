@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static hydra.dsl.Flows.bind;
+import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -39,11 +41,30 @@ public class Partition extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Flows::pure, args.get(1)),
-            (Function<List<Term>, Term>) lst -> {
-                // Simplified implementation - the static apply() provides the actual logic
-                return Terms.pair(Terms.list(List.of()), Terms.list(lst));
+        return args -> {
+            Term pred = args.get(0);
+            return bind(Expect.list(Flows::pure, args.get(1)), lst -> {
+                Flow<Graph, Tuple.Tuple2<List<Term>, List<Term>>> partitioned =
+                    pure(new Tuple.Tuple2<>(new ArrayList<>(), new ArrayList<>()));
+                for (Term element : lst) {
+                    Term application = Terms.apply(pred, element);
+                    partitioned = bind(partitioned, acc ->
+                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
+                            bind(Expect.boolean_(reduced), b -> {
+                                List<Term> yes = new ArrayList<>(acc.object1);
+                                List<Term> no = new ArrayList<>(acc.object2);
+                                if (b) {
+                                    yes.add(element);
+                                } else {
+                                    no.add(element);
+                                }
+                                return pure(new Tuple.Tuple2<>(yes, no));
+                            })));
+                }
+                return Flows.map(partitioned, p ->
+                    Terms.pair(Terms.list(p.object1), Terms.list(p.object2)));
             });
+        };
     }
 
     /**

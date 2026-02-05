@@ -49,8 +49,22 @@ public class MapKeys extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(
-            Expect.map(k -> pure(Terms.apply(args.get(0), k)), Flows::pure, args.get(1)), Terms::map);
+        return args -> {
+            Term f = args.get(0);
+            return Flows.bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
+                Flow<Graph, java.util.Map<Term, Term>> resultFlow = pure(new HashMap<>());
+                for (java.util.Map.Entry<Term, Term> entry : mp.entrySet()) {
+                    Term application = Terms.apply(f, entry.getKey());
+                    final Term value = entry.getValue();
+                    resultFlow = Flows.bind(resultFlow, acc ->
+                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), newKey -> {
+                            acc.put(newKey, value);
+                            return acc;
+                        }));
+                }
+                return Flows.map(resultFlow, Terms::map);
+            });
+        };
     }
 
     /**
@@ -75,10 +89,10 @@ public class MapKeys extends PrimitiveFunction {
      * @return the map with transformed keys
      */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
-        java.util.Map<K2, V> result = new HashMap<>();
+        java.util.Map<K2, V> result = new java.util.LinkedHashMap<>();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
             result.put(mapping.apply(e.getKey()), e.getValue());
         }
-        return result;
+        return FromList.orderedMap(result);
     }
 }

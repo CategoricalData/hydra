@@ -48,9 +48,8 @@ public class Reverse extends PrimitiveFunction {
      * @return a new list with elements in reverse order
      */
     public static <X> List<X> apply(List<X> list) {
-        List<X> newList = new ArrayList<>();
-        newList.addAll(list);
-        Collections.reverse(list);
+        List<X> newList = new ArrayList<>(list);
+        Collections.reverse(newList);
         return newList;
     }
 }

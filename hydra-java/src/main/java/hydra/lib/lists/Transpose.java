@@ -36,11 +36,26 @@ public class Transpose extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Flows::pure, args.get(0)),
-            (Function<List<Term>, Term>) lst -> {
-                // Simplified implementation - the static apply() provides the actual logic
-                return Terms.list(lst);
+        return args -> Flows.bind(Expect.list(Flows::pure, args.get(0)), outerList -> {
+            // Parse each inner list
+            Flow<Graph, List<List<Term>>> matrixFlow = pure(new ArrayList<>());
+            for (Term inner : outerList) {
+                matrixFlow = Flows.bind(matrixFlow, acc ->
+                    Flows.map(Expect.list(Flows::pure, inner), row -> {
+                        List<List<Term>> newAcc = new ArrayList<>(acc);
+                        newAcc.add(row);
+                        return newAcc;
+                    }));
+            }
+            return Flows.map(matrixFlow, matrix -> {
+                List<List<Term>> transposed = apply(matrix);
+                List<Term> result = new ArrayList<>();
+                for (List<Term> row : transposed) {
+                    result.add(Terms.list(row));
+                }
+                return Terms.list(result);
             });
+        });
     }
 
     /**
@@ -50,20 +65,24 @@ public class Transpose extends PrimitiveFunction {
      * @return the transposed matrix
      */
     public static <X> List<List<X>> apply(List<List<X>> matrix) {
-        if (matrix.isEmpty() || matrix.get(0).isEmpty()) {
+        if (matrix.isEmpty()) {
             return List.of();
         }
-        int rows = matrix.size();
-        int cols = matrix.get(0).size();
+        int maxCols = 0;
+        for (List<X> row : matrix) {
+            maxCols = Math.max(maxCols, row.size());
+        }
         List<List<X>> result = new ArrayList<>();
-        for (int col = 0; col < cols; col++) {
+        for (int col = 0; col < maxCols; col++) {
             List<X> newRow = new ArrayList<>();
-            for (int row = 0; row < rows; row++) {
-                if (col < matrix.get(row).size()) {
-                    newRow.add(matrix.get(row).get(col));
+            for (List<X> row : matrix) {
+                if (col < row.size()) {
+                    newRow.add(row.get(col));
                 }
             }
-            result.add(newRow);
+            if (!newRow.isEmpty()) {
+                result.add(newRow);
+            }
         }
         return result;
     }

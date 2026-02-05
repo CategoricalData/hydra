@@ -63,10 +63,8 @@ public class ToList extends PrimitiveFunction {
      * @return the list of character code points
      */
     public static List<Integer> apply(String s) {
-        List<Integer> list = new ArrayList<>(s.length());
-        for (char c : s.toCharArray()) {
-            list.add((int) c);
-        }
+        List<Integer> list = new ArrayList<>(s.codePointCount(0, s.length()));
+        s.codePoints().forEach(list::add);
         return list;
     }
 }

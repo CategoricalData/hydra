@@ -49,7 +49,11 @@ public class ToList extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> Terms.list(apply(terms)));
+        return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> {
+            java.util.List<Term> sorted = new java.util.ArrayList<>(terms);
+            sorted.sort(hydra.lib.equality.Compare::compareTerms);
+            return Terms.list(sorted);
+        });
     }
 
     /**
@@ -58,7 +62,14 @@ public class ToList extends PrimitiveFunction {
      * @param arg the set to convert
      * @return a list containing all elements from the set
      */
+    @SuppressWarnings("unchecked")
     public static <X> List<X> apply(Set<X> arg) {
-        return new ArrayList<>(arg);
+        // If the set is already ordered (TreeSet), just convert directly.
+        // Otherwise, sort if elements are Comparable to match Haskell's Data.Set.toList behavior.
+        List<X> result = new ArrayList<>(arg);
+        if (!(arg instanceof java.util.SortedSet) && !result.isEmpty() && result.get(0) instanceof Comparable) {
+            result.sort((a, b) -> ((Comparable<X>) a).compareTo(b));
+        }
+        return result;
     }
 }

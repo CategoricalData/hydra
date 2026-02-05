@@ -30,7 +30,9 @@ public class Foldl extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a","b",
+        // Variables listed in order of first appearance: (b -> a -> b) -> b -> list<a> -> b
+        // b appears first, then a
+        return scheme("b","a",
                 function(function(Types.var("b"), Types.var("a"), Types.var("b")), variable("b"), list("a"),
                         variable("b")));
     }
@@ -40,10 +42,11 @@ public class Foldl extends PrimitiveFunction {
         return args -> {
             Term mapping = args.get(0);
             Term init = args.get(1);
-            return Flows.map(Expect.list(Flows::pure, args.get(2)), xs -> {
-                Term cur = init;
+            return Flows.bind(Expect.list(Flows::pure, args.get(2)), xs -> {
+                Flow<Graph, Term> cur = Flows.pure(init);
                 for (Term x : xs) {
-                    cur = Terms.apply(mapping, cur, x);
+                    cur = Flows.bind(cur, acc ->
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(mapping, acc, x)));
                 }
                 return cur;
             });

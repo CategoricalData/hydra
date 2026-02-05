@@ -21,13 +21,13 @@ import static hydra.dsl.Types.scheme;
 /**
  * Negates a number.
  */
-public class Neg extends PrimitiveFunction {
+public class Negate extends PrimitiveFunction {
     /**
      * Gets the name of this primitive function.
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.neg");
+        return new Name("hydra.lib.math.negate");
     }
 
     /**

@@ -49,9 +49,21 @@ public class Compose extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.optional(Flows::pure, args.get(0)),
-                arg -> arg.map(term -> Terms.optional(Maybe.just(Terms.apply(args.get(1), term))))
-                        .orElseGet(() -> Terms.optional(Maybe.nothing())));
+        return args -> {
+            Term f = args.get(0);  // a -> Maybe b
+            Term g = args.get(1);  // b -> Maybe c
+            Term x = args.get(2);  // a
+            // Apply f(x) and reduce to get Maybe b
+            return Flows.bind(hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, x)), fResult ->
+                Flows.bind(Expect.optional(Flows::pure, fResult), maybeFResult -> {
+                    if (maybeFResult.isJust()) {
+                        // Apply g(b) and reduce to get Maybe c
+                        return hydra.reduction.Reduction.reduceTerm(true, Terms.apply(g, maybeFResult.fromJust()));
+                    } else {
+                        return Flows.pure(Terms.optional(Maybe.nothing()));
+                    }
+                }));
+        };
     }
 
     /**
@@ -80,5 +92,19 @@ public class Compose extends PrimitiveFunction {
             Maybe<B> ob = left.apply(a);
             return ob.isJust() ? right.apply(ob.fromJust()) : Maybe.nothing();
         };
+    }
+
+    /**
+     * Composes two Maybe-returning functions and applies to a value.
+     * @param <A> the input type
+     * @param <B> the intermediate type
+     * @param <C> the output type
+     * @param left the first function to apply
+     * @param right the second function to apply
+     * @param a the value to apply the composed function to
+     * @return the result of applying the composed function to the value
+     */
+    public static <A, B, C> Maybe<C> apply(Function<A, Maybe<B>> left, Function<B, Maybe<C>> right, A a) {
+        return apply(left, right).apply(a);
     }
 }

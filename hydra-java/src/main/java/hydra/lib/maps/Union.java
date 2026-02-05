@@ -52,8 +52,9 @@ public class Union extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(0)), mp1 ->
             bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp2 -> {
-                Map<Term, Term> result = new HashMap<>(mp1);
-                result.putAll(mp2);
+                // Left-biased union: mp1 values take precedence (matching Haskell's Data.Map.union)
+                Map<Term, Term> result = new HashMap<>(mp2);
+                result.putAll(mp1);
                 return pure(Terms.map(result));
             }));
     }
@@ -78,8 +79,9 @@ public class Union extends PrimitiveFunction {
      * @return the union of the two maps
      */
     public static <K, V> Map<K, V> apply(Map<K, V> mp1, Map<K, V> mp2) {
-        Map<K, V> result = new HashMap<>(mp1);
-        result.putAll(mp2);
+        // Left-biased union: mp1 values take precedence (matching Haskell's Data.Map.union)
+        Map<K, V> result = FromList.orderedMap(mp2);
+        result.putAll(mp1);
         return result;
     }
 }
