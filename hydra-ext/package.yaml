@@ -51,6 +51,42 @@ executables:
     dependencies:
       - hydra-ext
 
+  update-java-kernel-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-java-kernel-tests
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec
+
+  update-java-generation-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-java-generation-tests
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec
+
+  update-java-eval-lib:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-java-eval-lib
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
+  update-java-kernel-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-java-kernel-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   update-python-kernel:
     main: Main.hs
     source-dirs:

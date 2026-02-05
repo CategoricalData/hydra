@@ -1,0 +1,55 @@
+#!/usr/bin/env stack
+{- stack script
+   --resolver lts-22.28
+   --package hydra-ext
+-}
+
+module Main where
+
+import Hydra.Kernel
+import Hydra.Staging.Testing.Generation.Generate
+import Hydra.Ext.Staging.Java.TestCodec (javaTestGenerator)
+import qualified Hydra.Sources.Test.TestSuite as TestSuite
+import qualified Hydra.Test.TestSuite as GenTests
+import System.Exit (exitFailure)
+import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
+
+
+main :: IO ()
+main = do
+  hSetBuffering stdout NoBuffering
+
+  putStrLn "=== Generate Java generation tests ==="
+  putStrLn ""
+
+  -- Get the namespaces from TestSuite's term dependencies
+  let testNamespaces = moduleTermDependencies TestSuite.module_
+
+  -- Build the lookup function from namespaces and test group hierarchy
+  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
+
+  -- Get the list of test modules explicitly
+  let testModules = TestSuite.testSuiteModules
+
+  -- Generate generation tests to ../hydra-java/src/gen-test/java/generation
+  let outputDir = "../hydra-java/src/gen-test/java/generation"
+
+  putStrLn $ "Generating tests into: " ++ outputDir
+  putStrLn ""
+
+  success <- generateGenerationTestSuite javaTestGenerator outputDir testModules lookupFn
+
+  if success
+    then do
+      putStrLn ""
+      putStrLn "=== Done! ==="
+      putStrLn ""
+      putStrLn "To view the generated tests:"
+      putStrLn $ "  ls -R " ++ outputDir
+      putStrLn ""
+      putStrLn "To run the generated tests:"
+      putStrLn "  cd ../hydra-java && ./gradlew test"
+    else do
+      putStrLn ""
+      putStrLn "=== FAILED ==="
+      exitFailure
