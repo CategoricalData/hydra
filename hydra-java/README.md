@@ -1,11 +1,66 @@
 # Hydra-Java
 
+This directory contains a Java implementation of Hydra.
+
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell and Java.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
-This package contains Hydra's Java API and Java sources specifically.
+
 JavaDocs for Hydra-Java can be found [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java).
+
+## Getting Started
+
+Hydra-Java requires Java 18 or later. Build the project with Gradle:
+
+```bash
+./gradlew build
+```
+
+To publish the resulting JAR to your local Maven repository:
+
+```bash
+./gradlew publishToMavenLocal
+```
+
+You may need to set the `JAVA_HOME` environment variable:
+
+```bash
+JAVA_HOME=/path/to/java18/installation ./gradlew build
+```
+
+## Testing
+
+Hydra-Java has two types of tests: the **common test suite** (shared across all Hydra implementations) and **Java-specific tests**. See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
+
+### Common Test Suite
+
+The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations. **Passing all common test suite cases is the criterion for a true Hydra implementation.**
+
+To run all tests:
+
+```bash
+./gradlew test
+```
+
+The test suite is generated from Hydra DSL sources and includes:
+- Primitive function tests (lists, strings, math, etc.)
+- Case conversion tests (camelCase, snake_case, etc.)
+- Type inference tests
+- Type checking tests
+- Evaluation tests
+- JSON coder tests
+- Rewriting and hoisting tests
+
+### Java-Specific Tests
+
+Java-specific tests validate implementation details and Java-specific functionality. These are located in `src/test/java/` alongside the common test suite runner.
+
+To run a specific test class:
+
+```bash
+./gradlew test --tests "hydra.VisitorTest"
+```
 
 ## Code Organization
 
@@ -13,7 +68,7 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code o
 
 - **`src/main/java/`** - Hand-written Java code
   - `hydra/lib/` - Primitive function implementations
-  - `hydra/util/` - Core utilities (Either, Maybe, Tuple, Unit, etc.)
+  - `hydra/util/` - Core utilities (Either, Maybe, Tuple, Unit, Lazy, etc.)
   - `hydra/tools/` - Framework classes (PrimitiveFunction, MapperBase, etc.)
   - Language-specific parsers and extensions
 
@@ -21,28 +76,58 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern (see [Code o
   - `hydra/core/` - Core types (Term, Type, Literal, etc.)
   - `hydra/graph/`, `hydra/module/` - Graph and module structures
   - `hydra/coders/`, `hydra/compute/` - Type adapters and computational abstractions
-  - Generated from Haskell DSL sources using `writeJava` in hydra-ext
+  - `hydra/reduction/`, `hydra/rewriting/`, `hydra/hoisting/` - Term transformations
+  - `hydra/inference/`, `hydra/checking/` - Type inference and checking
+  - Generated from Haskell DSL sources using the Java coder in hydra-ext
 
 - **`src/gen-test/java/`** - Generated test suite
-  - Common tests ensuring parity with Haskell and Python
-  - Generated using `writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules`
+  - `hydra/test/` - Common tests ensuring parity with Haskell and Python
+  - `generation/` - Generation tests (terms generated to Java and executed)
 
-To regenerate the Java code, see the [Hydra-Ext README](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/README.md#code-generation).
+## Generate Java Code
 
-## Build
+The Java code in `src/gen-main/java` and `src/gen-test/java` is generated from sources in Hydra's bootstrapping implementation, Hydra-Haskell.
+See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) for more information on how this works.
 
-Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`.
-This project requires at least Java 11, so you may need to set the `JAVA_HOME` environment variable accordingly: `JAVA_HOME=/path/to/java11/installation ./gradlew build`.
+The recommended way to regenerate all Java code is to use the sync script:
 
-To run the tests, use `./gradlew test`.
+```bash
+cd ../hydra-ext
+./bin/sync-java.sh
+```
 
-## Design notes
+This will:
+1. Generate the kernel modules
+2. Generate the eval lib modules
+3. Generate the kernel tests
+4. Generate the generation tests
+5. Build and run all tests
 
-### Algebraic data types
+For manual generation, enter GHCi from hydra-ext:
+
+```bash
+cd ../hydra-ext && stack ghci
+```
+
+And run the following commands in the GHC REPL:
+
+```haskell
+-- Generate the kernel
+writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
+
+-- Generate the test suite
+let allModules = mainModules ++ testModules
+writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
+```
+
+## Design Notes
+
+### Algebraic Data Types
 
 The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found [here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Staging/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types which was originally proposed by Gabriel Garcia, and used in [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale).
+
 For example, the generated `Vertex` class represents a property graph vertex, and corresponds to a record type:
 
 ```java
@@ -81,9 +166,10 @@ public class Vertex<V> {
 See [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Vertex.java) for the complete class,
 as well as the `Vertex` type in [Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/gen-main/haskell/Hydra/Pg/Model.hs) for comparison.
 Both files were generated from the property graph model defined [here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
-In each instantiation of the model, a vertex is an object with a label, an id, and a key/value map of properties.
-The `Edge` type is defined similarly (see [Edge.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Edge.java)).
-Now compare this with the generated `Element` class, which is a tagged union of `Vertex` and `Edge`:
+
+### Union Types and Visitors
+
+Union types (sum types) are represented using the visitor pattern. For example, the `Element` type is a tagged union of `Vertex` and `Edge`:
 
 ```java
 public abstract class Element<V> {
@@ -93,7 +179,6 @@ public abstract class Element<V> {
 
   public interface Visitor<V, R> {
     R visit(Vertex<V> instance) ;
-
     R visit(Edge<V> instance) ;
   }
 
@@ -101,78 +186,24 @@ public abstract class Element<V> {
     default R otherwise(Element<V> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-
-    default R visit(Vertex<V> instance) {
-      return otherwise((instance));
-    }
-
-    default R visit(Edge<V> instance) {
-      return otherwise((instance));
-    }
+    default R visit(Vertex<V> instance) { return otherwise((instance)); }
+    default R visit(Edge<V> instance) { return otherwise((instance)); }
   }
 
   public static final class Vertex<V> extends hydra.pg.model.Element<V> {
     public final hydra.pg.model.Vertex<V> value;
-
-    public Vertex (hydra.pg.model.Vertex<V> value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Vertex)) {
-        return false;
-      }
-      Vertex o = (Vertex) (other);
-      return value.equals(o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-
-    @Override
-    public <R> R accept(Visitor<V, R> visitor) {
-      return visitor.visit(this);
-    }
+    // ... constructor, equals, hashCode, accept
   }
 
   public static final class Edge<V> extends hydra.pg.model.Element<V> {
     public final hydra.pg.model.Edge<V> value;
-
-    public Edge (hydra.pg.model.Edge<V> value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Edge)) {
-        return false;
-      }
-      Edge o = (Edge) (other);
-      return value.equals(o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-
-    @Override
-    public <R> R accept(Visitor<V, R> visitor) {
-      return visitor.visit(this);
-    }
+    // ... constructor, equals, hashCode, accept
   }
 }
 ```
 
 See [Element.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Element.java) for the complete class.
-Notice that we have defined two inner classes, `Element.Vertex` and `Element.Edge`, for each alternative of the union,
-as well as a pair of "visitor" classes: `Element.Visitor` and `Element.PartialVisitor`.
-The first two classes are used to instantiate an `Element` either as the first alternative (a vertex) or the second (an edge).
-The `Visitor` class is for pattern matching over the alternatives, and `PartialVisitor` is a convenient extension of the same which allows us to supply a default value for alternatives we do not care to match explicitly.
+The `Visitor` class is for pattern matching over the alternatives, and `PartialVisitor` is a convenient extension which allows supplying a default value for alternatives not matched explicitly.
+
 The [Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/rewriting/Rewriting.java) and [Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/reduction/Reduction.java) classes are good examples of pattern matching in action,
 and there are simpler examples in [VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/test/java/hydra/VisitorTest.java).
