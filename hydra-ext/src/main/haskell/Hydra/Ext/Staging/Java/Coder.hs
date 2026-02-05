@@ -1,7 +1,9 @@
 module Hydra.Ext.Staging.Java.Coder (
   JavaFeatures(..),
+  JavaEnvironment(..),
   java8Features,
   moduleToJava,
+  encodeTerm,
 ) where
 
 import Hydra.Kernel
@@ -690,9 +692,9 @@ classifyDataTerm ts term = if isLambda term
       then case countLambdaParams (stripTypeLambdas term) of
         n | n > 0 -> JavaSymbolClassHoistedLambda n
         _ -> JavaSymbolClassNullaryFunction
-      else if isUnsupportedVariant
-        then JavaSymbolClassNullaryFunction
-        else JavaSymbolClassConstant
+      -- All non-lambda, non-polymorphic terms are nullary functions (not constants)
+      -- to avoid forward-reference NPEs in interface static field initialization order.
+      else JavaSymbolClassNullaryFunction
   where
     hasTypeParameters = not $ L.null $ typeSchemeVariables ts
     isUnsupportedVariant = case deannotateTerm term of
@@ -743,19 +745,51 @@ constructElementsInterface mod members = (elName, cu)
     mods = [Java.InterfaceModifierPublic]
     className = elementsClassName $ moduleNamespace mod
     elName = unqualifyName $ QualifiedName (Just $ moduleNamespace mod) className
-    body = Java.InterfaceBody members
+    allMembers = members
+    body = Java.InterfaceBody allMembers
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
+-- | Split a constant declaration into a field + helper method to avoid large <clinit>.
+--   Transforms: Type x = <expr>;
+--   Into:       Type x = _init_x();
+--               static Type _init_x() { return <expr>; }
+splitConstantInitializer :: Java.InterfaceMemberDeclaration -> [Java.InterfaceMemberDeclaration]
+splitConstantInitializer member = case member of
+  Java.InterfaceMemberDeclarationConstant (Java.ConstantDeclaration mods utype vars) ->
+    L.concatMap (splitVar mods utype) vars
+  _ -> [member]
+  where
+    splitVar mods utype (Java.VariableDeclarator vid (Just (Java.VariableInitializerExpression expr))) =
+      [field, helper]
+      where
+        varName = javaIdentifierToString $ Java.variableDeclaratorIdIdentifier vid
+        helperName = "_init_" ++ varName
+        callExpr = javaMethodInvocationToJavaExpression $
+          methodInvocation Nothing (Java.Identifier helperName) []
+        field = Java.InterfaceMemberDeclarationConstant $
+          Java.ConstantDeclaration mods utype
+            [Java.VariableDeclarator vid (Just $ Java.VariableInitializerExpression callExpr)]
+        returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just expr
+        resultType = Java.ResultType utype
+        helper = interfaceMethodDeclaration
+          [Java.InterfaceMethodModifierStatic, Java.InterfaceMethodModifierPrivate]
+          [] helperName [] resultType (Just [returnSt])
+    splitVar mods utype var = [Java.InterfaceMemberDeclarationConstant $
+      Java.ConstantDeclaration mods utype [var]]
+
+javaIdentifierToString :: Java.Identifier -> String
+javaIdentifierToString (Java.Identifier s) = s
+
 declarationForRecordType :: Bool -> Bool -> Aliases -> [Java.TypeParameter] -> Name
   -> [FieldType] -> Flow Graph Java.ClassDeclaration
-declarationForRecordType isInner isSer aliases tparams elName fields = do
+declarationForRecordType isInner isSer aliases tparams elName fields = declarationForRecordType' isInner isSer aliases tparams elName Nothing fields
 
---    if (elName == Name "hydra.relational.ColumnSchema")
---      then fail $ "fields: [" ++ (L.intercalate ", " $ fmap (ShowCore.fieldType) fields) ++ "], tparams: " ++ show tparams
---      else pure ()
-
+-- | Extended version that accepts an optional parent name for union variant compareTo generation.
+declarationForRecordType' :: Bool -> Bool -> Aliases -> [Java.TypeParameter] -> Name -> Maybe Name -> [FieldType]
+  -> Flow Graph Java.ClassDeclaration
+declarationForRecordType' isInner isSer aliases tparams elName parentName fields = do
     memberVars <- CM.mapM toMemberVar fields
     memberVars' <- CM.zipWithM addComment memberVars fields
     withMethods <- if L.length fields > 1
@@ -766,14 +800,17 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
       d <- constantDeclForTypeName aliases elName
       dfields <- CM.mapM (constantDeclForFieldType aliases) fields
       return (d:dfields)
-    let bodyDecls = tn ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
-    return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing (interfaceTypes isSer) bodyDecls
+    let comparableMethods = case parentName of
+          Just pn -> if isSer then [variantCompareToMethod aliases tparams pn elName fields] else []
+          Nothing -> if not isInner && isSer then [compareToMethod] else []
+    let bodyDecls = tn ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ comparableMethods ++ withMethods)
+    let ifaces = if isInner then serializableTypes isSer else interfaceTypes isSer aliases tparams elName
+    return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls
   where
     constructor = do
       params <- CM.mapM (fieldTypeToFormalParam aliases) fields
-      let nullCheckStmts = fieldToNullCheckStatement <$> fields
       let assignStmts = fieldToAssignStatement <$> fields
-      return $ makeConstructor aliases elName False params $ nullCheckStmts ++ assignStmts
+      return $ makeConstructor aliases elName False params assignStmts
 
     fieldToAssignStatement = Java.BlockStatementStatement . toAssignStmt . fieldTypeName
 
@@ -787,12 +824,11 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
 
     toWithMethod field = do
         param <- fieldTypeToFormalParam aliases field
-        return $ methodDeclaration mods [] anns methodName [param] result (Just [nullCheck, returnStmt])
+        return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
       where
         anns = [] -- TODO
         mods = [Java.MethodModifierPublic]
         methodName = "with" ++ nonAlnumToUnderscores (capitalize (unName $ fieldTypeName field))
-        nullCheck = fieldToNullCheckStatement field
         result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
         consId = Java.Identifier $ sanitizeJavaName $ localNameOf elName
         returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
@@ -834,16 +870,53 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
         returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
             then javaBooleanExpression True
             else javaConditionalAndExpressionToJavaExpression $
-              Java.ConditionalAndExpression (eqClause . fieldTypeName <$> fields)
+              Java.ConditionalAndExpression (eqClause <$> fields)
           where
-            eqClause (Name fname) = javaPostfixExpressionToJavaInclusiveOrExpression $
-                javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
+            eqClause (FieldType (Name fname) ftype)
+              -- byte[]: use java.util.Arrays.equals() instead of equals()
+              | isBinaryType ftype = arraysEqualsClause fname
+              -- BigDecimal/BigInteger: use compareTo() == 0 instead of equals()
+              | isBigNumericType ftype = compareToZeroClause fname
+              | otherwise = equalsClause fname
+            -- Use java.util.Objects.equals() for null-safe comparison
+            -- Use this.fname to avoid name conflicts with the 'other' parameter in equals(Object other)
+            equalsClause fname = javaPostfixExpressionToJavaInclusiveOrExpression $
+                javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [thisArg, otherArg]
               where
-                arg = javaExpressionNameToJavaExpression $
+                thisArg = javaExpressionNameToJavaExpression $
+                  fieldExpression (Java.Identifier "this") (javaIdentifier fname)
+                otherArg = javaExpressionNameToJavaExpression $
                   fieldExpression (javaIdentifier tmpName) (javaIdentifier fname)
                 header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier equalsMethodName)
-                var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing $ Java.Identifier $
-                  sanitizeJavaName fname
+                var = Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "java.util.Objects"
+            -- Generate: java.util.Arrays.equals(this.value, o.value)
+            arraysEqualsClause fname = javaPostfixExpressionToJavaInclusiveOrExpression $
+                javaMethodInvocationToJavaPostfixExpression $
+                Java.MethodInvocation
+                  (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                    (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "java.util.Arrays")
+                    [] (Java.Identifier equalsMethodName))
+                  [ javaExpressionNameToJavaExpression $
+                      fieldExpression (Java.Identifier "this") (javaIdentifier fname)
+                  , javaExpressionNameToJavaExpression $
+                      fieldExpression (javaIdentifier tmpName) (javaIdentifier fname)
+                  ]
+            -- Generate: this.field.compareTo(o.field) == 0
+            compareToZeroClause fname = javaEqualityExpressionToJavaInclusiveOrExpression $
+                Java.EqualityExpressionEqual $ Java.EqualityExpression_Binary lhs rhs
+              where
+                lhs = javaRelationalExpressionToJavaEqualityExpression $
+                  javaPostfixExpressionToJavaRelationalExpression $
+                  javaMethodInvocationToJavaPostfixExpression $
+                  Java.MethodInvocation compareToHeader [compareToArg]
+                rhs = javaPostfixExpressionToJavaRelationalExpression $
+                  Java.PostfixExpressionPrimary $ javaLiteralToJavaPrimary $ javaInt 0
+                compareToArg = javaExpressionNameToJavaExpression $
+                  fieldExpression (javaIdentifier tmpName) (javaIdentifier fname)
+                compareToHeader = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex compareToVar [] (Java.Identifier compareToMethodName)
+                -- Use this.fname to avoid name conflicts with the 'other' parameter
+                compareToVar = Java.MethodInvocation_VariantExpression $
+                  fieldExpression (Java.Identifier "this") (javaIdentifier fname)
 
     hashCodeMethod = methodDeclaration mods [] anns hashCodeMethodName [] result $ Just [returnSum]
       where
@@ -859,6 +932,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
           where
             returnZero = javaReturnStatement $ Just $ javaIntExpression 0
 
+            -- Use java.util.Objects.hashCode() for null-safe hashing
             multPair :: Int -> Name -> Java.MultiplicativeExpression
             multPair i (Name fname) = Java.MultiplicativeExpressionTimes $
                 Java.MultiplicativeExpression_Binary lhs rhs
@@ -867,11 +941,276 @@ declarationForRecordType isInner isSer aliases tparams elName fields = do
                   javaLiteralToJavaPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
-                  methodInvocationStatic (javaIdentifier fname) (Java.Identifier hashCodeMethodName) []
+                  Java.MethodInvocation
+                    (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                      (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "java.util.Objects")
+                      [] (Java.Identifier hashCodeMethodName))
+                    [javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ Java.Identifier $ sanitizeJavaName fname]
 
             multipliers = L.cycle first20Primes
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
+
+    compareToMethod = recordCompareToMethod aliases tparams elName fields
+
+-- | Check whether a Hydra type maps to a Java type that does not implement Comparable.
+-- These types need special comparison logic in compareTo methods.
+isNonComparableType :: Type -> Bool
+isNonComparableType typ = case deannotateType typ of
+  TypeList _ -> True
+  TypeSet _ -> True
+  TypeMap _ -> True
+  TypeMaybe _ -> True
+  TypePair _ -> True
+  TypeEither _ -> True
+  TypeFunction _ -> True
+  TypeLiteral LiteralTypeBinary -> True  -- byte[] is not Comparable
+  TypeForall (ForallType _ body) -> isNonComparableType body
+  _ -> False
+
+-- | Check whether a Hydra type is the binary literal type (maps to byte[]).
+isBinaryType :: Type -> Bool
+isBinaryType typ = case deannotateType typ of
+  TypeLiteral LiteralTypeBinary -> True
+  _ -> False
+
+-- | Check whether a Hydra type maps to BigDecimal or BigInteger in Java.
+--   These types require compareTo() instead of equals() for value comparison,
+--   because BigDecimal.equals() considers scale (e.g. 0.0 != 0).
+isBigNumericType :: Type -> Bool
+isBigNumericType typ = case deannotateType typ of
+  TypeLiteral (LiteralTypeFloat FloatTypeBigfloat) -> True
+  TypeLiteral (LiteralTypeInteger IntegerTypeBigint) -> True
+  _ -> False
+
+-- | Generate a compareTo method for a record type.
+-- For zero fields: return 0
+-- For one field: return ((Comparable) this.field).compareTo(other.field)
+-- For multiple fields: sequential comparison with early return on non-zero
+-- For non-Comparable fields (List, Set, Map, etc.): use Integer.compare(hashCode, hashCode)
+-- For byte[] fields: use java.util.Arrays.compare
+recordCompareToMethod :: Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Java.ClassBodyDeclaration
+recordCompareToMethod aliases tparams elName fields = methodDeclaration mods [] anns compareToMethodName [param] result $
+    Just body
+  where
+    anns = [overrideAnnotation, suppressWarningsUncheckedAnnotation]
+    mods = [Java.MethodModifierPublic]
+    param = javaTypeToJavaFormalParameter (javaTypeFromTypeName aliases elName) (Name otherInstanceName)
+    result = javaTypeToJavaResult javaIntType
+    body = case fields of
+      [] -> [Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaIntExpression 0]
+      [f] -> [Java.BlockStatementStatement $ javaReturnStatement $ Just $ compareField f]
+      _ -> cmpDecl : L.concatMap compareAndReturn (L.init fields) ++ [returnLast (L.last fields)]
+    cmpVarName = "cmp"
+    -- int cmp;
+    cmpDecl = variableDeclarationStatement aliases javaIntType (javaIdentifier cmpVarName) (javaIntExpression 0)
+    -- Generate the appropriate comparison expression for a field based on its type
+    compareField (FieldType (Name fname) ftype)
+      -- byte[] fields: java.util.Arrays.compare(this.field, other.field)
+      | isBinaryType ftype = arraysCompareExpr fname
+      -- Non-Comparable fields: Integer.compare(this.field.hashCode(), other.field.hashCode())
+      | isNonComparableType ftype = hashCodeCompareExpr fname
+      -- Comparable fields: ((Comparable) this.field).compareTo(other.field)
+      | otherwise = comparableCompareExpr fname
+    -- ((Comparable) this.field).compareTo(other.field)
+    comparableCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation header [arg]
+      where
+        arg = javaExpressionNameToJavaExpression $
+          fieldExpression (javaIdentifier otherInstanceName) (javaIdentifier fname)
+        header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex castVar [] (Java.Identifier compareToMethodName)
+        castVar = Java.MethodInvocation_VariantPrimary $ javaExpressionToJavaPrimary $
+          javaCastExpressionToJavaExpression $
+          javaCastExpression comparableRefType (javaIdentifierToJavaUnaryExpression $ Java.Identifier $ sanitizeJavaName fname)
+    -- java.util.Arrays.compare(this.field, other.field)
+    arraysCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+          (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+            (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "java.util.Arrays")
+            [] (Java.Identifier "compare"))
+          [ javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ Java.Identifier $ sanitizeJavaName fname
+          , javaExpressionNameToJavaExpression $
+              fieldExpression (javaIdentifier otherInstanceName) (javaIdentifier fname)
+          ]
+    -- Integer.compare(this.field.hashCode(), other.field.hashCode())
+    hashCodeCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+          (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+            (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "Integer")
+            [] (Java.Identifier "compare"))
+          [ javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantExpression $
+                  Java.ExpressionName Nothing $ Java.Identifier $ sanitizeJavaName fname)
+                [] (Java.Identifier hashCodeMethodName))
+              []
+          , javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantExpression $
+                  fieldExpression (javaIdentifier otherInstanceName) (javaIdentifier fname))
+                [] (Java.Identifier hashCodeMethodName))
+              []
+          ]
+    comparableRefType = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+      Java.ClassType [] Java.ClassTypeQualifierNone (javaTypeIdentifier "Comparable") []
+    -- cmp = compareField(f); if (cmp != 0) return cmp;
+    compareAndReturn f =
+      [ Java.BlockStatementStatement $ javaAssignmentStatement
+          (Java.LeftHandSideExpressionName $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName)
+          (compareField f)
+      , Java.BlockStatementStatement $ Java.StatementIfThen $ Java.IfThenStatement
+          (cmpNotZero)
+          (javaReturnStatement $ Just $ javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName)
+      ]
+    returnLast f = Java.BlockStatementStatement $ javaReturnStatement $ Just $ compareField f
+    -- cmp != 0
+    cmpNotZero = javaEqualityExpressionToJavaExpression $
+        Java.EqualityExpressionNotEqual $ Java.EqualityExpression_Binary lhs rhs
+      where
+        lhs = javaRelationalExpressionToJavaEqualityExpression $
+          javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionName $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName
+        rhs = javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionPrimary $ javaLiteralToJavaPrimary $ javaInt 0
+
+-- | Generate a compareTo method for a union variant (inner) class.
+-- Takes the parent type as the compareTo parameter.
+-- First compares variant class names for tag ordering,
+-- then casts 'other' to the same variant class and compares the 'value' field.
+variantCompareToMethod :: Aliases -> [Java.TypeParameter] -> Name -> Name -> [FieldType] -> Java.ClassBodyDeclaration
+variantCompareToMethod aliases tparams parentName variantName fields = methodDeclaration mods [] anns compareToMethodName [param] result $
+    Just body
+  where
+    anns = [overrideAnnotation, suppressWarningsUncheckedAnnotation]
+    mods = [Java.MethodModifierPublic]
+    -- Parameter type is the parent type, not the variant type
+    param = javaTypeToJavaFormalParameter (javaTypeFromTypeName aliases parentName) (Name otherInstanceName)
+    result = javaTypeToJavaResult javaIntType
+    body =
+      [ -- int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+        variableDeclarationStatement aliases javaIntType (javaIdentifier "tagCmp") tagCompareExpr
+      , -- if (tagCmp != 0) return tagCmp;
+        Java.BlockStatementStatement $ Java.StatementIfThen $ Java.IfThenStatement
+          tagCmpNotZero
+          (javaReturnStatement $ Just $ javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ javaIdentifier "tagCmp")
+      ] ++ valueCompareStmt
+    -- For unit variants (no fields): return 0
+    -- For non-unit variants: VariantName o = (VariantName) other; return ((Comparable) this.value).compareTo(o.value);
+    valueCompareStmt = case fields of
+      [] -> [Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaIntExpression 0]
+      _ ->
+        [ -- VariantName o = (VariantName) other;
+          variableDeclarationStatement aliases variantJavaType (javaIdentifier varTmpName) castOtherExpr
+        ] ++ case fields of
+          [f] -> [Java.BlockStatementStatement $ javaReturnStatement $ Just $ compareFieldToOther f]
+          _ -> cmpDecl : L.concatMap compareAndReturn (L.init fields) ++ [returnLast (L.last fields)]
+    varTmpName = "o"
+    variantJavaType = javaTypeFromTypeName aliases variantName
+    variantRefType = nameToJavaReferenceType aliases False [] variantName Nothing
+    castOtherExpr = javaCastExpressionToJavaExpression $
+      javaCastExpression variantRefType (javaIdentifierToJavaUnaryExpression $ Java.Identifier otherInstanceName)
+    -- Generate type-aware comparison expression for a field
+    compareFieldToOther (FieldType (Name fname) ftype)
+      | isBinaryType ftype = arraysCompareExpr fname
+      | isNonComparableType ftype = hashCodeCompareExpr fname
+      | otherwise = comparableCompareExpr fname
+    -- ((Comparable) this.field).compareTo(o.field)
+    comparableCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation header [arg]
+      where
+        arg = javaExpressionNameToJavaExpression $
+          fieldExpression (javaIdentifier varTmpName) (javaIdentifier fname)
+        header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex castVar [] (Java.Identifier compareToMethodName)
+        castVar = Java.MethodInvocation_VariantPrimary $ javaExpressionToJavaPrimary $
+          javaCastExpressionToJavaExpression $
+          javaCastExpression comparableRefType (javaIdentifierToJavaUnaryExpression $ Java.Identifier $ sanitizeJavaName fname)
+    -- java.util.Arrays.compare(this.field, o.field)
+    arraysCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+          (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+            (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "java.util.Arrays")
+            [] (Java.Identifier "compare"))
+          [ javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ Java.Identifier $ sanitizeJavaName fname
+          , javaExpressionNameToJavaExpression $
+              fieldExpression (javaIdentifier varTmpName) (javaIdentifier fname)
+          ]
+    -- Integer.compare(this.field.hashCode(), o.field.hashCode())
+    hashCodeCompareExpr fname =
+        javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+          (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+            (Java.MethodInvocation_VariantType $ javaTypeName $ Java.Identifier "Integer")
+            [] (Java.Identifier "compare"))
+          [ javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantExpression $
+                  Java.ExpressionName Nothing $ Java.Identifier $ sanitizeJavaName fname)
+                [] (Java.Identifier hashCodeMethodName))
+              []
+          , javaMethodInvocationToJavaExpression $ Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantExpression $
+                  fieldExpression (javaIdentifier varTmpName) (javaIdentifier fname))
+                [] (Java.Identifier hashCodeMethodName))
+              []
+          ]
+    comparableRefType = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+      Java.ClassType [] Java.ClassTypeQualifierNone (javaTypeIdentifier "Comparable") []
+    cmpVarName = "cmp"
+    cmpDecl = variableDeclarationStatement aliases javaIntType (javaIdentifier cmpVarName) (javaIntExpression 0)
+    compareAndReturn f =
+      [ Java.BlockStatementStatement $ javaAssignmentStatement
+          (Java.LeftHandSideExpressionName $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName)
+          (compareFieldToOther f)
+      , Java.BlockStatementStatement $ Java.StatementIfThen $ Java.IfThenStatement
+          (cmpNotZero)
+          (javaReturnStatement $ Just $ javaExpressionNameToJavaExpression $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName)
+      ]
+    returnLast f = Java.BlockStatementStatement $ javaReturnStatement $ Just $ compareFieldToOther f
+    cmpNotZero = javaEqualityExpressionToJavaExpression $
+        Java.EqualityExpressionNotEqual $ Java.EqualityExpression_Binary lhs rhs
+      where
+        lhs = javaRelationalExpressionToJavaEqualityExpression $
+          javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionName $ Java.ExpressionName Nothing $ javaIdentifier cmpVarName
+        rhs = javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionPrimary $ javaLiteralToJavaPrimary $ javaInt 0
+    thisPrimary = Java.PrimaryNoNewArray_ Java.PrimaryNoNewArrayThis
+    tagCompareExpr = javaMethodInvocationToJavaExpression $
+      Java.MethodInvocation
+        (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+          (Java.MethodInvocation_VariantPrimary $ javaMethodInvocationToJavaPrimary $
+            Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantPrimary $ javaMethodInvocationToJavaPrimary $
+                  Java.MethodInvocation
+                    (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                      (Java.MethodInvocation_VariantPrimary thisPrimary)
+                      [] (Java.Identifier "getClass"))
+                    [])
+                [] (Java.Identifier "getName"))
+              [])
+          [] (Java.Identifier compareToMethodName))
+        [ javaMethodInvocationToJavaExpression $
+            Java.MethodInvocation
+              (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                (Java.MethodInvocation_VariantPrimary $ javaMethodInvocationToJavaPrimary $
+                  Java.MethodInvocation
+                    (Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex
+                      (Java.MethodInvocation_VariantExpression $
+                        Java.ExpressionName Nothing $ Java.Identifier otherInstanceName)
+                      [] (Java.Identifier "getClass"))
+                    [])
+                [] (Java.Identifier "getName"))
+              []
+        ]
+    tagCmpNotZero = javaEqualityExpressionToJavaExpression $
+        Java.EqualityExpressionNotEqual $ Java.EqualityExpression_Binary lhs rhs
+      where
+        lhs = javaRelationalExpressionToJavaEqualityExpression $
+          javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionName $ Java.ExpressionName Nothing $ javaIdentifier "tagCmp"
+        rhs = javaPostfixExpressionToJavaRelationalExpression $
+          Java.PostfixExpressionPrimary $ javaLiteralToJavaPrimary $ javaInt 0
 
 declarationForType :: Bool -> Aliases -> (Binding, TypeApplicationTerm) -> Flow Graph Java.TypeDeclarationWithComments
 declarationForType isSer aliases (el, TypeApplicationTerm term _) = withTrace ("element " ++ unName (bindingName el)) $ do
@@ -892,14 +1231,16 @@ declarationForUnionType isSer aliases tparams elName fields = do
       d <- constantDeclForTypeName aliases elName
       dfields <- CM.mapM (constantDeclForFieldType aliases) fields
       return (d:dfields)
+    -- No compareTo on the abstract parent — each variant overrides compareTo with proper value comparison
     let bodyDecls = tn ++ otherDecls ++ variantDecls'
     let mods = classModsPublic ++ [Java.ClassModifierAbstract]
-    return $ javaClassDeclaration aliases tparams elName mods Nothing (interfaceTypes isSer) bodyDecls
+    return $ javaClassDeclaration aliases tparams elName mods Nothing (interfaceTypes isSer aliases tparams elName) bodyDecls
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if Schemas.isUnitType ftype then [] else [FieldType (Name valueFieldName) $ deannotateType ftype]
-      toClassDecl True isSer aliases [] (variantClassName False elName fname) rtype
+      let rfields = if Schemas.isUnitType (deannotateType ftype) then [] else [FieldType (Name valueFieldName) $ deannotateType ftype]
+      let varName = variantClassName False elName fname
+      declarationForRecordType' True isSer aliases [] varName (if isSer then Just elName else Nothing) rfields
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
         Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True args elName Nothing,
@@ -973,7 +1314,7 @@ elementJavaIdentifier isPrim isMethod aliases name = Java.Identifier $ if isPrim
     QualifiedName ns local = qualifyName name
 
 elementsClassName :: Namespace -> String
-elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "." ns
+elementsClassName (Namespace ns) = sanitizeJavaName $ capitalize $ L.last $ LS.splitOn "." ns
 
 encodeApplication :: JavaEnvironment -> Application -> Flow Graph Java.Expression
 encodeApplication env app@(Application lhs rhs) = do
@@ -1380,7 +1721,7 @@ encodeLiteral lit = case lit of
     LiteralFloat f -> case f of
         FloatValueBigfloat v -> javaConstructorCall
           (javaConstructorName (Java.Identifier "java.math.BigDecimal") Nothing)
-          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigfloat v ++ "\""]
+          [encodeLiteral $ LiteralString $ Literals.showBigfloat v]
           Nothing
         FloatValueFloat32 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeFloatingPoint Java.FloatingPointTypeFloat) $ litExp $
               Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ realToFrac v
@@ -1388,7 +1729,7 @@ encodeLiteral lit = case lit of
     LiteralInteger i -> case i of
         IntegerValueBigint v -> javaConstructorCall
           (javaConstructorName (Java.Identifier "java.math.BigInteger") Nothing)
-          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigint v ++ "\""]
+          [encodeLiteral $ LiteralString $ Literals.showBigint v]
           Nothing
         IntegerValueInt8 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeByte) $ litExp $ integer $ fromIntegral v
         IntegerValueInt16 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeShort) $ litExp $ integer $ fromIntegral v
@@ -1399,7 +1740,7 @@ encodeLiteral lit = case lit of
         IntegerValueUint32 v -> primCast (Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeLong) $ litExp $ integer $ fromIntegral v
         IntegerValueUint64 v -> javaConstructorCall
           (javaConstructorName (Java.Identifier "java.math.BigInteger") Nothing)
-          [encodeLiteral $ LiteralString $ "\"" <> Literals.showBigint (fromIntegral v) ++ "\""]
+          [encodeLiteral $ LiteralString $ Literals.showBigint (fromIntegral v)]
           Nothing
       where
         integer = Java.LiteralInteger . Java.IntegerLiteral
@@ -1516,23 +1857,39 @@ encodeTerm env term0 = encodeInternal [] [] term0
               encodeFunction env dom cod f
             _ -> encodeNullaryConstant env typ f
 
-        TermLet lt -> withTrace "encode let as lambda application" $ do
-          -- Convert let x1=e1, x2=e2 in body to ((x1) -> ((x2) -> body).apply(e2)).apply(e1)
-          -- We fold from right to left, wrapping body in lambdas, then applying arguments
+        TermLet lt -> withTrace "encode let as block" $ do
+          -- Convert let bindings to local variable declarations in a block-bodied nullary lambda,
+          -- then immediately invoke with .get(). This avoids eager evaluation of binding values
+          -- (which the previous lambda-application encoding caused).
+          -- Emits: ((Supplier<R>) (() -> { T x = e; return body; })).get()
           let bindings = letBindings lt
           let body = letBody lt
           if L.null bindings
             then encode body
             else do
-              -- Build nested lambdas from innermost (last binding) to outermost (first binding)
-              -- Note: bindingType is Maybe TypeScheme, but Lambda needs Maybe Type
-              let getDomainType b = typeSchemeType <$> bindingType b
-              let buildLambda b innerBody = TermFunction $ FunctionLambda $ Lambda (bindingName b) (getDomainType b) innerBody
-              let lambdaBody = L.foldr buildLambda body bindings
-              -- Build nested applications from outermost (first binding) to innermost (last binding)
-              let buildApp lambdaOrApp b = TermApplication $ Application lambdaOrApp (bindingTerm b)
-              let fullApp = L.foldl buildApp lambdaBody bindings
-              encode fullApp
+              (bindingStmts, env2) <- bindingsToStatements env bindings
+              jbody <- encodeTerm env2 body
+              let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+              let block = Java.Block $ bindingStmts ++ [returnSt]
+              let nullaryLambda = Java.ExpressionLambda $
+                    Java.LambdaExpression (Java.LambdaParametersTuple []) (Java.LambdaBodyBlock block)
+              -- Get the type of the TermLet expression for the Supplier<R> cast.
+              -- First try annotations (most reliable), then fall back to type inference.
+              let combinedAnns = M.unions anns
+              let tc2 = javaEnvironmentTypeContext env2
+              let aliases2 = javaEnvironmentAliases env2
+              mt <- getType combinedAnns
+              letType <- case mt of
+                Just t -> pure t
+                Nothing -> tryTypeOf "let-body" tc2 body
+              jLetType <- encodeType aliases2 S.empty letType
+              rt <- javaTypeToJavaReferenceType jLetType
+              let supplierRt = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+                    javaClassType [rt] javaUtilFunctionPackageName "Supplier"
+              let castExpr = javaCastExpressionToJavaExpression $
+                    javaCastExpression supplierRt (javaExpressionToJavaUnaryExpression nullaryLambda)
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocation (Just $ Right $ javaExpressionToJavaPrimary castExpr) (Java.Identifier "get") []
 
         TermList els -> do
           jels <- CM.mapM encode els
@@ -1550,8 +1907,11 @@ encodeTerm env term0 = encodeInternal [] [] term0
           let pairs = L.zip jkeys jvals
           let pairExprs = (\(k, v) -> javaMethodInvocationToJavaExpression $
                 methodInvocationStatic (Java.Identifier "java.util.Map") (Java.Identifier "entry") [k, v]) <$> pairs
+          targs <- if M.null m
+            then takeTypeArgs "map" 2
+            else pure []
           return $ javaMethodInvocationToJavaExpression $
-            methodInvocationStatic (Java.Identifier "java.util.Map") (Java.Identifier "ofEntries") pairExprs
+            methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.Map") (Java.Identifier "ofEntries") targs pairExprs
 
         TermMaybe mt -> case mt of
           Nothing -> do
@@ -1588,12 +1948,18 @@ encodeTerm env term0 = encodeInternal [] [] term0
 
         TermSet s -> do
           jels <- CM.mapM encode $ S.toList s
-          let prim = javaMethodInvocationToJavaPrimary $
-                     methodInvocationStatic (Java.Identifier "java.util.Stream") (Java.Identifier "of") jels
-          let coll = javaMethodInvocationToJavaExpression $
-                     methodInvocationStatic (Java.Identifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
-          return $ javaMethodInvocationToJavaExpression $
-            methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
+          if S.null s
+            then do
+              targs <- takeTypeArgs "set" 1
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocationStaticWithTypeArgs (Java.Identifier "java.util.Set") (Java.Identifier "of") targs []
+            else do
+              let prim = javaMethodInvocationToJavaPrimary $
+                         methodInvocationStatic (Java.Identifier "java.util.stream.Stream") (Java.Identifier "of") jels
+              let coll = javaMethodInvocationToJavaExpression $
+                         methodInvocationStatic (Java.Identifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
+              return $ javaMethodInvocationToJavaExpression $
+                methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
         TermTypeApplication (TypeApplicationTerm body atyp) -> do
           -- Type applications in Java may require casting to the appropriate type
@@ -1699,7 +2065,9 @@ encodeTerm env term0 = encodeInternal [] [] term0
         TermUnion (Injection name (Field (Name fname) v)) -> do
           let (Java.Identifier typeId) = nameToJavaName aliases name
           let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-          args <- if Schemas.isUnitTerm v
+          -- Check if the field type is unit by looking up the union's schema
+          fieldIsUnit <- isFieldUnitType name (Name fname)
+          args <- if Schemas.isUnitTerm (deannotateTerm v) || fieldIsUnit
             then return []
             else do
               ex <- encode v
@@ -1707,6 +2075,16 @@ encodeTerm env term0 = encodeInternal [] [] term0
           return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
 
         TermVariable name -> encodeVariable env name
+
+        TermUnit -> do
+          -- Check the expected type to determine how to encode unit
+          -- If the expected type is TypeUnit (mapped to Void), emit null
+          -- Otherwise, the unit value is likely a union variant constructor, emit the proper class
+          let combinedAnns = M.unions anns
+          mtyp <- getType combinedAnns
+          case mtyp of
+            Just (TypeUnit) -> pure $ javaLiteralToJavaExpression Java.LiteralNull
+            _ -> pure $ javaLiteralToJavaExpression Java.LiteralNull
 
         TermWrap (WrappedTerm tname arg) -> do
           jarg <- encode arg
@@ -1719,6 +2097,18 @@ encodeTerm env term0 = encodeInternal [] [] term0
           else do
             rt <- CM.mapM javaTypeToJavaReferenceType $ L.take n tyapps
             return $ fmap Java.TypeArgumentReference rt
+        -- Check if a union variant field's type is a unit type, by looking up the union type schema
+        isFieldUnitType typeName fieldName = do
+          g <- getState
+          ix <- Schemas.graphToInferenceContext g
+          let schemaTypes = inferenceContextSchemaTypes ix
+          case M.lookup typeName schemaTypes of
+            Nothing -> return False
+            Just ts -> case deannotateType (typeSchemeType ts) of
+              TypeUnion (RowType _ fields) ->
+                return $ Y.maybe False (\ft -> Schemas.isUnitType (deannotateType (fieldTypeType ft))) $
+                  L.find (\ft -> fieldTypeName ft == fieldName) fields
+              _ -> return False
 
 -- | Convert a list of bindings to Java block statements, handling recursive bindings
 -- and performing topological sorting for correct declaration order.
@@ -1772,10 +2162,38 @@ bindingsToStatements env bindings = if L.null bindings
             Just deps -> if S.member name deps then [name] else []
           _ -> names  -- Mutually recursive group
 
+    -- Identify bindings that need thunking (lazy evaluation via Supplier).
+    -- A binding needs thunking if it is:
+    --   1. Not recursive (recursive bindings use AtomicReference)
+    --   2. Contains a subterm that needs lazy evaluation (TermLet, references to thunked vars, etc.)
+    --   3. Has zero arity (not a function — functions are already lazy)
+    thunkedVars = S.fromList [bindingName b | b <- flattenedBindings,
+      not (S.member (bindingName b) recursiveVars),
+      needsThunking (bindingTerm b),
+      not (isFunctionType b)]
+    isFunctionType (Binding _ _ (Just ts)) = case deannotateType (typeSchemeType ts) of
+      TypeFunction _ -> True
+      TypeForall (ForallType _ body) -> case deannotateType body of
+        TypeFunction _ -> True
+        _ -> False
+      _ -> False
+    isFunctionType (Binding _ term Nothing) = case deannotateTerm term of
+      TermFunction _ -> True
+      _ -> False
+    -- Check if a term structurally needs lazy evaluation.
+    -- Unlike isComplexTerm, this does NOT follow variable references — only checks
+    -- for direct structural complexity (TermLet, TermTypeApplication, TermTypeLambda).
+    needsThunking t = case deannotateTerm t of
+      TermLet _ -> True
+      TermTypeApplication _ -> True
+      TermTypeLambda _ -> True
+      _ -> L.foldl (\b st -> b || needsThunking st) False $ subterms t
+
     -- Create environment with recursive vars marked in aliases and binding names in scope
     aliasesExtended = aliases {
       aliasesRecursiveVars = S.union (aliasesRecursiveVars aliases) recursiveVars,
-      aliasesInScopeJavaVars = S.union (aliasesInScopeJavaVars aliases) bindingVars }
+      aliasesInScopeJavaVars = S.union (aliasesInScopeJavaVars aliases) bindingVars,
+      aliasesThunkedVars = S.union (aliasesThunkedVars aliases) thunkedVars }
     envExtended = env {
       javaEnvironmentTypeContext = tcExtended,
       javaEnvironmentAliases = aliasesExtended
@@ -1832,10 +2250,21 @@ bindingsToStatements env bindings = if L.null bindings
       -- Annotate the value with its type so that nested encoding can find it
       let annotatedValue = setTermAnnotation key_type (Just $ EncodeCore.type_ typ) value
       rhs <- encodeTerm envExtended annotatedValue
-      return $ if S.member name recursiveVars
-        then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
+      if S.member name recursiveVars
+        then return $ Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
           methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier setMethodName) [rhs]
-        else variableDeclarationStatement aliasesExtended jtype id rhs
+        else if S.member name thunkedVars
+          then do
+            -- Wrap in Lazy<T> for memoized lazy evaluation (like Python's @lru_cache(1))
+            rt <- javaTypeToJavaReferenceType jtype
+            let lazyType = javaRefType [rt] hydraUtilPackageName "Lazy"
+            let lambdaBody = Java.LambdaBodyExpression rhs
+            let supplierLambda = Java.ExpressionLambda $
+                  Java.LambdaExpression (Java.LambdaParametersTuple []) lambdaBody
+            let targs = typeArgsOrDiamond [Java.TypeArgumentReference rt]
+            let lazyExpr = javaConstructorCall (javaConstructorName (Java.Identifier "hydra.util.Lazy") (Just targs)) [supplierLambda] Nothing
+            return $ variableDeclarationStatement aliasesExtended lazyType id lazyExpr
+          else return $ variableDeclarationStatement aliasesExtended jtype id rhs
 
 -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
 -- These functions must be capable of handling various combinations of let and lambda terms:
@@ -1996,8 +2425,8 @@ encodeTermDefinition env (TermDefinition name term0 ts) = withTrace ("encode ter
           _ -> (acc, t)
         annotatedBody = propagateTypesInAppChain fixedCod body'
 
-    if (L.null fixedTparams && L.null params && L.null bindings)
-      then do -- Special case: constant field
+    if False -- Constant fields disabled: use nullary methods to avoid forward-reference NPEs
+      then do -- Special case: constant field (disabled)
         jtype <- Java.UnannType <$> encodeType aliases2 S.empty fixedCod
         jbody <- encodeTerm env3 annotatedBody
         let mods = []
@@ -2053,6 +2482,7 @@ encodeType aliases boundVars t =  case deannotateType t of
       jfirst <- encode first >>= javaTypeToJavaReferenceType
       jsecond <- encode second >>= javaTypeToJavaReferenceType
       return $ javaRefType [jfirst, jsecond] hydraUtilPackageName "Tuple.Tuple2"
+    TypeUnit -> unit
     TypeRecord (RowType _Unit []) -> unit
     TypeRecord (RowType name _) -> pure $
       Java.TypeReference $ nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) name Nothing
@@ -2085,9 +2515,14 @@ encodeType aliases boundVars t =  case deannotateType t of
         -- Lambda-bound heuristic for backward compatibility
         else if isLambdaBoundVariable name
         then variableReference name
+        -- Unresolved type inference variables (like t34403) become Object in Java
+        else if isUnresolvedInferenceVar name
+        then objectReference
         else nameReference name
     nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
     variableReference name = Java.TypeReference $ javaTypeVariable $ unName name
+    objectReference = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $
+      Java.ClassOrInterfaceTypeClass $ javaClassType [] javaLangPackageName "Object"
     encode = encodeType aliases boundVars
     -- Resolve a TypeVariable name if it refers to a typedef (simple type alias like Vertex = int32).
     -- Returns Nothing for records, unions, wraps, polymorphic types, or unknown names.
@@ -2126,6 +2561,7 @@ encodeTypeDefinition pkg aliases (TypeDefinition name typ) = do
       TypeRecord _ -> True
       TypeUnion _ -> True
       TypeWrap _ -> True
+      TypeForall (ForallType _ body) -> isSerializableType body
       _ -> False
 
 encodeVariable :: JavaEnvironment -> Name -> Flow Graph Java.Expression
@@ -2143,6 +2579,10 @@ encodeVariable env name =
         (Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary instanceExpr)
         (javaIdentifier valueFieldName)
     else if isRecursiveVariable aliases name && not (isLambdaBoundIn name (aliasesLambdaVars aliases))
+    then return $ javaMethodInvocationToJavaExpression $
+      methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
+    -- Thunked variables (wrapped in Supplier for lazy evaluation) use .get()
+    else if S.member name (aliasesThunkedVars aliases) && not (isLambdaBoundIn name (aliasesLambdaVars aliases))
     then return $ javaMethodInvocationToJavaExpression $
       methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
     -- Lambda-bound variables (including hoisted captures with qualified names) use sanitized names
@@ -2190,12 +2630,6 @@ encodeVariable env name =
     aliases = javaEnvironmentAliases env
     jid = javaIdentifier $ unName name
 
-fieldToNullCheckStatement :: FieldType -> Java.BlockStatement
-fieldToNullCheckStatement field = Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $ Java.MethodInvocation header [arg]
-  where
-    arg = javaIdentifierToJavaExpression $ fieldNameToJavaIdentifier $ fieldTypeName field
-    header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $
-      Java.Identifier "java.util.Objects.requireNonNull"
 
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases S.empty ft
@@ -2212,7 +2646,8 @@ functionCall env isPrim name args typeApps = do
       let className = take (length classWithApply - length suffix) classWithApply
       return $ javaIdentifierToJavaExpression $ Java.Identifier $ className ++ "::" ++ applyMethodName
     else do
-      jargs <- CM.mapM (encodeTerm env) args
+      jargs0 <- CM.mapM (encodeTerm env) args
+      let (jargs, mMethodOverride) = wrapLazyArguments name jargs0
       -- Check if this is a local variable OR a lambda-bound variable (from hoisted captures)
       -- Use isLambdaBoundIn to match both exact names and local parts of qualified names
       if isLocalVariable name || isLambdaBound
@@ -2228,9 +2663,13 @@ functionCall env isPrim name args typeApps = do
           -- can't be inferred from arguments (return-only type params). If so, add witnesses
           -- from the method's type scheme using the in-scope type variables.
           let effectiveTypeApps = typeApps
+          let overrideMethodName jid = case mMethodOverride of
+                Nothing -> jid
+                Just m -> let Java.Identifier s = jid
+                  in Java.Identifier $ reverse (drop (length applyMethodName) (reverse s)) ++ m
           if L.null effectiveTypeApps
             then do
-              let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+              let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ overrideMethodName $ elementJavaIdentifier isPrim False aliases name
               return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
             else do
               let QualifiedName mns localName = qualifyName name
@@ -2238,7 +2677,7 @@ functionCall env isPrim name args typeApps = do
                 Just ns -> do
                   let classId = nameToJavaName aliases $ unqualifyName $ QualifiedName mns (elementsClassName ns)
                   let methodId = if isPrim
-                        then Java.Identifier $ (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName mns (capitalize localName)) ++ "." ++ applyMethodName
+                        then overrideMethodName $ Java.Identifier $ (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName mns (capitalize localName)) ++ "." ++ applyMethodName
                         else Java.Identifier $ sanitizeJavaName localName
                   jTypeArgs <- CM.mapM (\t -> do
                     jt <- encodeType aliases S.empty t
@@ -2247,13 +2686,26 @@ functionCall env isPrim name args typeApps = do
                   return $ javaMethodInvocationToJavaExpression $
                     methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs
                 Nothing -> do
-                  let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier isPrim False aliases name
+                  let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ overrideMethodName $ elementJavaIdentifier isPrim False aliases name
                   return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
   where
     aliases = javaEnvironmentAliases env
     isLambdaBound = isLambdaBoundIn name (aliasesLambdaVars aliases)
     applySingle exp jarg = javaMethodInvocationToJavaExpression $
       methodInvocation (Just $ Right $ javaExpressionToJavaPrimary exp) (Java.Identifier applyMethodName) [jarg]
+
+-- | For primitives requiring lazy evaluation, wrap branch arguments in Supplier lambdas
+-- and return a replacement method name. Java eagerly evaluates all method arguments, so
+-- ifElse branches must be wrapped in () -> expr and called via IfElse.lazy() to ensure
+-- only the chosen branch is evaluated. This mirrors the Python coder's wrapLazyArguments.
+wrapLazyArguments :: Name -> [Java.Expression] -> ([Java.Expression], Maybe String)
+wrapLazyArguments name args
+  | name == Name "hydra.lib.logic.ifElse" && length args == 3 =
+      ([args !! 0, wrapInSupplierLambda (args !! 1), wrapInSupplierLambda (args !! 2)], Just "lazy")
+  | otherwise = (args, Nothing)
+  where
+    wrapInSupplierLambda expr = Java.ExpressionLambda $
+      Java.LambdaExpression (Java.LambdaParametersTuple []) (Java.LambdaBodyExpression expr)
 
 getCodomain :: M.Map Name Term -> Flow Graph Type
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
@@ -2277,14 +2729,34 @@ insertBranchVar name env = env {javaEnvironmentAliases = aliases {aliasesBranchV
   where
     aliases = javaEnvironmentAliases env
 
-interfaceTypes :: Bool -> [Java.InterfaceType]
-interfaceTypes isSer = if isSer then [javaSerializableType] else []
+serializableTypes :: Bool -> [Java.InterfaceType]
+serializableTypes isSer = if isSer then [javaSerializableType] else []
   where
     javaSerializableType = Java.InterfaceType $
       Java.ClassType [] Java.ClassTypeQualifierNone (javaTypeIdentifier "Serializable") []
 
+interfaceTypes :: Bool -> Aliases -> [Java.TypeParameter] -> Name -> [Java.InterfaceType]
+interfaceTypes isSer aliases tparams elName = if isSer then [javaSerializableType, javaComparableType] else []
+  where
+    javaSerializableType = Java.InterfaceType $
+      Java.ClassType [] Java.ClassTypeQualifierNone (javaTypeIdentifier "Serializable") []
+    javaComparableType = Java.InterfaceType $
+      Java.ClassType [] Java.ClassTypeQualifierNone (javaTypeIdentifier "Comparable") [selfTypeArg]
+    selfTypeArg = Java.TypeArgumentReference $
+      nameToJavaReferenceType aliases False (typeParameterToTypeArgument <$> tparams) elName Nothing
+
 isLambdaBoundVariable :: Name -> Bool
 isLambdaBoundVariable (Name v) = L.length v <= 4
+
+-- | Check if a name looks like an unresolved type inference variable.
+-- These are generated by the type inference engine and have the form 't' followed by digits
+-- (e.g., t34403). Such variables should be converted to Object in Java if they're not in scope.
+isUnresolvedInferenceVar :: Name -> Bool
+isUnresolvedInferenceVar (Name v) = case v of
+  ('t':rest) -> not (L.null rest) && all isDigit rest
+  _ -> False
+  where
+    isDigit c = c >= '0' && c <= '9'
 
 -- | Check if a name (possibly qualified) is lambda-bound.
 -- Lambda-bound variables may be stored with qualified names (hoisted captures) or simple names.

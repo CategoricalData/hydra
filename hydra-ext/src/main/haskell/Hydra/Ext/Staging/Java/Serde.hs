@@ -72,10 +72,15 @@ writeArrayAccess :: Java.ArrayAccess -> Ast.Expr
 writeArrayAccess _ = cst "STUB:ArrayAccess"
 
 writeArrayCreationExpression :: Java.ArrayCreationExpression -> Ast.Expr
-writeArrayCreationExpression _ = cst "STUB:ArrayCreationExpression"
+writeArrayCreationExpression ace = case ace of
+  Java.ArrayCreationExpressionPrimitiveArray (Java.ArrayCreationExpression_PrimitiveArray pt _ ai) ->
+    spaceSep [cst "new", noSep [writePrimitiveTypeWithAnnotations pt, cst "[]"], writeArrayInitializer ai]
+  _ -> cst "STUB:ArrayCreationExpression"
 
 writeArrayInitializer :: Java.ArrayInitializer -> Ast.Expr
-writeArrayInitializer _ = cst "STUB:ArrayInitializer"
+writeArrayInitializer (Java.ArrayInitializer groups) = case groups of
+  [vars] -> noSep [cst "{", commaSep inlineStyle (writeVariableInitializer <$> vars), cst "}"]
+  _ -> cst "{}"
 
 writeArrayType :: Java.ArrayType -> Ast.Expr
 writeArrayType (Java.ArrayType dims variant) = noSep [writeArrayTypeVariant variant, writeDims dims]
@@ -163,8 +168,16 @@ writeCharacterLiteral c = cst $ "'" ++ escapeChar (Chr.chr c) ++ "'"
       '\t' -> "\\t"
       _ -> if ord ch >= 32 && ord ch < 127
            then [ch]
-           else "\\u" ++ L.take (4 - L.length hex) "0000" ++ hex
-             where hex = showHex (ord ch) ""
+           else if ord ch > 0xFFFF
+             then -- Supplementary plane: use UTF-16 surrogate pair
+               let n = ord ch - 0x10000
+                   hi = 0xD800 + (n `div` 0x400)
+                   lo = 0xDC00 + (n `mod` 0x400)
+                   padH x = let h = fmap Chr.toUpper $ showHex x "" in
+                            replicate (4 - L.length h) '0' ++ h
+               in "\\u" ++ padH hi ++ "\\u" ++ padH lo
+             else "\\u" ++ L.take (4 - L.length hex) "0000" ++ hex
+               where hex = showHex (ord ch) ""
     ord = Chr.ord
 
 writeClassBody :: Java.ClassBody -> Ast.Expr
@@ -437,7 +450,9 @@ writeInstanceInitializer :: Java.InstanceInitializer -> Ast.Expr
 writeInstanceInitializer _ = cst "STUB:InstanceInitializer"
 
 writeIntegerLiteral :: Java.IntegerLiteral -> Ast.Expr
-writeIntegerLiteral (Java.IntegerLiteral i) = cst $ show i
+writeIntegerLiteral (Java.IntegerLiteral i) = cst $ show i ++ suffix
+  where
+    suffix = if i > 2147483647 || i < (-2147483648) then "L" else ""
 
 writeIntegralType :: Java.IntegralType -> Ast.Expr
 writeIntegralType t = cst $ case t of
@@ -837,8 +852,15 @@ writeStringLiteral (Java.StringLiteral s) = cst $ "\"" ++ escapeJavaString s ++ 
       '\t' -> "\\t"
       '\b' -> "\\b"
       '\f' -> "\\f"
-      _ | c < ' ' || c > '~' -> "\\u" ++ padHex (ord c)
+      _ | c < ' ' || c > '~' -> javaUnicodeEscape (ord c)
         | otherwise -> [c]
+    javaUnicodeEscape n
+      | n > 0xFFFF = -- Supplementary plane: use UTF-16 surrogate pair
+          let n' = n - 0x10000
+              hi = 0xD800 + (n' `div` 0x400)
+              lo = 0xDC00 + (n' `mod` 0x400)
+          in "\\u" ++ padHex hi ++ "\\u" ++ padHex lo
+      | otherwise = "\\u" ++ padHex n
     padHex n = replicate (4 - length hex) '0' ++ hex
       where hex = fmap toUpper $ showHex n ""
 

@@ -7,6 +7,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 
 acceptMethodName = "accept" :: String
 applyMethodName = "apply" :: String
+compareToMethodName = "compareTo" :: String
 equalsMethodName = "equals" :: String
 getMethodName = "get" :: String
 hashCodeMethodName = "hashCode" :: String

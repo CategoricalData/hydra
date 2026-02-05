@@ -36,7 +36,10 @@ data Aliases = Aliases {
   aliasesTrustedTypeVars :: S.Set Name,
   -- | The enclosing method's codomain (return type), used for casting pair expressions
   -- that have over-generalized type variables from inference.
-  aliasesMethodCodomain :: Maybe Type } deriving Show
+  aliasesMethodCodomain :: Maybe Type,
+  -- | Variables that have been thunked (wrapped in Supplier) for lazy evaluation.
+  -- References to these variables must use .get() to obtain the actual value.
+  aliasesThunkedVars :: S.Set Name } deriving Show
 
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
 addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
@@ -72,7 +75,7 @@ fieldNameToJavaVariableDeclaratorId :: Name -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (Name n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForModule :: Module -> Aliases
-importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty S.empty S.empty S.empty M.empty S.empty M.empty S.empty Nothing
+importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty S.empty S.empty S.empty S.empty M.empty S.empty M.empty S.empty Nothing S.empty
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -518,6 +521,16 @@ nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName al
 overrideAnnotation :: Java.Annotation
 overrideAnnotation = Java.AnnotationMarker $ Java.MarkerAnnotation $ javaTypeName $ Java.Identifier "Override"
 
+suppressWarningsUncheckedAnnotation :: Java.Annotation
+suppressWarningsUncheckedAnnotation = Java.AnnotationSingleElement $ Java.SingleElementAnnotation
+    (javaTypeName $ Java.Identifier "SuppressWarnings")
+    (Just $ Java.ElementValueConditionalExpression $
+      Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression
+        [Java.ConditionalAndExpression
+          [javaPostfixExpressionToJavaInclusiveOrExpression $
+            Java.PostfixExpressionPrimary $ javaLiteralToJavaPrimary $
+              Java.LiteralString $ Java.StringLiteral "unchecked"]])
+
 referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
 
@@ -584,6 +597,14 @@ unTypeParameter (Java.TypeParameter [] (Java.TypeIdentifier (Java.Identifier v))
 
 unescape :: String -> String
 unescape = L.tail
+
+varDeclarationStatement :: Java.Identifier -> Java.Expression -> Java.BlockStatement
+varDeclarationStatement id rhs = Java.BlockStatementLocalVariableDeclaration $
+    Java.LocalVariableDeclarationStatement $ Java.LocalVariableDeclaration [] Java.LocalVariableTypeVar [vdec]
+  where
+    vdec = javaVariableDeclarator id (Just init)
+      where
+        init = Java.VariableInitializerExpression rhs
 
 variableDeclarationStatement :: Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement
 variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVariableDeclaration $
