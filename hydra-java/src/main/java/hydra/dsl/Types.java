@@ -808,7 +808,7 @@ public interface Types {
      * @return the unit type
      */
     static Type unit() {
-        return new Type.Unit(true);
+        return new Type.Unit();
     }
 
     /**

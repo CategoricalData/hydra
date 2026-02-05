@@ -971,7 +971,7 @@ public interface Terms {
      * @return the unit term
      */
     static Term unit() {
-        return new Term.Unit(true);
+        return new Term.Unit();
     }
 
     // ===== Union terms =====

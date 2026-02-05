@@ -15,7 +15,7 @@ public interface LiteralTypes {
      * @return a bigfloat literal type
      */
     static LiteralType bigfloat() {
-        return float_(new FloatType.Bigfloat(false));
+        return float_(new FloatType.Bigfloat());
     }
 
     /**
@@ -24,7 +24,7 @@ public interface LiteralTypes {
      * @return a bigint literal type
      */
     static LiteralType bigint() {
-        return integer(new IntegerType.Bigint(false));
+        return integer(new IntegerType.Bigint());
     }
 
     /**
@@ -33,7 +33,7 @@ public interface LiteralTypes {
      * @return a binary literal type
      */
     static LiteralType binary() {
-        return new LiteralType.Binary(false);
+        return new LiteralType.Binary();
     }
 
     /**
@@ -42,7 +42,7 @@ public interface LiteralTypes {
      * @return a boolean literal type
      */
     static LiteralType boolean_() {
-        return new LiteralType.Boolean_(false);
+        return new LiteralType.Boolean_();
     }
 
     /**
@@ -51,7 +51,7 @@ public interface LiteralTypes {
      * @return a float32 literal type
      */
     static LiteralType float32() {
-        return float_(new FloatType.Float32(false));
+        return float_(new FloatType.Float32());
     }
 
     /**
@@ -60,7 +60,7 @@ public interface LiteralTypes {
      * @return a float64 literal type
      */
     static LiteralType float64() {
-        return float_(new FloatType.Float64(false));
+        return float_(new FloatType.Float64());
     }
 
     /**
@@ -79,7 +79,7 @@ public interface LiteralTypes {
      * @return an int16 literal type
      */
     static LiteralType int16() {
-        return integer(new IntegerType.Int16(false));
+        return integer(new IntegerType.Int16());
     }
 
     /**
@@ -88,7 +88,7 @@ public interface LiteralTypes {
      * @return an int32 literal type
      */
     static LiteralType int32() {
-        return integer(new IntegerType.Int32(false));
+        return integer(new IntegerType.Int32());
     }
 
     /**
@@ -97,7 +97,7 @@ public interface LiteralTypes {
      * @return an int64 literal type
      */
     static LiteralType int64() {
-        return integer(new IntegerType.Int64(false));
+        return integer(new IntegerType.Int64());
     }
 
     /**
@@ -106,7 +106,7 @@ public interface LiteralTypes {
      * @return an int8 literal type
      */
     static LiteralType int8() {
-        return integer(new IntegerType.Int8(false));
+        return integer(new IntegerType.Int8());
     }
 
     /**
@@ -125,7 +125,7 @@ public interface LiteralTypes {
      * @return a string literal type
      */
     static LiteralType string() {
-        return new LiteralType.String_(false);
+        return new LiteralType.String_();
     }
 
     /**
@@ -134,7 +134,7 @@ public interface LiteralTypes {
      * @return a uint16 literal type
      */
     static LiteralType uint16() {
-        return integer(new IntegerType.Uint16(false));
+        return integer(new IntegerType.Uint16());
     }
 
     /**
@@ -143,7 +143,7 @@ public interface LiteralTypes {
      * @return a uint32 literal type
      */
     static LiteralType uint32() {
-        return integer(new IntegerType.Uint32(false));
+        return integer(new IntegerType.Uint32());
     }
 
     /**
@@ -152,7 +152,7 @@ public interface LiteralTypes {
      * @return a uint64 literal type
      */
     static LiteralType uint64() {
-        return integer(new IntegerType.Uint64(false));
+        return integer(new IntegerType.Uint64());
     }
 
     /**
@@ -161,7 +161,7 @@ public interface LiteralTypes {
      * @return a uint8 literal type
      */
     static LiteralType uint8() {
-        return integer(new IntegerType.Uint8(false));
+        return integer(new IntegerType.Uint8());
     }
 
     /**

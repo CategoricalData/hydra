@@ -377,8 +377,9 @@ public interface Flows {
         Flow<S, List<B>> result = pure(new ArrayList<>());
         for (A a : as) {
             result = bind(result, ys -> map(f.apply(a), b -> {
-                ys.add(b); // Modify in place
-                return ys;
+                List<B> newList = new ArrayList<>(ys);
+                newList.add(b);
+                return newList;
             }));
         }
         return result;
@@ -465,8 +466,9 @@ public interface Flows {
         Flow<S, Set<B>> result = pure(new HashSet<>(as.size()));
         for (A a : as) {
             result = bind(result, ys -> map(f.apply(a), b -> {
-                ys.add(b); // Modify in place
-                return ys;
+                Set<B> newSet = new HashSet<>(ys);
+                newSet.add(b);
+                return newSet;
             }));
         }
         return result;
@@ -558,8 +560,6 @@ public interface Flows {
      * @return a pure flow containing the object
      */
     static <S, A> Flow<S, A> pure(A obj) {
-        requireNonNull(obj, "obj");
-
         return new Flow<>(s -> trace -> new FlowState<>(Maybe.just(obj), s, trace));
     }
 
@@ -608,8 +608,9 @@ public interface Flows {
         Flow<S, List<A>> result = Flows.pure(new ArrayList<>(elements.size()));
         for (Flow<S, A> element : elements) {
             result = Flows.bind(result, xs -> Flows.map(element, x -> {
-                xs.add(x); // Modify in place
-                return xs;
+                List<A> newList = new ArrayList<>(xs);
+                newList.add(x);
+                return newList;
             }));
         }
         return result;
