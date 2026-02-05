@@ -7,7 +7,7 @@ import hydra.lib.math.Max;
 import hydra.lib.math.Min;
 import hydra.lib.math.Mod;
 import hydra.lib.math.Mul;
-import hydra.lib.math.Neg;
+import hydra.lib.math.Negate;
 import hydra.lib.math.Rem;
 import hydra.lib.math.Sub;
 
@@ -75,7 +75,7 @@ public interface Math {
      * @return a term for negating a numeric value
      */
     static Term neg() {
-        return new Neg().term();
+        return new Negate().term();
     }
 
     /**
