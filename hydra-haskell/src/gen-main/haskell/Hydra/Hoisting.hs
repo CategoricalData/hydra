@@ -79,6 +79,14 @@ bindingUsesContextTypeVars cx binding = (Maybes.maybe False (\ts ->
     let contextTypeVars = (Typing.typeContextTypeVariables cx)
     in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding))
 
+-- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
+countVarOccurrences :: (Core.Name -> Core.Term -> Int)
+countVarOccurrences name term =  
+  let childCount = (Lists.foldl (\acc -> \t -> Math.add acc (countVarOccurrences name t)) 0 (Rewriting.subterms term))
+  in ((\x -> case x of
+    Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 name) (Math.add 1 childCount) childCount)
+    _ -> childCount) term)
+
 -- | Transform a let-term by pulling ALL let bindings to the top level. This is useful for targets like Java that don't support nested let expressions at all. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistAllLetBindings :: (Core.Let -> Core.Let)
 hoistAllLetBindings let0 =  
@@ -242,37 +250,62 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                                             in  
                                                               let finalUsedNames = (Pairs.second hoistPairsAndNames)
                                                               in  
-                                                                let subst = (Typing.TermSubst (Maps.fromList (Lists.zip (Lists.map Core.bindingName hoistUs) replacements)))
+                                                                let hoistNameReplacementPairs = (Lists.zip (Lists.map Core.bindingName hoistUs) replacements)
                                                                 in  
-                                                                  let bodySubst = (Substitution.substituteInTerm subst body)
+                                                                  let hoistBindingMap = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) hoistUs))
                                                                   in  
-                                                                    let keepUsSubst = (Lists.map (Substitution.substituteInBinding subst) keepUs)
-                                                                    in  
-                                                                      let hoistedBindingsSubst = (Lists.map (Substitution.substituteInBinding subst) hoistedBindings)
-                                                                      in  
-                                                                        let bindingsSoFarSubst = (Lists.map (Substitution.substituteInBinding subst) bindingsSoFar)
-                                                                        in  
-                                                                          let augmentResult = (augmentBindingsWithNewFreeVars cx (Sets.difference boundTermVariables polyLetVariables) bindingsSoFarSubst)
-                                                                          in  
-                                                                            let bindingsSoFarAugmented = (Pairs.first augmentResult)
+                                                                    let isCacheable = (\name ->  
+                                                                            let multiRef = (Equality.gte (countVarOccurrences name body) 2)
                                                                             in  
-                                                                              let augmentSubst = (Pairs.second augmentResult)
+                                                                              let isPoly = (Maybes.maybe False (\b -> bindingIsPolymorphic b) (Maps.lookup name hoistBindingMap))
+                                                                              in (Logic.and multiRef (Logic.not isPoly)))
+                                                                    in  
+                                                                      let singleRefPairs = (Lists.filter (\p -> Logic.not (isCacheable (Pairs.first p))) hoistNameReplacementPairs)
+                                                                      in  
+                                                                        let multiRefPairs = (Lists.filter (\p -> isCacheable (Pairs.first p)) hoistNameReplacementPairs)
+                                                                        in  
+                                                                          let fullSubst = (Typing.TermSubst (Maps.fromList hoistNameReplacementPairs))
+                                                                          in  
+                                                                            let bodyOnlySubst = (Typing.TermSubst (Maps.fromList singleRefPairs))
+                                                                            in  
+                                                                              let bodySubst = (Substitution.substituteInTerm bodyOnlySubst body)
                                                                               in  
-                                                                                let hoistedBindingsFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) hoistedBindingsSubst)
+                                                                                let cacheBindings = (Lists.map (\p -> Core.Binding {
+                                                                                        Core.bindingName = (Pairs.first p),
+                                                                                        Core.bindingTerm = (Pairs.second p),
+                                                                                        Core.bindingType = Nothing}) multiRefPairs)
                                                                                 in  
-                                                                                  let bindingsSoFarFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) bindingsSoFarAugmented)
+                                                                                  let bodyWithCache = (Logic.ifElse (Lists.null cacheBindings) bodySubst (Core.TermLet (Core.Let {
+                                                                                          Core.letBindings = cacheBindings,
+                                                                                          Core.letBody = bodySubst})))
                                                                                   in  
-                                                                                    let bodyFinal = (Substitution.substituteInTerm augmentSubst bodySubst)
+                                                                                    let keepUsSubst = (Lists.map (Substitution.substituteInBinding fullSubst) keepUs)
                                                                                     in  
-                                                                                      let keepUsFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) keepUsSubst)
+                                                                                      let hoistedBindingsSubst = (Lists.map (Substitution.substituteInBinding fullSubst) hoistedBindings)
                                                                                       in  
-                                                                                        let finalTerm = (Logic.ifElse (Lists.null keepUsFinal) bodyFinal (Core.TermLet (Core.Let {
-                                                                                                Core.letBindings = keepUsFinal,
-                                                                                                Core.letBody = bodyFinal})))
-                                                                                        in ((Lists.concat [
-                                                                                          previouslyFinishedBindings,
-                                                                                          hoistedBindingsFinal,
-                                                                                          bindingsSoFarFinal], finalUsedNames), finalTerm)
+                                                                                        let bindingsSoFarSubst = (Lists.map (Substitution.substituteInBinding fullSubst) bindingsSoFar)
+                                                                                        in  
+                                                                                          let augmentResult = (augmentBindingsWithNewFreeVars cx (Sets.difference boundTermVariables polyLetVariables) bindingsSoFarSubst)
+                                                                                          in  
+                                                                                            let bindingsSoFarAugmented = (Pairs.first augmentResult)
+                                                                                            in  
+                                                                                              let augmentSubst = (Pairs.second augmentResult)
+                                                                                              in  
+                                                                                                let hoistedBindingsFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) hoistedBindingsSubst)
+                                                                                                in  
+                                                                                                  let bindingsSoFarFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) bindingsSoFarAugmented)
+                                                                                                  in  
+                                                                                                    let bodyFinal = (Substitution.substituteInTerm augmentSubst bodyWithCache)
+                                                                                                    in  
+                                                                                                      let keepUsFinal = (Lists.map (Substitution.substituteInBinding augmentSubst) keepUsSubst)
+                                                                                                      in  
+                                                                                                        let finalTerm = (Logic.ifElse (Lists.null keepUsFinal) bodyFinal (Core.TermLet (Core.Let {
+                                                                                                                Core.letBindings = keepUsFinal,
+                                                                                                                Core.letBody = bodyFinal})))
+                                                                                                        in ((Lists.concat [
+                                                                                                          previouslyFinishedBindings,
+                                                                                                          hoistedBindingsFinal,
+                                                                                                          bindingsSoFarFinal], finalUsedNames), finalTerm)
                           _ -> ((Lists.concat2 previouslyFinishedBindings bindingsSoFar, alreadyUsedNames), newTerm)) newTerm))
     in  
       let cx1 = (Schemas.extendTypeContextForLet (\c -> \b -> Nothing) cx0 let0)

@@ -912,7 +912,7 @@ nestedEithersTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermList [
           Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "a"))),
-          Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
+          (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))),
           (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "b"))))]),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermList [
           Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -920,11 +920,11 @@ nestedEithersTests = Testing.TestGroup {
               Core.typeApplicationTermBody = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "a")))),
               Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
             Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}),
-          Core.TermTypeApplication (Core.TypeApplicationTerm {
+          (Core.TermTypeApplication (Core.TypeApplicationTerm {
             Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
               Core.typeApplicationTermBody = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))),
               Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
-            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}),
+            Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
           (Core.TermTypeApplication (Core.TypeApplicationTerm {
             Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
               Core.typeApplicationTermBody = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "b")))),
@@ -1276,11 +1276,11 @@ nestedOptionalsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermMaybe (Just (Core.TermList [
           Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
           (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermMaybe (Just (Core.TermList [
           Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
           (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeMaybe (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -1290,13 +1290,13 @@ nestedOptionalsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermList [
           Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "a"))),
-          Core.TermMaybe Nothing,
+          (Core.TermMaybe Nothing),
           (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "b"))))]),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermList [
           Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "a"))),
-          Core.TermTypeApplication (Core.TypeApplicationTerm {
+          (Core.TermTypeApplication (Core.TypeApplicationTerm {
             Core.typeApplicationTermBody = (Core.TermMaybe Nothing),
-            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}),
+            Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})),
           (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "b"))))]),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeList (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))})),
       Testing.testCaseWithMetadataDescription = Nothing,

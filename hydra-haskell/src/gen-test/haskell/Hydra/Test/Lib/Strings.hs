@@ -32,7 +32,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "one"),
-                Core.TermLiteral (Core.LiteralString "two"),
+                (Core.TermLiteral (Core.LiteralString "two")),
                 (Core.TermLiteral (Core.LiteralString "three"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "onetwothree"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -66,8 +66,8 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString ""),
-                Core.TermLiteral (Core.LiteralString "one"),
-                Core.TermLiteral (Core.LiteralString ""),
+                (Core.TermLiteral (Core.LiteralString "one")),
+                (Core.TermLiteral (Core.LiteralString "")),
                 (Core.TermLiteral (Core.LiteralString ""))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "one"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -80,8 +80,8 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString ""),
-                Core.TermLiteral (Core.LiteralString ""),
-                Core.TermLiteral (Core.LiteralString ""),
+                (Core.TermLiteral (Core.LiteralString "")),
+                (Core.TermLiteral (Core.LiteralString "")),
                 (Core.TermLiteral (Core.LiteralString ""))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString ""))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -94,7 +94,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "\241"),
-                Core.TermLiteral (Core.LiteralString "\19990"),
+                (Core.TermLiteral (Core.LiteralString "\19990")),
                 (Core.TermLiteral (Core.LiteralString "\127757"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\241\19990\127757"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -119,7 +119,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "\n"),
-                Core.TermLiteral (Core.LiteralString "\t"),
+                (Core.TermLiteral (Core.LiteralString "\t")),
                 (Core.TermLiteral (Core.LiteralString "\r"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\n\t\r"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -132,7 +132,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "hello"),
-                Core.TermLiteral (Core.LiteralString "\NUL"),
+                (Core.TermLiteral (Core.LiteralString "\NUL")),
                 (Core.TermLiteral (Core.LiteralString "world"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "hello\NULworld"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -328,9 +328,9 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 101)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 101))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "hello"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -364,7 +364,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 127757)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\241\19990\127757"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -389,7 +389,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 9)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 9))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 13)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\n\t\r"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -402,7 +402,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 105)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "h\NULi"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -422,7 +422,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "one"),
-                Core.TermLiteral (Core.LiteralString "two"),
+                (Core.TermLiteral (Core.LiteralString "two")),
                 (Core.TermLiteral (Core.LiteralString "three"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "one,two,three"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -437,7 +437,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "a"),
-                Core.TermLiteral (Core.LiteralString "b"),
+                (Core.TermLiteral (Core.LiteralString "b")),
                 (Core.TermLiteral (Core.LiteralString "c"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "abc"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -452,7 +452,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString " | "))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "A"),
-                Core.TermLiteral (Core.LiteralString "B"),
+                (Core.TermLiteral (Core.LiteralString "B")),
                 (Core.TermLiteral (Core.LiteralString "C"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "A | B | C"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -492,7 +492,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString ""),
-                Core.TermLiteral (Core.LiteralString "a"),
+                (Core.TermLiteral (Core.LiteralString "a")),
                 (Core.TermLiteral (Core.LiteralString ""))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString ",a,"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -627,7 +627,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "one\ntwo\nthree"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "one"),
-              Core.TermLiteral (Core.LiteralString "two"),
+              (Core.TermLiteral (Core.LiteralString "two")),
               (Core.TermLiteral (Core.LiteralString "three"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -684,7 +684,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a\n\nb"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString ""),
+              (Core.TermLiteral (Core.LiteralString "")),
               (Core.TermLiteral (Core.LiteralString "b"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -803,7 +803,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "Mississippi"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "Mi"),
-              Core.TermLiteral (Core.LiteralString "i"),
+              (Core.TermLiteral (Core.LiteralString "i")),
               (Core.TermLiteral (Core.LiteralString "ippi"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -818,7 +818,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "one two three"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "one"),
-              Core.TermLiteral (Core.LiteralString "two"),
+              (Core.TermLiteral (Core.LiteralString "two")),
               (Core.TermLiteral (Core.LiteralString "three"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -833,7 +833,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a  b  c"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString "b"),
+              (Core.TermLiteral (Core.LiteralString "b")),
               (Core.TermLiteral (Core.LiteralString "c"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -889,8 +889,8 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString " one two "))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString ""),
-              Core.TermLiteral (Core.LiteralString "one"),
-              Core.TermLiteral (Core.LiteralString "two"),
+              (Core.TermLiteral (Core.LiteralString "one")),
+              (Core.TermLiteral (Core.LiteralString "two")),
               (Core.TermLiteral (Core.LiteralString ""))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -919,7 +919,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a  b"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString ""),
+              (Core.TermLiteral (Core.LiteralString "")),
               (Core.TermLiteral (Core.LiteralString "b"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -934,7 +934,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "he"),
-              Core.TermLiteral (Core.LiteralString ""),
+              (Core.TermLiteral (Core.LiteralString "")),
               (Core.TermLiteral (Core.LiteralString "o"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -963,8 +963,8 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "abc"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString ""),
-              Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString "b"),
+              (Core.TermLiteral (Core.LiteralString "a")),
+              (Core.TermLiteral (Core.LiteralString "b")),
               (Core.TermLiteral (Core.LiteralString "c"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1033,7 +1033,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\241,\19990,\127757"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "\241"),
-              Core.TermLiteral (Core.LiteralString "\19990"),
+              (Core.TermLiteral (Core.LiteralString "\19990")),
               (Core.TermLiteral (Core.LiteralString "\127757"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1048,7 +1048,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "line1\nline2\nline3"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "line1"),
-              Core.TermLiteral (Core.LiteralString "line2"),
+              (Core.TermLiteral (Core.LiteralString "line2")),
               (Core.TermLiteral (Core.LiteralString "line3"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -1087,9 +1087,9 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 101)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 101))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1102,7 +1102,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\241\19990\127757"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 127757)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1127,7 +1127,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\n\t\r"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 9)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 9))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 13)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1140,7 +1140,7 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "h\NULi"))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 105)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -1307,7 +1307,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.unlines"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "one"),
-                Core.TermLiteral (Core.LiteralString "two"),
+                (Core.TermLiteral (Core.LiteralString "two")),
                 (Core.TermLiteral (Core.LiteralString "three"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "one\ntwo\nthree\n"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -1341,7 +1341,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.unlines"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString "hello"),
-                Core.TermLiteral (Core.LiteralString ""),
+                (Core.TermLiteral (Core.LiteralString "")),
                 (Core.TermLiteral (Core.LiteralString "world"))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "hello\n\nworld\n"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -1354,7 +1354,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.unlines"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralString ""),
-                Core.TermLiteral (Core.LiteralString ""),
+                (Core.TermLiteral (Core.LiteralString "")),
                 (Core.TermLiteral (Core.LiteralString ""))])})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\n\n\n"))})),
           Testing.testCaseWithMetadataDescription = Nothing,

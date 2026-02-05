@@ -139,9 +139,9 @@ matchUnion tname pairs term =
         in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName tname)) exp (Monads.unexpected (Strings.cat2 "injection for type " (Core.unName tname)) (Core_.term term)))
       _ -> (Monads.unexpected (Strings.cat [
         "inject(",
-        Core.unName tname,
+        (Core.unName tname),
         ") with one of {",
-        Strings.intercalate ", " (Lists.map (\pair -> Core.unName (Pairs.first pair)) pairs),
+        (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (Pairs.first pair)) pairs)),
         "}"]) (Core_.term stripped))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Compute.Flow t3 t1)))

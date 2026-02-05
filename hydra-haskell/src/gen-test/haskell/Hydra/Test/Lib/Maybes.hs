@@ -167,7 +167,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.cat"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                Core.TermMaybe Nothing,
+                (Core.TermMaybe Nothing),
                 (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
@@ -528,13 +528,13 @@ allTests = Testing.TestGroup {
                     Core.applicationArgument = (Core.TermMaybe Nothing)}))})))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 8)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 8))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

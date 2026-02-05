@@ -110,7 +110,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "notEqual"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -130,8 +130,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "lessThan"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -151,8 +151,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "greaterThan"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -172,8 +172,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "lessThanOrEqual"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -193,7 +193,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "greaterThanOrEqual"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -226,10 +226,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -569,7 +569,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.term")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "variable"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -589,7 +589,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.variable")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "wildcard"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -622,10 +622,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -749,7 +749,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.step")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "regex"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -769,7 +769,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.regexSequence")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "inverse"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -802,10 +802,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -929,7 +929,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.triplePattern")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "negation"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -949,8 +949,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.pattern")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "conjunction"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -972,8 +972,8 @@ module_ = Module.Module {
                                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.query.pattern"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "disjunction"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -995,7 +995,7 @@ module_ = Module.Module {
                                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.query.pattern"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "graph"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1028,10 +1028,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -1467,7 +1467,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "zeroOrOne"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1487,8 +1487,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "zeroOrMore"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1508,8 +1508,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "oneOrMore"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1529,8 +1529,8 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "exactly"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1608,8 +1608,8 @@ module_ = Module.Module {
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "atLeast"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1687,7 +1687,7 @@ module_ = Module.Module {
                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "range"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1720,10 +1720,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -1943,7 +1943,7 @@ module_ = Module.Module {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.query.edge")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
-                                    Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                    (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "project"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                       Core.lambdaParameter = (Core.Name "input"),
@@ -1963,7 +1963,7 @@ module_ = Module.Module {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.projection")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "compare"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1996,10 +1996,10 @@ module_ = Module.Module {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
                                         Core.TermLiteral (Core.LiteralString "no such field "),
-                                        Core.TermApplication (Core.Application {
+                                        (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                        Core.TermLiteral (Core.LiteralString " in union type "),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
@@ -2263,8 +2263,8 @@ module_ = Module.Module {
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.extract.helpers",
-    Module.Namespace "hydra.lexical",
-    Module.Namespace "hydra.rewriting",
+    (Module.Namespace "hydra.lexical"),
+    (Module.Namespace "hydra.rewriting"),
     (Module.Namespace "hydra.decode.core")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.query",

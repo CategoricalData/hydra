@@ -1090,7 +1090,7 @@ decodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) 
         Module.moduleElements = decodedBindings,
         Module.moduleTermDependencies = (Lists.concat2 [
           Module.Namespace "hydra.extract.helpers",
-          Module.Namespace "hydra.lexical",
+          (Module.Namespace "hydra.lexical"),
           (Module.Namespace "hydra.rewriting")] allDecodedDeps),
         Module.moduleTypeDependencies = [
           Module.moduleNamespace mod,
@@ -1352,10 +1352,10 @@ decodeUnionType rt =
                                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                     Core.applicationArgument = (Core.TermList [
                                       Core.TermLiteral (Core.LiteralString "no such field "),
-                                      Core.TermApplication (Core.Application {
+                                      (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))}),
-                                      Core.TermLiteral (Core.LiteralString " in union type "),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
+                                      (Core.TermLiteral (Core.LiteralString " in union type ")),
                                       (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),

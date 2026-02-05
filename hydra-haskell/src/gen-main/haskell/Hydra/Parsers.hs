@@ -69,6 +69,9 @@ fail msg = (Parsing.Parser (\input -> Parsing.ParseResultFailure (Parsing.ParseE
   Parsing.parseErrorMessage = msg,
   Parsing.parseErrorRemainder = input})))
 
+lazy :: ((() -> Parsing.Parser t0) -> Parsing.Parser t0)
+lazy f = (Parsing.Parser (\input -> Parsing.unParser (f ()) input))
+
 many :: (Parsing.Parser t0 -> Parsing.Parser [t0])
 many p = (alt (some p) (pure []))
 
@@ -97,17 +100,15 @@ satisfy :: ((Int -> Bool) -> Parsing.Parser Int)
 satisfy pred =  
   let parse = (\input ->  
           let codes = (Strings.toList input)
-          in  
-            let c = (Lists.head codes)
-            in  
-              let rest = (Strings.fromList (Lists.tail codes))
-              in (Logic.ifElse (Strings.null input) (Parsing.ParseResultFailure (Parsing.ParseError {
-                Parsing.parseErrorMessage = "unexpected end of input",
-                Parsing.parseErrorRemainder = input})) (Logic.ifElse (pred c) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-                Parsing.parseSuccessValue = c,
-                Parsing.parseSuccessRemainder = rest})) (Parsing.ParseResultFailure (Parsing.ParseError {
-                Parsing.parseErrorMessage = "character did not satisfy predicate",
-                Parsing.parseErrorRemainder = input})))))
+          in (Maybes.maybe (Parsing.ParseResultFailure (Parsing.ParseError {
+            Parsing.parseErrorMessage = "unexpected end of input",
+            Parsing.parseErrorRemainder = input})) (\c ->  
+            let rest = (Strings.fromList (Lists.drop 1 codes))
+            in (Logic.ifElse (pred c) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
+              Parsing.parseSuccessValue = c,
+              Parsing.parseSuccessRemainder = rest})) (Parsing.ParseResultFailure (Parsing.ParseError {
+              Parsing.parseErrorMessage = "character did not satisfy predicate",
+              Parsing.parseErrorRemainder = input})))) (Lists.safeHead codes)))
   in (Parsing.Parser parse)
 
 sepBy :: (Parsing.Parser t0 -> Parsing.Parser t1 -> Parsing.Parser [t0])

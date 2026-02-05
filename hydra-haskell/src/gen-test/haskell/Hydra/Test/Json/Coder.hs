@@ -116,11 +116,11 @@ allTests = Testing.TestGroup {
             Testing.jsonCoderTestCaseType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
             Testing.jsonCoderTestCaseTerm = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
             Testing.jsonCoderTestCaseJson = (Model.ValueArray [
               Model.ValueNumber 1.0,
-              Model.ValueNumber 2.0,
+              (Model.ValueNumber 2.0),
               (Model.ValueNumber 3.0)])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

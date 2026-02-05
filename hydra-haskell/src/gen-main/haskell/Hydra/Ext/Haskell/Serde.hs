@@ -244,9 +244,9 @@ importToExpr import_ =
                 Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v1))]))) spec)
       parts = (Maybes.cat [
               Just (Serialization.cst "import"),
-              Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing,
-              Just (Serialization.cst name),
-              Maybes.map (\m -> Serialization.cst (Strings.cat2 "as " (Ast_.unModuleName m))) mod,
+              (Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing),
+              (Just (Serialization.cst name)),
+              (Maybes.map (\m -> Serialization.cst (Strings.cat2 "as " (Ast_.unModuleName m))) mod),
               (Maybes.map hidingSec mspec)])
   in (Serialization.spaceSep parts)
 
@@ -317,7 +317,7 @@ nameToExpr name = (Serialization.cst ((\x -> case x of
   Ast_.NameNormal v1 -> (writeQualifiedName v1)
   Ast_.NameParens v1 -> (Strings.cat [
     "(",
-    writeQualifiedName v1,
+    (writeQualifiedName v1),
     ")"])) name))
 
 -- | Convert a pattern to an AST expression

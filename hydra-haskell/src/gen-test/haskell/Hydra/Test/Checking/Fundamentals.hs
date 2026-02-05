@@ -312,7 +312,7 @@ higherOrderApplicationsTests = Testing.TestGroup {
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [
                   Core.Name "t0",
-                  Core.Name "t1",
+                  (Core.Name "t1"),
                   (Core.Name "t2")],
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -550,7 +550,7 @@ polymorphicApplicationsTests = Testing.TestGroup {
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [
                   Core.Name "t0",
-                  Core.Name "t1",
+                  (Core.Name "t1"),
                   (Core.Name "t2")],
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -2558,7 +2558,7 @@ letWithComplexExpressionsTests = Testing.TestGroup {
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [
                   Core.Name "t0",
-                  Core.Name "t1",
+                  (Core.Name "t1"),
                   (Core.Name "t2")],
                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -2840,11 +2840,11 @@ literalsInComplexContextsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermList [
           Core.TermLiteral (Core.LiteralString "one"),
-          Core.TermLiteral (Core.LiteralString "two"),
+          (Core.TermLiteral (Core.LiteralString "two")),
           (Core.TermLiteral (Core.LiteralString "three"))]),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermList [
           Core.TermLiteral (Core.LiteralString "one"),
-          Core.TermLiteral (Core.LiteralString "two"),
+          (Core.TermLiteral (Core.LiteralString "two")),
           (Core.TermLiteral (Core.LiteralString "three"))]),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -3265,7 +3265,7 @@ primitivesInComplexContextsTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermVariable (Core.Name "increment"))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])}))}))})),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermLet (Core.Let {
           Core.letBindings = [
@@ -3319,7 +3319,7 @@ primitivesInComplexContextsTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermVariable (Core.Name "increment"))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])}))}))})),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
       Testing.testCaseWithMetadataDescription = Nothing,

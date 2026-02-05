@@ -250,7 +250,7 @@ allTests = Testing.TestGroup {
             Testing.parserTestCaseOutput = (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
               Parsing.parseSuccessValue = (Model.ValueArray [
                 Model.ValueNumber 1.0,
-                Model.ValueNumber 2.0,
+                (Model.ValueNumber 2.0),
                 (Model.ValueNumber 3.0)]),
               Parsing.parseSuccessRemainder = ""}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -273,8 +273,8 @@ allTests = Testing.TestGroup {
             Testing.parserTestCaseOutput = (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
               Parsing.parseSuccessValue = (Model.ValueArray [
                 Model.ValueNumber 1.0,
-                Model.ValueString "two",
-                Model.ValueBoolean True,
+                (Model.ValueString "two"),
+                (Model.ValueBoolean True),
                 Model.ValueNull]),
               Parsing.parseSuccessRemainder = ""}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -421,7 +421,7 @@ allTests = Testing.TestGroup {
             Testing.parserTestCaseOutput = (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
               Parsing.parseSuccessValue = (Model.ValueArray [
                 Model.ValueNumber 1.0,
-                Model.ValueNumber 2.0,
+                (Model.ValueNumber 2.0),
                 (Model.ValueNumber 3.0)]),
               Parsing.parseSuccessRemainder = ""}))})),
           Testing.testCaseWithMetadataDescription = Nothing,

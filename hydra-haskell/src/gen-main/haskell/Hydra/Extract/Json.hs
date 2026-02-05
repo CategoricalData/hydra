@@ -50,7 +50,7 @@ optString fname m = (Maybes.maybe (Flows.pure Nothing) (\s -> Flows.map Maybes.p
 require :: Ord t0 => (t0 -> M.Map t0 t1 -> Compute.Flow t2 t1)
 require fname m = (Maybes.maybe (Flows.fail (Strings.cat [
   "required attribute ",
-  showValue fname,
+  (showValue fname),
   " not found"])) (\value -> Flows.pure value) (Maps.lookup fname m))
 
 requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 [Model.Value])

@@ -81,11 +81,11 @@ listsOfLiteralsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermList [
           Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 1.0)),
-          Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5)),
+          (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5))),
           (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14)))]),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermList [
           Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 1.0)),
-          Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5)),
+          (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5))),
           (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 3.14)))]),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -728,11 +728,11 @@ monomorphicSetsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermSet (S.fromList [
           Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
           (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermSet (S.fromList [
           Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-          Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
           (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -742,11 +742,11 @@ monomorphicSetsTests = Testing.TestGroup {
       Testing.testCaseWithMetadataCase = (Testing.TestCaseTypeChecking (Testing.TypeCheckingTestCase {
         Testing.typeCheckingTestCaseInput = (Core.TermSet (S.fromList [
           Core.TermLiteral (Core.LiteralString "apple"),
-          Core.TermLiteral (Core.LiteralString "banana"),
+          (Core.TermLiteral (Core.LiteralString "banana")),
           (Core.TermLiteral (Core.LiteralString "cherry"))])),
         Testing.typeCheckingTestCaseOutputTerm = (Core.TermSet (S.fromList [
           Core.TermLiteral (Core.LiteralString "apple"),
-          Core.TermLiteral (Core.LiteralString "banana"),
+          (Core.TermLiteral (Core.LiteralString "banana")),
           (Core.TermLiteral (Core.LiteralString "cherry"))])),
         Testing.typeCheckingTestCaseOutputType = (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString))})),
       Testing.testCaseWithMetadataDescription = Nothing,
@@ -878,7 +878,7 @@ setsInComplexContextsTests = Testing.TestGroup {
               Core.bindingName = (Core.Name "numbers"),
               Core.bindingTerm = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))])),
               Core.bindingType = Nothing}],
           Core.letBody = (Core.TermVariable (Core.Name "numbers"))})),
@@ -888,7 +888,7 @@ setsInComplexContextsTests = Testing.TestGroup {
               Core.bindingName = (Core.Name "numbers"),
               Core.bindingTerm = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))])),
               Core.bindingType = (Just (Core.TypeScheme {
                 Core.typeSchemeVariables = [],

@@ -72,18 +72,14 @@ customIndent idt s = (Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> S
 
 customIndentBlock :: (String -> [Ast.Expr] -> Ast.Expr)
 customIndentBlock idt els =  
-  let head = (Lists.head els)
-  in  
-    let rest = (Lists.tail els)
-    in  
-      let idtOp = Ast.Op {
-              Ast.opSymbol = (sym ""),
-              Ast.opPadding = Ast.Padding {
-                Ast.paddingLeft = Ast.WsSpace,
-                Ast.paddingRight = (Ast.WsBreakAndIndent idt)},
-              Ast.opPrecedence = (Ast.Precedence 0),
-              Ast.opAssociativity = Ast.AssociativityNone}
-      in (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) (ifx idtOp head (newlineSep rest))))
+  let idtOp = Ast.Op {
+          Ast.opSymbol = (sym ""),
+          Ast.opPadding = Ast.Padding {
+            Ast.paddingLeft = Ast.WsSpace,
+            Ast.paddingRight = (Ast.WsBreakAndIndent idt)},
+          Ast.opPrecedence = (Ast.Precedence 0),
+          Ast.opAssociativity = Ast.AssociativityNone}
+  in (Maybes.maybe (cst "") (\head -> Logic.ifElse (Equality.equal (Lists.length els) 1) head (ifx idtOp head (newlineSep (Lists.drop 1 els)))) (Lists.safeHead els))
 
 dotSep :: ([Ast.Expr] -> Ast.Expr)
 dotSep = (sep (Ast.Op {
@@ -193,7 +189,7 @@ indentSubsequentLines idt e = (Ast.ExprIndent (Ast.IndentedExpression {
 infixWs :: (String -> Ast.Expr -> Ast.Expr -> Ast.Expr)
 infixWs op l r = (spaceSep [
   l,
-  cst op,
+  (cst op),
   r])
 
 infixWsList :: (String -> [Ast.Expr] -> Ast.Expr)
@@ -256,12 +252,8 @@ orOp newlines = Ast.Op {
 
 orSep :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 orSep style l =  
-  let h = (Lists.head l)
-  in  
-    let r = (Lists.tail l)
-    in  
-      let newlines = (Ast.blockStyleNewlineBeforeContent style)
-      in (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) (ifx (orOp newlines) h (orSep style r))))
+  let newlines = (Ast.blockStyleNewlineBeforeContent style)
+  in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx (orOp newlines) acc el) h (Lists.drop 1 l)) (Lists.safeHead l))
 
 parenList :: (Bool -> [Ast.Expr] -> Ast.Expr)
 parenList newlines els =  
@@ -428,11 +420,7 @@ semicolonSep :: ([Ast.Expr] -> Ast.Expr)
 semicolonSep = (symbolSep ";" inlineStyle)
 
 sep :: (Ast.Op -> [Ast.Expr] -> Ast.Expr)
-sep op els =  
-  let h = (Lists.head els)
-  in  
-    let r = (Lists.tail els)
-    in (Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) (ifx op h (sep op r))))
+sep op els = (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx op acc el) h (Lists.drop 1 els)) (Lists.safeHead els))
 
 spaceSep :: ([Ast.Expr] -> Ast.Expr)
 spaceSep = (sep (Ast.Op {
@@ -453,24 +441,20 @@ sym s = (Ast.Symbol s)
 
 symbolSep :: (String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 symbolSep symb style l =  
-  let h = (Lists.head l)
+  let breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
+          Ast.blockStyleNewlineBeforeContent style,
+          (Ast.blockStyleNewlineAfterContent style)]))
   in  
-    let r = (Lists.tail l)
+    let break = (Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
     in  
-      let breakCount = (Lists.length (Lists.filter (\x_ -> x_) [
-              Ast.blockStyleNewlineBeforeContent style,
-              (Ast.blockStyleNewlineAfterContent style)]))
-      in  
-        let break = (Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak))
-        in  
-          let commaOp = Ast.Op {
-                  Ast.opSymbol = (sym symb),
-                  Ast.opPadding = Ast.Padding {
-                    Ast.paddingLeft = Ast.WsNone,
-                    Ast.paddingRight = break},
-                  Ast.opPrecedence = (Ast.Precedence 0),
-                  Ast.opAssociativity = Ast.AssociativityNone}
-          in (Logic.ifElse (Lists.null l) (cst "") (Logic.ifElse (Equality.equal (Lists.length l) 1) (Lists.head l) (ifx commaOp h (symbolSep symb style r))))
+      let commaOp = Ast.Op {
+              Ast.opSymbol = (sym symb),
+              Ast.opPadding = Ast.Padding {
+                Ast.paddingLeft = Ast.WsNone,
+                Ast.paddingRight = break},
+              Ast.opPrecedence = (Ast.Precedence 0),
+              Ast.opAssociativity = Ast.AssociativityNone}
+      in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx commaOp acc el) h (Lists.drop 1 l)) (Lists.safeHead l))
 
 tabIndent :: (Ast.Expr -> Ast.Expr)
 tabIndent e = (Ast.ExprIndent (Ast.IndentedExpression {

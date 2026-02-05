@@ -43,13 +43,13 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
   let candidates = (Lists.filter (\adapter -> supported (Compute.adapterTarget adapter)) raw)
   in (Logic.ifElse (Lists.null candidates) (Flows.fail (Strings.cat [
     "no adapters found for ",
-    describe typ,
-    Logic.ifElse (Lists.null raw) "" (Strings.cat [
+    (describe typ),
+    (Logic.ifElse (Lists.null raw) "" (Strings.cat [
       " (discarded ",
-      Literals.showInt32 (Lists.length raw),
+      (Literals.showInt32 (Lists.length raw)),
       " unsupported candidate types: ",
-      Core_.list show (Lists.map Compute.adapterTarget raw),
-      ")"]),
+      (Core_.list show (Lists.map Compute.adapterTarget raw)),
+      ")"])),
     ". Original type: ",
     (show typ)])) (Flows.pure (Lists.head candidates))))))
 

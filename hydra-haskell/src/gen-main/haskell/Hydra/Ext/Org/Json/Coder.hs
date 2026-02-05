@@ -223,12 +223,12 @@ termCoder typ =
                               Core.TypeVariable v1 -> (Flows.pure (Compute.Coder {
                                 Compute.coderEncode = (\term -> Flows.pure (Model.ValueString (Strings.cat [
                                   "variable '",
-                                  Core.unName v1,
+                                  (Core.unName v1),
                                   "' for: ",
                                   (Core___.term term)]))),
                                 Compute.coderDecode = (\term -> Flows.fail (Strings.cat [
                                   "type variable ",
-                                  Core.unName v1,
+                                  (Core.unName v1),
                                   " does not support decoding"]))}))
                               _ -> (Flows.fail (Strings.cat [
                                 "unsupported type in JSON: ",

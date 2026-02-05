@@ -34,7 +34,7 @@ caseConvention cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) 
                 (Core.Name "upperSnake", (\input -> Eithers.map (\t -> Util.CaseConventionUpperSnake) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.util.CaseConvention"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -52,7 +52,7 @@ comparison cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
                 (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Util.ComparisonGreaterThan) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.util.Comparison"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -84,7 +84,7 @@ precision cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.util.Precision"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

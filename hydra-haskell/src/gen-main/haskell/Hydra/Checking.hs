@@ -50,13 +50,13 @@ applyTypeArgumentsToType tx typeArgs t =
               in (applyTypeArgumentsToType tx (Lists.tail typeArgs) (Substitution.substInType (Typing.TypeSubst (Maps.singleton v (Lists.head typeArgs))) tbody))
           _ -> (Flows.fail (Strings.cat [
             "not a forall type: ",
-            Core__.type_ t,
+            (Core__.type_ t),
             ". Trying to apply ",
-            Literals.showInt32 (Lists.length typeArgs),
+            (Literals.showInt32 (Lists.length typeArgs)),
             " type args: ",
-            Formatting.showList Core__.type_ typeArgs,
+            (Formatting.showList Core__.type_ typeArgs),
             ". Context has vars: {",
-            Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
+            (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx)))),
             "}"]))) t)
   in (Logic.ifElse (Lists.null typeArgs) (Flows.bind (checkTypeVariables tx t) (\_ -> Flows.pure t)) nonnull)
 
@@ -112,7 +112,7 @@ checkNominalApplication tx tname typeArgs = (Flows.bind (Schemas.requireSchemaTy
 checkSameType :: (Typing.TypeContext -> String -> [Core.Type] -> Compute.Flow t0 Core.Type)
 checkSameType tx desc types = (Logic.ifElse (typesAllEffectivelyEqual tx types) (Flows.pure (Lists.head types)) (Flows.fail (Strings.cat [
   "unequal types ",
-  Formatting.showList Core__.type_ types,
+  (Formatting.showList Core__.type_ types),
   " in ",
   desc])))
 
@@ -123,7 +123,7 @@ checkType tx term typ =
     let vars = (Typing.typeContextTypeVariables tx)
     in (Logic.ifElse Constants.debugInference (Flows.bind (typeOf tx [] term) (\t0 -> Logic.ifElse (typesEffectivelyEqual tx t0 typ) (Flows.pure ()) (Flows.fail (Strings.cat [
       "type checking failed: expected ",
-      Core__.type_ typ,
+      (Core__.type_ typ),
       " but found ",
       (Core__.type_ t0)])))) (Flows.pure ()))
 
@@ -208,15 +208,15 @@ typeOfApplication tx typeArgs app =
                   let cod = (Core.functionTypeCodomain v1)
                   in (Logic.ifElse (typesEffectivelyEqual tx dom targ) (Flows.pure cod) (Flows.fail (Strings.cat [
                     "in application, expected ",
-                    Core__.type_ dom,
+                    (Core__.type_ dom),
                     " but found ",
                     (Core__.type_ targ)])))
               Core.TypeVariable _ -> (Flows.map (\x -> Core.TypeVariable x) Schemas.freshName)
               _ -> (Flows.fail (Strings.cat [
                 "left hand side of application (",
-                Core__.term fun,
+                (Core__.term fun),
                 ") is not function-typed (",
-                Core__.type_ tfun,
+                (Core__.type_ tfun),
                 ")",
                 ". types: ",
                 (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
@@ -308,9 +308,9 @@ typeOfLet tx typeArgs letTerm =
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
             in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
               "binding types disagree: ",
-              Formatting.showList Core__.type_ btypes,
+              (Formatting.showList Core__.type_ btypes),
               " and ",
-              Formatting.showList Core__.type_ typeofs,
+              (Formatting.showList Core__.type_ typeofs),
               " from terms: ",
               (Formatting.showList Core__.term bterms)]))) (\t -> applyTypeArgumentsToType tx typeArgs t)))))
 
@@ -437,9 +437,9 @@ typeOfVariable tx typeArgs name =
   in  
     let failMsg = (Flows.fail (Strings.cat [
             "unbound variable: ",
-            Core.unName name,
+            (Core.unName name),
             ". Variables: {",
-            Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx))),
+            (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Typing.typeContextTypes tx)))),
             "}"]))
     in (Flows.bind (Maybes.maybe failMsg (\t -> Logic.ifElse (Lists.null typeArgs) (Schemas.instantiateType t) (Flows.pure t)) rawType) (\t -> applyTypeArgumentsToType tx typeArgs t))
 

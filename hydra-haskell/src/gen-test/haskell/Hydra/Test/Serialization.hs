@@ -111,7 +111,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
             Testing.serializationTestCaseInput = (Serialization.bracketList Serialization.inlineStyle [
               Serialization.num 1,
-              Serialization.num 2,
+              (Serialization.num 2),
               (Serialization.num 3)]),
             Testing.serializationTestCaseOutput = "[1, 2, 3]"})),
           Testing.testCaseWithMetadataDescription = Nothing,

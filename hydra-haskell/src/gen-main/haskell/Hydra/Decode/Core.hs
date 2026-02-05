@@ -107,7 +107,7 @@ elimination cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
                 (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.EliminationWrap t) (name cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.Elimination"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -143,7 +143,7 @@ floatType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
                 (Core.Name "float64", (\input -> Eithers.map (\t -> Core.FloatTypeFloat64) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.FloatType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -179,7 +179,7 @@ floatValue cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.FloatValue"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -206,7 +206,7 @@ function cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stri
                 (Core.Name "primitive", (\input -> Eithers.map (\t -> Core.FunctionPrimitive t) (name cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.Function"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -248,7 +248,7 @@ integerType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
                 (Core.Name "uint64", (\input -> Eithers.map (\t -> Core.IntegerTypeUint64) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.IntegerType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -326,7 +326,7 @@ integerValue cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.IntegerValue"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -377,7 +377,7 @@ literal cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strip
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.Literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -397,7 +397,7 @@ literalType cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
                 (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralTypeString) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.LiteralType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -475,7 +475,7 @@ term cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                 (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TermWrap t) (wrappedTerm cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.Term"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -506,7 +506,7 @@ type_ cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strippe
                 (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TypeWrap t) (wrappedType cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.core.Type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

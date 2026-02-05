@@ -34,7 +34,7 @@ binding el =
     in  
       let typeStr = (Maybes.maybe "" (\ts -> Strings.cat [
               ":(",
-              typeScheme ts,
+              (typeScheme ts),
               ")"]) (Core.bindingType el))
       in (Strings.cat [
         name,
@@ -77,7 +77,7 @@ elimination elm = ((\x -> case x of
               (fields allFields)])
   Core.EliminationWrap v1 -> (Strings.cat [
     "unwrap(",
-    Core.unName v1,
+    (Core.unName v1),
     ")"])) elm)
 
 field :: (Core.Field -> String)
@@ -106,7 +106,7 @@ fields flds =
   let fieldStrs = (Lists.map field flds)
   in (Strings.cat [
     "{",
-    Strings.intercalate ", " fieldStrs,
+    (Strings.intercalate ", " fieldStrs),
     "}"])
 
 -- | Show a float value as a string
@@ -138,7 +138,7 @@ injection inj =
     let f = (Core.injectionField inj)
     in (Strings.cat [
       "inject(",
-      Core.unName tname,
+      (Core.unName tname),
       ")",
       (fields [
         f])])
@@ -196,7 +196,7 @@ let_ l =
       let bindingStrs = (Lists.map binding bindings)
       in (Strings.cat [
         "let ",
-        Strings.intercalate ", " bindingStrs,
+        (Strings.intercalate ", " bindingStrs),
         " in ",
         (term env)])
 
@@ -205,7 +205,7 @@ list f xs =
   let elementStrs = (Lists.map f xs)
   in (Strings.cat [
     "[",
-    Strings.intercalate ", " elementStrs,
+    (Strings.intercalate ", " elementStrs),
     "]"])
 
 -- | Show a literal as a string
@@ -244,14 +244,14 @@ term t =
         let termStrs = (Lists.map term terms)
         in (Strings.cat [
           "(",
-          Strings.intercalate " @ " termStrs,
+          (Strings.intercalate " @ " termStrs),
           ")"])
     Core.TermEither v1 -> (Eithers.either (\l -> Strings.cat [
       "left(",
-      term l,
+      (term l),
       ")"]) (\r -> Strings.cat [
       "right(",
-      term r,
+      (term r),
       ")"]) v1)
     Core.TermFunction v1 -> (function v1)
     Core.TermLet v1 -> (let_ v1)
@@ -259,7 +259,7 @@ term t =
       let termStrs = (Lists.map term v1)
       in (Strings.cat [
         "[",
-        Strings.intercalate ", " termStrs,
+        (Strings.intercalate ", " termStrs),
         "]"])
     Core.TermLiteral v1 -> (literal v1)
     Core.TermMap v1 ->  
@@ -269,17 +269,17 @@ term t =
               (term (Pairs.second p))])
       in (Strings.cat [
         "{",
-        Strings.intercalate ", " (Lists.map entry (Maps.toList v1)),
+        (Strings.intercalate ", " (Lists.map entry (Maps.toList v1))),
         "}"])
     Core.TermMaybe v1 -> (Maybes.maybe "nothing" (\t -> Strings.cat [
       "just(",
-      term t,
+      (term t),
       ")"]) v1)
     Core.TermPair v1 -> (Strings.cat [
       "(",
-      term (Pairs.first v1),
+      (term (Pairs.first v1)),
       ", ",
-      term (Pairs.second v1),
+      (term (Pairs.second v1)),
       ")"])
     Core.TermRecord v1 ->  
       let tname = (Core.unName (Core.recordTypeName v1))
@@ -292,7 +292,7 @@ term t =
           (fields flds)])
     Core.TermSet v1 -> (Strings.cat [
       "{",
-      Strings.intercalate ", " (Lists.map term (Sets.toList v1)),
+      (Strings.intercalate ", " (Lists.map term (Sets.toList v1))),
       "}"])
     Core.TermTypeLambda v1 ->  
       let param = (Core.unName (Core.typeLambdaParameter v1))
@@ -310,7 +310,7 @@ term t =
         in (Strings.cat [
           term t2,
           "\10216",
-          type_ typ,
+          (type_ typ),
           "\10217"])
     Core.TermUnion v1 -> (injection v1)
     Core.TermUnit -> "unit"
@@ -323,7 +323,7 @@ term t =
           "wrap(",
           tname,
           "){",
-          term term1,
+          (term term1),
           "}"])) t)
 
 -- | Show a type as a string
@@ -335,7 +335,7 @@ type_ typ =
             let fieldStrs = (Lists.map fieldType flds)
             in (Strings.cat [
               "{",
-              Strings.intercalate ", " fieldStrs,
+              (Strings.intercalate ", " fieldStrs),
               "}"]))
   in  
     let gatherTypes = (\prev -> \app ->  
@@ -361,7 +361,7 @@ type_ typ =
             let typeStrs = (Lists.map type_ types)
             in (Strings.cat [
               "(",
-              Strings.intercalate " @ " typeStrs,
+              (Strings.intercalate " @ " typeStrs),
               ")"])
         Core.TypeEither v1 ->  
           let leftTyp = (Core.eitherTypeLeft v1)
@@ -369,9 +369,9 @@ type_ typ =
             let rightTyp = (Core.eitherTypeRight v1)
             in (Strings.cat [
               "either<",
-              type_ leftTyp,
+              (type_ leftTyp),
               ", ",
-              type_ rightTyp,
+              (type_ rightTyp),
               ">"])
         Core.TypeForall v1 ->  
           let var = (Core.unName (Core.forallTypeParameter v1))
@@ -381,7 +381,7 @@ type_ typ =
               "(\8704",
               var,
               ".",
-              type_ body,
+              (type_ body),
               ")"])
         Core.TypeFunction _ ->  
           let types = (gatherFunctionTypes [] typ)
@@ -389,11 +389,11 @@ type_ typ =
             let typeStrs = (Lists.map type_ types)
             in (Strings.cat [
               "(",
-              Strings.intercalate " \8594 " typeStrs,
+              (Strings.intercalate " \8594 " typeStrs),
               ")"])
         Core.TypeList v1 -> (Strings.cat [
           "list<",
-          type_ v1,
+          (type_ v1),
           ">"])
         Core.TypeLiteral v1 -> (literalType v1)
         Core.TypeMap v1 ->  
@@ -402,13 +402,13 @@ type_ typ =
             let valTyp = (Core.mapTypeValues v1)
             in (Strings.cat [
               "map<",
-              type_ keyTyp,
+              (type_ keyTyp),
               ", ",
-              type_ valTyp,
+              (type_ valTyp),
               ">"])
         Core.TypeMaybe v1 -> (Strings.cat [
           "maybe<",
-          type_ v1,
+          (type_ v1),
           ">"])
         Core.TypePair v1 ->  
           let firstTyp = (Core.pairTypeFirst v1)
@@ -416,14 +416,14 @@ type_ typ =
             let secondTyp = (Core.pairTypeSecond v1)
             in (Strings.cat [
               "(",
-              type_ firstTyp,
+              (type_ firstTyp),
               ", ",
-              type_ secondTyp,
+              (type_ secondTyp),
               ")"])
         Core.TypeRecord v1 -> (Strings.cat2 "record" (showRowType v1))
         Core.TypeSet v1 -> (Strings.cat [
           "set<",
-          type_ v1,
+          (type_ v1),
           ">"])
         Core.TypeUnion v1 -> (Strings.cat2 "union" (showRowType v1))
         Core.TypeUnit -> "unit"
@@ -436,7 +436,7 @@ type_ typ =
               "wrap[",
               tname,
               "](",
-              type_ typ1,
+              (type_ typ1),
               ")"])) typ)
 
 -- | Show a type scheme as a string
@@ -450,10 +450,10 @@ typeScheme ts =
       in  
         let fa = (Logic.ifElse (Lists.null vars) "" (Strings.cat [
                 "\8704[",
-                Strings.intercalate "," varNames,
+                (Strings.intercalate "," varNames),
                 "]."]))
         in (Strings.cat [
           "(",
           fa,
-          type_ body,
+          (type_ body),
           ")"])

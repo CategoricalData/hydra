@@ -54,7 +54,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.AlphaConversionTestCase"),
                                 Core.projectionField = (Core.Name "term")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -70,8 +70,8 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.AlphaConversionTestCase"),
                                 Core.projectionField = (Core.Name "oldVariable")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -87,7 +87,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.AlphaConversionTestCase"),
                                 Core.projectionField = (Core.Name "newVariable")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -228,7 +228,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.CaseConversionTestCase"),
                                 Core.projectionField = (Core.Name "fromConvention")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -244,8 +244,8 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.CaseConversionTestCase"),
                                 Core.projectionField = (Core.Name "toConvention")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -272,7 +272,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.CaseConversionTestCase"),
                                 Core.projectionField = (Core.Name "fromString")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -738,7 +738,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.FoldOverTermTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -754,8 +754,8 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.FoldOverTermTestCase"),
                                 Core.projectionField = (Core.Name "traversalOrder")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -771,7 +771,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.FoldOverTermTestCase"),
                                 Core.projectionField = (Core.Name "operation")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1166,7 +1166,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.HoistSubtermsTestCase"),
                                 Core.projectionField = (Core.Name "predicate")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1182,7 +1182,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.HoistSubtermsTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1378,7 +1378,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTermTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1394,7 +1394,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTermTestCase"),
                                 Core.projectionField = (Core.Name "rewriter")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1496,7 +1496,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTypeTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1512,7 +1512,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTypeTestCase"),
                                 Core.projectionField = (Core.Name "rewriter")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1568,7 +1568,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.EvaluationTestCase"),
                                 Core.projectionField = (Core.Name "evaluationStyle")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1584,7 +1584,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.EvaluationTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1733,7 +1733,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
                                 Core.projectionField = (Core.Name "type")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1749,7 +1749,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
                                 Core.projectionField = (Core.Name "term")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -1805,7 +1805,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
                                 Core.projectionField = (Core.Name "type")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -1821,7 +1821,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
                                 Core.projectionField = (Core.Name "json")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -3315,7 +3315,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
                                 Core.projectionField = (Core.Name "name")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -3331,8 +3331,8 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
                                 Core.projectionField = (Core.Name "case")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -3370,7 +3370,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
                                 Core.projectionField = (Core.Name "description")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -3448,7 +3448,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
                                 Core.projectionField = (Core.Name "name")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -3486,8 +3486,8 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
                                 Core.projectionField = (Core.Name "description")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -3514,7 +3514,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
                                 Core.projectionField = (Core.Name "subgroups")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
@@ -3581,7 +3581,7 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TypeCheckingTestCase"),
                                 Core.projectionField = (Core.Name "input")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    Core.TermRecord (Core.Record {
+                    (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [
                         Core.Field {
@@ -3597,7 +3597,7 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.testing.TypeCheckingTestCase"),
                                 Core.projectionField = (Core.Name "outputTerm")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                     (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.Name "hydra.core.Field"),
                       Core.recordFields = [

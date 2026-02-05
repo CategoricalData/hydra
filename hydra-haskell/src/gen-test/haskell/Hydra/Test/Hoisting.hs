@@ -56,7 +56,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermList [
                 Core.TermVariable (Core.Name "x"),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.hoistSubtermsTestCaseOutput = (Core.TermLet (Core.Let {
               Core.letBindings = [
@@ -66,7 +66,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermList [
                 Core.TermVariable (Core.Name "x"),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -112,7 +112,7 @@ allTests = Testing.TestGroup {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                 Core.applicationArgument = (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])}))})),
             Testing.hoistSubtermsTestCaseOutput = (Core.TermLet (Core.Let {
               Core.letBindings = [
@@ -126,7 +126,7 @@ allTests = Testing.TestGroup {
                     Core.bindingName = (Core.Name "_hoist__body_1"),
                     Core.bindingTerm = (Core.TermList [
                       Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                      (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
                     Core.bindingType = Nothing}],
                 Core.letBody = (Core.TermApplication (Core.Application {
@@ -524,13 +524,13 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.hoistSubtermsTestCaseOutput = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -1504,7 +1504,7 @@ allTests = Testing.TestGroup {
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "a"),
-                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                      (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])}))),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {
@@ -1519,7 +1519,7 @@ allTests = Testing.TestGroup {
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
                       Core.TermVariable (Core.Name "a"),
-                      Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                      (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])}))),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {
@@ -4490,7 +4490,7 @@ allTests = Testing.TestGroup {
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0",
-                            Core.Name "t1",
+                            (Core.Name "t1"),
                             (Core.Name "t2")],
                           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -4562,7 +4562,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = (Just (Core.TypeScheme {
                     Core.typeSchemeVariables = [
                       Core.Name "t0",
-                      Core.Name "t1",
+                      (Core.Name "t1"),
                       (Core.Name "t2")],
                     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -4656,7 +4656,7 @@ allTests = Testing.TestGroup {
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0",
-                            Core.Name "t1",
+                            (Core.Name "t1"),
                             (Core.Name "t2")],
                           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypePair (Core.PairType {
@@ -4708,7 +4708,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = (Just (Core.TypeScheme {
                     Core.typeSchemeVariables = [
                       Core.Name "t0",
-                      Core.Name "t1",
+                      (Core.Name "t1"),
                       (Core.Name "t2")],
                     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypePair (Core.PairType {
@@ -4941,7 +4941,7 @@ allTests = Testing.TestGroup {
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "s",
-                            Core.Name "t",
+                            (Core.Name "t"),
                             (Core.Name "v")],
                           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "s")),
@@ -4990,7 +4990,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = (Just (Core.TypeScheme {
                     Core.typeSchemeVariables = [
                       Core.Name "s",
-                      Core.Name "t",
+                      (Core.Name "t"),
                       (Core.Name "v")],
                     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "s")),
@@ -5022,7 +5022,7 @@ allTests = Testing.TestGroup {
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "t0",
-                            Core.Name "t1",
+                            (Core.Name "t1"),
                             (Core.Name "t2")],
                           Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
@@ -5071,7 +5071,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = (Just (Core.TypeScheme {
                     Core.typeSchemeVariables = [
                       Core.Name "t0",
-                      Core.Name "t1",
+                      (Core.Name "t1"),
                       (Core.Name "t2")],
                     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
@@ -5117,7 +5117,7 @@ allTests = Testing.TestGroup {
                               Core.bindingType = (Just (Core.TypeScheme {
                                 Core.typeSchemeVariables = [
                                   Core.Name "t0",
-                                  Core.Name "t1",
+                                  (Core.Name "t1"),
                                   (Core.Name "t2")],
                                 Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                                   Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
@@ -5202,7 +5202,7 @@ allTests = Testing.TestGroup {
                   Core.bindingType = (Just (Core.TypeScheme {
                     Core.typeSchemeVariables = [
                       Core.Name "t0",
-                      Core.Name "t1",
+                      (Core.Name "t1"),
                       (Core.Name "t2")],
                     Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {

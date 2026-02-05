@@ -140,7 +140,7 @@ testGroupForEithers = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
             Testing.inferenceTestCaseInput = (Core.TermList [
               Core.TermEither (Left (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))))),
-              Core.TermEither (Left (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "nested"))))),
+              (Core.TermEither (Left (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "nested")))))),
               (Core.TermEither (Right (Core.TermLiteral (Core.LiteralBoolean True))))]),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
@@ -157,7 +157,7 @@ testGroupForEithers = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
             Testing.inferenceTestCaseInput = (Core.TermList [
               Core.TermEither (Right (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))),
-              Core.TermEither (Right (Core.TermEither (Right (Core.TermLiteral (Core.LiteralBoolean True))))),
+              (Core.TermEither (Right (Core.TermEither (Right (Core.TermLiteral (Core.LiteralBoolean True)))))),
               (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "foo"))))]),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
@@ -305,9 +305,9 @@ testGroupForFolds = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))])})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
@@ -549,7 +549,7 @@ testGroupForLists = Testing.TestGroup {
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermList [
                 Core.TermVariable (Core.Name "x"),
-                Core.TermLiteral (Core.LiteralString "foo"),
+                (Core.TermLiteral (Core.LiteralString "foo")),
                 (Core.TermVariable (Core.Name "x"))])}))),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],

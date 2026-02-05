@@ -140,8 +140,8 @@ literalTypes = (Lists.concat [
   [
     Core.LiteralTypeBinary,
     Core.LiteralTypeBoolean],
-  Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes,
-  Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes,
+  (Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes),
+  (Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes),
   [
     Core.LiteralTypeString]])
 

@@ -126,7 +126,7 @@ pushError msg t =
                     in (Logic.ifElse (Equality.equal n 1) x (Strings.cat [
                       x,
                       " (x",
-                      Literals.showInt32 n,
+                      (Literals.showInt32 n),
                       ")"])))
           in (Lists.map condenseGroup (Lists.group ys)))
   in  
@@ -134,7 +134,7 @@ pushError msg t =
             "Error: ",
             msg,
             " (",
-            Strings.intercalate " > " (condenseRepeats (Lists.reverse (Compute.traceStack t))),
+            (Strings.intercalate " > " (condenseRepeats (Lists.reverse (Compute.traceStack t)))),
             ")"])
     in Compute.Trace {
       Compute.traceStack = (Compute.traceStack t),

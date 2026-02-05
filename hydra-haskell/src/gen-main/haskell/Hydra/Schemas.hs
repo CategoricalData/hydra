@@ -410,7 +410,7 @@ requireSchemaType cx tname =
   let types = (Typing.inferenceContextSchemaTypes cx)
   in (Maybes.maybe (Flows.fail (Strings.cat [
     "No such schema type: ",
-    Core.unName tname,
+    (Core.unName tname),
     ". Available types are: ",
     (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys types)))])) (\ts -> instantiateTypeScheme (Rewriting.deannotateTypeSchemeRecursive ts)) (Maps.lookup tname types))
 
@@ -425,7 +425,7 @@ requireUnionField tname fname =
           let matches = (Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) (Core.rowTypeFields rt))
           in (Logic.ifElse (Lists.null matches) (Flows.fail (Strings.cat [
             "no field \"",
-            Core.unName fname,
+            (Core.unName fname),
             "\" in union type \"",
             (Core.unName tname)])) (Flows.pure (Core.fieldTypeType (Lists.head matches)))))
   in (Flows.bind (requireUnionType tname) withRowType)

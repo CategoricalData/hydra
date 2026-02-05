@@ -179,7 +179,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c")))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString "b"),
+              (Core.TermLiteral (Core.LiteralString "b")),
               (Core.TermLiteral (Core.LiteralString "c"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -517,7 +517,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c")))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -533,7 +533,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c")))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -891,7 +891,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c")))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermLiteral (Core.LiteralString "a"))),
-              Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "b"))),
+              (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralString "b")))),
               (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)), (Core.TermLiteral (Core.LiteralString "c"))))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

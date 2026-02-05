@@ -22,5 +22,5 @@ graph graph =
       elementStrs = (Lists.map Core.binding elements)
   in (Strings.cat [
     "{",
-    Strings.intercalate ", " elementStrs,
+    (Strings.intercalate ", " elementStrs),
     "}"])
