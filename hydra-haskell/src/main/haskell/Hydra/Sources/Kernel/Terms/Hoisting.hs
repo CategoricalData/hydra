@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Terms.Hoisting where
 import Hydra.Kernel hiding (
   augmentBindingsWithNewFreeVars,
   bindingIsPolymorphic, bindingUsesContextTypeVars,
+  countVarOccurrences,
   hoistAllLetBindings, hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindingsWithContext, hoistLetBindingsWithPredicate, hoistPolymorphicLetBindings, hoistSubterms,
   isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination,
   normalizePathForHoisting,
@@ -82,6 +83,7 @@ module_ = Module ns elements
      toBinding augmentBindingsWithNewFreeVars,
      toBinding bindingIsPolymorphic,
      toBinding bindingUsesContextTypeVars,
+     toBinding countVarOccurrences,
      toBinding hoistAllLetBindings,
      toBinding hoistCaseStatements,
      toBinding hoistCaseStatementsInGraph,
@@ -126,6 +128,22 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
       "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
       "contextTypeVars" <~ Typing.typeContextTypeVariables (var "cx") $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
+
+-- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
+countVarOccurrences :: TBinding (Name -> Term -> Int)
+countVarOccurrences = define "countVarOccurrences" $
+  doc "Count the number of occurrences of a variable name in a term. Assumes no variable shadowing." $
+  "name" ~> "term" ~>
+  "childCount" <~ Lists.foldl
+    ("acc" ~> "t" ~> Math.add (var "acc") (countVarOccurrences @@ var "name" @@ var "t"))
+    (int32 0)
+    (Rewriting.subterms @@ var "term") $
+  cases _Term (var "term")
+    (Just $ var "childCount") [
+    _Term_variable>>: "v" ~>
+      Logic.ifElse (Equality.equal (var "v") (var "name"))
+        (Math.add (int32 1) (var "childCount"))
+        (var "childCount")]
 
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
 augmentBindingsWithNewFreeVars :: TBinding (TypeContext -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
@@ -345,15 +363,59 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         "hoistedBindings" <~ Lists.map (unaryFunction Pairs.first) (var "hoistPairs") $
         "replacements" <~ Lists.map (unaryFunction Pairs.second) (var "hoistPairs") $
         "finalUsedNames" <~ Pairs.second (var "hoistPairsAndNames") $
-        "subst" <~ (Typing.termSubst $ Maps.fromList $ Lists.zip
-          (Lists.map (unaryFunction Core.bindingName) (var "hoistUs"))
-          (var "replacements")) $
 
-        -- Finally, substitute all occurrences of the bound names with the replacement terms
-        "bodySubst" <~ Substitution.substituteInTerm @@ var "subst" @@ var "body" $
-        "keepUsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "keepUs") $
-        "hoistedBindingsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "hoistedBindings") $
-        "bindingsSoFarSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "subst") (var "bindingsSoFar") $
+        -- Pair each hoisted name with its replacement
+        "hoistNameReplacementPairs" <~ Lists.zip
+          (Lists.map (unaryFunction Core.bindingName) (var "hoistUs"))
+          (var "replacements") $
+
+        -- Map from binding name to original binding (for checking polymorphism)
+        "hoistBindingMap" <~ Maps.fromList (Lists.map
+          ("b" ~> pair (Core.bindingName $ var "b") (var "b"))
+          (var "hoistUs")) $
+
+        -- A binding is cacheable if: (1) referenced >1 time in body, AND (2) not polymorphic.
+        -- Polymorphic bindings (with non-empty typeSchemeVariables) can't be local Java variables.
+        -- Non-polymorphic bindings (hoisted only because they use context type vars) are safe to cache.
+        "isCacheable" <~ ("name" ~>
+          "multiRef" <~ Equality.gte (countVarOccurrences @@ var "name" @@ var "body") (int32 2) $
+          "isPoly" <~ optCases (Maps.lookup (var "name") (var "hoistBindingMap"))
+            false
+            ("b" ~> bindingIsPolymorphic @@ var "b") $
+          Logic.and (var "multiRef") (Logic.not $ var "isPoly")) $
+
+        -- Split into single-ref/polymorphic (substitute directly) and cacheable (keep as local let)
+        "singleRefPairs" <~ Lists.filter
+          ("p" ~> Logic.not $ var "isCacheable" @@ Pairs.first (var "p"))
+          (var "hoistNameReplacementPairs") $
+        "multiRefPairs" <~ Lists.filter
+          ("p" ~> var "isCacheable" @@ Pairs.first (var "p"))
+          (var "hoistNameReplacementPairs") $
+
+        -- Full substitution for all hoisted names (used for hoisted bindings, kept bindings, etc.)
+        "fullSubst" <~ (Typing.termSubst $ Maps.fromList $ var "hoistNameReplacementPairs") $
+        -- Partial substitution for single-ref names only (used for the body)
+        "bodyOnlySubst" <~ (Typing.termSubst $ Maps.fromList $ var "singleRefPairs") $
+
+        -- Substitute only single-ref names in the body; multi-ref names stay as variable refs
+        "bodySubst" <~ Substitution.substituteInTerm @@ var "bodyOnlySubst" @@ var "body" $
+
+        -- Create local let bindings for multi-ref hoisted names.
+        -- These bind the original name to the replacement expression (which calls the hoisted function once).
+        -- bindingType = Nothing so inference will infer the correct monomorphic type in context.
+        "cacheBindings" <~ Lists.map
+          ("p" ~> Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") nothing)
+          (var "multiRefPairs") $
+
+        -- Wrap the body in a let with the cache bindings if there are any
+        "bodyWithCache" <~ Logic.ifElse (Lists.null $ var "cacheBindings")
+          (var "bodySubst")
+          (Core.termLet $ Core.let_ (var "cacheBindings") (var "bodySubst")) $
+
+        -- Use full substitution for everything except the body
+        "keepUsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "fullSubst") (var "keepUs") $
+        "hoistedBindingsSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "fullSubst") (var "hoistedBindings") $
+        "bindingsSoFarSubst" <~ Lists.map (Substitution.substituteInBinding @@ var "fullSubst") (var "bindingsSoFar") $
 
         -- Augment bindings from inner lets with any new free variables introduced by substitution
         "augmentResult" <~ augmentBindingsWithNewFreeVars @@ var "cx" @@ (Sets.difference (var "boundTermVariables") (var "polyLetVariables")) @@ var "bindingsSoFarSubst" $
@@ -363,7 +425,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- Apply the augment substitution to update references in other bindings and body
         "hoistedBindingsFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "hoistedBindingsSubst") $
         "bindingsSoFarFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "bindingsSoFarAugmented") $
-        "bodyFinal" <~ Substitution.substituteInTerm @@ var "augmentSubst" @@ var "bodySubst" $
+        "bodyFinal" <~ Substitution.substituteInTerm @@ var "augmentSubst" @@ var "bodyWithCache" $
         "keepUsFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "keepUsSubst") $
 
         "finalTerm" <~ Logic.ifElse (Lists.null (var "keepUsFinal"))
