@@ -7,6 +7,10 @@
 module Main where
 
 import Hydra.Ext.Generation
+import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
+import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
+import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 main :: IO ()
 main = do
@@ -16,8 +20,14 @@ main = do
   putStrLn ""
 
   -- Universe provides all modules for dependency resolution
-  -- modulesToGenerate specifies which modules to actually generate
-  writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
+  -- modulesToGenerate includes kernelModules plus type-only modules
+  -- needed by the test suite (e.g. Haskell AST types, operators, YAML model)
+  let extraModules = [
+        HaskellAst.module_,
+        HaskellOperators.module_,
+        HaskellLanguage.module_,
+        YamlModel.module_]
+  writeJava "../hydra-java/src/gen-main/java" mainModules (kernelModules ++ extraModules)
 
   putStrLn ""
   putStrLn "=== Done! ==="
