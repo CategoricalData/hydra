@@ -21,7 +21,7 @@ import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExp
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax as PathAlgebraSyntax
 import Hydra.Ext.Sources.Graphql.Syntax
 import qualified Hydra.Ext.Sources.Graphviz.Dot as Dot
-import Hydra.Ext.Sources.Java.Language
+import qualified Hydra.Ext.Sources.Java.Language as JavaLanguage
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
 import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Ext.Sources.Json.Schema.Language as JsonSchemaLanguage
@@ -93,7 +93,7 @@ hydraExtModules = otherModules ++ gqlModules
       GraphsonUtils.module_,
       Gremlin.module_,
       IanaRelations.module_,
-      javaLanguageModule,
+      JavaLanguage.module_,
       JavaSyntax.module_,
       JsonSchema.module_,
       JsonSchemaLanguage.module_,

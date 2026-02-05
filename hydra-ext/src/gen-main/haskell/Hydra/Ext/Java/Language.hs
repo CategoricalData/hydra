@@ -72,6 +72,7 @@ javaLanguage = Coders.Language {
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
       Variants.TermVariantUnion,
+      Variants.TermVariantUnit,
       Variants.TermVariantVariable,
       Variants.TermVariantWrap])
     typeVariants = (Sets.fromList [
@@ -88,6 +89,7 @@ javaLanguage = Coders.Language {
       Variants.TypeVariantRecord,
       Variants.TypeVariantSet,
       Variants.TypeVariantUnion,
+      Variants.TypeVariantUnit,
       Variants.TypeVariantVariable,
       Variants.TypeVariantWrap])
     typePredicate = (\_ -> True)
