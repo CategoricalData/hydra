@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A floating-point type
  */
-public abstract class FloatType implements Serializable {
+public abstract class FloatType implements Serializable, Comparable<FloatType> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.FloatType");
   
   public static final hydra.core.Name FIELD_NAME_BIGFLOAT = new hydra.core.Name("bigfloat");
@@ -52,11 +52,8 @@ public abstract class FloatType implements Serializable {
    * An arbitrary-precision floating-point type
    */
   public static final class Bigfloat extends hydra.core.FloatType implements Serializable {
-    public final Boolean value;
+    public Bigfloat () {
     
-    public Bigfloat (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -65,12 +62,22 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Bigfloat o = (Bigfloat) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FloatType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -83,11 +90,8 @@ public abstract class FloatType implements Serializable {
    * A 32-bit floating-point type
    */
   public static final class Float32 extends hydra.core.FloatType implements Serializable {
-    public final Boolean value;
+    public Float32 () {
     
-    public Float32 (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -96,12 +100,22 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Float32 o = (Float32) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FloatType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -114,11 +128,8 @@ public abstract class FloatType implements Serializable {
    * A 64-bit floating-point type
    */
   public static final class Float64 extends hydra.core.FloatType implements Serializable {
-    public final Boolean value;
+    public Float64 () {
     
-    public Float64 (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -127,12 +138,22 @@ public abstract class FloatType implements Serializable {
         return false;
       }
       Float64 o = (Float64) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FloatType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

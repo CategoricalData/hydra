@@ -7,26 +7,26 @@ package hydra.substitution;
  */
 public interface Substitution {
   static hydra.typing.TypeSubst composeTypeSubst(hydra.typing.TypeSubst s1, hydra.typing.TypeSubst s2) {
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(((s1)).value),
-      (s2),
-      hydra.lib.logic.IfElse.apply(
+      () -> (s2),
+      () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.maps.Null.apply(((s2)).value),
-        (s1),
-        hydra.substitution.Substitution.composeTypeSubstNonEmpty(
+        () -> (s1),
+        () -> hydra.substitution.Substitution.composeTypeSubstNonEmpty(
           (s1),
           (s2))));
   }
   
   static hydra.typing.TypeSubst composeTypeSubstNonEmpty(hydra.typing.TypeSubst s1, hydra.typing.TypeSubst s2) {
-    java.util.Map<hydra.core.Name, hydra.core.Type> withExtra = hydra.lib.maps.FilterWithKey.apply(
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> withExtra = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
       (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, Boolean>>) (v1 -> (java.util.function.Function<hydra.core.Type, Boolean>) (v2 -> hydra.substitution.Substitution.composeTypeSubstNonEmpty_isExtra(
         (s1),
         (v1),
         (v2)))),
-      ((s2)).value);
+      ((s2)).value));
     return new hydra.typing.TypeSubst(hydra.lib.maps.Union.apply(
-      (withExtra),
+      withExtra.get(),
       hydra.lib.maps.Map.apply(
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> hydra.substitution.Substitution.substInType(
           (s2),
@@ -45,11 +45,13 @@ public interface Substitution {
       (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.substitution.Substitution.composeTypeSubst(
         (p0),
         (p1))),
-      (hydra.substitution.Substitution.idTypeSubst),
+      hydra.substitution.Substitution.idTypeSubst(),
       (v1));
   }
   
-  hydra.typing.TypeSubst idTypeSubst = new hydra.typing.TypeSubst((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
+  static hydra.typing.TypeSubst idTypeSubst() {
+    return new hydra.typing.TypeSubst((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
+  }
   
   static hydra.typing.TypeSubst singletonTypeSubst(hydra.core.Name v, hydra.core.Type t) {
     return new hydra.typing.TypeSubst(hydra.lib.maps.Singleton.apply(
@@ -83,25 +85,25 @@ public interface Substitution {
     java.util.Map<hydra.core.Name, hydra.core.Type> substMap = ((subst)).value;
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (acc -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (pair -> {
-        hydra.core.TypeVariableMetadata metadata = hydra.lib.pairs.Second.apply((pair));
-        hydra.core.Name varName = hydra.lib.pairs.First.apply((pair));
+        hydra.util.Lazy<hydra.core.TypeVariableMetadata> metadata = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((pair)));
+        hydra.util.Lazy<hydra.core.Name> varName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((pair)));
         return hydra.lib.maybes.Maybe.apply(
           hydra.substitution.Substitution.substInClassConstraints_insertOrMerge(
-            (varName),
-            (metadata),
+            varName.get(),
+            metadata.get(),
             (acc)),
           (java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (targetType -> {
-            java.util.List<hydra.core.Name> freeVars = hydra.lib.sets.ToList.apply(hydra.rewriting.Rewriting.freeVariablesInType((targetType)));
+            hydra.util.Lazy<java.util.List<hydra.core.Name>> freeVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.rewriting.Rewriting.freeVariablesInType((targetType))));
             return hydra.lib.lists.Foldl.apply(
               (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.core.Name, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (acc2 -> (java.util.function.Function<hydra.core.Name, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (freeVar -> hydra.substitution.Substitution.substInClassConstraints_insertOrMerge(
                 (freeVar),
-                (metadata),
+                metadata.get(),
                 (acc2)))),
               (acc),
-              (freeVars));
+              freeVars.get());
           }),
           hydra.lib.maps.Lookup.apply(
-            (varName),
+            varName.get(),
             (substMap)));
       })),
       (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())),
@@ -115,12 +117,12 @@ public interface Substitution {
         (metadata),
         (acc)),
       (java.util.function.Function<hydra.core.TypeVariableMetadata, java.util.Map<T0, hydra.core.TypeVariableMetadata>>) (existing -> {
-        hydra.core.TypeVariableMetadata merged = new hydra.core.TypeVariableMetadata(hydra.lib.sets.Union.apply(
+        hydra.util.Lazy<hydra.core.TypeVariableMetadata> merged = new hydra.util.Lazy<>(() -> new hydra.core.TypeVariableMetadata(hydra.lib.sets.Union.apply(
           ((existing)).classes,
-          ((metadata)).classes));
+          ((metadata)).classes)));
         return hydra.lib.maps.Insert.apply(
           (varName),
-          (merged),
+          merged.get(),
           (acc));
       }),
       hydra.lib.maps.Lookup.apply(
@@ -132,12 +134,12 @@ public interface Substitution {
     java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> newClassConstraints = hydra.substitution.Substitution.substInClassConstraints(
       (subst),
       ((cx)).classConstraints);
-    java.util.Map<hydra.core.Name, hydra.core.TypeScheme> newDataTypes = hydra.lib.maps.Map.apply(
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> newDataTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
       (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (v1 -> hydra.substitution.Substitution.substInTypeScheme(
         (subst),
         (v1))),
-      ((cx)).dataTypes);
-    return new hydra.typing.InferenceContext(((cx)).schemaTypes, ((cx)).primitiveTypes, (newDataTypes), (newClassConstraints), ((cx)).debug);
+      ((cx)).dataTypes));
+    return new hydra.typing.InferenceContext(((cx)).schemaTypes, ((cx)).primitiveTypes, newDataTypes.get(), (newClassConstraints), ((cx)).debug);
   }
   
   static hydra.core.Term substituteInTerm(hydra.typing.TermSubst subst, hydra.core.Term term0) {
@@ -145,30 +147,30 @@ public interface Substitution {
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
       java.util.function.Function<hydra.core.Lambda, hydra.core.Term> withLambda = (java.util.function.Function<hydra.core.Lambda, hydra.core.Term>) (l -> {
         hydra.core.Name v = ((l)).parameter;
-        hydra.typing.TermSubst subst2 = new hydra.typing.TermSubst(hydra.lib.maps.Delete.apply(
+        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.Delete.apply(
           (v),
-          (s)));
+          (s))));
         return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((v), ((l)).domain, hydra.substitution.Substitution.substituteInTerm(
-          (subst2),
+          subst2.get(),
           ((l)).body))));
       });
       java.util.function.Function<hydra.core.Let, hydra.core.Term> withLet = (java.util.function.Function<hydra.core.Let, hydra.core.Term>) (lt -> {
         java.util.List<hydra.core.Binding> bindings = ((lt)).bindings;
-        java.util.Set<hydra.core.Name> names = hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.Set<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
           projected -> projected.name,
-          (bindings)));
-        hydra.typing.TermSubst subst2 = new hydra.typing.TermSubst(hydra.lib.maps.FilterWithKey.apply(
+          (bindings))));
+        hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.FilterWithKey.apply(
           (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>>) (k -> (java.util.function.Function<hydra.core.Term, Boolean>) (v -> hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
             (k),
-            (names))))),
-          (s)));
+            names.get())))),
+          (s))));
         java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding(((b)).name, hydra.substitution.Substitution.substituteInTerm(
-          (subst2),
+          subst2.get(),
           ((b)).term), ((b)).type));
         return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
           (rewriteBinding),
           (bindings)), hydra.substitution.Substitution.substituteInTerm(
-          (subst2),
+          subst2.get(),
           ((lt)).body)));
       });
       return ((term)).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -214,10 +216,10 @@ public interface Substitution {
   }
   
   static hydra.core.Type substInType(hydra.typing.TypeSubst subst, hydra.core.Type typ0) {
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(((subst)).value),
-      (typ0),
-      hydra.substitution.Substitution.substInTypeNonEmpty(
+      () -> (typ0),
+      () -> hydra.substitution.Substitution.substInTypeNonEmpty(
         (subst),
         (typ0)));
   }
@@ -316,11 +318,11 @@ public interface Substitution {
         ((tt)).type))));
       java.util.function.Function<hydra.core.TypeLambda, hydra.core.Term> forTypeLambda = (java.util.function.Function<hydra.core.TypeLambda, hydra.core.Term>) (ta -> {
         hydra.core.Name param = ((ta)).parameter;
-        hydra.typing.TypeSubst subst2 = new hydra.typing.TypeSubst(hydra.lib.maps.Delete.apply(
+        hydra.util.Lazy<hydra.typing.TypeSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TypeSubst(hydra.lib.maps.Delete.apply(
           (param),
-          ((subst)).value));
+          ((subst)).value)));
         return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((param), hydra.substitution.Substitution.substTypesInTerm(
-          (subst2),
+          subst2.get(),
           ((ta)).body)));
       });
       return ((term)).accept(new hydra.core.Term.PartialVisitor<>() {

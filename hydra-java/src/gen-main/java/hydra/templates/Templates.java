@@ -32,7 +32,7 @@ public interface Templates {
     java.util.function.Function<hydra.core.FloatType, hydra.core.FloatValue> forFloat = (java.util.function.Function<hydra.core.FloatType, hydra.core.FloatValue>) (ft -> ((ft)).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.core.FloatValue visit(hydra.core.FloatType.Bigfloat ignored) {
-        return new hydra.core.FloatValue.Bigfloat(new java.math.BigDecimal("\"0.0\""));
+        return new hydra.core.FloatValue.Bigfloat(new java.math.BigDecimal("0.0"));
       }
       
       @Override
@@ -48,7 +48,7 @@ public interface Templates {
     java.util.function.Function<hydra.core.IntegerType, hydra.core.IntegerValue> forInteger = (java.util.function.Function<hydra.core.IntegerType, hydra.core.IntegerValue>) (it -> ((it)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public hydra.core.IntegerValue visit(hydra.core.IntegerType.Bigint ignored) {
-        return new hydra.core.IntegerValue.Bigint(new java.math.BigInteger("\"0\""));
+        return new hydra.core.IntegerValue.Bigint(new java.math.BigInteger("0"));
       }
       
       @Override
@@ -88,7 +88,7 @@ public interface Templates {
       
       @Override
       public hydra.core.IntegerValue visit(hydra.core.IntegerType.Uint64 ignored) {
-        return new hydra.core.IntegerValue.Uint64(new java.math.BigInteger("\"0\""));
+        return new hydra.core.IntegerValue.Uint64(new java.math.BigInteger("0"));
       }
     }));
     java.util.function.Function<hydra.core.LiteralType, hydra.core.Literal> forLiteral = (java.util.function.Function<hydra.core.LiteralType, hydra.core.Literal>) (lt -> ((lt)).accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -117,13 +117,14 @@ public interface Templates {
         return new hydra.core.Literal.String_("");
       }
     }));
+    java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>> inst = (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.templates.Templates.<T0>instantiateTemplate_inst(
+      (minimal),
+      (schema),
+      (v1)));
     return ((t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Type.Annotated at) {
-        return hydra.templates.Templates.<T0>instantiateTemplate_inst(
-          (minimal),
-          (schema),
-          (((at)).value).body);
+        return ((inst)).apply((((at)).value).body);
       }
       
       @Override
@@ -143,14 +144,11 @@ public interface Templates {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Type.List et) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           (minimal),
-          hydra.lib.flows.Pure.apply(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))),
-          hydra.lib.flows.Bind.apply(
-            hydra.templates.Templates.<T0>instantiateTemplate_inst(
-              (minimal),
-              (schema),
-              ((et)).value),
+          () -> hydra.lib.flows.Pure.apply(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))),
+          () -> hydra.lib.flows.Bind.apply(
+            ((inst)).apply(((et)).value),
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (e -> hydra.lib.flows.Pure.apply(new hydra.core.Term.List(java.util.List.of((e)))))));
       }
       
@@ -163,19 +161,13 @@ public interface Templates {
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Type.Map mt) {
         hydra.core.Type kt = (((mt)).value).keys;
         hydra.core.Type vt = (((mt)).value).values;
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           (minimal),
-          hydra.lib.flows.Pure.apply(new hydra.core.Term.Map((java.util.Map<hydra.core.Term, hydra.core.Term>) ((java.util.Map<hydra.core.Term, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Term, hydra.core.Term>apply())))),
-          hydra.lib.flows.Bind.apply(
-            hydra.templates.Templates.<T0>instantiateTemplate_inst(
-              (minimal),
-              (schema),
-              (kt)),
+          () -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Map((java.util.Map<hydra.core.Term, hydra.core.Term>) ((java.util.Map<hydra.core.Term, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Term, hydra.core.Term>apply())))),
+          () -> hydra.lib.flows.Bind.apply(
+            ((inst)).apply((kt)),
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (ke -> hydra.lib.flows.Bind.apply(
-              hydra.templates.Templates.<T0>instantiateTemplate_inst(
-                (minimal),
-                (schema),
-                (vt)),
+              ((inst)).apply((vt)),
               (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (ve -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Map(hydra.lib.maps.Singleton.apply(
                 (ke),
                 (ve)))))))));
@@ -183,14 +175,11 @@ public interface Templates {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Type.Maybe ot) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           (minimal),
-          hydra.lib.flows.Pure.apply(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
-          hydra.lib.flows.Bind.apply(
-            hydra.templates.Templates.<T0>instantiateTemplate_inst(
-              (minimal),
-              (schema),
-              ((ot)).value),
+          () -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+          () -> hydra.lib.flows.Bind.apply(
+            ((inst)).apply(((ot)).value),
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (e -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Maybe(hydra.util.Maybe.just((e)))))));
       }
       
@@ -201,10 +190,7 @@ public interface Templates {
         return hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
             (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<T0, hydra.core.Field>>) (v1 -> hydra.templates.Templates.<T0>instantiateTemplate_toField(
-              (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (v12 -> hydra.templates.Templates.<T0>instantiateTemplate_inst(
-                (minimal),
-                (schema),
-                (v12))),
+              (inst),
               (v1))),
             (fields)),
           (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<T0, hydra.core.Term>>) (dfields -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Record(new hydra.core.Record((tname), (dfields))))));
@@ -212,14 +198,11 @@ public interface Templates {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Type.Set et) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           (minimal),
-          hydra.lib.flows.Pure.apply(new hydra.core.Term.Set((java.util.Set<hydra.core.Term>) (hydra.lib.sets.Empty.<hydra.core.Term>apply()))),
-          hydra.lib.flows.Bind.apply(
-            hydra.templates.Templates.<T0>instantiateTemplate_inst(
-              (minimal),
-              (schema),
-              ((et)).value),
+          () -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Set((java.util.Set<hydra.core.Term>) (hydra.lib.sets.Empty.<hydra.core.Term>apply()))),
+          () -> hydra.lib.flows.Bind.apply(
+            ((inst)).apply(((et)).value),
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (e -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(java.util.List.of((e))))))));
       }
       
@@ -231,10 +214,7 @@ public interface Templates {
             hydra.lib.strings.Cat2.apply(
               hydra.show.core.Core.term(new hydra.core.Term.Variable(((tname)).value)),
               " not found in schema"))),
-          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.templates.Templates.<T0>instantiateTemplate_inst(
-            (minimal),
-            (schema),
-            (v1))),
+          (inst),
           hydra.lib.maps.Lookup.apply(
             ((tname)).value,
             (schema)));
@@ -245,10 +225,7 @@ public interface Templates {
         hydra.core.Type t_ = (((wt)).value).body;
         hydra.core.Name tname = (((wt)).value).typeName;
         return hydra.lib.flows.Bind.apply(
-          hydra.templates.Templates.<T0>instantiateTemplate_inst(
-            (minimal),
-            (schema),
-            (t_)),
+          ((inst)).apply((t_)),
           (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (e -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((tname), (e))))));
       }
     });

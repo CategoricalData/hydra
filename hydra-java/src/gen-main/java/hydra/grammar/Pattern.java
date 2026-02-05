@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A pattern which matches valid expressions in the language
  */
-public abstract class Pattern implements Serializable {
+public abstract class Pattern implements Serializable, Comparable<Pattern> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Pattern");
   
   public static final hydra.core.Name FIELD_NAME_ALTERNATIVES = new hydra.core.Name("alternatives");
@@ -119,7 +119,6 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Alternatives (java.util.List<hydra.grammar.Pattern> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -129,12 +128,27 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Alternatives o = (Alternatives) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Alternatives o = (Alternatives) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -150,7 +164,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Constant value;
     
     public Constant (hydra.grammar.Constant value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -160,12 +173,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Constant o = (Constant) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Constant o = (Constant) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -181,7 +207,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Ignored (hydra.grammar.Pattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -191,12 +216,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Ignored o = (Ignored) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Ignored o = (Ignored) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -212,7 +250,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.LabeledPattern value;
     
     public Labeled (hydra.grammar.LabeledPattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -222,12 +259,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Labeled o = (Labeled) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Labeled o = (Labeled) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -240,11 +290,8 @@ public abstract class Pattern implements Serializable {
    * An empty pattern
    */
   public static final class Nil extends hydra.grammar.Pattern implements Serializable {
-    public final Boolean value;
+    public Nil () {
     
-    public Nil (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -253,12 +300,22 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Nil o = (Nil) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -274,7 +331,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Symbol value;
     
     public Nonterminal (hydra.grammar.Symbol value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -284,12 +340,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Nonterminal o = (Nonterminal) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Nonterminal o = (Nonterminal) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -305,7 +374,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Option (hydra.grammar.Pattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -315,12 +383,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Option o = (Option) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Option o = (Option) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -336,7 +417,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Plus (hydra.grammar.Pattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -346,12 +426,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Plus o = (Plus) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Plus o = (Plus) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -367,7 +460,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Regex value;
     
     public Regex (hydra.grammar.Regex value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -377,12 +469,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Regex o = (Regex) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Regex o = (Regex) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -398,7 +503,6 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Sequence (java.util.List<hydra.grammar.Pattern> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -408,12 +512,27 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Sequence o = (Sequence) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Sequence o = (Sequence) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -429,7 +548,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
     
     public Star (hydra.grammar.Pattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -439,12 +557,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Star o = (Star) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Star o = (Star) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

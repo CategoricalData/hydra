@@ -10,22 +10,22 @@ public interface Ast {
     return ((v1)).accept(new hydra.ast.Associativity.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.ast.Associativity.None y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.ast.Associativity.Left y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.ast.Associativity.Right y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.ast.Associativity.Both y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -129,17 +129,17 @@ public interface Ast {
     return ((v1)).accept(new hydra.ast.Ws.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.ast.Ws.None y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.ast.Ws.Space y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("space"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("space"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.ast.Ws.Break y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("break"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("break"), new hydra.core.Term.Unit())));
       }
       
       @Override
@@ -149,7 +149,7 @@ public interface Ast {
       
       @Override
       public hydra.core.Term visit(hydra.ast.Ws.DoubleBreak y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("doubleBreak"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("doubleBreak"), new hydra.core.Term.Unit())));
       }
     });
   }

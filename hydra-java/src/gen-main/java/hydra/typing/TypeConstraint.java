@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * An assertion that two types can be unified into a single type
  */
-public class TypeConstraint implements Serializable {
+public class TypeConstraint implements Serializable, Comparable<TypeConstraint> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.TypeConstraint");
   
   public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
@@ -32,9 +32,6 @@ public class TypeConstraint implements Serializable {
   public final String comment;
   
   public TypeConstraint (hydra.core.Type left, hydra.core.Type right, String comment) {
-    java.util.Objects.requireNonNull((left));
-    java.util.Objects.requireNonNull((right));
-    java.util.Objects.requireNonNull((comment));
     this.left = left;
     this.right = right;
     this.comment = comment;
@@ -46,26 +43,44 @@ public class TypeConstraint implements Serializable {
       return false;
     }
     TypeConstraint o = (TypeConstraint) (other);
-    return left.equals(o.left) && right.equals(o.right) && comment.equals(o.comment);
+    return java.util.Objects.equals(
+      this.left,
+      o.left) && java.util.Objects.equals(
+      this.right,
+      o.right) && java.util.Objects.equals(
+      this.comment,
+      o.comment);
   }
   
   @Override
   public int hashCode() {
-    return 2 * left.hashCode() + 3 * right.hashCode() + 5 * comment.hashCode();
+    return 2 * java.util.Objects.hashCode(left) + 3 * java.util.Objects.hashCode(right) + 5 * java.util.Objects.hashCode(comment);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TypeConstraint other) {
+    int cmp = 0;
+    cmp = ((Comparable) (left)).compareTo(other.left);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (right)).compareTo(other.right);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (comment)).compareTo(other.comment);
   }
   
   public TypeConstraint withLeft(hydra.core.Type left) {
-    java.util.Objects.requireNonNull((left));
     return new TypeConstraint(left, right, comment);
   }
   
   public TypeConstraint withRight(hydra.core.Type right) {
-    java.util.Objects.requireNonNull((right));
     return new TypeConstraint(left, right, comment);
   }
   
   public TypeConstraint withComment(String comment) {
-    java.util.Objects.requireNonNull((comment));
     return new TypeConstraint(left, right, comment);
   }
 }

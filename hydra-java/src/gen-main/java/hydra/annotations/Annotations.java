@@ -29,35 +29,35 @@ public interface Annotations {
       ((getValue)).apply((t)));
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, Boolean> debugIf(T0 debugId, String message) {
+  static <T0, T1> hydra.compute.Flow<T1, java.lang.Void> debugIf(T0 debugId, String message) {
     return hydra.lib.flows.Bind.apply(
       hydra.annotations.Annotations.<T1>getDebugId(),
-      (java.util.function.Function<hydra.util.Maybe<String>, hydra.compute.Flow<T1, Boolean>>) (v1 -> hydra.annotations.Annotations.<T1>debugIf_checkAndFail(
+      (java.util.function.Function<hydra.util.Maybe<String>, hydra.compute.Flow<T1, java.lang.Void>>) (v1 -> hydra.annotations.Annotations.<T1>debugIf_checkAndFail(
         (message),
         (v1))));
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
-    return hydra.lib.logic.IfElse.apply(
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         (desc),
         hydra.util.Maybe.just("debugId")),
-      hydra.lib.flows.Fail.apply((message)),
-      hydra.lib.flows.Pure.apply(true));
+      () -> hydra.lib.flows.Fail.apply((message)),
+      () -> hydra.lib.flows.Pure.apply(null));
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> failOnFlag(hydra.core.Name flag, String msg) {
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> failOnFlag(hydra.core.Name flag, String msg) {
     return hydra.lib.flows.Bind.apply(
       hydra.annotations.Annotations.<T0>hasFlag((flag)),
-      (java.util.function.Function<Boolean, hydra.compute.Flow<T0, Boolean>>) (val -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<Boolean, hydra.compute.Flow<T0, java.lang.Void>>) (val -> hydra.lib.logic.IfElse.lazy(
         (val),
-        hydra.lib.flows.Fail.apply((msg)),
-        hydra.lib.flows.Pure.apply(true))));
+        () -> hydra.lib.flows.Fail.apply((msg)),
+        () -> hydra.lib.flows.Pure.apply(null))));
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.util.Maybe<String>> getDebugId() {
     return hydra.lexical.Lexical.<hydra.util.Maybe<String>, T0>withEmptyGraph(hydra.lib.flows.Bind.apply(
-      hydra.annotations.Annotations.getAttr((hydra.constants.Constants.key_debugId)),
+      hydra.annotations.Annotations.getAttr(hydra.constants.Constants.key_debugId()),
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>>) (desc -> hydra.lib.flows.MapMaybe.apply(
         (hydra.extract.core.Core::string),
         (desc)))));
@@ -121,7 +121,7 @@ public interface Annotations {
                 (cx),
                 (dat)))))),
         hydra.lib.maps.Lookup.apply(
-          (hydra.constants.Constants.key_type),
+          hydra.constants.Constants.key_type(),
           (anns)))));
   }
   
@@ -136,9 +136,9 @@ public interface Annotations {
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>>>) (cx -> {
         java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>> decodeClass = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>>) (term2 -> {
-          java.util.Map<hydra.core.Name, hydra.classes.TypeClass> byName = hydra.lib.maps.FromList.apply(java.util.List.of(
-            (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("equality"), new hydra.classes.TypeClass.Equality(true)))),
-            (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("ordering"), new hydra.classes.TypeClass.Ordering(true))))));
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.classes.TypeClass>> byName = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+            (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("equality"), new hydra.classes.TypeClass.Equality()))),
+            (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("ordering"), new hydra.classes.TypeClass.Ordering()))))));
           return hydra.lib.flows.Bind.apply(
             hydra.extract.core.Core.unitVariant(
               new hydra.core.Name("hydra.classes.TypeClass"),
@@ -150,7 +150,7 @@ public interface Annotations {
               (java.util.function.Function<hydra.classes.TypeClass, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>>) ((java.util.function.Function<hydra.classes.TypeClass, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>>) ((hydra.lib.flows.Pure::apply))),
               hydra.lib.maps.Lookup.apply(
                 (fn),
-                (byName)))));
+                byName.get()))));
         });
         return hydra.lib.maybes.Maybe.apply(
           hydra.lib.flows.Pure.apply((java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>) ((java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>) (hydra.lib.maps.Empty.<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>apply()))),
@@ -165,7 +165,7 @@ public interface Annotations {
               (v1))),
             (term2))),
           hydra.annotations.Annotations.getTermAnnotation(
-            (hydra.constants.Constants.key_classes),
+            hydra.constants.Constants.key_classes(),
             (term)));
       }));
   }
@@ -175,26 +175,26 @@ public interface Annotations {
   }
   
   static Boolean isNativeType(hydra.core.Binding el) {
-    Boolean isFlaggedAsFirstClassType = hydra.lib.maybes.FromMaybe.apply(
+    hydra.util.Lazy<Boolean> isFlaggedAsFirstClassType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
       false,
       hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.core.Term, Boolean>) (ignored -> true),
         hydra.annotations.Annotations.getTermAnnotation(
-          (hydra.constants.Constants.key_firstClassType),
-          ((el)).term)));
+          hydra.constants.Constants.key_firstClassType(),
+          ((el)).term))));
     return hydra.lib.maybes.Maybe.apply(
       false,
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
           (ts),
           new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
-        hydra.lib.logic.Not.apply((isFlaggedAsFirstClassType)))),
+        hydra.lib.logic.Not.apply(isFlaggedAsFirstClassType.get()))),
       ((el)).type);
   }
   
   static <T0> Boolean hasDescription(java.util.Map<hydra.core.Name, T0> anns) {
     return hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
-      (hydra.constants.Constants.key_description),
+      hydra.constants.Constants.key_description(),
       (anns)));
   }
   
@@ -214,7 +214,7 @@ public interface Annotations {
     return hydra.lib.flows.Bind.apply(
       hydra.annotations.Annotations.<T0>getCount((key)),
       (java.util.function.Function<Integer, hydra.compute.Flow<T0, Integer>>) (count -> hydra.lib.flows.Map.apply(
-        (java.util.function.Function<Boolean, Integer>) (ignored -> (count)),
+        (java.util.function.Function<java.lang.Void, Integer>) (ignored -> (count)),
         hydra.annotations.Annotations.<T0>putCount(
           (key),
           hydra.lib.math.Add.apply(
@@ -225,35 +225,35 @@ public interface Annotations {
   static hydra.core.Term normalizeTermAnnotations(hydra.core.Term term) {
     java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.annotations.Annotations.termAnnotationInternal((term));
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateTerm((term));
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply((anns)),
-      (stripped),
-      new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((stripped), (anns))));
+      () -> (stripped),
+      () -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((stripped), (anns))));
   }
   
   static hydra.core.Type normalizeTypeAnnotations(hydra.core.Type typ) {
     java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.annotations.Annotations.typeAnnotationInternal((typ));
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType((typ));
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply((anns)),
-      (stripped),
-      new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((stripped), (anns))));
+      () -> (stripped),
+      () -> new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((stripped), (anns))));
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> putAttr(hydra.core.Name key, hydra.core.Term val) {
-    return (hydra.compute.Flow<T0, Boolean>) ((hydra.compute.Flow<T0, Boolean>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, Boolean>>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, Boolean>>) (t0 -> (hydra.compute.FlowState<T0, Boolean>) ((hydra.compute.FlowState<T0, Boolean>) (new hydra.compute.FlowState<T0, Boolean>(hydra.util.Maybe.just(true), (s0), new hydra.compute.Trace(((t0)).stack, ((t0)).messages, hydra.lib.maps.Insert.apply(
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> putAttr(hydra.core.Name key, hydra.core.Term val) {
+    return (hydra.compute.Flow<T0, java.lang.Void>) ((hydra.compute.Flow<T0, java.lang.Void>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, java.lang.Void>>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, java.lang.Void>>) (t0 -> (hydra.compute.FlowState<T0, java.lang.Void>) ((hydra.compute.FlowState<T0, java.lang.Void>) (new hydra.compute.FlowState<T0, java.lang.Void>(hydra.util.Maybe.just(null), (s0), new hydra.compute.Trace(((t0)).stack, ((t0)).messages, hydra.lib.maps.Insert.apply(
       (key),
       (val),
       ((t0)).other))))))))));
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> putCount(hydra.core.Name key, Integer count) {
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> putCount(hydra.core.Name key, Integer count) {
     return hydra.annotations.Annotations.<T0>putAttr(
       (key),
       new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((count)))));
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> resetCount(hydra.core.Name key) {
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> resetCount(hydra.core.Name key) {
     return hydra.annotations.Annotations.<T0>putAttr(
       (key),
       new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))));
@@ -268,7 +268,7 @@ public interface Annotations {
   
   static java.util.Map<hydra.core.Name, hydra.core.Term> setDescription(hydra.util.Maybe<String> d, java.util.Map<hydra.core.Name, hydra.core.Term> v1) {
     return hydra.annotations.Annotations.setAnnotation(
-      (hydra.constants.Constants.key_description),
+      hydra.constants.Constants.key_description(),
       hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, hydra.core.Term>) (arg_ -> new hydra.core.Term.Literal(new hydra.core.Literal.String_((arg_)))),
         (d)),
@@ -276,20 +276,20 @@ public interface Annotations {
   }
   
   static hydra.core.Term setTermAnnotation(hydra.core.Name key, hydra.util.Maybe<hydra.core.Term> val, hydra.core.Term term) {
-    java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.annotations.Annotations.setAnnotation(
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.annotations.Annotations.setAnnotation(
       (key),
       (val),
-      hydra.annotations.Annotations.termAnnotationInternal((term)));
+      hydra.annotations.Annotations.termAnnotationInternal((term))));
     hydra.core.Term term_ = hydra.rewriting.Rewriting.deannotateTerm((term));
-    return hydra.lib.logic.IfElse.apply(
-      hydra.lib.maps.Null.apply((anns)),
-      (term_),
-      new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((term_), (anns))));
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.maps.Null.apply(anns.get()),
+      () -> (term_),
+      () -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((term_), anns.get())));
   }
   
   static hydra.core.Term setTermDescription(hydra.util.Maybe<String> d, hydra.core.Term v1) {
     return hydra.annotations.Annotations.setTermAnnotation(
-      (hydra.constants.Constants.key_description),
+      hydra.constants.Constants.key_description(),
       hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, hydra.core.Term>) (s -> new hydra.core.Term.Literal(new hydra.core.Literal.String_((s)))),
         (d)),
@@ -298,7 +298,7 @@ public interface Annotations {
   
   static java.util.Map<hydra.core.Name, hydra.core.Term> setType(hydra.util.Maybe<hydra.core.Type> mt, java.util.Map<hydra.core.Name, hydra.core.Term> v1) {
     return hydra.annotations.Annotations.setAnnotation(
-      (hydra.constants.Constants.key_type),
+      hydra.constants.Constants.key_type(),
       hydra.lib.maybes.Map.apply(
         (hydra.encode.core.Core::type),
         (mt)),
@@ -306,51 +306,51 @@ public interface Annotations {
   }
   
   static hydra.core.Type setTypeAnnotation(hydra.core.Name key, hydra.util.Maybe<hydra.core.Term> val, hydra.core.Type typ) {
-    java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.annotations.Annotations.setAnnotation(
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.annotations.Annotations.setAnnotation(
       (key),
       (val),
-      hydra.annotations.Annotations.typeAnnotationInternal((typ)));
+      hydra.annotations.Annotations.typeAnnotationInternal((typ))));
     hydra.core.Type typ_ = hydra.rewriting.Rewriting.deannotateType((typ));
-    return hydra.lib.logic.IfElse.apply(
-      hydra.lib.maps.Null.apply((anns)),
-      (typ_),
-      new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((typ_), (anns))));
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.maps.Null.apply(anns.get()),
+      () -> (typ_),
+      () -> new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((typ_), anns.get())));
   }
   
   static hydra.core.Term setTypeClasses(java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>> m, hydra.core.Term term) {
     java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term> encodeClass = (java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term>) (tc -> ((tc)).accept(new hydra.classes.TypeClass.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.classes.TypeClass.Equality ignored) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("equality"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("equality"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.classes.TypeClass.Ordering ignored) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("ordering"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("ordering"), new hydra.core.Term.Unit())));
       }
     }));
     java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>> encodePair = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (nameClasses -> {
-      java.util.Set<hydra.classes.TypeClass> classes = hydra.lib.pairs.Second.apply((nameClasses));
-      hydra.core.Name name = hydra.lib.pairs.First.apply((nameClasses));
-      return (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(hydra.encode.core.Core.name((name)), new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+      hydra.util.Lazy<java.util.Set<hydra.classes.TypeClass>> classes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((nameClasses)));
+      hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((nameClasses)));
+      return (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(hydra.encode.core.Core.name(name.get()), new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
         (encodeClass),
-        hydra.lib.sets.ToList.apply((classes))))))));
+        hydra.lib.sets.ToList.apply(classes.get())))))));
     });
-    hydra.util.Maybe<hydra.core.Term> encoded = hydra.lib.logic.IfElse.apply(
+    hydra.util.Lazy<hydra.util.Maybe<hydra.core.Term>> encoded = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply((m)),
-      (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
-      hydra.util.Maybe.just(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      () -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
+      () -> hydra.util.Maybe.just(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (encodePair),
-        hydra.lib.maps.ToList.apply((m)))))));
+        hydra.lib.maps.ToList.apply((m))))))));
     return hydra.annotations.Annotations.setTermAnnotation(
-      (hydra.constants.Constants.key_classes),
-      (encoded),
+      hydra.constants.Constants.key_classes(),
+      encoded.get(),
       (term));
   }
   
   static hydra.core.Type setTypeDescription(hydra.util.Maybe<String> d, hydra.core.Type v1) {
     return hydra.annotations.Annotations.setTypeAnnotation(
-      (hydra.constants.Constants.key_description),
+      hydra.constants.Constants.key_description(),
       hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, hydra.core.Term>) (arg_ -> new hydra.core.Term.Literal(new hydra.core.Literal.String_((arg_)))),
         (d)),
@@ -397,17 +397,17 @@ public interface Annotations {
   
   static hydra.core.Binding typeElement(hydra.core.Name name, hydra.core.Type typ) {
     hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
-    hydra.core.Term dataTerm = hydra.annotations.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.core.Core.type((typ)), hydra.lib.maps.FromList.apply(java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((hydra.constants.Constants.key_type), (schemaTerm)))))))));
-    return new hydra.core.Binding((name), (dataTerm), hydra.util.Maybe.just(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
+    hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.annotations.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.core.Core.type((typ)), hydra.lib.maps.FromList.apply(java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>(hydra.constants.Constants.key_type(), (schemaTerm))))))))));
+    return new hydra.core.Binding((name), dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
   }
   
   static <T0, T1> hydra.compute.Flow<T0, T1> whenFlag(hydra.core.Name flag, hydra.compute.Flow<T0, T1> fthen, hydra.compute.Flow<T0, T1> felse) {
     return hydra.lib.flows.Bind.apply(
       hydra.annotations.Annotations.<T0>hasFlag((flag)),
-      (java.util.function.Function<Boolean, hydra.compute.Flow<T0, T1>>) (b -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<Boolean, hydra.compute.Flow<T0, T1>>) (b -> hydra.lib.logic.IfElse.lazy(
         (b),
-        (fthen),
-        (felse))));
+        () -> (fthen),
+        () -> (felse))));
   }
   
   static <T0, T1> hydra.compute.Flow<T0, T1> withDepth(hydra.core.Name key, java.util.function.Function<Integer, hydra.compute.Flow<T0, T1>> f) {
@@ -421,13 +421,13 @@ public interface Annotations {
           hydra.annotations.Annotations.<T0>putCount(
             (key),
             (inc)),
-          (java.util.function.Function<Boolean, hydra.compute.Flow<T0, T1>>) (ignored -> hydra.lib.flows.Bind.apply(
+          (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, T1>>) (ignored -> hydra.lib.flows.Bind.apply(
             ((f)).apply((inc)),
             (java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>) (r -> hydra.lib.flows.Bind.apply(
               hydra.annotations.Annotations.<T0>putCount(
                 (key),
                 (count)),
-              (java.util.function.Function<Boolean, hydra.compute.Flow<T0, T1>>) (_2 -> hydra.lib.flows.Pure.apply((r))))))));
+              (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, T1>>) (_2 -> hydra.lib.flows.Pure.apply((r))))))));
       }));
   }
 }

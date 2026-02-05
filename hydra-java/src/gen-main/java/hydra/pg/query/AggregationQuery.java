@@ -39,16 +39,12 @@ public abstract class AggregationQuery implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Count)) {
-        return false;
-      }
-      Count o = (Count) (other);
-      return value.equals(o.value);
+      return other instanceof Count;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

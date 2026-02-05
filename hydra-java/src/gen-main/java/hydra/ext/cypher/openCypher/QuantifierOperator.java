@@ -63,16 +63,12 @@ public abstract class QuantifierOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof All)) {
-        return false;
-      }
-      All o = (All) (other);
-      return value.equals(o.value);
+      return other instanceof All;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -91,16 +87,12 @@ public abstract class QuantifierOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Any)) {
-        return false;
-      }
-      Any o = (Any) (other);
-      return value.equals(o.value);
+      return other instanceof Any;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -119,16 +111,12 @@ public abstract class QuantifierOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof None)) {
-        return false;
-      }
-      None o = (None) (other);
-      return value.equals(o.value);
+      return other instanceof None;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -147,16 +135,12 @@ public abstract class QuantifierOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Single)) {
-        return false;
-      }
-      Single o = (Single) (other);
-      return value.equals(o.value);
+      return other instanceof Single;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

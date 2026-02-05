@@ -175,7 +175,7 @@ public interface Grammar {
           hydra.core.Name fname = ((field)).name;
           hydra.core.Term fterm = ((field)).term;
           hydra.core.Name tname = (((inj)).value).typeName;
-          java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>> variantMap = hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>(new hydra.core.Name("alternatives"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.util.List<hydra.grammar.Pattern>, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Alternatives((t))),
               hydra.extract.helpers.Helpers.decodeList(
@@ -200,7 +200,7 @@ public interface Grammar {
                 (cx),
                 (input))))))),
             (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>>(new hydra.core.Name("nil"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<Boolean, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Nil((t))),
+              (java.util.function.Function<java.lang.Void, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Nil()),
               hydra.extract.helpers.Helpers.decodeUnit(
                 (cx),
                 (input))))))),
@@ -236,7 +236,7 @@ public interface Grammar {
               (java.util.function.Function<hydra.grammar.Pattern, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Star((t))),
               hydra.decode.grammar.Grammar.pattern(
                 (cx),
-                (input)))))))));
+                (input))))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>) ((hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>) (hydra.util.Either.<hydra.util.DecodingError, hydra.grammar.Pattern>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
@@ -246,7 +246,7 @@ public interface Grammar {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>, hydra.util.Either<hydra.util.DecodingError, hydra.grammar.Pattern>>) (f -> ((f)).apply((fterm))),
             hydra.lib.maps.Lookup.apply(
               (fname),
-              (variantMap)));
+              variantMap.get()));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

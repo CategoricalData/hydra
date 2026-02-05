@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The identifier of an elimination constructor
  */
-public abstract class EliminationVariant implements Serializable {
+public abstract class EliminationVariant implements Serializable, Comparable<EliminationVariant> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.EliminationVariant");
   
   public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
@@ -49,11 +49,8 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Record extends hydra.variants.EliminationVariant implements Serializable {
-    public final Boolean value;
+    public Record () {
     
-    public Record (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -62,12 +59,22 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Record o = (Record) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(EliminationVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -77,11 +84,8 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Union extends hydra.variants.EliminationVariant implements Serializable {
-    public final Boolean value;
+    public Union () {
     
-    public Union (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -90,12 +94,22 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(EliminationVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -105,11 +119,8 @@ public abstract class EliminationVariant implements Serializable {
   }
   
   public static final class Wrap extends hydra.variants.EliminationVariant implements Serializable {
-    public final Boolean value;
+    public Wrap () {
     
-    public Wrap (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -118,12 +129,22 @@ public abstract class EliminationVariant implements Serializable {
         return false;
       }
       Wrap o = (Wrap) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(EliminationVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

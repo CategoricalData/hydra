@@ -193,19 +193,21 @@ public interface Coder {
   }
   
   static <T0, T1, T2> hydra.compute.Flow<T0, hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, T2>>> encodeRecord_encodeField(hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.core.FieldType, hydra.compute.Coder<T0, T1, hydra.core.Term, T2>>, hydra.core.Field> coderAndField) {
-    hydra.core.Field field = hydra.lib.pairs.Second.apply((coderAndField));
-    hydra.core.Name fname = ((field)).name;
-    hydra.core.FieldType ft = hydra.lib.pairs.First.apply(hydra.ext.org.json.coder.Coder.encodeRecord_coder((coderAndField)));
-    hydra.core.Term fvalue = ((field)).term;
+    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.core.FieldType, hydra.compute.Coder<T0, T1, hydra.core.Term, T2>>> coder = new hydra.util.Lazy<>(() -> hydra.ext.org.json.coder.Coder.encodeRecord_coder((coderAndField)));
+    hydra.util.Lazy<hydra.compute.Coder<T0, T1, hydra.core.Term, T2>> coder_ = new hydra.util.Lazy<>(() -> hydra.ext.org.json.coder.Coder.encodeRecord_coder_(coder.get()));
+    hydra.util.Lazy<hydra.core.Field> field = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((coderAndField)));
+    hydra.core.Name fname = (field.get()).name;
+    hydra.util.Lazy<hydra.core.FieldType> ft = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(coder.get()));
+    hydra.core.Term fvalue = (field.get()).term;
     return hydra.ext.org.json.coder.Coder.encodeRecord_matchTypeForMaybe(
-      (ft),
+      ft.get(),
       (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, T2>>>>) (v1 -> hydra.ext.org.json.coder.Coder.encodeRecord_forMaybe(
-        hydra.ext.org.json.coder.Coder.encodeRecord_coder_(hydra.ext.org.json.coder.Coder.encodeRecord_coder((coderAndField))),
+        coder_.get(),
         (fname),
         (fvalue),
         (v1))),
       hydra.ext.org.json.coder.Coder.encodeRecord_dflt(
-        hydra.ext.org.json.coder.Coder.encodeRecord_coder_(hydra.ext.org.json.coder.Coder.encodeRecord_coder((coderAndField))),
+        coder_.get(),
         (fname),
         (fvalue)));
   }
@@ -277,16 +279,16 @@ public interface Coder {
   }
   
   static <T0, T1> hydra.compute.Flow<T1, hydra.core.Field> decodeRecord_decodeField(java.util.Map<String, hydra.json.model.Value> m, hydra.util.Tuple.Tuple2<hydra.core.FieldType, hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>> coder) {
-    hydra.json.model.Value defaultValue = new hydra.json.model.Value.Null(true);
-    hydra.core.FieldType ft = hydra.lib.pairs.First.apply((coder));
-    hydra.core.Name fname = ((ft)).name;
-    hydra.json.model.Value jsonValue = hydra.lib.maybes.FromMaybe.apply(
+    hydra.json.model.Value defaultValue = new hydra.json.model.Value.Null();
+    hydra.util.Lazy<hydra.core.FieldType> ft = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((coder)));
+    hydra.core.Name fname = (ft.get()).name;
+    hydra.util.Lazy<hydra.json.model.Value> jsonValue = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
       (defaultValue),
       hydra.lib.maps.Lookup.apply(
         ((fname)).value,
-        (m)));
+        (m))));
     return hydra.lib.flows.Bind.apply(
-      (((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) (projected -> projected.decode))))).apply(hydra.ext.org.json.coder.Coder.decodeRecord_coder_((coder)))).apply((jsonValue)),
+      (((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>>) (projected -> projected.decode))))).apply(hydra.ext.org.json.coder.Coder.decodeRecord_coder_((coder)))).apply(jsonValue.get()),
       (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Field>>) (v -> hydra.lib.flows.Pure.apply(new hydra.core.Field((fname), (v)))));
   }
   
@@ -437,10 +439,10 @@ public interface Coder {
       
       @Override
       public hydra.compute.Flow<T1, hydra.json.model.Value> visit(hydra.core.Term.Maybe maybeContents) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.maybes.IsNothing.apply(((maybeContents)).value),
-          hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null(true)),
-          hydra.lib.flows.Bind.apply(
+          () -> hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null()),
+          () -> hydra.lib.flows.Bind.apply(
             (((java.util.function.Function<hydra.compute.Coder<T1, T2, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<T1, T2, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<T1, T2, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<T1, T2, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.json.model.Value>>>) (projected -> projected.encode))))).apply((maybeElementCoder))).apply(hydra.lib.maybes.FromJust.apply(((maybeContents)).value)),
             (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.json.model.Value>>) (encodedInner -> hydra.lib.flows.Pure.apply((encodedInner)))));
       }
@@ -507,24 +509,24 @@ public interface Coder {
             (java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, hydra.compute.Flow<T0, hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>>>) (vc -> hydra.lib.flows.Bind.apply(
               hydra.monads.Monads.<T0>getState(),
               (java.util.function.Function<T0, hydra.compute.Flow<T0, hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>>>) (cx -> {
-                Boolean isStringKey = hydra.lib.equality.Equal.apply(
+                hydra.util.Lazy<Boolean> isStringKey = new hydra.util.Lazy<>(() -> hydra.lib.equality.Equal.apply(
                   ((hydra_rewriting_deannotateType2)).apply((kt)),
-                  new hydra.core.Type.Literal(new hydra.core.LiteralType.String_(true)));
-                java.util.function.Function<hydra.core.Term, String> toString = (java.util.function.Function<hydra.core.Term, String>) (v -> hydra.lib.logic.IfElse.apply(
-                  (isStringKey),
-                  ((matchTermLiteral)).apply((v)),
-                  ((hydra_show_core_term2)).apply((v))));
+                  new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())));
+                java.util.function.Function<hydra.core.Term, String> toString = (java.util.function.Function<hydra.core.Term, String>) (v -> hydra.lib.logic.IfElse.lazy(
+                  isStringKey.get(),
+                  () -> ((matchTermLiteral)).apply((v)),
+                  () -> ((hydra_show_core_term2)).apply((v))));
                 java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>> encodeEntry = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (kv -> {
-                  hydra.core.Term k = hydra.lib.pairs.First.apply((kv));
-                  hydra.core.Term v = hydra.lib.pairs.Second.apply((kv));
+                  hydra.util.Lazy<hydra.core.Term> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((kv)));
+                  hydra.util.Lazy<hydra.core.Term> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((kv)));
                   return hydra.lib.flows.Bind.apply(
-                    (((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) (projected -> projected.encode))))).apply((vc))).apply((v)),
-                    (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (encodedV -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>(((toString)).apply((k)), (encodedV)))))));
+                    (((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) (projected -> projected.encode))))).apply((vc))).apply(v.get()),
+                    (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (encodedV -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>(((toString)).apply(k.get()), (encodedV)))))));
                 });
-                java.util.function.Function<String, hydra.core.Term> fromString = (java.util.function.Function<String, hydra.core.Term>) (s -> hydra.lib.logic.IfElse.apply(
-                  (isStringKey),
-                  new hydra.core.Term.Literal(new hydra.core.Literal.String_((s))),
-                  ((hydra_ext_org_json_coder_readStringStub2)).apply((s))));
+                java.util.function.Function<String, hydra.core.Term> fromString = (java.util.function.Function<String, hydra.core.Term>) (s -> hydra.lib.logic.IfElse.lazy(
+                  isStringKey.get(),
+                  () -> new hydra.core.Term.Literal(new hydra.core.Literal.String_((s))),
+                  () -> ((hydra_ext_org_json_coder_readStringStub2)).apply((s))));
                 return hydra.lib.flows.Pure.apply((hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>) ((hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>) ((hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>) ((hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>) (new hydra.compute.Coder<hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value>(((java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.json.model.Value>>) (v2 -> hydra.ext.org.json.coder.Coder.termCoder_encodeMap(
                   (hydra_show_core_term2),
                   (v1),
@@ -575,11 +577,11 @@ public interface Coder {
   }
   
   static <T0, T1, T2, T3, T4, T5> hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T1, T4>> termCoder_decodeEntry(java.util.function.Function<T0, T1> fromString, hydra.compute.Coder<T2, T3, T4, T5> vc, hydra.util.Tuple.Tuple2<T0, T5> kv) {
-    T0 k = hydra.lib.pairs.First.apply((kv));
-    T5 v = hydra.lib.pairs.Second.apply((kv));
+    hydra.util.Lazy<T0> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((kv)));
+    hydra.util.Lazy<T5> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((kv)));
     return hydra.lib.flows.Bind.apply(
-      (((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) (projected -> projected.decode))))).apply((vc))).apply((v)),
-      (java.util.function.Function<T4, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T1, T4>>>) (decodedV -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T1, T4>) ((hydra.util.Tuple.Tuple2<T1, T4>) (new hydra.util.Tuple.Tuple2<T1, T4>(((fromString)).apply((k)), (decodedV)))))));
+      (((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T2, T3, T4, T5>, java.util.function.Function<T5, hydra.compute.Flow<T3, T4>>>) (projected -> projected.decode))))).apply((vc))).apply(v.get()),
+      (java.util.function.Function<T4, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T1, T4>>>) (decodedV -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T1, T4>) ((hydra.util.Tuple.Tuple2<T1, T4>) (new hydra.util.Tuple.Tuple2<T1, T4>(((fromString)).apply(k.get()), (decodedV)))))));
   }
   
   static <T0, T1> hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value> unitCoder() {
@@ -600,7 +602,7 @@ public interface Coder {
       
       @Override
       public hydra.compute.Flow<T1, hydra.json.model.Value> visit(hydra.core.Term.Unit ignored) {
-        return hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null(true));
+        return hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null());
       }
     });
   }
@@ -616,7 +618,7 @@ public interface Coder {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.json.model.Value.Null ignored) {
-        return hydra.lib.flows.Pure.apply(new hydra.core.Term.Unit(true));
+        return hydra.lib.flows.Pure.apply(new hydra.core.Term.Unit());
       }
     });
   }
@@ -825,7 +827,7 @@ public interface Coder {
       @Override
       public hydra.compute.Flow<T0, hydra.json.model.Value> visit(hydra.core.Term.Maybe mt) {
         return hydra.lib.maybes.Maybe.apply(
-          hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null(true)),
+          hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Null()),
           p0 -> hydra.ext.org.json.coder.Coder.<T0>untypedTermToJson((p0)),
           ((mt)).value);
       }
@@ -862,12 +864,12 @@ public interface Coder {
       @Override
       public hydra.compute.Flow<T0, hydra.json.model.Value> visit(hydra.core.Term.Union i) {
         hydra.core.Field field = (((i)).value).field;
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((field)).term,
-            new hydra.core.Term.Unit(true)),
-          hydra.lib.flows.Pure.apply(new hydra.json.model.Value.String_((((field)).name).value)),
-          hydra.lib.flows.Bind.apply(
+            new hydra.core.Term.Unit()),
+          () -> hydra.lib.flows.Pure.apply(new hydra.json.model.Value.String_((((field)).name).value)),
+          () -> hydra.lib.flows.Bind.apply(
             ((fieldToKeyval)).apply((field)),
             (java.util.function.Function<hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>, hydra.compute.Flow<T0, hydra.json.model.Value>>) (mkeyval -> hydra.lib.flows.Pure.apply(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Maybe.apply(
               (java.util.List<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>) (java.util.List.<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>of()),
@@ -888,11 +890,11 @@ public interface Coder {
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>> untypedTermToJson_encodePair(hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term> kv) {
-    String k = (hydra.lib.pairs.First.apply((kv))).value;
-    hydra.core.Term v = hydra.lib.pairs.Second.apply((kv));
+    hydra.util.Lazy<String> k = new hydra.util.Lazy<>(() -> (hydra.lib.pairs.First.apply((kv))).value);
+    hydra.util.Lazy<hydra.core.Term> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((kv)));
     return hydra.lib.flows.Bind.apply(
-      hydra.ext.org.json.coder.Coder.<T0>untypedTermToJson((v)),
-      (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (json -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>((k), (json)))))));
+      hydra.ext.org.json.coder.Coder.<T0>untypedTermToJson(v.get()),
+      (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (json -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>(k.get(), (json)))))));
   }
   
   static <T0, T1> T1 untypedTermToJson_forTerm(java.util.function.Function<java.util.function.Function<T0, T1>, java.util.function.Function<T0, T1>> matchTermMaybe, T0 t) {

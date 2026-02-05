@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A query path
  */
-public abstract class Path implements Serializable {
+public abstract class Path implements Serializable, Comparable<Path> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Path");
   
   public static final hydra.core.Name FIELD_NAME_STEP = new hydra.core.Name("step");
@@ -55,7 +55,6 @@ public abstract class Path implements Serializable {
     public final hydra.query.Step value;
     
     public Step (hydra.query.Step value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -65,12 +64,25 @@ public abstract class Path implements Serializable {
         return false;
       }
       Step o = (Step) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Path other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Step o = (Step) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -86,7 +98,6 @@ public abstract class Path implements Serializable {
     public final hydra.query.RegexSequence value;
     
     public Regex (hydra.query.RegexSequence value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -96,12 +107,25 @@ public abstract class Path implements Serializable {
         return false;
       }
       Regex o = (Regex) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Path other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Regex o = (Regex) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -117,7 +141,6 @@ public abstract class Path implements Serializable {
     public final hydra.query.Path value;
     
     public Inverse (hydra.query.Path value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -127,12 +150,25 @@ public abstract class Path implements Serializable {
         return false;
       }
       Inverse o = (Inverse) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Path other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Inverse o = (Inverse) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

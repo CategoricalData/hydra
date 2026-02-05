@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A JSON value
  */
-public abstract class Value implements Serializable {
+public abstract class Value implements Serializable, Comparable<Value> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.json.model.Value");
   
   public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
@@ -79,7 +79,6 @@ public abstract class Value implements Serializable {
     public final java.util.List<hydra.json.model.Value> value;
     
     public Array (java.util.List<hydra.json.model.Value> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -89,12 +88,27 @@ public abstract class Value implements Serializable {
         return false;
       }
       Array o = (Array) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Array o = (Array) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -110,7 +124,6 @@ public abstract class Value implements Serializable {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -120,12 +133,25 @@ public abstract class Value implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Boolean_ o = (Boolean_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -138,11 +164,8 @@ public abstract class Value implements Serializable {
    * JSON's null value
    */
   public static final class Null extends hydra.json.model.Value implements Serializable {
-    public final Boolean value;
+    public Null () {
     
-    public Null (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -151,12 +174,22 @@ public abstract class Value implements Serializable {
         return false;
       }
       Null o = (Null) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -172,7 +205,6 @@ public abstract class Value implements Serializable {
     public final java.math.BigDecimal value;
     
     public Number_ (java.math.BigDecimal value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -182,12 +214,23 @@ public abstract class Value implements Serializable {
         return false;
       }
       Number_ o = (Number_) (other);
-      return value.equals(o.value);
+      return this.value.compareTo(o.value) == 0;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Number_ o = (Number_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -203,7 +246,6 @@ public abstract class Value implements Serializable {
     public final java.util.Map<String, hydra.json.model.Value> value;
     
     public Object_ (java.util.Map<String, hydra.json.model.Value> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -213,12 +255,27 @@ public abstract class Value implements Serializable {
         return false;
       }
       Object_ o = (Object_) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Object_ o = (Object_) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -234,7 +291,6 @@ public abstract class Value implements Serializable {
     public final String value;
     
     public String_ (String value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -244,12 +300,25 @@ public abstract class Value implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Value other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      String_ o = (String_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

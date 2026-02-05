@@ -28,7 +28,7 @@ public interface Workflow {
       
       @Override
       public hydra.core.Term visit(hydra.workflow.SchemaSpec.Provided y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.workflow.SchemaSpec"), new hydra.core.Field(new hydra.core.Name("provided"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.workflow.SchemaSpec"), new hydra.core.Field(new hydra.core.Name("provided"), new hydra.core.Term.Unit())));
       }
     });
   }

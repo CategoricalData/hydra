@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
  */
-public abstract class LiteralType implements Serializable {
+public abstract class LiteralType implements Serializable, Comparable<LiteralType> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.LiteralType");
   
   public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
@@ -68,11 +68,8 @@ public abstract class LiteralType implements Serializable {
    * The type of a binary (byte string) value
    */
   public static final class Binary extends hydra.core.LiteralType implements Serializable {
-    public final Boolean value;
+    public Binary () {
     
-    public Binary (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -81,12 +78,22 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Binary o = (Binary) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -99,11 +106,8 @@ public abstract class LiteralType implements Serializable {
    * The type of a boolean (true/false) value
    */
   public static final class Boolean_ extends hydra.core.LiteralType implements Serializable {
-    public final Boolean value;
+    public Boolean_ () {
     
-    public Boolean_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -112,12 +116,22 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Boolean_ o = (Boolean_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -133,7 +147,6 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.FloatType value;
     
     public Float_ (hydra.core.FloatType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -143,12 +156,25 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Float_ o = (Float_) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Float_ o = (Float_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -164,7 +190,6 @@ public abstract class LiteralType implements Serializable {
     public final hydra.core.IntegerType value;
     
     public Integer_ (hydra.core.IntegerType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -174,12 +199,25 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       Integer_ o = (Integer_) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Integer_ o = (Integer_) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -192,11 +230,8 @@ public abstract class LiteralType implements Serializable {
    * The type of a string value
    */
   public static final class String_ extends hydra.core.LiteralType implements Serializable {
-    public final Boolean value;
+    public String_ () {
     
-    public String_ (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -205,12 +240,22 @@ public abstract class LiteralType implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralType other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

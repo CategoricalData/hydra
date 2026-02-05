@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which applies a term rewriter and compares the result
  */
-public class RewriteTermTestCase implements Serializable {
+public class RewriteTermTestCase implements Serializable, Comparable<RewriteTermTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.RewriteTermTestCase");
   
   public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
@@ -32,9 +32,6 @@ public class RewriteTermTestCase implements Serializable {
   public final hydra.core.Term output;
   
   public RewriteTermTestCase (hydra.core.Term input, hydra.testing.TermRewriter rewriter, hydra.core.Term output) {
-    java.util.Objects.requireNonNull((input));
-    java.util.Objects.requireNonNull((rewriter));
-    java.util.Objects.requireNonNull((output));
     this.input = input;
     this.rewriter = rewriter;
     this.output = output;
@@ -46,26 +43,44 @@ public class RewriteTermTestCase implements Serializable {
       return false;
     }
     RewriteTermTestCase o = (RewriteTermTestCase) (other);
-    return input.equals(o.input) && rewriter.equals(o.rewriter) && output.equals(o.output);
+    return java.util.Objects.equals(
+      this.input,
+      o.input) && java.util.Objects.equals(
+      this.rewriter,
+      o.rewriter) && java.util.Objects.equals(
+      this.output,
+      o.output);
   }
   
   @Override
   public int hashCode() {
-    return 2 * input.hashCode() + 3 * rewriter.hashCode() + 5 * output.hashCode();
+    return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(rewriter) + 5 * java.util.Objects.hashCode(output);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(RewriteTermTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (input)).compareTo(other.input);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (rewriter)).compareTo(other.rewriter);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (output)).compareTo(other.output);
   }
   
   public RewriteTermTestCase withInput(hydra.core.Term input) {
-    java.util.Objects.requireNonNull((input));
     return new RewriteTermTestCase(input, rewriter, output);
   }
   
   public RewriteTermTestCase withRewriter(hydra.testing.TermRewriter rewriter) {
-    java.util.Objects.requireNonNull((rewriter));
     return new RewriteTermTestCase(input, rewriter, output);
   }
   
   public RewriteTermTestCase withOutput(hydra.core.Term output) {
-    java.util.Objects.requireNonNull((output));
     return new RewriteTermTestCase(input, rewriter, output);
   }
 }

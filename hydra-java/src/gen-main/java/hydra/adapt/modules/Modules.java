@@ -49,13 +49,13 @@ public interface Modules {
             p0 -> hydra.schemas.Schemas.<hydra.graph.Graph>elementAsTypeApplicationTerm((p0)),
             (els))),
           (java.util.function.Function<java.util.List<hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (tterms -> {
-            java.util.List<hydra.core.Type> types = hydra.lib.sets.ToList.apply(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.TypeApplicationTerm, hydra.core.Type>) (arg_ -> hydra.rewriting.Rewriting.deannotateType(((arg_)).type)),
-              (tterms))));
+              (tterms)))));
             return hydra.lib.flows.Bind.apply(
               ((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>>) (v1 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_adaptersFor(
                 (lang),
-                (v1)))).apply((types)),
+                (v1)))).apply(types.get()),
               (java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (adapters -> hydra.lib.flows.MapList.apply(
                 ((java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>>) (v1 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>) (v2 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_classify(
                   (cx),
@@ -87,14 +87,14 @@ public interface Modules {
   }
   
   static <T0, T1, T2, T3> hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition> adaptedModuleDefinitions_classify(T0 cx, java.util.function.Function<hydra.core.Binding, Boolean> hydra_annotations_isNativeType2, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<T1, hydra.core.TypeScheme> hydra_schemas_typeToTypeScheme2, hydra.coders.Language lang, java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T2, T3, T1, hydra.core.Term, hydra.core.Term>> adapters, hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm> pair) {
-    hydra.core.Binding el = hydra.lib.pairs.First.apply((pair));
-    hydra.core.Name name = ((el)).name;
-    hydra.core.TypeApplicationTerm tt = hydra.lib.pairs.Second.apply((pair));
-    hydra.core.Term term = ((tt)).body;
-    hydra.core.Type typ = ((tt)).type;
-    return hydra.lib.logic.IfElse.apply(
-      ((hydra_annotations_isNativeType2)).apply((el)),
-      hydra.lib.flows.Bind.apply(
+    hydra.util.Lazy<hydra.core.Binding> el = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((pair)));
+    hydra.core.Name name = (el.get()).name;
+    hydra.util.Lazy<hydra.core.TypeApplicationTerm> tt = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((pair)));
+    hydra.core.Term term = (tt.get()).body;
+    hydra.core.Type typ = (tt.get()).type;
+    return hydra.lib.logic.IfElse.lazy(
+      ((hydra_annotations_isNativeType2)).apply(el.get()),
+      () -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.withTrace(
             "adapt module definitions",
@@ -105,7 +105,7 @@ public interface Modules {
             (lang),
             (coreTyp)))),
         (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>) (adaptedTyp -> hydra.lib.flows.Pure.apply(new hydra.module.Definition.Type(new hydra.module.TypeDefinition((name), (adaptedTyp)))))),
-      hydra.lib.maybes.Maybe.apply(
+      () -> hydra.lib.maybes.Maybe.apply(
         hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
           "no adapter for element ",
           ((name)).value)),
@@ -140,20 +140,20 @@ public interface Modules {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>) (g -> {
-        hydra.coders.AdapterContext cx0 = new hydra.coders.AdapterContext((g), (lang), (java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) ((java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>apply())));
+        hydra.util.Lazy<hydra.coders.AdapterContext> cx0 = new hydra.util.Lazy<>(() -> new hydra.coders.AdapterContext((g), (lang), (java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) ((java.util.Map<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>apply()))));
         return hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.withState(
-            (cx0),
+            cx0.get(),
             ((getPair)).apply((typ))),
           (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.coders.AdapterContext>, hydra.compute.Flow<hydra.graph.Graph, hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>) (result -> {
-            hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term> adapter = hydra.lib.pairs.First.apply((result));
-            hydra.coders.AdapterContext cx = hydra.lib.pairs.Second.apply((result));
-            return hydra.lib.flows.Pure.apply((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>(((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) (projected -> projected.isLossy))))))).apply((adapter)), ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.source))))))).apply((adapter)), ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.target))))))).apply((adapter)), (hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.adapt.modules.Modules.languageAdapter_encode(
-              (adapter),
-              (cx),
+            hydra.util.Lazy<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapter = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((result)));
+            hydra.util.Lazy<hydra.coders.AdapterContext> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((result)));
+            return hydra.lib.flows.Pure.apply((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Adapter<T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>(((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, Boolean>) (projected -> projected.isLossy))))))).apply(adapter.get()), ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.source))))))).apply(adapter.get()), ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.target))))))).apply(adapter.get()), (hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.core.Term>((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.adapt.modules.Modules.languageAdapter_encode(
+              adapter.get(),
+              cx.get(),
               (v1))), (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.adapt.modules.Modules.languageAdapter_decode(
-              (adapter),
-              (cx),
+              adapter.get(),
+              cx.get(),
               (v1))))))))))))))));
           }));
       }));
@@ -191,19 +191,19 @@ public interface Modules {
         p0 -> hydra.schemas.Schemas.<hydra.graph.Graph>elementAsTypeApplicationTerm((p0)),
         (els))),
       (java.util.function.Function<java.util.List<hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, T4>>) (tterms -> {
-        java.util.List<hydra.core.Type> types = hydra.lib.lists.Nub.apply(hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.lists.Nub.apply(hydra.lib.lists.Map.apply(
           projected -> projected.type,
-          (tterms)));
+          (tterms))));
         return hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
             (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.compute.Coder<T1, T2, hydra.core.Term, T3>>>) (v1 -> hydra.adapt.modules.Modules.<T1, T3, T2>constructCoder(
               (lang),
               (encodeTerm),
               (v1))),
-            (types)),
+            types.get()),
           (java.util.function.Function<java.util.List<hydra.compute.Coder<T1, T2, hydra.core.Term, T3>>, hydra.compute.Flow<hydra.graph.Graph, T4>>) (cdrs -> ((((createModule)).apply((mod))).apply(hydra.adapt.modules.Modules.transformModule_coders(
             (cdrs),
-            (types)))).apply(hydra.lib.lists.Zip.apply(
+            types.get()))).apply(hydra.lib.lists.Zip.apply(
             (els),
             (tterms)))));
       }));

@@ -17,23 +17,23 @@ public interface Typing {
   
   static String typeSubst(hydra.typing.TypeSubst ts) {
     java.util.Map<hydra.core.Name, hydra.core.Type> subst = ((ts)).value;
-    java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>> pairs = hydra.lib.maps.ToList.apply((subst));
+    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((subst)));
     java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, String> showPair = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, String>) (pair -> {
-      String name = (hydra.lib.pairs.First.apply((pair))).value;
-      hydra.core.Type typ = hydra.lib.pairs.Second.apply((pair));
+      hydra.util.Lazy<String> name = new hydra.util.Lazy<>(() -> (hydra.lib.pairs.First.apply((pair))).value);
+      hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((pair)));
       return hydra.lib.strings.Cat.apply(java.util.List.of(
-        (name),
+        name.get(),
         "\u21A6",
-        hydra.show.core.Core.type((typ))));
+        hydra.show.core.Core.type(typ.get())));
     });
-    java.util.List<String> pairStrs = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> pairStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (showPair),
-      (pairs));
+      pairs.get()));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "{",
       hydra.lib.strings.Intercalate.apply(
         ",",
-        (pairStrs)),
+        pairStrs.get()),
       "}"));
   }
 }

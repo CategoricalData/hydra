@@ -2,10 +2,12 @@
 
 package hydra.relational;
 
+import java.io.Serializable;
+
 /**
  * An abstract relation; the name and columns of a relation without its actual data
  */
-public class RelationSchema<T> {
+public class RelationSchema<T> implements Serializable, Comparable<RelationSchema<T>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.RelationSchema");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -37,10 +39,6 @@ public class RelationSchema<T> {
   public final java.util.List<hydra.relational.ForeignKey> foreignKeys;
   
   public RelationSchema (hydra.relational.RelationName name, java.util.List<hydra.relational.ColumnSchema<T>> columns, java.util.List<hydra.relational.PrimaryKey> primaryKeys, java.util.List<hydra.relational.ForeignKey> foreignKeys) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((columns));
-    java.util.Objects.requireNonNull((primaryKeys));
-    java.util.Objects.requireNonNull((foreignKeys));
     this.name = name;
     this.columns = columns;
     this.primaryKeys = primaryKeys;
@@ -53,31 +51,60 @@ public class RelationSchema<T> {
       return false;
     }
     RelationSchema o = (RelationSchema) (other);
-    return name.equals(o.name) && columns.equals(o.columns) && primaryKeys.equals(o.primaryKeys) && foreignKeys.equals(o.foreignKeys);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.columns,
+      o.columns) && java.util.Objects.equals(
+      this.primaryKeys,
+      o.primaryKeys) && java.util.Objects.equals(
+      this.foreignKeys,
+      o.foreignKeys);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * columns.hashCode() + 5 * primaryKeys.hashCode() + 7 * foreignKeys.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(columns) + 5 * java.util.Objects.hashCode(primaryKeys) + 7 * java.util.Objects.hashCode(foreignKeys);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(RelationSchema other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      columns.hashCode(),
+      other.columns.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      primaryKeys.hashCode(),
+      other.primaryKeys.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      foreignKeys.hashCode(),
+      other.foreignKeys.hashCode());
   }
   
   public RelationSchema withName(hydra.relational.RelationName name) {
-    java.util.Objects.requireNonNull((name));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withColumns(java.util.List<hydra.relational.ColumnSchema<T>> columns) {
-    java.util.Objects.requireNonNull((columns));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withPrimaryKeys(java.util.List<hydra.relational.PrimaryKey> primaryKeys) {
-    java.util.Objects.requireNonNull((primaryKeys));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
   public RelationSchema withForeignKeys(java.util.List<hydra.relational.ForeignKey> foreignKeys) {
-    java.util.Objects.requireNonNull((foreignKeys));
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 }

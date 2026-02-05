@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A query pattern
  */
-public abstract class Pattern implements Serializable {
+public abstract class Pattern implements Serializable, Comparable<Pattern> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Pattern");
   
   public static final hydra.core.Name FIELD_NAME_TRIPLE = new hydra.core.Name("triple");
@@ -71,7 +71,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.query.TriplePattern value;
     
     public Triple (hydra.query.TriplePattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -81,12 +80,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Triple o = (Triple) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Triple o = (Triple) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -102,7 +114,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.query.Pattern value;
     
     public Negation (hydra.query.Pattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -112,12 +123,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Negation o = (Negation) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Negation o = (Negation) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -133,7 +157,6 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.query.Pattern> value;
     
     public Conjunction (java.util.List<hydra.query.Pattern> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -143,12 +166,27 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Conjunction o = (Conjunction) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Conjunction o = (Conjunction) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -164,7 +202,6 @@ public abstract class Pattern implements Serializable {
     public final java.util.List<hydra.query.Pattern> value;
     
     public Disjunction (java.util.List<hydra.query.Pattern> value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -174,12 +211,27 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Disjunction o = (Disjunction) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Disjunction o = (Disjunction) (other);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -195,7 +247,6 @@ public abstract class Pattern implements Serializable {
     public final hydra.query.GraphPattern value;
     
     public Graph (hydra.query.GraphPattern value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -205,12 +256,25 @@ public abstract class Pattern implements Serializable {
         return false;
       }
       Graph o = (Graph) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pattern other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Graph o = (Graph) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

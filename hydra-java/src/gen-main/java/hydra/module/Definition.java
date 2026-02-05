@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A definition, which may be either a term or type definition
  */
-public abstract class Definition implements Serializable {
+public abstract class Definition implements Serializable, Comparable<Definition> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Definition");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
@@ -47,7 +47,6 @@ public abstract class Definition implements Serializable {
     public final hydra.module.TermDefinition value;
     
     public Term (hydra.module.TermDefinition value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -57,12 +56,25 @@ public abstract class Definition implements Serializable {
         return false;
       }
       Term o = (Term) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Definition other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Term o = (Term) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -78,7 +90,6 @@ public abstract class Definition implements Serializable {
     public final hydra.module.TypeDefinition value;
     
     public Type (hydra.module.TypeDefinition value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -88,12 +99,25 @@ public abstract class Definition implements Serializable {
         return false;
       }
       Type o = (Type) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Definition other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Type o = (Type) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override

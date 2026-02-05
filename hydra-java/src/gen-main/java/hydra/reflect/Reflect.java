@@ -10,31 +10,33 @@ public interface Reflect {
     return ((v1)).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Record ignored) {
-        return new hydra.variants.EliminationVariant.Record(true);
+        return new hydra.variants.EliminationVariant.Record();
       }
       
       @Override
       public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Union ignored) {
-        return new hydra.variants.EliminationVariant.Union(true);
+        return new hydra.variants.EliminationVariant.Union();
       }
       
       @Override
       public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Wrap ignored) {
-        return new hydra.variants.EliminationVariant.Wrap(true);
+        return new hydra.variants.EliminationVariant.Wrap();
       }
     });
   }
   
-  java.util.List<hydra.variants.EliminationVariant> eliminationVariants = java.util.List.of(
-    new hydra.variants.EliminationVariant.Record(true),
-    new hydra.variants.EliminationVariant.Union(true),
-    new hydra.variants.EliminationVariant.Wrap(true));
+  static java.util.List<hydra.variants.EliminationVariant> eliminationVariants() {
+    return java.util.List.of(
+      new hydra.variants.EliminationVariant.Record(),
+      new hydra.variants.EliminationVariant.Union(),
+      new hydra.variants.EliminationVariant.Wrap());
+  }
   
   static hydra.util.Precision floatTypePrecision(hydra.core.FloatType v1) {
     return ((v1)).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.util.Precision visit(hydra.core.FloatType.Bigfloat ignored) {
-        return new hydra.util.Precision.Arbitrary(true);
+        return new hydra.util.Precision.Arbitrary();
       }
       
       @Override
@@ -49,26 +51,28 @@ public interface Reflect {
     });
   }
   
-  java.util.List<hydra.core.FloatType> floatTypes = java.util.List.of(
-    new hydra.core.FloatType.Bigfloat(true),
-    new hydra.core.FloatType.Float32(true),
-    new hydra.core.FloatType.Float64(true));
+  static java.util.List<hydra.core.FloatType> floatTypes() {
+    return java.util.List.of(
+      new hydra.core.FloatType.Bigfloat(),
+      new hydra.core.FloatType.Float32(),
+      new hydra.core.FloatType.Float64());
+  }
   
   static hydra.core.FloatType floatValueType(hydra.core.FloatValue v1) {
     return ((v1)).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Bigfloat ignored) {
-        return new hydra.core.FloatType.Bigfloat(true);
+        return new hydra.core.FloatType.Bigfloat();
       }
       
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Float32 ignored) {
-        return new hydra.core.FloatType.Float32(true);
+        return new hydra.core.FloatType.Float32();
       }
       
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Float64 ignored) {
-        return new hydra.core.FloatType.Float64(true);
+        return new hydra.core.FloatType.Float64();
       }
     });
   }
@@ -77,25 +81,27 @@ public interface Reflect {
     return ((v1)).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.variants.FunctionVariant visit(hydra.core.Function.Elimination ignored) {
-        return new hydra.variants.FunctionVariant.Elimination(true);
+        return new hydra.variants.FunctionVariant.Elimination();
       }
       
       @Override
       public hydra.variants.FunctionVariant visit(hydra.core.Function.Lambda ignored) {
-        return new hydra.variants.FunctionVariant.Lambda(true);
+        return new hydra.variants.FunctionVariant.Lambda();
       }
       
       @Override
       public hydra.variants.FunctionVariant visit(hydra.core.Function.Primitive ignored) {
-        return new hydra.variants.FunctionVariant.Primitive(true);
+        return new hydra.variants.FunctionVariant.Primitive();
       }
     });
   }
   
-  java.util.List<hydra.variants.FunctionVariant> functionVariants = java.util.List.of(
-    new hydra.variants.FunctionVariant.Elimination(true),
-    new hydra.variants.FunctionVariant.Lambda(true),
-    new hydra.variants.FunctionVariant.Primitive(true));
+  static java.util.List<hydra.variants.FunctionVariant> functionVariants() {
+    return java.util.List.of(
+      new hydra.variants.FunctionVariant.Elimination(),
+      new hydra.variants.FunctionVariant.Lambda(),
+      new hydra.variants.FunctionVariant.Primitive());
+  }
   
   static Boolean integerTypeIsSigned(hydra.core.IntegerType v1) {
     return ((v1)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -150,7 +156,7 @@ public interface Reflect {
     return ((v1)).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public hydra.util.Precision visit(hydra.core.IntegerType.Bigint ignored) {
-        return new hydra.util.Precision.Arbitrary(true);
+        return new hydra.util.Precision.Arbitrary();
       }
       
       @Override
@@ -195,62 +201,64 @@ public interface Reflect {
     });
   }
   
-  java.util.List<hydra.core.IntegerType> integerTypes = java.util.List.of(
-    new hydra.core.IntegerType.Bigint(true),
-    new hydra.core.IntegerType.Int8(true),
-    new hydra.core.IntegerType.Int16(true),
-    new hydra.core.IntegerType.Int32(true),
-    new hydra.core.IntegerType.Int64(true),
-    new hydra.core.IntegerType.Uint8(true),
-    new hydra.core.IntegerType.Uint16(true),
-    new hydra.core.IntegerType.Uint32(true),
-    new hydra.core.IntegerType.Uint64(true));
+  static java.util.List<hydra.core.IntegerType> integerTypes() {
+    return java.util.List.of(
+      new hydra.core.IntegerType.Bigint(),
+      new hydra.core.IntegerType.Int8(),
+      new hydra.core.IntegerType.Int16(),
+      new hydra.core.IntegerType.Int32(),
+      new hydra.core.IntegerType.Int64(),
+      new hydra.core.IntegerType.Uint8(),
+      new hydra.core.IntegerType.Uint16(),
+      new hydra.core.IntegerType.Uint32(),
+      new hydra.core.IntegerType.Uint64());
+  }
   
   static hydra.core.IntegerType integerValueType(hydra.core.IntegerValue v1) {
     return ((v1)).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Bigint ignored) {
-        return new hydra.core.IntegerType.Bigint(true);
+        return new hydra.core.IntegerType.Bigint();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int8 ignored) {
-        return new hydra.core.IntegerType.Int8(true);
+        return new hydra.core.IntegerType.Int8();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int16 ignored) {
-        return new hydra.core.IntegerType.Int16(true);
+        return new hydra.core.IntegerType.Int16();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int32 ignored) {
-        return new hydra.core.IntegerType.Int32(true);
+        return new hydra.core.IntegerType.Int32();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int64 ignored) {
-        return new hydra.core.IntegerType.Int64(true);
+        return new hydra.core.IntegerType.Int64();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint8 ignored) {
-        return new hydra.core.IntegerType.Uint8(true);
+        return new hydra.core.IntegerType.Uint8();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint16 ignored) {
-        return new hydra.core.IntegerType.Uint16(true);
+        return new hydra.core.IntegerType.Uint16();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint32 ignored) {
-        return new hydra.core.IntegerType.Uint32(true);
+        return new hydra.core.IntegerType.Uint32();
       }
       
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint64 ignored) {
-        return new hydra.core.IntegerType.Uint64(true);
+        return new hydra.core.IntegerType.Uint64();
       }
     });
   }
@@ -259,12 +267,12 @@ public interface Reflect {
     return ((v1)).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Binary ignored) {
-        return new hydra.core.LiteralType.Binary(true);
+        return new hydra.core.LiteralType.Binary();
       }
       
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Boolean_ ignored) {
-        return new hydra.core.LiteralType.Boolean_(true);
+        return new hydra.core.LiteralType.Boolean_();
       }
       
       @Override
@@ -279,7 +287,7 @@ public interface Reflect {
       
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.String_ ignored) {
-        return new hydra.core.LiteralType.String_(true);
+        return new hydra.core.LiteralType.String_();
       }
     });
   }
@@ -288,266 +296,274 @@ public interface Reflect {
     return ((v1)).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Binary ignored) {
-        return new hydra.variants.LiteralVariant.Binary(true);
+        return new hydra.variants.LiteralVariant.Binary();
       }
       
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Boolean_ ignored) {
-        return new hydra.variants.LiteralVariant.Boolean_(true);
+        return new hydra.variants.LiteralVariant.Boolean_();
       }
       
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Float_ ignored) {
-        return new hydra.variants.LiteralVariant.Float_(true);
+        return new hydra.variants.LiteralVariant.Float_();
       }
       
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Integer_ ignored) {
-        return new hydra.variants.LiteralVariant.Integer_(true);
+        return new hydra.variants.LiteralVariant.Integer_();
       }
       
       @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.String_ ignored) {
-        return new hydra.variants.LiteralVariant.String_(true);
+        return new hydra.variants.LiteralVariant.String_();
       }
     });
   }
   
-  java.util.List<hydra.core.LiteralType> literalTypes = hydra.lib.lists.Concat.apply(java.util.List.of(
-    java.util.List.of(
-      new hydra.core.LiteralType.Binary(true),
-      new hydra.core.LiteralType.Boolean_(true)),
-    hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.FloatType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Float_((x))),
-      (hydra.reflect.Reflect.floatTypes)),
-    hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.IntegerType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Integer_((x))),
-      (hydra.reflect.Reflect.integerTypes)),
-    java.util.List.of(new hydra.core.LiteralType.String_(true))));
+  static java.util.List<hydra.core.LiteralType> literalTypes() {
+    return hydra.lib.lists.Concat.apply(java.util.List.of(
+      java.util.List.of(
+        new hydra.core.LiteralType.Binary(),
+        new hydra.core.LiteralType.Boolean_()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.core.FloatType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Float_((x))),
+        hydra.reflect.Reflect.floatTypes()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.core.IntegerType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Integer_((x))),
+        hydra.reflect.Reflect.integerTypes()),
+      java.util.List.of(new hydra.core.LiteralType.String_())));
+  }
   
   static hydra.variants.LiteralVariant literalVariant(hydra.core.Literal arg_) {
     return hydra.reflect.Reflect.literalTypeVariant(hydra.reflect.Reflect.literalType((arg_)));
   }
   
-  java.util.List<hydra.variants.LiteralVariant> literalVariants = java.util.List.of(
-    new hydra.variants.LiteralVariant.Binary(true),
-    new hydra.variants.LiteralVariant.Boolean_(true),
-    new hydra.variants.LiteralVariant.Float_(true),
-    new hydra.variants.LiteralVariant.Integer_(true),
-    new hydra.variants.LiteralVariant.String_(true));
+  static java.util.List<hydra.variants.LiteralVariant> literalVariants() {
+    return java.util.List.of(
+      new hydra.variants.LiteralVariant.Binary(),
+      new hydra.variants.LiteralVariant.Boolean_(),
+      new hydra.variants.LiteralVariant.Float_(),
+      new hydra.variants.LiteralVariant.Integer_(),
+      new hydra.variants.LiteralVariant.String_());
+  }
   
   static hydra.variants.TermVariant termVariant(hydra.core.Term v1) {
     return ((v1)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Annotated ignored) {
-        return new hydra.variants.TermVariant.Annotated(true);
+        return new hydra.variants.TermVariant.Annotated();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Application ignored) {
-        return new hydra.variants.TermVariant.Application(true);
+        return new hydra.variants.TermVariant.Application();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Either ignored) {
-        return new hydra.variants.TermVariant.Either(true);
+        return new hydra.variants.TermVariant.Either();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Function ignored) {
-        return new hydra.variants.TermVariant.Function(true);
+        return new hydra.variants.TermVariant.Function();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Let ignored) {
-        return new hydra.variants.TermVariant.Let(true);
+        return new hydra.variants.TermVariant.Let();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.List ignored) {
-        return new hydra.variants.TermVariant.List(true);
+        return new hydra.variants.TermVariant.List();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Literal ignored) {
-        return new hydra.variants.TermVariant.Literal(true);
+        return new hydra.variants.TermVariant.Literal();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Map ignored) {
-        return new hydra.variants.TermVariant.Map(true);
+        return new hydra.variants.TermVariant.Map();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Maybe ignored) {
-        return new hydra.variants.TermVariant.Maybe(true);
+        return new hydra.variants.TermVariant.Maybe();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Pair ignored) {
-        return new hydra.variants.TermVariant.Pair(true);
+        return new hydra.variants.TermVariant.Pair();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Record ignored) {
-        return new hydra.variants.TermVariant.Record(true);
+        return new hydra.variants.TermVariant.Record();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Set ignored) {
-        return new hydra.variants.TermVariant.Set(true);
+        return new hydra.variants.TermVariant.Set();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.TypeApplication ignored) {
-        return new hydra.variants.TermVariant.TypeApplication(true);
+        return new hydra.variants.TermVariant.TypeApplication();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.TypeLambda ignored) {
-        return new hydra.variants.TermVariant.TypeLambda(true);
+        return new hydra.variants.TermVariant.TypeLambda();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Union ignored) {
-        return new hydra.variants.TermVariant.Union(true);
+        return new hydra.variants.TermVariant.Union();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Unit ignored) {
-        return new hydra.variants.TermVariant.Unit(true);
+        return new hydra.variants.TermVariant.Unit();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Variable ignored) {
-        return new hydra.variants.TermVariant.Variable(true);
+        return new hydra.variants.TermVariant.Variable();
       }
       
       @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Wrap ignored) {
-        return new hydra.variants.TermVariant.Wrap(true);
+        return new hydra.variants.TermVariant.Wrap();
       }
     });
   }
   
-  java.util.List<hydra.variants.TermVariant> termVariants = java.util.List.of(
-    new hydra.variants.TermVariant.Annotated(true),
-    new hydra.variants.TermVariant.Application(true),
-    new hydra.variants.TermVariant.Either(true),
-    new hydra.variants.TermVariant.Function(true),
-    new hydra.variants.TermVariant.List(true),
-    new hydra.variants.TermVariant.Literal(true),
-    new hydra.variants.TermVariant.Map(true),
-    new hydra.variants.TermVariant.Maybe(true),
-    new hydra.variants.TermVariant.Pair(true),
-    new hydra.variants.TermVariant.Record(true),
-    new hydra.variants.TermVariant.Set(true),
-    new hydra.variants.TermVariant.TypeLambda(true),
-    new hydra.variants.TermVariant.TypeApplication(true),
-    new hydra.variants.TermVariant.Union(true),
-    new hydra.variants.TermVariant.Unit(true),
-    new hydra.variants.TermVariant.Variable(true),
-    new hydra.variants.TermVariant.Wrap(true));
+  static java.util.List<hydra.variants.TermVariant> termVariants() {
+    return java.util.List.of(
+      new hydra.variants.TermVariant.Annotated(),
+      new hydra.variants.TermVariant.Application(),
+      new hydra.variants.TermVariant.Either(),
+      new hydra.variants.TermVariant.Function(),
+      new hydra.variants.TermVariant.List(),
+      new hydra.variants.TermVariant.Literal(),
+      new hydra.variants.TermVariant.Map(),
+      new hydra.variants.TermVariant.Maybe(),
+      new hydra.variants.TermVariant.Pair(),
+      new hydra.variants.TermVariant.Record(),
+      new hydra.variants.TermVariant.Set(),
+      new hydra.variants.TermVariant.TypeLambda(),
+      new hydra.variants.TermVariant.TypeApplication(),
+      new hydra.variants.TermVariant.Union(),
+      new hydra.variants.TermVariant.Unit(),
+      new hydra.variants.TermVariant.Variable(),
+      new hydra.variants.TermVariant.Wrap());
+  }
   
   static hydra.variants.TypeVariant typeVariant(hydra.core.Type v1) {
     return ((v1)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Annotated ignored) {
-        return new hydra.variants.TypeVariant.Annotated(true);
+        return new hydra.variants.TypeVariant.Annotated();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Application ignored) {
-        return new hydra.variants.TypeVariant.Application(true);
+        return new hydra.variants.TypeVariant.Application();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Either ignored) {
-        return new hydra.variants.TypeVariant.Either(true);
+        return new hydra.variants.TypeVariant.Either();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Function ignored) {
-        return new hydra.variants.TypeVariant.Function(true);
+        return new hydra.variants.TypeVariant.Function();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Forall ignored) {
-        return new hydra.variants.TypeVariant.Forall(true);
+        return new hydra.variants.TypeVariant.Forall();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.List ignored) {
-        return new hydra.variants.TypeVariant.List(true);
+        return new hydra.variants.TypeVariant.List();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Literal ignored) {
-        return new hydra.variants.TypeVariant.Literal(true);
+        return new hydra.variants.TypeVariant.Literal();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Map ignored) {
-        return new hydra.variants.TypeVariant.Map(true);
+        return new hydra.variants.TypeVariant.Map();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Maybe ignored) {
-        return new hydra.variants.TypeVariant.Maybe(true);
+        return new hydra.variants.TypeVariant.Maybe();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Pair ignored) {
-        return new hydra.variants.TypeVariant.Pair(true);
+        return new hydra.variants.TypeVariant.Pair();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Record ignored) {
-        return new hydra.variants.TypeVariant.Record(true);
+        return new hydra.variants.TypeVariant.Record();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Set ignored) {
-        return new hydra.variants.TypeVariant.Set(true);
+        return new hydra.variants.TypeVariant.Set();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Union ignored) {
-        return new hydra.variants.TypeVariant.Union(true);
+        return new hydra.variants.TypeVariant.Union();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Unit ignored) {
-        return new hydra.variants.TypeVariant.Unit(true);
+        return new hydra.variants.TypeVariant.Unit();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Variable ignored) {
-        return new hydra.variants.TypeVariant.Variable(true);
+        return new hydra.variants.TypeVariant.Variable();
       }
       
       @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Wrap ignored) {
-        return new hydra.variants.TypeVariant.Wrap(true);
+        return new hydra.variants.TypeVariant.Wrap();
       }
     });
   }
   
-  java.util.List<hydra.variants.TypeVariant> typeVariants = java.util.List.of(
-    new hydra.variants.TypeVariant.Annotated(true),
-    new hydra.variants.TypeVariant.Application(true),
-    new hydra.variants.TypeVariant.Either(true),
-    new hydra.variants.TypeVariant.Function(true),
-    new hydra.variants.TypeVariant.Forall(true),
-    new hydra.variants.TypeVariant.List(true),
-    new hydra.variants.TypeVariant.Literal(true),
-    new hydra.variants.TypeVariant.Map(true),
-    new hydra.variants.TypeVariant.Wrap(true),
-    new hydra.variants.TypeVariant.Maybe(true),
-    new hydra.variants.TypeVariant.Pair(true),
-    new hydra.variants.TypeVariant.Record(true),
-    new hydra.variants.TypeVariant.Set(true),
-    new hydra.variants.TypeVariant.Union(true),
-    new hydra.variants.TypeVariant.Unit(true),
-    new hydra.variants.TypeVariant.Variable(true));
+  static java.util.List<hydra.variants.TypeVariant> typeVariants() {
+    return java.util.List.of(
+      new hydra.variants.TypeVariant.Annotated(),
+      new hydra.variants.TypeVariant.Application(),
+      new hydra.variants.TypeVariant.Either(),
+      new hydra.variants.TypeVariant.Function(),
+      new hydra.variants.TypeVariant.Forall(),
+      new hydra.variants.TypeVariant.List(),
+      new hydra.variants.TypeVariant.Literal(),
+      new hydra.variants.TypeVariant.Map(),
+      new hydra.variants.TypeVariant.Wrap(),
+      new hydra.variants.TypeVariant.Maybe(),
+      new hydra.variants.TypeVariant.Pair(),
+      new hydra.variants.TypeVariant.Record(),
+      new hydra.variants.TypeVariant.Set(),
+      new hydra.variants.TypeVariant.Union(),
+      new hydra.variants.TypeVariant.Unit(),
+      new hydra.variants.TypeVariant.Variable());
+  }
 }

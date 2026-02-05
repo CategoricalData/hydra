@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A codec for generating compiled test files from test groups into a target programming language
  */
-public class TestCodec implements Serializable {
+public class TestCodec implements Serializable, Comparable<TestCodec> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCodec");
   
   public static final hydra.core.Name FIELD_NAME_LANGUAGE = new hydra.core.Name("language");
@@ -88,17 +88,6 @@ public class TestCodec implements Serializable {
   public final java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports;
   
   public TestCodec (hydra.coders.LanguageName language, hydra.module.FileExtension fileExtension, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, String>> encodeTerm, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, String>> encodeType, java.util.function.Function<String, String> formatTestName, java.util.function.Function<hydra.module.Namespace, String> formatModuleName, String testCaseTemplate, String testGroupTemplate, String moduleTemplate, String importTemplate, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
-    java.util.Objects.requireNonNull((language));
-    java.util.Objects.requireNonNull((fileExtension));
-    java.util.Objects.requireNonNull((encodeTerm));
-    java.util.Objects.requireNonNull((encodeType));
-    java.util.Objects.requireNonNull((formatTestName));
-    java.util.Objects.requireNonNull((formatModuleName));
-    java.util.Objects.requireNonNull((testCaseTemplate));
-    java.util.Objects.requireNonNull((testGroupTemplate));
-    java.util.Objects.requireNonNull((moduleTemplate));
-    java.util.Objects.requireNonNull((importTemplate));
-    java.util.Objects.requireNonNull((findImports));
     this.language = language;
     this.fileExtension = fileExtension;
     this.encodeTerm = encodeTerm;
@@ -118,66 +107,134 @@ public class TestCodec implements Serializable {
       return false;
     }
     TestCodec o = (TestCodec) (other);
-    return language.equals(o.language) && fileExtension.equals(o.fileExtension) && encodeTerm.equals(o.encodeTerm) && encodeType.equals(o.encodeType) && formatTestName.equals(o.formatTestName) && formatModuleName.equals(o.formatModuleName) && testCaseTemplate.equals(o.testCaseTemplate) && testGroupTemplate.equals(o.testGroupTemplate) && moduleTemplate.equals(o.moduleTemplate) && importTemplate.equals(o.importTemplate) && findImports.equals(o.findImports);
+    return java.util.Objects.equals(
+      this.language,
+      o.language) && java.util.Objects.equals(
+      this.fileExtension,
+      o.fileExtension) && java.util.Objects.equals(
+      this.encodeTerm,
+      o.encodeTerm) && java.util.Objects.equals(
+      this.encodeType,
+      o.encodeType) && java.util.Objects.equals(
+      this.formatTestName,
+      o.formatTestName) && java.util.Objects.equals(
+      this.formatModuleName,
+      o.formatModuleName) && java.util.Objects.equals(
+      this.testCaseTemplate,
+      o.testCaseTemplate) && java.util.Objects.equals(
+      this.testGroupTemplate,
+      o.testGroupTemplate) && java.util.Objects.equals(
+      this.moduleTemplate,
+      o.moduleTemplate) && java.util.Objects.equals(
+      this.importTemplate,
+      o.importTemplate) && java.util.Objects.equals(
+      this.findImports,
+      o.findImports);
   }
   
   @Override
   public int hashCode() {
-    return 2 * language.hashCode() + 3 * fileExtension.hashCode() + 5 * encodeTerm.hashCode() + 7 * encodeType.hashCode() + 11 * formatTestName.hashCode() + 13 * formatModuleName.hashCode() + 17 * testCaseTemplate.hashCode() + 19 * testGroupTemplate.hashCode() + 23 * moduleTemplate.hashCode() + 29 * importTemplate.hashCode() + 31 * findImports.hashCode();
+    return 2 * java.util.Objects.hashCode(language) + 3 * java.util.Objects.hashCode(fileExtension) + 5 * java.util.Objects.hashCode(encodeTerm) + 7 * java.util.Objects.hashCode(encodeType) + 11 * java.util.Objects.hashCode(formatTestName) + 13 * java.util.Objects.hashCode(formatModuleName) + 17 * java.util.Objects.hashCode(testCaseTemplate) + 19 * java.util.Objects.hashCode(testGroupTemplate) + 23 * java.util.Objects.hashCode(moduleTemplate) + 29 * java.util.Objects.hashCode(importTemplate) + 31 * java.util.Objects.hashCode(findImports);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TestCodec other) {
+    int cmp = 0;
+    cmp = ((Comparable) (language)).compareTo(other.language);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (fileExtension)).compareTo(other.fileExtension);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      encodeTerm.hashCode(),
+      other.encodeTerm.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      encodeType.hashCode(),
+      other.encodeType.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      formatTestName.hashCode(),
+      other.formatTestName.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      formatModuleName.hashCode(),
+      other.formatModuleName.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (testCaseTemplate)).compareTo(other.testCaseTemplate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (testGroupTemplate)).compareTo(other.testGroupTemplate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (moduleTemplate)).compareTo(other.moduleTemplate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (importTemplate)).compareTo(other.importTemplate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      findImports.hashCode(),
+      other.findImports.hashCode());
   }
   
   public TestCodec withLanguage(hydra.coders.LanguageName language) {
-    java.util.Objects.requireNonNull((language));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withFileExtension(hydra.module.FileExtension fileExtension) {
-    java.util.Objects.requireNonNull((fileExtension));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withEncodeTerm(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, String>> encodeTerm) {
-    java.util.Objects.requireNonNull((encodeTerm));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withEncodeType(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, String>> encodeType) {
-    java.util.Objects.requireNonNull((encodeType));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withFormatTestName(java.util.function.Function<String, String> formatTestName) {
-    java.util.Objects.requireNonNull((formatTestName));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withFormatModuleName(java.util.function.Function<hydra.module.Namespace, String> formatModuleName) {
-    java.util.Objects.requireNonNull((formatModuleName));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withTestCaseTemplate(String testCaseTemplate) {
-    java.util.Objects.requireNonNull((testCaseTemplate));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withTestGroupTemplate(String testGroupTemplate) {
-    java.util.Objects.requireNonNull((testGroupTemplate));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withModuleTemplate(String moduleTemplate) {
-    java.util.Objects.requireNonNull((moduleTemplate));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withImportTemplate(String importTemplate) {
-    java.util.Objects.requireNonNull((importTemplate));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
   public TestCodec withFindImports(java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
-    java.util.Objects.requireNonNull((findImports));
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
 }

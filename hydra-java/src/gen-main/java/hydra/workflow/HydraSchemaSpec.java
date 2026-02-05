@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The specification of a Hydra schema, provided as a set of modules and a distinguished type
  */
-public class HydraSchemaSpec implements Serializable {
+public class HydraSchemaSpec implements Serializable, Comparable<HydraSchemaSpec> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.HydraSchemaSpec");
   
   public static final hydra.core.Name FIELD_NAME_MODULES = new hydra.core.Name("modules");
@@ -25,8 +25,6 @@ public class HydraSchemaSpec implements Serializable {
   public final hydra.core.Name typeName;
   
   public HydraSchemaSpec (java.util.List<hydra.module.Module> modules, hydra.core.Name typeName) {
-    java.util.Objects.requireNonNull((modules));
-    java.util.Objects.requireNonNull((typeName));
     this.modules = modules;
     this.typeName = typeName;
   }
@@ -37,21 +35,36 @@ public class HydraSchemaSpec implements Serializable {
       return false;
     }
     HydraSchemaSpec o = (HydraSchemaSpec) (other);
-    return modules.equals(o.modules) && typeName.equals(o.typeName);
+    return java.util.Objects.equals(
+      this.modules,
+      o.modules) && java.util.Objects.equals(
+      this.typeName,
+      o.typeName);
   }
   
   @Override
   public int hashCode() {
-    return 2 * modules.hashCode() + 3 * typeName.hashCode();
+    return 2 * java.util.Objects.hashCode(modules) + 3 * java.util.Objects.hashCode(typeName);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(HydraSchemaSpec other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      modules.hashCode(),
+      other.modules.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (typeName)).compareTo(other.typeName);
   }
   
   public HydraSchemaSpec withModules(java.util.List<hydra.module.Module> modules) {
-    java.util.Objects.requireNonNull((modules));
     return new HydraSchemaSpec(modules, typeName);
   }
   
   public HydraSchemaSpec withTypeName(hydra.core.Name typeName) {
-    java.util.Objects.requireNonNull((typeName));
     return new HydraSchemaSpec(modules, typeName);
   }
 }

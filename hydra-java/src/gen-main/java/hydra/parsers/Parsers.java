@@ -22,17 +22,19 @@ public interface Parsers {
       
       @Override
       public hydra.parsing.ParseResult<T0> visit(hydra.parsing.ParseResult.Failure<T0> e) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             (((e)).value).remainder,
             (input)),
-          (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> ((wrapped)).value)).apply((p2))).apply((input)),
-          (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure(((e)).value)));
+          () -> (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> ((wrapped)).value)).apply((p2))).apply((input)),
+          () -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure(((e)).value)));
       }
     })))).apply((v1)))).apply((((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> ((wrapped)).value)).apply((p1))).apply((input)));
   }
   
-  hydra.parsing.Parser<Integer> anyChar = hydra.parsers.Parsers.satisfy((java.util.function.Function<Integer, Boolean>) (ignored -> true));
+  static hydra.parsing.Parser<Integer> anyChar() {
+    return hydra.parsers.Parsers.satisfy((java.util.function.Function<Integer, Boolean>) (ignored -> true));
+  }
   
   static <T0, T1> hydra.parsing.Parser<T1> apply(hydra.parsing.Parser<java.util.function.Function<T0, T1>> pf, hydra.parsing.Parser<T0> pa) {
     return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T1>>) (v1 -> hydra.parsers.Parsers.<T0, T1>apply_parse(
@@ -111,15 +113,21 @@ public interface Parsers {
       (ps));
   }
   
-  hydra.parsing.Parser<Boolean> eof = (hydra.parsing.Parser<Boolean>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<Boolean>>) (input -> hydra.lib.logic.IfElse.apply(
-    hydra.lib.equality.Equal.apply(
-      (input),
-      ""),
-    (hydra.parsing.ParseResult<Boolean>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<Boolean>) (new hydra.parsing.ParseSuccess<Boolean>(true, "")))),
-    (hydra.parsing.ParseResult<Boolean>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("expected end of input", (input))))))));
+  static hydra.parsing.Parser<java.lang.Void> eof() {
+    return (hydra.parsing.Parser<java.lang.Void>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Void>>) (input -> hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        (input),
+        ""),
+      () -> (hydra.parsing.ParseResult<java.lang.Void>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<java.lang.Void>) (new hydra.parsing.ParseSuccess<java.lang.Void>(null, "")))),
+      () -> (hydra.parsing.ParseResult<java.lang.Void>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("expected end of input", (input))))))));
+  }
   
   static <T0> hydra.parsing.Parser<T0> fail(String msg) {
     return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T0>>) (input -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError((msg), (input)))))));
+  }
+  
+  static <T0> hydra.parsing.Parser<T0> lazy(java.util.function.Function<java.lang.Void, hydra.parsing.Parser<T0>> f) {
+    return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T0>>) (input -> (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> ((wrapped)).value)).apply(((f)).apply(null))).apply((input)))));
   }
   
   static <T0> hydra.parsing.Parser<java.util.List<T0>> many(hydra.parsing.Parser<T0> p) {
@@ -168,15 +176,18 @@ public interface Parsers {
   static hydra.parsing.Parser<Integer> satisfy(java.util.function.Function<Integer, Boolean> pred) {
     java.util.function.Function<String, hydra.parsing.ParseResult<Integer>> parse = (java.util.function.Function<String, hydra.parsing.ParseResult<Integer>>) (input -> {
       java.util.List<Integer> codes = hydra.lib.strings.ToList.apply((input));
-      Integer c = hydra.lib.lists.Head.apply((codes));
-      String rest = hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply((codes)));
-      return hydra.lib.logic.IfElse.apply(
-        hydra.lib.strings.Null.apply((input)),
+      return hydra.lib.maybes.Maybe.apply(
         (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("unexpected end of input", (input)))),
-        hydra.lib.logic.IfElse.apply(
-          ((pred)).apply((c)),
-          (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<Integer>) (new hydra.parsing.ParseSuccess<Integer>((c), (rest))))),
-          (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("character did not satisfy predicate", (input))))));
+        (java.util.function.Function<Integer, hydra.parsing.ParseResult<Integer>>) (c -> {
+          hydra.util.Lazy<String> rest = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Drop.apply(
+            1,
+            (codes))));
+          return hydra.lib.logic.IfElse.lazy(
+            ((pred)).apply((c)),
+            () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<Integer>) (new hydra.parsing.ParseSuccess<Integer>((c), rest.get())))),
+            () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("character did not satisfy predicate", (input)))));
+        }),
+        hydra.lib.lists.SafeHead.apply((codes)));
     });
     return (hydra.parsing.Parser<Integer>) (new hydra.parsing.Parser((parse)));
   }
@@ -215,18 +226,18 @@ public interface Parsers {
     return (hydra.parsing.Parser<String>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<String>>) (input -> {
       java.util.List<Integer> inputCodes = hydra.lib.strings.ToList.apply((input));
       java.util.List<Integer> strCodes = hydra.lib.strings.ToList.apply((str));
-      Integer strLen = hydra.lib.lists.Length.apply((strCodes));
-      java.util.List<Integer> inputPrefix = hydra.lib.lists.Take.apply(
-        (strLen),
-        (inputCodes));
-      return hydra.lib.logic.IfElse.apply(
+      hydra.util.Lazy<Integer> strLen = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply((strCodes)));
+      hydra.util.Lazy<java.util.List<Integer>> inputPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
+        strLen.get(),
+        (inputCodes)));
+      return hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           (strCodes),
-          (inputPrefix)),
-        (hydra.parsing.ParseResult<String>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<String>) (new hydra.parsing.ParseSuccess<String>((str), hydra.lib.strings.FromList.apply(hydra.lib.lists.Drop.apply(
-          (strLen),
+          inputPrefix.get()),
+        () -> (hydra.parsing.ParseResult<String>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<String>) (new hydra.parsing.ParseSuccess<String>((str), hydra.lib.strings.FromList.apply(hydra.lib.lists.Drop.apply(
+          strLen.get(),
           (inputCodes))))))),
-        (hydra.parsing.ParseResult<String>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError(hydra.lib.strings.Cat2.apply(
+        () -> (hydra.parsing.ParseResult<String>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError(hydra.lib.strings.Cat2.apply(
           "expected: ",
           (str)), (input)))));
     })));

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term
  */
-public class AlphaConversionTestCase implements Serializable {
+public class AlphaConversionTestCase implements Serializable, Comparable<AlphaConversionTestCase> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.AlphaConversionTestCase");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
@@ -39,10 +39,6 @@ public class AlphaConversionTestCase implements Serializable {
   public final hydra.core.Term result;
   
   public AlphaConversionTestCase (hydra.core.Term term, hydra.core.Name oldVariable, hydra.core.Name newVariable, hydra.core.Term result) {
-    java.util.Objects.requireNonNull((term));
-    java.util.Objects.requireNonNull((oldVariable));
-    java.util.Objects.requireNonNull((newVariable));
-    java.util.Objects.requireNonNull((result));
     this.term = term;
     this.oldVariable = oldVariable;
     this.newVariable = newVariable;
@@ -55,31 +51,54 @@ public class AlphaConversionTestCase implements Serializable {
       return false;
     }
     AlphaConversionTestCase o = (AlphaConversionTestCase) (other);
-    return term.equals(o.term) && oldVariable.equals(o.oldVariable) && newVariable.equals(o.newVariable) && result.equals(o.result);
+    return java.util.Objects.equals(
+      this.term,
+      o.term) && java.util.Objects.equals(
+      this.oldVariable,
+      o.oldVariable) && java.util.Objects.equals(
+      this.newVariable,
+      o.newVariable) && java.util.Objects.equals(
+      this.result,
+      o.result);
   }
   
   @Override
   public int hashCode() {
-    return 2 * term.hashCode() + 3 * oldVariable.hashCode() + 5 * newVariable.hashCode() + 7 * result.hashCode();
+    return 2 * java.util.Objects.hashCode(term) + 3 * java.util.Objects.hashCode(oldVariable) + 5 * java.util.Objects.hashCode(newVariable) + 7 * java.util.Objects.hashCode(result);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AlphaConversionTestCase other) {
+    int cmp = 0;
+    cmp = ((Comparable) (term)).compareTo(other.term);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (oldVariable)).compareTo(other.oldVariable);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (newVariable)).compareTo(other.newVariable);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (result)).compareTo(other.result);
   }
   
   public AlphaConversionTestCase withTerm(hydra.core.Term term) {
-    java.util.Objects.requireNonNull((term));
     return new AlphaConversionTestCase(term, oldVariable, newVariable, result);
   }
   
   public AlphaConversionTestCase withOldVariable(hydra.core.Name oldVariable) {
-    java.util.Objects.requireNonNull((oldVariable));
     return new AlphaConversionTestCase(term, oldVariable, newVariable, result);
   }
   
   public AlphaConversionTestCase withNewVariable(hydra.core.Name newVariable) {
-    java.util.Objects.requireNonNull((newVariable));
     return new AlphaConversionTestCase(term, oldVariable, newVariable, result);
   }
   
   public AlphaConversionTestCase withResult(hydra.core.Term result) {
-    java.util.Objects.requireNonNull((result));
     return new AlphaConversionTestCase(term, oldVariable, newVariable, result);
   }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A file extension (without the dot), e.g. "json" or "py"
  */
-public class FileExtension implements Serializable {
+public class FileExtension implements Serializable, Comparable<FileExtension> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.FileExtension");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class FileExtension implements Serializable {
   public final String value;
   
   public FileExtension (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,19 @@ public class FileExtension implements Serializable {
       return false;
     }
     FileExtension o = (FileExtension) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(FileExtension other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

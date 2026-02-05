@@ -79,16 +79,12 @@ public abstract class Literal implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Boolean_)) {
-        return false;
-      }
-      Boolean_ o = (Boolean_) (other);
-      return value.equals(o.value);
+      return other instanceof Boolean_;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -107,16 +103,12 @@ public abstract class Literal implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Null)) {
-        return false;
-      }
-      Null o = (Null) (other);
-      return value.equals(o.value);
+      return other instanceof Null;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -139,12 +131,12 @@ public abstract class Literal implements Serializable {
         return false;
       }
       Number_ o = (Number_) (other);
-      return value.equals(o.value);
+      return other instanceof Literal;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -167,12 +159,12 @@ public abstract class Literal implements Serializable {
         return false;
       }
       String_ o = (String_) (other);
-      return value.equals(o.value);
+      return other instanceof Literal;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -195,12 +187,12 @@ public abstract class Literal implements Serializable {
         return false;
       }
       List o = (List) (other);
-      return value.equals(o.value);
+      return other instanceof Literal;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -223,12 +215,12 @@ public abstract class Literal implements Serializable {
         return false;
       }
       Map o = (Map) (other);
-      return value.equals(o.value);
+      return other instanceof Literal;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

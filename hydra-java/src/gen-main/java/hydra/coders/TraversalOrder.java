@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Specifies either a pre-order or post-order traversal
  */
-public abstract class TraversalOrder implements Serializable {
+public abstract class TraversalOrder implements Serializable, Comparable<TraversalOrder> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.TraversalOrder");
   
   public static final hydra.core.Name FIELD_NAME_PRE = new hydra.core.Name("pre");
@@ -44,11 +44,8 @@ public abstract class TraversalOrder implements Serializable {
    * Pre-order traversal
    */
   public static final class Pre extends hydra.coders.TraversalOrder implements Serializable {
-    public final Boolean value;
+    public Pre () {
     
-    public Pre (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -57,12 +54,22 @@ public abstract class TraversalOrder implements Serializable {
         return false;
       }
       Pre o = (Pre) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TraversalOrder other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -75,11 +82,8 @@ public abstract class TraversalOrder implements Serializable {
    * Post-order traversal
    */
   public static final class Post extends hydra.coders.TraversalOrder implements Serializable {
-    public final Boolean value;
+    public Post () {
     
-    public Post (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -88,12 +92,22 @@ public abstract class TraversalOrder implements Serializable {
         return false;
       }
       Post o = (Post) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TraversalOrder other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

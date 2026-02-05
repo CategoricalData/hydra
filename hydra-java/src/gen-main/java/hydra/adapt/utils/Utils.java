@@ -7,40 +7,41 @@ package hydra.adapt.utils;
  */
 public interface Utils {
   static <T0, T1> hydra.compute.Coder<T1, T1, T0, T0> bidirectional(java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>> f) {
-    return (hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) (new hydra.compute.Coder<T1, T1, T0, T0>((java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> (((f)).apply(new hydra.coders.CoderDirection.Encode(true))).apply((v1))), (java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> (((f)).apply(new hydra.coders.CoderDirection.Decode(true))).apply((v1))))))));
+    return (hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) (new hydra.compute.Coder<T1, T1, T0, T0>((java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> (((f)).apply(new hydra.coders.CoderDirection.Encode())).apply((v1))), (java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> (((f)).apply(new hydra.coders.CoderDirection.Decode())).apply((v1))))))));
   }
   
   static <T0, T1, T2, T3, T4> hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> chooseAdapter(java.util.function.Function<T0, hydra.compute.Flow<T1, java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>> alts, java.util.function.Function<T0, Boolean> supported, java.util.function.Function<T0, String> show, java.util.function.Function<T0, String> describe, T0 typ) {
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       ((supported)).apply((typ)),
-      hydra.lib.flows.Pure.apply((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) (new hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>(false, (typ), (typ), hydra.adapt.utils.Utils.<T2, T3, T4>idCoder())))))))),
-      hydra.lib.flows.Bind.apply(
+      () -> hydra.lib.flows.Pure.apply((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) (new hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>(false, (typ), (typ), hydra.adapt.utils.Utils.<T2, T3, T4>idCoder())))))))),
+      () -> hydra.lib.flows.Bind.apply(
         ((alts)).apply((typ)),
-        (java.util.function.Function<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>, hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>) (raw -> hydra.lib.logic.IfElse.apply(
-          hydra.lib.lists.Null.apply(hydra.adapt.utils.Utils.<T2, T3, T0, T0, T4, T4>chooseAdapter_candidates(
+        (java.util.function.Function<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>, hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>) (raw -> {
+          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T2, T3, T0, T0, T4, T4>chooseAdapter_candidates(
             (raw),
-            (supported))),
-          hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
-            "no adapters found for ",
-            ((describe)).apply((typ)),
-            hydra.lib.logic.IfElse.apply(
-              hydra.lib.lists.Null.apply((raw)),
-              "",
-              hydra.lib.strings.Cat.apply(java.util.List.of(
-                " (discarded ",
-                hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply((raw))),
-                " unsupported candidate types: ",
-                hydra.show.core.Core.<T0>list(
-                  (show),
-                  hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) (projected -> projected.target)))))),
-                    (raw))),
-                ")"))),
-            ". Original type: ",
-            ((show)).apply((typ))))),
-          hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(hydra.adapt.utils.Utils.<T2, T3, T0, T0, T4, T4>chooseAdapter_candidates(
-            (raw),
-            (supported))))))));
+            (supported)));
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.lists.Null.apply(candidates.get()),
+            () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
+              "no adapters found for ",
+              ((describe)).apply((typ)),
+              hydra.lib.logic.IfElse.lazy(
+                hydra.lib.lists.Null.apply((raw)),
+                () -> "",
+                () -> hydra.lib.strings.Cat.apply(java.util.List.of(
+                  " (discarded ",
+                  hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply((raw))),
+                  " unsupported candidate types: ",
+                  hydra.show.core.Core.<T0>list(
+                    (show),
+                    hydra.lib.lists.Map.apply(
+                      (java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) (projected -> projected.target)))))),
+                      (raw))),
+                  ")"))),
+              ". Original type: ",
+              ((show)).apply((typ))))),
+            () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(candidates.get())));
+        })));
   }
   
   static <T0, T1, T2, T3, T4, T5> java.util.List<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>> chooseAdapter_candidates(java.util.List<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>> raw, java.util.function.Function<T3, Boolean> supported) {
@@ -127,24 +128,24 @@ public interface Utils {
       "/",
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<String, String>) (part -> hydra.formatting.Formatting.convertCase(
-          new hydra.util.CaseConvention.Camel(true),
+          new hydra.util.CaseConvention.Camel(),
           (nsConv),
           (part))),
         hydra.lib.strings.SplitOn.apply(
           ".",
           ((ns2)).value))));
-    String prefix = hydra.lib.maybes.Maybe.apply(
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         ((nsToFilePath)).apply((n)),
         "/")),
-      (ns));
+      (ns)));
     String suffix = hydra.formatting.Formatting.convertCase(
-      new hydra.util.CaseConvention.Pascal(true),
+      new hydra.util.CaseConvention.Pascal(),
       (localConv),
       (local));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
-      (prefix),
+      prefix.get(),
       (suffix),
       ".",
       ((ext)).value));

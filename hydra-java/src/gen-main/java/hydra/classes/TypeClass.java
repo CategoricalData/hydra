@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Any of a small number of built-in type classes
  */
-public abstract class TypeClass implements Serializable {
+public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.classes.TypeClass");
   
   public static final hydra.core.Name FIELD_NAME_EQUALITY = new hydra.core.Name("equality");
@@ -41,11 +41,8 @@ public abstract class TypeClass implements Serializable {
   }
   
   public static final class Equality extends hydra.classes.TypeClass implements Serializable {
-    public final Boolean value;
+    public Equality () {
     
-    public Equality (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -54,12 +51,22 @@ public abstract class TypeClass implements Serializable {
         return false;
       }
       Equality o = (Equality) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeClass other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -69,11 +76,8 @@ public abstract class TypeClass implements Serializable {
   }
   
   public static final class Ordering extends hydra.classes.TypeClass implements Serializable {
-    public final Boolean value;
+    public Ordering () {
     
-    public Ordering (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -82,12 +86,22 @@ public abstract class TypeClass implements Serializable {
         return false;
       }
       Ordering o = (Ordering) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeClass other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

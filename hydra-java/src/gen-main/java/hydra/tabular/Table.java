@@ -2,10 +2,12 @@
 
 package hydra.tabular;
 
+import java.io.Serializable;
+
 /**
  * A simple table as in a CSV file, having an optional header row and any number of data rows
  */
-public class Table<V> {
+public class Table<V> implements Serializable, Comparable<Table<V>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.tabular.Table");
   
   public static final hydra.core.Name FIELD_NAME_HEADER = new hydra.core.Name("header");
@@ -23,8 +25,6 @@ public class Table<V> {
   public final java.util.List<hydra.tabular.DataRow<V>> data;
   
   public Table (hydra.util.Maybe<hydra.tabular.HeaderRow> header, java.util.List<hydra.tabular.DataRow<V>> data) {
-    java.util.Objects.requireNonNull((header));
-    java.util.Objects.requireNonNull((data));
     this.header = header;
     this.data = data;
   }
@@ -35,21 +35,38 @@ public class Table<V> {
       return false;
     }
     Table o = (Table) (other);
-    return header.equals(o.header) && data.equals(o.data);
+    return java.util.Objects.equals(
+      this.header,
+      o.header) && java.util.Objects.equals(
+      this.data,
+      o.data);
   }
   
   @Override
   public int hashCode() {
-    return 2 * header.hashCode() + 3 * data.hashCode();
+    return 2 * java.util.Objects.hashCode(header) + 3 * java.util.Objects.hashCode(data);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Table other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      header.hashCode(),
+      other.header.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      data.hashCode(),
+      other.data.hashCode());
   }
   
   public Table withHeader(hydra.util.Maybe<hydra.tabular.HeaderRow> header) {
-    java.util.Objects.requireNonNull((header));
     return new Table(header, data);
   }
   
   public Table withData(java.util.List<hydra.tabular.DataRow<V>> data) {
-    java.util.Objects.requireNonNull((data));
     return new Table(header, data);
   }
 }

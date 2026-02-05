@@ -2,10 +2,12 @@
 
 package hydra.workflow;
 
+import java.io.Serializable;
+
 /**
  * The last mile of a transformation, which encodes and serializes terms to a file
  */
-public class LastMile<S, A> {
+public class LastMile<S, A> implements Serializable, Comparable<LastMile<S, A>> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.LastMile");
   
   public static final hydra.core.Name FIELD_NAME_ENCODER = new hydra.core.Name("encoder");
@@ -30,9 +32,6 @@ public class LastMile<S, A> {
   public final String fileExtension;
   
   public LastMile (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder, java.util.function.Function<java.util.List<A>, hydra.compute.Flow<S, String>> serializer, String fileExtension) {
-    java.util.Objects.requireNonNull((encoder));
-    java.util.Objects.requireNonNull((serializer));
-    java.util.Objects.requireNonNull((fileExtension));
     this.encoder = encoder;
     this.serializer = serializer;
     this.fileExtension = fileExtension;
@@ -44,26 +43,48 @@ public class LastMile<S, A> {
       return false;
     }
     LastMile o = (LastMile) (other);
-    return encoder.equals(o.encoder) && serializer.equals(o.serializer) && fileExtension.equals(o.fileExtension);
+    return java.util.Objects.equals(
+      this.encoder,
+      o.encoder) && java.util.Objects.equals(
+      this.serializer,
+      o.serializer) && java.util.Objects.equals(
+      this.fileExtension,
+      o.fileExtension);
   }
   
   @Override
   public int hashCode() {
-    return 2 * encoder.hashCode() + 3 * serializer.hashCode() + 5 * fileExtension.hashCode();
+    return 2 * java.util.Objects.hashCode(encoder) + 3 * java.util.Objects.hashCode(serializer) + 5 * java.util.Objects.hashCode(fileExtension);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(LastMile other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      encoder.hashCode(),
+      other.encoder.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      serializer.hashCode(),
+      other.serializer.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (fileExtension)).compareTo(other.fileExtension);
   }
   
   public LastMile withEncoder(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder) {
-    java.util.Objects.requireNonNull((encoder));
     return new LastMile(encoder, serializer, fileExtension);
   }
   
   public LastMile withSerializer(java.util.function.Function<java.util.List<A>, hydra.compute.Flow<S, String>> serializer) {
-    java.util.Objects.requireNonNull((serializer));
     return new LastMile(encoder, serializer, fileExtension);
   }
   
   public LastMile withFileExtension(String fileExtension) {
-    java.util.Objects.requireNonNull((fileExtension));
     return new LastMile(encoder, serializer, fileExtension);
   }
 }

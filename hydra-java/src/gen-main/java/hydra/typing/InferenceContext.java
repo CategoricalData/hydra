@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The context provided to type inference, including various typing environments.
  */
-public class InferenceContext implements Serializable {
+public class InferenceContext implements Serializable, Comparable<InferenceContext> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.InferenceContext");
   
   public static final hydra.core.Name FIELD_NAME_SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
@@ -46,11 +46,6 @@ public class InferenceContext implements Serializable {
   public final Boolean debug;
   
   public InferenceContext (java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> primitiveTypes, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> dataTypes, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, Boolean debug) {
-    java.util.Objects.requireNonNull((schemaTypes));
-    java.util.Objects.requireNonNull((primitiveTypes));
-    java.util.Objects.requireNonNull((dataTypes));
-    java.util.Objects.requireNonNull((classConstraints));
-    java.util.Objects.requireNonNull((debug));
     this.schemaTypes = schemaTypes;
     this.primitiveTypes = primitiveTypes;
     this.dataTypes = dataTypes;
@@ -64,36 +59,72 @@ public class InferenceContext implements Serializable {
       return false;
     }
     InferenceContext o = (InferenceContext) (other);
-    return schemaTypes.equals(o.schemaTypes) && primitiveTypes.equals(o.primitiveTypes) && dataTypes.equals(o.dataTypes) && classConstraints.equals(o.classConstraints) && debug.equals(o.debug);
+    return java.util.Objects.equals(
+      this.schemaTypes,
+      o.schemaTypes) && java.util.Objects.equals(
+      this.primitiveTypes,
+      o.primitiveTypes) && java.util.Objects.equals(
+      this.dataTypes,
+      o.dataTypes) && java.util.Objects.equals(
+      this.classConstraints,
+      o.classConstraints) && java.util.Objects.equals(
+      this.debug,
+      o.debug);
   }
   
   @Override
   public int hashCode() {
-    return 2 * schemaTypes.hashCode() + 3 * primitiveTypes.hashCode() + 5 * dataTypes.hashCode() + 7 * classConstraints.hashCode() + 11 * debug.hashCode();
+    return 2 * java.util.Objects.hashCode(schemaTypes) + 3 * java.util.Objects.hashCode(primitiveTypes) + 5 * java.util.Objects.hashCode(dataTypes) + 7 * java.util.Objects.hashCode(classConstraints) + 11 * java.util.Objects.hashCode(debug);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(InferenceContext other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      schemaTypes.hashCode(),
+      other.schemaTypes.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      primitiveTypes.hashCode(),
+      other.primitiveTypes.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      dataTypes.hashCode(),
+      other.dataTypes.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      classConstraints.hashCode(),
+      other.classConstraints.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (debug)).compareTo(other.debug);
   }
   
   public InferenceContext withSchemaTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes) {
-    java.util.Objects.requireNonNull((schemaTypes));
     return new InferenceContext(schemaTypes, primitiveTypes, dataTypes, classConstraints, debug);
   }
   
   public InferenceContext withPrimitiveTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> primitiveTypes) {
-    java.util.Objects.requireNonNull((primitiveTypes));
     return new InferenceContext(schemaTypes, primitiveTypes, dataTypes, classConstraints, debug);
   }
   
   public InferenceContext withDataTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> dataTypes) {
-    java.util.Objects.requireNonNull((dataTypes));
     return new InferenceContext(schemaTypes, primitiveTypes, dataTypes, classConstraints, debug);
   }
   
   public InferenceContext withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
-    java.util.Objects.requireNonNull((classConstraints));
     return new InferenceContext(schemaTypes, primitiveTypes, dataTypes, classConstraints, debug);
   }
   
   public InferenceContext withDebug(Boolean debug) {
-    java.util.Objects.requireNonNull((debug));
     return new InferenceContext(schemaTypes, primitiveTypes, dataTypes, classConstraints, debug);
   }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A node in a query expression; it may be a term, a variable, or a wildcard
  */
-public abstract class Node implements Serializable {
+public abstract class Node implements Serializable, Comparable<Node> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Node");
   
   public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
@@ -55,7 +55,6 @@ public abstract class Node implements Serializable {
     public final hydra.core.Term value;
     
     public Term (hydra.core.Term value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -65,12 +64,25 @@ public abstract class Node implements Serializable {
         return false;
       }
       Term o = (Term) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Term o = (Term) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -86,7 +98,6 @@ public abstract class Node implements Serializable {
     public final hydra.query.Variable value;
     
     public Variable (hydra.query.Variable value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -96,12 +107,25 @@ public abstract class Node implements Serializable {
         return false;
       }
       Variable o = (Variable) (other);
-      return value.equals(o.value);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Variable o = (Variable) (other);
+      return ((Comparable) (value)).compareTo(o.value);
     }
     
     @Override
@@ -114,11 +138,8 @@ public abstract class Node implements Serializable {
    * An anonymous variable which we do not care to join across patterns
    */
   public static final class Wildcard extends hydra.query.Node implements Serializable {
-    public final Boolean value;
+    public Wildcard () {
     
-    public Wildcard (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -127,12 +148,22 @@ public abstract class Node implements Serializable {
         return false;
       }
       Wildcard o = (Wildcard) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

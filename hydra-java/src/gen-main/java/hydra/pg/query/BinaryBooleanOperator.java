@@ -55,16 +55,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof And)) {
-        return false;
-      }
-      And o = (And) (other);
-      return value.equals(o.value);
+      return other instanceof And;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -83,16 +79,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Or)) {
-        return false;
-      }
-      Or o = (Or) (other);
-      return value.equals(o.value);
+      return other instanceof Or;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -111,16 +103,12 @@ public abstract class BinaryBooleanOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Xor)) {
-        return false;
-      }
-      Xor o = (Xor) (other);
-      return value.equals(o.value);
+      return other instanceof Xor;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

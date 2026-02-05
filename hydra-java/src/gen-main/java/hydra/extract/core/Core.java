@@ -105,15 +105,15 @@ public interface Core {
         (name),
         (term)),
       (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Field>>) (cs -> {
-        java.util.List<hydra.core.Field> matching = hydra.lib.lists.Filter.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Field>> matching = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
             (((f)).name).value,
             ((fieldName)).value)),
-          ((cs)).cases);
-        return hydra.lib.logic.IfElse.apply(
-          hydra.lib.lists.Null.apply((matching)),
-          hydra.lib.flows.Fail.apply("not enough cases"),
-          hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply((matching))));
+          ((cs)).cases));
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.lists.Null.apply(matching.get()),
+          () -> hydra.lib.flows.Fail.apply("not enough cases"),
+          () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(matching.get())));
       }));
   }
   
@@ -157,12 +157,12 @@ public interface Core {
               
               @Override
               public hydra.compute.Flow<T0, hydra.core.CaseStatement> visit(hydra.core.Elimination.Union cs) {
-                return hydra.lib.logic.IfElse.apply(
+                return hydra.lib.logic.IfElse.lazy(
                   hydra.lib.equality.Equal.apply(
                     ((((cs)).value).typeName).value,
                     ((name)).value),
-                  hydra.lib.flows.Pure.apply(((cs)).value),
-                  hydra.monads.Monads.unexpected(
+                  () -> hydra.lib.flows.Pure.apply(((cs)).value),
+                  () -> hydra.monads.Monads.unexpected(
                     hydra.lib.strings.Cat2.apply(
                       "case statement for type ",
                       ((name)).value),
@@ -176,26 +176,26 @@ public interface Core {
   }
   
   static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> field(hydra.core.Name fname, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> mapping, java.util.List<hydra.core.Field> fields) {
-    java.util.List<hydra.core.Field> matchingFields = hydra.lib.lists.Filter.apply(
+    hydra.util.Lazy<java.util.List<hydra.core.Field>> matchingFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
         (((f)).name).value,
         ((fname)).value)),
-      (fields));
-    return hydra.lib.logic.IfElse.apply(
-      hydra.lib.lists.Null.apply((matchingFields)),
-      hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+      (fields)));
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.lists.Null.apply(matchingFields.get()),
+      () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           "field ",
           ((fname)).value),
         " not found")),
-      hydra.lib.logic.IfElse.apply(
+      () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
-          hydra.lib.lists.Length.apply((matchingFields)),
+          hydra.lib.lists.Length.apply(matchingFields.get()),
           1),
-        hydra.lib.flows.Bind.apply(
-          hydra.lexical.Lexical.stripAndDereferenceTerm((hydra.lib.lists.Head.apply((matchingFields))).term),
+        () -> hydra.lib.flows.Bind.apply(
+          hydra.lexical.Lexical.stripAndDereferenceTerm((hydra.lib.lists.Head.apply(matchingFields.get())).term),
           (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>) (stripped -> ((mapping)).apply((stripped)))),
-        hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+        () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
           "multiple fields named ",
           ((fname)).value))));
   }
@@ -357,12 +357,12 @@ public interface Core {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Field> visit(hydra.core.Term.Union injection) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((((injection)).value).typeName).value,
             ((expected)).value),
-          hydra.lib.flows.Pure.apply((((injection)).value).field),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.lib.flows.Pure.apply((((injection)).value).field),
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "injection of type ",
               ((expected)).value),
@@ -536,22 +536,22 @@ public interface Core {
     return hydra.lib.flows.Bind.apply(
       hydra.extract.core.Core.let((term)),
       (java.util.function.Function<hydra.core.Let, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (letExpr -> {
-        java.util.List<hydra.core.Binding> matchingBindings = hydra.lib.lists.Filter.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> matchingBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
             (((b)).name).value,
             ((name)).value)),
-          ((letExpr)).bindings);
-        return hydra.lib.logic.IfElse.apply(
-          hydra.lib.lists.Null.apply((matchingBindings)),
-          hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+          ((letExpr)).bindings));
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.lists.Null.apply(matchingBindings.get()),
+          () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
             "no such binding: ",
             (n))),
-          hydra.lib.logic.IfElse.apply(
+          () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              hydra.lib.lists.Length.apply((matchingBindings)),
+              hydra.lib.lists.Length.apply(matchingBindings.get()),
               1),
-            hydra.lib.flows.Pure.apply((hydra.lib.lists.Head.apply((matchingBindings))).term),
-            hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+            () -> hydra.lib.flows.Pure.apply((hydra.lib.lists.Head.apply(matchingBindings.get())).term),
+            () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
               "multiple bindings named ",
               (n)))));
       }));
@@ -608,10 +608,10 @@ public interface Core {
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> listHead(hydra.core.Term term) {
     return hydra.lib.flows.Bind.apply(
       hydra.extract.core.Core.list((term)),
-      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (l -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (l -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply((l)),
-        hydra.lib.flows.Fail.apply("empty list"),
-        hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply((l))))));
+        () -> hydra.lib.flows.Fail.apply("empty list"),
+        () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply((l))))));
   }
   
   static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.List<T0>> listOf(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> f, hydra.core.Term term) {
@@ -676,12 +676,12 @@ public interface Core {
   }
   
   static <T0, T1, T2, T3, T4> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>> map_pair(java.util.function.Function<T0, hydra.compute.Flow<T1, T2>> fk, java.util.function.Function<T3, hydra.compute.Flow<T1, T4>> fv, hydra.util.Tuple.Tuple2<T0, T3> kvPair) {
-    T0 kterm = hydra.lib.pairs.First.apply((kvPair));
-    T3 vterm = hydra.lib.pairs.Second.apply((kvPair));
+    hydra.util.Lazy<T0> kterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((kvPair)));
+    hydra.util.Lazy<T3> vterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((kvPair)));
     return hydra.lib.flows.Bind.apply(
-      ((fk)).apply((kterm)),
+      ((fk)).apply(kterm.get()),
       (java.util.function.Function<T2, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>>>) (kval -> hydra.lib.flows.Bind.apply(
-        ((fv)).apply((vterm)),
+        ((fv)).apply(vterm.get()),
         (java.util.function.Function<T4, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>>>) (vval -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T2, T4>) ((hydra.util.Tuple.Tuple2<T2, T4>) (new hydra.util.Tuple.Tuple2<T2, T4>((kval), (vval)))))))));
   }
   
@@ -722,13 +722,13 @@ public interface Core {
     });
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, Boolean> nArgs(hydra.core.Name name, Integer n, java.util.List<T0> args) {
-    return hydra.lib.logic.IfElse.apply(
+  static <T0, T1> hydra.compute.Flow<T1, java.lang.Void> nArgs(hydra.core.Name name, Integer n, java.util.List<T0> args) {
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply((args)),
         (n)),
-      hydra.lib.flows.Pure.apply(true),
-      hydra.monads.Monads.<T1, Boolean>unexpected(
+      () -> hydra.lib.flows.Pure.apply(null),
+      () -> hydra.monads.Monads.<T1, java.lang.Void>unexpected(
         hydra.lib.strings.Cat.apply(java.util.List.of(
           hydra.lib.literals.ShowInt32.apply((n)),
           " arguments to primitive ",
@@ -816,12 +816,12 @@ public interface Core {
   static hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Field>> record(hydra.core.Name expected, hydra.core.Term term0) {
     return hydra.lib.flows.Bind.apply(
       hydra.extract.core.Core.termRecord((term0)),
-      (java.util.function.Function<hydra.core.Record, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Field>>>) (record -> hydra.lib.logic.IfElse.apply(
+      (java.util.function.Function<hydra.core.Record, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Field>>>) (record -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           ((record)).typeName,
           (expected)),
-        hydra.lib.flows.Pure.apply(((record)).fields),
-        hydra.monads.Monads.unexpected(
+        () -> hydra.lib.flows.Pure.apply(((record)).fields),
+        () -> hydra.monads.Monads.unexpected(
           hydra.lib.strings.Cat2.apply(
             "record of type ",
             ((expected)).value),
@@ -840,12 +840,12 @@ public interface Core {
       
       @Override
       public hydra.compute.Flow<T0, java.util.List<hydra.core.FieldType>> visit(hydra.core.Type.Record rowType) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((((rowType)).value).typeName).value,
             ((ename)).value),
-          hydra.lib.flows.Pure.apply((((rowType)).value).fields),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.lib.flows.Pure.apply((((rowType)).value).fields),
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "record of type ",
               ((ename)).value),
@@ -1059,12 +1059,12 @@ public interface Core {
       
       @Override
       public hydra.compute.Flow<T0, java.util.List<hydra.core.FieldType>> visit(hydra.core.Type.Union rowType) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             (((rowType)).value).typeName,
             (ename)),
-          hydra.lib.flows.Pure.apply((((rowType)).value).fields),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.lib.flows.Pure.apply((((rowType)).value).fields),
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "union of type ",
               ((ename)).value),
@@ -1075,18 +1075,18 @@ public interface Core {
     });
   }
   
-  static <T0> hydra.compute.Flow<T0, Boolean> unit(hydra.core.Term term) {
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> unit(hydra.core.Term term) {
     return ((term)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, Boolean> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, Boolean>unexpected(
+      public hydra.compute.Flow<T0, java.lang.Void> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.<T0, java.lang.Void>unexpected(
           "unit",
           hydra.show.core.Core.term((term)));
       }
       
       @Override
-      public hydra.compute.Flow<T0, Boolean> visit(hydra.core.Term.Unit ignored) {
-        return hydra.lib.flows.Pure.apply(true);
+      public hydra.compute.Flow<T0, java.lang.Void> visit(hydra.core.Term.Unit ignored) {
+        return hydra.lib.flows.Pure.apply(null);
       }
     });
   }
@@ -1098,7 +1098,7 @@ public interface Core {
         (term)),
       (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Name>>) (field -> hydra.lib.flows.Bind.apply(
         hydra.extract.core.Core.unit(((field)).term),
-        (java.util.function.Function<Boolean, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Name>>) (ignored -> hydra.lib.flows.Pure.apply(((field)).name)))));
+        (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Name>>) (ignored -> hydra.lib.flows.Pure.apply(((field)).name)))));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> wrap(hydra.core.Name expected, hydra.core.Term term0) {
@@ -1125,12 +1125,12 @@ public interface Core {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Term.Wrap wrappedTerm) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((((wrappedTerm)).value).typeName).value,
             ((expected)).value),
-          hydra.lib.flows.Pure.apply((((wrappedTerm)).value).body),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.lib.flows.Pure.apply((((wrappedTerm)).value).body),
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "wrapper of type ",
               ((expected)).value),
@@ -1151,12 +1151,12 @@ public interface Core {
       
       @Override
       public hydra.compute.Flow<T0, hydra.core.Type> visit(hydra.core.Type.Wrap wrappedType) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             ((((wrappedType)).value).typeName).value,
             ((ename)).value),
-          hydra.lib.flows.Pure.apply((((wrappedType)).value).body),
-          hydra.monads.Monads.unexpected(
+          () -> hydra.lib.flows.Pure.apply((((wrappedType)).value).body),
+          () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
               "wrapped type ",
               ((ename)).value),

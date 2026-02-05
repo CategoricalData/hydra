@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A predefined fold operation for testing foldOverTerm
  */
-public abstract class FoldOperation implements Serializable {
+public abstract class FoldOperation implements Serializable, Comparable<FoldOperation> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.FoldOperation");
   
   public static final hydra.core.Name FIELD_NAME_SUM_INT32_LITERALS = new hydra.core.Name("sumInt32Literals");
@@ -52,11 +52,8 @@ public abstract class FoldOperation implements Serializable {
    * Sum all Int32 literals in a term
    */
   public static final class SumInt32Literals extends hydra.testing.FoldOperation implements Serializable {
-    public final Boolean value;
+    public SumInt32Literals () {
     
-    public SumInt32Literals (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -65,12 +62,22 @@ public abstract class FoldOperation implements Serializable {
         return false;
       }
       SumInt32Literals o = (SumInt32Literals) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FoldOperation other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -83,11 +90,8 @@ public abstract class FoldOperation implements Serializable {
    * Collect the lengths of all list terms (returns list of integers in traversal order)
    */
   public static final class CollectListLengths extends hydra.testing.FoldOperation implements Serializable {
-    public final Boolean value;
+    public CollectListLengths () {
     
-    public CollectListLengths (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -96,12 +100,22 @@ public abstract class FoldOperation implements Serializable {
         return false;
       }
       CollectListLengths o = (CollectListLengths) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FoldOperation other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -114,11 +128,8 @@ public abstract class FoldOperation implements Serializable {
    * Collect labels (first element of pairs where first is a string literal)
    */
   public static final class CollectLabels extends hydra.testing.FoldOperation implements Serializable {
-    public final Boolean value;
+    public CollectLabels () {
     
-    public CollectLabels (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -127,12 +138,22 @@ public abstract class FoldOperation implements Serializable {
         return false;
       }
       CollectLabels o = (CollectLabels) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(FoldOperation other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

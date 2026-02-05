@@ -39,16 +39,12 @@ public abstract class UnaryOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Negate)) {
-        return false;
-      }
-      Negate o = (Negate) (other);
-      return value.equals(o.value);
+      return other instanceof Negate;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

@@ -47,16 +47,12 @@ public abstract class SortOrder implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Ascending)) {
-        return false;
-      }
-      Ascending o = (Ascending) (other);
-      return value.equals(o.value);
+      return other instanceof Ascending;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -75,16 +71,12 @@ public abstract class SortOrder implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Descending)) {
-        return false;
-      }
-      Descending o = (Descending) (other);
-      return value.equals(o.value);
+      return other instanceof Descending;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

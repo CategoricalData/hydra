@@ -33,19 +33,19 @@ public interface Names {
   }
   
   static String namespaceToFilePath(hydra.util.CaseConvention caseConv, hydra.module.FileExtension ext, hydra.module.Namespace ns) {
-    java.util.List<String> parts = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, String>) (v1 -> hydra.formatting.Formatting.convertCase(
-        new hydra.util.CaseConvention.Camel(true),
+        new hydra.util.CaseConvention.Camel(),
         (caseConv),
         (v1))),
       hydra.lib.strings.SplitOn.apply(
         ".",
-        ((ns)).value));
+        ((ns)).value)));
     return hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Intercalate.apply(
           "/",
-          (parts)),
+          parts.get()),
         "."),
       ((ext)).value);
   }
@@ -58,41 +58,41 @@ public interface Names {
   }
   
   static hydra.module.QualifiedName qualifyName(hydra.core.Name name) {
-    java.util.List<String> parts = hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
+    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
       ".",
-      ((name)).value));
-    return hydra.lib.logic.IfElse.apply(
+      ((name)).value)));
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         1,
-        hydra.lib.lists.Length.apply((parts))),
-      new hydra.module.QualifiedName((hydra.util.Maybe<hydra.module.Namespace>) (hydra.util.Maybe.<hydra.module.Namespace>nothing()), ((name)).value),
-      new hydra.module.QualifiedName(hydra.util.Maybe.just(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
+        hydra.lib.lists.Length.apply(parts.get())),
+      () -> new hydra.module.QualifiedName((hydra.util.Maybe<hydra.module.Namespace>) (hydra.util.Maybe.<hydra.module.Namespace>nothing()), ((name)).value),
+      () -> new hydra.module.QualifiedName(hydra.util.Maybe.just(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
         ".",
-        hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply((parts)))))), hydra.lib.lists.Head.apply((parts))));
+        hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply(parts.get()))))), hydra.lib.lists.Head.apply(parts.get())));
   }
   
   static String uniqueLabel(java.util.Set<String> visited, String l) {
-    return hydra.lib.logic.IfElse.apply(
+    return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         (l),
         (visited)),
-      hydra.names.Names.uniqueLabel(
+      () -> hydra.names.Names.uniqueLabel(
         (visited),
         hydra.lib.strings.Cat2.apply(
           (l),
           "'")),
-      (l));
+      () -> (l));
   }
   
   static hydra.core.Name unqualifyName(hydra.module.QualifiedName qname) {
-    String prefix = hydra.lib.maybes.Maybe.apply(
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         ((n)).value,
         ".")),
-      ((qname)).namespace);
+      ((qname)).namespace));
     return new hydra.core.Name(hydra.lib.strings.Cat2.apply(
-      (prefix),
+      prefix.get(),
       ((qname)).local));
   }
 }

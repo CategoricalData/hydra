@@ -50,16 +50,12 @@ public abstract class ElementKind implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Vertex)) {
-        return false;
-      }
-      Vertex o = (Vertex) (other);
-      return value.equals(o.value);
+      return other instanceof Vertex;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -78,16 +74,12 @@ public abstract class ElementKind implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Edge)) {
-        return false;
-      }
-      Edge o = (Edge) (other);
-      return value.equals(o.value);
+      return other instanceof Edge;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

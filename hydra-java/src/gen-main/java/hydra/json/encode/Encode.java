@@ -23,29 +23,29 @@ public interface Encode {
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.List terms) {
-        hydra.util.Either<String, java.util.List<hydra.json.model.Value>> results = hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.json.model.Value>>) (t -> hydra.json.encode.Encode.toJson((t))),
-          ((terms)).value);
+          ((terms)).value));
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array((vs))),
-          (results));
+          results.get());
       }
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Set vals) {
-        java.util.List<hydra.core.Term> terms = hydra.lib.sets.ToList.apply(((vals)).value);
-        hydra.util.Either<String, java.util.List<hydra.json.model.Value>> results = hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(((vals)).value));
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.json.model.Value>>) (t -> hydra.json.encode.Encode.toJson((t))),
-          (terms));
+          terms.get()));
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array((vs))),
-          (results));
+          results.get());
       }
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Maybe opt) {
         return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null(true)))),
+          (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null()))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.json.model.Value>>) (v -> {
             hydra.util.Either<String, hydra.json.model.Value> encodedMaybe = hydra.json.encode.Encode.toJson((v));
             return hydra.lib.eithers.Map.apply(
@@ -66,12 +66,12 @@ public interface Encode {
             (encodedField));
         });
         java.util.List<hydra.core.Field> fields = (((r)).value).fields;
-        hydra.util.Either<String, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>> encodedFields = hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>> encodedFields = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           (encodeField),
-          (fields));
+          (fields)));
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>, hydra.json.model.Value>) (fs -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply((fs)))),
-          (encodedFields));
+          encodedFields.get());
       }
       
       @Override
@@ -98,10 +98,10 @@ public interface Encode {
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Map m) {
         java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.json.model.Value>> encodeEntry = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.json.model.Value>>) (kv -> {
-          hydra.core.Term k = hydra.lib.pairs.First.apply((kv));
-          hydra.util.Either<String, hydra.json.model.Value> encodedK = hydra.json.encode.Encode.toJson((k));
-          hydra.core.Term v = hydra.lib.pairs.Second.apply((kv));
-          hydra.util.Either<String, hydra.json.model.Value> encodedV = hydra.json.encode.Encode.toJson((v));
+          hydra.util.Lazy<hydra.core.Term> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((kv)));
+          hydra.util.Either<String, hydra.json.model.Value> encodedK = hydra.json.encode.Encode.toJson(k.get());
+          hydra.util.Lazy<hydra.core.Term> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((kv)));
+          hydra.util.Either<String, hydra.json.model.Value> encodedV = hydra.json.encode.Encode.toJson(v.get());
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<String, hydra.util.Either<String, hydra.json.model.Value>>) (err -> (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>left((err))))),
             (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.json.model.Value>>) (ek -> hydra.lib.eithers.Map.apply(
@@ -111,20 +111,20 @@ public interface Encode {
               (encodedV))),
             (encodedK));
         });
-        hydra.util.Either<String, java.util.List<hydra.json.model.Value>> entries = hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.json.model.Value>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           (encodeEntry),
-          hydra.lib.maps.ToList.apply(((m)).value));
+          hydra.lib.maps.ToList.apply(((m)).value)));
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (es -> new hydra.json.model.Value.Array((es))),
-          (entries));
+          entries.get());
       }
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Pair p) {
-        hydra.core.Term first = hydra.lib.pairs.First.apply(((p)).value);
-        hydra.util.Either<String, hydra.json.model.Value> encodedFirst = hydra.json.encode.Encode.toJson((first));
-        hydra.core.Term second = hydra.lib.pairs.Second.apply(((p)).value);
-        hydra.util.Either<String, hydra.json.model.Value> encodedSecond = hydra.json.encode.Encode.toJson((second));
+        hydra.util.Lazy<hydra.core.Term> first = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(((p)).value));
+        hydra.util.Either<String, hydra.json.model.Value> encodedFirst = hydra.json.encode.Encode.toJson(first.get());
+        hydra.util.Lazy<hydra.core.Term> second = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(((p)).value));
+        hydra.util.Either<String, hydra.json.model.Value> encodedSecond = hydra.json.encode.Encode.toJson(second.get());
         return hydra.lib.eithers.Either.apply(
           (java.util.function.Function<String, hydra.util.Either<String, hydra.json.model.Value>>) (err -> (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>left((err))))),
           (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.json.model.Value>>) (ef -> hydra.lib.eithers.Map.apply(

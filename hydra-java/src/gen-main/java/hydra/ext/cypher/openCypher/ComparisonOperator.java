@@ -79,16 +79,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Eq)) {
-        return false;
-      }
-      Eq o = (Eq) (other);
-      return value.equals(o.value);
+      return other instanceof Eq;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -107,16 +103,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Neq)) {
-        return false;
-      }
-      Neq o = (Neq) (other);
-      return value.equals(o.value);
+      return other instanceof Neq;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -135,16 +127,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Lt)) {
-        return false;
-      }
-      Lt o = (Lt) (other);
-      return value.equals(o.value);
+      return other instanceof Lt;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -163,16 +151,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Gt)) {
-        return false;
-      }
-      Gt o = (Gt) (other);
-      return value.equals(o.value);
+      return other instanceof Gt;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -191,16 +175,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Lte)) {
-        return false;
-      }
-      Lte o = (Lte) (other);
-      return value.equals(o.value);
+      return other instanceof Lte;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -219,16 +199,12 @@ public abstract class ComparisonOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Gte)) {
-        return false;
-      }
-      Gte o = (Gte) (other);
-      return value.equals(o.value);
+      return other instanceof Gte;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

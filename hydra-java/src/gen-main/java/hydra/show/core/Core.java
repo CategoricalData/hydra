@@ -13,16 +13,16 @@ public interface Core {
   static String binding(hydra.core.Binding el) {
     String name = (((el)).name).value;
     hydra.core.Term t = ((el)).term;
-    String typeStr = hydra.lib.maybes.Maybe.apply(
+    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.core.TypeScheme, String>) (ts -> hydra.lib.strings.Cat.apply(java.util.List.of(
         ":(",
         hydra.show.core.Core.typeScheme((ts)),
         ")"))),
-      ((el)).type);
+      ((el)).type));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       (name),
-      (typeStr),
+      typeStr.get(),
       " = ",
       hydra.show.core.Core.term((t))));
   }
@@ -45,19 +45,19 @@ public interface Core {
       public String visit(hydra.core.Elimination.Union cs) {
         java.util.List<hydra.core.Field> cases = (((cs)).value).cases;
         hydra.util.Maybe<hydra.core.Term> mdef = (((cs)).value).default_;
-        java.util.List<hydra.core.Field> defaultField = hydra.lib.maybes.Maybe.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
           (java.util.List<hydra.core.Field>) (java.util.List.<hydra.core.Field>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.List.of(new hydra.core.Field(new hydra.core.Name("[default]"), (d)))),
-          (mdef));
-        java.util.List<hydra.core.Field> allFields = hydra.lib.lists.Concat.apply(java.util.List.of(
+          (mdef)));
+        hydra.util.Lazy<java.util.List<hydra.core.Field>> allFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.List.of(
           (cases),
-          (defaultField)));
+          defaultField.get())));
         String tname = ((((cs)).value).typeName).value;
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "case(",
           (tname),
           ")",
-          hydra.show.core.Core.fields((allFields))));
+          hydra.show.core.Core.fields(allFields.get())));
       }
       
       @Override
@@ -89,14 +89,14 @@ public interface Core {
   }
   
   static String fields(java.util.List<hydra.core.Field> flds) {
-    java.util.List<String> fieldStrs = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> fieldStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (hydra.show.core.Core::field),
-      (flds));
+      (flds)));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "{",
       hydra.lib.strings.Intercalate.apply(
         ", ",
-        (fieldStrs)),
+        fieldStrs.get()),
       "}"));
   }
   
@@ -294,45 +294,45 @@ public interface Core {
   static String lambda(hydra.core.Lambda l) {
     hydra.core.Term body = ((l)).body;
     hydra.util.Maybe<hydra.core.Type> mt = ((l)).domain;
-    String typeStr = hydra.lib.maybes.Maybe.apply(
+    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
       "",
       (java.util.function.Function<hydra.core.Type, String>) (t -> hydra.lib.strings.Cat2.apply(
         ":",
         hydra.show.core.Core.type((t)))),
-      (mt));
+      (mt)));
     String v = (((l)).parameter).value;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "\u03BB",
       (v),
-      (typeStr),
+      typeStr.get(),
       ".",
       hydra.show.core.Core.term((body))));
   }
   
   static String let(hydra.core.Let l) {
     java.util.List<hydra.core.Binding> bindings = ((l)).bindings;
-    java.util.List<String> bindingStrs = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> bindingStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (hydra.show.core.Core::binding),
-      (bindings));
+      (bindings)));
     hydra.core.Term env = ((l)).body;
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "let ",
       hydra.lib.strings.Intercalate.apply(
         ", ",
-        (bindingStrs)),
+        bindingStrs.get()),
       " in ",
       hydra.show.core.Core.term((env))));
   }
   
   static <T0> String list(java.util.function.Function<T0, String> f, java.util.List<T0> xs) {
-    java.util.List<String> elementStrs = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> elementStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (f),
-      (xs));
+      (xs)));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "[",
       hydra.lib.strings.Intercalate.apply(
         ", ",
-        (elementStrs)),
+        elementStrs.get()),
       "]"));
   }
   
@@ -345,10 +345,10 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Literal.Boolean_ b) {
-        return hydra.lib.logic.IfElse.apply(
+        return hydra.lib.logic.IfElse.lazy(
           ((b)).value,
-          "true",
-          "false");
+          () -> "true",
+          () -> "false");
       }
       
       @Override
@@ -428,15 +428,15 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Application app) {
-        java.util.List<hydra.core.Term> terms = ((gatherTerms.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(((app)).value);
-        java.util.List<String> termStrs = hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> ((gatherTerms.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(((app)).value));
+        hydra.util.Lazy<java.util.List<String>> termStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::term),
-          (terms));
+          terms.get()));
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
           hydra.lib.strings.Intercalate.apply(
             " @ ",
-            (termStrs)),
+            termStrs.get()),
           ")"));
       }
       
@@ -466,14 +466,14 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.List els) {
-        java.util.List<String> termStrs = hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<String>> termStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::term),
-          ((els)).value);
+          ((els)).value));
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "[",
           hydra.lib.strings.Intercalate.apply(
             ", ",
-            (termStrs)),
+            termStrs.get()),
           "]"));
       }
       
@@ -636,14 +636,14 @@ public interface Core {
     })));
     java.util.function.Function<hydra.core.RowType, String> showRowType = (java.util.function.Function<hydra.core.RowType, String>) (rt -> {
       java.util.List<hydra.core.FieldType> flds = ((rt)).fields;
-      java.util.List<String> fieldStrs = hydra.lib.lists.Map.apply(
+      hydra.util.Lazy<java.util.List<String>> fieldStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
         (hydra.show.core.Core::fieldType),
-        (flds));
+        (flds)));
       return hydra.lib.strings.Cat.apply(java.util.List.of(
         "{",
         hydra.lib.strings.Intercalate.apply(
           ", ",
-          (fieldStrs)),
+          fieldStrs.get()),
         "}"));
     });
     return ((typ)).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -654,15 +654,15 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Application app) {
-        java.util.List<hydra.core.Type> types = ((gatherTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply(((app)).value);
-        java.util.List<String> typeStrs = hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply(((app)).value));
+        hydra.util.Lazy<java.util.List<String>> typeStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::type),
-          (types));
+          types.get()));
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
           hydra.lib.strings.Intercalate.apply(
             " @ ",
-            (typeStrs)),
+            typeStrs.get()),
           ")"));
       }
       
@@ -692,15 +692,15 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Function ft) {
-        java.util.List<hydra.core.Type> types = ((gatherFunctionTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply((typ));
-        java.util.List<String> typeStrs = hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherFunctionTypes.get()).apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))).apply((typ)));
+        hydra.util.Lazy<java.util.List<String>> typeStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (hydra.show.core.Core::type),
-          (types));
+          types.get()));
         return hydra.lib.strings.Cat.apply(java.util.List.of(
           "(",
           hydra.lib.strings.Intercalate.apply(
             " \u2192 ",
-            (typeStrs)),
+            typeStrs.get()),
           ")"));
       }
       
@@ -798,21 +798,21 @@ public interface Core {
   static String typeScheme(hydra.core.TypeScheme ts) {
     hydra.core.Type body = ((ts)).type;
     java.util.List<hydra.core.Name> vars = ((ts)).variables;
-    java.util.List<String> varNames = hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> varNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       wrapped -> ((wrapped)).value,
-      (vars));
-    String fa = hydra.lib.logic.IfElse.apply(
+      (vars)));
+    hydra.util.Lazy<String> fa = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply((vars)),
-      "",
-      hydra.lib.strings.Cat.apply(java.util.List.of(
+      () -> "",
+      () -> hydra.lib.strings.Cat.apply(java.util.List.of(
         "\u2200[",
         hydra.lib.strings.Intercalate.apply(
           ",",
-          (varNames)),
-        "].")));
+          varNames.get()),
+        "]."))));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "(",
-      (fa),
+      fa.get(),
       hydra.show.core.Core.type((body)),
       ")"));
   }

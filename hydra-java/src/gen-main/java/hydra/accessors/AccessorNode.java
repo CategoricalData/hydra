@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A node in an accessor graph, representing a term or subterm
  */
-public class AccessorNode implements Serializable {
+public class AccessorNode implements Serializable, Comparable<AccessorNode> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorNode");
   
   public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
@@ -32,9 +32,6 @@ public class AccessorNode implements Serializable {
   public final String id;
   
   public AccessorNode (hydra.core.Name name, String label, String id) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((label));
-    java.util.Objects.requireNonNull((id));
     this.name = name;
     this.label = label;
     this.id = id;
@@ -46,26 +43,44 @@ public class AccessorNode implements Serializable {
       return false;
     }
     AccessorNode o = (AccessorNode) (other);
-    return name.equals(o.name) && label.equals(o.label) && id.equals(o.id);
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.label,
+      o.label) && java.util.Objects.equals(
+      this.id,
+      o.id);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * label.hashCode() + 5 * id.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(label) + 5 * java.util.Objects.hashCode(id);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AccessorNode other) {
+    int cmp = 0;
+    cmp = ((Comparable) (name)).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) (label)).compareTo(other.label);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) (id)).compareTo(other.id);
   }
   
   public AccessorNode withName(hydra.core.Name name) {
-    java.util.Objects.requireNonNull((name));
     return new AccessorNode(name, label, id);
   }
   
   public AccessorNode withLabel(String label) {
-    java.util.Objects.requireNonNull((label));
     return new AccessorNode(name, label, id);
   }
   
   public AccessorNode withId(String id) {
-    java.util.Objects.requireNonNull((id));
     return new AccessorNode(name, label, id);
   }
 }

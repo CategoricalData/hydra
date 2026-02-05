@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * The unique name of a language
  */
-public class LanguageName implements Serializable {
+public class LanguageName implements Serializable, Comparable<LanguageName> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.LanguageName");
   
   public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
@@ -15,7 +15,6 @@ public class LanguageName implements Serializable {
   public final String value;
   
   public LanguageName (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -25,11 +24,19 @@ public class LanguageName implements Serializable {
       return false;
     }
     LanguageName o = (LanguageName) (other);
-    return value.equals(o.value);
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(LanguageName other) {
+    return ((Comparable) (value)).compareTo(other.value);
   }
 }

@@ -4,7 +4,7 @@ package hydra.topology;
 
 import java.io.Serializable;
 
-public class TarjanState implements Serializable {
+public class TarjanState implements Serializable, Comparable<TarjanState> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.topology.TarjanState");
   
   public static final hydra.core.Name FIELD_NAME_COUNTER = new hydra.core.Name("counter");
@@ -50,12 +50,6 @@ public class TarjanState implements Serializable {
   public final java.util.List<java.util.List<Integer>> sccs;
   
   public TarjanState (Integer counter, java.util.Map<Integer, Integer> indices, java.util.Map<Integer, Integer> lowLinks, java.util.List<Integer> stack, java.util.Set<Integer> onStack, java.util.List<java.util.List<Integer>> sccs) {
-    java.util.Objects.requireNonNull((counter));
-    java.util.Objects.requireNonNull((indices));
-    java.util.Objects.requireNonNull((lowLinks));
-    java.util.Objects.requireNonNull((stack));
-    java.util.Objects.requireNonNull((onStack));
-    java.util.Objects.requireNonNull((sccs));
     this.counter = counter;
     this.indices = indices;
     this.lowLinks = lowLinks;
@@ -70,41 +64,84 @@ public class TarjanState implements Serializable {
       return false;
     }
     TarjanState o = (TarjanState) (other);
-    return counter.equals(o.counter) && indices.equals(o.indices) && lowLinks.equals(o.lowLinks) && stack.equals(o.stack) && onStack.equals(o.onStack) && sccs.equals(o.sccs);
+    return java.util.Objects.equals(
+      this.counter,
+      o.counter) && java.util.Objects.equals(
+      this.indices,
+      o.indices) && java.util.Objects.equals(
+      this.lowLinks,
+      o.lowLinks) && java.util.Objects.equals(
+      this.stack,
+      o.stack) && java.util.Objects.equals(
+      this.onStack,
+      o.onStack) && java.util.Objects.equals(
+      this.sccs,
+      o.sccs);
   }
   
   @Override
   public int hashCode() {
-    return 2 * counter.hashCode() + 3 * indices.hashCode() + 5 * lowLinks.hashCode() + 7 * stack.hashCode() + 11 * onStack.hashCode() + 13 * sccs.hashCode();
+    return 2 * java.util.Objects.hashCode(counter) + 3 * java.util.Objects.hashCode(indices) + 5 * java.util.Objects.hashCode(lowLinks) + 7 * java.util.Objects.hashCode(stack) + 11 * java.util.Objects.hashCode(onStack) + 13 * java.util.Objects.hashCode(sccs);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TarjanState other) {
+    int cmp = 0;
+    cmp = ((Comparable) (counter)).compareTo(other.counter);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      indices.hashCode(),
+      other.indices.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      lowLinks.hashCode(),
+      other.lowLinks.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      stack.hashCode(),
+      other.stack.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      onStack.hashCode(),
+      other.onStack.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      sccs.hashCode(),
+      other.sccs.hashCode());
   }
   
   public TarjanState withCounter(Integer counter) {
-    java.util.Objects.requireNonNull((counter));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
   public TarjanState withIndices(java.util.Map<Integer, Integer> indices) {
-    java.util.Objects.requireNonNull((indices));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
   public TarjanState withLowLinks(java.util.Map<Integer, Integer> lowLinks) {
-    java.util.Objects.requireNonNull((lowLinks));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
   public TarjanState withStack(java.util.List<Integer> stack) {
-    java.util.Objects.requireNonNull((stack));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
   public TarjanState withOnStack(java.util.Set<Integer> onStack) {
-    java.util.Objects.requireNonNull((onStack));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
   
   public TarjanState withSccs(java.util.List<java.util.List<Integer>> sccs) {
-    java.util.Objects.requireNonNull((sccs));
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 }

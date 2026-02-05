@@ -10,12 +10,12 @@ public interface Coders {
     return ((v1)).accept(new hydra.coders.CoderDirection.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.coders.CoderDirection.Encode y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.coders.CoderDirection.Decode y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -28,12 +28,12 @@ public interface Coders {
     return ((v1)).accept(new hydra.coders.TraversalOrder.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.coders.TraversalOrder.Pre y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("pre"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("pre"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.coders.TraversalOrder.Post y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("post"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("post"), new hydra.core.Term.Unit())));
       }
     });
   }

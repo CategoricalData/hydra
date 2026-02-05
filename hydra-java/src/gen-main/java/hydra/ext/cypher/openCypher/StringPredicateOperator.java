@@ -55,16 +55,12 @@ public abstract class StringPredicateOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof StartsWith)) {
-        return false;
-      }
-      StartsWith o = (StartsWith) (other);
-      return value.equals(o.value);
+      return other instanceof StartsWith;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -83,16 +79,12 @@ public abstract class StringPredicateOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof EndsWith)) {
-        return false;
-      }
-      EndsWith o = (EndsWith) (other);
-      return value.equals(o.value);
+      return other instanceof EndsWith;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override
@@ -111,16 +103,12 @@ public abstract class StringPredicateOperator implements Serializable {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Contains)) {
-        return false;
-      }
-      Contains o = (Contains) (other);
-      return value.equals(o.value);
+      return other instanceof Contains;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return getClass().hashCode();
     }
     
     @Override

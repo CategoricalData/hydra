@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * One of several comparison operators
  */
-public abstract class ComparisonConstraint implements Serializable {
+public abstract class ComparisonConstraint implements Serializable, Comparable<ComparisonConstraint> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.ComparisonConstraint");
   
   public static final hydra.core.Name FIELD_NAME_EQUAL = new hydra.core.Name("equal");
@@ -73,11 +73,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class Equal extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public Equal () {
     
-    public Equal (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -86,12 +83,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       Equal o = (Equal) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -101,11 +108,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class NotEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public NotEqual () {
     
-    public NotEqual (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -114,12 +118,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       NotEqual o = (NotEqual) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -129,11 +143,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class LessThan extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public LessThan () {
     
-    public LessThan (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -142,12 +153,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       LessThan o = (LessThan) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -157,11 +178,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class GreaterThan extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public GreaterThan () {
     
-    public GreaterThan (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -170,12 +188,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       GreaterThan o = (GreaterThan) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -185,11 +213,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class LessThanOrEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public LessThanOrEqual () {
     
-    public LessThanOrEqual (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -198,12 +223,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       LessThanOrEqual o = (LessThanOrEqual) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -213,11 +248,8 @@ public abstract class ComparisonConstraint implements Serializable {
   }
   
   public static final class GreaterThanOrEqual extends hydra.query.ComparisonConstraint implements Serializable {
-    public final Boolean value;
+    public GreaterThanOrEqual () {
     
-    public GreaterThanOrEqual (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -226,12 +258,22 @@ public abstract class ComparisonConstraint implements Serializable {
         return false;
       }
       GreaterThanOrEqual o = (GreaterThanOrEqual) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ComparisonConstraint other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

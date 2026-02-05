@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A predefined type rewriter for testing rewriteType
  */
-public abstract class TypeRewriter implements Serializable {
+public abstract class TypeRewriter implements Serializable, Comparable<TypeRewriter> {
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeRewriter");
   
   public static final hydra.core.Name FIELD_NAME_REPLACE_STRING_WITH_INT32 = new hydra.core.Name("replaceStringWithInt32");
@@ -36,11 +36,8 @@ public abstract class TypeRewriter implements Serializable {
    * Replace all String types with Int32 types
    */
   public static final class ReplaceStringWithInt32 extends hydra.testing.TypeRewriter implements Serializable {
-    public final Boolean value;
+    public ReplaceStringWithInt32 () {
     
-    public ReplaceStringWithInt32 (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
@@ -49,12 +46,22 @@ public abstract class TypeRewriter implements Serializable {
         return false;
       }
       ReplaceStringWithInt32 o = (ReplaceStringWithInt32) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeRewriter other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

@@ -10,32 +10,32 @@ public interface Query {
     return ((v1)).accept(new hydra.query.ComparisonConstraint.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.Equal y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("equal"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("equal"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.NotEqual y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("notEqual"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("notEqual"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.LessThan y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThan"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThan"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.GreaterThan y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThan"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThan"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.LessThanOrEqual y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThanOrEqual"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThanOrEqual"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.ComparisonConstraint.GreaterThanOrEqual y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThanOrEqual"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThanOrEqual"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -73,7 +73,7 @@ public interface Query {
       
       @Override
       public hydra.core.Term visit(hydra.query.Node.Wildcard y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("wildcard"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("wildcard"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -150,22 +150,22 @@ public interface Query {
     return ((v1)).accept(new hydra.query.RegexQuantifier.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.query.RegexQuantifier.One y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("one"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("one"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.RegexQuantifier.ZeroOrOne y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrOne"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrOne"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.RegexQuantifier.ZeroOrMore y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrMore"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrMore"), new hydra.core.Term.Unit())));
       }
       
       @Override
       public hydra.core.Term visit(hydra.query.RegexQuantifier.OneOrMore y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("oneOrMore"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("oneOrMore"), new hydra.core.Term.Unit())));
       }
       
       @Override

@@ -22,7 +22,7 @@ public interface Model {
       
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Null y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("null"), new hydra.core.Term.Unit(true))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("null"), new hydra.core.Term.Unit())));
       }
       
       @Override
