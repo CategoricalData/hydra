@@ -27,6 +27,19 @@ public abstract class Tuple {
         public Tuple1(T1 object1) {
             this.object1 = object1;
         }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            Tuple1<?> o = (Tuple1<?>) other;
+            return java.util.Objects.equals(object1, o.object1);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(object1);
+        }
     }
 
     /**
@@ -47,6 +60,20 @@ public abstract class Tuple {
         public Tuple2(T1 object1, T2 object2) {
             super(object1);
             this.object2 = object2;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            Tuple2<?, ?> o = (Tuple2<?, ?>) other;
+            return java.util.Objects.equals(object1, o.object1)
+                && java.util.Objects.equals(object2, o.object2);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(object1, object2);
         }
     }
 
@@ -70,6 +97,21 @@ public abstract class Tuple {
         public Tuple3(T1 object1, T2 object2, T3 object3) {
             super(object1, object2);
             this.object3 = object3;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            Tuple3<?, ?, ?> o = (Tuple3<?, ?, ?>) other;
+            return java.util.Objects.equals(object1, o.object1)
+                && java.util.Objects.equals(object2, o.object2)
+                && java.util.Objects.equals(object3, o.object3);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(object1, object2, object3);
         }
     }
 
@@ -95,6 +137,22 @@ public abstract class Tuple {
         public Tuple4(T1 object1, T2 object2, T3 object3, T4 object4) {
             super(object1, object2, object3);
             this.object4 = object4;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            Tuple4<?, ?, ?, ?> o = (Tuple4<?, ?, ?, ?>) other;
+            return java.util.Objects.equals(object1, o.object1)
+                && java.util.Objects.equals(object2, o.object2)
+                && java.util.Objects.equals(object3, o.object3)
+                && java.util.Objects.equals(object4, o.object4);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(object1, object2, object3, object4);
         }
     }
 
@@ -122,6 +180,23 @@ public abstract class Tuple {
         public Tuple5(T1 object1, T2 object2, T3 object3, T4 object4, T5 object5) {
             super(object1, object2, object3, object4);
             this.object5 = object5;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            Tuple5<?, ?, ?, ?, ?> o = (Tuple5<?, ?, ?, ?, ?>) other;
+            return java.util.Objects.equals(object1, o.object1)
+                && java.util.Objects.equals(object2, o.object2)
+                && java.util.Objects.equals(object3, o.object3)
+                && java.util.Objects.equals(object4, o.object4)
+                && java.util.Objects.equals(object5, o.object5);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(object1, object2, object3, object4, object5);
         }
     }
 

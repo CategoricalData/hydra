@@ -7,26 +7,30 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * A Hydra binary labeled union type, similar to java.util.Optional.
  * This class implements Serializable and can be used in place of java.util.Optional with frameworks
  * including Spark which require serializable objects.
  *
+ * Unlike Optional, this class can hold null values (e.g. for Void/unit types),
+ * using a separate flag to distinguish Just(null) from Nothing.
+ *
  * @param <T> the element type
  */
 public class Maybe<T> implements Serializable {
     private final T value;
+    private final boolean present;
 
     private Maybe() {
         this.value = null;
+        this.present = false;
     }
 
     private Maybe(T value) {
         this.value = value;
+        this.present = true;
     }
-    
+
     /**
      * Checks if this Maybe is equal to another object.
      *
@@ -44,9 +48,12 @@ public class Maybe<T> implements Serializable {
         }
 
         Maybe<?> other = (Maybe<?>) obj;
+        if (present != other.present) {
+            return false;
+        }
         return Objects.equals(value, other.value);
     }
-    
+
     /**
      * Applies a flatMap operation to this Maybe.
      *
@@ -64,7 +71,7 @@ public class Maybe<T> implements Serializable {
             return Objects.requireNonNull(r);
         }
     }
-    
+
     /**
      * Gets the value if present, otherwise throws an exception. Analogous to Optional.get.
      *
@@ -72,7 +79,7 @@ public class Maybe<T> implements Serializable {
      * @throws NoSuchElementException if no value is present
      */
     public T fromJust() {
-        if (value == null) {
+        if (!present) {
             throw new NoSuchElementException("No value present");
         } else {
             return value;
@@ -86,7 +93,7 @@ public class Maybe<T> implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(value);
+        return present ? Objects.hashCode(value) + 1 : 0;
     }
 
     /**
@@ -95,7 +102,7 @@ public class Maybe<T> implements Serializable {
      * @param action the action to execute
      */
     public void ifJust(Consumer<? super T> action) {
-        if (value != null) {
+        if (present) {
             action.accept(value);
         }
     }
@@ -106,7 +113,7 @@ public class Maybe<T> implements Serializable {
      * @return true if a value is present, false otherwise
      */
     public boolean isJust() {
-        return value != null;
+        return present;
     }
 
     /**
@@ -115,19 +122,18 @@ public class Maybe<T> implements Serializable {
      * @return true if no value is present, false otherwise
      */
     public boolean isNothing() {
-        return value == null;
+        return !present;
     }
 
     /**
-     * Creates a Maybe with the given non-null value. Analogous to Optional.of.
+     * Creates a Maybe with the given value. Analogous to Optional.of, but allows null
+     * values (needed for Void/unit types).
      *
      * @param <T> the type
-     * @param value the value, must not be null
-     * @return an Opt containing the value
-     * @throws NullPointerException if value is null
+     * @param value the value
+     * @return a Maybe containing the value
      */
     public static <T> Maybe<T> just(T value) {
-        requireNonNull(value);
         return new Maybe<>(value);
     }
 
@@ -136,7 +142,7 @@ public class Maybe<T> implements Serializable {
      *
      * @param <T> the type
      * @param value the value, may be null
-     * @return an Opt containing the value if non-null, otherwise an empty Maybe
+     * @return a Maybe containing the value if non-null, otherwise an empty Maybe
      */
     public static <T> Maybe<T> justNullable(T value) {
         return value == null ? nothing() : just(value);
@@ -154,10 +160,10 @@ public class Maybe<T> implements Serializable {
         if (!isJust()) {
             return nothing();
         } else {
-            return Maybe.justNullable(mapper.apply(value));
+            return Maybe.just(mapper.apply(value));
         }
     }
-    
+
     /**
      * Creates an empty Maybe instance. Analogous to Optional.empty().
      *
@@ -175,7 +181,7 @@ public class Maybe<T> implements Serializable {
      * @return the value if present, otherwise the default value
      */
     public T orElse(T other) {
-        return value != null ? value : other;
+        return present ? value : other;
     }
 
     /**
@@ -185,6 +191,6 @@ public class Maybe<T> implements Serializable {
      * @return the value if present, otherwise the result of the supplier
      */
     public T orElseGet(Supplier<? extends T> supplier) {
-        return value != null ? value : supplier.get();
+        return present ? value : supplier.get();
     }
 }
