@@ -32,13 +32,7 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
         @lru_cache(1)
         def codes() -> frozenlist[int]:
             return hydra.lib.strings.to_list(input)
-        @lru_cache(1)
-        def c() -> int:
-            return hydra.lib.lists.head(codes())
-        @lru_cache(1)
-        def rest() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.tail(codes()))
-        return hydra.lib.logic.if_else(hydra.lib.strings.null(input), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input)))), (lambda : hydra.lib.logic.if_else(pred(c()), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c(), rest())))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input)))))))
+        return hydra.lib.maybes.maybe(cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input))), (lambda c: (rest := hydra.lib.strings.from_list(hydra.lib.lists.drop(1, codes())), hydra.lib.logic.if_else(pred(c), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c, rest)))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input))))))[1]), hydra.lib.lists.safe_head(codes()))
     return hydra.parsing.Parser(parse)
 
 @lru_cache(1)
@@ -89,6 +83,9 @@ def eof() -> hydra.parsing.Parser[None]:
     r"""A parser that succeeds only at the end of input."""
     
     return hydra.parsing.Parser((lambda input: hydra.lib.logic.if_else(hydra.lib.equality.equal(input, ""), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(None, "")))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("expected end of input", input)))))))
+
+def lazy(f: Callable[[None], hydra.parsing.Parser[T0]]) -> hydra.parsing.Parser[T0]:
+    return hydra.parsing.Parser((lambda input: f(None).value(input)))
 
 def many(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]]:
     return alt(some(p), pure(()))
