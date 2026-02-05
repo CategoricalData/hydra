@@ -43,5 +43,5 @@ typeSubst ts =
       pairStrs = (Lists.map showPair pairs)
   in (Strings.cat [
     "{",
-    Strings.intercalate "," pairStrs,
+    (Strings.intercalate "," pairStrs),
     "}"])

@@ -49,7 +49,7 @@ schemaSpec cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
                 (Core.Name "provided", (\input -> Eithers.map (\t -> Workflow.SchemaSpecProvided) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.workflow.SchemaSpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

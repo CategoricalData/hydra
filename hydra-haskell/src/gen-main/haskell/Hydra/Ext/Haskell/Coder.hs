@@ -65,7 +65,7 @@ adaptTypeToHaskellAndEncode namespaces = (Modules.adaptTypeToLanguageAndEncode L
 constantForFieldName :: (Core.Name -> Core.Name -> String)
 constantForFieldName tname fname = (Strings.cat [
   "_",
-  Names.localNameOf tname,
+  (Names.localNameOf tname),
   "_",
   (Core.unName fname)])
 
@@ -177,7 +177,7 @@ encodeFunction namespaces fun = ((\x -> case x of
                         hname = (Utils.unionFieldReference namespaces dn fn)
                     in (Flows.bind (Maybes.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
                       "field ",
-                      Literals.showString (Core.unName fn),
+                      (Literals.showString (Core.unName fn)),
                       " not found in ",
                       (Literals.showString (Core.unName dn))])) (\fieldType ->  
                       let ft = (Core.fieldTypeType fieldType) 
@@ -322,7 +322,7 @@ encodeType namespaces typ =
           right = (Core.eitherTypeRight v1)
       in (Flows.map Utils.toTypeApplication (Flows.sequence [
         Flows.pure (Ast.TypeVariable (Utils.rawName "Either")),
-        encode left,
+        (encode left),
         (encode right)]))
     Core.TypeFunction v1 ->  
       let dom = (Core.functionTypeDomain v1) 
@@ -356,7 +356,7 @@ encodeType namespaces typ =
           vt = (Core.mapTypeValues v1)
       in (Flows.map Utils.toTypeApplication (Flows.sequence [
         Flows.pure (Ast.TypeVariable (Utils.rawName "M.Map")),
-        encode kt,
+        (encode kt),
         (encode vt)]))
     Core.TypeMaybe v1 -> (Flows.map Utils.toTypeApplication (Flows.sequence [
       Flows.pure (Ast.TypeVariable (Utils.rawName "Maybe")),
@@ -635,7 +635,7 @@ typeDecl namespaces name typ =
   let typeName = (\ns -> \name_ -> Names.qname ns (typeNameLocal name_)) 
       typeNameLocal = (\name_ -> Strings.cat [
               "_",
-              Names.localNameOf name_,
+              (Names.localNameOf name_),
               "_type_"])
       rawTerm = (Core_.type_ typ)
       rewrite = (\recurse -> \term ->  

@@ -385,8 +385,8 @@ module_ = Module.Module {
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.extract.helpers",
-    Module.Namespace "hydra.lexical",
-    Module.Namespace "hydra.rewriting",
+    (Module.Namespace "hydra.lexical"),
+    (Module.Namespace "hydra.rewriting"),
     (Module.Namespace "hydra.decode.core")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.compute",

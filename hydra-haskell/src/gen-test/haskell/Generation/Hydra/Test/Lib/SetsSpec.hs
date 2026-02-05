@@ -187,9 +187,9 @@ spec = H.describe "hydra.lib.sets primitives" $ do
           S.fromList [
             1,
             2],
-          S.fromList [
+          (S.fromList [
             2,
-            3],
+            3]),
           (S.fromList [
             3,
             4])])

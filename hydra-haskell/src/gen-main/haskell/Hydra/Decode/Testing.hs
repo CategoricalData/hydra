@@ -51,7 +51,7 @@ evaluationStyle cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)
                 (Core.Name "lazy", (\input -> Eithers.map (\t -> Testing.EvaluationStyleLazy) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.EvaluationStyle"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -133,7 +133,7 @@ foldOperation cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) 
                 (Core.Name "collectLabels", (\input -> Eithers.map (\t -> Testing.FoldOperationCollectLabels) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.FoldOperation"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -172,7 +172,7 @@ hoistPredicate cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err))
                 (Core.Name "nothing", (\input -> Eithers.map (\t -> Testing.HoistPredicateNothing) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.HoistPredicate"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -226,7 +226,7 @@ termRewriter cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (
                 (Core.Name "replaceInt32WithInt64", (\input -> Eithers.map (\t -> Testing.TermRewriterReplaceInt32WithInt64) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.TermRewriter"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -252,7 +252,7 @@ typeRewriter cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (
                 (Core.Name "replaceStringWithInt32", (\input -> Eithers.map (\t -> Testing.TypeRewriterReplaceStringWithInt32) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.TypeRewriter"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -421,7 +421,7 @@ testCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\str
                 (Core.Name "hoistPolymorphicLetBindings", (\input -> Eithers.map (\t -> Testing.TestCaseHoistPolymorphicLetBindings t) (hoistPolymorphicLetBindingsTestCase cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util_.DecodingError "expected union of type hydra.testing.TestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

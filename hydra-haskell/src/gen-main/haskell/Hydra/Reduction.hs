@@ -457,17 +457,17 @@ reduceTerm eager term =
                     let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
                     in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
                       "no such field: ",
-                      Core.unName (Core.projectionField v1),
+                      (Core.unName (Core.projectionField v1)),
                       " in ",
-                      Core.unName (Core.projectionTypeName v1),
+                      (Core.unName (Core.projectionTypeName v1)),
                       " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
                   Core.EliminationUnion v1 -> (Flows.bind (Core_.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
                     let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
                     in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Flows.fail (Strings.cat [
                       "no such field ",
-                      Core.unName (Core.fieldName field),
+                      (Core.unName (Core.fieldName field)),
                       " in ",
-                      Core.unName (Core.caseStatementTypeName v1),
+                      (Core.unName (Core.caseStatementTypeName v1)),
                       " case statement"])) Flows.pure (Core.caseStatementDefault v1)) (Flows.pure (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                       Core.applicationArgument = (Core.fieldTerm field)}))))))

@@ -35,7 +35,7 @@ associativity cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (
                 (Core.Name "both", (\input -> Eithers.map (\t -> Ast.AssociativityBoth) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.ast.Associativity"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -95,7 +95,7 @@ expr cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                 (Core.Name "brackets", (\input -> Eithers.map (\t -> Ast.ExprBrackets t) (bracketExpr cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.ast.Expr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -129,7 +129,7 @@ indentStyle cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\s
                   _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.ast.IndentStyle"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -203,7 +203,7 @@ ws cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -
                 (Core.Name "doubleBreak", (\input -> Eithers.map (\t -> Ast.WsDoubleBreak) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.ast.Ws"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

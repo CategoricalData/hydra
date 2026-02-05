@@ -74,7 +74,7 @@ pattern cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strip
                 (Core.Name "star", (\input -> Eithers.map (\t -> Grammar.PatternStar t) (pattern cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.grammar.Pattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

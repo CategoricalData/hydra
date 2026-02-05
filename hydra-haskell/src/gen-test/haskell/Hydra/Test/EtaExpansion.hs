@@ -1039,7 +1039,7 @@ allTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "arg1"),
-                                Core.TermVariable (Core.Name "arg2"),
+                                (Core.TermVariable (Core.Name "arg2")),
                                 (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                       Core.bindingType = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
@@ -1071,7 +1071,7 @@ allTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "arg1"),
-                                Core.TermVariable (Core.Name "arg2"),
+                                (Core.TermVariable (Core.Name "arg2")),
                                 (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                       Core.bindingType = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
@@ -1118,7 +1118,7 @@ allTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "arg1"),
-                                Core.TermVariable (Core.Name "arg2"),
+                                (Core.TermVariable (Core.Name "arg2")),
                                 (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                       Core.bindingType = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
@@ -1162,7 +1162,7 @@ allTests = Testing.TestGroup {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                               Core.applicationArgument = (Core.TermList [
                                 Core.TermVariable (Core.Name "arg1"),
-                                Core.TermVariable (Core.Name "arg2"),
+                                (Core.TermVariable (Core.Name "arg2")),
                                 (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                       Core.bindingType = (Just (Core.TypeScheme {
                         Core.typeSchemeVariables = [],
@@ -1225,7 +1225,7 @@ allTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                     Core.applicationArgument = (Core.TermList [
                                       Core.TermVariable (Core.Name "arg1"),
-                                      Core.TermVariable (Core.Name "arg2"),
+                                      (Core.TermVariable (Core.Name "arg2")),
                                       (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                             Core.bindingType = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [],
@@ -1270,7 +1270,7 @@ allTests = Testing.TestGroup {
                                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                     Core.applicationArgument = (Core.TermList [
                                       Core.TermVariable (Core.Name "arg1"),
-                                      Core.TermVariable (Core.Name "arg2"),
+                                      (Core.TermVariable (Core.Name "arg2")),
                                       (Core.TermVariable (Core.Name "arg3"))])}))})))})))}))),
                             Core.bindingType = (Just (Core.TypeScheme {
                               Core.typeSchemeVariables = [],

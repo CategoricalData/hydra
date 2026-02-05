@@ -314,8 +314,8 @@ testGroupForSystemF = Testing.TestGroup {
         Testing.inferenceTestCaseOutput = Core.TypeScheme {
           Core.typeSchemeVariables = [
             Core.Name "t0",
-            Core.Name "t1",
-            Core.Name "t2",
+            (Core.Name "t1"),
+            (Core.Name "t2"),
             (Core.Name "t3")],
           Core.typeSchemeType = (Core.TypePair (Core.PairType {
             Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {

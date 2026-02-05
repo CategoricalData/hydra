@@ -285,7 +285,7 @@ testGroupForLet = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermList [
                 Core.TermVariable (Core.Name "foo"),
-                Core.TermVariable (Core.Name "bar"),
+                (Core.TermVariable (Core.Name "bar")),
                 (Core.TermVariable (Core.Name "foo"))])})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [],
@@ -1050,7 +1050,7 @@ testGroupForLet = Testing.TestGroup {
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
-                Core.Name "t1",
+                (Core.Name "t1"),
                 (Core.Name "t2")],
               Core.typeSchemeType = (Core.TypePair (Core.PairType {
                 Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
@@ -1567,8 +1567,8 @@ testGroupForLet = Testing.TestGroup {
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
                 Core.Name "t0",
-                Core.Name "t1",
-                Core.Name "t2",
+                (Core.Name "t1"),
+                (Core.Name "t2"),
                 (Core.Name "t3")],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {

@@ -140,7 +140,7 @@ allTests = Testing.TestGroup {
             Testing.jsonRoundtripTestCaseType = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
             Testing.jsonRoundtripTestCaseTerm = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

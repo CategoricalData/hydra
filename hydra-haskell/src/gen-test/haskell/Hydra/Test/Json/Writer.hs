@@ -187,7 +187,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueArray [
               Model.ValueNumber 1.0,
-              Model.ValueNumber 2.0,
+              (Model.ValueNumber 2.0),
               (Model.ValueNumber 3.0)]),
             Testing.writerTestCaseOutput = "[1, 2, 3]"})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -206,8 +206,8 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonWriter (Testing.WriterTestCase {
             Testing.writerTestCaseInput = (Model.ValueArray [
               Model.ValueNumber 1.0,
-              Model.ValueString "two",
-              Model.ValueBoolean True,
+              (Model.ValueString "two"),
+              (Model.ValueBoolean True),
               Model.ValueNull]),
             Testing.writerTestCaseOutput = "[1, \"two\", true, null]"})),
           Testing.testCaseWithMetadataDescription = Nothing,

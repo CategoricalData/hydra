@@ -61,11 +61,11 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -77,12 +77,12 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -109,11 +109,11 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.toList"))),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -125,11 +125,11 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.toList"))),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -158,12 +158,12 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -177,11 +177,11 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -213,7 +213,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
@@ -230,11 +230,11 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -265,7 +265,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean True))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -280,7 +280,7 @@ allTests = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralBoolean False))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -310,7 +310,7 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.size"))),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
@@ -383,7 +383,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -434,16 +434,16 @@ allTests = Testing.TestGroup {
                 Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
-                Core.TermSet (S.fromList [
+                (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
                 (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))])})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -457,12 +457,12 @@ allTests = Testing.TestGroup {
                 Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
-                Core.TermSet S.empty,
+                (Core.TermSet S.empty),
                 (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))]))])})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -485,11 +485,11 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermList [
                 Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])])})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -507,11 +507,11 @@ allTests = Testing.TestGroup {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.intersection"))),
                 Core.applicationArgument = (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
@@ -562,7 +562,7 @@ allTests = Testing.TestGroup {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.difference"))),
                 Core.applicationArgument = (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
@@ -628,11 +628,11 @@ allTests = Testing.TestGroup {
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})))})),
               Core.applicationArgument = (Core.TermSet (S.fromList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
             Testing.evaluationTestCaseOutput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))]))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

@@ -38,7 +38,7 @@ comparisonConstraint cx raw = (Eithers.either (\err -> Left (Util.DecodingError 
                 (Core.Name "greaterThanOrEqual", (\input -> Eithers.map (\t -> Query.ComparisonConstraintGreaterThanOrEqual) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.ComparisonConstraint"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -75,7 +75,7 @@ node cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                 (Core.Name "wildcard", (\input -> Eithers.map (\t -> Query.NodeWildcard) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.Node"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -93,7 +93,7 @@ path cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                 (Core.Name "inverse", (\input -> Eithers.map (\t -> Query.PathInverse t) (path cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.Path"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -113,7 +113,7 @@ pattern cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\strip
                 (Core.Name "graph", (\input -> Eithers.map (\t -> Query.PatternGraph t) (graphPattern cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.Pattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -177,7 +177,7 @@ regexQuantifier cx raw = (Eithers.either (\err -> Left (Util.DecodingError err))
                 (Core.Name "range", (\input -> Eithers.map (\t -> Query.RegexQuantifierRange t) (range cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.RegexQuantifier"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
@@ -204,7 +204,7 @@ step cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped
                 (Core.Name "compare", (\input -> Eithers.map (\t -> Query.StepCompare t) (comparisonConstraint cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.query.Step"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

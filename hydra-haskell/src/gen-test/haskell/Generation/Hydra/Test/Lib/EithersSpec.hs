@@ -77,8 +77,8 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
     H.it "filter left values" $ H.shouldBe
       (Eithers.lefts [
           Left 1,
-          Right "a",
-          Left 2,
+          (Right "a"),
+          (Left 2),
           (Right "b")])
       ([
           1,
@@ -102,8 +102,8 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
     H.it "filter right values" $ H.shouldBe
       (Eithers.rights [
           Left 1,
-          Right "a",
-          Left 2,
+          (Right "a"),
+          (Left 2),
           (Right "b")])
       ([
           "a",
@@ -127,8 +127,8 @@ spec = H.describe "hydra.lib.eithers primitives" $ do
     H.it "partition mixed" $ H.shouldBe
       (Eithers.partitionEithers [
           Left 1,
-          Right "a",
-          Left 2,
+          (Right "a"),
+          (Left 2),
           (Right "b")])
       (([
           1,

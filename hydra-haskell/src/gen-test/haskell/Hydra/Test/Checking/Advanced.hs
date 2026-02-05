@@ -451,7 +451,7 @@ flowsWithFailureAcrossLetBindingsTests = Testing.TestGroup {
                     Core.bindingType = (Just (Core.TypeScheme {
                       Core.typeSchemeVariables = [
                         Core.Name "t3",
-                        Core.Name "t4",
+                        (Core.Name "t4"),
                         (Core.Name "t5")],
                       Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                         Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),

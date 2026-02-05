@@ -334,8 +334,8 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.lefts"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))),
+                (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
+                (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
                 (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
@@ -391,8 +391,8 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.rights"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))),
+                (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
+                (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
                 (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
             Testing.evaluationTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
@@ -448,8 +448,8 @@ allTests = Testing.TestGroup {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.partitionEithers"))),
               Core.applicationArgument = (Core.TermList [
                 Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))),
-                Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a"))),
-                Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))),
+                (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "a")))),
+                (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))),
                 (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "b"))))])})),
             Testing.evaluationTestCaseOutput = (Core.TermPair (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
@@ -571,11 +571,11 @@ allTests = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermEither (Right (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -606,7 +606,7 @@ allTests = Testing.TestGroup {
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))}))})))})),
               Core.applicationArgument = (Core.TermList [
                 Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
                 (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
             Testing.evaluationTestCaseOutput = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralString "zero"))))})),
           Testing.testCaseWithMetadataDescription = Nothing,

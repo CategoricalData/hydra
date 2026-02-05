@@ -857,7 +857,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseLiftLambdaAboveLet (Testing.LiftLambdaAboveLetTestCase {
             Testing.liftLambdaAboveLetTestCaseInput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLet (Core.Let {
+              (Core.TermLet (Core.Let {
                 Core.letBindings = [
                   Core.Binding {
                     Core.bindingName = (Core.Name "x"),
@@ -866,11 +866,11 @@ allTests = Testing.TestGroup {
                 Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]),
             Testing.liftLambdaAboveLetTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -879,7 +879,7 @@ allTests = Testing.TestGroup {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.letBody = (Core.TermVariable (Core.Name "x"))}))}))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -2245,8 +2245,8 @@ allTests = Testing.TestGroup {
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
             Testing.foldOverTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "a"),
-              Core.TermLiteral (Core.LiteralString "b"),
-              Core.TermLiteral (Core.LiteralString "c"),
+              (Core.TermLiteral (Core.LiteralString "b")),
+              (Core.TermLiteral (Core.LiteralString "c")),
               (Core.TermLiteral (Core.LiteralString "d"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -2271,8 +2271,8 @@ allTests = Testing.TestGroup {
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectLabels,
             Testing.foldOverTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "b"),
-              Core.TermLiteral (Core.LiteralString "d"),
-              Core.TermLiteral (Core.LiteralString "c"),
+              (Core.TermLiteral (Core.LiteralString "d")),
+              (Core.TermLiteral (Core.LiteralString "c")),
               (Core.TermLiteral (Core.LiteralString "a"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -2310,7 +2310,7 @@ allTests = Testing.TestGroup {
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
             Testing.foldOverTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -2332,7 +2332,7 @@ allTests = Testing.TestGroup {
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
             Testing.foldOverTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -2507,12 +2507,12 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseRewriteTerm (Testing.RewriteTermTestCase {
             Testing.rewriteTermTestCaseInput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "foo"),
-              Core.TermLiteral (Core.LiteralString "foo"),
+              (Core.TermLiteral (Core.LiteralString "foo")),
               (Core.TermLiteral (Core.LiteralString "baz"))]),
             Testing.rewriteTermTestCaseRewriter = Testing.TermRewriterReplaceFooWithBar,
             Testing.rewriteTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralString "bar"),
-              Core.TermLiteral (Core.LiteralString "bar"),
+              (Core.TermLiteral (Core.LiteralString "bar")),
               (Core.TermLiteral (Core.LiteralString "baz"))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -3152,7 +3152,7 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataCase = (Testing.TestCaseFoldOverTerm (Testing.FoldOverTermTestCase {
             Testing.foldOverTermTestCaseInput = (Core.TermSet (S.fromList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])),
             Testing.foldOverTermTestCaseTraversalOrder = Coders.TraversalOrderPre,
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationSumInt32Literals,
@@ -3192,7 +3192,7 @@ allTests = Testing.TestGroup {
             Testing.foldOverTermTestCaseOperation = Testing.FoldOperationCollectListLengths,
             Testing.foldOverTermTestCaseOutput = (Core.TermList [
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},

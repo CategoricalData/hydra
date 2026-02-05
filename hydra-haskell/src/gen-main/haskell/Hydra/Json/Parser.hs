@@ -25,8 +25,8 @@ import qualified Data.Set as S
 whitespace :: (Parsing.Parser ())
 whitespace = (Parsers.map (\_ -> ()) (Parsers.many (Parsers.satisfy (\c -> Lists.foldl Logic.or False [
   Equality.equal c 32,
-  Equality.equal c 9,
-  Equality.equal c 10,
+  (Equality.equal c 9),
+  (Equality.equal c 10),
   (Equality.equal c 13)]))))
 
 token :: (Parsing.Parser t0 -> Parsing.Parser t0)
@@ -70,12 +70,12 @@ jsonNumber = (token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind json
 jsonEscapeChar :: (Parsing.Parser Int)
 jsonEscapeChar = (Parsers.choice [
   Parsers.map (\_ -> 34) (Parsers.char 34),
-  Parsers.map (\_ -> 92) (Parsers.char 92),
-  Parsers.map (\_ -> 47) (Parsers.char 47),
-  Parsers.map (\_ -> 8) (Parsers.char 98),
-  Parsers.map (\_ -> 12) (Parsers.char 102),
-  Parsers.map (\_ -> 10) (Parsers.char 110),
-  Parsers.map (\_ -> 13) (Parsers.char 114),
+  (Parsers.map (\_ -> 92) (Parsers.char 92)),
+  (Parsers.map (\_ -> 47) (Parsers.char 47)),
+  (Parsers.map (\_ -> 8) (Parsers.char 98)),
+  (Parsers.map (\_ -> 12) (Parsers.char 102)),
+  (Parsers.map (\_ -> 10) (Parsers.char 110)),
+  (Parsers.map (\_ -> 13) (Parsers.char 114)),
   (Parsers.map (\_ -> 9) (Parsers.char 116))])
 
 -- | Parse a single character in a JSON string (handling escapes)
@@ -88,11 +88,11 @@ jsonString = (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers
 
 -- | Parse a JSON array
 jsonArray :: (Parsing.Parser Model.Value)
-jsonArray = (Parsers.map (\x -> Model.ValueArray x) (Parsers.between (token (Parsers.char 91)) (token (Parsers.char 93)) (Parsers.sepBy jsonValue (token (Parsers.char 44)))))
+jsonArray = (Parsers.map (\x -> Model.ValueArray x) (Parsers.between (token (Parsers.char 91)) (token (Parsers.char 93)) (Parsers.sepBy (Parsers.lazy (\_ -> jsonValue)) (token (Parsers.char 44)))))
 
 -- | Parse a JSON object key-value pair
 jsonKeyValue :: (Parsing.Parser (String, Model.Value))
-jsonKeyValue = (Parsers.bind (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Strings.fromList chars)))))) (\key -> Parsers.bind (token (Parsers.char 58)) (\_ -> Parsers.map (\v -> (key, v)) jsonValue)))
+jsonKeyValue = (Parsers.bind (token (Parsers.bind (Parsers.char 34) (\_ -> Parsers.bind (Parsers.many jsonStringChar) (\chars -> Parsers.bind (Parsers.char 34) (\_ -> Parsers.pure (Strings.fromList chars)))))) (\key -> Parsers.bind (token (Parsers.char 58)) (\_ -> Parsers.map (\v -> (key, v)) (Parsers.lazy (\_ -> jsonValue)))))
 
 -- | Parse a JSON object
 jsonObject :: (Parsing.Parser Model.Value)

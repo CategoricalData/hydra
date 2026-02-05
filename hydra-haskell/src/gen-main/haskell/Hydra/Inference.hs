@@ -283,10 +283,10 @@ inferTypeOfCaseStatement cx caseStmt =
             let stype = (Core.typeSchemeType schemaType)
             in (Flows.bind (Core_.unionType tname stype) (\sfields -> Flows.bind (Flows.mapMaybe (\t -> inferTypeOfTerm cx t (Strings.cat [
               "case ",
-              Core.unName tname,
+              (Core.unName tname),
               ".<default>"])) dflt) (\dfltResult -> Flows.bind (inferMany cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat [
               "case ",
-              Core.unName tname,
+              (Core.unName tname),
               ".",
               (Core.unName (Core.fieldName f))]))) cases)) (\caseResults ->  
               let iterms = (Pairs.first caseResults)
@@ -372,7 +372,7 @@ inferTypeOf cx term =
                 let bindings = (Core.letBindings letResult)
                 in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (forBindings bindings) (Flows.fail (Strings.cat [
                   "Expected a single binding with a type scheme, but got: ",
-                  Literals.showInt32 (Lists.length bindings),
+                  (Literals.showInt32 (Lists.length bindings)),
                   " bindings"])))))))
       in (Flows.bind (inferTypeOfTerm cx letTerm "infer type of term") (\result -> unifyAndSubst result))
 
@@ -493,7 +493,7 @@ inferTypeOfLambda cx lambda =
                     in  
                       let vars = (Sets.unions [
                               Rewriting.freeVariablesInType rdom,
-                              Rewriting.freeVariablesInType icod,
+                              (Rewriting.freeVariablesInType icod),
                               (freeVariablesInContext (Substitution.substInContext isubst cx2))])
                       in  
                         let cx3 = (Substitution.substInContext isubst cx)
@@ -906,7 +906,7 @@ inferTypesOfTemporaryBindings cx bins =
                 let tl = (Lists.tail bins)
                 in (Flows.bind (inferTypeOfTerm cx v (Strings.cat [
                   "temporary let binding '",
-                  Core.unName k,
+                  (Core.unName k),
                   "'"])) (\result1 ->  
                   let j = (Typing_.inferenceResultTerm result1)
                   in  
@@ -976,11 +976,11 @@ showInferenceResult result =
       let subst = (Typing_.inferenceResultSubst result)
       in (Strings.cat [
         "{term=",
-        Core__.term term,
+        (Core__.term term),
         ", type=",
-        Core__.type_ typ,
+        (Core__.type_ typ),
         ", subst=",
-        Typing.typeSubst subst,
+        (Typing.typeSubst subst),
         "}"])
 
 -- | Create an inference result with no class constraints
@@ -1022,13 +1022,13 @@ yieldDebug cx debugId term typ subst =
     let rtyp = (Substitution.substInType subst typ)
     in (Flows.bind (Annotations.debugIf debugId (Strings.cat [
       "\n\tterm: ",
-      Core__.term term,
+      (Core__.term term),
       "\n\ttyp: ",
-      Core__.type_ typ,
+      (Core__.type_ typ),
       "\n\tsubst: ",
-      Typing.typeSubst subst,
+      (Typing.typeSubst subst),
       "\n\trterm: ",
-      Core__.term rterm,
+      (Core__.term rterm),
       "\n\trtyp: ",
       (Core__.type_ rtyp)])) (\result -> Flows.pure (Typing_.InferenceResult {
       Typing_.inferenceResultTerm = rterm,

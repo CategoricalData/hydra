@@ -33,7 +33,7 @@ typeClass cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
                 (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
       "no such field ",
-      Core.unName fname,
+      (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Util.DecodingError "expected union of type hydra.classes.TypeClass"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

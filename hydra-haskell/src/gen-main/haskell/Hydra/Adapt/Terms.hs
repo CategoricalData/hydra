@@ -656,9 +656,9 @@ unionToRecord t =
             let matches = (Maybes.mapMaybe forField fields)
             in (Logic.ifElse (Lists.null matches) (Flows.fail (Strings.cat [
               "cannot convert term back to union: ",
-              Core__.term term,
+              (Core__.term term),
               " where type = ",
-              Core__.type_ t,
+              (Core__.type_ t),
               "    and target type = ",
               (Core__.type_ t_)])) (Flows.pure (Lists.head matches))))
     in  

@@ -105,7 +105,7 @@ sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToU
 showList :: ((t0 -> String) -> [t0] -> String)
 showList f els = (Strings.cat [
   "[",
-  Strings.intercalate ", " (Lists.map f els),
+  (Strings.intercalate ", " (Lists.map f els)),
   "]"])
 
 -- | Remove leading and trailing whitespace from a string

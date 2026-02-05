@@ -711,7 +711,7 @@ allTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                                 Core.applicationArgument = (Core.TermList [
                                   Core.TermVariable (Core.Name "y1"),
-                                  Core.TermVariable (Core.Name "y2"),
+                                  (Core.TermVariable (Core.Name "y2")),
                                   (Core.TermVariable (Core.Name "y3"))])}))})))}))})))}))})))}))})),
                 Core.applicationArgument = Core.TermUnit})),
               Core.applicationArgument = (Core.TermRecord (Core.Record {
@@ -733,7 +733,7 @@ allTests = Testing.TestGroup {
                   Core.fieldName = (Core.Name "value"),
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
@@ -928,7 +928,7 @@ allTests = Testing.TestGroup {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
                                   Core.applicationArgument = (Core.TermList [
                                     Core.TermVariable (Core.Name "y1"),
-                                    Core.TermVariable (Core.Name "y2"),
+                                    (Core.TermVariable (Core.Name "y2")),
                                     (Core.TermVariable (Core.Name "y3"))])}))}))})))}))})))}))})))}))})),
                 Core.applicationArgument = Core.TermUnit})),
               Core.applicationArgument = (Core.TermRecord (Core.Record {
@@ -950,7 +950,7 @@ allTests = Testing.TestGroup {
                   Core.fieldName = (Core.Name "value"),
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermSet (S.fromList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
@@ -1216,7 +1216,7 @@ allTests = Testing.TestGroup {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.monads.pure")),
                                 Core.applicationArgument = (Core.TermList [
                                   Core.TermVariable (Core.Name "x1"),
-                                  Core.TermVariable (Core.Name "x2"),
+                                  (Core.TermVariable (Core.Name "x2")),
                                   (Core.TermVariable (Core.Name "x3"))])}))})))}))})))}))})))}))})),
                 Core.applicationArgument = Core.TermUnit})),
               Core.applicationArgument = (Core.TermRecord (Core.Record {
@@ -1238,7 +1238,7 @@ allTests = Testing.TestGroup {
                   Core.fieldName = (Core.Name "value"),
                   Core.fieldTerm = (Core.TermMaybe (Just (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])))},
                 Core.Field {
                   Core.fieldName = (Core.Name "state"),
