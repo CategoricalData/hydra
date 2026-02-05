@@ -300,7 +300,7 @@ jsonArray = define "jsonArray" $
       @@ (token @@ (Parsers.char @@ bracketOpenCode))
       @@ (token @@ (Parsers.char @@ bracketCloseCode))
       @@ (Parsers.sepBy
-          @@ jsonValue
+          @@ (Parsers.lazy @@ constant jsonValue)
           @@ (token @@ (Parsers.char @@ commaCode))))
 
 -- | Parse a JSON key-value pair
@@ -315,7 +315,7 @@ jsonKeyValue = define "jsonKeyValue" $
             Parsers.pure @@ (Strings.fromList (var "chars"))))))) @@
     ("key" ~>
       Parsers.bind @@ (token @@ (Parsers.char @@ colonCode)) @@ (constant $
-        Parsers.map @@ ("v" ~> pair (var "key") (var "v")) @@ jsonValue))
+        Parsers.map @@ ("v" ~> pair (var "key") (var "v")) @@ (Parsers.lazy @@ constant jsonValue)))
 
 -- | Parse a JSON object
 jsonObject :: TBinding (Parser J.Value)
