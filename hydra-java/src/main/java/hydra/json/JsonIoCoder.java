@@ -87,7 +87,7 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
      */
     public static <S> Flow<S, Value> decode(Object value) {
         if (value == null) {
-            return Flows.pure(new Value.Null(false));
+            return Flows.pure(new Value.Null());
         } else if (value.getClass().isArray()) {
             Object[] array = (Object[]) value;
             return Flows.map(Flows.mapM(array, JsonIoCoder::decode), Value.Array::new);
