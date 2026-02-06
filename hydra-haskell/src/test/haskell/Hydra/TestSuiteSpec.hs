@@ -24,6 +24,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Unification as Unification
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -155,6 +156,18 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "hoist all let bindings" $ H.shouldBe
         (ShowCore.let_ $ Hoisting.hoistAllLetBindings input)
         (ShowCore.let_ output)
+    TestCaseSubstInType (SubstInTypeTestCase substitution input output) ->
+      H.it "substitute in type" $ H.shouldBe
+        (substInType (TypeSubst (M.fromList substitution)) input)
+        output
+    TestCaseVariableOccursInType (VariableOccursInTypeTestCase variable typ expected) ->
+      H.it "variable occurs in type" $ H.shouldBe
+        (variableOccursInType variable typ)
+        expected
+    TestCaseUnifyTypes (UnifyTypesTestCase schemaTypeNames left right expected) ->
+      H.it "unify types" $ checkUnifyTypes schemaTypeNames left right expected
+    TestCaseJoinTypes (JoinTypesTestCase left right expected) ->
+      H.it "join types" $ checkJoinTypes left right expected
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
@@ -304,3 +317,39 @@ emptyTypeContext :: TypeContext
 emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty S.empty emptyInferenceContext
   where
     emptyInferenceContext = InferenceContext M.empty M.empty M.empty M.empty False
+
+-- | Check unifyTypes result against expected
+-- schemaTypeNames is a list of names that should be treated as schema types (not bound during unification)
+checkUnifyTypes :: [Name] -> Type -> Type -> Either String TypeSubst -> H.Expectation
+checkUnifyTypes schemaTypeNames left right expected = case expected of
+    Left errSubstring -> case unifyResult of
+      Nothing -> return ()  -- Expected failure, got failure
+      Just result -> HL.assertFailure $
+        "Expected unification failure but got success: " ++ show (unTypeSubst result)
+    Right expectedSubst -> case unifyResult of
+      Nothing -> HL.assertFailure $
+        "Expected unification success but got failure (trace: " ++ traceSummary trace ++ ")"
+      Just actualSubst -> H.shouldBe actualSubst expectedSubst
+  where
+    -- Build schema types map from the list of names
+    -- Each schema name gets a trivial type scheme (no free variables)
+    schemaTypes = M.fromList [(n, TypeScheme [] (TypeVariable n) Nothing) | n <- schemaTypeNames]
+    FlowState unifyResult _ trace = unFlow
+      (Unification.unifyTypes schemaTypes left right "test")
+      testGraph emptyTrace
+
+-- | Check joinTypes result against expected
+checkJoinTypes :: Type -> Type -> Either () [TypeConstraint] -> H.Expectation
+checkJoinTypes left right expected = case expected of
+    Left () -> case joinResult of
+      Nothing -> return ()  -- Expected failure, got failure
+      Just result -> HL.assertFailure $
+        "Expected join failure but got success with constraints: " ++ show result
+    Right expectedConstraints -> case joinResult of
+      Nothing -> HL.assertFailure $
+        "Expected join success but got failure (trace: " ++ traceSummary trace ++ ")"
+      Just actualConstraints -> H.shouldBe actualConstraints expectedConstraints
+  where
+    FlowState joinResult _ trace = unFlow
+      (Unification.joinTypes left right "test")
+      testGraph emptyTrace
