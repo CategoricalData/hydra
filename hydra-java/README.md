@@ -1,6 +1,7 @@
 # Hydra-Java
 
-This directory contains a Java implementation of Hydra.
+This directory contains a **complete Java implementation** of Hydra.
+Hydra-Java passes all tests in the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing), ensuring identical behavior with Hydra-Haskell and Hydra-Python.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
 It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
@@ -28,6 +29,16 @@ You may need to set the `JAVA_HOME` environment variable:
 ```bash
 JAVA_HOME=/path/to/java18/installation ./gradlew build
 ```
+
+## Documentation
+
+For comprehensive documentation about Hydra's architecture and usage, see:
+
+- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
+- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Implementation guide
+- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite documentation
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides
 
 ## Testing
 

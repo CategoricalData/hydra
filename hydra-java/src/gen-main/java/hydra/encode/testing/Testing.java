@@ -437,6 +437,26 @@ public interface Testing {
       public hydra.core.Term visit(hydra.testing.TestCase.HoistPolymorphicLetBindings y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("hoistPolymorphicLetBindings"), hydra.encode.testing.Testing.hoistPolymorphicLetBindingsTestCase(((y)).value))));
       }
+      
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.SubstInType y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("substInType"), hydra.encode.testing.Testing.substInTypeTestCase(((y)).value))));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.VariableOccursInType y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("variableOccursInType"), hydra.encode.testing.Testing.variableOccursInTypeTestCase(((y)).value))));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.UnifyTypes y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unifyTypes"), hydra.encode.testing.Testing.unifyTypesTestCase(((y)).value))));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.JoinTypes y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("joinTypes"), hydra.encode.testing.Testing.joinTypesTestCase(((y)).value))));
+      }
     });
   }
   
@@ -562,5 +582,49 @@ public interface Testing {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.WriterTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("input"), ((a)).apply(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, T0>) (projected -> projected.input)).apply((x)))),
       new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Literal(new hydra.core.Literal.String_(((java.util.function.Function<hydra.testing.WriterTestCase<T0>, String>) (projected -> projected.output)).apply((x))))))));
+  }
+  
+  static hydra.core.Term substInTypeTestCase(hydra.testing.SubstInTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SubstInTypeTestCase"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("substitution"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+          (hydra.encode.core.Core::name),
+          (hydra.encode.core.Core::type),
+          (p)))),
+        ((x)).substitution))),
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.core.Core.type(((x)).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.core.Core.type(((x)).output)))));
+  }
+  
+  static hydra.core.Term variableOccursInTypeTestCase(hydra.testing.VariableOccursInTypeTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.core.Core.name(((x)).variable)),
+      new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.core.Core.type(((x)).type)),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(((x)).expected))))));
+  }
+  
+  static hydra.core.Term unifyTypesTestCase(hydra.testing.UnifyTypesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UnifyTypesTestCase"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("schemaTypes"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.encode.core.Core::name),
+        ((x)).schemaTypes))),
+      new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.core.Core.type(((x)).left)),
+      new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.core.Core.type(((x)).right)),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
+        (java.util.function.Function<String, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.String_((x2)))),
+        (hydra.encode.typing.Typing::typeSubst),
+        ((x)).expected))))));
+  }
+  
+  static hydra.core.Term joinTypesTestCase(hydra.testing.JoinTypesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.JoinTypesTestCase"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.core.Core.type(((x)).left)),
+      new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.core.Core.type(((x)).right)),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
+        (java.util.function.Function<java.lang.Void, hydra.core.Term>) (ignored -> new hydra.core.Term.Unit()),
+        (java.util.function.Function<java.util.List<hydra.typing.TypeConstraint>, hydra.core.Term>) (xs -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          (hydra.encode.typing.Typing::typeConstraint),
+          (xs)))),
+        ((x)).expected))))));
   }
 }

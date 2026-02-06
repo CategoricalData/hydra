@@ -78,6 +78,14 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
   
   public static final hydra.core.Name FIELD_NAME_HOIST_POLYMORPHIC_LET_BINDINGS = new hydra.core.Name("hoistPolymorphicLetBindings");
   
+  public static final hydra.core.Name FIELD_NAME_SUBST_IN_TYPE = new hydra.core.Name("substInType");
+  
+  public static final hydra.core.Name FIELD_NAME_VARIABLE_OCCURS_IN_TYPE = new hydra.core.Name("variableOccursInType");
+  
+  public static final hydra.core.Name FIELD_NAME_UNIFY_TYPES = new hydra.core.Name("unifyTypes");
+  
+  public static final hydra.core.Name FIELD_NAME_JOIN_TYPES = new hydra.core.Name("joinTypes");
+  
   private TestCase () {
   
   }
@@ -152,6 +160,14 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     R visit(HoistLetBindings instance) ;
     
     R visit(HoistPolymorphicLetBindings instance) ;
+    
+    R visit(SubstInType instance) ;
+    
+    R visit(VariableOccursInType instance) ;
+    
+    R visit(UnifyTypes instance) ;
+    
+    R visit(JoinTypes instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -292,6 +308,22 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     }
     
     default R visit(HoistPolymorphicLetBindings instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(SubstInType instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(VariableOccursInType instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(UnifyTypes instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(JoinTypes instance) {
       return otherwise((instance));
     }
   }
@@ -1749,6 +1781,178 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         return tagCmp;
       }
       HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) (other);
+      return ((Comparable) (value)).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A type substitution test
+   */
+  public static final class SubstInType extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.SubstInTypeTestCase value;
+    
+    public SubstInType (hydra.testing.SubstInTypeTestCase value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof SubstInType)) {
+        return false;
+      }
+      SubstInType o = (SubstInType) (other);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SubstInType o = (SubstInType) (other);
+      return ((Comparable) (value)).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * An occur check test for type unification
+   */
+  public static final class VariableOccursInType extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.VariableOccursInTypeTestCase value;
+    
+    public VariableOccursInType (hydra.testing.VariableOccursInTypeTestCase value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof VariableOccursInType)) {
+        return false;
+      }
+      VariableOccursInType o = (VariableOccursInType) (other);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      VariableOccursInType o = (VariableOccursInType) (other);
+      return ((Comparable) (value)).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A type unification test
+   */
+  public static final class UnifyTypes extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.UnifyTypesTestCase value;
+    
+    public UnifyTypes (hydra.testing.UnifyTypesTestCase value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof UnifyTypes)) {
+        return false;
+      }
+      UnifyTypes o = (UnifyTypes) (other);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      UnifyTypes o = (UnifyTypes) (other);
+      return ((Comparable) (value)).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A join types test (produce type constraints)
+   */
+  public static final class JoinTypes extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.JoinTypesTestCase value;
+    
+    public JoinTypes (hydra.testing.JoinTypesTestCase value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof JoinTypes)) {
+        return false;
+      }
+      JoinTypes o = (JoinTypes) (other);
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      JoinTypes o = (JoinTypes) (other);
       return ((Comparable) (value)).compareTo(o.value);
     }
     

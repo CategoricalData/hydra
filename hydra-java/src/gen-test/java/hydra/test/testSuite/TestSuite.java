@@ -35,6 +35,8 @@ public interface TestSuite {
       hydra.test.reduction.Reduction.allTests(),
       hydra.test.rewriting.Rewriting.allTests(),
       hydra.test.serialization.Serialization.allTests(),
-      hydra.test.sorting.Sorting.allTests()), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.List.<hydra.testing.TestCaseWithMetadata>of()));
+      hydra.test.sorting.Sorting.allTests(),
+      hydra.test.substitution.Substitution.allTests(),
+      hydra.test.unification.Unification.allTests()), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.List.<hydra.testing.TestCaseWithMetadata>of()));
   }
 }

@@ -1065,6 +1065,97 @@ public class TestSuiteRunner {
                     }
                 });
             }
+
+            @Override
+            public DynamicTest visit(TestCase.SubstInType instance) {
+                SubstInTypeTestCase tc = instance.value;
+                return withTimeout(name, () -> {
+                    // Build TypeSubst from list of (Name, Type) pairs
+                    Map<Name, Type> substMap = new HashMap<>();
+                    for (hydra.util.Tuple.Tuple2<Name, Type> pair : tc.substitution) {
+                        substMap.put(pair.object1, pair.object2);
+                    }
+                    hydra.typing.TypeSubst subst = new hydra.typing.TypeSubst(substMap);
+                    Type result = hydra.substitution.Substitution.substInType(subst, tc.input);
+                    assertEquals(tc.output, result);
+                });
+            }
+
+            @Override
+            public DynamicTest visit(TestCase.VariableOccursInType instance) {
+                VariableOccursInTypeTestCase tc = instance.value;
+                return withTimeout(name, () -> {
+                    boolean result = hydra.unification.Unification.variableOccursInType(tc.variable, tc.type);
+                    assertEquals(tc.expected, result);
+                });
+            }
+
+            @Override
+            public DynamicTest visit(TestCase.UnifyTypes instance) {
+                UnifyTypesTestCase tc = instance.value;
+                return withTimeout(name, () -> {
+                    // Build schema types map from the list of names
+                    Map<Name, hydra.core.TypeScheme> schemaTypes = new HashMap<>();
+                    for (Name n : tc.schemaTypes) {
+                        schemaTypes.put(n, new hydra.core.TypeScheme(
+                            java.util.Collections.emptyList(),
+                            new Type.Variable(n),
+                            hydra.util.Maybe.nothing()));
+                    }
+                    Flow<Object, hydra.typing.TypeSubst> flow =
+                        hydra.unification.Unification.unifyTypes(schemaTypes, tc.left, tc.right, "test");
+                    FlowState<Object, hydra.typing.TypeSubst> state = flow.value.apply(UNIT).apply(EMPTY_TRACE);
+
+                    tc.expected.accept(new hydra.util.Either.Visitor<String, hydra.typing.TypeSubst, Void>() {
+                        @Override
+                        public Void visit(hydra.util.Either.Left<String, hydra.typing.TypeSubst> left) {
+                            // Expected failure
+                            assertFalse(state.value.isJust(),
+                                "Expected unification failure but got success: " + state.value);
+                            return null;
+                        }
+
+                        @Override
+                        public Void visit(hydra.util.Either.Right<String, hydra.typing.TypeSubst> right) {
+                            // Expected success
+                            assertTrue(state.value.isJust(),
+                                "Expected unification success but got failure: " + state.trace.messages);
+                            assertEquals(right.value, state.value.fromJust());
+                            return null;
+                        }
+                    });
+                });
+            }
+
+            @Override
+            public DynamicTest visit(TestCase.JoinTypes instance) {
+                JoinTypesTestCase tc = instance.value;
+                return withTimeout(name, () -> {
+                    Flow<Object, java.util.List<hydra.typing.TypeConstraint>> flow =
+                        hydra.unification.Unification.joinTypes(tc.left, tc.right, "test");
+                    FlowState<Object, java.util.List<hydra.typing.TypeConstraint>> state =
+                        flow.value.apply(UNIT).apply(EMPTY_TRACE);
+
+                    tc.expected.accept(new hydra.util.Either.Visitor<Void, java.util.List<hydra.typing.TypeConstraint>, Void>() {
+                        @Override
+                        public Void visit(hydra.util.Either.Left<Void, java.util.List<hydra.typing.TypeConstraint>> left) {
+                            // Expected failure
+                            assertFalse(state.value.isJust(),
+                                "Expected join failure but got success: " + state.value);
+                            return null;
+                        }
+
+                        @Override
+                        public Void visit(hydra.util.Either.Right<Void, java.util.List<hydra.typing.TypeConstraint>> right) {
+                            // Expected success
+                            assertTrue(state.value.isJust(),
+                                "Expected join success but got failure: " + state.trace.messages);
+                            assertEquals(right.value, state.value.fromJust());
+                            return null;
+                        }
+                    });
+                });
+            }
         });
     }
 
