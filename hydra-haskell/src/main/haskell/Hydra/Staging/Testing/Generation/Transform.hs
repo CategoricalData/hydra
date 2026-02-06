@@ -101,6 +101,10 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) = case tc of
     TestCaseTypeChecking _ -> Nothing
     TestCaseTypeCheckingFailure _ -> Nothing
     TestCaseTypeReduction _ -> Nothing
+    TestCaseSubstInType _ -> Nothing
+    TestCaseVariableOccursInType _ -> Nothing
+    TestCaseUnifyTypes _ -> Nothing
+    TestCaseJoinTypes _ -> Nothing
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: CaseConvention -> CaseConvention -> String -> Term
