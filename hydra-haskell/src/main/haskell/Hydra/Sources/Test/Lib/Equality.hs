@@ -93,10 +93,80 @@ equalityMin = subgroup "min" [
   where
     test name x y result = primCase name _equality_min [int32 x, int32 y] (int32 result)
 
+-- Tests for ordering with string values
+equalityCompareStrings :: TTerm TestGroup
+equalityCompareStrings = subgroup "compare strings" [
+  test "less than (lexicographic)" "apple" "banana" "lessThan",
+  test "equal" "hello" "hello" "equalTo",
+  test "greater than (lexicographic)" "zebra" "apple" "greaterThan",
+  test "empty vs non-empty" "" "a" "lessThan",
+  test "prefix vs longer" "ab" "abc" "lessThan"]
+  where
+    test testName x y resultField = primCase testName _equality_compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
+
+equalityLtStrings :: TTerm TestGroup
+equalityLtStrings = subgroup "lt strings" [
+  test "less (lexicographic)" "apple" "banana" true,
+  test "equal" "hello" "hello" false,
+  test "greater" "zebra" "apple" false]
+  where
+    test name x y result = primCase name _equality_lt [string x, string y] result
+
+equalityGtStrings :: TTerm TestGroup
+equalityGtStrings = subgroup "gt strings" [
+  test "greater (lexicographic)" "zebra" "apple" true,
+  test "equal" "hello" "hello" false,
+  test "less" "apple" "banana" false]
+  where
+    test name x y result = primCase name _equality_gt [string x, string y] result
+
+equalityMaxStrings :: TTerm TestGroup
+equalityMaxStrings = subgroup "max strings" [
+  test "first greater" "zebra" "apple" "zebra",
+  test "second greater" "apple" "zebra" "zebra",
+  test "equal" "hello" "hello" "hello"]
+  where
+    test name x y result = primCase name _equality_max [string x, string y] (string result)
+
+equalityMinStrings :: TTerm TestGroup
+equalityMinStrings = subgroup "min strings" [
+  test "first less" "apple" "zebra" "apple",
+  test "second less" "zebra" "apple" "apple",
+  test "equal" "hello" "hello" "hello"]
+  where
+    test name x y result = primCase name _equality_min [string x, string y] (string result)
+
+-- Tests for ordering with float values
+equalityCompareFloats :: TTerm TestGroup
+equalityCompareFloats = subgroup "compare floats" [
+  test "less than" 1.5 2.5 "lessThan",
+  test "equal" 3.14 3.14 "equalTo",
+  test "greater than" 5.0 3.0 "greaterThan",
+  test "negative vs positive" (-1.0) 1.0 "lessThan"]
+  where
+    test testName x y resultField = primCase testName _equality_compare [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
+
+equalityLtFloats :: TTerm TestGroup
+equalityLtFloats = subgroup "lt floats" [
+  test "less" 1.5 2.5 true,
+  test "equal" 3.14 3.14 false,
+  test "greater" 5.0 3.0 false]
+  where
+    test name x y result = primCase name _equality_lt [float64 x, float64 y] result
+
+equalityGtFloats :: TTerm TestGroup
+equalityGtFloats = subgroup "gt floats" [
+  test "greater" 5.0 3.0 true,
+  test "equal" 3.14 3.14 false,
+  test "less" 1.5 2.5 false]
+  where
+    test name x y result = primCase name _equality_gt [float64 x, float64 y] result
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
+      -- Integer tests
       equalityCompare,
       equalityEqual,
       equalityGt,
@@ -105,4 +175,14 @@ allTests = definitionInModule module_ "allTests" $
       equalityLt,
       equalityLte,
       equalityMax,
-      equalityMin]
+      equalityMin,
+      -- String tests
+      equalityCompareStrings,
+      equalityLtStrings,
+      equalityGtStrings,
+      equalityMaxStrings,
+      equalityMinStrings,
+      -- Float tests
+      equalityCompareFloats,
+      equalityLtFloats,
+      equalityGtFloats]
