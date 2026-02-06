@@ -562,6 +562,38 @@
                 "parameter": "msg"}}}}},
       "type": null},
     {
+      "name": "hydra.parsers.lazy",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "application": {
+                              "argument": {"variable": "input"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {"argument": {"unit": {}}, "function": {"variable": "f"}}},
+                                  "function": {"function": {"elimination": {"wrap": "hydra.parsing.Parser"}}}}}}},
+                          "domain": null,
+                          "parameter": "input"}}},
+                    "typeName": "hydra.parsing.Parser"}},
+                "domain": null,
+                "parameter": "f"}}}}},
+      "type": null},
+    {
       "name": "hydra.parsers.many",
       "term": {
         "annotated": {
@@ -810,85 +842,83 @@
                                           "function": {"function": {"primitive": "hydra.lib.strings.toList"}}}},
                                       "type": null}],
                                   "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "c",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "codes"},
-                                              "function": {"function": {"primitive": "hydra.lib.lists.head"}}}},
-                                          "type": null}],
-                                      "body": {
-                                        "let": {
-                                          "bindings": [
-                                            {
-                                              "name": "rest",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "codes"},
-                                                      "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}},
-                                                  "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
-                                              "type": null}],
-                                          "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "codes"},
+                                          "function": {"function": {"primitive": "hydra.lib.lists.safeHead"}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "rest",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "codes"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                    "function": {"function": {"primitive": "hydra.lib.lists.drop"}}}}}},
+                                                            "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}},
+                                                        "type": null}],
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "failure",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "message",
+                                                                      "term": {"literal": {"string": "character did not satisfy predicate"}}},
+                                                                    {"name": "remainder", "term": {"variable": "input"}}],
+                                                                  "typeName": "hydra.parsing.ParseError"}}},
+                                                            "typeName": "hydra.parsing.ParseResult"}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "success",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {"name": "value", "term": {"variable": "c"}},
+                                                                        {"name": "remainder", "term": {"variable": "rest"}}],
+                                                                      "typeName": "hydra.parsing.ParseSuccess"}}},
+                                                                "typeName": "hydra.parsing.ParseResult"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {"argument": {"variable": "c"}, "function": {"variable": "pred"}}},
+                                                                "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
+                                                "domain": null,
+                                                "parameter": "c"}}},
+                                          "function": {
                                             "application": {
                                               "argument": {
-                                                "application": {
-                                                  "argument": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "failure",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "message",
-                                                                "term": {"literal": {"string": "character did not satisfy predicate"}}},
-                                                              {"name": "remainder", "term": {"variable": "input"}}],
-                                                            "typeName": "hydra.parsing.ParseError"}}},
-                                                      "typeName": "hydra.parsing.ParseResult"}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "union": {
-                                                          "field": {
-                                                            "name": "success",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "value", "term": {"variable": "c"}},
-                                                                  {"name": "remainder", "term": {"variable": "rest"}}],
-                                                                "typeName": "hydra.parsing.ParseSuccess"}}},
-                                                          "typeName": "hydra.parsing.ParseResult"}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {"argument": {"variable": "c"}, "function": {"variable": "pred"}}},
-                                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "failure",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "message",
-                                                                "term": {"literal": {"string": "unexpected end of input"}}},
-                                                              {"name": "remainder", "term": {"variable": "input"}}],
-                                                            "typeName": "hydra.parsing.ParseError"}}},
-                                                      "typeName": "hydra.parsing.ParseResult"}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "input"},
-                                                          "function": {"function": {"primitive": "hydra.lib.strings.null"}}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}},
+                                                "union": {
+                                                  "field": {
+                                                    "name": "failure",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "message",
+                                                            "term": {"literal": {"string": "unexpected end of input"}}},
+                                                          {"name": "remainder", "term": {"variable": "input"}}],
+                                                        "typeName": "hydra.parsing.ParseError"}}},
+                                                  "typeName": "hydra.parsing.ParseResult"}},
+                                              "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}}}},
                               "domain": null,
                               "parameter": "input"}}},
                         "type": null}],
