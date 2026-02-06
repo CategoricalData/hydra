@@ -886,7 +886,15 @@
                           "function": {"variable": "hydra.json.parser.token"}}},
                       "function": {
                         "application": {
-                          "argument": {"variable": "hydra.json.parser.jsonValue"},
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {"variable": "hydra.json.parser.jsonValue"},
+                                    "domain": null,
+                                    "parameter": "_"}}},
+                              "function": {"variable": "hydra.parsers.lazy"}}},
                           "function": {"variable": "hydra.parsers.sepBy"}}}}},
                   "function": {
                     "application": {
@@ -940,7 +948,15 @@
                             "lambda": {
                               "body": {
                                 "application": {
-                                  "argument": {"variable": "hydra.json.parser.jsonValue"},
+                                  "argument": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {"variable": "hydra.json.parser.jsonValue"},
+                                            "domain": null,
+                                            "parameter": "_"}}},
+                                      "function": {"variable": "hydra.parsers.lazy"}}},
                                   "function": {
                                     "application": {
                                       "argument": {
