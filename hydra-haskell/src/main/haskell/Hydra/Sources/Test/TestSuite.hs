@@ -26,6 +26,7 @@ import qualified Hydra.Sources.Test.Lib.Maps as Maps
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
 import qualified Hydra.Sources.Test.Annotations as Annotations
+import qualified Hydra.Sources.Test.Ordering as Ordering
 import qualified Hydra.Sources.Test.Monads as Monads
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
@@ -55,6 +56,8 @@ import qualified Hydra.Sources.Test.Reduction as Reduction
 import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
+import qualified Hydra.Sources.Test.Substitution as Substitution
+import qualified Hydra.Sources.Test.Unification as Unification
 
 
 ns :: Namespace
@@ -104,10 +107,13 @@ otherPairs = [
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
   (Monads.ns, Monads.allTests),
+  -- TODO: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
-  (Sorting.ns, Sorting.allTests)]
+  (Sorting.ns, Sorting.allTests),
+  (Substitution.ns, Substitution.allTests),
+  (Unification.ns, Unification.allTests)]
 
 testPairs :: [(Namespace, TBinding TestGroup)]
 testPairs = libPairs ++ otherPairs
@@ -123,6 +129,7 @@ testSuiteModules =
    Annotations.module_, EtaExpansion.module_, Formatting.module_, Hoisting.module_,
    JsonCoder.module_, JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_,
    Monads.module_, Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   -- TODO: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
@@ -130,4 +137,6 @@ testSuiteModules =
    -- Inference tests (including sub-modules)
    InferenceAll.module_,
    InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceFailures.module_,
-   InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_]
+   InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
+   -- Substitution and unification tests
+   Substitution.module_, Unification.module_]
