@@ -176,8 +176,16 @@ evaluationTestCase style input output = Phantoms.record _EvaluationTestCase [
   _EvaluationTestCase_input>>: input,
   _EvaluationTestCase_output>>: output]
 
+delegatedEvaluationTestCase :: TTerm Term -> TTerm Term -> TTerm DelegatedEvaluationTestCase
+delegatedEvaluationTestCase input output = Phantoms.record _DelegatedEvaluationTestCase [
+  _DelegatedEvaluationTestCase_input>>: input,
+  _DelegatedEvaluationTestCase_output>>: output]
+
 testCaseCaseConversion :: TTerm CaseConversionTestCase -> TTerm TestCase
 testCaseCaseConversion = inject _TestCase _TestCase_caseConversion
+
+testCaseDelegatedEvaluation :: TTerm DelegatedEvaluationTestCase -> TTerm TestCase
+testCaseDelegatedEvaluation = inject _TestCase _TestCase_delegatedEvaluation
 
 testCaseEtaExpansion :: TTerm EtaExpansionTestCase -> TTerm TestCase
 testCaseEtaExpansion = inject _TestCase _TestCase_etaExpansion
@@ -666,4 +674,90 @@ hoistPolymorphicLetBindingsTestCase input output = Phantoms.record _HoistPolymor
 hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistPolymorphicLetBindingsCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseHoistPolymorphicLetBindings $ hoistPolymorphicLetBindingsTestCase input output)
+  nothing noTags
+
+----------------------------------------
+-- Type substitution test case helpers
+
+testCaseSubstInType :: TTerm SubstInTypeTestCase -> TTerm TestCase
+testCaseSubstInType = inject _TestCase _TestCase_substInType
+
+substInTypeTestCase :: TTerm [(Name, Type)] -> TTerm Type -> TTerm Type -> TTerm SubstInTypeTestCase
+substInTypeTestCase subst input output = Phantoms.record _SubstInTypeTestCase [
+  _SubstInTypeTestCase_substitution>>: subst,
+  _SubstInTypeTestCase_input>>: input,
+  _SubstInTypeTestCase_output>>: output]
+
+-- | Convenience function for creating type substitution test cases
+substInTypeCase :: String -> TTerm [(Name, Type)] -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+substInTypeCase cname subst input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseSubstInType $ substInTypeTestCase subst input output)
+  nothing noTags
+
+----------------------------------------
+-- Variable occurs in type test case helpers
+
+testCaseVariableOccursInType :: TTerm VariableOccursInTypeTestCase -> TTerm TestCase
+testCaseVariableOccursInType = inject _TestCase _TestCase_variableOccursInType
+
+variableOccursInTypeTestCase :: TTerm Name -> TTerm Type -> TTerm Bool -> TTerm VariableOccursInTypeTestCase
+variableOccursInTypeTestCase variable typ expected = Phantoms.record _VariableOccursInTypeTestCase [
+  _VariableOccursInTypeTestCase_variable>>: variable,
+  _VariableOccursInTypeTestCase_type>>: typ,
+  _VariableOccursInTypeTestCase_expected>>: expected]
+
+-- | Convenience function for creating variable occurs in type test cases
+variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
+variableOccursCase cname variable typ expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseVariableOccursInType $ variableOccursInTypeTestCase variable typ expected)
+  nothing noTags
+
+----------------------------------------
+-- Unify types test case helpers
+
+testCaseUnifyTypes :: TTerm UnifyTypesTestCase -> TTerm TestCase
+testCaseUnifyTypes = inject _TestCase _TestCase_unifyTypes
+
+unifyTypesTestCase :: TTerm [Name] -> TTerm Type -> TTerm Type -> TTerm (Either String TypeSubst) -> TTerm UnifyTypesTestCase
+unifyTypesTestCase schemaTypes left right expected = Phantoms.record _UnifyTypesTestCase [
+  _UnifyTypesTestCase_schemaTypes>>: schemaTypes,
+  _UnifyTypesTestCase_left>>: left,
+  _UnifyTypesTestCase_right>>: right,
+  _UnifyTypesTestCase_expected>>: expected]
+
+-- | Convenience function for creating unify types test cases (expecting success)
+-- The substitution is provided as a list of (name, type) pairs
+unifyTypesCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> [(TTerm Name, TTerm Type)] -> TTerm TestCaseWithMetadata
+unifyTypesCase cname schemaTypes left right substPairs = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUnifyTypes $ unifyTypesTestCase schemaTypes left right (Phantoms.right (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs)))))
+  nothing noTags
+
+-- | Convenience function for creating unify types test cases (expecting failure)
+unifyTypesFailCase :: String -> TTerm [Name] -> TTerm Type -> TTerm Type -> String -> TTerm TestCaseWithMetadata
+unifyTypesFailCase cname schemaTypes left right errSubstring = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUnifyTypes $ unifyTypesTestCase schemaTypes left right (Phantoms.left (Phantoms.string errSubstring)))
+  nothing noTags
+
+----------------------------------------
+-- Join types test case helpers
+
+testCaseJoinTypes :: TTerm JoinTypesTestCase -> TTerm TestCase
+testCaseJoinTypes = inject _TestCase _TestCase_joinTypes
+
+joinTypesTestCase :: TTerm Type -> TTerm Type -> TTerm (Either () [TypeConstraint]) -> TTerm JoinTypesTestCase
+joinTypesTestCase left right expected = Phantoms.record _JoinTypesTestCase [
+  _JoinTypesTestCase_left>>: left,
+  _JoinTypesTestCase_right>>: right,
+  _JoinTypesTestCase_expected>>: expected]
+
+-- | Convenience function for creating join types test cases (expecting success)
+joinTypesCase :: String -> TTerm Type -> TTerm Type -> TTerm [TypeConstraint] -> TTerm TestCaseWithMetadata
+joinTypesCase cname left right constraints = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJoinTypes $ joinTypesTestCase left right (Phantoms.right constraints))
+  nothing noTags
+
+-- | Convenience function for creating join types test cases (expecting failure)
+joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
+joinTypesFailCase cname left right = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseJoinTypes $ joinTypesTestCase left right (Phantoms.left Phantoms.unit))
   nothing noTags
