@@ -7,7 +7,8 @@ in Hydra, programs are graphs, and graphs are programs.
 Hydra has the ability to translate its own kernel into several other languages, including
 Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
 Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
-and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python); complete and being tested for production readiness).
+and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)).
+All three implementations are complete and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
 for data integration and graph construction at Uber.
@@ -41,14 +42,21 @@ and we think it will be very useful in heterogeneous environments like TinkerPop
 -- validation, query steps, user-defined functions, etc. -- to be manifested identically in more than one programming language.
 
 If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://bit.ly/lg-discord) server.
-Near-term goals of the project include what we call "closing the loop" (completely folding Hydra's kernel into the Hydra DSL),
-[finishing](https://github.com/CategoricalData/hydra/wiki/New-Hydra-implementations) Hydra-Python and updating Hydra-Java,
-and getting Hydra out into the community.
+We are preparing for the 1.0 release, with all three core implementations (Haskell, Java, Python) now complete.
+Near-term goals include integrating with [Apache TinkerPop](https://tinkerpop.apache.org),
+expanding language support, and growing the community.
 There is a recent [demo video](https://drive.google.com/file/d/1p2R6WWc1cW02eb7O8l-4cV1htDb84Y43/view) you can check out,
 as well as a couple of earlier presentations [here](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)
 and [here](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA),
 and the original design document [here](https://bit.ly/hydra-design-doc).
 
-For a detailed history of changes, see the [CHANGELOG](CHANGELOG.md).
+## Documentation
+
+- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts, type system, and design principles
+- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Detailed implementation guide
+- **[DSL Guide](https://github.com/CategoricalData/hydra/wiki/DSL-guide)** - Domain-specific languages for Hydra
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite across implementations
+- **[Developer Recipes](docs/src/recipes/index.md)** - Step-by-step guides for common tasks
+- **[CHANGELOG](CHANGELOG.md)** - Detailed history of changes
 
 Share and enjoy.

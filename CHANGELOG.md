@@ -8,9 +8,16 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ---
 
-## [0.13.0] - Upcoming
+## [0.13.0] - 2026-02-05
 
-Next release with Either type support and library improvements.
+Major release completing Hydra-Java as the third full implementation, with significant improvements to let hoisting, type inference, and documentation.
+
+### Highlights
+
+- **Hydra-Java is now complete** (#166): All kernel and generation tests pass. Hydra now has three full implementations (Haskell, Java, Python) that pass the common test suite.
+- **Either type support** (#210): First-class Either types in the core type system with full inference, checking, and library support.
+- **Let hoisting improvements**: Deep changes to support hoisting polymorphic let terms with associated inference and type checking fixes.
+- **Comprehensive documentation**: New developer recipes, updated READMEs, and improved cross-linking between documents.
 
 ### Breaking Changes
 
@@ -19,39 +26,108 @@ Next release with Either type support and library improvements.
   - All `optional` variants renamed to `maybe`
 - Removed deprecated `hydra.decoding` module
 - Removed old `hydra.mantle.Either` type (replaced by core `Either`)
+- Minimum Java version bumped to 18 (#249)
 
 ### New Features
+
+- **Hydra-Java Completion** (#166, #131)
+  - All kernel tests pass
+  - All generation tests pass
+  - Deep changes to Java coder enabling complete kernel generation
+  - Added generation test codec for Java
+  - Scripts and executables for Java generation (`sync-java.sh`)
+  - Support for unit type and term in Java language constraints
+  - Added `Lazy` utility class for delayed evaluation
+  - Array type support in Java serde
 
 - **Either Type Support** (#210)
   - Added `EitherType` to core type system
   - Added `either` term constructor
-  - New `hydra.lib.eithers` library
+  - New `hydra.lib.eithers` library with `map`, `mapList`, `mapMaybe`, `bimap`
   - Full support in type inference, type checking, rewriting, encoding/decoding
-  - Added Either support in Python implementation
-  - Comprehensive test coverage (inference and type checking)
-- **Developer Documentation**
-  - Added developer recipes to in-repo documentation
-  - Created guides for extending Hydra Core and creating new implementations
-- **Library Additions**
-  - Added `hydra.lib.tuples` for tuple operations
-  - Added library DSLs for each primitive library
+  - Either support in all three implementations
+  - Comprehensive test coverage
+
+- **Let Hoisting and Flattening**
+  - Deep changes to support hoisting polymorphic let terms
+  - Refined let hoisting for monomorphic bindings inside polymorphic ones
+  - More efficient `liftLambdaAboveLet` implementation (#202)
+  - New test cases for let hoisting focusing on polymorphic bindings
+
+- **New Primitives**
+  - `hydra.lib.lists.find` and `hydra.lib.lists.partition` (all implementations)
   - New math functions: `abs`, `pred`, `signum`, `succ`, `even`, `odd`
-  - Renamed `neg` to `negate` for consistency with Prelude
+  - `hydra.lib.flows.foldl`
+  - Renamed `neg` to `negate` for consistency with Haskell Prelude
   - Completed floating-point math primitives in Python (#208)
+
+- **Developer Documentation**
+  - Added developer recipes: extending Hydra Core, adding primitives, syncing Python, promoting code
+  - Recipe for LLM-assisted development
+  - Updated all implementation READMEs with documentation sections
+  - Comprehensive cross-linking between wiki pages, READMEs, and recipes
 
 ### Improvements
 
-- Included all Hydra kernel types in test schema (#205)
-- More efficient implementation of `liftLambdaAboveLet` (#202)
-- Reorganized Haskell DSL definitions for better clarity
-- Added TODO comments to all unsafe primitives (#201)
-- Sanity-check tuple projection index against arity during inference
-- Propagated rewriting fixes into Python
+- **Type System**
+  - Refactored `hydra.inference` to create new module `hydra.checking`
+  - Inference checks after unification to prevent schema names from being unified with inferred type variables
+  - Type application terms preserved when preparing application terms for Python
+  - Sanity-check tuple projection index against arity during inference
+  - Enabled inference logic to check for and bind lost type variables in term annotations
+
+- **Code Generation**
+  - Python: Partitioned code into `src/main` and `src/gen-main` pattern
+  - Python: Support for deeply-nested match statements
+  - Python: More complete `let` support
+  - Python: Pythonic syntax for polymorphic function definitions
+  - Java: Method declaration style consistent with calling style
+  - Haskell coder updated to use standardized typeclass names
+
+- **Kernel Improvements**
+  - Included all Hydra kernel types in test schema (#205)
+  - Reorganized Haskell DSL definitions for better clarity
+  - Added TODO comments to all unsafe primitives (#201)
+  - New `rewriteAndFoldTerm` utility for simultaneous rewriting and folding
+  - Lexical helper for dereferencing schema types through aliases
+  - Made JSON parser lazy with new `lazy` parser combinator
+
+- **GenPG Demo**
+  - Refactored to support both Haskell and Python modes
+  - Added Python runner for the demo
+  - Command-line helper for generating Python
+
+- **Testing**
+  - Extended test runners for let hoisting test cases (Haskell, Python, Java)
+  - Test cases for floating-point precision in show primitives
+  - Tests for `hydra.lib.maps` and `hydra.lib.sets` enforcing ordering in `toList`
+  - Inference tests for inferred System F terms
 
 ### Bug Fixes
 
 - Fixed bug in type checking in connection with dead code
 - Fixed bug in `removeTypesFromTerm`
+- Fixed bug in `typeOfMap`
+- Fixed consistency issues in Python primitives:
+  - `hydra.lib.sets.toList`
+  - `hydra.lib.maps.union` (precedence)
+  - `hydra.lib.strings.lines`
+  - `hydra.lib.strings.readString` (dequoting)
+  - `hydra.lib.lists.apply`
+  - `hydra.lib.maps.toList`
+- Fixed Haskell type signature of `hydra.lists.span`
+- Fixed issue with eta expansion of typed terms
+- Fixed shadowing issue in generated encoding modules
+- Added missing alternatives in `hydra.rewriting.rewriteTermM`
+
+### Documentation
+
+- Updated main README with complete implementation status
+- Added Documentation sections to all implementation READMEs
+- Fixed outdated Code-organization.md (Python now uses src/gen-main pattern)
+- Fixed incorrect code paths in Implementation.md
+- Added Java section to Testing wiki
+- Comprehensive developer recipes in `docs/src/recipes/`
 
 ---
 
@@ -314,6 +390,7 @@ This initial release contains the complete foundation of Hydra:
 
 ## Version History
 
+- **0.13.0** (2026-02-05) - Java completion, Either type, let hoisting, documentation
 - **0.12.0** (2025-08-28) - Python completion, architectural improvements
 - **0.8.1** (2024-09-24) - Property graph utilities
 - **0.8.0** (2024-09-09) - C# support, Graphviz DOT, breaking changes
