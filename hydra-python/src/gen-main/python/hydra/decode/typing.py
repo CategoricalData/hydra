@@ -3,8 +3,10 @@
 r"""Term decoders for hydra.typing."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Left, Right
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
+from typing import TypeVar
 import hydra.core
 import hydra.decode.core
 import hydra.extract.helpers
@@ -13,6 +15,22 @@ import hydra.lexical
 import hydra.lib.eithers
 import hydra.typing
 import hydra.util
+
+T0 = TypeVar("T0")
+T1 = TypeVar("T1")
+
+def function_structure(env: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.FunctionStructure[T0]]:
+    def _hoist_hydra_decode_typing_function_structure_1(cx: hydra.graph.Graph, env: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.FunctionStructure[T1]]:
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeParams", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.core.name, v12, v2)), field_map(), cx), (lambda field_type_params: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("params", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.core.name, v12, v2)), field_map(), cx), (lambda field_params: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("bindings", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.core.binding, v12, v2)), field_map(), cx), (lambda field_bindings: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("body", hydra.decode.core.term, field_map(), cx), (lambda field_body: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("domains", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.core.type, v12, v2)), field_map(), cx), (lambda field_domains: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("codomain", (lambda v12, v2: hydra.extract.helpers.decode_maybe(hydra.decode.core.type, v12, v2)), field_map(), cx), (lambda field_codomain: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("environment", env, field_map(), cx), (lambda field_environment: Right(hydra.typing.FunctionStructure(field_type_params, field_params, field_bindings, field_body, field_domains, field_codomain, field_environment))))))))))))))))
+            
+            case _:
+                return Left(hydra.util.DecodingError("expected record of type hydra.typing.FunctionStructure"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_function_structure_1(cx, env, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:
     def _hoist_hydra_decode_typing_inference_context_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:

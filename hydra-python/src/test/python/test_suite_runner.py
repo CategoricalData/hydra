@@ -49,6 +49,8 @@ import hydra.sources.libraries
 import hydra.testing
 import hydra.typing
 import hydra.hoisting
+import hydra.substitution
+import hydra.unification
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 
 # Manually load and register hydra.test package
@@ -630,7 +632,24 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
         case hydra.testing.TestCaseHoistPolymorphicLetBindings(value=tc):
             return lambda: run_hoist_polymorphic_let_bindings_test(tc)
 
-    return None
+        case hydra.testing.TestCaseSubstInType(value=tc):
+            return lambda: run_subst_in_type_test(tc)
+
+        case hydra.testing.TestCaseVariableOccursInType(value=tc):
+            return lambda: run_variable_occurs_in_type_test(tc)
+
+        case hydra.testing.TestCaseUnifyTypes(value=tc):
+            return lambda: run_unify_types_test(tc)
+
+        case hydra.testing.TestCaseJoinTypes(value=tc):
+            return lambda: run_join_types_test(tc)
+
+        case _:
+            # Fail on unhandled test case types to catch missing implementations
+            case_type = type(tcase.case).__name__
+            def fail_unhandled():
+                pytest.fail(f"Unhandled test case type: {case_type}")
+            return fail_unhandled
 
 
 def run_case_conversion_test(test_case: hydra.testing.CaseConversionTestCase) -> None:
@@ -1292,6 +1311,102 @@ def run_hoist_polymorphic_let_bindings_test(test_case: hydra.testing.HoistPolymo
         f"  Expected: {repr(test_case.output)}\n"
         f"  Actual: {repr(result)}"
     )
+
+
+def run_subst_in_type_test(test_case: hydra.testing.SubstInTypeTestCase) -> None:
+    """Execute a type substitution test."""
+    # Build TypeSubst from list of (Name, Type) pairs
+    subst_map = FrozenDict({pair[0]: pair[1] for pair in test_case.substitution})
+    subst = hydra.typing.TypeSubst(subst_map)
+    result = hydra.substitution.subst_in_type(subst, test_case.input)
+    assert result == test_case.output, (
+        f"Type substitution failed:\n"
+        f"  Expected: {hydra.show.core.type(test_case.output)}\n"
+        f"  Actual: {hydra.show.core.type(result)}"
+    )
+
+
+def run_variable_occurs_in_type_test(test_case: hydra.testing.VariableOccursInTypeTestCase) -> None:
+    """Execute a variable occurs in type test."""
+    result = hydra.unification.variable_occurs_in_type(test_case.variable, test_case.type)
+    assert result == test_case.expected, (
+        f"Variable occurs in type failed:\n"
+        f"  Variable: {test_case.variable}\n"
+        f"  Type: {hydra.show.core.type(test_case.type)}\n"
+        f"  Expected: {test_case.expected}\n"
+        f"  Actual: {result}"
+    )
+
+
+def run_unify_types_test(test_case: hydra.testing.UnifyTypesTestCase) -> None:
+    """Execute a type unification test."""
+    # Build schema types map from the list of names
+    # Each schema name gets a trivial type scheme (no free variables)
+    schema_types = FrozenDict({
+        n: hydra.core.TypeScheme(
+            variables=(),
+            type=hydra.core.TypeVariable(n),
+            constraints=Nothing()
+        )
+        for n in test_case.schema_types
+    })
+
+    # Run unification
+    unify_flow = hydra.unification.unify_types(schema_types, test_case.left, test_case.right, "test")
+    unify_state = unify_flow.value(None, hydra.monads.empty_trace())
+
+    match test_case.expected:
+        case Left(value=_err_substring):
+            # Expected failure
+            match unify_state.value:
+                case Nothing():
+                    pass  # Expected failure, got failure
+                case Just(value=result):
+                    pytest.fail(
+                        f"Expected unification failure but got success: {result}"
+                    )
+        case Right(value=expected_subst):
+            # Expected success
+            match unify_state.value:
+                case Nothing():
+                    errors = "\n".join(unify_state.trace.messages)
+                    pytest.fail(f"Expected unification success but got failure: {errors}")
+                case Just(value=actual_subst):
+                    assert actual_subst == expected_subst, (
+                        f"Unification result mismatch:\n"
+                        f"  Expected: {expected_subst}\n"
+                        f"  Actual: {actual_subst}"
+                    )
+
+
+def run_join_types_test(test_case: hydra.testing.JoinTypesTestCase) -> None:
+    """Execute a type join test."""
+    # Run join
+    join_flow = hydra.unification.join_types(test_case.left, test_case.right, "test")
+    join_state = join_flow.value(None, hydra.monads.empty_trace())
+
+    match test_case.expected:
+        case Left(value=_):
+            # Expected failure (Left () indicates failure)
+            match join_state.value:
+                case Nothing():
+                    pass  # Expected failure, got failure
+                case Just(value=result):
+                    pytest.fail(
+                        f"Expected join failure but got success with constraints: {result}"
+                    )
+        case Right(value=expected_constraints):
+            # Expected success
+            match join_state.value:
+                case Nothing():
+                    errors = "\n".join(join_state.trace.messages)
+                    pytest.fail(f"Expected join success but got failure: {errors}")
+                case Just(value=actual_constraints):
+                    assert actual_constraints == expected_constraints, (
+                        f"Join constraints mismatch:\n"
+                        f"  Expected: {expected_constraints}\n"
+                        f"  Actual: {actual_constraints}"
+                    )
 
 
 def run_test_case(parent_desc: str, runner: TestRunner, tcase: hydra.testing.TestCaseWithMetadata) -> None:
