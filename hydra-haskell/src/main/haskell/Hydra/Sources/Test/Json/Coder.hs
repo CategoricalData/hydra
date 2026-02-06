@@ -1,16 +1,4 @@
 -- | Test cases for the type-directed JSON coder
---
--- Note: This module supersedes the Haskell-specific Hydra.Staging.Json.CoderSpec tests.
--- The following additional coverage should be added to this kernel test suite:
---   - Additional integer types: uint16, bigint
---   - Additional literal types: binary data, bigfloat
---   - Maps (Map String Int -> JSON objects)
---   - Sets (Set String -> JSON arrays)
---   - Nominal types / type aliases (dereferenced to underlying types)
---   - Union types encoded as single-attribute JSON objects
---   - Enum types encoded as objects with empty-object values
---   - Records with multiple fields (e.g., latlon with lat/lon fields)
---   - Functions (currently unsupported)
 module Hydra.Sources.Test.Json.Coder where
 
 import Hydra.Kernel
@@ -47,6 +35,8 @@ allTests = define "allTests" $
     Base.doc "Test cases for the type-directed JSON coder" $
     supergroup "JSON coder" [
       literalCoderGroup,
+      integerCoderGroup,
+      floatCoderGroup,
       collectionCoderGroup,
       optionalCoderGroup,
       recordCoderGroup]
@@ -107,6 +97,84 @@ literalCoderGroup = subgroup "literal types" [
       MetaTypes.string
       (MetaTerms.string "hello world")
       (Json.valueString $ Base.string "hello world")]
+
+-- | Test cases for all integer types
+integerCoderGroup :: TTerm TestGroup
+integerCoderGroup = subgroup "integer types" [
+    -- int8
+    coderTest "int8 positive"
+      MetaTypes.int8
+      (MetaTerms.int8 127)
+      (Json.valueNumber $ Base.bigfloat 127.0),
+    coderTest "int8 negative"
+      MetaTypes.int8
+      (MetaTerms.int8 (-128))
+      (Json.valueNumber $ Base.bigfloat (-128.0)),
+
+    -- int16
+    coderTest "int16 positive"
+      MetaTypes.int16
+      (MetaTerms.int16 1000)
+      (Json.valueNumber $ Base.bigfloat 1000.0),
+    coderTest "int16 negative"
+      MetaTypes.int16
+      (MetaTerms.int16 (-1000))
+      (Json.valueNumber $ Base.bigfloat (-1000.0)),
+
+    -- uint8
+    coderTest "uint8 max"
+      MetaTypes.uint8
+      (MetaTerms.uint8 255)
+      (Json.valueNumber $ Base.bigfloat 255.0),
+    coderTest "uint8 zero"
+      MetaTypes.uint8
+      (MetaTerms.uint8 0)
+      (Json.valueNumber $ Base.bigfloat 0.0),
+
+    -- uint16
+    coderTest "uint16 positive"
+      MetaTypes.uint16
+      (MetaTerms.uint16 60000)
+      (Json.valueNumber $ Base.bigfloat 60000.0),
+
+    -- uint32
+    coderTest "uint32 positive"
+      MetaTypes.uint32
+      (MetaTerms.uint32 4000000000)
+      (Json.valueNumber $ Base.bigfloat 4000000000.0),
+
+    -- uint64
+    coderTest "uint64 positive"
+      MetaTypes.uint64
+      (MetaTerms.uint64 1000000)
+      (Json.valueNumber $ Base.bigfloat 1000000.0),
+
+    -- bigint (encoded as number, like other integer types)
+    coderTest "bigint positive"
+      MetaTypes.bigint
+      (MetaTerms.bigint 123456789012345)
+      (Json.valueNumber $ Base.bigfloat 123456789012345.0),
+    coderTest "bigint negative"
+      MetaTypes.bigint
+      (MetaTerms.bigint (-999999999999))
+      (Json.valueNumber $ Base.bigfloat (-999999999999.0))]
+
+-- | Test cases for float types
+floatCoderGroup :: TTerm TestGroup
+floatCoderGroup = subgroup "float types" [
+    -- bigfloat (note: like bigint, these may be encoded as strings for precision in some cases)
+    coderTest "bigfloat positive"
+      MetaTypes.bigfloat
+      (MetaTerms.bigfloat 3.14159265359)
+      (Json.valueNumber $ Base.bigfloat 3.14159265359),
+    coderTest "bigfloat negative"
+      MetaTypes.bigfloat
+      (MetaTerms.bigfloat (-2.71828))
+      (Json.valueNumber $ Base.bigfloat (-2.71828)),
+    coderTest "bigfloat zero"
+      MetaTypes.bigfloat
+      (MetaTerms.bigfloat 0.0)
+      (Json.valueNumber $ Base.bigfloat 0.0)]
 
 -- | Test cases for collection type encoding/decoding
 collectionCoderGroup :: TTerm TestGroup
