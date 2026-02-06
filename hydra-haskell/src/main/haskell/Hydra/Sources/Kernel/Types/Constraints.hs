@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Types.Constraints where
 import           Hydra.Kernel
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:))
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Query as Query

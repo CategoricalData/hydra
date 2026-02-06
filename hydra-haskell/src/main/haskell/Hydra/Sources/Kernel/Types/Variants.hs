@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Types.Variants where
 import           Hydra.Kernel hiding (eliminationVariant, functionVariant, literalVariant, termVariant, typeVariant)
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 

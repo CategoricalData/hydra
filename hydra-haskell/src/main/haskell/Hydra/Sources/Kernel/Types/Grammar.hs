@@ -6,7 +6,7 @@ module Hydra.Sources.Kernel.Types.Grammar where
 import           Hydra.Kernel
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:))
+import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 

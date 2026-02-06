@@ -2,7 +2,8 @@ module Hydra.Sources.Kernel.Types.Relational where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc, nonemptyList, nonemptyMap)
+import           Hydra.Dsl.Annotations (doc)
+import           Hydra.Dsl.Annotations as Annotations
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
