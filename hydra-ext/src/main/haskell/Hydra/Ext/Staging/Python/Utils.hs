@@ -1,7 +1,11 @@
-module Hydra.Ext.Staging.Python.Utils where
+module Hydra.Ext.Staging.Python.Utils (
+  module Hydra.Ext.Staging.Python.Utils,
+  normalizeComment,
+) where
 
 import Hydra.Kernel
 import Hydra.Formatting
+import Hydra.CoderUtils (normalizeComment)
 import qualified Hydra.Ext.Python.Syntax as Py
 import qualified Hydra.Ext.Staging.Python.Serde as PySer
 
@@ -82,15 +86,6 @@ nameAndParams pyName params = primaryAndParams (pyNameToPyPrimary pyName) params
 newtypeStatement :: Py.Name -> Maybe String -> Py.Expression -> Py.Statement
 newtypeStatement name mcomment expr = annotatedStatement mcomment $ assignmentStatement name
   $ functionCall (pyNameToPyPrimary $ Py.Name "NewType") [doubleQuotedString $ Py.unName name, expr]
-
-normalizeComment :: String -> String
-normalizeComment s = if L.null stripped
-    then ""
-    else if L.last stripped /= '.'
-      then stripped ++ "."
-      else stripped
-  where
-    stripped = stripLeadingAndTrailingWhitespace s
 
 primaryAndParams :: Py.Primary -> [Py.Expression] -> Py.Expression
 primaryAndParams prim params = pyPrimaryToPyExpression $ primaryWithExpressionSlices prim params

@@ -16,6 +16,8 @@ import qualified Hydra.Ext.Sources.Csharp.Syntax as CsharpSyntax
 import qualified Hydra.Ext.Sources.Cypher.Features as CypherFeatures
 import qualified Hydra.Ext.Sources.Cypher.OpenCypher as OpenCypher
 import qualified Hydra.Ext.Sources.Delta.Parquet as DeltaParquet
+import qualified Hydra.Ext.Sources.Go.Language as GoLanguage
+import qualified Hydra.Ext.Sources.Go.Syntax as GoSyntax
 import qualified Hydra.Ext.Sources.Gql.OpenGql as OpenGql
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax as PathAlgebraSyntax
@@ -23,6 +25,10 @@ import Hydra.Ext.Sources.Graphql.Syntax
 import qualified Hydra.Ext.Sources.Graphviz.Dot as Dot
 import qualified Hydra.Ext.Sources.Java.Language as JavaLanguage
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
+import qualified Hydra.Ext.Sources.JavaScript.Language as JavaScriptLanguage
+import qualified Hydra.Ext.Sources.JavaScript.Operators as JavaScriptOperators
+import qualified Hydra.Ext.Sources.JavaScript.Serde as JavaScriptSerde
+import qualified Hydra.Ext.Sources.JavaScript.Syntax as JavaScriptSyntax
 import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Ext.Sources.Json.Schema.Language as JsonSchemaLanguage
 import qualified Hydra.Ext.Sources.Kusto.Kql as Kql
@@ -49,9 +55,14 @@ import qualified Hydra.Ext.Sources.Protobuf.Any as ProtobufAny
 import Hydra.Ext.Sources.Protobuf.Language
 import qualified Hydra.Ext.Sources.Protobuf.Proto3 as Proto3
 import qualified Hydra.Ext.Sources.Protobuf.SourceContext as ProtobufSourceContext
+import qualified Hydra.Ext.Sources.Python.Helpers as PythonHelpers
 import Hydra.Ext.Sources.Python.Language
 import qualified Hydra.Ext.Sources.Python.Syntax as PythonSyntax
 import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
+import qualified Hydra.Ext.Sources.Rust.Language as RustLanguage
+import qualified Hydra.Ext.Sources.Rust.Operators as RustOperators
+import qualified Hydra.Ext.Sources.Rust.Serde as RustSerde
+import qualified Hydra.Ext.Sources.Rust.Syntax as RustSyntax
 import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
 import qualified Hydra.Ext.Sources.Shacl.Model as ShaclModel
 import Hydra.Ext.Sources.Shex.Syntax
@@ -86,6 +97,8 @@ hydraExtModules = otherModules ++ gqlModules
       Dot.module_,
       AzureDtld.module_,
       GeoJson.module_,
+      GoLanguage.module_,
+      GoSyntax.module_,
       graphqlSyntaxModule,
       GraphsonCoder.module_,
       GraphsonConstruct.module_,
@@ -95,6 +108,10 @@ hydraExtModules = otherModules ++ gqlModules
       IanaRelations.module_,
       JavaLanguage.module_,
       JavaSyntax.module_,
+      JavaScriptLanguage.module_,
+      JavaScriptOperators.module_,
+      JavaScriptSerde.module_,
+      JavaScriptSyntax.module_,
       JsonSchema.module_,
       JsonSchemaLanguage.module_,
       Kql.module_,
@@ -112,9 +129,14 @@ hydraExtModules = otherModules ++ gqlModules
       ProtobufAny.module_,
       protobufLanguageModule,
       ProtobufSourceContext.module_,
+      PythonHelpers.module_,
       pythonLanguageModule,
       PythonSyntax.module_,
       RdfSyntax.module_,
+      RustLanguage.module_,
+      RustOperators.module_,
+      RustSerde.module_,
+      RustSyntax.module_,
       ScalaMeta.module_,
       ShaclModel.module_,
       shexSyntaxModule,

@@ -1,8 +1,12 @@
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
-module Hydra.Ext.Staging.Cpp.Utils where
+module Hydra.Ext.Staging.Cpp.Utils (
+  module Hydra.Ext.Staging.Cpp.Utils,
+  normalizeComment,
+) where
 
 import Hydra.Kernel
+import Hydra.CoderUtils (normalizeComment)
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
 
 import qualified Data.List as L
@@ -209,15 +213,6 @@ memberSpecificationProtected = Cpp.MemberSpecificationAccessLabel Cpp.AccessSpec
 
 memberSpecificationPublic :: Cpp.MemberSpecification
 memberSpecificationPublic = Cpp.MemberSpecificationAccessLabel Cpp.AccessSpecifierPublic
-
-normalizeComment :: String -> String
-normalizeComment s = if L.null stripped
-    then ""
-    else if L.last stripped /= '.'
-      then stripped ++ "."
-      else stripped
-  where
-    stripped = stripLeadingAndTrailingWhitespace s
 
 stringExpression :: String -> Cpp.Expression
 stringExpression =
