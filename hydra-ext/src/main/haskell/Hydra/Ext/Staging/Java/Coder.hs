@@ -8,7 +8,7 @@ module Hydra.Ext.Staging.Java.Coder (
 
 import Hydra.Kernel
 import Hydra.Typing
-import Hydra.Ext.Staging.CoderUtils
+import Hydra.CoderUtils
 import Hydra.Ext.Staging.Java.Utils
 import Hydra.Ext.Java.Language
 import Hydra.Ext.Staging.Java.Names
@@ -708,12 +708,6 @@ classifyDataTerm ts term = if isLambda term
       TermLet (Let _ body) -> countLambdaParams body
       _ -> 0
 
-commentsFromElement :: Binding -> Flow Graph (Maybe String)
-commentsFromElement = getTermDescription . bindingTerm
-
-commentsFromFieldType :: FieldType -> Flow Graph (Maybe String)
-commentsFromFieldType = getTypeDescription . fieldTypeType
-
 constantDecl :: String -> Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments
 constantDecl javaName aliases name = do
   g <- getState
@@ -1383,7 +1377,7 @@ encodeApplication env app@(Application lhs rhs) = do
     aliases = javaEnvironmentAliases env
     tc = javaEnvironmentTypeContext env
     encode = encodeTerm env
-    (fun, args, typeApps) = gatherArgsWithTypeApps (TermApplication app) [] []
+    (fun, (args, typeApps)) = gatherArgsWithTypeApps (TermApplication app) [] []
 
     -- | Annotate lambda arguments with expected types computed from the callee's type scheme
     -- and type applications. This corrects type annotations that normalizeTypeVariablesInTerm

@@ -13,7 +13,7 @@ import Hydra.Dsl.Terms
 import qualified Hydra.Ext.Python.Syntax as Py
 import Hydra.Ext.Staging.Python.Names
 import Hydra.Ext.Staging.Python.Utils
-import Hydra.Ext.Staging.CoderUtils
+import Hydra.CoderUtils
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as ShowCore
