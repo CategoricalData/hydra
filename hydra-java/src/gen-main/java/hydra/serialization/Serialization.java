@@ -709,6 +709,14 @@ public interface Serialization {
     return new hydra.ast.Brackets(hydra.serialization.Serialization.sym("["), hydra.serialization.Serialization.sym("]"));
   }
   
+  static hydra.ast.Expr suffix(String s, hydra.ast.Expr expr) {
+    hydra.ast.Op sufOp = new hydra.ast.Op(hydra.serialization.Serialization.sym((s)), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
+    return hydra.serialization.Serialization.ifx(
+      (sufOp),
+      (expr),
+      hydra.serialization.Serialization.cst(""));
+  }
+  
   static hydra.ast.Symbol sym(String s) {
     return new hydra.ast.Symbol((s));
   }

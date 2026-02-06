@@ -6,6 +6,27 @@ package hydra.encode.typing;
  * Term encoders for hydra.typing
  */
 public interface Typing {
+  static <T0> hydra.core.Term functionStructure(java.util.function.Function<T0, hydra.core.Term> env, hydra.typing.FunctionStructure<T0> x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.typing.FunctionStructure"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("typeParams"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.encode.core.Core::name),
+        ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, java.util.List<hydra.core.Name>>) (projected -> projected.typeParams)).apply((x))))),
+      new hydra.core.Field(new hydra.core.Name("params"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.encode.core.Core::name),
+        ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, java.util.List<hydra.core.Name>>) (projected -> projected.params)).apply((x))))),
+      new hydra.core.Field(new hydra.core.Name("bindings"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.encode.core.Core::binding),
+        ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, java.util.List<hydra.core.Binding>>) (projected -> projected.bindings)).apply((x))))),
+      new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.core.Core.term(((java.util.function.Function<hydra.typing.FunctionStructure<T0>, hydra.core.Term>) (projected -> projected.body)).apply((x)))),
+      new hydra.core.Field(new hydra.core.Name("domains"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        (hydra.encode.core.Core::type),
+        ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, java.util.List<hydra.core.Type>>) (projected -> projected.domains)).apply((x))))),
+      new hydra.core.Field(new hydra.core.Name("codomain"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
+        (hydra.encode.core.Core::type),
+        ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, hydra.util.Maybe<hydra.core.Type>>) (projected -> projected.codomain)).apply((x))))),
+      new hydra.core.Field(new hydra.core.Name("environment"), ((env)).apply(((java.util.function.Function<hydra.typing.FunctionStructure<T0>, T0>) (projected -> projected.environment)).apply((x)))))));
+  }
+  
   static hydra.core.Term inferenceContext(hydra.typing.InferenceContext x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.typing.InferenceContext"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("schemaTypes"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(

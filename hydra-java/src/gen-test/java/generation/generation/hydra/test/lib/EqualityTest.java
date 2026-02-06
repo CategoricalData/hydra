@@ -361,4 +361,398 @@ public class EqualityTest {
   5));
 
     }
+
+    // compare strings
+
+    @Test
+
+    public void testCompareStringsLessThanLexicographic() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.LessThan(),
+
+            hydra.lib.equality.Compare.apply(
+  "apple",
+  "banana"));
+
+    }
+
+    @Test
+
+    public void testCompareStringsEqual() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.EqualTo(),
+
+            hydra.lib.equality.Compare.apply(
+  "hello",
+  "hello"));
+
+    }
+
+    @Test
+
+    public void testCompareStringsGreaterThanLexicographic() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.GreaterThan(),
+
+            hydra.lib.equality.Compare.apply(
+  "zebra",
+  "apple"));
+
+    }
+
+    @Test
+
+    public void testCompareStringsEmptyVsNonNegempty() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.LessThan(),
+
+            hydra.lib.equality.Compare.apply(
+  "",
+  "a"));
+
+    }
+
+    @Test
+
+    public void testCompareStringsPrefixVsLonger() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.LessThan(),
+
+            hydra.lib.equality.Compare.apply(
+  "ab",
+  "abc"));
+
+    }
+
+    // lt strings
+
+    @Test
+
+    public void testLtStringsLessLexicographic() {
+
+        assertEquals(
+
+            true,
+
+            hydra.lib.equality.Lt.apply(
+  "apple",
+  "banana"));
+
+    }
+
+    @Test
+
+    public void testLtStringsEqual() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Lt.apply(
+  "hello",
+  "hello"));
+
+    }
+
+    @Test
+
+    public void testLtStringsGreater() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Lt.apply(
+  "zebra",
+  "apple"));
+
+    }
+
+    // gt strings
+
+    @Test
+
+    public void testGtStringsGreaterLexicographic() {
+
+        assertEquals(
+
+            true,
+
+            hydra.lib.equality.Gt.apply(
+  "zebra",
+  "apple"));
+
+    }
+
+    @Test
+
+    public void testGtStringsEqual() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Gt.apply(
+  "hello",
+  "hello"));
+
+    }
+
+    @Test
+
+    public void testGtStringsLess() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Gt.apply(
+  "apple",
+  "banana"));
+
+    }
+
+    // max strings
+
+    @Test
+
+    public void testMaxStringsFirstGreater() {
+
+        assertEquals(
+
+            "zebra",
+
+            hydra.lib.equality.Max.apply(
+  "zebra",
+  "apple"));
+
+    }
+
+    @Test
+
+    public void testMaxStringsSecondGreater() {
+
+        assertEquals(
+
+            "zebra",
+
+            hydra.lib.equality.Max.apply(
+  "apple",
+  "zebra"));
+
+    }
+
+    @Test
+
+    public void testMaxStringsEqual() {
+
+        assertEquals(
+
+            "hello",
+
+            hydra.lib.equality.Max.apply(
+  "hello",
+  "hello"));
+
+    }
+
+    // min strings
+
+    @Test
+
+    public void testMinStringsFirstLess() {
+
+        assertEquals(
+
+            "apple",
+
+            hydra.lib.equality.Min.apply(
+  "apple",
+  "zebra"));
+
+    }
+
+    @Test
+
+    public void testMinStringsSecondLess() {
+
+        assertEquals(
+
+            "apple",
+
+            hydra.lib.equality.Min.apply(
+  "zebra",
+  "apple"));
+
+    }
+
+    @Test
+
+    public void testMinStringsEqual() {
+
+        assertEquals(
+
+            "hello",
+
+            hydra.lib.equality.Min.apply(
+  "hello",
+  "hello"));
+
+    }
+
+    // compare floats
+
+    @Test
+
+    public void testCompareFloatsLessThan() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.LessThan(),
+
+            hydra.lib.equality.Compare.apply(
+  1.5,
+  2.5));
+
+    }
+
+    @Test
+
+    public void testCompareFloatsEqual() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.EqualTo(),
+
+            hydra.lib.equality.Compare.apply(
+  3.14,
+  3.14));
+
+    }
+
+    @Test
+
+    public void testCompareFloatsGreaterThan() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.GreaterThan(),
+
+            hydra.lib.equality.Compare.apply(
+  5.0,
+  3.0));
+
+    }
+
+    @Test
+
+    public void testCompareFloatsNegativeVsPositive() {
+
+        assertEquals(
+
+            new hydra.util.Comparison.LessThan(),
+
+            hydra.lib.equality.Compare.apply(
+  -1.0,
+  1.0));
+
+    }
+
+    // lt floats
+
+    @Test
+
+    public void testLtFloatsLess() {
+
+        assertEquals(
+
+            true,
+
+            hydra.lib.equality.Lt.apply(
+  1.5,
+  2.5));
+
+    }
+
+    @Test
+
+    public void testLtFloatsEqual() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Lt.apply(
+  3.14,
+  3.14));
+
+    }
+
+    @Test
+
+    public void testLtFloatsGreater() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Lt.apply(
+  5.0,
+  3.0));
+
+    }
+
+    // gt floats
+
+    @Test
+
+    public void testGtFloatsGreater() {
+
+        assertEquals(
+
+            true,
+
+            hydra.lib.equality.Gt.apply(
+  5.0,
+  3.0));
+
+    }
+
+    @Test
+
+    public void testGtFloatsEqual() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Gt.apply(
+  3.14,
+  3.14));
+
+    }
+
+    @Test
+
+    public void testGtFloatsLess() {
+
+        assertEquals(
+
+            false,
+
+            hydra.lib.equality.Gt.apply(
+  1.5,
+  2.5));
+
+    }
 }
