@@ -15,6 +15,7 @@ import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Json.Model as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Parsing as Parsing
+import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
@@ -25,7 +26,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Util.ns] [Core.ns] $
+module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
     Just "A model for unit testing"
   where
     elements = [
@@ -74,7 +75,11 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel
       simplifyTermTestCase,
       normalizeTypeVariablesTestCase,
       typeReductionTestCase,
-      writerTestCase]
+      writerTestCase,
+      substInTypeTestCase,
+      variableOccursInTypeTestCase,
+      unifyTypesTestCase,
+      joinTypesTestCase]
 
 alphaConversionTestCase :: Binding
 alphaConversionTestCase = define "AlphaConversionTestCase" $
@@ -603,7 +608,19 @@ testCase = define "TestCase" $
       hoistLetBindingsTestCase,
     "hoistPolymorphicLetBindings">:
       doc "A hoist polymorphic let bindings test"
-      hoistPolymorphicLetBindingsTestCase]
+      hoistPolymorphicLetBindingsTestCase,
+    "substInType">:
+      doc "A type substitution test"
+      substInTypeTestCase,
+    "variableOccursInType">:
+      doc "An occur check test for type unification"
+      variableOccursInTypeTestCase,
+    "unifyTypes">:
+      doc "A type unification test"
+      unifyTypesTestCase,
+    "joinTypes">:
+      doc "A join types test (produce type constraints)"
+      joinTypesTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $
@@ -753,3 +770,66 @@ writerTestCase = define "WriterTestCase" $
     "output">:
       doc "The expected string" $
       T.string]
+
+substInTypeTestCase :: Binding
+substInTypeTestCase = define "SubstInTypeTestCase" $
+  doc ("A test case which applies a type substitution to a type and compares the result."
+    <> " The substitution is provided as a list of (variable name, replacement type) pairs.") $
+  T.record [
+    "substitution">:
+      doc "The type substitution as a list of (name, type) pairs" $
+      T.list (T.pair Core.name Core.type_),
+    "input">:
+      doc "The type to substitute into"
+      Core.type_,
+    "output">:
+      doc "The expected result type"
+      Core.type_]
+
+variableOccursInTypeTestCase :: Binding
+variableOccursInTypeTestCase = define "VariableOccursInTypeTestCase" $
+  doc ("A test case which checks whether a type variable occurs in a type expression."
+    <> " This is the occur check used in type unification.") $
+  T.record [
+    "variable">:
+      doc "The variable name to search for"
+      Core.name,
+    "type">:
+      doc "The type to search within"
+      Core.type_,
+    "expected">:
+      doc "Whether the variable occurs in the type" $
+      T.boolean]
+
+unifyTypesTestCase :: Binding
+unifyTypesTestCase = define "UnifyTypesTestCase" $
+  doc ("A test case which attempts to unify two types and compares the result."
+    <> " The expected result is either Left (failure message substring) or Right (substitution).") $
+  T.record [
+    "schemaTypes">:
+      doc "The schema types map (type variable names that should not be bound)" $
+      T.list Core.name,
+    "left">:
+      doc "The left type to unify"
+      Core.type_,
+    "right">:
+      doc "The right type to unify"
+      Core.type_,
+    "expected">:
+      doc "The expected result: Left for failure (substring of error), Right for substitution" $
+      T.either_ T.string Typing.typeSubst]
+
+joinTypesTestCase :: Binding
+joinTypesTestCase = define "JoinTypesTestCase" $
+  doc ("A test case which joins two types (producing type constraints or failing)."
+    <> " The expected result is either Left (failure) or Right (list of constraints).") $
+  T.record [
+    "left">:
+      doc "The left type to join"
+      Core.type_,
+    "right">:
+      doc "The right type to join"
+      Core.type_,
+    "expected">:
+      doc "The expected result: Left for failure, Right for constraints" $
+      T.either_ T.unit (T.list Typing.typeConstraint)]
