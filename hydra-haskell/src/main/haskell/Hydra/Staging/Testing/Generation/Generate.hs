@@ -144,9 +144,6 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       putStrLn $ "Found " ++ show (length moduleTestPairs) ++ " module(s) with generation tests, generating to " ++ outDir
 
       let graph = modulesToGraph (mainModules ++ testModules) $ modules ++ extraModules
---      let graph = bootstrapGraph
-
---      putStrLn $ "graph elements: {" ++ (L.intercalate ", " $ fmap (unName . bindingName) (graphElements graph)) ++ "}"
 
       -- Generate using the provided test generator, writing files incrementally
       result <- runFlowWithGraph graph $ generateAllModuleTestsIncremental testGen outDir moduleTestPairs writeFilePair
@@ -214,8 +211,9 @@ generateAllModuleTestsIncremental testGen baseDir modulePairs writeFile = do
   putState g
 
   -- Generate files one at a time, writing each immediately
-  -- Continue on failures so that one failing module doesn't block others
-  successCount <- generateModulesWithContinueOnError testGen baseDir writeFile (zip [1..] modulePairs) 0
+  -- Strict: any failure stops generation
+  mapM_ (generateAndWriteModuleStrict testGen baseDir writeFile) (zip [1..] modulePairs)
+  let successCount = length modulePairs
 
   -- Generate an aggregator file if the generator provides one
   case testGenAggregatorFile testGen of
@@ -224,31 +222,14 @@ generateAllModuleTestsIncremental testGen baseDir modulePairs writeFile = do
       unsafePerformIO (writeFile aggregator) `seq` return (successCount + 1)
     Nothing -> return successCount
 
--- | Generate modules one at a time, continuing on errors
--- Returns the count of successfully generated modules
-generateModulesWithContinueOnError :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> [(Int, (Module, TestGroup))] -> Int -> Flow Graph Int
-generateModulesWithContinueOnError _ _ _ [] count = return count
-generateModulesWithContinueOnError testGen baseDir writeFile ((idx, pair):rest) count = do
+-- | Generate and write a single module strictly (fails on any error)
+generateAndWriteModuleStrict :: TestGenerator a -> FilePath -> ((FilePath, String) -> IO ()) -> (Int, (Module, TestGroup)) -> Flow Graph ()
+generateAndWriteModuleStrict testGen baseDir writeFile (idx, pair) = do
   let (sourceModule, _) = pair
       ns = moduleNamespace sourceModule
   trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
-
-  -- Try to generate this module using tryFlowWithTrace, which catches errors and returns Maybe with trace
-  (mresult, errTrace) <- tryFlowWithTrace (generateModuleTest testGen baseDir pair)
-
-  -- Handle result
-  newCount <- case mresult of
-    Just result -> do
-      -- Success: write the file
-      unsafePerformIO (writeFile result) `seq` return ()
-      return (count + 1)
-    Nothing -> do
-      -- Failure: log error details and continue
-      trace ("  ✗ Generation failed for " ++ show ns ++ ": " ++ errTrace ++ " (continuing...)") $ return ()
-      return count
-
-  -- Continue with remaining modules
-  generateModulesWithContinueOnError testGen baseDir writeFile rest newCount
+  result <- generateModuleTest testGen baseDir pair
+  unsafePerformIO (writeFile result) `seq` return ()
 
 -- | Try to run a Flow, returning Nothing if it fails instead of propagating the error
 tryFlow :: Flow s a -> Flow s (Maybe a)
