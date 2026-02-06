@@ -29,6 +29,17 @@ Install the dependencies:
 uv sync
 ```
 
+## Documentation
+
+For comprehensive documentation about Hydra's architecture and usage, see:
+
+- **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
+- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Implementation guide
+- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
+- **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite documentation
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides
+- **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/syncing-python.md)** - Regenerating Python from Haskell
+
 ## Testing
 
 Hydra-Python has two types of tests: the **common test suite** (shared across all Hydra implementations) and **Python-specific tests**. See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.

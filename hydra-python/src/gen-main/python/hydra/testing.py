@@ -16,6 +16,7 @@ import hydra.graph
 import hydra.json.model
 import hydra.module
 import hydra.parsing
+import hydra.typing
 import hydra.util
 
 A = TypeVar("A")
@@ -523,13 +524,25 @@ class TestCaseHoistLetBindings(Node["HoistLetBindingsTestCase"]):
 class TestCaseHoistPolymorphicLetBindings(Node["HoistPolymorphicLetBindingsTestCase"]):
     r"""A hoist polymorphic let bindings test."""
 
+class TestCaseSubstInType(Node["SubstInTypeTestCase"]):
+    r"""A type substitution test."""
+
+class TestCaseVariableOccursInType(Node["VariableOccursInTypeTestCase"]):
+    r"""An occur check test for type unification."""
+
+class TestCaseUnifyTypes(Node["UnifyTypesTestCase"]):
+    r"""A type unification test."""
+
+class TestCaseJoinTypes(Node["JoinTypesTestCase"]):
+    r"""A join types test (produce type constraints)."""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes"""
     
     pass
 
@@ -568,6 +581,10 @@ TEST_CASE__HOIST_SUBTERMS__NAME = hydra.core.Name("hoistSubterms")
 TEST_CASE__HOIST_CASE_STATEMENTS__NAME = hydra.core.Name("hoistCaseStatements")
 TEST_CASE__HOIST_LET_BINDINGS__NAME = hydra.core.Name("hoistLetBindings")
 TEST_CASE__HOIST_POLYMORPHIC_LET_BINDINGS__NAME = hydra.core.Name("hoistPolymorphicLetBindings")
+TEST_CASE__SUBST_IN_TYPE__NAME = hydra.core.Name("substInType")
+TEST_CASE__VARIABLE_OCCURS_IN_TYPE__NAME = hydra.core.Name("variableOccursInType")
+TEST_CASE__UNIFY_TYPES__NAME = hydra.core.Name("unifyTypes")
+TEST_CASE__JOIN_TYPES__NAME = hydra.core.Name("joinTypes")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
@@ -708,3 +725,57 @@ class WriterTestCase(Generic[A]):
 WRITER_TEST_CASE__NAME = hydra.core.Name("hydra.testing.WriterTestCase")
 WRITER_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
 WRITER_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class SubstInTypeTestCase:
+    r"""A test case which applies a type substitution to a type and compares the result. The substitution is provided as a list of (variable name, replacement type) pairs."""
+    
+    substitution: Annotated[frozenlist[tuple[hydra.core.Name, hydra.core.Type]], "The type substitution as a list of (name, type) pairs"]
+    input: Annotated[hydra.core.Type, "The type to substitute into"]
+    output: Annotated[hydra.core.Type, "The expected result type"]
+
+SUBST_IN_TYPE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.SubstInTypeTestCase")
+SUBST_IN_TYPE_TEST_CASE__SUBSTITUTION__NAME = hydra.core.Name("substitution")
+SUBST_IN_TYPE_TEST_CASE__INPUT__NAME = hydra.core.Name("input")
+SUBST_IN_TYPE_TEST_CASE__OUTPUT__NAME = hydra.core.Name("output")
+
+@dataclass(frozen=True)
+class VariableOccursInTypeTestCase:
+    r"""A test case which checks whether a type variable occurs in a type expression. This is the occur check used in type unification."""
+    
+    variable: Annotated[hydra.core.Name, "The variable name to search for"]
+    type: Annotated[hydra.core.Type, "The type to search within"]
+    expected: Annotated[bool, "Whether the variable occurs in the type"]
+
+VARIABLE_OCCURS_IN_TYPE_TEST_CASE__NAME = hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase")
+VARIABLE_OCCURS_IN_TYPE_TEST_CASE__VARIABLE__NAME = hydra.core.Name("variable")
+VARIABLE_OCCURS_IN_TYPE_TEST_CASE__TYPE__NAME = hydra.core.Name("type")
+VARIABLE_OCCURS_IN_TYPE_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class UnifyTypesTestCase:
+    r"""A test case which attempts to unify two types and compares the result. The expected result is either Left (failure message substring) or Right (substitution)."""
+    
+    schema_types: Annotated[frozenlist[hydra.core.Name], "The schema types map (type variable names that should not be bound)"]
+    left: Annotated[hydra.core.Type, "The left type to unify"]
+    right: Annotated[hydra.core.Type, "The right type to unify"]
+    expected: Annotated[Either[str, hydra.typing.TypeSubst], "The expected result: Left for failure (substring of error), Right for substitution"]
+
+UNIFY_TYPES_TEST_CASE__NAME = hydra.core.Name("hydra.testing.UnifyTypesTestCase")
+UNIFY_TYPES_TEST_CASE__SCHEMA_TYPES__NAME = hydra.core.Name("schemaTypes")
+UNIFY_TYPES_TEST_CASE__LEFT__NAME = hydra.core.Name("left")
+UNIFY_TYPES_TEST_CASE__RIGHT__NAME = hydra.core.Name("right")
+UNIFY_TYPES_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class JoinTypesTestCase:
+    r"""A test case which joins two types (producing type constraints or failing). The expected result is either Left (failure) or Right (list of constraints)."""
+    
+    left: Annotated[hydra.core.Type, "The left type to join"]
+    right: Annotated[hydra.core.Type, "The right type to join"]
+    expected: Annotated[Either[None, frozenlist[hydra.typing.TypeConstraint]], "The expected result: Left for failure, Right for constraints"]
+
+JOIN_TYPES_TEST_CASE__NAME = hydra.core.Name("hydra.testing.JoinTypesTestCase")
+JOIN_TYPES_TEST_CASE__LEFT__NAME = hydra.core.Name("left")
+JOIN_TYPES_TEST_CASE__RIGHT__NAME = hydra.core.Name("right")
+JOIN_TYPES_TEST_CASE__EXPECTED__NAME = hydra.core.Name("expected")

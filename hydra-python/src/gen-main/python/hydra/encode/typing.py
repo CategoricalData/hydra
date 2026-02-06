@@ -3,12 +3,20 @@
 r"""Term encoders for hydra.typing."""
 
 from __future__ import annotations
-from typing import cast
+from collections.abc import Callable
+from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.core
+import hydra.lib.lists
 import hydra.lib.maps
+import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.typing
+
+T0 = TypeVar("T0")
+
+def function_structure(env: Callable[[T0], hydra.core.Term], x: hydra.typing.FunctionStructure[T0]) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.typing.FunctionStructure"), (hydra.core.Field(hydra.core.Name("typeParams"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.name, x.type_params)))), hydra.core.Field(hydra.core.Name("params"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.name, x.params)))), hydra.core.Field(hydra.core.Name("bindings"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.binding, x.bindings)))), hydra.core.Field(hydra.core.Name("body"), hydra.encode.core.term(x.body)), hydra.core.Field(hydra.core.Name("domains"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.type, x.domains)))), hydra.core.Field(hydra.core.Name("codomain"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(hydra.encode.core.type, x.codomain)))), hydra.core.Field(hydra.core.Name("environment"), env(x.environment))))))
 
 def inference_context(x: hydra.typing.InferenceContext) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.typing.InferenceContext"), (hydra.core.Field(hydra.core.Name("schemaTypes"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(hydra.encode.core.name, hydra.encode.core.type_scheme, x.schema_types)))), hydra.core.Field(hydra.core.Name("primitiveTypes"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(hydra.encode.core.name, hydra.encode.core.type_scheme, x.primitive_types)))), hydra.core.Field(hydra.core.Name("dataTypes"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(hydra.encode.core.name, hydra.encode.core.type_scheme, x.data_types)))), hydra.core.Field(hydra.core.Name("classConstraints"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(hydra.encode.core.name, hydra.encode.core.type_variable_metadata, x.class_constraints)))), hydra.core.Field(hydra.core.Name("debug"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.debug)))))))))

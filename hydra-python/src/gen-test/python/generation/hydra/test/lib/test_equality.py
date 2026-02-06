@@ -162,3 +162,127 @@ def test_min__second_less():
 def test_min__equal():
 
     assert (hydra.lib.equality.min(5, 5)) == (5)
+
+# compare strings
+
+def test_compare_strings__less_than__lexicographic_():
+
+    assert (hydra.lib.equality.compare("apple", "banana")) == (hydra.util.Comparison.LESS_THAN)
+
+def test_compare_strings__equal():
+
+    assert (hydra.lib.equality.compare("hello", "hello")) == (hydra.util.Comparison.EQUAL_TO)
+
+def test_compare_strings__greater_than__lexicographic_():
+
+    assert (hydra.lib.equality.compare("zebra", "apple")) == (hydra.util.Comparison.GREATER_THAN)
+
+def test_compare_strings__empty_vs_non_empty():
+
+    assert (hydra.lib.equality.compare("", "a")) == (hydra.util.Comparison.LESS_THAN)
+
+def test_compare_strings__prefix_vs_longer():
+
+    assert (hydra.lib.equality.compare("ab", "abc")) == (hydra.util.Comparison.LESS_THAN)
+
+# lt strings
+
+def test_lt_strings__less__lexicographic_():
+
+    assert (hydra.lib.equality.lt("apple", "banana")) == (True)
+
+def test_lt_strings__equal():
+
+    assert (hydra.lib.equality.lt("hello", "hello")) == (False)
+
+def test_lt_strings__greater():
+
+    assert (hydra.lib.equality.lt("zebra", "apple")) == (False)
+
+# gt strings
+
+def test_gt_strings__greater__lexicographic_():
+
+    assert (hydra.lib.equality.gt("zebra", "apple")) == (True)
+
+def test_gt_strings__equal():
+
+    assert (hydra.lib.equality.gt("hello", "hello")) == (False)
+
+def test_gt_strings__less():
+
+    assert (hydra.lib.equality.gt("apple", "banana")) == (False)
+
+# max strings
+
+def test_max_strings__first_greater():
+
+    assert (hydra.lib.equality.max("zebra", "apple")) == ("zebra")
+
+def test_max_strings__second_greater():
+
+    assert (hydra.lib.equality.max("apple", "zebra")) == ("zebra")
+
+def test_max_strings__equal():
+
+    assert (hydra.lib.equality.max("hello", "hello")) == ("hello")
+
+# min strings
+
+def test_min_strings__first_less():
+
+    assert (hydra.lib.equality.min("apple", "zebra")) == ("apple")
+
+def test_min_strings__second_less():
+
+    assert (hydra.lib.equality.min("zebra", "apple")) == ("apple")
+
+def test_min_strings__equal():
+
+    assert (hydra.lib.equality.min("hello", "hello")) == ("hello")
+
+# compare floats
+
+def test_compare_floats__less_than():
+
+    assert (hydra.lib.equality.compare(1.5, 2.5)) == (hydra.util.Comparison.LESS_THAN)
+
+def test_compare_floats__equal():
+
+    assert (hydra.lib.equality.compare(3.14, 3.14)) == (hydra.util.Comparison.EQUAL_TO)
+
+def test_compare_floats__greater_than():
+
+    assert (hydra.lib.equality.compare(5.0, 3.0)) == (hydra.util.Comparison.GREATER_THAN)
+
+def test_compare_floats__negative_vs_positive():
+
+    assert (hydra.lib.equality.compare(-1.0, 1.0)) == (hydra.util.Comparison.LESS_THAN)
+
+# lt floats
+
+def test_lt_floats__less():
+
+    assert (hydra.lib.equality.lt(1.5, 2.5)) == (True)
+
+def test_lt_floats__equal():
+
+    assert (hydra.lib.equality.lt(3.14, 3.14)) == (False)
+
+def test_lt_floats__greater():
+
+    assert (hydra.lib.equality.lt(5.0, 3.0)) == (False)
+
+# gt floats
+
+def test_gt_floats__greater():
+
+    assert (hydra.lib.equality.gt(5.0, 3.0)) == (True)
+
+def test_gt_floats__equal():
+
+    assert (hydra.lib.equality.gt(3.14, 3.14)) == (False)
+
+def test_gt_floats__less():
+
+    assert (hydra.lib.equality.gt(1.5, 2.5)) == (False)

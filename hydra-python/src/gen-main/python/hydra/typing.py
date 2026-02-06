@@ -4,9 +4,32 @@ r"""Types supporting type inference and type reconstruction."""
 
 from __future__ import annotations
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, Node
-from typing import Annotated, TypeAlias
+from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
+from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.core
+
+Env = TypeVar("Env")
+
+@dataclass(frozen=True)
+class FunctionStructure(Generic[Env]):
+    r"""A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term."""
+    
+    type_params: Annotated[frozenlist[hydra.core.Name], "Type parameters (from type lambdas)"]
+    params: Annotated[frozenlist[hydra.core.Name], "Value parameters (from lambdas)"]
+    bindings: Annotated[frozenlist[hydra.core.Binding], "Let bindings accumulated from the term"]
+    body: Annotated[hydra.core.Term, "The body term after removing all lambdas, lets, etc."]
+    domains: Annotated[frozenlist[hydra.core.Type], "Domain types of the value parameters"]
+    codomain: Annotated[Maybe[hydra.core.Type], "The return type of the function (if type inference succeeded)"]
+    environment: Annotated[Env, "Updated environment after processing all bindings"]
+
+FUNCTION_STRUCTURE__NAME = hydra.core.Name("hydra.typing.FunctionStructure")
+FUNCTION_STRUCTURE__TYPE_PARAMS__NAME = hydra.core.Name("typeParams")
+FUNCTION_STRUCTURE__PARAMS__NAME = hydra.core.Name("params")
+FUNCTION_STRUCTURE__BINDINGS__NAME = hydra.core.Name("bindings")
+FUNCTION_STRUCTURE__BODY__NAME = hydra.core.Name("body")
+FUNCTION_STRUCTURE__DOMAINS__NAME = hydra.core.Name("domains")
+FUNCTION_STRUCTURE__CODOMAIN__NAME = hydra.core.Name("codomain")
+FUNCTION_STRUCTURE__ENVIRONMENT__NAME = hydra.core.Name("environment")
 
 @dataclass(frozen=True)
 class InferenceContext:

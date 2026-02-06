@@ -516,6 +516,14 @@ def print_expr(e: hydra.ast.Expr) -> str:
 def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
     return symbol_sep(";", inline_style(), v1)
 
+def suffix(s: str, expr: hydra.ast.Expr) -> hydra.core.Type:
+    r"""Append a suffix string to an expression."""
+    
+    @lru_cache(1)
+    def suf_op() -> hydra.core.Type:
+        return hydra.ast.Op(sym(s), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+    return ifx(suf_op(), expr, cst(""))
+
 def tab_indent(e: hydra.ast.Expr) -> hydra.core.Type:
     return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleAllLines("    ")), e)))
 

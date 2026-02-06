@@ -12,6 +12,7 @@ import hydra.encode.coders
 import hydra.encode.core
 import hydra.encode.json.model
 import hydra.encode.parsing
+import hydra.encode.typing
 import hydra.encode.util
 import hydra.json.model
 import hydra.lib.eithers
@@ -113,6 +114,9 @@ def inference_failure_test_case(x: hydra.testing.InferenceFailureTestCase) -> hy
 def inference_test_case(x: hydra.testing.InferenceTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.InferenceTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.type_scheme(x.output))))))
 
+def join_types_test_case(x: hydra.testing.JoinTypesTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JoinTypesTestCase"), (hydra.core.Field(hydra.core.Name("left"), hydra.encode.core.type(x.left)), hydra.core.Field(hydra.core.Name("right"), hydra.encode.core.type(x.right)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda _: cast(hydra.core.Term, hydra.core.TermUnit())), (lambda xs: cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.typing.type_constraint, xs)))), x.expected))))))))
+
 def json_coder_test_case(x: hydra.testing.JsonCoderTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.JsonCoderTestCase"), (hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("json"), hydra.encode.json.model.value(x.json))))))
 
@@ -174,6 +178,9 @@ def serialization_test_case(x: hydra.testing.SerializationTestCase) -> hydra.cor
 def simplify_term_test_case(x: hydra.testing.SimplifyTermTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.SimplifyTermTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
 
+def subst_in_type_test_case(x: hydra.testing.SubstInTypeTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.SubstInTypeTestCase"), (hydra.core.Field(hydra.core.Name("substitution"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda p: cast(hydra.core.Term, hydra.core.TermPair(hydra.lib.pairs.bimap(hydra.encode.core.name, hydra.encode.core.type, p)))), x.substitution)))), hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.type(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.type(x.output))))))
+
 def tag(x: hydra.testing.Tag) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.testing.Tag"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
@@ -194,6 +201,12 @@ def type_checking_test_case(x: hydra.testing.TypeCheckingTestCase) -> hydra.core
 
 def type_reduction_test_case(x: hydra.testing.TypeReductionTestCase) -> hydra.core.Type:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.TypeReductionTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.type(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.type(x.output))))))
+
+def unify_types_test_case(x: hydra.testing.UnifyTypesTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), (hydra.core.Field(hydra.core.Name("schemaTypes"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(hydra.encode.core.name, x.schema_types)))), hydra.core.Field(hydra.core.Name("left"), hydra.encode.core.type(x.left)), hydra.core.Field(hydra.core.Name("right"), hydra.encode.core.type(x.right)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), hydra.encode.typing.type_subst, x.expected))))))))
+
+def variable_occurs_in_type_test_case(x: hydra.testing.VariableOccursInTypeTestCase) -> hydra.core.Type:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), (hydra.core.Field(hydra.core.Name("variable"), hydra.encode.core.name(x.variable)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.expected)))))))))
 
 def test_case(v1: hydra.testing.TestCase) -> hydra.core.Type:
     match v1:
@@ -298,6 +311,18 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Type:
         
         case hydra.testing.TestCaseHoistPolymorphicLetBindings(value=y34):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("hoistPolymorphicLetBindings"), hoist_polymorphic_let_bindings_test_case(y34)))))
+        
+        case hydra.testing.TestCaseSubstInType(value=y35):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("substInType"), subst_in_type_test_case(y35)))))
+        
+        case hydra.testing.TestCaseVariableOccursInType(value=y36):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("variableOccursInType"), variable_occurs_in_type_test_case(y36)))))
+        
+        case hydra.testing.TestCaseUnifyTypes(value=y37):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unifyTypes"), unify_types_test_case(y37)))))
+        
+        case hydra.testing.TestCaseJoinTypes(value=y38):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("joinTypes"), join_types_test_case(y38)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
