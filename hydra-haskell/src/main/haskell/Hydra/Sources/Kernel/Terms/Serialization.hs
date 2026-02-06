@@ -10,7 +10,7 @@ import Hydra.Kernel hiding (
   indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, newline, newlineSep, noSep,
   noPad, noPadding, num, op, orOp, orSep, parenList, parens, parensList, parentheses, parenthesize,
   prefix, printExpr, printGraph, semicolonSep, sep, singleQuoted, space, spaceSep, squareBrackets,
-  sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
+  suffix, sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
   unsupportedVariant, withComma, withSemi)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors     as Accessors
@@ -118,6 +118,7 @@ module_ = Module ns elements
      toBinding sep,
      toBinding spaceSep,
      toBinding squareBrackets,
+     toBinding suffix,
      toBinding sym,
      toBinding symbolSep,
      toBinding tabIndent,
@@ -536,6 +537,17 @@ spaceSep = define "spaceSep" $
 squareBrackets :: TBinding Brackets
 squareBrackets = define "squareBrackets" $
   Ast.brackets (sym @@ string "[") (sym @@ string "]")
+
+suffix :: TBinding (String -> Expr -> Expr)
+suffix = define "suffix" $
+  doc "Append a suffix string to an expression" $
+  "s" ~> "expr" ~>
+  "sufOp" <~ Ast.op
+    (sym @@ var "s")
+    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone $
+  ifx @@ var "sufOp" @@ var "expr" @@ (cst @@ string "")
 
 sym :: TBinding (String -> Symbol)
 sym = define "sym" $
