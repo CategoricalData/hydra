@@ -12,6 +12,41 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.
+data FunctionStructure env = 
+  FunctionStructure {
+    -- | Type parameters (from type lambdas)
+    functionStructureTypeParams :: [Core.Name],
+    -- | Value parameters (from lambdas)
+    functionStructureParams :: [Core.Name],
+    -- | Let bindings accumulated from the term
+    functionStructureBindings :: [Core.Binding],
+    -- | The body term after removing all lambdas, lets, etc.
+    functionStructureBody :: Core.Term,
+    -- | Domain types of the value parameters
+    functionStructureDomains :: [Core.Type],
+    -- | The return type of the function (if type inference succeeded)
+    functionStructureCodomain :: (Maybe Core.Type),
+    -- | Updated environment after processing all bindings
+    functionStructureEnvironment :: env}
+  deriving (Eq, Ord, Read, Show)
+
+_FunctionStructure = (Core.Name "hydra.typing.FunctionStructure")
+
+_FunctionStructure_typeParams = (Core.Name "typeParams")
+
+_FunctionStructure_params = (Core.Name "params")
+
+_FunctionStructure_bindings = (Core.Name "bindings")
+
+_FunctionStructure_body = (Core.Name "body")
+
+_FunctionStructure_domains = (Core.Name "domains")
+
+_FunctionStructure_codomain = (Core.Name "codomain")
+
+_FunctionStructure_environment = (Core.Name "environment")
+
 -- | The context provided to type inference, including various typing environments.
 data InferenceContext = 
   InferenceContext {

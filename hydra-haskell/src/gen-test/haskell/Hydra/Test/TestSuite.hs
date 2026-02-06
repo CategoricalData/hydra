@@ -32,6 +32,8 @@ import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
 import qualified Hydra.Test.Serialization as Serialization
 import qualified Hydra.Test.Sorting as Sorting
+import qualified Hydra.Test.Substitution as Substitution
+import qualified Hydra.Test.Unification as Unification
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -73,5 +75,7 @@ allTests = Testing.TestGroup {
     Reduction.allTests,
     Rewriting.allTests,
     Serialization.allTests,
-    Sorting.allTests],
+    Sorting.allTests,
+    Substitution.allTests,
+    Unification.allTests],
   Testing.testGroupCases = []}

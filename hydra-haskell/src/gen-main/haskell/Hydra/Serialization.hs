@@ -436,6 +436,18 @@ squareBrackets = Ast.Brackets {
   Ast.bracketsOpen = (sym "["),
   Ast.bracketsClose = (sym "]")}
 
+-- | Append a suffix string to an expression
+suffix :: (String -> Ast.Expr -> Ast.Expr)
+suffix s expr =  
+  let sufOp = Ast.Op {
+          Ast.opSymbol = (sym s),
+          Ast.opPadding = Ast.Padding {
+            Ast.paddingLeft = Ast.WsNone,
+            Ast.paddingRight = Ast.WsNone},
+          Ast.opPrecedence = (Ast.Precedence 0),
+          Ast.opAssociativity = Ast.AssociativityNone}
+  in (ifx sufOp expr (cst ""))
+
 sym :: (String -> Ast.Symbol)
 sym s = (Ast.Symbol s)
 

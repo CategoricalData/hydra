@@ -106,6 +106,128 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
+      Testing.testGroupName = "integer types",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "int8 positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 127))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 127.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "int8 negative",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (-128)))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber (-128.0))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "int16 positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 1000))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 1000.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "int16 negative",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (-1000)))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber (-1000.0))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "uint8 max",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 255))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 255.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "uint8 zero",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint8)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 0))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 0.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "uint16 positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 60000))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 60000.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "uint32 positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint32)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 4000000000))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 4.0e9)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "uint64 positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 1000000))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 1000000.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bigint positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 123456789012345))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 1.23456789012345e14)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bigint negative",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint (-999999999999)))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber (-9.99999999999e11))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "float types",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bigfloat positive",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 3.14159265359))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 3.14159265359)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bigfloat negative",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (-2.71828)))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber (-2.71828))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bigfloat zero",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseJsonCoder (Testing.JsonCoderTestCase {
+            Testing.jsonCoderTestCaseType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)),
+            Testing.jsonCoderTestCaseTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat 0.0))),
+            Testing.jsonCoderTestCaseJson = (Model.ValueNumber 0.0)})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
       Testing.testGroupName = "collection types",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],

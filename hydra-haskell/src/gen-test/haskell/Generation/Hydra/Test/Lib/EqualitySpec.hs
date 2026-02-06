@@ -99,3 +99,92 @@ spec = H.describe "hydra.lib.equality primitives" $ do
     H.it "equal" $ H.shouldBe
       (Equality.min 5 5)
       (5)
+  H.describe "compare strings" $ do
+    H.it "less than (lexicographic)" $ H.shouldBe
+      (Equality.compare "apple" "banana")
+      (Util.ComparisonLessThan)
+    H.it "equal" $ H.shouldBe
+      (Equality.compare "hello" "hello")
+      (Util.ComparisonEqualTo)
+    H.it "greater than (lexicographic)" $ H.shouldBe
+      (Equality.compare "zebra" "apple")
+      (Util.ComparisonGreaterThan)
+    H.it "empty vs non-empty" $ H.shouldBe
+      (Equality.compare "" "a")
+      (Util.ComparisonLessThan)
+    H.it "prefix vs longer" $ H.shouldBe
+      (Equality.compare "ab" "abc")
+      (Util.ComparisonLessThan)
+  H.describe "lt strings" $ do
+    H.it "less (lexicographic)" $ H.shouldBe
+      (Equality.lt "apple" "banana")
+      (True)
+    H.it "equal" $ H.shouldBe
+      (Equality.lt "hello" "hello")
+      (False)
+    H.it "greater" $ H.shouldBe
+      (Equality.lt "zebra" "apple")
+      (False)
+  H.describe "gt strings" $ do
+    H.it "greater (lexicographic)" $ H.shouldBe
+      (Equality.gt "zebra" "apple")
+      (True)
+    H.it "equal" $ H.shouldBe
+      (Equality.gt "hello" "hello")
+      (False)
+    H.it "less" $ H.shouldBe
+      (Equality.gt "apple" "banana")
+      (False)
+  H.describe "max strings" $ do
+    H.it "first greater" $ H.shouldBe
+      (Equality.max "zebra" "apple")
+      ("zebra")
+    H.it "second greater" $ H.shouldBe
+      (Equality.max "apple" "zebra")
+      ("zebra")
+    H.it "equal" $ H.shouldBe
+      (Equality.max "hello" "hello")
+      ("hello")
+  H.describe "min strings" $ do
+    H.it "first less" $ H.shouldBe
+      (Equality.min "apple" "zebra")
+      ("apple")
+    H.it "second less" $ H.shouldBe
+      (Equality.min "zebra" "apple")
+      ("apple")
+    H.it "equal" $ H.shouldBe
+      (Equality.min "hello" "hello")
+      ("hello")
+  H.describe "compare floats" $ do
+    H.it "less than" $ H.shouldBe
+      (Equality.compare 1.5 2.5)
+      (Util.ComparisonLessThan)
+    H.it "equal" $ H.shouldBe
+      (Equality.compare 3.14 3.14)
+      (Util.ComparisonEqualTo)
+    H.it "greater than" $ H.shouldBe
+      (Equality.compare 5.0 3.0)
+      (Util.ComparisonGreaterThan)
+    H.it "negative vs positive" $ H.shouldBe
+      (Equality.compare (-1.0) 1.0)
+      (Util.ComparisonLessThan)
+  H.describe "lt floats" $ do
+    H.it "less" $ H.shouldBe
+      (Equality.lt 1.5 2.5)
+      (True)
+    H.it "equal" $ H.shouldBe
+      (Equality.lt 3.14 3.14)
+      (False)
+    H.it "greater" $ H.shouldBe
+      (Equality.lt 5.0 3.0)
+      (False)
+  H.describe "gt floats" $ do
+    H.it "greater" $ H.shouldBe
+      (Equality.gt 5.0 3.0)
+      (True)
+    H.it "equal" $ H.shouldBe
+      (Equality.gt 3.14 3.14)
+      (False)
+    H.it "less" $ H.shouldBe
+      (Equality.gt 1.5 2.5)
+      (False)

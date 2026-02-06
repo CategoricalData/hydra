@@ -19,6 +19,20 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+functionStructure :: ((Graph.Graph -> Core.Term -> Either Util.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Util.DecodingError (Typing.FunctionStructure t0))
+functionStructure env cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v1 ->  
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "typeParams" (Helpers.decodeList Core_.name) fieldMap cx) (\field_typeParams -> Eithers.bind (Helpers.requireField "params" (Helpers.decodeList Core_.name) fieldMap cx) (\field_params -> Eithers.bind (Helpers.requireField "bindings" (Helpers.decodeList Core_.binding) fieldMap cx) (\field_bindings -> Eithers.bind (Helpers.requireField "body" Core_.term fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "domains" (Helpers.decodeList Core_.type_) fieldMap cx) (\field_domains -> Eithers.bind (Helpers.requireField "codomain" (Helpers.decodeMaybe Core_.type_) fieldMap cx) (\field_codomain -> Eithers.bind (Helpers.requireField "environment" env fieldMap cx) (\field_environment -> Right (Typing.FunctionStructure {
+      Typing.functionStructureTypeParams = field_typeParams,
+      Typing.functionStructureParams = field_params,
+      Typing.functionStructureBindings = field_bindings,
+      Typing.functionStructureBody = field_body,
+      Typing.functionStructureDomains = field_domains,
+      Typing.functionStructureCodomain = field_codomain,
+      Typing.functionStructureEnvironment = field_environment})))))))))
+  _ -> (Left (Util.DecodingError "expected record of type hydra.typing.FunctionStructure"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
 inferenceContext :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Typing.InferenceContext)
 inferenceContext cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v1 ->  

@@ -6,7 +6,9 @@ module Hydra.Encode.Typing where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -15,6 +17,32 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+functionStructure :: ((t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term)
+functionStructure env x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "typeParams"),
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureTypeParams x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "params"),
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureParams x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "bindings"),
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.binding xs)) (Typing.functionStructureBindings x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "body"),
+      Core.fieldTerm = (Core_.term (Typing.functionStructureBody x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "domains"),
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Typing.functionStructureDomains x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "codomain"),
+      Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.type_ opt)) (Typing.functionStructureCodomain x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "environment"),
+      Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]}))
 
 inferenceContext :: (Typing.InferenceContext -> Core.Term)
 inferenceContext x = (Core.TermRecord (Core.Record {

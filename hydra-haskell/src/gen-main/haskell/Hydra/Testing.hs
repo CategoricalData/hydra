@@ -12,6 +12,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Module as Module
 import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -637,7 +638,15 @@ data TestCase =
   -- | A hoist all let bindings test (hoistAll=True, for Java)
   TestCaseHoistLetBindings HoistLetBindingsTestCase |
   -- | A hoist polymorphic let bindings test
-  TestCaseHoistPolymorphicLetBindings HoistPolymorphicLetBindingsTestCase
+  TestCaseHoistPolymorphicLetBindings HoistPolymorphicLetBindingsTestCase |
+  -- | A type substitution test
+  TestCaseSubstInType SubstInTypeTestCase |
+  -- | An occur check test for type unification
+  TestCaseVariableOccursInType VariableOccursInTypeTestCase |
+  -- | A type unification test
+  TestCaseUnifyTypes UnifyTypesTestCase |
+  -- | A join types test (produce type constraints)
+  TestCaseJoinTypes JoinTypesTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -709,6 +718,14 @@ _TestCase_hoistCaseStatements = (Core.Name "hoistCaseStatements")
 _TestCase_hoistLetBindings = (Core.Name "hoistLetBindings")
 
 _TestCase_hoistPolymorphicLetBindings = (Core.Name "hoistPolymorphicLetBindings")
+
+_TestCase_substInType = (Core.Name "substInType")
+
+_TestCase_variableOccursInType = (Core.Name "variableOccursInType")
+
+_TestCase_unifyTypes = (Core.Name "unifyTypes")
+
+_TestCase_joinTypes = (Core.Name "joinTypes")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -905,3 +922,83 @@ _WriterTestCase = (Core.Name "hydra.testing.WriterTestCase")
 _WriterTestCase_input = (Core.Name "input")
 
 _WriterTestCase_output = (Core.Name "output")
+
+-- | A test case which applies a type substitution to a type and compares the result. The substitution is provided as a list of (variable name, replacement type) pairs.
+data SubstInTypeTestCase = 
+  SubstInTypeTestCase {
+    -- | The type substitution as a list of (name, type) pairs
+    substInTypeTestCaseSubstitution :: [(Core.Name, Core.Type)],
+    -- | The type to substitute into
+    substInTypeTestCaseInput :: Core.Type,
+    -- | The expected result type
+    substInTypeTestCaseOutput :: Core.Type}
+  deriving (Eq, Ord, Read, Show)
+
+_SubstInTypeTestCase = (Core.Name "hydra.testing.SubstInTypeTestCase")
+
+_SubstInTypeTestCase_substitution = (Core.Name "substitution")
+
+_SubstInTypeTestCase_input = (Core.Name "input")
+
+_SubstInTypeTestCase_output = (Core.Name "output")
+
+-- | A test case which checks whether a type variable occurs in a type expression. This is the occur check used in type unification.
+data VariableOccursInTypeTestCase = 
+  VariableOccursInTypeTestCase {
+    -- | The variable name to search for
+    variableOccursInTypeTestCaseVariable :: Core.Name,
+    -- | The type to search within
+    variableOccursInTypeTestCaseType :: Core.Type,
+    -- | Whether the variable occurs in the type
+    variableOccursInTypeTestCaseExpected :: Bool}
+  deriving (Eq, Ord, Read, Show)
+
+_VariableOccursInTypeTestCase = (Core.Name "hydra.testing.VariableOccursInTypeTestCase")
+
+_VariableOccursInTypeTestCase_variable = (Core.Name "variable")
+
+_VariableOccursInTypeTestCase_type = (Core.Name "type")
+
+_VariableOccursInTypeTestCase_expected = (Core.Name "expected")
+
+-- | A test case which attempts to unify two types and compares the result. The expected result is either Left (failure message substring) or Right (substitution).
+data UnifyTypesTestCase = 
+  UnifyTypesTestCase {
+    -- | The schema types map (type variable names that should not be bound)
+    unifyTypesTestCaseSchemaTypes :: [Core.Name],
+    -- | The left type to unify
+    unifyTypesTestCaseLeft :: Core.Type,
+    -- | The right type to unify
+    unifyTypesTestCaseRight :: Core.Type,
+    -- | The expected result: Left for failure (substring of error), Right for substitution
+    unifyTypesTestCaseExpected :: (Either String Typing.TypeSubst)}
+  deriving (Eq, Ord, Read, Show)
+
+_UnifyTypesTestCase = (Core.Name "hydra.testing.UnifyTypesTestCase")
+
+_UnifyTypesTestCase_schemaTypes = (Core.Name "schemaTypes")
+
+_UnifyTypesTestCase_left = (Core.Name "left")
+
+_UnifyTypesTestCase_right = (Core.Name "right")
+
+_UnifyTypesTestCase_expected = (Core.Name "expected")
+
+-- | A test case which joins two types (producing type constraints or failing). The expected result is either Left (failure) or Right (list of constraints).
+data JoinTypesTestCase = 
+  JoinTypesTestCase {
+    -- | The left type to join
+    joinTypesTestCaseLeft :: Core.Type,
+    -- | The right type to join
+    joinTypesTestCaseRight :: Core.Type,
+    -- | The expected result: Left for failure, Right for constraints
+    joinTypesTestCaseExpected :: (Either () [Typing.TypeConstraint])}
+  deriving (Eq, Ord, Read, Show)
+
+_JoinTypesTestCase = (Core.Name "hydra.testing.JoinTypesTestCase")
+
+_JoinTypesTestCase_left = (Core.Name "left")
+
+_JoinTypesTestCase_right = (Core.Name "right")
+
+_JoinTypesTestCase_expected = (Core.Name "expected")
