@@ -34,6 +34,8 @@ For comprehensive documentation about Hydra's architecture, type system, and imp
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts: Type, Term, Graph, Flow monad, primitives, coders
 - **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
+- **[DSL Guide](https://github.com/CategoricalData/hydra/wiki/DSL-guide)** - Comprehensive guide to Hydra's domain-specific languages
+- **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite and language-specific testing
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides for extending Hydra
 
