@@ -63,6 +63,27 @@ executables:
     dependencies:
       - hydra
 
+  update-haskell-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-kernel
+    dependencies:
+      - hydra
+
+  update-haskell-eval-lib:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-eval-lib
+    dependencies:
+      - hydra
+
+  update-haskell-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-sources
+    dependencies:
+      - hydra
+
   verify-json-kernel:
     main: Main.hs
     source-dirs:
