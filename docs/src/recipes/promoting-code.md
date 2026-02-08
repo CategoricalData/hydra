@@ -559,6 +559,18 @@ When promoting code:
        Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
    ```
 
+8. **DSL module naming conventions**: Functions in DSL modules often have different names than their Haskell counterparts:
+   - `Flows.getState` doesn't exist - use `Monads.getState`
+   - `Maybes.catMaybes` doesn't exist - use `Maybes.mapMaybe ("x" ~> var "x")`
+   - `Maps.values` doesn't exist - use `Maps.toList` and map over pairs
+   - `Lists.any` doesn't exist - use foldl with `Logic.or`
+
+   When in doubt, check the actual exports in `Hydra.Dsl.Meta.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
+
+9. **Namespace collisions**: When your DSL module defines a function with the same name as something in `Hydra.Kernel`, you'll get ambiguity errors. Either:
+   - Rename your function (e.g., `partitionDefs` instead of `partitionDefinitions`)
+   - Hide the conflicting import: `import Hydra.Kernel hiding (partitionDefinitions)`
+
 8. **Separate I/O from pure logic**: When promoting code from an I/O-heavy module, extract as much pure logic
    as possible into the promoted module. The I/O wrapper in Haskell should become a thin shell that:
    - Reads input (files, network, etc.)
@@ -567,6 +579,169 @@ When promoting code:
    - Writes output
 
    This maximizes code reuse when porting to other languages.
+
+## Recommended Approach: Incremental Hybrid Testing
+
+When promoting a large module like a language coder, use this incremental approach that provides continuous verification:
+
+### Phase 1: Simplify Staging Code First
+
+Before starting the actual promotion, refactor the staging (raw Haskell) code:
+
+1. **Break up complex functions** into smaller, composable helpers
+2. **Simplify pattern matching** to align with Hydra's case statement patterns
+3. **Extract pure logic** from functions with side effects
+4. **Remove unnecessary callbacks** - if functions take callbacks to break circular dependencies, consider whether direct calls would work
+5. **Test the refactored staging code** to verify it still works correctly
+
+This preparation makes the actual promotion much easier and catches issues early.
+
+### Phase 2: Create DSL Module Structure
+
+Create the source module file with:
+- Standard imports
+- Module namespace and dependencies
+- Empty elements list
+
+Build to verify the structure compiles.
+
+### Phase 3: Incremental Promotion with Hybrid Testing
+
+The key insight is to **keep both versions working simultaneously**:
+
+1. **Import the generated module in the staging module**:
+   ```haskell
+   -- In Hydra.Ext.Staging.Python.Coder
+   import qualified Hydra.Ext.Python.Coder as Generated
+   ```
+
+2. **Promote functions one at a time** to the DSL Sources module
+
+3. **After regenerating**, comment out the corresponding function in staging:
+   ```haskell
+   -- PROMOTED: function is now in Generated module
+   -- originalFunction :: ...
+   -- originalFunction = ...
+   ```
+
+4. **Use the generated function from the import**:
+   ```haskell
+   -- Staging code now uses:
+   Generated.originalFunction
+   ```
+
+5. **Test after each promotion** using the sync script (e.g., `bin/sync-python.sh`)
+
+6. **Verify identical output** - the generated code should produce the same results
+
+This approach:
+- Provides immediate feedback when something breaks
+- Makes it clear which functions have been promoted
+- Allows incremental progress with minimal risk
+- Documents the promotion progress visually
+
+### Phase 4: Handle Interface Differences
+
+When promoting, watch for functions with callback parameters used to break circular dependencies:
+
+```haskell
+-- Staging version (with callback)
+encodeDefinition :: Env -> (Env -> Term -> Expression) -> Definition -> Expression
+
+-- DSL version (direct call)
+encodeDefinition :: TBinding (Env -> Definition -> Expression)
+-- Calls encodeTermInline directly inside
+```
+
+The DSL can handle mutual recursion directly - functions can reference each other without explicit callbacks. Remove callback parameters and replace `var "callback" @@ args` with direct calls like `otherFunction @@ args`.
+
+### Phase 5: Complete the Migration
+
+Once all functions are promoted and the staging module just re-exports from the generated module:
+
+1. Update consumers to import the generated module directly
+2. Remove or archive the staging module
+3. Update documentation
+
+### Example: Regeneration Script
+
+When regenerating, ensure you include all required modules:
+
+```haskell
+main = do
+  writeHaskell "src/gen-main/haskell"
+    (allHaskellModules <> hydraExtModules)  -- Full module universe
+    [PythonCoder.module_]  -- Module to generate
+  where
+    allHaskellModules = kernelModules <> otherModules  -- Include CoderUtils, etc.
+```
+
+Common mistake: Using just `kernelModules` misses helper modules like `CoderUtils` that contain shared functionality.
+
+### Lessons from Python Coder Promotion
+
+Key issues encountered and their solutions:
+
+1. **Callback parameters vs direct calls**: The original DSL versions added callback parameters to break circular dependencies. These are unnecessary - the DSL handles mutual recursion directly. Remove callbacks and use direct function references.
+
+2. **TBinding reference vs callback**: When passing a TBinding function as a callback argument, you need a lambda wrapper:
+   ```haskell
+   -- Wrong: encodeMultiline @@ encodeTermMultiline
+   -- Correct: encodeMultiline @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "e" @@ var "t")
+   ```
+
+3. **Module dependencies in regeneration**: The `writeHaskell` function needs the complete universe of modules that might be referenced. Include `otherModules` (which contains `CoderUtils`) not just `kernelModules`.
+
+4. **Interface alignment**: Ensure DSL function signatures match staging signatures exactly. Extra parameters break callers.
+
+5. **Non-exhaustive patterns in nested cases**: When using nested `cases` expressions, each needs a default case:
+   ```haskell
+   -- Wrong - inner cases without default causes non-exhaustive pattern errors:
+   cases _Outer (var "x") Nothing [
+     _Outer_foo>>: "f" ~> cases _Inner (var "f") Nothing [...]]
+
+   -- Correct - extract default logic and provide it to nested cases:
+   "dfltLogic" <~ someDefaultExpr $
+   cases _Outer (var "x") (Just $ var "dfltLogic") [
+     _Outer_foo>>: "f" ~> cases _Inner (var "f") (Just $ var "dfltLogic") [...]]
+   ```
+
+6. **Metadata flags for generated imports**: When encoding produces output that requires imports (like `@lru_cache` decorators), ensure the corresponding metadata flag is set via `updateMeta`:
+   ```haskell
+   -- When adding a decorator that requires an import:
+   updateMeta @@ (setMetaUsesLruCache @@ true)
+   ```
+   Missing metadata flags cause `NameError` in generated code because imports won't be added.
+
+7. **Bindings with vs without type schemes**: When processing bindings, check whether a type scheme is present - bindings WITH type schemes typically need different handling (e.g., `encodeTermAssignment`) than bindings without:
+   ```haskell
+   Maybes.maybe
+     (handleNoTypeScheme @@ ...)  -- No type scheme
+     ("ts" ~> handleWithTypeScheme @@ var "ts" @@ ...)  -- Has type scheme
+     (Core.bindingType $ var "binding")
+   ```
+
+### What Cannot Be Promoted
+
+Some code is inherently "driver" or "orchestration" code that's best kept in hand-written Haskell:
+
+1. **Module-level orchestration** (`moduleToPython`, `encodeModule`): Functions that:
+   - Reorder definitions using topological sorting
+   - Generate import statements based on collected metadata
+   - Serialize ASTs to strings and map to file paths
+   - Use `CM.mapM` for traversing lists in Flow context
+
+2. **Test generation infrastructure**: Code that:
+   - Creates test codecs and test generators
+   - Builds file paths for test output
+   - Uses complex Haskell features like `FlowState` pattern matching
+
+These functions typically live in a thin wrapper module (e.g., `Hydra.Ext.Python.Module`) that:
+- Imports everything from the Generated module
+- Provides the entry points that call into generated encoding functions
+- Handles final serialization and file I/O concerns
+
+This pattern keeps the DSL focused on encoding logic while hand-written Haskell handles language-specific orchestration.
 
 ## Related Recipes
 
