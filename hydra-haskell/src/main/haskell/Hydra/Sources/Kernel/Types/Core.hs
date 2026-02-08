@@ -1,5 +1,6 @@
 module Hydra.Sources.Kernel.Types.Core where
 
+-- Special "bootstrapping" imports for hydra.core
 import Hydra.Kernel hiding (literalType)
 import Hydra.Dsl.Annotations (doc)
 import Hydra.Dsl.Bootstrap

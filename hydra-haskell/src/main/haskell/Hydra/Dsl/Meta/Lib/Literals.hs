@@ -47,6 +47,9 @@ bigintToUint32 = primitive1 _literals_bigintToUint32
 bigintToUint64 :: TTerm Integer -> TTerm Integer
 bigintToUint64 = primitive1 _literals_bigintToUint64
 
+binaryToBytes :: TTerm B.ByteString -> TTerm [Int]
+binaryToBytes = primitive1 _literals_binaryToBytes
+
 binaryToString :: TTerm B.ByteString -> TTerm String
 binaryToString = primitive1 _literals_binaryToString
 

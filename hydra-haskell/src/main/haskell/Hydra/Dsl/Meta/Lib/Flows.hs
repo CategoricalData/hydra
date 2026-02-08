@@ -51,3 +51,6 @@ pure x = primitive1 _flows_pure (asTerm x)
 
 sequence :: TTerm [Flow s a] -> TTerm (Flow s [a])
 sequence = primitive1 _flows_sequence
+
+withDefault :: AsTerm t x => t -> TTerm (Flow s x) -> TTerm (Flow s x)
+withDefault fallback flow = primitive2 _flows_withDefault (asTerm fallback) flow

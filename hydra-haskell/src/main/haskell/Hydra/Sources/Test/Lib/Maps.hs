@@ -1,18 +1,22 @@
 module Hydra.Sources.Test.Lib.Maps where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
-import qualified Data.List as L
-import qualified Data.Map as M
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
 
+-- Additional imports specific to this file
+import Hydra.Testing
+import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 
 
@@ -44,7 +48,7 @@ intStringMap pairs = Core.termMap $ Phantoms.map $ M.fromList $ fmap toPair pair
 -- Helper for optional values
 optionalString :: Maybe String -> TTerm Term
 optionalString Nothing = Core.termMaybe nothing
-optionalString (Just s) = Core.termMaybe $ just (MetaTerms.string s)
+optionalString (Just s) = Core.termMaybe $ just (Terms.string s)
 
 -- Test groups for hydra.lib.maps primitives
 
@@ -58,7 +62,7 @@ mapsSingleton :: TTerm TestGroup
 mapsSingleton = subgroup "singleton" [
   test "single entry" 42 "hello" [(42, "hello")]]
   where
-    test name k v result = primCase name _maps_singleton [int32 k, MetaTerms.string v] (intStringMap result)
+    test name k v result = primCase name _maps_singleton [int32 k, Terms.string v] (intStringMap result)
 
 mapsFromList :: TTerm TestGroup
 mapsFromList = subgroup "fromList" [
@@ -67,7 +71,7 @@ mapsFromList = subgroup "fromList" [
   test "empty list" [] []]
   where
     test name input expected = primCase name _maps_fromList [
-      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (MetaTerms.string v)) input
+      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (Terms.string v)) input
       ] $ intStringMap expected
 
 mapsToList :: TTerm TestGroup
@@ -77,7 +81,7 @@ mapsToList = subgroup "toList" [
   test "empty map" [] []]
   where
     test name input expected = primCase name _maps_toList [intStringMap input] (
-      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (MetaTerms.string v)) expected)
+      list $ Prelude.map (\(k, v) -> Core.termPair $ Phantoms.pair (int32 k) (Terms.string v)) expected)
 
 mapsInsert :: TTerm TestGroup
 mapsInsert = subgroup "insert" [
@@ -85,7 +89,7 @@ mapsInsert = subgroup "insert" [
   test "update existing" 2 "updated" [(1, "a"), (2, "b")] [(1, "a"), (2, "updated")],
   test "insert into empty" 1 "x" [] [(1, "x")]]
   where
-    test name k v m result = primCase name _maps_insert [int32 k, MetaTerms.string v, intStringMap m] (intStringMap result)
+    test name k v m result = primCase name _maps_insert [int32 k, Terms.string v, intStringMap m] (intStringMap result)
 
 mapsRemove :: TTerm TestGroup
 mapsRemove = subgroup "remove" [
@@ -140,7 +144,7 @@ mapsElems = subgroup "elems" [
   test "unsorted keys" [(3, "c"), (1, "a"), (2, "b")] ["a", "b", "c"],
   test "empty map" [] []]
   where
-    test name m result = primCase name _maps_elems [intStringMapOrEmpty m] (list $ Prelude.map MetaTerms.string result)
+    test name m result = primCase name _maps_elems [intStringMapOrEmpty m] (list $ Prelude.map Terms.string result)
 
 mapsMap :: TTerm TestGroup
 mapsMap = subgroup "map" [
@@ -157,7 +161,7 @@ mapsFindWithDefault = subgroup "findWithDefault" [
   test "use default" "default" 3 [(1, "a"), (2, "b")] "default"]
   where
     test name def k m result = primCase name _maps_findWithDefault [
-      MetaTerms.string def, int32 k, intStringMap m] (MetaTerms.string result)
+      Terms.string def, int32 k, intStringMap m] (Terms.string result)
 
 mapsUnion :: TTerm TestGroup
 mapsUnion = subgroup "union" [
@@ -215,11 +219,11 @@ mapsAlter = subgroup "alter" [
     -- The alter function tests use different functions:
     -- insert: always return Just "new"
     test "insert new key" k m result = primCase "insert new key" _maps_alter [
-      lambda "opt" (Core.termMaybe $ just (MetaTerms.string "new")),
+      lambda "opt" (Core.termMaybe $ just (Terms.string "new")),
       int32 k, intStringMap m] (intStringMap result)
     -- update: return Just "updated" if exists
     test "update existing key" k m result = primCase "update existing key" _maps_alter [
-      lambda "opt" (Core.termMaybe $ just (MetaTerms.string "updated")),
+      lambda "opt" (Core.termMaybe $ just (Terms.string "updated")),
       int32 k, intStringMap m] (intStringMap result)
     -- delete: always return Nothing
     test "delete key" k m result = primCase "delete key" _maps_alter [

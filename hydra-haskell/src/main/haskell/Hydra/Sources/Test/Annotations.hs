@@ -1,20 +1,27 @@
 -- | Test cases for hydra.annotations functions
 module Hydra.Sources.Test.Annotations where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
 import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Core as Core
-import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-
-import qualified Data.Map as M
 
 
 -- | Test trace for Flow-based tests
@@ -45,13 +52,13 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   -- Note: These tests require interpretation because setTermAnnotation uses maps.alter which has no interpreter impl
   evalCase "set single annotation #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ int32Term 42) @@ stringTerm "foo")
-    (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (nameTerm "k1") (int32Term 42)),
+    (annotatedTerm (stringTerm "foo") $ Terms.map $ Maps.singleton (nameTerm "k1") (int32Term 42)),
   evalCase "set single annotation #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "myKey" @@ (optional $ just $ int32Term (-17)) @@ stringTerm "bar")
-    (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "myKey") (int32Term (-17))),
+    (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "myKey") (int32Term (-17))),
   evalCase "set single annotation #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "hello") @@ int32Term 0)
-    (annotatedTerm (int32Term 0) $ MetaTerms.map $ Maps.singleton (nameTerm "x") (stringTerm "hello")),
+    (annotatedTerm (int32Term 0) $ Terms.map $ Maps.singleton (nameTerm "x") (stringTerm "hello")),
 
   -- Retrieve a single value (multiple cases)
   -- Note: These tests require the interpreter because getTermAnnotation uses pattern matching on Term
@@ -84,13 +91,13 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   evalCase "set multiple annotations #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ booleanTerm True))
-    (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.fromList $ Phantoms.list [
+    (annotatedTerm (booleanTerm True) $ Terms.map $ Maps.fromList $ Phantoms.list [
       Phantoms.pair (nameTerm "k1") (stringTerm "first"),
       Phantoms.pair (nameTerm "k2") (int32Term 200)]),
   evalCase "set multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 0)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term (-5)) @@ stringTerm "test"))
-    (annotatedTerm (stringTerm "test") $ MetaTerms.map $ Maps.fromList $ Phantoms.list [
+    (annotatedTerm (stringTerm "test") $ Terms.map $ Maps.fromList $ Phantoms.list [
       Phantoms.pair (nameTerm "a") (int32Term (-5)),
       Phantoms.pair (nameTerm "b") (int32Term 0)]),
 
@@ -98,15 +105,15 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
   evalCase "outer annotation overrides inner #1"
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "outer")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "inner") @@ stringTerm "bar"))
-    (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "k1") (stringTerm "outer")),
+    (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "k1") (stringTerm "outer")),
   evalCase "outer annotation overrides inner #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "new")
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "x" @@ (optional $ just $ stringTerm "old") @@ int32Term 42))
-    (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "x") (stringTerm "new")),
+    (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "x") (stringTerm "new")),
   evalCase "outer annotation overrides inner #3"
     (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 999)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "key" @@ (optional $ just $ int32Term 1) @@ booleanTerm False))
-    (annotatedTerm (booleanTerm False) $ MetaTerms.map $ Maps.singleton (nameTerm "key") (int32Term 999)),
+    (annotatedTerm (booleanTerm False) $ Terms.map $ Maps.singleton (nameTerm "key") (int32Term 999)),
 
   -- Unset a single annotation (multiple cases)
   evalCase "unset single annotation #1"
@@ -123,12 +130,12 @@ arbitraryAnnotationTests = subgroup "arbitrary annotations" [
     (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k2" @@ (optional $ just $ int32Term 200)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "k1" @@ (optional $ just $ stringTerm "first") @@ int64Term 137)))
-    (annotatedTerm (int64Term 137) $ MetaTerms.map $ Maps.singleton (nameTerm "k2") (int32Term 200)),
+    (annotatedTerm (int64Term 137) $ Terms.map $ Maps.singleton (nameTerm "k2") (int32Term 200)),
   evalCase "unset one of multiple annotations #2"
     (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional nothing)
       @@ (metaref Annotations.setTermAnnotation @@ nameTerm "b" @@ (optional $ just $ int32Term 2)
         @@ (metaref Annotations.setTermAnnotation @@ nameTerm "a" @@ (optional $ just $ int32Term 1) @@ stringTerm "x")))
-    (annotatedTerm (stringTerm "x") $ MetaTerms.map $ Maps.singleton (nameTerm "a") (int32Term 1))]
+    (annotatedTerm (stringTerm "x") $ Terms.map $ Maps.singleton (nameTerm "a") (int32Term 1))]
 
 -- | Test cases for getTermDescription and setTermDescription
 descriptionTests :: TTerm TestGroup
@@ -137,13 +144,13 @@ descriptionTests = subgroup "descriptions" [
   -- Note: These tests require interpretation because setTermDescription uses maps.alter which has no interpreter impl
   evalCase "set description #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "my description") @@ stringTerm "foo")
-    (annotatedTerm (stringTerm "foo") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "my description")),
+    (annotatedTerm (stringTerm "foo") $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "my description")),
   evalCase "set description #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "") @@ int32Term 42)
-    (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "")),
+    (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "")),
   evalCase "set description #3"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "A longer description with spaces") @@ booleanTerm True)
-    (annotatedTerm (booleanTerm True) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
+    (annotatedTerm (booleanTerm True) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
 
   -- Get existing description (returns Flow Graph (Maybe String))
   -- Note: These tests require the interpreter because getTermDescription uses Flow and pattern matching
@@ -181,11 +188,11 @@ descriptionTests = subgroup "descriptions" [
   evalCase "outer description overrides inner #1"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "outer")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "inner") @@ stringTerm "bar"))
-    (annotatedTerm (stringTerm "bar") $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "outer")),
+    (annotatedTerm (stringTerm "bar") $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "outer")),
   evalCase "outer description overrides inner #2"
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "new")
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "old") @@ int32Term 99))
-    (annotatedTerm (int32Term 99) $ MetaTerms.map $ Maps.singleton (nameTerm "description") (stringTerm "new")),
+    (annotatedTerm (int32Term 99) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "new")),
 
   -- Unset a description (multiple cases)
   evalCase "unset description #1"
@@ -208,21 +215,21 @@ layeredAnnotationTests = subgroup "layered annotations" [
 
   evalCaseWithTags "get annotation from singly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
-      @@ (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1)))
+      @@ (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1)))
     (optional $ just $ int32Term 1),
 
   evalCaseWithTags "get inner annotation from doubly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
-           (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
-           $ MetaTerms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
+           (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
+           $ Terms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
     (optional $ just $ int32Term 1),
 
   evalCaseWithTags "get outer annotation from doubly annotated term" [tag_requiresFlowDecoding]
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
-           (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
-           $ MetaTerms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
+           (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
+           $ Terms.map $ Maps.singleton (nameTerm "two") (int32Term 2)))
     (optional $ just $ int32Term 2),
 
   -- Non-overridden annotation still accessible in triply annotated term
@@ -230,9 +237,9 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (metaref Annotations.getTermAnnotation @@ nameTerm "two"
       @@ (annotatedTerm
            (annotatedTerm
-             (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
-             $ MetaTerms.map $ Maps.singleton (nameTerm "two") (int32Term 2))
-           $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
+             (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
+             $ Terms.map $ Maps.singleton (nameTerm "two") (int32Term 2))
+           $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
     (optional $ just $ int32Term 2),
 
   -- Outer annotations override inner ones
@@ -240,9 +247,9 @@ layeredAnnotationTests = subgroup "layered annotations" [
     (metaref Annotations.getTermAnnotation @@ nameTerm "one"
       @@ (annotatedTerm
            (annotatedTerm
-             (annotatedTerm (int32Term 42) $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
-             $ MetaTerms.map $ Maps.singleton (nameTerm "two") (int32Term 2))
-           $ MetaTerms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
+             (annotatedTerm (int32Term 42) $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 1))
+             $ Terms.map $ Maps.singleton (nameTerm "two") (int32Term 2))
+           $ Terms.map $ Maps.singleton (nameTerm "one") (int32Term 99)))
     (optional $ just $ int32Term 99)]
 
 allTests :: TBinding TestGroup

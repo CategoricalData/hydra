@@ -1,15 +1,22 @@
 module Hydra.Sources.Test.Lib.Pairs where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
+-- Additional imports specific to this file
+import Hydra.Testing
+import Hydra.Sources.Libraries
 
 
 ns :: Namespace
@@ -23,7 +30,7 @@ module_ = Module ns elements [] [] $
 
 -- Helper to create pair terms
 pairTerm :: Int -> String -> TTerm Term
-pairTerm i s = MetaTerms.pair (int32 i) (MetaTerms.string s)
+pairTerm i s = Terms.pair (int32 i) (Terms.string s)
 
 -- Test groups for hydra.lib.pairs primitives
 
@@ -35,7 +42,7 @@ pairsBimap = subgroup "bimap" [
     test name fst snd resultFst resultSnd = primCase name _pairs_bimap [
       lambda "x" (primitive _math_mul @@ var "x" @@ int32 2),
       lambda "s" (primitive _strings_length @@ var "s"),
-      pairTerm fst snd] (MetaTerms.pair (int32 resultFst) (int32 resultSnd))
+      pairTerm fst snd] (Terms.pair (int32 resultFst) (int32 resultSnd))
 
 pairsFirst :: TTerm TestGroup
 pairsFirst = subgroup "first" [
@@ -51,7 +58,7 @@ pairsSecond = subgroup "second" [
   test "empty string" 0 "" "",
   test "long string" 123 "testing" "testing"]
   where
-    test name fst snd result = primCase name _pairs_second [pairTerm fst snd] (MetaTerms.string result)
+    test name fst snd result = primCase name _pairs_second [pairTerm fst snd] (Terms.string result)
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

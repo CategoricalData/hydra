@@ -1,16 +1,18 @@
 module Hydra.Sources.Test.TestTypes where
 
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++), (>:))
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Module        as DModule
-import qualified Hydra.Dsl.Types         as Types
-import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
-import qualified Data.List               as L
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Meta.Types as T
-import           Hydra.Dsl.Meta.Phantoms (toBinding, definitionInModule, firstClassType)
-import           Hydra.Dsl.Meta.Base (name, (>:))
+import Hydra.Dsl.Meta.Base (name, (>:))
+import qualified Hydra.Dsl.Meta.Module        as DModule
+import qualified Hydra.Dsl.Types              as Types
+import           Prelude hiding ((++))
 
 
 ns :: Namespace
