@@ -1,16 +1,20 @@
 module Hydra.Ext.Sources.Pg.Mapping where
 
 -- Standard imports for type-level sources outside of the kernel
-import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@))
-import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import           Hydra.Kernel
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import           Hydra.Dsl.Types                    ((>:), (@@))
+import qualified Hydra.Dsl.Types                    as T
+import qualified Hydra.Sources.Kernel.Types.Core    as Core
+import qualified Data.List                          as L
+import qualified Data.Map                           as M
+import qualified Data.Set                           as S
+import qualified Data.Maybe                         as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Sources.Pg.Model as PgModel
+import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Ext.Sources.Pg.Model         as PgModel
 
 
 ns :: Namespace

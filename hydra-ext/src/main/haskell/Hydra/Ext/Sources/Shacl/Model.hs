@@ -1,15 +1,19 @@
 module Hydra.Ext.Sources.Shacl.Model where
 
 -- Standard imports for type-level sources outside of the kernel
-import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@))
-import qualified Hydra.Dsl.Types as T
+import           Hydra.Kernel
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import           Hydra.Dsl.Types                 ((>:), (@@))
+import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Data.List                       as L
+import qualified Data.Map                        as M
+import qualified Data.Set                        as S
+import qualified Data.Maybe                      as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
+import qualified Hydra.Ext.Sources.Rdf.Syntax    as RdfSyntax
 
 
 ns :: Namespace

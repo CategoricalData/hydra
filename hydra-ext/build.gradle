@@ -54,3 +54,5 @@ publishing {
 signing {
     sign publishing.publications.mavenJava
 }
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
