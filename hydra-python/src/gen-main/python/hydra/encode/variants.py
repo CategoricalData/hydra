@@ -7,7 +7,7 @@ from typing import cast
 import hydra.core
 import hydra.variants
 
-def elimination_variant(v1: hydra.variants.EliminationVariant) -> hydra.core.Type:
+def elimination_variant(v1: hydra.variants.EliminationVariant) -> hydra.core.Term:
     match v1:
         case hydra.variants.EliminationVariant.RECORD:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.EliminationVariant"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -21,7 +21,7 @@ def elimination_variant(v1: hydra.variants.EliminationVariant) -> hydra.core.Typ
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def function_variant(v1: hydra.variants.FunctionVariant) -> hydra.core.Type:
+def function_variant(v1: hydra.variants.FunctionVariant) -> hydra.core.Term:
     match v1:
         case hydra.variants.FunctionVariant.ELIMINATION:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.FunctionVariant"), hydra.core.Field(hydra.core.Name("elimination"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -35,7 +35,7 @@ def function_variant(v1: hydra.variants.FunctionVariant) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def literal_variant(v1: hydra.variants.LiteralVariant) -> hydra.core.Type:
+def literal_variant(v1: hydra.variants.LiteralVariant) -> hydra.core.Term:
     match v1:
         case hydra.variants.LiteralVariant.BINARY:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.LiteralVariant"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -55,7 +55,7 @@ def literal_variant(v1: hydra.variants.LiteralVariant) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Type:
+def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Term:
     match v1:
         case hydra.variants.TermVariant.ANNOTATED:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("annotated"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -114,7 +114,7 @@ def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def type_variant(v1: hydra.variants.TypeVariant) -> hydra.core.Type:
+def type_variant(v1: hydra.variants.TypeVariant) -> hydra.core.Term:
     match v1:
         case hydra.variants.TypeVariant.ANNOTATED:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("annotated"), cast(hydra.core.Term, hydra.core.TermUnit())))))

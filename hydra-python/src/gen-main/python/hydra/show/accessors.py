@@ -3,6 +3,7 @@
 r"""Utilities for working with term accessors."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
@@ -14,7 +15,6 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
 import hydra.rewriting
 
@@ -93,16 +93,16 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.core.Type:
+def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
     r"""Build an accessor graph from a term."""
     
     dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody())
     def helper(ids: FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], mroot: Maybe[hydra.accessors.AccessorNode], path: frozenlist[hydra.accessors.TermAccessor], state: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], accessor_term: tuple[hydra.accessors.TermAccessor, hydra.core.Term]) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
         @lru_cache(1)
-        def accessor() -> hydra.core.Type:
+        def accessor() -> hydra.accessors.TermAccessor:
             return hydra.lib.pairs.first(accessor_term)
         @lru_cache(1)
-        def current_term() -> hydra.core.Type:
+        def current_term() -> hydra.core.Term:
             return hydra.lib.pairs.second(accessor_term)
         @lru_cache(1)
         def nodes_edges() -> tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]]:
@@ -125,7 +125,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                 def bindings() -> frozenlist[hydra.core.Binding]:
                     return let_expr.bindings
                 @lru_cache(1)
-                def env() -> hydra.core.Type:
+                def env() -> hydra.core.Term:
                     return let_expr.body
                 @lru_cache(1)
                 def binding_names() -> frozenlist[hydra.core.Name]:
@@ -150,7 +150,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     def unique_label() -> str:
                         return hydra.names.unique_label(current_visited(), raw_label())
                     @lru_cache(1)
-                    def node() -> hydra.core.Type:
+                    def node() -> hydra.accessors.AccessorNode:
                         return hydra.accessors.AccessorNode(name, raw_label(), unique_label())
                     @lru_cache(1)
                     def new_visited() -> frozenset[str]:
@@ -164,7 +164,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     return ((new_nodes(), new_visited()), new_ids())
                 @lru_cache(1)
                 def nodes_visited_ids1() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]]:
-                    return hydra.lib.lists.foldl(add_binding_name, (((), visited()), ids), binding_names())
+                    return hydra.lib.lists.foldl((lambda x1, x2: add_binding_name(x1, x2)), (((), visited()), ids), binding_names())
                 @lru_cache(1)
                 def nodes1() -> frozenlist[hydra.accessors.AccessorNode]:
                     return hydra.lib.pairs.first(hydra.lib.pairs.first(nodes_visited_ids1()))
@@ -176,13 +176,13 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     return hydra.lib.pairs.second(nodes_visited_ids1())
                 def add_binding_term(current_state: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], node_binding: tuple[hydra.accessors.AccessorNode, hydra.core.Binding]) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
                     @lru_cache(1)
-                    def root() -> hydra.core.Type:
+                    def root() -> hydra.accessors.AccessorNode:
                         return hydra.lib.pairs.first(node_binding)
                     @lru_cache(1)
-                    def binding() -> hydra.core.Type:
+                    def binding() -> hydra.core.Binding:
                         return hydra.lib.pairs.second(node_binding)
                     @lru_cache(1)
-                    def term1() -> hydra.core.Type:
+                    def term1() -> hydra.core.Term:
                         return binding().term
                     return helper(ids1(), Just(root()), (), current_state, (dont_care_accessor, term1()))
                 @lru_cache(1)
@@ -190,7 +190,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     return hydra.lib.lists.zip(nodes1(), bindings())
                 @lru_cache(1)
                 def state_after_bindings() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
-                    return hydra.lib.lists.foldl(add_binding_term, ((hydra.lib.lists.concat2(nodes1(), nodes()), edges()), visited1()), node_binding_pairs())
+                    return hydra.lib.lists.foldl((lambda x1, x2: add_binding_term(x1, x2)), ((hydra.lib.lists.concat2(nodes1(), nodes()), edges()), visited1()), node_binding_pairs())
                 return helper(ids1(), mroot, next_path(), state_after_bindings(), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env()))
             
             case hydra.core.TermVariable(value=name):

@@ -3,12 +3,11 @@
 r"""Evaluation-level implementations of Either functions for the Hydra interpreter."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from hydra.dsl.python import Either, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.compute
 import hydra.core
 import hydra.extract.core
-import hydra.graph
 import hydra.lib.eithers
 import hydra.lib.flows
 import hydra.lib.lists

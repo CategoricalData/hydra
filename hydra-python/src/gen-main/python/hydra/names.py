@@ -3,8 +3,10 @@
 r"""Functions for working with qualified names."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing
+from typing import cast
 import hydra.core
 import hydra.formatting
 import hydra.lib.equality
@@ -17,7 +19,7 @@ import hydra.lib.strings
 import hydra.module
 import hydra.util
 
-def qualify_name(name: hydra.core.Name) -> hydra.core.Type:
+def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
     r"""Split a dot-separated name into a namespace and local name."""
     
     @lru_cache(1)
@@ -29,7 +31,7 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
     r"""Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""
     
     @lru_cache(1)
-    def qual_name() -> hydra.core.Type:
+    def qual_name() -> hydra.module.QualifiedName:
         return qualify_name(name)
     @lru_cache(1)
     def mns() -> Maybe[hydra.module.Namespace]:
@@ -57,7 +59,7 @@ def namespace_to_file_path(case_conv: hydra.util.CaseConvention, ext: hydra.modu
         return hydra.lib.lists.map((lambda v1: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, case_conv, v1)), hydra.lib.strings.split_on(".", ns.value))
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.intercalate("/", parts()), "."), ext.value)
 
-def qname(ns: hydra.module.Namespace, name: str) -> hydra.core.Type:
+def qname(ns: hydra.module.Namespace, name: str) -> hydra.core.Name:
     r"""Construct a qualified (dot-separated) name."""
     
     return hydra.core.Name(hydra.lib.strings.cat((ns.value, ".", name)))
@@ -67,7 +69,7 @@ def unique_label(visited: frozenset[str], l: str) -> str:
     
     return hydra.lib.logic.if_else(hydra.lib.sets.member(l, visited), (lambda : unique_label(visited, hydra.lib.strings.cat2(l, "'"))), (lambda : l))
 
-def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Type:
+def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
     r"""Convert a qualified name to a dot-separated name."""
     
     @lru_cache(1)

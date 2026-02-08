@@ -35,19 +35,19 @@ LABELED_PATTERN__LABEL__NAME = hydra.core.Name("label")
 LABELED_PATTERN__PATTERN__NAME = hydra.core.Name("pattern")
 
 class PatternAlternatives(Node["frozenlist[Pattern]"]):
-    r"""A choice between alternative patterns."""
+    r"""A choice between alternative patterns"""
 
 class PatternConstant(Node["Constant"]):
-    r"""A constant (terminal) pattern."""
+    r"""A constant (terminal) pattern"""
 
 class PatternIgnored(Node["Pattern"]):
-    r"""A pattern to be ignored (not captured)."""
+    r"""A pattern to be ignored (not captured)"""
 
 class PatternLabeled(Node["LabeledPattern"]):
-    r"""A labeled pattern."""
+    r"""A labeled pattern"""
 
 class PatternNil:
-    r"""An empty pattern."""
+    r"""An empty pattern"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -56,22 +56,22 @@ class PatternNil:
         return hash("PatternNil")
 
 class PatternNonterminal(Node["Symbol"]):
-    r"""A nonterminal symbol reference."""
+    r"""A nonterminal symbol reference"""
 
 class PatternOption(Node["Pattern"]):
-    r"""An optional pattern (zero or one occurrence)."""
+    r"""An optional pattern (zero or one occurrence)"""
 
 class PatternPlus(Node["Pattern"]):
-    r"""One or more occurrences of a pattern."""
+    r"""One or more occurrences of a pattern"""
 
 class PatternRegex(Node["Regex"]):
-    r"""A regular expression pattern."""
+    r"""A regular expression pattern"""
 
 class PatternSequence(Node["frozenlist[Pattern]"]):
-    r"""A sequence of patterns."""
+    r"""A sequence of patterns"""
 
 class PatternStar(Node["Pattern"]):
-    r"""Zero or more occurrences of a pattern."""
+    r"""Zero or more occurrences of a pattern"""
 
 class _PatternMeta(type):
     def __getitem__(cls, item):

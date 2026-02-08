@@ -148,3 +148,13 @@ def test_pure__pure_string():
 def test_sequence__sequence_pure_list():
 
     assert (hydra.monads.bind(hydra.monads.pure(1), (lambda x1: hydra.monads.bind(hydra.monads.pure(2), (lambda x2: hydra.monads.bind(hydra.monads.pure(3), (lambda x3: hydra.monads.pure((x1, x2, x3)))))))).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just((1, 2, 3)), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+# withDefault
+
+def test_withdefault__withdefault_on_success_returns_original():
+
+    assert (hydra.lib.flows.with_default(0, hydra.monads.pure(42)).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(42), None, hydra.compute.Trace((), (), FrozenDict({}))))
+
+def test_withdefault__withdefault_on_failure_returns_fallback():
+
+    assert (hydra.lib.flows.with_default(99, hydra.monads.fail("error")).value(None, hydra.compute.Trace((), (), FrozenDict({})))) == (hydra.compute.FlowState(Just(99), None, hydra.compute.Trace((), (), FrozenDict({}))))

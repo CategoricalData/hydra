@@ -9,7 +9,6 @@ from hydra.dsl.python import Either, FrozenDict, Left, Right
 from typing import cast
 import hydra.core
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -22,16 +21,16 @@ def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.util.CaseConvention]]]:
@@ -47,16 +46,16 @@ def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.util.Comparison]]]:
@@ -96,16 +95,16 @@ def precision(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.util.Precision]]]:

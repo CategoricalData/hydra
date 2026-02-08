@@ -3,10 +3,10 @@
 r"""Utilities for extracting values from JSON objects."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from decimal import Decimal
 from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
 from typing import TypeVar
-import hydra.compute
 import hydra.core
 import hydra.json.model
 import hydra.lib.flows

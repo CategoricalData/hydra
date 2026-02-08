@@ -11,10 +11,10 @@ import hydra.json.model
 import hydra.lib.lists
 import hydra.lib.maps
 
-def value(v1: hydra.json.model.Value) -> hydra.core.Type:
+def value(v1: hydra.json.model.Value) -> hydra.core.Term:
     match v1:
         case hydra.json.model.ValueArray(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("array"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(value, y)))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("array"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: value(x1)), y)))))))
         
         case hydra.json.model.ValueBoolean(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(y2))))))))
@@ -26,7 +26,7 @@ def value(v1: hydra.json.model.Value) -> hydra.core.Type:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("number"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(y4))))))))))
         
         case hydra.json.model.ValueObject(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("object"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x))))), value, y5)))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("object"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x))))), (lambda x1: value(x1)), y5)))))))
         
         case hydra.json.model.ValueString(value=y6):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(y6))))))))

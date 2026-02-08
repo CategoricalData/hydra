@@ -3,13 +3,13 @@
 r"""Term decoders for hydra.phantoms."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Left, Right
-from typing import TypeVar
+from hydra.dsl.python import Either, Left, Right
+from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.phantoms
@@ -37,7 +37,7 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydr
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.phantoms.TBinding"))

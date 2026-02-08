@@ -7,7 +7,7 @@ from typing import cast
 import hydra.core
 import hydra.util
 
-def case_convention(v1: hydra.util.CaseConvention) -> hydra.core.Type:
+def case_convention(v1: hydra.util.CaseConvention) -> hydra.core.Term:
     match v1:
         case hydra.util.CaseConvention.CAMEL:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.CaseConvention"), hydra.core.Field(hydra.core.Name("camel"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -24,7 +24,7 @@ def case_convention(v1: hydra.util.CaseConvention) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def comparison(v1: hydra.util.Comparison) -> hydra.core.Type:
+def comparison(v1: hydra.util.Comparison) -> hydra.core.Term:
     match v1:
         case hydra.util.Comparison.LESS_THAN:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.Comparison"), hydra.core.Field(hydra.core.Name("lessThan"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -38,10 +38,10 @@ def comparison(v1: hydra.util.Comparison) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def decoding_error(x: hydra.util.DecodingError) -> hydra.core.Type:
+def decoding_error(x: hydra.util.DecodingError) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def precision(v1: hydra.util.Precision) -> hydra.core.Type:
+def precision(v1: hydra.util.Precision) -> hydra.core.Term:
     match v1:
         case hydra.util.PrecisionArbitrary():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.Precision"), hydra.core.Field(hydra.core.Name("arbitrary"), cast(hydra.core.Term, hydra.core.TermUnit())))))

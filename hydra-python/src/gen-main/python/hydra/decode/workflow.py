@@ -11,7 +11,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.decode.module
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -27,7 +26,7 @@ def hydra_schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hyd
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("modules", (lambda v12, v2: hydra.extract.helpers.decode_list(hydra.decode.module.module, v12, v2)), field_map(), cx), (lambda field_modules: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", hydra.decode.core.name, field_map(), cx), (lambda field_type_name: Right(hydra.workflow.HydraSchemaSpec(field_modules, field_type_name))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("modules", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: hydra.decode.module.module(x1, x2)), v12, v2)), field_map(), cx), (lambda field_modules: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("typeName", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_type_name: Right(hydra.workflow.HydraSchemaSpec(field_modules, field_type_name))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.workflow.HydraSchemaSpec"))
@@ -38,16 +37,16 @@ def schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.workflow.SchemaSpec]]]:
@@ -121,7 +120,7 @@ def transform_workflow(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hy
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("schemaSpec", schema_spec, field_map(), cx), (lambda field_schema_spec: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("srcDir", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_src_dir: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("destDir", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_dest_dir: Right(hydra.workflow.TransformWorkflow(field_name, field_schema_spec, field_src_dir, field_dest_dir))))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("schemaSpec", (lambda x1, x2: schema_spec(x1, x2)), field_map(), cx), (lambda field_schema_spec: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("srcDir", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_src_dir: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("destDir", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_dest_dir: Right(hydra.workflow.TransformWorkflow(field_name, field_schema_spec, field_src_dir, field_dest_dir))))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.workflow.TransformWorkflow"))

@@ -3,13 +3,12 @@
 r"""Evaluation-level implementations of Flow functions for the Hydra interpreter."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
-import hydra.compute
 import hydra.core
 import hydra.extract.core
-import hydra.graph
 import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.maps
@@ -89,3 +88,14 @@ def map_set(fun_term: hydra.core.Term, set_term: hydra.core.Term) -> hydra.compu
     r"""Interpreter-friendly mapSet for Set with Flow."""
     
     return hydra.lib.flows.bind(hydra.extract.core.set(set_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.map"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.sets.fromList")))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.sequence"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), hydra.lib.sets.to_list(elements)))))))))))))
+
+def with_default(fallback_term: hydra.core.Term, flow_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    match flow_term:
+        case hydra.core.TermWrap(value=wrapped_term):
+            @lru_cache(1)
+            def inner_fun() -> hydra.core.Term:
+                return wrapped_term.body
+            return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.compute.Flow"), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("s"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("t"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.maybe"))))), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.compute.FlowState"), (hydra.core.Field(hydra.core.Name("value"), cast(hydra.core.Term, hydra.core.TermMaybe(Just(fallback_term)))), hydra.core.Field(hydra.core.Name("state"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("s")))), hydra.core.Field(hydra.core.Name("trace"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("t"))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(inner_fun(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("s")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("t")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.compute.FlowState"), hydra.core.Name("value")))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(inner_fun(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("s")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("t"))))))))))))))))))))))))))
+        
+        case _:
+            return hydra.monads.unexpected("flow term", hydra.show.core.term(flow_term))

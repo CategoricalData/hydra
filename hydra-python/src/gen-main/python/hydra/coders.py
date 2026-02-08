@@ -89,10 +89,10 @@ class TraversalOrder(Enum):
     r"""Specifies either a pre-order or post-order traversal."""
     
     PRE = "pre"
-    r"""Pre-order traversal."""
+    r"""Pre-order traversal"""
     
     POST = "post"
-    r"""Post-order traversal."""
+    r"""Post-order traversal"""
 
 TRAVERSAL_ORDER__NAME = hydra.core.Name("hydra.coders.TraversalOrder")
 TRAVERSAL_ORDER__PRE__NAME = hydra.core.Name("pre")

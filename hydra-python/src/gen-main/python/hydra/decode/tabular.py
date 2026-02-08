@@ -5,13 +5,12 @@ r"""Term decoders for hydra.tabular."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
-from typing import TypeVar
+from hydra.dsl.python import Either, Left, Maybe, Right, frozenlist
+from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
 import hydra.decode.relational
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.tabular
@@ -27,7 +26,7 @@ def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.relational.column_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", hydra.decode.core.type, field_map(), cx), (lambda field_type: Right(hydra.tabular.ColumnType(field_name, field_type))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.relational.column_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("type", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_type: Right(hydra.tabular.ColumnType(field_name, field_type))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.ColumnType"))
@@ -74,7 +73,7 @@ def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.De
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("header", (lambda v12, v2: hydra.extract.helpers.decode_maybe(header_row, v12, v2)), field_map(), cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("data", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: data_row(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("header", (lambda v12, v2: hydra.extract.helpers.decode_maybe((lambda x1, x2: header_row(x1, x2)), v12, v2)), field_map(), cx), (lambda field_header: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("data", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda v13, v22: data_row(v, v13, v22)), v12, v2)), field_map(), cx), (lambda field_data: Right(hydra.tabular.Table(field_header, field_data))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.Table"))
@@ -87,7 +86,7 @@ def table_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.relational.relation_name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v12, v2: hydra.extract.helpers.decode_list(column_type, v12, v2)), field_map(), cx), (lambda field_columns: Right(hydra.tabular.TableType(field_name, field_columns))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.relational.relation_name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("columns", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: column_type(x1, x2)), v12, v2)), field_map(), cx), (lambda field_columns: Right(hydra.tabular.TableType(field_name, field_columns))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.TableType"))

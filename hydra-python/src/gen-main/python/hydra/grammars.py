@@ -94,7 +94,7 @@ def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
         def ni() -> int:
             return hydra.lib.pairs.second(name_and_index())
         return (hydra.lib.lists.cons(nn(), names()), hydra.lib.maps.insert(rn(), ni(), name_map()))
-    return hydra.lib.lists.reverse(hydra.lib.pairs.first(hydra.lib.lists.foldl(next_name, ((), hydra.lib.maps.empty()), pats)))
+    return hydra.lib.lists.reverse(hydra.lib.pairs.first(hydra.lib.lists.foldl((lambda x1, x2: next_name(x1, x2)), ((), hydra.lib.maps.empty()), pats)))
 
 def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[hydra.grammar.Pattern]:
     r"""Remove trivial patterns from records."""
@@ -139,7 +139,7 @@ def is_complex(pat: hydra.grammar.Pattern) -> bool:
         case _:
             return False
 
-def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Type:
+def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
     r"""Convert local name to qualified name."""
     
     return hydra.names.unqualify_name(hydra.module.QualifiedName(Just(ns), local))
@@ -205,7 +205,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
             return descend(n, (lambda pairs: (hydra.core.FieldType(hydra.core.Name(n), hydra.lib.pairs.second(hydra.lib.lists.head(pairs))), hydra.lib.lists.tail(pairs))), p)
         @lru_cache(1)
         def field_pairs() -> frozenlist[tuple[hydra.core.FieldType, frozenlist[tuple[str, hydra.core.Type]]]]:
-            return hydra.lib.lists.zip_with(to_field, field_names(), min_pats())
+            return hydra.lib.lists.zip_with((lambda x1, x2: to_field(x1, x2)), field_names(), min_pats())
         @lru_cache(1)
         def fields() -> frozenlist[hydra.core.FieldType]:
             return hydra.lib.lists.map((lambda x1: hydra.lib.pairs.first(x1)), field_pairs())
@@ -231,7 +231,7 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
         case _:
             return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(hydra.core.Name("Placeholder"), t)))
 
-def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.core.Type:
+def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
     r"""Convert a BNF grammar to a Hydra module."""
     
     @lru_cache(1)

@@ -15,17 +15,17 @@ import hydra.tabular
 
 T0 = TypeVar("T0")
 
-def column_type(x: hydra.tabular.ColumnType) -> hydra.core.Type:
+def column_type(x: hydra.tabular.ColumnType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.tabular.ColumnType"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.relational.column_name(x.name)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type))))))
 
-def data_row(v: Callable[[T0], hydra.core.Term], x: hydra.tabular.DataRow[T0]) -> hydra.core.Type:
+def data_row(v: Callable[[T0], hydra.core.Term], x: hydra.tabular.DataRow[T0]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.tabular.DataRow"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda opt: cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(v, opt)))), x.value))))))
 
-def header_row(x: hydra.tabular.HeaderRow) -> hydra.core.Type:
+def header_row(x: hydra.tabular.HeaderRow) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.tabular.HeaderRow"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.value))))))
 
-def table(v: Callable[[T0], hydra.core.Term], x: hydra.tabular.Table[T0]) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.tabular.Table"), (hydra.core.Field(hydra.core.Name("header"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(header_row, x.header)))), hydra.core.Field(hydra.core.Name("data"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda v1: data_row(v, v1)), x.data))))))))
+def table(v: Callable[[T0], hydra.core.Term], x: hydra.tabular.Table[T0]) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.tabular.Table"), (hydra.core.Field(hydra.core.Name("header"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x1: header_row(x1)), x.header)))), hydra.core.Field(hydra.core.Name("data"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda v1: data_row(v, v1)), x.data))))))))
 
-def table_type(x: hydra.tabular.TableType) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.tabular.TableType"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.relational.relation_name(x.name)), hydra.core.Field(hydra.core.Name("columns"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(column_type, x.columns))))))))
+def table_type(x: hydra.tabular.TableType) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.tabular.TableType"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.relational.relation_name(x.name)), hydra.core.Field(hydra.core.Name("columns"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: column_type(x1)), x.columns))))))))

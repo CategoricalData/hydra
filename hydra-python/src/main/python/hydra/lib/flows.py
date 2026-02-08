@@ -258,3 +258,23 @@ def sequence(flows: Sequence[Flow[S, X]]) -> Flow[S, frozenlist[X]]:
         return FlowState(value=Just(tuple(results)), state=current_state, trace=current_trace)
 
     return Flow(run)
+
+
+def with_default(fallback: X, flow: Flow[S, X]) -> Flow[S, X]:
+    """Try a Flow and use a fallback value if it fails.
+
+    This is similar to "catch" - the fallback is used only if the flow fails.
+    On failure, the original state and trace are preserved (not the modified ones).
+    """
+    def run(state: S, trace: Trace) -> FlowState[S, X]:
+        result_state = flow.value(state, trace)
+
+        match result_state.value:
+            case Just(_):
+                # Success - return the result with updated state/trace
+                return result_state
+            case Nothing():
+                # Failure - return fallback with original state and trace
+                return FlowState(value=Just(fallback), state=state, trace=trace)
+
+    return Flow(run)

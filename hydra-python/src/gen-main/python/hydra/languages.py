@@ -8,10 +8,9 @@ import hydra.coders
 import hydra.core
 import hydra.lib.sets
 import hydra.reflect
-import hydra.variants
 
 @lru_cache(1)
-def hydra_language() -> hydra.core.Type:
+def hydra_language() -> hydra.coders.Language:
     r"""Language constraints for Hydra Core, i.e. no constraints."""
     
     @lru_cache(1)
@@ -39,4 +38,4 @@ def hydra_language() -> hydra.core.Type:
         match t:
             case _:
                 return True
-    return hydra.coders.Language(hydra.coders.LanguageName("hydra.core"), hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), types))
+    return hydra.coders.Language(hydra.coders.LanguageName("hydra.core"), hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), (lambda x1: types(x1))))

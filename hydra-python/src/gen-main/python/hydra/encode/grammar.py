@@ -9,25 +9,25 @@ import hydra.core
 import hydra.grammar
 import hydra.lib.lists
 
-def constant(x: hydra.grammar.Constant) -> hydra.core.Type:
+def constant(x: hydra.grammar.Constant) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Constant"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def label(x: hydra.grammar.Label) -> hydra.core.Type:
+def label(x: hydra.grammar.Label) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Label"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def regex(x: hydra.grammar.Regex) -> hydra.core.Type:
+def regex(x: hydra.grammar.Regex) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Regex"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def symbol(x: hydra.grammar.Symbol) -> hydra.core.Type:
+def symbol(x: hydra.grammar.Symbol) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Symbol"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def labeled_pattern(x: hydra.grammar.LabeledPattern) -> hydra.core.Type:
+def labeled_pattern(x: hydra.grammar.LabeledPattern) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.grammar.LabeledPattern"), (hydra.core.Field(hydra.core.Name("label"), label(x.label)), hydra.core.Field(hydra.core.Name("pattern"), pattern(x.pattern))))))
 
-def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Type:
+def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Term:
     match v1:
         case hydra.grammar.PatternAlternatives(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("alternatives"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, y)))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("alternatives"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: pattern(x1)), y)))))))
         
         case hydra.grammar.PatternConstant(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("constant"), constant(y2)))))
@@ -54,7 +54,7 @@ def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Type:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("regex"), regex(y9)))))
         
         case hydra.grammar.PatternSequence(value=y10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("sequence"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(pattern, y10)))))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("sequence"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: pattern(x1)), y10)))))))
         
         case hydra.grammar.PatternStar(value=y11):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("star"), pattern(y11)))))
@@ -62,8 +62,8 @@ def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def production(x: hydra.grammar.Production) -> hydra.core.Type:
+def production(x: hydra.grammar.Production) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.grammar.Production"), (hydra.core.Field(hydra.core.Name("symbol"), symbol(x.symbol)), hydra.core.Field(hydra.core.Name("pattern"), pattern(x.pattern))))))
 
-def grammar(x: hydra.grammar.Grammar) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Grammar"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(production, x.value))))))
+def grammar(x: hydra.grammar.Grammar) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.grammar.Grammar"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: production(x1)), x.value))))))

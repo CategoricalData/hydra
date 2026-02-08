@@ -64,16 +64,16 @@ BRACKETS__OPEN__NAME = hydra.core.Name("open")
 BRACKETS__CLOSE__NAME = hydra.core.Name("close")
 
 class ExprConst(Node["Symbol"]):
-    r"""A constant symbol."""
+    r"""A constant symbol"""
 
 class ExprIndent(Node["IndentedExpression"]):
-    r"""An indented expression."""
+    r"""An indented expression"""
 
 class ExprOp(Node["OpExpr"]):
-    r"""An operator expression."""
+    r"""An operator expression"""
 
 class ExprBrackets(Node["BracketExpr"]):
-    r"""A bracketed expression."""
+    r"""A bracketed expression"""
 
 class _ExprMeta(type):
     def __getitem__(cls, item):
@@ -103,10 +103,10 @@ INDENTED_EXPRESSION__STYLE__NAME = hydra.core.Name("style")
 INDENTED_EXPRESSION__EXPR__NAME = hydra.core.Name("expr")
 
 class IndentStyleAllLines(Node[str]):
-    r"""Indent all lines with the given string."""
+    r"""Indent all lines with the given string"""
 
 class IndentStyleSubsequentLines(Node[str]):
-    r"""Indent only lines after the first with the given string."""
+    r"""Indent only lines after the first with the given string"""
 
 class _IndentStyleMeta(type):
     def __getitem__(cls, item):
@@ -172,7 +172,7 @@ class Symbol(Node[str]):
 SYMBOL__NAME = hydra.core.Name("hydra.ast.Symbol")
 
 class WsNone:
-    r"""No whitespace."""
+    r"""No whitespace"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -181,7 +181,7 @@ class WsNone:
         return hash("WsNone")
 
 class WsSpace:
-    r"""A single space."""
+    r"""A single space"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -190,7 +190,7 @@ class WsSpace:
         return hash("WsSpace")
 
 class WsBreak:
-    r"""A line break."""
+    r"""A line break"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -199,10 +199,10 @@ class WsBreak:
         return hash("WsBreak")
 
 class WsBreakAndIndent(Node[str]):
-    r"""A line break followed by indentation."""
+    r"""A line break followed by indentation"""
 
 class WsDoubleBreak:
-    r"""Two line breaks."""
+    r"""Two line breaks"""
     
     __slots__ = ()
     def __eq__(self, other):

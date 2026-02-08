@@ -107,13 +107,13 @@ PAIR_TYPE__FIRST__NAME = Name("first")
 PAIR_TYPE__SECOND__NAME = Name("second")
 
 class EliminationRecord(Node["Projection"]):
-    r"""Eliminates a record by projecting a given field."""
+    r"""Eliminates a record by projecting a given field"""
 
 class EliminationUnion(Node["CaseStatement"]):
     r"""Eliminates a union term by matching over the fields of the union. This is a case statement."""
 
 class EliminationWrap(Node["Name"]):
-    r"""Unwrap a wrapped term."""
+    r"""Unwrap a wrapped term"""
 
 class _EliminationMeta(type):
     def __getitem__(cls, item):
@@ -156,13 +156,13 @@ class FloatType(Enum):
     r"""A floating-point type."""
     
     BIGFLOAT = "bigfloat"
-    r"""An arbitrary-precision floating-point type."""
+    r"""An arbitrary-precision floating-point type"""
     
     FLOAT32 = "float32"
-    r"""A 32-bit floating-point type."""
+    r"""A 32-bit floating-point type"""
     
     FLOAT64 = "float64"
-    r"""A 64-bit floating-point type."""
+    r"""A 64-bit floating-point type"""
 
 FLOAT_TYPE__NAME = Name("hydra.core.FloatType")
 FLOAT_TYPE__BIGFLOAT__NAME = Name("bigfloat")
@@ -170,13 +170,13 @@ FLOAT_TYPE__FLOAT32__NAME = Name("float32")
 FLOAT_TYPE__FLOAT64__NAME = Name("float64")
 
 class FloatValueBigfloat(Node[Decimal]):
-    r"""An arbitrary-precision floating-point value."""
+    r"""An arbitrary-precision floating-point value"""
 
 class FloatValueFloat32(Node[float]):
-    r"""A 32-bit floating-point value."""
+    r"""A 32-bit floating-point value"""
 
 class FloatValueFloat64(Node[float]):
-    r"""A 64-bit floating-point value."""
+    r"""A 64-bit floating-point value"""
 
 class _FloatValueMeta(type):
     def __getitem__(cls, item):
@@ -205,13 +205,13 @@ FORALL_TYPE__PARAMETER__NAME = Name("parameter")
 FORALL_TYPE__BODY__NAME = Name("body")
 
 class FunctionElimination(Node["Elimination"]):
-    r"""An elimination for any of a few term variants."""
+    r"""An elimination for any of a few term variants"""
 
 class FunctionLambda(Node["Lambda"]):
-    r"""A function abstraction (lambda)."""
+    r"""A function abstraction (lambda)"""
 
 class FunctionPrimitive(Node["Name"]):
-    r"""A reference to a built-in (primitive) function."""
+    r"""A reference to a built-in (primitive) function"""
 
 class _FunctionMeta(type):
     def __getitem__(cls, item):
@@ -254,31 +254,31 @@ class IntegerType(Enum):
     r"""An integer type."""
     
     BIGINT = "bigint"
-    r"""An arbitrary-precision integer type."""
+    r"""An arbitrary-precision integer type"""
     
     INT8 = "int8"
-    r"""An 8-bit signed integer type."""
+    r"""An 8-bit signed integer type"""
     
     INT16 = "int16"
-    r"""A 16-bit signed integer type."""
+    r"""A 16-bit signed integer type"""
     
     INT32 = "int32"
-    r"""A 32-bit signed integer type."""
+    r"""A 32-bit signed integer type"""
     
     INT64 = "int64"
-    r"""A 64-bit signed integer type."""
+    r"""A 64-bit signed integer type"""
     
     UINT8 = "uint8"
-    r"""An 8-bit unsigned integer type."""
+    r"""An 8-bit unsigned integer type"""
     
     UINT16 = "uint16"
-    r"""A 16-bit unsigned integer type."""
+    r"""A 16-bit unsigned integer type"""
     
     UINT32 = "uint32"
-    r"""A 32-bit unsigned integer type."""
+    r"""A 32-bit unsigned integer type"""
     
     UINT64 = "uint64"
-    r"""A 64-bit unsigned integer type."""
+    r"""A 64-bit unsigned integer type"""
 
 INTEGER_TYPE__NAME = Name("hydra.core.IntegerType")
 INTEGER_TYPE__BIGINT__NAME = Name("bigint")
@@ -292,31 +292,31 @@ INTEGER_TYPE__UINT32__NAME = Name("uint32")
 INTEGER_TYPE__UINT64__NAME = Name("uint64")
 
 class IntegerValueBigint(Node[int]):
-    r"""An arbitrary-precision integer value."""
+    r"""An arbitrary-precision integer value"""
 
 class IntegerValueInt8(Node[int]):
-    r"""An 8-bit signed integer value."""
+    r"""An 8-bit signed integer value"""
 
 class IntegerValueInt16(Node[int]):
-    r"""A 16-bit signed integer value (short value)."""
+    r"""A 16-bit signed integer value (short value)"""
 
 class IntegerValueInt32(Node[int]):
-    r"""A 32-bit signed integer value (int value)."""
+    r"""A 32-bit signed integer value (int value)"""
 
 class IntegerValueInt64(Node[int]):
-    r"""A 64-bit signed integer value (long value)."""
+    r"""A 64-bit signed integer value (long value)"""
 
 class IntegerValueUint8(Node[int]):
-    r"""An 8-bit unsigned integer value (byte)."""
+    r"""An 8-bit unsigned integer value (byte)"""
 
 class IntegerValueUint16(Node[int]):
-    r"""A 16-bit unsigned integer value."""
+    r"""A 16-bit unsigned integer value"""
 
 class IntegerValueUint32(Node[int]):
-    r"""A 32-bit unsigned integer value (unsigned int)."""
+    r"""A 32-bit unsigned integer value (unsigned int)"""
 
 class IntegerValueUint64(Node[int]):
-    r"""A 64-bit unsigned integer value (unsigned long)."""
+    r"""A 64-bit unsigned integer value (unsigned long)"""
 
 class _IntegerValueMeta(type):
     def __getitem__(cls, item):
@@ -364,19 +364,19 @@ LET__BINDINGS__NAME = Name("bindings")
 LET__BODY__NAME = Name("body")
 
 class LiteralBinary(Node[bytes]):
-    r"""A binary literal."""
+    r"""A binary literal"""
 
 class LiteralBoolean(Node[bool]):
-    r"""A boolean literal."""
+    r"""A boolean literal"""
 
 class LiteralFloat(Node["FloatValue"]):
-    r"""A floating-point literal."""
+    r"""A floating-point literal"""
 
 class LiteralInteger(Node["IntegerValue"]):
-    r"""An integer literal."""
+    r"""An integer literal"""
 
 class LiteralString(Node[str]):
-    r"""A string literal."""
+    r"""A string literal"""
 
 class _LiteralMeta(type):
     def __getitem__(cls, item):
@@ -396,7 +396,7 @@ LITERAL__INTEGER__NAME = Name("integer")
 LITERAL__STRING__NAME = Name("string")
 
 class LiteralTypeBinary:
-    r"""The type of a binary (byte string) value."""
+    r"""The type of a binary (byte string) value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -405,7 +405,7 @@ class LiteralTypeBinary:
         return hash("LiteralTypeBinary")
 
 class LiteralTypeBoolean:
-    r"""The type of a boolean (true/false) value."""
+    r"""The type of a boolean (true/false) value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -414,13 +414,13 @@ class LiteralTypeBoolean:
         return hash("LiteralTypeBoolean")
 
 class LiteralTypeFloat(Node["FloatType"]):
-    r"""The type of a floating-point value."""
+    r"""The type of a floating-point value"""
 
 class LiteralTypeInteger(Node["IntegerType"]):
-    r"""The type of an integer value."""
+    r"""The type of an integer value"""
 
 class LiteralTypeString:
-    r"""The type of a string value."""
+    r"""The type of a string value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -490,52 +490,52 @@ ROW_TYPE__TYPE_NAME__NAME = Name("typeName")
 ROW_TYPE__FIELDS__NAME = Name("fields")
 
 class TermAnnotated(Node["AnnotatedTerm"]):
-    r"""A term annotated with metadata."""
+    r"""A term annotated with metadata"""
 
 class TermApplication(Node["Application"]):
-    r"""A function application."""
+    r"""A function application"""
 
 class TermEither(Node["Either[Term, Term]"]):
-    r"""An either value."""
+    r"""An either value"""
 
 class TermFunction(Node["Function"]):
-    r"""A function term."""
+    r"""A function term"""
 
 class TermLet(Node["Let"]):
-    r"""A 'let' term, which binds variables to terms."""
+    r"""A 'let' term, which binds variables to terms"""
 
 class TermList(Node["frozenlist[Term]"]):
-    r"""A list."""
+    r"""A list"""
 
 class TermLiteral(Node["Literal"]):
-    r"""A literal value."""
+    r"""A literal value"""
 
 class TermMap(Node["FrozenDict[Term, Term]"]):
-    r"""A map of keys to values."""
+    r"""A map of keys to values"""
 
 class TermMaybe(Node["Maybe[Term]"]):
-    r"""An optional value."""
+    r"""An optional value"""
 
 class TermPair(Node["tuple[Term, Term]"]):
-    r"""A pair (2-tuple)."""
+    r"""A pair (2-tuple)"""
 
 class TermRecord(Node["Record"]):
-    r"""A record term."""
+    r"""A record term"""
 
 class TermSet(Node["frozenset[Term]"]):
-    r"""A set of values."""
+    r"""A set of values"""
 
 class TermTypeApplication(Node["TypeApplicationTerm"]):
-    r"""A System F type application term."""
+    r"""A System F type application term"""
 
 class TermTypeLambda(Node["TypeLambda"]):
-    r"""A System F type abstraction term."""
+    r"""A System F type abstraction term"""
 
 class TermUnion(Node["Injection"]):
-    r"""An injection; an instance of a union type."""
+    r"""An injection; an instance of a union type"""
 
 class TermUnit:
-    r"""A unit value; a term with no value."""
+    r"""A unit value; a term with no value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -544,10 +544,10 @@ class TermUnit:
         return hash("TermUnit")
 
 class TermVariable(Node["Name"]):
-    r"""A variable reference."""
+    r"""A variable reference"""
 
 class TermWrap(Node["WrappedTerm"]):
-    r"""A wrapped term; an instance of a wrapper type (newtype)."""
+    r"""A wrapped term; an instance of a wrapper type (newtype)"""
 
 class _TermMeta(type):
     def __getitem__(cls, item):
@@ -580,46 +580,46 @@ TERM__VARIABLE__NAME = Name("variable")
 TERM__WRAP__NAME = Name("wrap")
 
 class TypeAnnotated(Node["AnnotatedType"]):
-    r"""An annotated type."""
+    r"""An annotated type"""
 
 class TypeApplication(Node["ApplicationType"]):
-    r"""A type application."""
+    r"""A type application"""
 
 class TypeEither(Node["EitherType"]):
-    r"""An either (sum) type."""
+    r"""An either (sum) type"""
 
 class TypeForall(Node["ForallType"]):
-    r"""A universally quantified (polymorphic) type."""
+    r"""A universally quantified (polymorphic) type"""
 
 class TypeFunction(Node["FunctionType"]):
-    r"""A function type."""
+    r"""A function type"""
 
 class TypeList(Node["Type"]):
-    r"""A list type."""
+    r"""A list type"""
 
 class TypeLiteral(Node["LiteralType"]):
-    r"""A literal type."""
+    r"""A literal type"""
 
 class TypeMap(Node["MapType"]):
-    r"""A map type."""
+    r"""A map type"""
 
 class TypeMaybe(Node["Type"]):
-    r"""An optional type."""
+    r"""An optional type"""
 
 class TypePair(Node["PairType"]):
-    r"""A pair (2-tuple) type."""
+    r"""A pair (2-tuple) type"""
 
 class TypeRecord(Node["RowType"]):
-    r"""A record type."""
+    r"""A record type"""
 
 class TypeSet(Node["Type"]):
-    r"""A set type."""
+    r"""A set type"""
 
 class TypeUnion(Node["RowType"]):
-    r"""A union type with field names."""
+    r"""A union type with field names"""
 
 class TypeUnit:
-    r"""The unit type."""
+    r"""The unit type"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -628,10 +628,10 @@ class TypeUnit:
         return hash("TypeUnit")
 
 class TypeVariable(Node["Name"]):
-    r"""A type variable."""
+    r"""A type variable"""
 
 class TypeWrap(Node["WrappedType"]):
-    r"""A wrapped type (newtype)."""
+    r"""A wrapped type (newtype)"""
 
 class _TypeMeta(type):
     def __getitem__(cls, item):

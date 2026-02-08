@@ -3,11 +3,10 @@
 r"""Evaluation-level implementations of Set functions for the Hydra interpreter."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from typing import cast
-import hydra.compute
 import hydra.core
 import hydra.extract.core
-import hydra.graph
 import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.sets

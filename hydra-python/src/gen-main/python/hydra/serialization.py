@@ -3,6 +3,7 @@
 r"""Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import cast
@@ -17,45 +18,45 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def sym(s: str) -> hydra.core.Type:
+def sym(s: str) -> hydra.ast.Symbol:
     return hydra.ast.Symbol(s)
 
 @lru_cache(1)
-def angle_braces() -> hydra.core.Type:
+def angle_braces() -> hydra.ast.Brackets:
     return hydra.ast.Brackets(sym("<"), sym(">"))
 
-def brackets(br: hydra.ast.Brackets, style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.core.Type:
+def brackets(br: hydra.ast.Brackets, style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprBrackets(hydra.ast.BracketExpr(br, e, style)))
 
-def cst(s: str) -> hydra.core.Type:
+def cst(s: str) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprConst(sym(s)))
 
-def ifx(op: hydra.ast.Op, lhs: hydra.ast.Expr, rhs: hydra.ast.Expr) -> hydra.core.Type:
+def ifx(op: hydra.ast.Op, lhs: hydra.ast.Expr, rhs: hydra.ast.Expr) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs, rhs)))
 
-def symbol_sep(symb: str, style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def symbol_sep(symb: str, style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)
     def break_count() -> int:
         return hydra.lib.lists.length(hydra.lib.lists.filter((lambda x_: x_), (style.newline_before_content, style.newline_after_content)))
     @lru_cache(1)
-    def break_() -> hydra.core.Type:
+    def break_() -> hydra.ast.Ws:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count(), 0), (lambda : cast(hydra.ast.Ws, hydra.ast.WsSpace())), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(break_count(), 1), (lambda : cast(hydra.ast.Ws, hydra.ast.WsBreak())), (lambda : cast(hydra.ast.Ws, hydra.ast.WsDoubleBreak())))))
     @lru_cache(1)
-    def comma_op() -> hydra.core.Type:
+    def comma_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(symb), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), break_()), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return hydra.lib.maybes.maybe(cst(""), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(comma_op(), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.safe_head(l))
 
-def comma_sep(v1: hydra.ast.BlockStyle, v2: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def comma_sep(v1: hydra.ast.BlockStyle, v2: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(",", v1, v2)
 
-def angle_braces_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def angle_braces_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("<>")), (lambda : brackets(angle_braces(), style, comma_sep(style, els))))
 
 @lru_cache(1)
-def curly_braces() -> hydra.core.Type:
+def curly_braces() -> hydra.ast.Brackets:
     return hydra.ast.Brackets(sym("{"), sym("}"))
 
-def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("{}")), (lambda : brackets(curly_braces(), style, symbol_sep(hydra.lib.maybes.from_maybe(",", msymb), style, els))))
 
 def expression_length(e: hydra.ast.Expr) -> int:
@@ -118,7 +119,7 @@ def expression_length(e: hydra.ast.Expr) -> int:
         def sym_len() -> int:
             return symbol_length(op.symbol)
         @lru_cache(1)
-        def padding() -> hydra.core.Type:
+        def padding() -> hydra.ast.Padding:
             return op.padding
         @lru_cache(1)
         def left_len() -> int:
@@ -159,54 +160,54 @@ double_space = "  "
 half_block_style = hydra.ast.BlockStyle(Just(double_space), True, False)
 
 @lru_cache(1)
-def inline_style() -> hydra.core.Type:
+def inline_style() -> hydra.ast.BlockStyle:
     return hydra.ast.BlockStyle(Nothing(), False, False)
 
-def braces_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def braces_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
     
     @lru_cache(1)
-    def inline_list() -> hydra.core.Type:
+    def inline_list() -> hydra.ast.Expr:
         return curly_braces_list(Nothing(), inline_style(), els)
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list()), 70), (lambda : curly_braces_list(Nothing(), half_block_style, els)), (lambda : inline_list()))
 
 @lru_cache(1)
-def square_brackets() -> hydra.core.Type:
+def square_brackets() -> hydra.ast.Brackets:
     return hydra.ast.Brackets(sym("["), sym("]"))
 
-def bracket_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def bracket_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("[]")), (lambda : brackets(square_brackets(), style, comma_sep(style, els))))
 
-def bracket_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def bracket_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
     
     @lru_cache(1)
-    def inline_list() -> hydra.core.Type:
+    def inline_list() -> hydra.ast.Expr:
         return bracket_list(inline_style(), els)
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(expression_length(inline_list()), 70), (lambda : bracket_list(half_block_style, els)), (lambda : inline_list()))
 
-def curly_block(style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.core.Type:
+def curly_block(style: hydra.ast.BlockStyle, e: hydra.ast.Expr) -> hydra.ast.Expr:
     return curly_braces_list(Nothing(), style, (e,))
 
 def custom_indent(idt: str, s: str) -> str:
     return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), hydra.lib.strings.lines(s))))
 
-def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return hydra.lib.maybes.maybe(cst(""), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(op, acc, el)), h, hydra.lib.lists.drop(1, els))), hydra.lib.lists.safe_head(els))
 
-def newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsBreak())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
-def custom_indent_block(idt: str, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def custom_indent_block(idt: str, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)
-    def idt_op() -> hydra.core.Type:
+    def idt_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsBreakAndIndent(idt))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return hydra.lib.maybes.maybe(cst(""), (lambda head: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : head), (lambda : ifx(idt_op(), head, newline_sep(hydra.lib.lists.drop(1, els)))))), hydra.lib.lists.safe_head(els))
 
-def dot_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def dot_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym("."), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
-def double_newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def double_newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsBreak()), cast(hydra.ast.Ws, hydra.ast.WsBreak())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 full_block_style = hydra.ast.BlockStyle(Just(double_space), True, True)
@@ -214,60 +215,60 @@ full_block_style = hydra.ast.BlockStyle(Just(double_space), True, True)
 def indent(v1: str) -> str:
     return custom_indent(double_space, v1)
 
-def indent_block(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def indent_block(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return custom_indent_block(double_space, v1)
 
-def indent_subsequent_lines(idt: str, e: hydra.ast.Expr) -> hydra.core.Type:
+def indent_subsequent_lines(idt: str, e: hydra.ast.Expr) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleSubsequentLines(idt)), e)))
 
-def space_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def space_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
-def infix_ws(op: str, l: hydra.ast.Expr, r: hydra.ast.Expr) -> hydra.core.Type:
+def infix_ws(op: str, l: hydra.ast.Expr, r: hydra.ast.Expr) -> hydra.ast.Expr:
     return space_sep((l, cst(op), r))
 
-def infix_ws_list(op: str, opers: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def infix_ws_list(op: str, opers: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)
-    def op_expr() -> hydra.core.Type:
+    def op_expr() -> hydra.ast.Expr:
         return cst(op)
     def fold_fun(e: frozenlist[hydra.ast.Expr], r: hydra.ast.Expr) -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(e), (lambda : (r,)), (lambda : hydra.lib.lists.cons(r, hydra.lib.lists.cons(op_expr(), e))))
-    return space_sep(hydra.lib.lists.foldl(fold_fun, (), hydra.lib.lists.reverse(opers)))
+    return space_sep(hydra.lib.lists.foldl((lambda x1, x2: fold_fun(x1, x2)), (), hydra.lib.lists.reverse(opers)))
 
 no_padding = hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone()))
 
-def no_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def no_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
-def num(i: int) -> hydra.core.Type:
+def num(i: int) -> hydra.ast.Expr:
     return cst(hydra.lib.literals.show_int32(i))
 
-def op(s: str, p: int, assoc: hydra.ast.Associativity) -> hydra.core.Type:
+def op(s: str, p: int, assoc: hydra.ast.Associativity) -> hydra.ast.Op:
     return hydra.ast.Op(sym(s), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsSpace())), hydra.ast.Precedence(p), assoc)
 
-def or_op(newlines: bool) -> hydra.core.Type:
+def or_op(newlines: bool) -> hydra.ast.Op:
     return hydra.ast.Op(sym("|"), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), hydra.lib.logic.if_else(newlines, (lambda : cast(hydra.ast.Ws, hydra.ast.WsBreak())), (lambda : cast(hydra.ast.Ws, hydra.ast.WsSpace())))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
 
-def or_sep(style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def or_sep(style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)
     def newlines() -> bool:
         return style.newline_before_content
     return hydra.lib.maybes.maybe(cst(""), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(or_op(newlines()), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.safe_head(l))
 
 @lru_cache(1)
-def parentheses() -> hydra.core.Type:
+def parentheses() -> hydra.ast.Brackets:
     return hydra.ast.Brackets(sym("("), sym(")"))
 
-def paren_list(newlines: bool, els: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def paren_list(newlines: bool, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)
-    def style() -> hydra.core.Type:
+    def style() -> hydra.ast.BlockStyle:
         return hydra.lib.logic.if_else(hydra.lib.logic.and_(newlines, hydra.lib.equality.gt(hydra.lib.lists.length(els), 1)), (lambda : half_block_style), (lambda : inline_style()))
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("()")), (lambda : brackets(parentheses(), style(), comma_sep(style(), els))))
 
-def parens(v1: hydra.ast.Expr) -> hydra.core.Type:
+def parens(v1: hydra.ast.Expr) -> hydra.ast.Expr:
     return brackets(parentheses(), inline_style(), v1)
 
-def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
+def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
     def assoc_left(a: hydra.ast.Associativity) -> bool:
         match a:
             case hydra.ast.Associativity.RIGHT:
@@ -294,41 +295,41 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
         
         case hydra.ast.ExprOp(value=op_expr):
             @lru_cache(1)
-            def op() -> hydra.core.Type:
+            def op() -> hydra.ast.Op:
                 return op_expr.op
             @lru_cache(1)
             def prec() -> int:
                 return op().precedence.value
             @lru_cache(1)
-            def assoc() -> hydra.core.Type:
+            def assoc() -> hydra.ast.Associativity:
                 return op().associativity
             @lru_cache(1)
-            def lhs() -> hydra.core.Type:
+            def lhs() -> hydra.ast.Expr:
                 return op_expr.lhs
             @lru_cache(1)
-            def rhs() -> hydra.core.Type:
+            def rhs() -> hydra.ast.Expr:
                 return op_expr.rhs
             @lru_cache(1)
-            def lhs_() -> hydra.core.Type:
+            def lhs_() -> hydra.ast.Expr:
                 return parenthesize(lhs())
             @lru_cache(1)
-            def rhs_() -> hydra.core.Type:
+            def rhs_() -> hydra.ast.Expr:
                 return parenthesize(rhs())
             @lru_cache(1)
-            def lhs2() -> hydra.core.Type:
+            def lhs2() -> hydra.ast.Expr:
                 match lhs_():
                     case hydra.ast.ExprOp(value=lop_expr):
                         @lru_cache(1)
-                        def lop() -> hydra.core.Type:
+                        def lop() -> hydra.ast.Op:
                             return lop_expr.op
                         @lru_cache(1)
                         def lprec() -> int:
                             return lop().precedence.value
                         @lru_cache(1)
-                        def lassoc() -> hydra.core.Type:
+                        def lassoc() -> hydra.ast.Associativity:
                             return lop().associativity
                         @lru_cache(1)
-                        def comparison() -> hydra.core.Type:
+                        def comparison() -> hydra.util.Comparison:
                             return hydra.lib.equality.compare(prec(), lprec())
                         match comparison():
                             case hydra.util.Comparison.LESS_THAN:
@@ -346,20 +347,20 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
                     case _:
                         return lhs_()
             @lru_cache(1)
-            def rhs2() -> hydra.core.Type:
+            def rhs2() -> hydra.ast.Expr:
                 match rhs_():
                     case hydra.ast.ExprOp(value=rop_expr):
                         @lru_cache(1)
-                        def rop() -> hydra.core.Type:
+                        def rop() -> hydra.ast.Op:
                             return rop_expr.op
                         @lru_cache(1)
                         def rprec() -> int:
                             return rop().precedence.value
                         @lru_cache(1)
-                        def rassoc() -> hydra.core.Type:
+                        def rassoc() -> hydra.ast.Associativity:
                             return rop().associativity
                         @lru_cache(1)
-                        def comparison() -> hydra.core.Type:
+                        def comparison() -> hydra.util.Comparison:
                             return hydra.lib.equality.compare(prec(), rprec())
                         match comparison():
                             case hydra.util.Comparison.LESS_THAN:
@@ -381,9 +382,9 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def prefix(p: str, expr: hydra.ast.Expr) -> hydra.core.Type:
+def prefix(p: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
     @lru_cache(1)
-    def pre_op() -> hydra.core.Type:
+    def pre_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(p), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return ifx(pre_op(), cst(""), expr)
 
@@ -420,10 +421,10 @@ def print_expr(e: hydra.ast.Expr) -> str:
         
         case hydra.ast.ExprIndent(value=indent_expr):
             @lru_cache(1)
-            def style() -> hydra.core.Type:
+            def style() -> hydra.ast.IndentStyle:
                 return indent_expr.style
             @lru_cache(1)
-            def expr() -> hydra.core.Type:
+            def expr() -> hydra.ast.Expr:
                 return indent_expr.expr
             @lru_cache(1)
             def lns() -> frozenlist[str]:
@@ -443,25 +444,25 @@ def print_expr(e: hydra.ast.Expr) -> str:
         
         case hydra.ast.ExprOp(value=op_expr):
             @lru_cache(1)
-            def op() -> hydra.core.Type:
+            def op() -> hydra.ast.Op:
                 return op_expr.op
             @lru_cache(1)
             def sym() -> str:
                 return op().symbol.value
             @lru_cache(1)
-            def padding() -> hydra.core.Type:
+            def padding() -> hydra.ast.Padding:
                 return op().padding
             @lru_cache(1)
-            def padl() -> hydra.core.Type:
+            def padl() -> hydra.ast.Ws:
                 return padding().left
             @lru_cache(1)
-            def padr() -> hydra.core.Type:
+            def padr() -> hydra.ast.Ws:
                 return padding().right
             @lru_cache(1)
-            def l() -> hydra.core.Type:
+            def l() -> hydra.ast.Expr:
                 return op_expr.lhs
             @lru_cache(1)
-            def r() -> hydra.core.Type:
+            def r() -> hydra.ast.Expr:
                 return op_expr.rhs
             @lru_cache(1)
             def lhs() -> str:
@@ -473,7 +474,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
         
         case hydra.ast.ExprBrackets(value=bracket_expr):
             @lru_cache(1)
-            def brackets() -> hydra.core.Type:
+            def brackets() -> hydra.ast.Brackets:
                 return bracket_expr.brackets
             @lru_cache(1)
             def l() -> str:
@@ -482,10 +483,10 @@ def print_expr(e: hydra.ast.Expr) -> str:
             def r() -> str:
                 return brackets().close.value
             @lru_cache(1)
-            def e() -> hydra.core.Type:
+            def e() -> hydra.ast.Expr:
                 return bracket_expr.enclosed
             @lru_cache(1)
-            def style() -> hydra.core.Type:
+            def style() -> hydra.ast.BlockStyle:
                 return bracket_expr.style
             @lru_cache(1)
             def body() -> str:
@@ -513,34 +514,34 @@ def print_expr(e: hydra.ast.Expr) -> str:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(";", inline_style(), v1)
 
-def suffix(s: str, expr: hydra.ast.Expr) -> hydra.core.Type:
+def suffix(s: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
     r"""Append a suffix string to an expression."""
     
     @lru_cache(1)
-    def suf_op() -> hydra.core.Type:
+    def suf_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(s), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
     return ifx(suf_op(), expr, cst(""))
 
-def tab_indent(e: hydra.ast.Expr) -> hydra.core.Type:
+def tab_indent(e: hydra.ast.Expr) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleAllLines("    ")), e)))
 
-def tab_indent_double_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def tab_indent_double_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return tab_indent(double_newline_sep(exprs))
 
-def tab_indent_single_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.core.Type:
+def tab_indent_single_space(exprs: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return tab_indent(newline_sep(exprs))
 
-def unsupported_type(label: str) -> hydra.core.Type:
+def unsupported_type(label: str) -> hydra.ast.Expr:
     return cst(hydra.lib.strings.cat2(hydra.lib.strings.cat2("[", label), "]"))
 
-def unsupported_variant(label: str, obj: str) -> hydra.core.Type:
+def unsupported_variant(label: str, obj: str) -> hydra.ast.Expr:
     return cst(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("[unsupported ", label), ": "), hydra.lib.literals.show_string(obj)), "]"))
 
-def with_comma(e: hydra.ast.Expr) -> hydra.core.Type:
+def with_comma(e: hydra.ast.Expr) -> hydra.ast.Expr:
     return no_sep((e, cst(",")))
 
-def with_semi(e: hydra.ast.Expr) -> hydra.core.Type:
+def with_semi(e: hydra.ast.Expr) -> hydra.ast.Expr:
     return no_sep((e, cst(";")))

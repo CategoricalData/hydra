@@ -4,7 +4,6 @@ r"""String representations of hydra.graph types."""
 
 from __future__ import annotations
 from functools import lru_cache
-from hydra.dsl.python import frozenlist
 import hydra.core
 import hydra.graph
 import hydra.lib.lists
@@ -19,5 +18,5 @@ def graph(graph: hydra.graph.Graph) -> str:
         return graph.elements
     @lru_cache(1)
     def element_strs() -> frozenlist[str]:
-        return hydra.lib.lists.map(hydra.show.core.binding, elements())
+        return hydra.lib.lists.map((lambda x1: hydra.show.core.binding(x1)), elements())
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", element_strs()), "}"))

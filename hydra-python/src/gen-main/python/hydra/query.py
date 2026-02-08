@@ -57,13 +57,13 @@ GRAPH_PATTERN__GRAPH__NAME = hydra.core.Name("graph")
 GRAPH_PATTERN__PATTERNS__NAME = hydra.core.Name("patterns")
 
 class NodeTerm(Node["hydra.core.Term"]):
-    r"""A graph term; an expression which is valid in the graph being matched."""
+    r"""A graph term; an expression which is valid in the graph being matched"""
 
 class NodeVariable(Node["Variable"]):
-    r"""A query variable, not to be confused with a variable term."""
+    r"""A query variable, not to be confused with a variable term"""
 
 class NodeWildcard:
-    r"""An anonymous variable which we do not care to join across patterns."""
+    r"""An anonymous variable which we do not care to join across patterns"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -87,13 +87,13 @@ NODE__VARIABLE__NAME = hydra.core.Name("variable")
 NODE__WILDCARD__NAME = hydra.core.Name("wildcard")
 
 class PathStep(Node["Step"]):
-    r"""A path given by a single step."""
+    r"""A path given by a single step"""
 
 class PathRegex(Node["RegexSequence"]):
-    r"""A path given by a regular expression quantifier applied to another path."""
+    r"""A path given by a regular expression quantifier applied to another path"""
 
 class PathInverse(Node["Path"]):
-    r"""A path given by the inverse of another path."""
+    r"""A path given by the inverse of another path"""
 
 class _PathMeta(type):
     def __getitem__(cls, item):
@@ -111,19 +111,19 @@ PATH__REGEX__NAME = hydra.core.Name("regex")
 PATH__INVERSE__NAME = hydra.core.Name("inverse")
 
 class PatternTriple(Node["TriplePattern"]):
-    r"""A subject/predicate/object pattern."""
+    r"""A subject/predicate/object pattern"""
 
 class PatternNegation(Node["Pattern"]):
-    r"""The negation of another pattern."""
+    r"""The negation of another pattern"""
 
 class PatternConjunction(Node["frozenlist[Pattern]"]):
-    r"""The conjunction ('and') of several other patterns."""
+    r"""The conjunction ('and') of several other patterns"""
 
 class PatternDisjunction(Node["frozenlist[Pattern]"]):
-    r"""The disjunction (inclusive 'or') of several other patterns."""
+    r"""The disjunction (inclusive 'or') of several other patterns"""
 
 class PatternGraph(Node["GraphPattern"]):
-    r"""A pattern which matches within a named subgraph."""
+    r"""A pattern which matches within a named subgraph"""
 
 class _PatternMeta(type):
     def __getitem__(cls, item):
@@ -165,7 +165,7 @@ RANGE__MIN__NAME = hydra.core.Name("min")
 RANGE__MAX__NAME = hydra.core.Name("max")
 
 class RegexQuantifierOne:
-    r"""No quantifier; matches a single occurrence."""
+    r"""No quantifier; matches a single occurrence"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -174,7 +174,7 @@ class RegexQuantifierOne:
         return hash("RegexQuantifierOne")
 
 class RegexQuantifierZeroOrOne:
-    r"""The ? quanifier; matches zero or one occurrence."""
+    r"""The ? quanifier; matches zero or one occurrence"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -183,7 +183,7 @@ class RegexQuantifierZeroOrOne:
         return hash("RegexQuantifierZeroOrOne")
 
 class RegexQuantifierZeroOrMore:
-    r"""The * quantifier; matches any number of occurrences."""
+    r"""The * quantifier; matches any number of occurrences"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -192,7 +192,7 @@ class RegexQuantifierZeroOrMore:
         return hash("RegexQuantifierZeroOrMore")
 
 class RegexQuantifierOneOrMore:
-    r"""The + quantifier; matches one or more occurrences."""
+    r"""The + quantifier; matches one or more occurrences"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -201,13 +201,13 @@ class RegexQuantifierOneOrMore:
         return hash("RegexQuantifierOneOrMore")
 
 class RegexQuantifierExactly(Node[int]):
-    r"""The {n} quantifier; matches exactly n occurrences."""
+    r"""The {n} quantifier; matches exactly n occurrences"""
 
 class RegexQuantifierAtLeast(Node[int]):
-    r"""The {n,} quantifier; matches at least n occurrences."""
+    r"""The {n,} quantifier; matches at least n occurrences"""
 
 class RegexQuantifierRange(Node["Range"]):
-    r"""The {n, m} quantifier; matches between n and m (inclusive) occurrences."""
+    r"""The {n, m} quantifier; matches between n and m (inclusive) occurrences"""
 
 class _RegexQuantifierMeta(type):
     def __getitem__(cls, item):
@@ -240,13 +240,13 @@ REGEX_SEQUENCE__PATH__NAME = hydra.core.Name("path")
 REGEX_SEQUENCE__QUANTIFIER__NAME = hydra.core.Name("quantifier")
 
 class StepEdge(Node["Edge"]):
-    r"""An out-to-in traversal of an abstract edge."""
+    r"""An out-to-in traversal of an abstract edge"""
 
 class StepProject(Node["hydra.core.Projection"]):
-    r"""A projection from a record through one of its fields."""
+    r"""A projection from a record through one of its fields"""
 
 class StepCompare(Node["ComparisonConstraint"]):
-    r"""A comparison of two terms."""
+    r"""A comparison of two terms"""
 
 class _StepMeta(type):
     def __getitem__(cls, item):

@@ -10,7 +10,6 @@ from typing import cast
 import hydra.ast
 import hydra.core
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -23,16 +22,16 @@ def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.Associativity]]]:
@@ -129,7 +128,7 @@ def brackets(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.D
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("open", symbol, field_map(), cx), (lambda field_open: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("close", symbol, field_map(), cx), (lambda field_close: Right(hydra.ast.Brackets(field_open, field_close))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("open", (lambda x1, x2: symbol(x1, x2)), field_map(), cx), (lambda field_open: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("close", (lambda x1, x2: symbol(x1, x2)), field_map(), cx), (lambda field_close: Right(hydra.ast.Brackets(field_open, field_close))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Brackets"))
@@ -140,16 +139,16 @@ def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.IndentStyle]]]:
@@ -193,16 +192,16 @@ def ws(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decodin
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.Ws]]]:
@@ -234,7 +233,7 @@ def padding(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.De
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", ws, field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", ws, field_map(), cx), (lambda field_right: Right(hydra.ast.Padding(field_left, field_right))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", (lambda x1, x2: ws(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", (lambda x1, x2: ws(x1, x2)), field_map(), cx), (lambda field_right: Right(hydra.ast.Padding(field_left, field_right))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Padding"))
@@ -278,7 +277,7 @@ def op(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decodin
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("symbol", symbol, field_map(), cx), (lambda field_symbol: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("padding", padding, field_map(), cx), (lambda field_padding: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("precedence", precedence, field_map(), cx), (lambda field_precedence: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("associativity", associativity, field_map(), cx), (lambda field_associativity: Right(hydra.ast.Op(field_symbol, field_padding, field_precedence, field_associativity))))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("symbol", (lambda x1, x2: symbol(x1, x2)), field_map(), cx), (lambda field_symbol: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("padding", (lambda x1, x2: padding(x1, x2)), field_map(), cx), (lambda field_padding: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("precedence", (lambda x1, x2: precedence(x1, x2)), field_map(), cx), (lambda field_precedence: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("associativity", (lambda x1, x2: associativity(x1, x2)), field_map(), cx), (lambda field_associativity: Right(hydra.ast.Op(field_symbol, field_padding, field_precedence, field_associativity))))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Op"))
@@ -291,7 +290,7 @@ def bracket_expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("brackets", brackets, field_map(), cx), (lambda field_brackets: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("enclosed", expr, field_map(), cx), (lambda field_enclosed: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("style", block_style, field_map(), cx), (lambda field_style: Right(hydra.ast.BracketExpr(field_brackets, field_enclosed, field_style))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("brackets", (lambda x1, x2: brackets(x1, x2)), field_map(), cx), (lambda field_brackets: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("enclosed", (lambda x1, x2: expr(x1, x2)), field_map(), cx), (lambda field_enclosed: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("style", (lambda x1, x2: block_style(x1, x2)), field_map(), cx), (lambda field_style: Right(hydra.ast.BracketExpr(field_brackets, field_enclosed, field_style))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.BracketExpr"))
@@ -302,16 +301,16 @@ def expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decod
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.Expr]]]:
@@ -329,7 +328,7 @@ def indented_expression(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[h
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("style", indent_style, field_map(), cx), (lambda field_style: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expr", expr, field_map(), cx), (lambda field_expr: Right(hydra.ast.IndentedExpression(field_style, field_expr))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("style", (lambda x1, x2: indent_style(x1, x2)), field_map(), cx), (lambda field_style: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("expr", (lambda x1, x2: expr(x1, x2)), field_map(), cx), (lambda field_expr: Right(hydra.ast.IndentedExpression(field_style, field_expr))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.IndentedExpression"))
@@ -342,7 +341,7 @@ def op_expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.De
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("op", op, field_map(), cx), (lambda field_op: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("lhs", expr, field_map(), cx), (lambda field_lhs: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("rhs", expr, field_map(), cx), (lambda field_rhs: Right(hydra.ast.OpExpr(field_op, field_lhs, field_rhs))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("op", (lambda x1, x2: op(x1, x2)), field_map(), cx), (lambda field_op: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("lhs", (lambda x1, x2: expr(x1, x2)), field_map(), cx), (lambda field_lhs: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("rhs", (lambda x1, x2: expr(x1, x2)), field_map(), cx), (lambda field_rhs: Right(hydra.ast.OpExpr(field_op, field_lhs, field_rhs))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.OpExpr"))

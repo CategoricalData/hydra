@@ -5,8 +5,8 @@ r"""String formatting types and functions."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, frozenlist
-from typing import TypeVar
+from hydra.dsl.python import frozenlist
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.chars
 import hydra.lib.equality

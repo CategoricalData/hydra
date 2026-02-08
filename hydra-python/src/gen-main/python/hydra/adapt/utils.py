@@ -5,8 +5,8 @@ r"""Additional adapter utilities, above and beyond the generated ones."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Maybe, frozenlist
-from typing import TypeVar
+from hydra.dsl.python import frozenlist
+from typing import TypeVar, cast
 import hydra.coders
 import hydra.compute
 import hydra.core
@@ -88,7 +88,7 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
     r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
     
     @lru_cache(1)
-    def qual_name() -> hydra.core.Type:
+    def qual_name() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
     @lru_cache(1)
     def ns() -> Maybe[hydra.module.Namespace]:
