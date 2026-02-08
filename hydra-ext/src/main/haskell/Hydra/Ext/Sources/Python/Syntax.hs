@@ -1,12 +1,12 @@
 module Hydra.Ext.Sources.Python.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
-import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:))
-import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Core as Core
+import           Hydra.Kernel
+import           Hydra.Dsl.Annotations
+import           Hydra.Dsl.Bootstrap
+import           Hydra.Dsl.Types                           ((>:))
+import qualified Hydra.Dsl.Types                           as T
+import qualified Hydra.Sources.Kernel.Types.Core           as Core
 
 
 ns :: Namespace
