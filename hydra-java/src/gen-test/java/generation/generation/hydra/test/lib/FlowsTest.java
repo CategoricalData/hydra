@@ -361,4 +361,34 @@ public class FlowsTest {
         (x3))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
+
+    // withDefault
+
+    @Test
+
+    public void testWithdefaultWithdefaultOnSuccessReturnsOriginal() {
+
+        assertEquals(
+
+            (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(42), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
+
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.WithDefault.apply(
+  0,
+  hydra.monads.Monads.pure(42)))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+
+    }
+
+    @Test
+
+    public void testWithdefaultWithdefaultOnFailureReturnsFallback() {
+
+        assertEquals(
+
+            (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(99), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
+
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.WithDefault.apply(
+  99,
+  hydra.monads.Monads.fail("error")))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+
+    }
 }

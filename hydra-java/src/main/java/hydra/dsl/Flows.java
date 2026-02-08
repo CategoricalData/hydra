@@ -661,4 +661,29 @@ public interface Flows {
             return new FlowState<>(result.value, result.state, result.trace.withMessages(messages));
         });
     }
+
+    /**
+     * Try a flow and use a fallback value if it fails.
+     * On failure, the original state and trace are preserved (not the modified ones).
+     * @param <S> the state type
+     * @param <A> the value type
+     * @param fallback the default value to use if the flow fails
+     * @param flow the flow to try
+     * @return a flow that succeeds with either the flow's result or the fallback
+     */
+    static <S, A> Flow<S, A> withDefault(A fallback, Flow<S, A> flow) {
+        requireNonNull(fallback, "fallback");
+        requireNonNull(flow, "flow");
+
+        return new Flow<>(s0 -> t0 -> {
+            FlowState<S, A> result = flow.value.apply(s0).apply(t0);
+            if (result.value.isJust()) {
+                // Success - return the result with updated state/trace
+                return result;
+            } else {
+                // Failure - return fallback with original state and trace
+                return new FlowState<>(Maybe.just(fallback), s0, t0);
+            }
+        });
+    }
 }
