@@ -40,13 +40,13 @@ LAST_MILE__SERIALIZER__NAME = hydra.core.Name("serializer")
 LAST_MILE__FILE_EXTENSION__NAME = hydra.core.Name("fileExtension")
 
 class SchemaSpecHydra(Node["HydraSchemaSpec"]):
-    r"""A native Hydra schema."""
+    r"""A native Hydra schema"""
 
 class SchemaSpecFile(Node[str]):
-    r"""A schema provided as a file, available at the given file path."""
+    r"""A schema provided as a file, available at the given file path"""
 
 class SchemaSpecProvided:
-    r"""A schema which will be provided within the workflow."""
+    r"""A schema which will be provided within the workflow"""
     
     __slots__ = ()
     def __eq__(self, other):

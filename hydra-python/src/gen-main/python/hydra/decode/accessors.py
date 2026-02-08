@@ -11,7 +11,6 @@ import hydra.accessors
 import hydra.core
 import hydra.decode.core
 import hydra.extract.helpers
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
@@ -54,7 +53,7 @@ def accessor_node(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", hydra.decode.core.name, field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.accessors.AccessorNode(field_name, field_label, field_id))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.accessors.AccessorNode(field_name, field_label, field_id))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.accessors.AccessorNode"))
@@ -65,16 +64,16 @@ def term_accessor(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
-                def tname() -> hydra.core.Type:
+                def tname() -> hydra.core.Name:
                     return inj.type_name
                 @lru_cache(1)
-                def field() -> hydra.core.Type:
+                def field() -> hydra.core.Field:
                     return inj.field
                 @lru_cache(1)
-                def fname() -> hydra.core.Type:
+                def fname() -> hydra.core.Name:
                     return field().name
                 @lru_cache(1)
-                def fterm() -> hydra.core.Type:
+                def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.accessors.TermAccessor]]]:
@@ -194,7 +193,7 @@ def accessor_path(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
     def _hoist_hydra_decode_accessors_accessor_path_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.accessors.AccessorPath]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.accessors.AccessorPath(b)), hydra.extract.helpers.decode_list(term_accessor, cx, wrapped_term.body))
+                return hydra.lib.eithers.map((lambda b: hydra.accessors.AccessorPath(b)), hydra.extract.helpers.decode_list((lambda x1, x2: term_accessor(x1, x2)), cx, wrapped_term.body))
             
             case _:
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.accessors.AccessorPath"))
@@ -207,7 +206,7 @@ def accessor_edge(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("source", accessor_node, field_map(), cx), (lambda field_source: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("path", accessor_path, field_map(), cx), (lambda field_path: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("target", accessor_node, field_map(), cx), (lambda field_target: Right(hydra.accessors.AccessorEdge(field_source, field_path, field_target))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("source", (lambda x1, x2: accessor_node(x1, x2)), field_map(), cx), (lambda field_source: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("path", (lambda x1, x2: accessor_path(x1, x2)), field_map(), cx), (lambda field_path: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("target", (lambda x1, x2: accessor_node(x1, x2)), field_map(), cx), (lambda field_target: Right(hydra.accessors.AccessorEdge(field_source, field_path, field_target))))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.accessors.AccessorEdge"))
@@ -220,7 +219,7 @@ def accessor_graph(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("nodes", (lambda v12, v2: hydra.extract.helpers.decode_list(accessor_node, v12, v2)), field_map(), cx), (lambda field_nodes: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v12, v2: hydra.extract.helpers.decode_list(accessor_edge, v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.accessors.AccessorGraph(field_nodes, field_edges))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("nodes", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: accessor_node(x1, x2)), v12, v2)), field_map(), cx), (lambda field_nodes: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("edges", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: accessor_edge(x1, x2)), v12, v2)), field_map(), cx), (lambda field_edges: Right(hydra.accessors.AccessorGraph(field_nodes, field_edges))))))
             
             case _:
                 return Left(hydra.util.DecodingError("expected record of type hydra.accessors.AccessorGraph"))

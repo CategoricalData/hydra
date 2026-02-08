@@ -105,6 +105,11 @@ def bigint_to_uint64(x: int) -> int:
     return x
 
 
+def binary_to_bytes(s: bytes) -> tuple[int, ...]:
+    """Convert binary to a tuple of byte values (0-255)."""
+    return tuple(s)
+
+
 def binary_to_string(s: bytes) -> str:
     """Convert binary to string by base64 encoding."""
     import base64

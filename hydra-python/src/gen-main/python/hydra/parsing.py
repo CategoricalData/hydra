@@ -23,10 +23,10 @@ PARSE_ERROR__MESSAGE__NAME = hydra.core.Name("message")
 PARSE_ERROR__REMAINDER__NAME = hydra.core.Name("remainder")
 
 class ParseResultSuccess(Node["ParseSuccess[A]"]):
-    r"""A successful parse, with a value and the remaining unparsed input."""
+    r"""A successful parse, with a value and the remaining unparsed input"""
 
 class ParseResultFailure(Node["ParseError"]):
-    r"""A failed parse, with an error message and the remaining input."""
+    r"""A failed parse, with an error message and the remaining input"""
 
 class _ParseResultMeta(type):
     def __getitem__(cls, item):

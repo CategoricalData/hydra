@@ -3,6 +3,7 @@
 r"""Adapter framework for literal types and terms."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import frozenlist
@@ -37,8 +38,8 @@ T7 = TypeVar("T7")
 T8 = TypeVar("T8")
 T9 = TypeVar("T9")
 
-def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.core.Type:
-    def _hoist_hydra_adapt_literals_compare_precision_1(v1: hydra.util.Precision) -> hydra.core.Type:
+def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hydra.util.Comparison:
+    def _hoist_hydra_adapt_literals_compare_precision_1(v1: hydra.util.Precision) -> hydra.util.Comparison:
         match v1:
             case hydra.util.PrecisionArbitrary():
                 return hydra.util.Comparison.EQUAL_TO
@@ -48,7 +49,7 @@ def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hyd
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_hydra_adapt_literals_compare_precision_2(b1: int, v1: hydra.util.Precision) -> hydra.core.Type:
+    def _hoist_hydra_adapt_literals_compare_precision_2(b1: int, v1: hydra.util.Precision) -> hydra.util.Comparison:
         match v1:
             case hydra.util.PrecisionArbitrary():
                 return hydra.util.Comparison.LESS_THAN
@@ -68,7 +69,7 @@ def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hyd
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue) -> hydra.core.Type:
+def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue) -> hydra.core.FloatValue:
     r"""Convert a float value to a different float type."""
     
     def decoder(fv2: hydra.core.FloatValue) -> Decimal:
@@ -84,7 +85,7 @@ def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue)
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encoder(d: Decimal) -> hydra.core.Type:
+    def encoder(d: Decimal) -> hydra.core.FloatValue:
         match target:
             case hydra.core.FloatType.BIGFLOAT:
                 return cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(d))
@@ -99,7 +100,7 @@ def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue)
                 raise AssertionError("Unreachable: all variants handled")
     return encoder(decoder(fv))
 
-def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.IntegerValue) -> hydra.core.Type:
+def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.IntegerValue) -> hydra.core.IntegerValue:
     r"""Convert an integer value to a different integer type."""
     
     def decoder(iv2: hydra.core.IntegerValue) -> int:
@@ -133,7 +134,7 @@ def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.Integer
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def encoder(d: int) -> hydra.core.Type:
+    def encoder(d: int) -> hydra.core.IntegerValue:
         match target:
             case hydra.core.IntegerType.BIGINT:
                 return cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(d))
@@ -198,7 +199,7 @@ def float_adapter(ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.A
                 raise AssertionError("Unreachable: all variants handled")
     def alts(t: hydra.core.FloatType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]]:
         return hydra.lib.flows.map_list((lambda v1: make_adapter(t, v1)), alt_types(t))
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.float_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), supported, hydra.show.core.float_type, hydra.show.core.float_type, ft))[1]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.float_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), (lambda x1: supported(x1)), (lambda x1: hydra.show.core.float_type(x1)), (lambda x1: hydra.show.core.float_type(x1)), ft))[1]))
 
 def integer_adapter(it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
     def interleave(xs: frozenlist[T2], ys: frozenlist[T2]) -> frozenlist[T2]:
@@ -269,7 +270,7 @@ def integer_adapter(it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.code
                 raise AssertionError("Unreachable: all variants handled")
     def alts(t: hydra.core.IntegerType) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]]:
         return hydra.lib.flows.map_list((lambda v1: make_adapter(t, v1)), alt_types(t))
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.integer_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), supported, hydra.show.core.integer_type, hydra.show.core.integer_type, it))[1]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.integer_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), (lambda x1: supported(x1)), (lambda x1: hydra.show.core.integer_type(x1)), (lambda x1: hydra.show.core.integer_type(x1)), it))[1]))
 
 def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]:
     def for_binary(t: T1) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
@@ -300,7 +301,7 @@ def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.code
                 case _:
                     raise TypeError("Unsupported Literal")
         def match_integer(step_: hydra.compute.Coder[T4, T5, hydra.core.IntegerValue, hydra.core.IntegerValue], lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
-            def for_value(val: hydra.core.IntegerValue) -> hydra.core.Type:
+            def for_value(val: hydra.core.IntegerValue) -> hydra.core.Literal:
                 match val:
                     case hydra.core.IntegerValueUint8(value=v):
                         return cast(hydra.core.Literal, hydra.core.LiteralBoolean(hydra.lib.equality.equal(v, 1)))
@@ -357,4 +358,4 @@ def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.code
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.literal_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), supported, hydra.show.core.literal_type, hydra.show.core.literal_type, lt))[1]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.literal_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), (lambda x1: supported(x1)), (lambda x1: hydra.show.core.literal_type(x1)), (lambda x1: hydra.show.core.literal_type(x1)), lt))[1]))

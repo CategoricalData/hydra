@@ -242,6 +242,11 @@ def register_flows_primitives() -> dict[Name, Primitive]:
         qname(namespace, "sequence"), flows.sequence, ["s", "x"],
         prims.list_(prims.flow(s, x)), prims.flow(s, prims.list_(x))
     )
+    # withDefault :: x -> Flow s x -> Flow s x
+    primitives[qname(namespace, "withDefault")] = prims.prim2_interp(
+        qname(namespace, "withDefault"), Just(eval_flows.with_default), ["x", "s"],
+        x, prims.flow(s, x), prims.flow(s, x)
+    )
 
     return primitives
 
@@ -976,6 +981,10 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "bigintToUint64")] = prims.prim1(
         qname(namespace, "bigintToUint64"), literals.bigint_to_uint64, [],
         prims.bigint(), prims.uint64()
+    )
+    primitives[qname(namespace, "binaryToBytes")] = prims.prim1(
+        qname(namespace, "binaryToBytes"), literals.binary_to_bytes, [],
+        prims.binary(), prims.list_(prims.int32())
     )
     primitives[qname(namespace, "binaryToString")] = prims.prim1(
         qname(namespace, "binaryToString"), literals.binary_to_string, [],

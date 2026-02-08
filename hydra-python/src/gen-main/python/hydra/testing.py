@@ -121,13 +121,13 @@ class FoldOperation(Enum):
     r"""A predefined fold operation for testing foldOverTerm."""
     
     SUM_INT32_LITERALS = "sumInt32Literals"
-    r"""Sum all Int32 literals in a term."""
+    r"""Sum all Int32 literals in a term"""
     
     COLLECT_LIST_LENGTHS = "collectListLengths"
-    r"""Collect the lengths of all list terms (returns list of integers in traversal order)."""
+    r"""Collect the lengths of all list terms (returns list of integers in traversal order)"""
     
     COLLECT_LABELS = "collectLabels"
-    r"""Collect labels (first element of pairs where first is a string literal)."""
+    r"""Collect labels (first element of pairs where first is a string literal)"""
 
 FOLD_OPERATION__NAME = hydra.core.Name("hydra.testing.FoldOperation")
 FOLD_OPERATION__SUM_INT32_LITERALS__NAME = hydra.core.Name("sumInt32Literals")
@@ -164,16 +164,16 @@ class HoistPredicate(Enum):
     r"""A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings."""
     
     CASE_STATEMENTS = "caseStatements"
-    r"""Hoist case statements (elimination unions) that appear in non-top-level positions."""
+    r"""Hoist case statements (elimination unions) that appear in non-top-level positions"""
     
     APPLICATIONS = "applications"
-    r"""Hoist function applications that appear in non-top-level positions."""
+    r"""Hoist function applications that appear in non-top-level positions"""
     
     LISTS = "lists"
-    r"""Hoist list terms that appear in non-top-level positions."""
+    r"""Hoist list terms that appear in non-top-level positions"""
     
     NOTHING = "nothing"
-    r"""Never hoist anything (identity transformation for let terms)."""
+    r"""Never hoist anything (identity transformation for let terms)"""
 
 HOIST_PREDICATE__NAME = hydra.core.Name("hydra.testing.HoistPredicate")
 HOIST_PREDICATE__CASE_STATEMENTS__NAME = hydra.core.Name("caseStatements")
@@ -231,10 +231,10 @@ class TermRewriter(Enum):
     r"""A predefined term rewriter for testing rewriteTerm."""
     
     REPLACE_FOO_WITH_BAR = "replaceFooWithBar"
-    r"""Replace all string literal 'foo' with 'bar'."""
+    r"""Replace all string literal 'foo' with 'bar'"""
     
     REPLACE_INT32_WITH_INT64 = "replaceInt32WithInt64"
-    r"""Replace all Int32 literals with Int64 literals of the same value."""
+    r"""Replace all Int32 literals with Int64 literals of the same value"""
 
 TERM_REWRITER__NAME = hydra.core.Name("hydra.testing.TermRewriter")
 TERM_REWRITER__REPLACE_FOO_WITH_BAR__NAME = hydra.core.Name("replaceFooWithBar")
@@ -257,7 +257,7 @@ class TypeRewriter(Enum):
     r"""A predefined type rewriter for testing rewriteType."""
     
     REPLACE_STRING_WITH_INT32 = "replaceStringWithInt32"
-    r"""Replace all String types with Int32 types."""
+    r"""Replace all String types with Int32 types"""
 
 TYPE_REWRITER__NAME = hydra.core.Name("hydra.testing.TypeRewriter")
 TYPE_REWRITER__REPLACE_STRING_WITH_INT32__NAME = hydra.core.Name("replaceStringWithInt32")
@@ -423,118 +423,118 @@ TEST_CODEC__IMPORT_TEMPLATE__NAME = hydra.core.Name("importTemplate")
 TEST_CODEC__FIND_IMPORTS__NAME = hydra.core.Name("findImports")
 
 class TestCaseAlphaConversion(Node["AlphaConversionTestCase"]):
-    r"""An alpha conversion test."""
+    r"""An alpha conversion test"""
 
 class TestCaseCaseConversion(Node["CaseConversionTestCase"]):
-    r"""A case conversion test."""
+    r"""A case conversion test"""
 
 class TestCaseDeannotateTerm(Node["DeannotateTermTestCase"]):
-    r"""A deannotate term test."""
+    r"""A deannotate term test"""
 
 class TestCaseDeannotateType(Node["DeannotateTypeTestCase"]):
-    r"""A deannotate type test."""
+    r"""A deannotate type test"""
 
 class TestCaseDelegatedEvaluation(Node["DelegatedEvaluationTestCase"]):
-    r"""A delegated evaluation test."""
+    r"""A delegated evaluation test"""
 
 class TestCaseEtaExpansion(Node["EtaExpansionTestCase"]):
-    r"""An eta expansion test."""
+    r"""An eta expansion test"""
 
 class TestCaseFlattenLetTerms(Node["FlattenLetTermsTestCase"]):
-    r"""A flatten let terms test."""
+    r"""A flatten let terms test"""
 
 class TestCaseFreeVariables(Node["FreeVariablesTestCase"]):
-    r"""A free variables test."""
+    r"""A free variables test"""
 
 class TestCaseEvaluation(Node["EvaluationTestCase"]):
-    r"""A term evaluation test."""
+    r"""A term evaluation test"""
 
 class TestCaseInference(Node["InferenceTestCase"]):
-    r"""A type inference test."""
+    r"""A type inference test"""
 
 class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
-    r"""A type inference failure test."""
+    r"""A type inference failure test"""
 
 class TestCaseJsonCoder(Node["JsonCoderTestCase"]):
-    r"""A JSON coder (round-trip) test using Flow-based coder."""
+    r"""A JSON coder (round-trip) test using Flow-based coder"""
 
 class TestCaseJsonDecode(Node["JsonDecodeTestCase"]):
-    r"""A JSON decode test using Either-based decoder."""
+    r"""A JSON decode test using Either-based decoder"""
 
 class TestCaseJsonEncode(Node["JsonEncodeTestCase"]):
-    r"""A JSON encode test using Either-based encoder."""
+    r"""A JSON encode test using Either-based encoder"""
 
 class TestCaseJsonParser(Node["JsonParserTestCase"]):
-    r"""A JSON parser test."""
+    r"""A JSON parser test"""
 
 class TestCaseJsonRoundtrip(Node["JsonRoundtripTestCase"]):
-    r"""A JSON round-trip test using Either-based encoder/decoder."""
+    r"""A JSON round-trip test using Either-based encoder/decoder"""
 
 class TestCaseJsonWriter(Node["JsonWriterTestCase"]):
-    r"""A JSON writer test."""
+    r"""A JSON writer test"""
 
 class TestCaseLiftLambdaAboveLet(Node["LiftLambdaAboveLetTestCase"]):
-    r"""A lift lambda above let test."""
+    r"""A lift lambda above let test"""
 
 class TestCaseSerialization(Node["SerializationTestCase"]):
-    r"""An AST serialization test."""
+    r"""An AST serialization test"""
 
 class TestCaseSimplifyTerm(Node["SimplifyTermTestCase"]):
-    r"""A simplify term test."""
+    r"""A simplify term test"""
 
 class TestCaseTopologicalSort(Node["TopologicalSortTestCase"]):
-    r"""A topological sort test."""
+    r"""A topological sort test"""
 
 class TestCaseTopologicalSortBindings(Node["TopologicalSortBindingsTestCase"]):
-    r"""A topological sort bindings test."""
+    r"""A topological sort bindings test"""
 
 class TestCaseTopologicalSortSCC(Node["TopologicalSortSCCTestCase"]):
-    r"""A topological sort with SCC detection test."""
+    r"""A topological sort with SCC detection test"""
 
 class TestCaseTypeChecking(Node["TypeCheckingTestCase"]):
-    r"""A type checking test."""
+    r"""A type checking test"""
 
 class TestCaseTypeCheckingFailure(Node["TypeCheckingFailureTestCase"]):
-    r"""A type checking failure test (currently unused)."""
+    r"""A type checking failure test (currently unused)"""
 
 class TestCaseTypeReduction(Node["TypeReductionTestCase"]):
-    r"""A type reduction test."""
+    r"""A type reduction test"""
 
 class TestCaseNormalizeTypeVariables(Node["NormalizeTypeVariablesTestCase"]):
-    r"""A normalize type variables test."""
+    r"""A normalize type variables test"""
 
 class TestCaseFoldOverTerm(Node["FoldOverTermTestCase"]):
-    r"""A fold over term test."""
+    r"""A fold over term test"""
 
 class TestCaseRewriteTerm(Node["RewriteTermTestCase"]):
-    r"""A rewrite term test."""
+    r"""A rewrite term test"""
 
 class TestCaseRewriteType(Node["RewriteTypeTestCase"]):
-    r"""A rewrite type test."""
+    r"""A rewrite type test"""
 
 class TestCaseHoistSubterms(Node["HoistSubtermsTestCase"]):
-    r"""A hoist subterms test."""
+    r"""A hoist subterms test"""
 
 class TestCaseHoistCaseStatements(Node["HoistCaseStatementsTestCase"]):
-    r"""A hoist case statements test."""
+    r"""A hoist case statements test"""
 
 class TestCaseHoistLetBindings(Node["HoistLetBindingsTestCase"]):
-    r"""A hoist all let bindings test (hoistAll=True, for Java)."""
+    r"""A hoist all let bindings test (hoistAll=True, for Java)"""
 
 class TestCaseHoistPolymorphicLetBindings(Node["HoistPolymorphicLetBindingsTestCase"]):
-    r"""A hoist polymorphic let bindings test."""
+    r"""A hoist polymorphic let bindings test"""
 
 class TestCaseSubstInType(Node["SubstInTypeTestCase"]):
-    r"""A type substitution test."""
+    r"""A type substitution test"""
 
 class TestCaseVariableOccursInType(Node["VariableOccursInTypeTestCase"]):
-    r"""An occur check test for type unification."""
+    r"""An occur check test for type unification"""
 
 class TestCaseUnifyTypes(Node["UnifyTypesTestCase"]):
-    r"""A type unification test."""
+    r"""A type unification test"""
 
 class TestCaseJoinTypes(Node["JoinTypesTestCase"]):
-    r"""A join types test (produce type constraints)."""
+    r"""A join types test (produce type constraints)"""
 
 class _TestCaseMeta(type):
     def __getitem__(cls, item):

@@ -3,10 +3,9 @@
 r"""Extraction and validation for hydra.util types."""
 
 from __future__ import annotations
-import hydra.compute
+from typing import cast
 import hydra.core
 import hydra.extract.core
-import hydra.graph
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.logic

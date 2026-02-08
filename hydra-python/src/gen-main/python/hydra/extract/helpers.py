@@ -5,9 +5,8 @@ r"""Helper functions for decoding terms to domain types."""
 from __future__ import annotations
 from collections.abc import Callable
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
-from typing import TypeVar
+from typing import TypeVar, cast
 import hydra.core
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.lists

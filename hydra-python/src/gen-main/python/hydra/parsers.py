@@ -23,7 +23,7 @@ T3 = TypeVar("T3")
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     def parse(input: str) -> hydra.parsing.ParseResult[T0]:
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(p1.value(input))
-    return hydra.parsing.Parser(parse)
+    return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
     r"""Parse a character (codepoint) that satisfies the given predicate."""
@@ -33,7 +33,7 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
         def codes() -> frozenlist[int]:
             return hydra.lib.strings.to_list(input)
         return hydra.lib.maybes.maybe(cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input))), (lambda c: (rest := hydra.lib.strings.from_list(hydra.lib.lists.drop(1, codes())), hydra.lib.logic.if_else(pred(c), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c, rest)))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input))))))[1]), hydra.lib.lists.safe_head(codes()))
-    return hydra.parsing.Parser(parse)
+    return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 @lru_cache(1)
 def any_char() -> hydra.parsing.Parser[int]:
@@ -54,12 +54,12 @@ def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pf.value(input))
-    return hydra.parsing.Parser(parse)
+    return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def bind(pa: hydra.parsing.Parser[T0], f: Callable[[T0], hydra.parsing.Parser[T1]]) -> hydra.parsing.Parser[T1]:
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
-    return hydra.parsing.Parser(parse)
+    return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def pure(a: T0) -> hydra.parsing.Parser[T0]:
     return hydra.parsing.Parser((lambda input: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(a, input)))))
@@ -96,7 +96,7 @@ def some(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]]:
 def map(f: Callable[[T0], T1], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
-    return hydra.parsing.Parser(parse)
+    return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def optional(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[Maybe[T0]]:
     return alt(map((lambda x1: hydra.lib.maybes.pure(x1)), p), pure(Nothing()))

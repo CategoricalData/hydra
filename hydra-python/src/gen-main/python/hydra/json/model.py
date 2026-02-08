@@ -9,13 +9,13 @@ from typing import TypeAlias
 import hydra.core
 
 class ValueArray(Node["frozenlist[Value]"]):
-    r"""A JSON array."""
+    r"""A JSON array"""
 
 class ValueBoolean(Node[bool]):
-    r"""A boolean value."""
+    r"""A boolean value"""
 
 class ValueNull:
-    r"""JSON's null value."""
+    r"""JSON's null value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -24,13 +24,13 @@ class ValueNull:
         return hash("ValueNull")
 
 class ValueNumber(Node[Decimal]):
-    r"""A numeric value."""
+    r"""A numeric value"""
 
 class ValueObject(Node["FrozenDict[str, Value]"]):
-    r"""A JSON object as a set of key/value pairs."""
+    r"""A JSON object as a set of key/value pairs"""
 
 class ValueString(Node[str]):
-    r"""A string value."""
+    r"""A string value"""
 
 class _ValueMeta(type):
     def __getitem__(cls, item):

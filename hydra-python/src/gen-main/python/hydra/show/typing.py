@@ -4,7 +4,6 @@ r"""String representations of hydra.typing types."""
 
 from __future__ import annotations
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, frozenlist
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps
@@ -43,5 +42,5 @@ def type_subst(ts: hydra.typing.TypeSubst) -> str:
         return hydra.lib.strings.cat((name(), "↦", hydra.show.core.type(typ())))
     @lru_cache(1)
     def pair_strs() -> frozenlist[str]:
-        return hydra.lib.lists.map(show_pair, pairs())
+        return hydra.lib.lists.map((lambda x1: show_pair(x1)), pairs())
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(",", pair_strs()), "}"))

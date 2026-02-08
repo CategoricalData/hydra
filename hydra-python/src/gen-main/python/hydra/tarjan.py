@@ -7,7 +7,6 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import TypeVar
-import hydra.compute
 import hydra.constants
 import hydra.core
 import hydra.lib.equality
@@ -42,10 +41,10 @@ def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> t
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), neighbors := hydra.lib.pairs.second(k_neighbors), (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex())), neighbors)))[3]), indexed_edges()))
     def vertex_to_key(v: int) -> T0:
         return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map()))
-    return (graph(), vertex_to_key)
+    return (graph(), (lambda x1: vertex_to_key(x1)))
 
 @lru_cache(1)
-def initial_state() -> hydra.core.Type:
+def initial_state() -> hydra.topology.TarjanState:
     r"""Initial state for Tarjan's algorithm."""
     
     return hydra.topology.TarjanState(0, hydra.lib.maps.empty(), hydra.lib.maps.empty(), (), hydra.lib.sets.empty(), ())
@@ -62,10 +61,10 @@ def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, fr
             def xs() -> frozenlist[int]:
                 return hydra.lib.lists.tail(st.stack)
             @lru_cache(1)
-            def new_st() -> hydra.core.Type:
+            def new_st() -> hydra.topology.TarjanState:
                 return hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
             @lru_cache(1)
-            def new_st2() -> hydra.core.Type:
+            def new_st2() -> hydra.topology.TarjanState:
                 return hydra.topology.TarjanState(new_st().counter, new_st().indices, new_st().low_links, new_st().stack, hydra.lib.sets.delete(x(), st.on_stack), new_st().sccs)
             @lru_cache(1)
             def acc_() -> frozenlist[int]:
@@ -77,7 +76,7 @@ def pop_stack_until(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, fr
 def strong_connect(graph: FrozenDict[int, frozenlist[int]], v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:
     r"""Visit a vertex and recursively explore its successors."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st: (i := st.counter, new_st := hydra.topology.TarjanState(hydra.lib.math.add(i, 1), hydra.lib.maps.insert(v, i, st.indices), hydra.lib.maps.insert(v, i, st.low_links), hydra.lib.lists.cons(v, st.stack), hydra.lib.sets.insert(v, st.on_stack), st.sccs), neighbors := hydra.lib.maps.find_with_default((), v, graph), process_neighbor := (lambda w: (low_link := (lambda st_: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_.low_links), idx_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_.indices), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, idx_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _: hydra.lib.flows.pure(None))))[2]), hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.maps.member(w, st_.indices)), (lambda : hydra.lib.flows.bind(strong_connect(graph, w), (lambda _: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_after: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_after.low_links), low_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_after.low_links), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, low_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _2: hydra.lib.flows.pure(None))))[2]))))), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(w, st_.on_stack), (lambda : low_link(st_)), (lambda : hydra.lib.flows.pure(None))))))))[1]), hydra.lib.flows.bind(hydra.monads.put_state(new_st), (lambda _: hydra.lib.flows.bind(hydra.lib.flows.map_list(process_neighbor, neighbors), (lambda _2: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_final: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.low_links), idx_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.indices), hydra.lib.logic.if_else(hydra.lib.equality.equal(low_v, idx_v), (lambda : hydra.lib.flows.bind(pop_stack_until(v), (lambda comp: hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, s.low_links, s.stack, s.on_stack, hydra.lib.lists.cons(comp, s.sccs)))), (lambda _3: hydra.lib.flows.pure(None)))))), (lambda : hydra.lib.flows.pure(None))))[2])))))))[4]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st: (i := st.counter, new_st := hydra.topology.TarjanState(hydra.lib.math.add(i, 1), hydra.lib.maps.insert(v, i, st.indices), hydra.lib.maps.insert(v, i, st.low_links), hydra.lib.lists.cons(v, st.stack), hydra.lib.sets.insert(v, st.on_stack), st.sccs), neighbors := hydra.lib.maps.find_with_default((), v, graph), process_neighbor := (lambda w: (low_link := (lambda st_: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_.low_links), idx_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_.indices), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, idx_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _: hydra.lib.flows.pure(None))))[2]), hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.maps.member(w, st_.indices)), (lambda : hydra.lib.flows.bind(strong_connect(graph, w), (lambda _: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_after: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_after.low_links), low_w := hydra.lib.maps.find_with_default(hydra.constants.max_int32, w, st_after.low_links), hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, hydra.lib.maps.insert(v, hydra.lib.equality.min(low_v, low_w), s.low_links), s.stack, s.on_stack, s.sccs))), (lambda _2: hydra.lib.flows.pure(None))))[2]))))), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(w, st_.on_stack), (lambda : low_link(st_)), (lambda : hydra.lib.flows.pure(None))))))))[1]), hydra.lib.flows.bind(hydra.monads.put_state(new_st), (lambda _: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: process_neighbor(x1)), neighbors), (lambda _2: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda st_final: (low_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.low_links), idx_v := hydra.lib.maps.find_with_default(hydra.constants.max_int32, v, st_final.indices), hydra.lib.logic.if_else(hydra.lib.equality.equal(low_v, idx_v), (lambda : hydra.lib.flows.bind(pop_stack_until(v), (lambda comp: hydra.lib.flows.bind(hydra.monads.modify((lambda s: hydra.topology.TarjanState(s.counter, s.indices, s.low_links, s.stack, s.on_stack, hydra.lib.lists.cons(comp, s.sccs)))), (lambda _3: hydra.lib.flows.pure(None)))))), (lambda : hydra.lib.flows.pure(None))))[2])))))))[4]))
 
 def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> frozenlist[frozenlist[int]]:
     r"""Compute the strongly connected components of the given graph. The components are returned in reverse topological order."""
@@ -88,6 +87,6 @@ def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> fr
     def process_vertex(v: int) -> hydra.compute.Flow[hydra.topology.TarjanState, None]:
         return hydra.lib.flows.bind(hydra.lib.flows.map((lambda st: hydra.lib.maps.member(v, st.indices)), hydra.monads.get_state()), (lambda visited: hydra.lib.logic.if_else(hydra.lib.logic.not_(visited), (lambda : strong_connect(graph, v)), (lambda : hydra.lib.flows.pure(None)))))
     @lru_cache(1)
-    def final_state() -> hydra.core.Type:
-        return hydra.monads.exec(hydra.lib.flows.map_list(process_vertex, verts()), initial_state())
+    def final_state() -> hydra.topology.TarjanState:
+        return hydra.monads.exec(hydra.lib.flows.map_list((lambda x1: process_vertex(x1)), verts()), initial_state())
     return hydra.lib.lists.reverse(hydra.lib.lists.map((lambda x1: hydra.lib.lists.sort(x1)), final_state().sccs))

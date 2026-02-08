@@ -32,23 +32,23 @@ def json_string(s: str) -> str:
         return hydra.lib.strings.cat(hydra.lib.lists.map(escape, hydra.lib.strings.to_list(s)))
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"", escaped()), "\"")
 
-def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.core.Type:
+def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.ast.Expr:
     r"""Convert a key-value pair to an AST expression."""
     
     @lru_cache(1)
     def key() -> str:
         return hydra.lib.pairs.first(pair)
     @lru_cache(1)
-    def value() -> hydra.core.Type:
+    def value() -> hydra.json.model.Value:
         return hydra.lib.pairs.second(pair)
     return hydra.serialization.ifx(colon_op, hydra.serialization.cst(json_string(key())), value_to_expr(value()))
 
-def value_to_expr(value: hydra.json.model.Value) -> hydra.core.Type:
+def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
     r"""Convert a JSON value to an AST expression for serialization."""
     
     match value:
         case hydra.json.model.ValueArray(value=arr):
-            return hydra.serialization.bracket_list_adaptive(hydra.lib.lists.map(value_to_expr, arr))
+            return hydra.serialization.bracket_list_adaptive(hydra.lib.lists.map((lambda x1: value_to_expr(x1)), arr))
         
         case hydra.json.model.ValueBoolean(value=b):
             return hydra.serialization.cst(hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false")))
@@ -63,7 +63,7 @@ def value_to_expr(value: hydra.json.model.Value) -> hydra.core.Type:
             return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_bigfloat(rounded())), (lambda : hydra.lib.literals.show_bigint(rounded())), (lambda : hydra.lib.literals.show_bigfloat(n))))
         
         case hydra.json.model.ValueObject(value=obj):
-            return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map(key_value_to_expr, hydra.lib.maps.to_list(obj)))
+            return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map((lambda x1: key_value_to_expr(x1)), hydra.lib.maps.to_list(obj)))
         
         case hydra.json.model.ValueString(value=s):
             return hydra.serialization.cst(json_string(s))

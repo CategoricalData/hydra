@@ -4,7 +4,7 @@ r"""Language constraints for JSON."""
 
 from __future__ import annotations
 from functools import lru_cache
-from typing import TypeVar
+from typing import TypeVar, cast
 import hydra.coders
 import hydra.core
 import hydra.lib.sets
@@ -14,7 +14,7 @@ import hydra.variants
 T0 = TypeVar("T0")
 
 @lru_cache(1)
-def json_language() -> hydra.core.Type:
+def json_language() -> hydra.coders.Language:
     r"""Language constraints for JSON."""
     
     @lru_cache(1)
@@ -52,4 +52,4 @@ def json_language() -> hydra.core.Type:
             
             case _:
                 return True
-    return hydra.coders.Language(hydra.coders.LanguageName("hydra.ext.org.json"), hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), type_predicate))
+    return hydra.coders.Language(hydra.coders.LanguageName("hydra.ext.org.json"), hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), (lambda x1: type_predicate(x1))))

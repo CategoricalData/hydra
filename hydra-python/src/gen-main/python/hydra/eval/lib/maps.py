@@ -3,10 +3,10 @@
 r"""Evaluation-level implementations of Map functions for the Hydra interpreter."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
+from hydra.dsl.python import FrozenDict, Nothing
 from typing import TypeVar, cast
-import hydra.compute
 import hydra.core
 import hydra.lib.flows
 import hydra.lib.lists

@@ -7,10 +7,8 @@ from collections.abc import Callable
 from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
-from typing import TypeVar
-import hydra.compute
+from typing import TypeVar, cast
 import hydra.core
-import hydra.graph
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.equality
@@ -139,7 +137,7 @@ def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.co
     r"""Extract a specific case handler from a case statement term."""
     
     @lru_cache(1)
-    def field_name() -> hydra.core.Type:
+    def field_name() -> hydra.core.Name:
         return hydra.core.Name(n)
     return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : hydra.lib.flows.fail("not enough cases")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching)))))[1]))
 
@@ -321,7 +319,7 @@ def let_binding(n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph
     r"""Extract a binding with the given name from a let term."""
     
     @lru_cache(1)
-    def name() -> hydra.core.Type:
+    def name() -> hydra.core.Name:
         return hydra.core.Name(n)
     return hydra.lib.flows.bind(let(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("no such binding: ", n))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple bindings named ", n)))))))[1]))
 
@@ -359,16 +357,16 @@ def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
 def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fv: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
     def pair(kv_pair: tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
         @lru_cache(1)
-        def kterm() -> hydra.core.Type:
+        def kterm() -> hydra.core.Term:
             return hydra.lib.pairs.first(kv_pair)
         @lru_cache(1)
-        def vterm() -> hydra.core.Type:
+        def vterm() -> hydra.core.Term:
             return hydra.lib.pairs.second(kv_pair)
         return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure((kval, vval))))))
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
         match term:
             case hydra.core.TermMap(value=m):
-                return hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list(pair, hydra.lib.maps.to_list(m)))
+                return hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list((lambda x1: pair(x1)), hydra.lib.maps.to_list(m)))
             
             case _:
                 return hydra.monads.unexpected("map", hydra.show.core.term(term))

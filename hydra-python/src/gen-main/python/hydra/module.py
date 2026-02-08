@@ -12,10 +12,10 @@ import hydra.graph
 N = TypeVar("N")
 
 class DefinitionTerm(Node["TermDefinition"]):
-    r"""A term definition."""
+    r"""A term definition"""
 
 class DefinitionType(Node["TypeDefinition"]):
-    r"""A type definition."""
+    r"""A type definition"""
 
 class _DefinitionMeta(type):
     def __getitem__(cls, item):

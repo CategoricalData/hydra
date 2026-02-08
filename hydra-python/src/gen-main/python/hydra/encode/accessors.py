@@ -9,10 +9,10 @@ import hydra.core
 import hydra.encode.core
 import hydra.lib.lists
 
-def accessor_node(x: hydra.accessors.AccessorNode) -> hydra.core.Type:
+def accessor_node(x: hydra.accessors.AccessorNode) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.accessors.AccessorNode"), (hydra.core.Field(hydra.core.Name("name"), hydra.encode.core.name(x.name)), hydra.core.Field(hydra.core.Name("label"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.label))))), hydra.core.Field(hydra.core.Name("id"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.id)))))))))
 
-def term_accessor(v1: hydra.accessors.TermAccessor) -> hydra.core.Type:
+def term_accessor(v1: hydra.accessors.TermAccessor) -> hydra.core.Term:
     match v1:
         case hydra.accessors.TermAccessorAnnotatedBody():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.accessors.TermAccessor"), hydra.core.Field(hydra.core.Name("annotatedBody"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -77,11 +77,11 @@ def term_accessor(v1: hydra.accessors.TermAccessor) -> hydra.core.Type:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def accessor_path(x: hydra.accessors.AccessorPath) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.accessors.AccessorPath"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(term_accessor, x.value))))))
+def accessor_path(x: hydra.accessors.AccessorPath) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.accessors.AccessorPath"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: term_accessor(x1)), x.value))))))
 
-def accessor_edge(x: hydra.accessors.AccessorEdge) -> hydra.core.Type:
+def accessor_edge(x: hydra.accessors.AccessorEdge) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.accessors.AccessorEdge"), (hydra.core.Field(hydra.core.Name("source"), accessor_node(x.source)), hydra.core.Field(hydra.core.Name("path"), accessor_path(x.path)), hydra.core.Field(hydra.core.Name("target"), accessor_node(x.target))))))
 
-def accessor_graph(x: hydra.accessors.AccessorGraph) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.accessors.AccessorGraph"), (hydra.core.Field(hydra.core.Name("nodes"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(accessor_node, x.nodes)))), hydra.core.Field(hydra.core.Name("edges"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map(accessor_edge, x.edges))))))))
+def accessor_graph(x: hydra.accessors.AccessorGraph) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.accessors.AccessorGraph"), (hydra.core.Field(hydra.core.Name("nodes"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: accessor_node(x1)), x.nodes)))), hydra.core.Field(hydra.core.Name("edges"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: accessor_edge(x1)), x.edges))))))))

@@ -3,6 +3,7 @@
 r"""Term definitions for the test suite."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Nothing
 from typing import cast

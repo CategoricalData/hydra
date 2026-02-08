@@ -3,12 +3,11 @@
 r"""Evaluation-level implementations of List functions for the Hydra interpreter."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from hydra.dsl.python import Nothing, frozenlist
 from typing import TypeVar, cast
-import hydra.compute
 import hydra.core
 import hydra.extract.core
-import hydra.graph
 import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.pairs
@@ -18,7 +17,7 @@ T0 = TypeVar("T0")
 def apply(funs_term: hydra.core.Term, args_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Interpreter-friendly applicative apply for List terms."""
     
-    return hydra.lib.flows.bind(hydra.extract.core.list(funs_term), (lambda funs: hydra.lib.flows.bind(hydra.extract.core.list(args_term), (lambda arguments: (apply_one := (lambda f: hydra.lib.lists.map((lambda arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(f, arg)))), arguments)), hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.concat(hydra.lib.lists.map(apply_one, funs))))))[1]))))
+    return hydra.lib.flows.bind(hydra.extract.core.list(funs_term), (lambda funs: hydra.lib.flows.bind(hydra.extract.core.list(args_term), (lambda arguments: (apply_one := (lambda f: hydra.lib.lists.map((lambda arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(f, arg)))), arguments)), hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: apply_one(x1)), funs))))))[1]))))
 
 def bind(list_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Interpreter-friendly monadic bind for List terms."""

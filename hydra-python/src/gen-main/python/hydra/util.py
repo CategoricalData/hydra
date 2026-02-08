@@ -45,7 +45,7 @@ class DecodingError(Node[str]):
 DECODING_ERROR__NAME = hydra.core.Name("hydra.util.DecodingError")
 
 class PrecisionArbitrary:
-    r"""Arbitrary precision."""
+    r"""Arbitrary precision"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -54,7 +54,7 @@ class PrecisionArbitrary:
         return hash("PrecisionArbitrary")
 
 class PrecisionBits(Node[int]):
-    r"""Precision to a specified number of bits."""
+    r"""Precision to a specified number of bits"""
 
 class _PrecisionMeta(type):
     def __getitem__(cls, item):

@@ -15,8 +15,8 @@ import hydra.lib.maybes
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
-def trace(x: hydra.compute.Trace) -> hydra.core.Type:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.compute.Trace"), (hydra.core.Field(hydra.core.Name("stack"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.stack)))), hydra.core.Field(hydra.core.Name("messages"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.messages)))), hydra.core.Field(hydra.core.Name("other"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap(hydra.encode.core.name, hydra.encode.core.term, x.other))))))))
+def trace(x: hydra.compute.Trace) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.compute.Trace"), (hydra.core.Field(hydra.core.Name("stack"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.stack)))), hydra.core.Field(hydra.core.Name("messages"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), x.messages)))), hydra.core.Field(hydra.core.Name("other"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: hydra.encode.core.name(x1)), (lambda x1: hydra.encode.core.term(x1)), x.other))))))))
 
-def flow_state(s: Callable[[T0], hydra.core.Term], v: Callable[[T1], hydra.core.Term], x: hydra.compute.FlowState[T0, T1]) -> hydra.core.Type:
+def flow_state(s: Callable[[T0], hydra.core.Term], v: Callable[[T1], hydra.core.Term], x: hydra.compute.FlowState[T0, T1]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.compute.FlowState"), (hydra.core.Field(hydra.core.Name("value"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(v, x.value)))), hydra.core.Field(hydra.core.Name("state"), s(x.state)), hydra.core.Field(hydra.core.Name("trace"), trace(x.trace))))))
