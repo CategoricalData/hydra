@@ -9,11 +9,13 @@ import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Staging.Testing.Generation.Transform (collectTestCases)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
-import Hydra.Ext.Staging.Python.Coder (encodeTermInline, encodeType, PyGraph(..), PythonModuleMetadata(..))
-import qualified Hydra.Ext.Staging.Python.Names as PyNames
-import Hydra.Ext.Staging.Python.Names (PythonEnvironment(..), encodeNamespace, findNamespaces)
-import Hydra.Ext.Staging.Python.Utils
-import qualified Hydra.Ext.Staging.Python.Serde as PySer
+import Hydra.Ext.Python.Coder (encodeTermInline, encodeType)
+import Hydra.Ext.Python.Helpers (PyGraph(..), PythonModuleMetadata(..))
+import qualified Hydra.Ext.Python.Names as PyNames
+import Hydra.Ext.Python.Names (encodeNamespace)
+import Hydra.Ext.Python.Helpers (PythonEnvironment(..))
+import Hydra.Ext.Python.Utils
+import qualified Hydra.Ext.Python.Serde as PySer
 import Hydra.Serialization (printExpr, parenthesize)
 import qualified Hydra.Ext.Python.Syntax as Py
 import qualified Hydra.Names as Names
@@ -70,8 +72,8 @@ termToPythonWithContext namespaces tcontext skipCasts term = do
         pythonEnvironmentNamespaces = namespaces,
         pythonEnvironmentBoundTypeVariables = ([], M.empty),
         pythonEnvironmentTypeContext = tcontext,
-        pythonEnvironmentNUllaryBindings = S.empty,
-        pythonEnvironmentVersion = PyNames.targetPythonVersion,
+        pythonEnvironmentNullaryBindings = S.empty,
+        pythonEnvironmentVersion = targetPythonVersion,
         pythonEnvironmentSkipCasts = skipCasts,
         pythonEnvironmentInlineVariables = S.empty
       }
@@ -109,8 +111,8 @@ typeToPython namespaces typ = do
         pythonEnvironmentNamespaces = namespaces,
         pythonEnvironmentBoundTypeVariables = ([], M.empty),
         pythonEnvironmentTypeContext = tcontext,
-        pythonEnvironmentNUllaryBindings = S.empty,
-        pythonEnvironmentVersion = PyNames.targetPythonVersion,
+        pythonEnvironmentNullaryBindings = S.empty,
+        pythonEnvironmentVersion = targetPythonVersion,
         pythonEnvironmentSkipCasts = False,  -- Types don't use casts anyway
         pythonEnvironmentInlineVariables = S.empty
       }
