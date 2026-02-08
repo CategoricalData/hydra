@@ -1,17 +1,25 @@
 -- | Test cases for hydra.monads functions
 module Hydra.Sources.Test.Monads where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
 import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Compute as Compute
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-
-import qualified Data.Map as M
 
 
 ns :: Namespace
@@ -24,7 +32,7 @@ module_ = Module ns elements [Monads.ns] [] $
     elements = [Phantoms.toBinding allTests]
 
 testTrace :: TTerm Term
-testTrace = traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
+testTrace = traceTerm (list []) (list []) (Terms.map (Phantoms.map M.empty))
 
 -- | Test cases for pure: lifts a value into a successful flow
 pureTests :: TTerm TestGroup
@@ -61,7 +69,7 @@ traceWithMessages :: [String] -> TTerm Term
 traceWithMessages msgs = traceTerm
   (list [])
   (list $ fmap string msgs)
-  (MetaTerms.map (Phantoms.map M.empty))
+  (Terms.map (Phantoms.map M.empty))
 
 -- | Test cases for error trace ordering
 -- Tests that withTrace annotations are properly recorded and errors include the trace context

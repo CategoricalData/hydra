@@ -168,3 +168,16 @@ spec = H.describe "hydra.lib.flows primitives" $ do
           1,
           2,
           3])
+  H.describe "withDefault" $ do
+    H.it "withDefault on success returns original" $ H.shouldBe
+      (Compute.flowStateValue (Compute.unFlow (Flows.withDefault 0 (Monads.pure 42)) Lexical.emptyGraph (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty})))
+      (Just 42)
+    H.it "withDefault on failure returns fallback" $ H.shouldBe
+      (Compute.flowStateValue (Compute.unFlow (Flows.withDefault 99 (Monads.fail "error")) Lexical.emptyGraph (Compute.Trace {
+          Compute.traceStack = [],
+          Compute.traceMessages = [],
+          Compute.traceOther = M.empty})))
+      (Just 99)

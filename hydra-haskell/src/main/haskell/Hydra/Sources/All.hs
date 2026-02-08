@@ -12,6 +12,7 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Test.All
 
+import qualified Hydra.Sources.CoderUtils as CoderUtils
 import qualified Hydra.Sources.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
@@ -45,6 +46,7 @@ jsonModules = [
 
 otherModules :: [Module]
 otherModules = [
+  CoderUtils.module_,
   HaskellAst.module_,
   HaskellCoder.module_,
   HaskellLanguage.module_,

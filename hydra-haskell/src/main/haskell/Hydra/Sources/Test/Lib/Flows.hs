@@ -1,17 +1,25 @@
 -- | Test cases for hydra.lib.flows primitives
 module Hydra.Sources.Test.Lib.Flows where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
+-- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Compute as Compute
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
-import Hydra.Sources.Kernel.Types.All
-import qualified Data.Map as M
 
 
 ns :: Namespace
@@ -25,7 +33,7 @@ module_ = Module ns elements [Monads.ns] kernelTypesNamespaces $
 
 -- | Trace at the TTerm Term level
 testTrace :: TTerm Term
-testTrace = traceTerm (list []) (list []) (MetaTerms.map (Phantoms.map M.empty))
+testTrace = traceTerm (list []) (list []) (Terms.map (Phantoms.map M.empty))
 
 -- Test groups for hydra.lib.flows primitives
 
@@ -51,7 +59,7 @@ flowsFail = subgroup "fail" [
     test testName = evalCase testName
       (unFlowTerm @@ (metaref Monads.fail @@ string "test error message") @@ unit @@ testTrace)
       (flowStateTerm (optional nothing) unit (traceWithMessages ["Error: test error message ()"]))
-    traceWithMessages msgs = traceTerm (list []) (list $ fmap string msgs) (MetaTerms.map (Phantoms.map M.empty))
+    traceWithMessages msgs = traceTerm (list []) (list $ fmap string msgs) (Terms.map (Phantoms.map M.empty))
 
 -- | Test cases for flows.map: transforms the value inside a flow
 -- Tests the primitive _flows_map with kernel Monads.pure for flow construction
@@ -225,6 +233,21 @@ flowsMapKeys = subgroup "mapKeys" [
           (lambda "k2" $ metaref Monads.pure @@
             (primitive _maps_fromList @@ list [pair (var "k1") (string "a"), pair (var "k2") (string "b")])))
 
+-- | Test cases for flows.withDefault: uses fallback value if flow fails
+flowsWithDefault :: TTerm TestGroup
+flowsWithDefault = subgroup "withDefault" [
+  testSuccess "withDefault on success returns original",
+  testFailure "withDefault on failure returns fallback"]
+  where
+    -- withDefault 0 (pure 42) = pure 42 (success case)
+    testSuccess testName = evalCase testName
+      (unFlowTerm @@ (primitive _flows_withDefault @@ int32 0 @@ (metaref Monads.pure @@ int32 42)) @@ unit @@ testTrace)
+      (flowStateTerm (optional $ just (int32 42)) unit testTrace)
+    -- withDefault 99 (fail "error") = pure 99 (failure case - uses fallback)
+    testFailure testName = evalCase testName
+      (unFlowTerm @@ (primitive _flows_withDefault @@ int32 99 @@ (metaref Monads.fail @@ string "error")) @@ unit @@ testTrace)
+      (flowStateTerm (optional $ just (int32 99)) unit testTrace)
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.flows primitives" $
@@ -240,4 +263,5 @@ allTests = definitionInModule module_ "allTests" $
       flowsMapMaybe,
       flowsMapSet,
       flowsPure,
-      flowsSequence]
+      flowsSequence,
+      flowsWithDefault]

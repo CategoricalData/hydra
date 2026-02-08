@@ -1,17 +1,18 @@
-
 module Hydra.Sources.Test.Formatting where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Dsl.Meta.Testing as Testing
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Data.List as L
-import qualified Data.Map  as M
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
 
 import qualified Hydra.Dsl.Meta.Util as Util
 import qualified Hydra.Show.Util as ShowUtil
@@ -35,16 +36,16 @@ define = definitionInModule module_
 
 allTests :: TBinding TestGroup
 allTests = define "allTests" $
-    doc "Test cases for hydra.formatting" $
-    Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TTerm TestCaseWithMetadata]))
+    Phantoms.doc "Test cases for hydra.formatting" $
+    Testing.testGroup (Phantoms.string "formatting") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list ([] :: [TTerm TestCaseWithMetadata]))
   where
     subgroups = [
       caseConversionTests]
 
 caseConversionTests :: TBinding TestGroup
 caseConversionTests = define "caseConversionTests" $
-  doc "Test cases for case conversion" $
-  Testing.testGroup (string "case conversion") nothing (list ([] :: [TTerm TestGroup])) (list cases)
+  Phantoms.doc "Test cases for case conversion" $
+  Testing.testGroup (Phantoms.string "case conversion") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list cases)
   where
     cases = [
       -- from lower_snake_case
@@ -74,14 +75,14 @@ caseConversionTests = define "caseConversionTests" $
 -- Helpers
 
 testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm TestCaseWithMetadata
-testCase i fromConvention toConvention fromString toString = Testing.testCaseWithMetadata name tcase nothing (list ([] :: [TTerm Tag]))
+testCase i fromConvention toConvention fromString toString = Testing.testCaseWithMetadata name tcase Phantoms.nothing (Phantoms.list ([] :: [TTerm Tag]))
   where
     tcase = Testing.testCaseCaseConversion $ Testing.caseConversionTestCase
       (metaConv fromConvention)
       (metaConv toConvention)
-      (string fromString)
-      (string toString)
-    name = string $ "#" ++ show i ++ " (" ++ ShowUtil.caseConvention fromConvention ++ " -> " ++ ShowUtil.caseConvention toConvention ++ ")"
+      (Phantoms.string fromString)
+      (Phantoms.string toString)
+    name = Phantoms.string $ "#" ++ show i ++ " (" ++ ShowUtil.caseConvention fromConvention ++ " -> " ++ ShowUtil.caseConvention toConvention ++ ")"
     metaConv conv = case conv of
       CaseConventionLowerSnake -> Util.caseConventionLowerSnake
       CaseConventionUpperSnake -> Util.caseConventionUpperSnake

@@ -1,19 +1,22 @@
 -- | Test cases for Ord instance comparisons on complex Hydra types
 module Hydra.Sources.Test.Ordering where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Terms as Terms
-import qualified Hydra.Dsl.Meta.Types as T
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
 
-import qualified Data.Map as M
+import Hydra.Testing
+import Hydra.Sources.Libraries
 
 
 ns :: Namespace
@@ -51,37 +54,37 @@ ltTest testName x y result = primCase testName _equality_lt [toTerm x, toTerm y]
 
 nameComparisonTests :: TTerm TestGroup
 nameComparisonTests = subgroup "Name comparison" [
-  -- Compare two names (using MetaTerms.nameTerm which creates a Name wrapped term)
+  -- Compare two names (using nameTerm which creates a Name wrapped term)
   compareTest "name less than (alphabetic)"
-    (MetaTerms.nameTerm "apple")
-    (MetaTerms.nameTerm "banana")
+    (nameTerm "apple")
+    (nameTerm "banana")
     "lessThan",
   compareTest "name equal"
-    (MetaTerms.nameTerm "hello")
-    (MetaTerms.nameTerm "hello")
+    (nameTerm "hello")
+    (nameTerm "hello")
     "equalTo",
   compareTest "name greater than"
-    (MetaTerms.nameTerm "zebra")
-    (MetaTerms.nameTerm "apple")
+    (nameTerm "zebra")
+    (nameTerm "apple")
     "greaterThan",
   -- Qualified names
   compareTest "qualified name less than"
-    (MetaTerms.nameTerm "hydra.core.Term")
-    (MetaTerms.nameTerm "hydra.core.Type")
+    (nameTerm "hydra.core.Term")
+    (nameTerm "hydra.core.Type")
     "lessThan",
   compareTest "qualified name equal"
-    (MetaTerms.nameTerm "hydra.core.Term")
-    (MetaTerms.nameTerm "hydra.core.Term")
+    (nameTerm "hydra.core.Term")
+    (nameTerm "hydra.core.Term")
     "equalTo",
   -- Boolean equality
   equalTest "name equality true"
-    (MetaTerms.nameTerm "foo")
-    (MetaTerms.nameTerm "foo")
-    MetaTerms.true,
+    (nameTerm "foo")
+    (nameTerm "foo")
+    true,
   equalTest "name equality false"
-    (MetaTerms.nameTerm "foo")
-    (MetaTerms.nameTerm "bar")
-    MetaTerms.false]
+    (nameTerm "foo")
+    (nameTerm "bar")
+    false]
 
 -- ============================================================
 -- Literal comparison tests
@@ -141,11 +144,11 @@ typeComparisonTests = subgroup "Type comparison" [
   equalTest "type equality true"
     T.int32
     T.int32
-    MetaTerms.true,
+    true,
   equalTest "type equality false"
     T.int32
     T.string
-    MetaTerms.false]
+    false]
 
 -- ============================================================
 -- Term comparison tests
@@ -183,16 +186,16 @@ termComparisonTests = subgroup "Term comparison" [
 
 -- Helper to build a Person record term
 personTerm :: String -> String -> Int -> TTerm Term
-personTerm firstName lastName age = MetaTerms.record TestTypes.testTypePersonName [
-  "firstName" >: MetaTerms.string firstName,
-  "lastName" >: MetaTerms.string lastName,
-  "age" >: MetaTerms.int32 (fromIntegral age)]
+personTerm firstName lastName age = record TestTypes.testTypePersonName [
+  "firstName" >: string firstName,
+  "lastName" >: string lastName,
+  "age" >: int32 (fromIntegral age)]
 
 -- Helper to build a LatLon record term
 latLonTerm :: Float -> Float -> TTerm Term
-latLonTerm lat lon = MetaTerms.record TestTypes.testTypeLatLonName [
-  "lat" >: MetaTerms.float32 (realToFrac lat),
-  "lon" >: MetaTerms.float32 (realToFrac lon)]
+latLonTerm lat lon = record TestTypes.testTypeLatLonName [
+  "lat" >: float32 (realToFrac lat),
+  "lon" >: float32 (realToFrac lon)]
 
 recordComparisonTests :: TTerm TestGroup
 recordComparisonTests = subgroup "Record comparison (monomorphic)" [
@@ -230,11 +233,11 @@ recordComparisonTests = subgroup "Record comparison (monomorphic)" [
   equalTest "person equality true"
     (personTerm "Alice" "Smith" 30)
     (personTerm "Alice" "Smith" 30)
-    MetaTerms.true,
+    true,
   equalTest "person equality false"
     (personTerm "Alice" "Smith" 30)
     (personTerm "Bob" "Smith" 30)
-    MetaTerms.false]
+    false]
 
 -- ============================================================
 -- Polymorphic type comparison tests
@@ -242,28 +245,28 @@ recordComparisonTests = subgroup "Record comparison (monomorphic)" [
 
 -- Helper to build a LatLonPoly record term with type application
 latLonPolyInt32Term :: Int -> Int -> TTerm Term
-latLonPolyInt32Term lat lon = MetaTerms.tyapp
-  (MetaTerms.record TestTypes.testTypeLatLonPolyName [
-    "lat" >: MetaTerms.int32 (fromIntegral lat),
-    "lon" >: MetaTerms.int32 (fromIntegral lon)])
+latLonPolyInt32Term lat lon = tyapp
+  (record TestTypes.testTypeLatLonPolyName [
+    "lat" >: int32 (fromIntegral lat),
+    "lon" >: int32 (fromIntegral lon)])
   T.int32
 
 latLonPolyStringTerm :: String -> String -> TTerm Term
-latLonPolyStringTerm lat lon = MetaTerms.tyapp
-  (MetaTerms.record TestTypes.testTypeLatLonPolyName [
-    "lat" >: MetaTerms.string lat,
-    "lon" >: MetaTerms.string lon])
+latLonPolyStringTerm lat lon = tyapp
+  (record TestTypes.testTypeLatLonPolyName [
+    "lat" >: string lat,
+    "lon" >: string lon])
   T.string
 
 -- Helper to build a PersonOrSomething union term
 personOrSomethingPersonTerm :: String -> String -> Int -> TTerm Term
-personOrSomethingPersonTerm firstName lastName age = MetaTerms.tyapp
-  (MetaTerms.inject TestTypes.testTypePersonOrSomethingName "person" (personTerm firstName lastName age))
+personOrSomethingPersonTerm firstName lastName age = tyapp
+  (inject TestTypes.testTypePersonOrSomethingName "person" (personTerm firstName lastName age))
   (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
 personOrSomethingOtherListTerm :: [TTerm Term] -> TTerm Term
-personOrSomethingOtherListTerm persons = MetaTerms.tyapp
-  (MetaTerms.inject TestTypes.testTypePersonOrSomethingName "other" (MetaTerms.list persons))
+personOrSomethingOtherListTerm persons = tyapp
+  (inject TestTypes.testTypePersonOrSomethingName "other" (list persons))
   (T.list $ Core.typeVariable TestTypes.testTypePersonName)
 
 polymorphicComparisonTests :: TTerm TestGroup
@@ -303,11 +306,11 @@ polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
   equalTest "LatLonPoly Int32 equality true"
     (latLonPolyInt32Term 10 20)
     (latLonPolyInt32Term 10 20)
-    MetaTerms.true,
+    true,
   equalTest "LatLonPoly Int32 equality false"
     (latLonPolyInt32Term 10 20)
     (latLonPolyInt32Term 10 25)
-    MetaTerms.false]
+    false]
 
 -- ============================================================
 -- Union type comparison tests
@@ -315,10 +318,10 @@ polymorphicComparisonTests = subgroup "Polymorphic type comparison" [
 
 -- Helper for Number union (int vs float)
 numberIntTerm :: Int -> TTerm Term
-numberIntTerm n = MetaTerms.inject TestTypes.testTypeNumberName "int" (MetaTerms.int32 (fromIntegral n))
+numberIntTerm n = inject TestTypes.testTypeNumberName "int" (int32 (fromIntegral n))
 
 numberFloatTerm :: Float -> TTerm Term
-numberFloatTerm f = MetaTerms.inject TestTypes.testTypeNumberName "float" (MetaTerms.float32 (realToFrac f))
+numberFloatTerm f = inject TestTypes.testTypeNumberName "float" (float32 (realToFrac f))
 
 unionComparisonTests :: TTerm TestGroup
 unionComparisonTests = subgroup "Union comparison" [
@@ -344,15 +347,15 @@ unionComparisonTests = subgroup "Union comparison" [
   equalTest "Number int equality true"
     (numberIntTerm 42)
     (numberIntTerm 42)
-    MetaTerms.true,
+    true,
   equalTest "Number int equality false (different value)"
     (numberIntTerm 42)
     (numberIntTerm 43)
-    MetaTerms.false,
+    false,
   equalTest "Number equality false (different variant)"
     (numberIntTerm 42)
     (numberFloatTerm 42.0)
-    MetaTerms.false]
+    false]
 
 -- ============================================================
 -- All tests

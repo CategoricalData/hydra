@@ -1,15 +1,22 @@
 module Hydra.Sources.Test.Lib.Strings where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Meta.Phantoms as Base
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
-import qualified Hydra.Sources.Kernel.Types.Testing as TestingTypes
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
+-- Additional imports specific to this file
+import Hydra.Testing
+import Hydra.Sources.Libraries
 
 
 ns :: Namespace
@@ -18,18 +25,18 @@ ns = Namespace "hydra.test.lib.strings"
 module_ :: Module
 module_ = Module ns elements
     [TestGraph.ns]
-    KernelTypes.kernelTypesNamespaces
+    kernelTypesNamespaces
     (Just "Test cases for hydra.lib.strings primitives")
   where
     elements = [
-        Base.toBinding allTests]
+        Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
 allTests :: TBinding TestGroup
 allTests = define "allTests" $
-    Base.doc "Test cases for hydra.lib.strings primitives" $
+    Phantoms.doc "Test cases for hydra.lib.strings primitives" $
     supergroup "hydra.lib.strings primitives" [
       stringsCat,
       stringsCat2,

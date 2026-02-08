@@ -1,16 +1,18 @@
-
 module Hydra.Sources.Test.TestTerms where
 
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Module        as DModule
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import           Prelude hiding ((++))
-import qualified Data.List               as L
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
 
-import           Hydra.Dsl.Meta.Terms as MetaTerms
+import qualified Hydra.Dsl.Meta.Module        as DModule
+import           Prelude hiding ((++))
 
 
 -- Type alias to avoid confusion with DSL Module

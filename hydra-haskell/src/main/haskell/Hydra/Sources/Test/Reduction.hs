@@ -1,14 +1,22 @@
 -- | Test cases for term reduction/evaluation mechanics
 module Hydra.Sources.Test.Reduction where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
 import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import Hydra.Dsl.Meta.Terms as MetaTerms
-import qualified Hydra.Dsl.Meta.Types as MetaTypes
-import Hydra.Dsl.Meta.Base (name)
 
 
 ns :: Namespace
@@ -274,38 +282,38 @@ typeReductionTests :: TTerm TestGroup
 typeReductionTests = subgroup "type reduction" [
   -- Non-application types are unchanged
   typeRedCase "unit type unchanged"
-    MetaTypes.unit
-    MetaTypes.unit,
+    T.unit
+    T.unit,
   typeRedCase "string type unchanged"
-    MetaTypes.string
-    MetaTypes.string,
+    T.string
+    T.string,
   typeRedCase "int32 type unchanged"
-    MetaTypes.int32
-    MetaTypes.int32,
+    T.int32
+    T.int32,
   -- Simple type application: (forall t. t -> t) String = String -> String
   typeRedCase "identity type applied to string"
-    (MetaTypes.forAll "t" (MetaTypes.function (MetaTypes.var "t") (MetaTypes.var "t")) MetaTypes.@@ MetaTypes.string)
-    (MetaTypes.function MetaTypes.string MetaTypes.string),
+    (T.forAll "t" (T.function (T.var "t") (T.var "t")) T.@@ T.string)
+    (T.function T.string T.string),
   -- Type application with unused variable: (forall x. Int32) Bool = Int32
   typeRedCase "constant type ignores argument"
-    (MetaTypes.forAll "x" MetaTypes.int32 MetaTypes.@@ MetaTypes.boolean)
-    MetaTypes.int32,
+    (T.forAll "x" T.int32 T.@@ T.boolean)
+    T.int32,
   -- Nested forall application
   typeRedCase "nested forall first application"
-    (MetaTypes.forAll "x" (MetaTypes.forAll "y" (MetaTypes.function (MetaTypes.var "x") (MetaTypes.var "y"))) MetaTypes.@@ MetaTypes.int32)
-    (MetaTypes.forAll "y" (MetaTypes.function MetaTypes.int32 (MetaTypes.var "y"))),
+    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32)
+    (T.forAll "y" (T.function T.int32 (T.var "y"))),
   -- Full application of nested forall
   typeRedCase "nested forall both applications"
-    (MetaTypes.forAll "x" (MetaTypes.forAll "y" (MetaTypes.function (MetaTypes.var "x") (MetaTypes.var "y"))) MetaTypes.@@ MetaTypes.int32 MetaTypes.@@ MetaTypes.string)
-    (MetaTypes.function MetaTypes.int32 MetaTypes.string),
+    (T.forAll "x" (T.forAll "y" (T.function (T.var "x") (T.var "y"))) T.@@ T.int32 T.@@ T.string)
+    (T.function T.int32 T.string),
   -- List type application
   typeRedCase "list type applied"
-    (MetaTypes.forAll "a" (MetaTypes.list (MetaTypes.var "a")) MetaTypes.@@ MetaTypes.int32)
-    (MetaTypes.list MetaTypes.int32),
+    (T.forAll "a" (T.list (T.var "a")) T.@@ T.int32)
+    (T.list T.int32),
   -- Optional type application
   typeRedCase "optional type applied"
-    (MetaTypes.forAll "a" (MetaTypes.optional (MetaTypes.var "a")) MetaTypes.@@ MetaTypes.string)
-    (MetaTypes.optional MetaTypes.string)]
+    (T.forAll "a" (T.optional (T.var "a")) T.@@ T.string)
+    (T.optional T.string)]
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

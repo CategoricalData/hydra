@@ -5,14 +5,23 @@
 -- Note: This module supersedes the Haskell-specific Hydra.SerializationSpec tests.
 module Hydra.Sources.Test.Serialization where
 
+-- Standard imports for deep DSL tests (produces TTerm a with specific types)
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
 import Hydra.Testing
-import Hydra.Dsl.AsTerm
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
+import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Meta.Ast as Ast
-import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 import qualified Hydra.Sources.Haskell.Operators as Operators
 
@@ -25,7 +34,7 @@ ns = Namespace "hydra.test.serialization"
 module_ :: Module
 module_ = Module ns elements
     [Serialization.ns, Operators.ns]
-    KernelTypes.kernelTypesNamespaces
+    kernelTypesNamespaces
     (Just "Test cases for AST serialization")
   where
     elements = [Phantoms.toBinding allTests]

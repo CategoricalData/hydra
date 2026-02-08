@@ -5,18 +5,28 @@
 -- to produce a canonical ordering (sorted by node value within each SCC).
 module Hydra.Sources.Test.Sorting where
 
+-- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Test.TestGraph as TestGraph
+import qualified Hydra.Sources.Test.TestTerms as TestTerms
+import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.List                    as L
+import qualified Data.Map                     as M
+
 import Hydra.Testing
-import Hydra.Dsl.Meta.Testing
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Phantoms as Base
-import qualified Hydra.Sources.Kernel.Types.All as KernelTypes
 import qualified Hydra.Sources.Kernel.Terms.Sorting as SortingModule
 
 import qualified Data.Int as I
 
 
--- Note: We use Int for input types in helpers because Base.int32 expects Int
+-- Note: We use Int for input types in helpers because Phantoms.int32 expects Int
 -- and produces TTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
 
 ns :: Namespace
@@ -25,36 +35,36 @@ ns = Namespace "hydra.test.sorting"
 module_ :: Module
 module_ = Module ns elements
     [SortingModule.ns]
-    KernelTypes.kernelTypesNamespaces
+    kernelTypesNamespaces
     (Just "Test cases for topological sorting algorithms")
   where
-    elements = [Base.toBinding allTests]
+    elements = [Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
-define = Base.definitionInModule module_
+define = Phantoms.definitionInModule module_
 
 allTests :: TBinding TestGroup
 allTests = define "allTests" $
-    Base.doc "Test cases for topological sorting" $
+    Phantoms.doc "Test cases for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,
       topologicalSortSCCGroup]
 
 -- Helper to create adjacency list
 adj :: [(Int, [Int])] -> TTerm [(Int, [Int])]
-adj pairs = Base.list [Base.pair (Base.int32 n) (Base.list (Base.int32 <$> deps)) | (n, deps) <- pairs]
+adj pairs = Phantoms.list [Phantoms.pair (Phantoms.int32 n) (Phantoms.list (Phantoms.int32 <$> deps)) | (n, deps) <- pairs]
 
 -- Helper for Right result (sorted list)
 sorted :: [Int] -> TTerm (Either [[Int]] [Int])
-sorted xs = Base.right $ Base.list (Base.int32 <$> xs)
+sorted xs = Phantoms.right $ Phantoms.list (Phantoms.int32 <$> xs)
 
 -- Helper for Left result (cycles)
 cycles :: [[Int]] -> TTerm (Either [[Int]] [Int])
-cycles cs = Base.left $ Base.list [Base.list (Base.int32 <$> c) | c <- cs]
+cycles cs = Phantoms.left $ Phantoms.list [Phantoms.list (Phantoms.int32 <$> c) | c <- cs]
 
 -- Helper for SCC result
 sccs :: [[Int]] -> TTerm [[Int]]
-sccs cs = Base.list [Base.list (Base.int32 <$> c) | c <- cs]
+sccs cs = Phantoms.list [Phantoms.list (Phantoms.int32 <$> c) | c <- cs]
 
 -- | Test cases for topological sort (without cycles)
 topologicalSortGroup :: TTerm TestGroup
