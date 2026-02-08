@@ -158,7 +158,8 @@ hydraLibFlows = standardLibrary _hydra_lib_flows [
     prim2Eval _flows_mapMaybe EvalFlows.mapMaybe [_x, _s, _y]                 (function x_ $ flow s_ y_) (optional x_) (flow s_ $ optional y_),
     prim2Eval _flows_mapSet   EvalFlows.mapSet   [_xOrd, _s, _yOrd]           (function x_ (flow s_ y_)) (set x_) (flow s_ (set y_)),
     prim1     _flows_pure     Flows.pure         [_s, _x]                     x_ (flow s_ x_),
-    prim1     _flows_sequence Flows.sequence     [_s, _x]                     (list (flow s_ x_)) (flow s_ (list x_))]
+    prim1     _flows_sequence Flows.sequence     [_s, _x]                     (list (flow s_ x_)) (flow s_ (list x_)),
+    prim2Eval _flows_withDefault EvalFlows.withDefault [_s, _x]               x_ (flow s_ x_) (flow s_ x_)]
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
@@ -213,6 +214,7 @@ hydraLibLiterals = standardLibrary _hydra_lib_literals [
   prim1 _literals_bigintToUint16    Literals.bigintToUint16    [] bigint uint16,
   prim1 _literals_bigintToUint32    Literals.bigintToUint32    [] bigint uint32,
   prim1 _literals_bigintToUint64    Literals.bigintToUint64    [] bigint uint64,
+  prim1 _literals_binaryToBytes     Literals.binaryToBytes     [] binary (list int32),
   prim1 _literals_binaryToString    Literals.binaryToString    [] binary string,
   prim1 _literals_float32ToBigfloat Literals.float32ToBigfloat [] float32 bigfloat,
   prim1 _literals_float64ToBigfloat Literals.float64ToBigfloat [] float64 bigfloat,

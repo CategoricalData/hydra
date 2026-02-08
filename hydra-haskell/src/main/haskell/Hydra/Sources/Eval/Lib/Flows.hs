@@ -79,7 +79,8 @@ module_ = Module ns elements
       toBinding mapKeys_,
       toBinding mapList_,
       toBinding mapMaybe_,
-      toBinding mapSet_]
+      toBinding mapSet_,
+      toBinding withDefault_]
 
 -- | Interpreter-friendly applicative apply for Flow.
 -- apply flowFun flowArg: applies the function inside flowFun to the value inside flowArg.
@@ -366,3 +367,54 @@ mapSet_ = define "mapSet" $
       (Core.termList $ Lists.map
         ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
         (Sets.toList $ var "elements")))
+
+-- | Interpreter-friendly withDefault for Flow (try/catch).
+-- withDefault fallbackTerm flowTerm: returns flowTerm's result if it succeeds,
+-- otherwise returns fallbackTerm wrapped in pure.
+withDefault_ :: TBinding (Term -> Term -> Flow s Term)
+withDefault_ = define "withDefault" $
+  doc "Interpreter-friendly withDefault for Flow." $
+  "fallbackTerm" ~> "flowTerm" ~>
+  -- Pattern match on flowTerm to see if it's a TermWrap (Flow)
+  cases _Term (var "flowTerm")
+    (Just (Monads.unexpected @@ string "flow term" @@ (ShowCore.term @@ var "flowTerm"))) [
+    _Term_wrap>>: "wrappedTerm" ~>
+      "innerFun" <~ Core.wrappedTermBody (var "wrappedTerm") $
+      produce $ Core.termWrap $ Core.wrappedTerm
+        (wrap _Name $ string "hydra.compute.Flow")
+        (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "s") nothing $
+          Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "t") nothing $
+            -- Build: let fs = innerFun s t
+            --        in maybe (FlowState (Just fallback) s t)  -- use original s, t on failure
+            --                 (\_ -> fs)                        -- use result on success
+            --                 fs.value
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_maybe)
+                  -- default (Nothing): return FlowState with fallback, original state/trace
+                  (Core.termRecord $ Core.record (wrap _Name $ string "hydra.compute.FlowState") $
+                    list [
+                      Core.field (wrap _Name $ string "value") (Core.termMaybe $ just $ var "fallbackTerm"),
+                      Core.field (wrap _Name $ string "state") (Core.termVariable $ wrap _Name $ string "s"),
+                      Core.field (wrap _Name $ string "trace") (Core.termVariable $ wrap _Name $ string "t")]))
+                -- Just case: \_ -> fs (return the original FlowState)
+                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+                  runFlowWd))
+              -- fs.value
+              (projectFsWd (string "value")))]
+  where
+    -- Run the inner function to get FlowState: innerFun s t
+    runFlowWd :: TTerm Term
+    runFlowWd = Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application
+        (var "innerFun")
+        (Core.termVariable $ wrap _Name $ string "s"))
+      (Core.termVariable $ wrap _Name $ string "t")
+    -- Project a field from the FlowState
+    projectFsWd :: TTerm String -> TTerm Term
+    projectFsWd fieldName = Core.termApplication $ Core.application
+      (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $ Core.projection
+        (wrap _Name $ string "hydra.compute.FlowState")
+        (wrap _Name fieldName))
+      runFlowWd
