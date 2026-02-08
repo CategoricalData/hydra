@@ -136,4 +136,24 @@ public interface Flows {
         (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application((funTerm), (el)))),
         hydra.lib.sets.ToList.apply((elements)))))))))));
   }
+  
+  static <T0> hydra.compute.Flow<T0, hydra.core.Term> withDefault(hydra.core.Term fallbackTerm, hydra.core.Term flowTerm) {
+    return ((flowTerm)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.compute.Flow<T0, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.unexpected(
+          "flow term",
+          hydra.show.core.Core.term((flowTerm)));
+      }
+      
+      @Override
+      public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Term.Wrap wrappedTerm) {
+        hydra.core.Term innerFun = (((wrappedTerm)).value).body;
+        return hydra.lib.flows.Pure.apply(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.compute.Flow"), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("s"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("t"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.maybe"))), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.compute.FlowState"), java.util.List.of(
+          new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Maybe(hydra.util.Maybe.just((fallbackTerm)))),
+          new hydra.core.Field(new hydra.core.Name("state"), new hydra.core.Term.Variable(new hydra.core.Name("s"))),
+          new hydra.core.Field(new hydra.core.Name("trace"), new hydra.core.Term.Variable(new hydra.core.Name("t")))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application((innerFun), new hydra.core.Term.Variable(new hydra.core.Name("s")))), new hydra.core.Term.Variable(new hydra.core.Name("t"))))))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.compute.FlowState"), new hydra.core.Name("value"))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application((innerFun), new hydra.core.Term.Variable(new hydra.core.Name("s")))), new hydra.core.Term.Variable(new hydra.core.Name("t")))))))))))))))));
+      }
+    });
+  }
 }

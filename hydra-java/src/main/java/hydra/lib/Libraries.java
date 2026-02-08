@@ -108,7 +108,8 @@ public class Libraries {
                 new hydra.lib.flows.MapMaybe(),
                 new hydra.lib.flows.MapSet(),
                 new hydra.lib.flows.Pure(),
-                new hydra.lib.flows.Sequence());
+                new hydra.lib.flows.Sequence(),
+                new hydra.lib.flows.WithDefault());
     }
 
     private static List<PrimitiveFunction> ioPrimitives() {
