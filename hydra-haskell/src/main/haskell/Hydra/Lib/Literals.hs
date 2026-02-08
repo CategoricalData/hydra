@@ -62,6 +62,10 @@ bigintToUint32 = fromIntegral
 bigintToUint64 :: Integer -> Integer
 bigintToUint64 = id
 
+-- | Convert binary to a list of byte values (0-255).
+binaryToBytes :: B.ByteString -> [Int]
+binaryToBytes = fmap fromIntegral . B.unpack
+
 -- | Convert binary to string by base64 encoding.
 binaryToString :: B.ByteString -> String
 binaryToString = T.unpack . TE.decodeUtf8 . B64.encode

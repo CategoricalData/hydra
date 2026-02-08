@@ -71,3 +71,12 @@ pure = Monads.pure
 -- | Sequence a list of Flows into a Flow of a list.
 sequence :: [Flow s x] -> Flow s [x]
 sequence = CM.sequence
+
+-- | Try a Flow and use a default value if it fails.
+--   This is similar to "catch" - the fallback is used only if the flow fails.
+withDefault :: x -> Flow s x -> Flow s x
+withDefault fallback flow = Flow $ \s t ->
+  let FlowState mResult s' t' = unFlow flow s t
+  in case mResult of
+    Just result -> FlowState (Just result) s' t'
+    Nothing -> FlowState (Just fallback) s t  -- Use original state and trace on failure

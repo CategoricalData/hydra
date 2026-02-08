@@ -61,6 +61,7 @@ _flows_mapMaybe    = qname _hydra_lib_flows "mapMaybe" :: Name
 _flows_mapSet      = qname _hydra_lib_flows "mapSet" :: Name
 _flows_pure        = qname _hydra_lib_flows "pure" :: Name
 _flows_sequence    = qname _hydra_lib_flows "sequence" :: Name
+_flows_withDefault = qname _hydra_lib_flows "withDefault" :: Name
 
 _hydra_lib_lists :: Namespace
 _hydra_lib_lists = Namespace "hydra.lib.lists"
@@ -117,6 +118,7 @@ _literals_bigintToUint8     = qname _hydra_lib_literals "bigintToUint8" :: Name
 _literals_bigintToUint16    = qname _hydra_lib_literals "bigintToUint16" :: Name
 _literals_bigintToUint32    = qname _hydra_lib_literals "bigintToUint32" :: Name
 _literals_bigintToUint64    = qname _hydra_lib_literals "bigintToUint64" :: Name
+_literals_binaryToBytes     = qname _hydra_lib_literals "binaryToBytes" :: Name
 _literals_binaryToString    = qname _hydra_lib_literals "binaryToString" :: Name
 _literals_float32ToBigfloat = qname _hydra_lib_literals "float32ToBigfloat" :: Name
 _literals_float64ToBigfloat = qname _hydra_lib_literals "float64ToBigfloat" :: Name
