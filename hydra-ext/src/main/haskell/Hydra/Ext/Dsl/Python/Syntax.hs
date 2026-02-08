@@ -119,6 +119,39 @@ compoundStatementMatch :: TTerm Py.MatchStatement -> TTerm Py.CompoundStatement
 compoundStatementMatch = inject Py._CompoundStatement Py._CompoundStatement_match
 
 -- =============================================================================
+-- FunctionDefinition (record type)
+-- =============================================================================
+
+-- | Construct a FunctionDefinition with optional decorators and raw definition
+functionDefinition :: TTerm (Maybe Py.Decorators) -> TTerm Py.FunctionDefRaw -> TTerm Py.FunctionDefinition
+functionDefinition decs raw = record Py._FunctionDefinition [
+  Py._FunctionDefinition_decorators>>: decs,
+  Py._FunctionDefinition_raw>>: raw]
+
+-- | Construct a simple FunctionDefinition (no decorators)
+functionDefinitionSimple :: TTerm Py.FunctionDefRaw -> TTerm Py.FunctionDefinition
+functionDefinitionSimple raw = functionDefinition nothing raw
+
+-- =============================================================================
+-- FunctionDefRaw (record type)
+-- =============================================================================
+
+-- | Construct a FunctionDefRaw with all fields
+functionDefRaw :: TTerm Bool -> TTerm Py.Name -> TTerm [Py.TypeParameter] -> TTerm (Maybe Py.Parameters) -> TTerm (Maybe Py.Expression) -> TTerm (Maybe Py.FuncTypeComment) -> TTerm Py.Block -> TTerm Py.FunctionDefRaw
+functionDefRaw async name_ tparams params retType funcTypeComment block_ = record Py._FunctionDefRaw [
+  Py._FunctionDefRaw_async>>: async,
+  Py._FunctionDefRaw_name>>: name_,
+  Py._FunctionDefRaw_typeParams>>: tparams,
+  Py._FunctionDefRaw_params>>: params,
+  Py._FunctionDefRaw_returnType>>: retType,
+  Py._FunctionDefRaw_funcTypeComment>>: funcTypeComment,
+  Py._FunctionDefRaw_block>>: block_]
+
+-- | Construct a simple synchronous FunctionDefRaw (no async, no type params, no return type, no func type comment)
+functionDefRawSimple :: TTerm Py.Name -> TTerm (Maybe Py.Parameters) -> TTerm Py.Block -> TTerm Py.FunctionDefRaw
+functionDefRawSimple name_ params block_ = functionDefRaw false name_ (list ([] :: [TTerm Py.TypeParameter])) params nothing nothing block_
+
+-- =============================================================================
 -- Block (union type)
 -- =============================================================================
 
@@ -474,6 +507,12 @@ doubleStarredKvpairPair = inject Py._DoubleStarredKvpair Py._DoubleStarredKvpair
 -- Lambda (record type)
 -- =============================================================================
 
+-- | Construct a Lambda
+lambda_ :: TTerm Py.LambdaParameters -> TTerm Py.Expression -> TTerm Py.Lambda
+lambda_ params body = record Py._Lambda [
+  Py._Lambda_params>>: params,
+  Py._Lambda_body>>: body]
+
 lambdaParameters :: TTerm Py.Lambda -> TTerm Py.LambdaParameters
 lambdaParameters l = project Py._Lambda Py._Lambda_params @@ l
 
@@ -484,12 +523,32 @@ lambdaBody l = project Py._Lambda Py._Lambda_body @@ l
 -- LambdaParameters (record type)
 -- =============================================================================
 
+-- | Construct simple LambdaParameters with only paramNoDefault
+lambdaParametersSimple :: TTerm [Py.LambdaParamNoDefault] -> TTerm Py.LambdaParameters
+lambdaParametersSimple params = record Py._LambdaParameters [
+  Py._LambdaParameters_slashNoDefault>>: nothing,
+  Py._LambdaParameters_paramNoDefault>>: params,
+  Py._LambdaParameters_paramWithDefault>>: list ([] :: [TTerm Py.LambdaParamWithDefault]),
+  Py._LambdaParameters_starEtc>>: nothing]
+
+-- | Construct empty LambdaParameters (for nullary lambdas)
+lambdaParametersEmpty :: TTerm Py.LambdaParameters
+lambdaParametersEmpty = record Py._LambdaParameters [
+  Py._LambdaParameters_slashNoDefault>>: nothing,
+  Py._LambdaParameters_paramNoDefault>>: list ([] :: [TTerm Py.LambdaParamNoDefault]),
+  Py._LambdaParameters_paramWithDefault>>: list ([] :: [TTerm Py.LambdaParamWithDefault]),
+  Py._LambdaParameters_starEtc>>: nothing]
+
 lambdaParametersParamNoDefault :: TTerm Py.LambdaParameters -> TTerm [Py.LambdaParamNoDefault]
 lambdaParametersParamNoDefault lp = project Py._LambdaParameters Py._LambdaParameters_paramNoDefault @@ lp
 
 -- =============================================================================
 -- LambdaParamNoDefault (wrapper type)
 -- =============================================================================
+
+-- | Wrap a Name into a LambdaParamNoDefault
+lambdaParamNoDefault :: TTerm Py.Name -> TTerm Py.LambdaParamNoDefault
+lambdaParamNoDefault = wrap Py._LambdaParamNoDefault
 
 unLambdaParamNoDefault :: TTerm Py.LambdaParamNoDefault -> TTerm Py.Name
 unLambdaParamNoDefault p = unwrap Py._LambdaParamNoDefault @@ p
@@ -1059,3 +1118,275 @@ pyStringToPyExpression s = pyPrimaryToPyExpression (primarySimple (atomString s)
 -- | Create a double-quoted Python String_ from a string
 doubleQuotedString :: TTerm String -> TTerm Py.String_
 doubleQuotedString val = string_ val quoteStyleDouble
+
+-- =============================================================================
+-- ReturnStatement (wrapper type) - constructor
+-- =============================================================================
+
+-- | Wrap star expressions into a ReturnStatement
+returnStatement :: TTerm [Py.StarExpression] -> TTerm Py.ReturnStatement
+returnStatement = wrap Py._ReturnStatement
+
+-- =============================================================================
+-- Slices (record type) - constructor
+-- =============================================================================
+
+-- | Construct Slices
+slices :: TTerm Py.Slice -> TTerm [Py.SliceOrStarredExpression] -> TTerm Py.Slices
+slices hd tl = record Py._Slices [
+  Py._Slices_head>>: hd,
+  Py._Slices_tail>>: tl]
+
+-- =============================================================================
+-- Slice (union type) - additional constructors
+-- =============================================================================
+
+-- | Inject a SliceExpression into Slice
+sliceSlice :: TTerm Py.SliceExpression -> TTerm Py.Slice
+sliceSlice = inject Py._Slice Py._Slice_slice
+
+-- =============================================================================
+-- RaiseExpression (record type) - constructor
+-- =============================================================================
+
+-- | Construct a RaiseExpression
+raiseExpression :: TTerm Py.Expression -> TTerm (Maybe Py.Expression) -> TTerm Py.RaiseExpression
+raiseExpression expr from = record Py._RaiseExpression [
+  Py._RaiseExpression_expression>>: expr,
+  Py._RaiseExpression_from>>: from]
+
+-- =============================================================================
+-- TypeAlias (record type)
+-- =============================================================================
+
+-- | Construct a TypeAlias
+typeAlias :: TTerm Py.Name -> TTerm [Py.TypeParameter] -> TTerm Py.Expression -> TTerm Py.TypeAlias
+typeAlias n tparams expr = record Py._TypeAlias [
+  Py._TypeAlias_name>>: n,
+  Py._TypeAlias_typeParams>>: tparams,
+  Py._TypeAlias_expression>>: expr]
+
+-- =============================================================================
+-- UntypedAssignment (record type) - constructor
+-- =============================================================================
+
+-- | Construct an UntypedAssignment
+untypedAssignment :: TTerm [Py.StarTarget] -> TTerm Py.AnnotatedRhs -> TTerm (Maybe String) -> TTerm Py.UntypedAssignment
+untypedAssignment targets rhs typeComment = record Py._UntypedAssignment [
+  Py._UntypedAssignment_targets>>: targets,
+  Py._UntypedAssignment_rhs>>: rhs,
+  Py._UntypedAssignment_typeComment>>: typeComment]
+
+-- | Construct a simple UntypedAssignment (no type comment)
+untypedAssignmentSimple :: TTerm [Py.StarTarget] -> TTerm Py.AnnotatedRhs -> TTerm Py.UntypedAssignment
+untypedAssignmentSimple targets rhs = untypedAssignment targets rhs nothing
+
+-- =============================================================================
+-- TypedAssignment (record type) - constructor
+-- =============================================================================
+
+-- | Construct a TypedAssignment
+typedAssignment :: TTerm Py.SingleTarget -> TTerm Py.Expression -> TTerm (Maybe Py.AnnotatedRhs) -> TTerm Py.TypedAssignment
+typedAssignment lhs typ rhs = record Py._TypedAssignment [
+  Py._TypedAssignment_lhs>>: lhs,
+  Py._TypedAssignment_type>>: typ,
+  Py._TypedAssignment_rhs>>: rhs]
+
+-- =============================================================================
+-- Annotation (newtype wrapper)
+-- =============================================================================
+
+-- | Wrap an expression as an Annotation
+annotation :: TTerm Py.Expression -> TTerm Py.Annotation
+annotation = wrap Py._Annotation
+
+-- =============================================================================
+-- Kwarg (record type)
+-- =============================================================================
+
+-- | Construct a Kwarg
+kwarg :: TTerm Py.Name -> TTerm Py.Expression -> TTerm Py.Kwarg
+kwarg n expr = record Py._Kwarg [
+  Py._Kwarg_name>>: n,
+  Py._Kwarg_value>>: expr]
+
+-- =============================================================================
+-- KwargOrStarred (union type)
+-- =============================================================================
+
+-- | Inject a Kwarg into KwargOrStarred
+kwargOrStarredKwarg :: TTerm Py.Kwarg -> TTerm Py.KwargOrStarred
+kwargOrStarredKwarg = inject Py._KwargOrStarred Py._KwargOrStarred_kwarg
+
+-- =============================================================================
+-- PrimaryWithRhs (record type) - constructor
+-- =============================================================================
+
+-- | Construct a PrimaryWithRhs
+primaryWithRhs :: TTerm Py.Primary -> TTerm Py.PrimaryRhs -> TTerm Py.PrimaryWithRhs
+primaryWithRhs prim rhs = record Py._PrimaryWithRhs [
+  Py._PrimaryWithRhs_primary>>: prim,
+  Py._PrimaryWithRhs_rhs>>: rhs]
+
+-- =============================================================================
+-- ClassDefinition (record type) - constructor
+-- =============================================================================
+
+-- | Construct a ClassDefinition
+classDefinition :: TTerm (Maybe Py.Decorators) -> TTerm Py.Name -> TTerm [Py.TypeParameter]
+                -> TTerm (Maybe Py.Args) -> TTerm Py.Block -> TTerm Py.ClassDefinition
+classDefinition decs n tparams args body = record Py._ClassDefinition [
+  Py._ClassDefinition_decorators>>: decs,
+  Py._ClassDefinition_name>>: n,
+  Py._ClassDefinition_typeParams>>: tparams,
+  Py._ClassDefinition_arguments>>: args,
+  Py._ClassDefinition_body>>: body]
+
+-- =============================================================================
+-- Args (record type) - constructor
+-- =============================================================================
+
+-- | Construct Args with positional arguments only
+argsPositionalOnly :: TTerm [Py.PosArg] -> TTerm Py.Args
+argsPositionalOnly pos = record Py._Args [
+  Py._Args_positional>>: pos,
+  Py._Args_kwargOrStarred>>: list ([] :: [TTerm Py.KwargOrStarred]),
+  Py._Args_kwargOrDoubleStarred>>: list ([] :: [TTerm Py.KwargOrDoubleStarred])]
+
+-- | Construct Args with all fields
+args :: TTerm [Py.PosArg] -> TTerm [Py.KwargOrStarred] -> TTerm [Py.KwargOrDoubleStarred] -> TTerm Py.Args
+args pos kwargOrStarred kwargOrDoubleStarred = record Py._Args [
+  Py._Args_positional>>: pos,
+  Py._Args_kwargOrStarred>>: kwargOrStarred,
+  Py._Args_kwargOrDoubleStarred>>: kwargOrDoubleStarred]
+
+-- =============================================================================
+-- ParamNoDefault (record type) - constructor
+-- =============================================================================
+
+-- | Construct a ParamNoDefault
+-- | Construct a ParamNoDefault with param and optional type comment
+paramNoDefault :: TTerm Py.Param -> TTerm (Maybe Py.TypeComment) -> TTerm Py.ParamNoDefault
+paramNoDefault p tc = record Py._ParamNoDefault [
+  Py._ParamNoDefault_param>>: p,
+  Py._ParamNoDefault_typeComment>>: tc]
+
+-- | Construct a simple ParamNoDefault (no type comment)
+paramNoDefaultSimple :: TTerm Py.Param -> TTerm Py.ParamNoDefault
+paramNoDefaultSimple p = paramNoDefault p nothing
+
+-- =============================================================================
+-- Param (record type) - constructor
+-- =============================================================================
+
+-- | Construct a Param with name and optional annotation
+param :: TTerm Py.Name -> TTerm (Maybe Py.Annotation) -> TTerm Py.Param
+param n ann = record Py._Param [
+  Py._Param_name>>: n,
+  Py._Param_annotation>>: ann]
+
+-- | Construct a Param with just a name (no annotation)
+paramSimple :: TTerm Py.Name -> TTerm Py.Param
+paramSimple n = param n nothing
+
+-- =============================================================================
+-- ParamNoDefaultParameters (record type) - constructor
+-- =============================================================================
+
+-- | Construct ParamNoDefaultParameters
+paramNoDefaultParameters :: TTerm [Py.ParamNoDefault] -> TTerm [Py.ParamWithDefault] -> TTerm (Maybe Py.StarEtc) -> TTerm Py.ParamNoDefaultParameters
+paramNoDefaultParameters noDefault withDefault starEtc = record Py._ParamNoDefaultParameters [
+  Py._ParamNoDefaultParameters_paramNoDefault>>: noDefault,
+  Py._ParamNoDefaultParameters_paramWithDefault>>: withDefault,
+  Py._ParamNoDefaultParameters_starEtc>>: starEtc]
+
+-- | Construct simple ParamNoDefaultParameters (no defaults, no star)
+paramNoDefaultParametersSimple :: TTerm [Py.ParamNoDefault] -> TTerm Py.ParamNoDefaultParameters
+paramNoDefaultParametersSimple noDefault = paramNoDefaultParameters noDefault (list ([] :: [TTerm Py.ParamWithDefault])) nothing
+
+-- =============================================================================
+-- SimpleTypeParameter (record type) - constructor
+-- =============================================================================
+
+-- | Construct a SimpleTypeParameter
+simpleTypeParameter :: TTerm Py.Name -> TTerm (Maybe Py.Expression) -> TTerm (Maybe Py.Expression) -> TTerm Py.SimpleTypeParameter
+simpleTypeParameter n bound dflt = record Py._SimpleTypeParameter [
+  Py._SimpleTypeParameter_name>>: n,
+  Py._SimpleTypeParameter_bound>>: bound,
+  Py._SimpleTypeParameter_default>>: dflt]
+
+-- | Construct a simple SimpleTypeParameter (no bound or default)
+simpleTypeParameterSimple :: TTerm Py.Name -> TTerm Py.SimpleTypeParameter
+simpleTypeParameterSimple n = simpleTypeParameter n nothing nothing
+
+-- =============================================================================
+-- OrPattern (wrapper type) - constructor
+-- =============================================================================
+
+-- | Wrap closed patterns into an OrPattern
+orPattern :: TTerm [Py.ClosedPattern] -> TTerm Py.OrPattern
+orPattern = wrap Py._OrPattern
+
+-- =============================================================================
+-- CaseBlock (record type) - constructor
+-- =============================================================================
+
+-- | Construct a CaseBlock
+caseBlock :: TTerm Py.Patterns -> TTerm (Maybe Py.Guard) -> TTerm Py.Block -> TTerm Py.CaseBlock
+caseBlock patterns guard body = record Py._CaseBlock [
+  Py._CaseBlock_patterns>>: patterns,
+  Py._CaseBlock_guard>>: guard,
+  Py._CaseBlock_body>>: body]
+
+-- =============================================================================
+-- ClassPattern (record type) - constructors
+-- =============================================================================
+
+-- | Construct a simple ClassPattern (no positional or keyword patterns)
+classPatternSimple :: TTerm Py.NameOrAttribute -> TTerm Py.ClassPattern
+classPatternSimple nameOrAttr = record Py._ClassPattern [
+  Py._ClassPattern_nameOrAttribute>>: nameOrAttr,
+  Py._ClassPattern_positionalPatterns>>: nothing,
+  Py._ClassPattern_keywordPatterns>>: nothing]
+
+-- | Construct a ClassPattern with keyword patterns
+classPatternWithKeywords :: TTerm Py.NameOrAttribute -> TTerm Py.KeywordPatterns -> TTerm Py.ClassPattern
+classPatternWithKeywords nameOrAttr kwPatterns = record Py._ClassPattern [
+  Py._ClassPattern_nameOrAttribute>>: nameOrAttr,
+  Py._ClassPattern_positionalPatterns>>: nothing,
+  Py._ClassPattern_keywordPatterns>>: just kwPatterns]
+
+-- =============================================================================
+-- KeywordPattern (record type) - constructor
+-- =============================================================================
+
+-- | Construct a KeywordPattern
+keywordPattern :: TTerm Py.Name -> TTerm Py.Pattern -> TTerm Py.KeywordPattern
+keywordPattern n pattern = record Py._KeywordPattern [
+  Py._KeywordPattern_name>>: n,
+  Py._KeywordPattern_pattern>>: pattern]
+
+-- =============================================================================
+-- KeywordPatterns (wrapper type) - constructor
+-- =============================================================================
+
+-- | Wrap keyword patterns list into KeywordPatterns
+keywordPatterns :: TTerm [Py.KeywordPattern] -> TTerm Py.KeywordPatterns
+keywordPatterns = wrap Py._KeywordPatterns
+
+-- =============================================================================
+-- NameOrAttribute (wrapper type) - constructor
+-- =============================================================================
+
+-- | Wrap names into NameOrAttribute
+nameOrAttribute :: TTerm [Py.Name] -> TTerm Py.NameOrAttribute
+nameOrAttribute = wrap Py._NameOrAttribute
+
+-- =============================================================================
+-- Pattern (union type) - additional constructor
+-- =============================================================================
+
+-- | Inject a ClosedPattern into Pattern (as-pattern)
+patternAs :: TTerm Py.AsPattern -> TTerm Py.Pattern
+patternAs = inject Py._Pattern Py._Pattern_as
+

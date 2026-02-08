@@ -12,7 +12,7 @@ import qualified Hydra.Ext.Go.Syntax as Go
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
-import qualified Data.Char as Chr
+import qualified Data.Char as C
 import Data.Char (ord, toUpper)
 import Numeric (showHex)
 
@@ -713,7 +713,7 @@ writeImaginaryLit :: Go.ImaginaryLit -> Ast.Expr
 writeImaginaryLit (Go.ImaginaryLit d) = cst $ show d ++ "i"
 
 writeRuneLit :: Go.RuneLit -> Ast.Expr
-writeRuneLit (Go.RuneLit c) = cst $ "'" ++ escapeRune (Chr.chr $ fromIntegral c) ++ "'"
+writeRuneLit (Go.RuneLit c) = cst $ "'" ++ escapeRune (C.chr $ fromIntegral c) ++ "'"
   where
     escapeRune ch = case ch of
       '\'' -> "\\'"
@@ -728,7 +728,7 @@ writeRuneLit (Go.RuneLit c) = cst $ "'" ++ escapeRune (Chr.chr $ fromIntegral c)
                let n = ord ch - 0x10000
                    hi = 0xD800 + (n `div` 0x400)
                    lo = 0xDC00 + (n `mod` 0x400)
-                   padH x = let h = fmap Chr.toUpper $ showHex x "" in
+                   padH x = let h = fmap C.toUpper $ showHex x "" in
                             replicate (4 - L.length h) '0' ++ h
                in "\\u" ++ padH hi ++ "\\u" ++ padH lo
              else "\\u" ++ L.take (4 - L.length hex) "0000" ++ hex
