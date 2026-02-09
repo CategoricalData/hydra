@@ -47,65 +47,81 @@ This is the fundamental architectural pattern across all implementations:
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 
-## Essential local resources
+## Document index
 
-### Documentation
+This section links to every major document in the project with a brief description.
 
-| Resource | Local path | Notes |
-|----------|-----------|-------|
-| Main README | [README.md](../../README.md) | Project overview |
-| Changelog | [CHANGELOG.md](../../CHANGELOG.md) | Detailed change history, breaking changes |
-| Hydra lexicon | [docs/hydra-lexicon.txt](../hydra-lexicon.txt) | **The single most important LLM reference.** All types, terms, and primitive signatures. |
-| LLM prompts | [docs/prompts.txt](../prompts.txt) | Ready-to-use LLM prompts for code promotion and qualification |
-| Style guide | [docs/style-guide.md](../style-guide.md) | Documentation writing conventions |
-| Test suite architecture | [docs/src/test-suite-architecture.md](test-suite-architecture.md) | How tests are structured and generated |
+### Root-level files
 
-### Developer recipes (local)
+| Document | Path | Description |
+|----------|------|-------------|
+| Main README | [README.md](../../README.md) | Project overview, use cases, links to all major docs |
+| Changelog | [CHANGELOG.md](../../CHANGELOG.md) | Detailed version history; breaking changes, new features, bug fixes per release |
+| License | [LICENSE](../../LICENSE) | Apache 2.0 license text |
 
-All in [docs/src/recipes/](recipes/):
+### READMEs
 
-| Recipe | File | Summary |
-|--------|------|---------|
-| Index | [index.md](recipes/index.md) | Table of contents for all recipes |
-| Adding primitives | [adding-primitives.md](recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations |
-| Extending Hydra Core | [extending-hydra-core.md](recipes/extending-hydra-core.md) | Add new type/term constructors (most complex recipe) |
-| Extending tests | [extending-tests.md](recipes/extending-tests.md) | Add to the common test suite |
-| JSON kernel | [json-kernel.md](recipes/json-kernel.md) | Export/verify kernel in JSON format |
-| LLM-assisted development | [llm-assisted-development.md](recipes/llm-assisted-development.md) | Using LLMs effectively with Hydra |
-| New implementation | [new-implementation.md](recipes/new-implementation.md) | Create Hydra in a new language |
-| Promoting code | [promoting-code.md](recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules |
-| Refactoring namespaces | [refactoring-namespaces.md](recipes/refactoring-namespaces.md) | Rename/move Hydra namespaces |
-| Refactoring | [refactoring.md](recipes/refactoring.md) | Create, rename, move, delete kernel elements/modules |
-| Syncing Python | [syncing-python.md](recipes/syncing-python.md) | Regenerate Python from Haskell |
+| Document | Path | Description |
+|----------|------|-------------|
+| Hydra-Haskell | [hydra-haskell/README.md](../../hydra-haskell/README.md) | Bootstrap implementation. Build/test with Stack, GHCi REPL usage, code generation commands (`writeHaskell`, `writeJava`, `writePython`), DSL overview, self-hosting demo, core types reference |
+| Hydra-Java | [hydra-java/README.md](../../hydra-java/README.md) | Complete Java implementation. Gradle build, test commands, code organization, Java code generation from hydra-ext, visitor pattern for ADTs, union type design |
+| Hydra-Python | [hydra-python/README.md](../../hydra-python/README.md) | Complete Python implementation. Setup with uv, pytest, ruff, pyright. Code generation, validation of generated code |
+| Hydra-Ext | [hydra-ext/README.md](../../hydra-ext/README.md) | Code generators, coders, demos, tools. Comprehensive coder reference (Java, Python, C++, Protobuf, GraphQL, JSON Schema, PDL, Scala, Avro, RDF, SHACL, Graphviz). Type mapping tables per target. Sync scripts. Language syntax models and domain models |
+| Hydra-Scala | [hydra-scala/README.md](../../hydra-scala/README.md) | Experimental, on hold. Build with `sbt compile` |
+| GenPG demo | [hydra-ext/demos/genpg/README.md](../../hydra-ext/demos/genpg/README.md) | End-to-end CSV-to-property-graph demo. Runs in Haskell or Python. LLM-assisted schema generation workflow. GraphSON output for TinkerPop-compatible databases |
 
-### Wiki (web links)
+### docs/ directory (checked into git)
+
+| Document | Path | Description |
+|----------|------|-------------|
+| Hydra lexicon | [docs/hydra-lexicon.txt](../hydra-lexicon.txt) | **The single most important LLM reference.** Complete listing of all kernel types, terms, and ~180+ primitive function signatures. Auto-generated from the kernel graph |
+| LLM prompts | [docs/prompts.txt](../prompts.txt) | Two ready-to-use LLM prompts: (1) promoting raw Haskell to DSL, (2) fully qualifying Haskell imports. Include context files listed in each prompt |
+| Documentation style guide | [docs/src/documentation-style-guide.md](documentation-style-guide.md) | Writing conventions for Hydra docs: sentence case headings, 120 char line length, active voice, backtick formatting rules, file naming |
+| GitHub Pages index | [docs/index.html](../index.html) | HTML landing page for https://categoricaldata.github.io/hydra/ |
+
+### docs/src/ -- guides and architecture
+
+| Document | Path | Description |
+|----------|------|-------------|
+| This quickstart | [docs/src/llm-quickstart.md](llm-quickstart.md) | LLM orientation guide (this document) |
+| Test suite architecture | [docs/src/test-suite-architecture.md](test-suite-architecture.md) | How the common test suite is structured. TestGraph shared types, module-based organization, meta-level vs term-level DSLs, test case types (checking, inference, evaluation, formatting) |
+
+### docs/src/recipes/ -- step-by-step developer guides
+
+| Recipe | Path | Description |
+|--------|------|-------------|
+| Recipe index | [index.md](recipes/index.md) | Table of contents for all recipes, organized by category |
+| Adding primitives | [adding-primitives.md](recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
+| Extending Hydra Core | [extending-hydra-core.md](recipes/extending-hydra-core.md) | Add new type/term constructors (e.g., Either). The most complex recipe. 12+ steps covering the bootstrap problem, manual patching of generated files, inference, checking, rewriting, encoding/decoding. Also covers adding fields to existing records |
+| Extending tests | [extending-tests.md](recipes/extending-tests.md) | Add tests to the common test suite. Choosing test modules, writing test cases with `checkWithType`/`inferWithType`/`primCase`, meta-level vs term-level DSL differences |
+| JSON kernel | [json-kernel.md](recipes/json-kernel.md) | Export Hydra kernel to JSON for language-agnostic access. `update-json-kernel.sh` and `verify-json-kernel.sh`. JSON encoding format details |
+| LLM-assisted development | [llm-assisted-development.md](recipes/llm-assisted-development.md) | Guidelines for using LLMs with Hydra. Lexicon reference, how to regenerate it, property graph generation demo with video walkthroughs |
+| New implementation | [new-implementation.md](recipes/new-implementation.md) | 10-step guide for implementing Hydra in a new language: syntax model, language constraints, coder, serializer, primitives, test runner, DSLs |
+| Promoting code | [promoting-code.md](recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules. Incremental hybrid approach. DSL construct mapping (`<~` for let, `match` for cases, `project` for fields). Common pitfalls with lambdas in higher-order functions |
+| Refactoring namespaces | [refactoring-namespaces.md](recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace. 5-phase process across hydra-haskell, hydra-ext, hydra-python, hydra-java. Orphan file cleanup, decoder/encoder module moves |
+| Refactoring | [refactoring.md](recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules. Detailed examples: creating `hydra.hoisting`, changing `Graph.elements` from Map to List |
+| Syncing Python | [syncing-python.md](recipes/syncing-python.md) | Regenerate Python from Haskell. 5 artifact categories, 7 manual steps, `sync-python.sh` script. Troubleshooting generation errors |
+
+### Wiki (GitHub wiki -- separate repository)
 
 The wiki is a separate Git repository. A local checkout may exist at `./wiki/`,
 but these web links are the canonical references:
 
-| Page | URL |
-|------|-----|
-| Home | https://github.com/CategoricalData/hydra/wiki |
-| Concepts | https://github.com/CategoricalData/hydra/wiki/Concepts |
-| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/wiki/DSL-guide |
-| DSL guide (Java) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-java |
-| DSL guide (Python) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-python |
-| Implementation | https://github.com/CategoricalData/hydra/wiki/Implementation |
-| Code organization | https://github.com/CategoricalData/hydra/wiki/Code-organization |
-| Testing | https://github.com/CategoricalData/hydra/wiki/Testing |
-| Benchmarking | https://github.com/CategoricalData/hydra/wiki/Benchmarking |
-| Hydra developers | https://github.com/CategoricalData/hydra/wiki/Hydra-developers |
-| Release process | https://github.com/CategoricalData/hydra/wiki/Hydra-release-process |
-| Property graphs | https://github.com/CategoricalData/hydra/wiki/Property-graphs |
-
-### Per-implementation READMEs
-
-| Implementation | Path |
-|----------------|------|
-| Hydra-Haskell | [hydra-haskell/README.md](../../hydra-haskell/README.md) |
-| Hydra-Java | [hydra-java/README.md](../../hydra-java/README.md) |
-| Hydra-Python | [hydra-python/README.md](../../hydra-python/README.md) |
-| Hydra-Ext | [hydra-ext/README.md](../../hydra-ext/README.md) |
+| Page | URL | Description |
+|------|-----|-------------|
+| Home | https://github.com/CategoricalData/hydra/wiki | Navigation hub linking to all wiki pages |
+| Concepts | https://github.com/CategoricalData/hydra/wiki/Concepts | Core concepts: Type, Term, Element, Graph, Module, Flow monad, primitives, coders, adapters. Type system (System F with HM inference). 7 design principles. Algebraic Property Graphs |
+| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/wiki/DSL-guide | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
+| DSL guide (Java) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-java | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
+| DSL guide (Python) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-python | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
+| Implementation | https://github.com/CategoricalData/hydra/wiki/Implementation | Detailed architecture guide. 20 kernel type modules, DSL system (3 levels, 33+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
+| Code organization | https://github.com/CategoricalData/hydra/wiki/Code-organization | The `src/main/` vs `src/gen-main/` pattern explained per implementation. What goes where. Never edit generated files |
+| Testing | https://github.com/CategoricalData/hydra/wiki/Testing | Common test suite (`hydra.test.testSuite`). Kernel tests vs generation tests. Test categories (primitives, inference, checking, formatting). Per-language test runners. TestGenerator abstraction |
+| Benchmarking | https://github.com/CategoricalData/hydra/wiki/Benchmarking | Performance measurement across implementations. Python benchmark tool with CSV output. `hydra_path` for cross-language comparison. Known slow tests |
+| Hydra developers | https://github.com/CategoricalData/hydra/wiki/Hydra-developers | Source code organization guide. Kernel sources, extended sources, DSLs, primitives. Release processes for Hackage and Sonatype |
+| Release process | https://github.com/CategoricalData/hydra/wiki/Hydra-release-process | Full release workflow: sync Haskell -> sync Java -> sync Python -> verify -> publish to Hackage/Sonatype/PyPI -> tag. Version file locations. `verify-release.sh` |
+| Property graphs | https://github.com/CategoricalData/hydra/wiki/Property-graphs | Algebraic Property Graphs. Mapping annotation keys (`@label`, `@id`, `@key`, `@value`, `@outVertex`, `@inVertex`, etc.). Value patterns. Schema object definition |
+| New implementations | https://github.com/CategoricalData/hydra/wiki/New-Hydra-implementations | Redirect stub -- actual content moved to [new-implementation.md](recipes/new-implementation.md) |
 
 ## Architecture: how the pieces fit together
 

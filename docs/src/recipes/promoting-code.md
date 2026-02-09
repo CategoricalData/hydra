@@ -1,6 +1,9 @@
-# Promoting Raw Code to Hydra Modules
+# Promoting raw code to Hydra modules
 
 A step-by-step guide for "promoting" raw Haskell code into Hydra source modules that can be generated to multiple target languages.
+Haskell code can potentially be promoted when it uses APIs which were generated from Hydra type definitions.
+As Hydra syntax is fairly close to Haskell syntax, promotion generally involves eliminating external dependencies,
+rewriting the code to avoid unsupported language features, and finally transposing the code from Haskell syntax to Hydra syntax.
 
 ## Prerequisites
 
@@ -19,53 +22,35 @@ A step-by-step guide for "promoting" raw Haskell code into Hydra source modules 
 
 **What cannot be promoted:**
 - I/O operations (file reading, network calls, console output)
-- Code relying on language-specific features not supported by Hydra
+- Code which depends on external libraries, unless those dependencies can be replaced
 
-## Example: Promoting GraphSON Coder
+## The promotion workflow
 
-Here's a concrete example of promoting `Hydra.Ext.Staging.Pg.Graphson.Coder` (raw Haskell) to `Hydra.Ext.Sources.Pg.Graphson.Coder` (Hydra source module).
+Promotion is done **incrementally, one function at a time**, with testing at each step. This is the recommended workflow:
 
-### Original Raw Haskell
+1. **Simplify the staging code** — refactor the raw Haskell to prepare it for promotion (break up complex functions, extract pure logic, remove unnecessary callbacks). A useful technique is to edit the original function to bring it as close to Hydra syntax as possible *before* promoting: replace unsupported primitives with supported ones, replace complex pattern matching with simpler case expressions, and eliminate syntax features that have no DSL equivalent. Test the refactored code to verify it still works.
+2. **Create the DSL module structure** — set up the source module file with standard imports, namespace, module definition, and an empty elements list. Build to verify it compiles.
+3. **Promote one function** — translate it into the Hydra DSL and add it to the module's elements list.
+4. **Regenerate** — generate the promoted function into `gen-main` (e.g., `writeHaskell`).
+5. **Comment out the original** — in the staging module, comment out the original function. This keeps it available as a reference while the generated version takes over. Import and use the generated version instead.
+6. **Test** — run the relevant test suite (e.g., `bin/sync-python.sh` or `./gradlew test`). Verify the generated code produces the same results.
+7. **Repeat** steps 3–6 for the next function. The commented-out originals serve as a reference in case issues arise later in the promotion process.
+8. **Complete the migration** — once all functions are promoted and verified, update consumers to import the generated module directly, and remove the staging module.
 
-```haskell
--- Raw Haskell in Hydra.Ext.Staging.Pg.Graphson.Coder
+## Step-by-step guide
 
-doubleValueToJson :: G.DoubleValue -> Json.Value
-doubleValueToJson v = case v of
-  G.DoubleValueFinite d -> Json.ValueNumber d
-  G.DoubleValueInfinity -> Json.ValueString "Infinity"
-  G.DoubleValueNegativeInfinity -> Json.ValueString "-Infinity"
-  G.DoubleValueNotANumber -> Json.ValueString "NaN"
-```
+### 1. Simplify staging code first
 
-### Promoted Hydra Source
+Before starting the actual promotion, refactor the staging (raw Haskell) code:
 
-```haskell
--- Hydra source module in Hydra.Ext.Sources.Pg.Graphson.Coder
+1. **Break up complex functions** into smaller, composable helpers
+2. **Simplify pattern matching** to align with Hydra's case statement patterns
+3. **Extract pure logic** from functions with side effects
+4. **Remove unnecessary callbacks** — if functions take callbacks to break circular dependencies, consider whether direct calls would work. The DSL can handle mutual recursion directly.
+5. **Separate I/O from pure logic** — extract as much pure logic as possible. The I/O wrapper should become a thin shell that reads input, calls the generated pure functions, handles errors, and writes output.
+6. **Test the refactored staging code** to verify it still works correctly
 
-doubleValueToJson :: TBinding (G.DoubleValue -> JM.Value)
-doubleValueToJson = define "doubleValueToJson" $
-  doc "Convert a GraphSON DoubleValue to a JSON Value" $
-  match G._DoubleValue Nothing [
-    G._DoubleValue_finite>>: lambda "d" $ Json.valueNumber (var "d"),
-    G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
-    G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
-    G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]
-```
-
-### Key Differences
-
-| Raw Haskell | Hydra Source |
-|-------------|--------------|
-| `case v of` | `match G._DoubleValue Nothing [...]` |
-| `G.DoubleValueFinite d -> ...` | `G._DoubleValue_finite>>: lambda "d" $ ...` |
-| `Json.ValueNumber d` | `Json.valueNumber (var "d")` |
-| Pattern matching on values | Pattern matching on names + lambdas |
-| Type signatures with concrete types | Type signatures with `TBinding` wrapper |
-
-## Step-by-Step Guide
-
-### 1. Create the Source Module File
+### 2. Create the source module file
 
 Create a new file in the appropriate location under `Hydra/Sources/` or `Hydra/Ext/Sources/`:
 
@@ -73,48 +58,21 @@ Create a new file in the appropriate location under `Hydra/Sources/` or `Hydra/E
 module Hydra.Ext.Sources.Pg.Graphson.Coder where
 ```
 
-### 2. Add Standard Imports
+### 3. Add standard imports
 
-Use this template for term-level source modules:
+The import block for a term-level source module is large but follows a consistent structure. Copy it from an existing source module such as the [Haskell Coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs). The block has these sections:
 
-```haskell
--- Standard imports for term-level sources
-import Hydra.Kernel hiding (<names to avoid conflicts>)
-import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Bootstrap     as Bootstrap
-import qualified Hydra.Dsl.Meta.Json     as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
-import           Hydra.Dsl.Meta.Phantoms as Phantoms
-import           Hydra.Sources.Kernel.Types.All
--- Import generated phantom types for domain-specific types
-import qualified Hydra.Pg.Graphson.Syntax as G
-import           Prelude hiding ((++))
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
-```
+1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Lib.Strings`
+2. **Qualified DSL imports** — `Hydra.Dsl.*` modules (Bootstrap, Annotations, Grammars, LiteralTypes, Literals, Types, Terms, etc.)
+3. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` modules (Accessors, Ast, Base, Coders, Compute, Core, Graph, Json, Module, Terms, Types, Variants, etc.)
+4. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Flows, Lists, Literals, Logic, Maps, Math, Maybes, Pairs, Sets)
+5. **Qualified kernel sources imports** — `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
+6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
+7. **Domain-specific imports** — generated phantom types for the types your module uses (e.g., `Hydra.Ext.Haskell.Ast as H`)
 
-**Important:** The `(++)` operator from `Hydra.Dsl.Meta.Phantoms` is for `TTerm String` concatenation. Use `L.++` for regular list concatenation.
+Not every module needs all of these — include only what you use. The `(++)` from `Phantoms` is for `TTerm String` concatenation; use `L.++` for regular list concatenation.
 
-Additional DSL modules available:
-- `Chars` - Character operations (`isSpace`, `toUpper`, `toLower`, etc.)
-- `Eithers` - Either operations (`map`, `bind`, `mapList`)
-- `Equality` - Equality comparison (`equal`)
-- `Flows` - Flow monad operations (`pure`, `bind`, `map`, `mapList`)
-- `Sets` - Set operations (`empty`, `insert`, `union`, `toList`, etc.)
-
-### 3. Define Namespace and Module
+### 4. Define namespace and module
 
 ```haskell
 ns :: Namespace
@@ -142,9 +100,104 @@ define = definitionInModule module_
 
 If code generation fails with "No such schema type: hydra.foo.Bar", add the namespace containing that type to the type dependencies.
 
-### 4. Translate Functions
+### 5. Add to module registry
 
-#### Variable Bindings (Let Expressions)
+Add the import and register the module:
+
+```haskell
+-- In Hydra/Ext/Sources/All.hs
+
+import qualified Hydra.Ext.Sources.Pg.Graphson.Coder as GraphsonCoder
+
+hydraExtModules :: [Module]
+hydraExtModules = [
+  -- ...
+  GraphsonCoder.module_,
+  -- ...
+  ]
+```
+
+### 6. Promote functions incrementally
+
+Translate functions one at a time into the DSL, adding each to the module's elements list. After each function:
+
+1. Build: `stack build` in `hydra-ext`
+2. Regenerate the target code (see "Regenerating target code" below)
+3. Comment out the original staging function, keeping it as a reference
+4. Import and use the generated version in the staging module:
+   ```haskell
+   -- In Hydra.Ext.Staging.Python.Coder
+   import qualified Hydra.Ext.Python.Coder as Generated
+
+   -- PROMOTED: now using generated version
+   -- originalFunction :: ...
+   -- originalFunction = ...
+   ```
+5. Test to verify identical behavior
+
+Start with simpler helper functions and build up to more complex ones.
+
+### 7. Regenerate target code
+
+After promoting functions, regenerate the Haskell (or other language) code:
+
+```haskell
+-- In GHCi (stack ghci)
+import Hydra.Ext.Sources.All
+import Hydra.Ext.Generation
+import qualified Hydra.Ext.Sources.YourModule as YourModule
+import qualified Data.List as L
+
+writeHaskell "src/gen-main/haskell" (mainModules `L.union` hydraExtModules) [YourModule.module_]
+```
+
+**Important:** The first argument to `writeHaskell` is the universe of all modules (for type resolution).
+Use `mainModules `L.union` hydraExtModules` to include both kernel and extension modules.
+Using just `kernelModules` instead of `mainModules` misses helper modules like `CoderUtils` that contain shared functionality.
+
+### 8. Complete the migration
+
+Once all functions are promoted and the staging module just re-exports from the generated module:
+
+1. Update consumers to import the generated module directly
+2. Remove or archive the staging module
+3. Update documentation
+
+## DSL translation reference
+
+### Example: promoting a function
+
+**Original raw Haskell:**
+
+```haskell
+-- Raw Haskell in Hydra.Ext.Staging.Pg.Graphson.Coder
+
+doubleValueToJson :: G.DoubleValue -> Json.Value
+doubleValueToJson v = case v of
+  G.DoubleValueFinite d -> Json.ValueNumber d
+  G.DoubleValueInfinity -> Json.ValueString "Infinity"
+  G.DoubleValueNegativeInfinity -> Json.ValueString "-Infinity"
+  G.DoubleValueNotANumber -> Json.ValueString "NaN"
+```
+
+Notice that while the code itself is written in pure Haskell, it uses GraphSON domain types which were defined using Hydra.
+
+**Promoted Hydra source:**
+
+```haskell
+-- Hydra source module in Hydra.Ext.Sources.Pg.Graphson.Coder
+
+doubleValueToJson :: TBinding (G.DoubleValue -> JM.Value)
+doubleValueToJson = define "doubleValueToJson" $
+  doc "Convert a GraphSON DoubleValue to a JSON Value" $
+  match G._DoubleValue Nothing [
+    G._DoubleValue_finite>>: lambda "d" $ Json.valueNumber (var "d"),
+    G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
+    G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
+    G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]
+```
+
+### Variable bindings (let expressions)
 
 Raw Haskell `let` or `where` bindings become `<~` (let binding operator):
 
@@ -160,7 +213,7 @@ expr2
 finalExpr
 ```
 
-#### Pattern Matching
+### Pattern matching
 
 Raw Haskell case expressions become `match` expressions:
 
@@ -174,7 +227,7 @@ match _TypeName Nothing [
 
 Use `constant` for branches that ignore their argument.
 
-#### Record Access
+### Record access
 
 Raw Haskell field access becomes `project`:
 
@@ -184,7 +237,7 @@ Raw Haskell field access becomes `project`:
 project _RecordType _RecordType_field @@ var "record"
 ```
 
-#### Newtype Unwrapping and Wrapping
+### Newtype unwrapping and wrapping
 
 Raw Haskell newtype access becomes `unwrap`:
 
@@ -210,7 +263,7 @@ wrap _Newtype (var "value")
 Lists.map ("r" ~> wrap _DataRow (var "r")) (var "rows")
 ```
 
-#### Record Construction
+### Record construction
 
 Raw record construction becomes `record`:
 
@@ -222,7 +275,7 @@ record _MyRecord [
   _MyRecord_field2>>: var "y"]
 ```
 
-#### Function Application
+### Function application
 
 Raw function application becomes `@@`:
 
@@ -242,7 +295,7 @@ myHelper @@ var "str"
 -- Not: myHelper (var "str")  -- This won't work
 ```
 
-#### Lambdas
+### Lambdas
 
 Raw lambdas become `~>` (preferred) or `lambda`/`lambdas`:
 
@@ -275,7 +328,7 @@ Lists.map ("x" ~> Maybes.isNothing (var "x")) (var "xs")
 Eithers.map ("x" ~> just (var "x")) (var "either")
 ```
 
-#### Conditionals
+### Conditionals
 
 Raw `if-then-else` becomes `Logic.ifElse`:
 
@@ -285,7 +338,7 @@ Raw `if-then-else` becomes `Logic.ifElse`:
 Logic.ifElse (var "cond") (var "x") (var "y")
 ```
 
-#### Lists
+### Lists
 
 Raw list literals become `list`:
 
@@ -295,7 +348,7 @@ Raw list literals become `list`:
 list [a, b, c]
 ```
 
-#### Map/List Operations
+### Map/list operations
 
 Use the DSL wrappers from `Hydra.Dsl.Meta.Lib.*`:
 
@@ -325,7 +378,7 @@ Lists.filter ("x" ~> ...) (var "xs")
 Lists.dropWhile ("x" ~> ...) (var "xs")
 ```
 
-#### Either Operations
+### Either operations
 
 Use `Eithers` for Either-based operations:
 
@@ -351,7 +404,7 @@ Eithers.bind (var "either") ("x" ~> ...)
 Eithers.mapList ("x" ~> ...) (var "xs")
 ```
 
-#### Flow (Monadic) Operations
+### Flow (monadic) operations
 
 For code using the `Flow` monad (Hydra's effect system):
 
@@ -373,158 +426,40 @@ Flows.map ("x" ~> ...) (var "flow")
 Flows.mapList ("x" ~> ...) (var "xs")
 ```
 
-#### Type Conversions
-
-For integer-to-float conversions, compose the appropriate primitives:
+### Literals, constructors, and common types
 
 ```haskell
--- Raw: fromIntegral i :: Double
--- Promoted (for Int32 -> Double):
+-- Strings and booleans
+string "hello"
+boolean True
+
+-- Union values (use generated lowercase constructors)
+Json.valueString (var "s")
+-- Or with explicit injection:
+inject _TypeName _TypeName_variant @@ var "value"
+
+-- Optionals
+just (var "x")
+nothing
+Maybes.maybe (var "default") ("x" ~> ...) (var "opt")
+Maybes.cat (var "xs")
+
+-- Pairs
+pair (var "a") (var "b")
+Pairs.first (var "p")
+Pairs.second (var "p")
+
+-- Type conversions (compose primitives; there's no direct int32ToBigfloat)
 Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i"
 ```
 
-### 5. Add to Module Registry
+### Mutual recursion
 
-Add the import and register the module:
-
-```haskell
--- In Hydra/Ext/Sources/All.hs
-
-import qualified Hydra.Ext.Sources.Pg.Graphson.Coder as GraphsonCoder
-
-hydraExtModules :: [Module]
-hydraExtModules = [
-  -- ...
-  GraphsonCoder.module_,
-  -- ...
-  ]
-```
-
-### 6. Build and Test
-
-```bash
-cd hydra-ext
-stack build
-```
-
-Fix any type errors, which usually involve:
-- Missing phantom type imports
-- Incorrect DSL function usage
-- Namespace issues
-
-### 7. Regenerate the Target Code
-
-After the source module builds, regenerate the Haskell (or other language) code:
-
-```bash
-# In GHCi (stack ghci)
-import Hydra.Ext.Sources.All
-import Hydra.Ext.Generation
-import qualified Hydra.Ext.Sources.YourModule as YourModule
-import qualified Data.List as L
-
-writeHaskell "src/gen-main/haskell" (mainModules `L.union` hydraExtModules) [YourModule.module_]
-```
-
-**Important:** The first argument to `writeHaskell` is the universe of all modules (for type resolution).
-Use `mainModules `L.union` hydraExtModules` to include both kernel and extension modules.
-
-### 8. Update the Consumer Code
-
-After regeneration, update the code that was using the raw Haskell functions to use the generated module:
-
-```haskell
--- Before:
-import MyRawModule (myFunction)
-
--- After:
-import qualified Hydra.Generated.MyModule as MyModule
-
--- Then use:
-MyModule.myFunction args
-```
-
-## Common Patterns
-
-### Constructing Union Values
-
-```haskell
--- Raw: Json.ValueString s
--- Promoted:
-Json.valueString (var "s")
-
--- For injection with specific names:
-inject _TypeName _TypeName_variant @@ var "value"
-```
-
-### Optional Values
-
-```haskell
--- Raw: Just x
--- Promoted:
-just (var "x")
-
--- Raw: Nothing
--- Promoted:
-nothing
-
--- Raw: maybe default f opt
--- Promoted:
-Maybes.maybe (var "default") f (var "opt")
-
--- Raw: catMaybes xs
--- Promoted:
-Maybes.cat (var "xs")
-```
-
-### Pairs/Tuples
-
-```haskell
--- Raw: (a, b)
--- Promoted:
-pair (var "a") (var "b")
-
--- Raw: fst p
--- Promoted:
-Pairs.first (var "p")
-
--- Raw: snd p
--- Promoted:
-Pairs.second (var "p")
-```
-
-### String Literals
-
-```haskell
--- Raw: "hello"
--- Promoted:
-string "hello"
-```
-
-### Boolean Literals
-
-```haskell
--- Raw: True / False
--- Promoted:
-boolean True / boolean False
-```
-
-## Checklist
-
-When promoting code:
-
-- [ ] Create source module file with proper namespace
-- [ ] Add standard imports (watch for name conflicts)
-- [ ] Define namespace, module, and `define` helper
-- [ ] Translate all functions using DSL constructs
-- [ ] Use phantom types from generated modules (e.g., `Hydra.Pg.Graphson.Syntax`)
-- [ ] Add module to registry in `All.hs`
-- [ ] Build and fix type errors
-- [ ] Keep original "staging" code in place until generated code is verified
+The DSL can handle mutual recursion directly — functions in the same module can reference each other without explicit callbacks. If the staging code passes callback parameters to break circular dependencies, remove them and replace `var "callback" @@ args` with direct calls like `otherFunction @@ args`.
 
 ## Tips
 
-1. **Start with simpler functions**: Promote helper functions first, then build up to more complex ones.
+1. **Exact carbon copies**: The promoted function should be a carbon copy of the original function, transposed into Hydra syntax. Do not refactor behavior during promotion — any behavioral refactoring should be done beforehand in the staging code, where it can be tested independently.
 
 2. **Use phantom types**: Import generated phantom types (`_TypeName`, `_TypeName_variant`) from the generated modules.
 
@@ -560,191 +495,104 @@ When promoting code:
    ```
 
 8. **DSL module naming conventions**: Functions in DSL modules often have different names than their Haskell counterparts:
-   - `Flows.getState` doesn't exist - use `Monads.getState`
-   - `Maybes.catMaybes` doesn't exist - use `Maybes.mapMaybe ("x" ~> var "x")`
-   - `Maps.values` doesn't exist - use `Maps.toList` and map over pairs
-   - `Lists.any` doesn't exist - use foldl with `Logic.or`
+   - `Flows.getState` doesn't exist — use `Monads.getState`
+   - `Maybes.catMaybes` doesn't exist — use `Maybes.mapMaybe ("x" ~> var "x")`
+   - `Maps.values` doesn't exist — use `Maps.elems`
+   - `Lists.any` doesn't exist — use foldl with `Logic.or`
 
    When in doubt, check the actual exports in `Hydra.Dsl.Meta.Lib.*` or `Hydra.Sources.Kernel.Terms.*`.
 
-9. **Namespace collisions**: When your DSL module defines a function with the same name as something in `Hydra.Kernel`, you'll get ambiguity errors. Either:
+9. **`inject` takes direct arguments, not `@@`**: The `inject` function takes three Haskell arguments directly:
+
+   ```haskell
+   -- Correct:
+   inject _Definition _Definition_type (var "td")
+
+   -- Wrong (will not type-check):
+   inject _Definition _Definition_type @@ var "td"
+   ```
+
+   This is because `inject` returns a `TTerm b`, not a curried `TTerm (a -> b)`. Other functions like `wrap` follow the same pattern.
+
+10. **`TBinding` vs `TTerm`**: A `TBinding a` value must be explicitly converted with `asTerm` when used in a context expecting `TTerm a`. This comes up when passing module-level configuration bindings to DSL functions like `Logic.and` or `Equality.equal`:
+
+    ```haskell
+    -- If you have: useInlineTypeParams :: TBinding Bool
+    -- Wrong:
+    Logic.and useInlineTypeParams (var "flag")
+    -- Correct:
+    Logic.and (asTerm useInlineTypeParams) (var "flag")
+    ```
+
+    Note: `TBinding` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint. The issue only arises with DSL functions that expect `TTerm` directly.
+
+11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat` are Haskell functions (`TTerm [[a]] -> TTerm [a]`), not DSL-level function values. When passing them to higher-order DSL functions like `Flows.map` (which expects an `AsTerm f (x -> y)`), wrap them in a lambda:
+
+    ```haskell
+    -- Wrong (type error — Lists.concat is a Haskell function, not a TTerm):
+    Flows.map Lists.concat (var "flowOfLists")
+
+    -- Correct:
+    Flows.map ("xs" ~> Lists.concat (var "xs")) (var "flowOfLists")
+    ```
+
+12. **Record updates require setter functions**: The DSL has no record update syntax. If the original code uses `rec { field = newValue }`, create a setter function that reconstructs the entire record, copying all unchanged fields:
+
+    ```haskell
+    setMyField :: TBinding (MyRecord -> Int -> MyRecord)
+    setMyField = define "setMyField" $
+      "r" ~> "v" ~>
+        record _MyRecord [
+          _MyRecord_field1>>: project _MyRecord _MyRecord_field1 @@ var "r",
+          _MyRecord_field2>>: var "v",  -- the updated field
+          _MyRecord_field3>>: project _MyRecord _MyRecord_field3 @@ var "r"]
+    ```
+
+13. **Where clauses become separate TBindings**: Haskell `where` clauses have no DSL equivalent. Extract local helper functions into separate top-level `TBinding` definitions and add them to the module's elements list.
+
+14. **Constructing syntax types without DSL helpers**: Not all generated types have convenience constructors in DSL helper modules. When no helper exists, use `record`, `wrap`, and `inject` directly with the phantom type names:
+
+    ```haskell
+    -- If there's no helper like PyDsl.importName, build it directly:
+    inject Py._ImportStatement Py._ImportStatement_name $
+      record Py._ImportName [
+        Py._ImportName_names>>: list [
+          record Py._DottedAsName [
+            Py._DottedAsName_name>>: var "dotted",
+            Py._DottedAsName_as>>: nothing]]]
+    ```
+
+15. **Namespace collisions**: When your DSL module defines a function with the same name as something in `Hydra.Kernel`, you'll get ambiguity errors. Either:
    - Rename your function (e.g., `partitionDefs` instead of `partitionDefinitions`)
    - Hide the conflicting import: `import Hydra.Kernel hiding (partitionDefinitions)`
 
-8. **Separate I/O from pure logic**: When promoting code from an I/O-heavy module, extract as much pure logic
-   as possible into the promoted module. The I/O wrapper in Haskell should become a thin shell that:
-   - Reads input (files, network, etc.)
-   - Calls the generated pure functions
-   - Handles errors
-   - Writes output
+16. **GHCi regeneration in hydra-ext**: Use stdin redirect to run GHCi scripts in `hydra-ext`:
 
-   This maximizes code reuse when porting to other languages.
+    ```bash
+    cd hydra-ext && stack ghci hydra-ext:lib < my_regen_script.ghci
+    ```
 
-## Recommended Approach: Incremental Hybrid Testing
+    The script should contain the imports and `writeHaskell` call. Interactive flags like `--ghci-options="-e"` or `--no-load` don't work reliably for this purpose.
 
-When promoting a large module like a language coder, use this incremental approach that provides continuous verification:
+## Checklist
 
-### Phase 1: Simplify Staging Code First
+- [ ] Simplify staging code (break up complex functions, extract pure logic)
+- [ ] Create source module file with proper namespace
+- [ ] Add standard imports (watch for name conflicts)
+- [ ] Define namespace, module, and `define` helper
+- [ ] Add module to registry in `All.hs`
+- [ ] Build empty module to verify structure compiles
+- [ ] Promote functions one at a time, testing after each:
+  - [ ] Translate function into DSL
+  - [ ] Add to module's elements list
+  - [ ] Regenerate target code
+  - [ ] Comment out original staging function
+  - [ ] Import and use generated version
+  - [ ] Run tests to verify identical behavior
+- [ ] Once all functions promoted, update consumers and remove staging module
 
-Before starting the actual promotion, refactor the staging (raw Haskell) code:
+## Related recipes
 
-1. **Break up complex functions** into smaller, composable helpers
-2. **Simplify pattern matching** to align with Hydra's case statement patterns
-3. **Extract pure logic** from functions with side effects
-4. **Remove unnecessary callbacks** - if functions take callbacks to break circular dependencies, consider whether direct calls would work
-5. **Test the refactored staging code** to verify it still works correctly
-
-This preparation makes the actual promotion much easier and catches issues early.
-
-### Phase 2: Create DSL Module Structure
-
-Create the source module file with:
-- Standard imports
-- Module namespace and dependencies
-- Empty elements list
-
-Build to verify the structure compiles.
-
-### Phase 3: Incremental Promotion with Hybrid Testing
-
-The key insight is to **keep both versions working simultaneously**:
-
-1. **Import the generated module in the staging module**:
-   ```haskell
-   -- In Hydra.Ext.Staging.Python.Coder
-   import qualified Hydra.Ext.Python.Coder as Generated
-   ```
-
-2. **Promote functions one at a time** to the DSL Sources module
-
-3. **After regenerating**, comment out the corresponding function in staging:
-   ```haskell
-   -- PROMOTED: function is now in Generated module
-   -- originalFunction :: ...
-   -- originalFunction = ...
-   ```
-
-4. **Use the generated function from the import**:
-   ```haskell
-   -- Staging code now uses:
-   Generated.originalFunction
-   ```
-
-5. **Test after each promotion** using the sync script (e.g., `bin/sync-python.sh`)
-
-6. **Verify identical output** - the generated code should produce the same results
-
-This approach:
-- Provides immediate feedback when something breaks
-- Makes it clear which functions have been promoted
-- Allows incremental progress with minimal risk
-- Documents the promotion progress visually
-
-### Phase 4: Handle Interface Differences
-
-When promoting, watch for functions with callback parameters used to break circular dependencies:
-
-```haskell
--- Staging version (with callback)
-encodeDefinition :: Env -> (Env -> Term -> Expression) -> Definition -> Expression
-
--- DSL version (direct call)
-encodeDefinition :: TBinding (Env -> Definition -> Expression)
--- Calls encodeTermInline directly inside
-```
-
-The DSL can handle mutual recursion directly - functions can reference each other without explicit callbacks. Remove callback parameters and replace `var "callback" @@ args` with direct calls like `otherFunction @@ args`.
-
-### Phase 5: Complete the Migration
-
-Once all functions are promoted and the staging module just re-exports from the generated module:
-
-1. Update consumers to import the generated module directly
-2. Remove or archive the staging module
-3. Update documentation
-
-### Example: Regeneration Script
-
-When regenerating, ensure you include all required modules:
-
-```haskell
-main = do
-  writeHaskell "src/gen-main/haskell"
-    (allHaskellModules <> hydraExtModules)  -- Full module universe
-    [PythonCoder.module_]  -- Module to generate
-  where
-    allHaskellModules = kernelModules <> otherModules  -- Include CoderUtils, etc.
-```
-
-Common mistake: Using just `kernelModules` misses helper modules like `CoderUtils` that contain shared functionality.
-
-### Lessons from Python Coder Promotion
-
-Key issues encountered and their solutions:
-
-1. **Callback parameters vs direct calls**: The original DSL versions added callback parameters to break circular dependencies. These are unnecessary - the DSL handles mutual recursion directly. Remove callbacks and use direct function references.
-
-2. **TBinding reference vs callback**: When passing a TBinding function as a callback argument, you need a lambda wrapper:
-   ```haskell
-   -- Wrong: encodeMultiline @@ encodeTermMultiline
-   -- Correct: encodeMultiline @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "e" @@ var "t")
-   ```
-
-3. **Module dependencies in regeneration**: The `writeHaskell` function needs the complete universe of modules that might be referenced. Include `otherModules` (which contains `CoderUtils`) not just `kernelModules`.
-
-4. **Interface alignment**: Ensure DSL function signatures match staging signatures exactly. Extra parameters break callers.
-
-5. **Non-exhaustive patterns in nested cases**: When using nested `cases` expressions, each needs a default case:
-   ```haskell
-   -- Wrong - inner cases without default causes non-exhaustive pattern errors:
-   cases _Outer (var "x") Nothing [
-     _Outer_foo>>: "f" ~> cases _Inner (var "f") Nothing [...]]
-
-   -- Correct - extract default logic and provide it to nested cases:
-   "dfltLogic" <~ someDefaultExpr $
-   cases _Outer (var "x") (Just $ var "dfltLogic") [
-     _Outer_foo>>: "f" ~> cases _Inner (var "f") (Just $ var "dfltLogic") [...]]
-   ```
-
-6. **Metadata flags for generated imports**: When encoding produces output that requires imports (like `@lru_cache` decorators), ensure the corresponding metadata flag is set via `updateMeta`:
-   ```haskell
-   -- When adding a decorator that requires an import:
-   updateMeta @@ (setMetaUsesLruCache @@ true)
-   ```
-   Missing metadata flags cause `NameError` in generated code because imports won't be added.
-
-7. **Bindings with vs without type schemes**: When processing bindings, check whether a type scheme is present - bindings WITH type schemes typically need different handling (e.g., `encodeTermAssignment`) than bindings without:
-   ```haskell
-   Maybes.maybe
-     (handleNoTypeScheme @@ ...)  -- No type scheme
-     ("ts" ~> handleWithTypeScheme @@ var "ts" @@ ...)  -- Has type scheme
-     (Core.bindingType $ var "binding")
-   ```
-
-### What Cannot Be Promoted
-
-Some code is inherently "driver" or "orchestration" code that's best kept in hand-written Haskell:
-
-1. **Module-level orchestration** (`moduleToPython`, `encodeModule`): Functions that:
-   - Reorder definitions using topological sorting
-   - Generate import statements based on collected metadata
-   - Serialize ASTs to strings and map to file paths
-   - Use `CM.mapM` for traversing lists in Flow context
-
-2. **Test generation infrastructure**: Code that:
-   - Creates test codecs and test generators
-   - Builds file paths for test output
-   - Uses complex Haskell features like `FlowState` pattern matching
-
-These functions typically live in a thin wrapper module (e.g., `Hydra.Ext.Python.Module`) that:
-- Imports everything from the Generated module
-- Provides the entry points that call into generated encoding functions
-- Handles final serialization and file I/O concerns
-
-This pattern keeps the DSL focused on encoding logic while hand-written Haskell handles language-specific orchestration.
-
-## Related Recipes
-
-- [Extending Hydra Core](extending-hydra-core.md) - Adding new types to the kernel
-- [Syncing Python](syncing-python.md) - Generating Python from Hydra modules
-- [New Implementation](new-implementation.md) - Adding a new target language
+- [Extending Hydra Core](extending-hydra-core.md) — Adding new types to the kernel
+- [Syncing Python](syncing-python.md) — Generating Python from Hydra modules
+- [New Implementation](new-implementation.md) — Adding a new target language

@@ -12,7 +12,7 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Getting Started
 
-Hydra-Java requires Java 18 or later. Build the project with Gradle:
+Hydra-Java requires Java 17 or later. Build the project with Gradle:
 
 ```bash
 ./gradlew build
@@ -27,7 +27,7 @@ To publish the resulting JAR to your local Maven repository:
 You may need to set the `JAVA_HOME` environment variable:
 
 ```bash
-JAVA_HOME=/path/to/java18/installation ./gradlew build
+JAVA_HOME=/path/to/java17/installation ./gradlew build
 ```
 
 ## Documentation
