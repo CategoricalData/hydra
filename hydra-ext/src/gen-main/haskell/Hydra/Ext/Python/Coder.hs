@@ -17,6 +17,7 @@ import qualified Hydra.Ext.Python.Serde as Serde
 import qualified Hydra.Ext.Python.Syntax as Syntax
 import qualified Hydra.Ext.Python.Utils as Utils
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -38,6 +39,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -2454,3 +2456,180 @@ gatherMetadata focusNs defs =
       in  
         let tvars = (Helpers.pythonModuleMetadataTypeVariables result)
         in (setMetaUsesTypeVar result (Logic.not (Sets.null tvars)))
+
+setMetaUsesTypeAlias :: (Helpers.PythonModuleMetadata -> Bool -> Helpers.PythonModuleMetadata)
+setMetaUsesTypeAlias m b = Helpers.PythonModuleMetadata {
+  Helpers.pythonModuleMetadataNamespaces = (Helpers.pythonModuleMetadataNamespaces m),
+  Helpers.pythonModuleMetadataTypeVariables = (Helpers.pythonModuleMetadataTypeVariables m),
+  Helpers.pythonModuleMetadataUsesAnnotated = (Helpers.pythonModuleMetadataUsesAnnotated m),
+  Helpers.pythonModuleMetadataUsesCallable = (Helpers.pythonModuleMetadataUsesCallable m),
+  Helpers.pythonModuleMetadataUsesCast = (Helpers.pythonModuleMetadataUsesCast m),
+  Helpers.pythonModuleMetadataUsesLruCache = (Helpers.pythonModuleMetadataUsesLruCache m),
+  Helpers.pythonModuleMetadataUsesTypeAlias = b,
+  Helpers.pythonModuleMetadataUsesDataclass = (Helpers.pythonModuleMetadataUsesDataclass m),
+  Helpers.pythonModuleMetadataUsesDecimal = (Helpers.pythonModuleMetadataUsesDecimal m),
+  Helpers.pythonModuleMetadataUsesEither = (Helpers.pythonModuleMetadataUsesEither m),
+  Helpers.pythonModuleMetadataUsesEnum = (Helpers.pythonModuleMetadataUsesEnum m),
+  Helpers.pythonModuleMetadataUsesFrozenDict = (Helpers.pythonModuleMetadataUsesFrozenDict m),
+  Helpers.pythonModuleMetadataUsesFrozenList = (Helpers.pythonModuleMetadataUsesFrozenList m),
+  Helpers.pythonModuleMetadataUsesGeneric = (Helpers.pythonModuleMetadataUsesGeneric m),
+  Helpers.pythonModuleMetadataUsesJust = (Helpers.pythonModuleMetadataUsesJust m),
+  Helpers.pythonModuleMetadataUsesLeft = (Helpers.pythonModuleMetadataUsesLeft m),
+  Helpers.pythonModuleMetadataUsesMaybe = (Helpers.pythonModuleMetadataUsesMaybe m),
+  Helpers.pythonModuleMetadataUsesName = (Helpers.pythonModuleMetadataUsesName m),
+  Helpers.pythonModuleMetadataUsesNode = (Helpers.pythonModuleMetadataUsesNode m),
+  Helpers.pythonModuleMetadataUsesNothing = (Helpers.pythonModuleMetadataUsesNothing m),
+  Helpers.pythonModuleMetadataUsesRight = (Helpers.pythonModuleMetadataUsesRight m),
+  Helpers.pythonModuleMetadataUsesTypeVar = (Helpers.pythonModuleMetadataUsesTypeVar m)}
+
+-- | Check whether a list of definitions contains any type definitions
+isTypeModuleCheck :: ([Module.Definition] -> Bool)
+isTypeModuleCheck defs = (Logic.not (Lists.null (Lists.filter (\d -> (\x -> case x of
+  Module.DefinitionType _ -> True
+  _ -> False) d) defs)))
+
+-- | Reorder definitions: types first, then topologically sorted terms
+reorderDefs :: ([Module.Definition] -> [Module.Definition])
+reorderDefs defs =  
+  let partitioned = (Schemas.partitionDefinitions defs)
+  in  
+    let typeDefsRaw = (Pairs.first partitioned)
+    in  
+      let termDefsRaw = (Pairs.second partitioned)
+      in  
+        let nameFirst = (Lists.filter (\td -> Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw)
+        in  
+          let nameRest = (Lists.filter (\td -> Logic.not (Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name"))) typeDefsRaw)
+          in  
+            let sortedTypeDefs = (Lists.concat [
+                    Lists.map (\td -> Module.DefinitionType td) nameFirst,
+                    (Lists.map (\td -> Module.DefinitionType td) nameRest)])
+            in  
+              let termDefs = (Lists.map (\td -> Module.DefinitionTerm td) termDefsRaw)
+              in  
+                let sortedTermDefs = (Lists.concat (Sorting.topologicalSortNodes (\d -> (\x -> case x of
+                        Module.DefinitionTerm v1 -> (Module.termDefinitionName v1)) d) (\d -> (\x -> case x of
+                        Module.DefinitionTerm v1 -> (Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v1)))
+                        _ -> []) d) termDefs))
+                in (Lists.concat [
+                  sortedTypeDefs,
+                  sortedTermDefs])
+
+-- | Create a TypeVar assignment statement for a type variable name
+tvarStatement :: (Syntax.Name -> Syntax.Statement)
+tvarStatement name = (Utils.assignmentStatement name (Utils.functionCall (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "TypeVar"))) [
+  Utils.doubleQuotedString (Syntax.unName name)]))
+
+condImportSymbol :: (t0 -> Bool -> Maybe t0)
+condImportSymbol name flag = (Logic.ifElse flag (Just name) Nothing)
+
+-- | Generate domain import statements from namespace mappings
+moduleDomainImports :: (Module.Namespaces Syntax.DottedName -> [Syntax.ImportStatement])
+moduleDomainImports namespaces =  
+  let names = (Lists.sort (Maps.elems (Module.namespacesMapping namespaces)))
+  in (Lists.map (\ns -> Syntax.ImportStatementName (Syntax.ImportName [
+    Syntax.DottedAsName {
+      Syntax.dottedAsNameName = ns,
+      Syntax.dottedAsNameAs = Nothing}])) names)
+
+-- | Generate a single from-import statement
+standardImportStatement :: (String -> [String] -> Syntax.ImportStatement)
+standardImportStatement modName symbols = (Syntax.ImportStatementFrom (Syntax.ImportFrom {
+  Syntax.importFromPrefixes = [],
+  Syntax.importFromDottedName = (Just (Syntax.DottedName [
+    Syntax.Name modName])),
+  Syntax.importFromTargets = (Syntax.ImportFromTargetsSimple (Lists.map (\s -> Syntax.ImportFromAsName {
+    Syntax.importFromAsNameName = (Syntax.Name s),
+    Syntax.importFromAsNameAs = Nothing}) symbols))}))
+
+-- | Generate standard import statements based on module metadata
+moduleStandardImports :: (Helpers.PythonModuleMetadata -> [Syntax.ImportStatement])
+moduleStandardImports meta =  
+  let pairs = [
+          ("__future__", [
+            condImportSymbol "annotations" Names.useFutureAnnotations]),
+          ("collections.abc", [
+            condImportSymbol "Callable" (Helpers.pythonModuleMetadataUsesCallable meta)]),
+          ("dataclasses", [
+            condImportSymbol "dataclass" (Helpers.pythonModuleMetadataUsesDataclass meta)]),
+          ("decimal", [
+            condImportSymbol "Decimal" (Helpers.pythonModuleMetadataUsesDecimal meta)]),
+          ("enum", [
+            condImportSymbol "Enum" (Helpers.pythonModuleMetadataUsesEnum meta)]),
+          ("functools", [
+            condImportSymbol "lru_cache" (Helpers.pythonModuleMetadataUsesLruCache meta)]),
+          ("hydra.dsl.python", [
+            condImportSymbol "Either" (Helpers.pythonModuleMetadataUsesEither meta),
+            (condImportSymbol "FrozenDict" (Helpers.pythonModuleMetadataUsesFrozenDict meta)),
+            (condImportSymbol "Just" (Helpers.pythonModuleMetadataUsesJust meta)),
+            (condImportSymbol "Left" (Helpers.pythonModuleMetadataUsesLeft meta)),
+            (condImportSymbol "Maybe" (Helpers.pythonModuleMetadataUsesMaybe meta)),
+            (condImportSymbol "Node" (Helpers.pythonModuleMetadataUsesNode meta)),
+            (condImportSymbol "Nothing" (Helpers.pythonModuleMetadataUsesNothing meta)),
+            (condImportSymbol "Right" (Helpers.pythonModuleMetadataUsesRight meta)),
+            (condImportSymbol "frozenlist" (Helpers.pythonModuleMetadataUsesFrozenList meta))]),
+          ("typing", [
+            condImportSymbol "Annotated" (Helpers.pythonModuleMetadataUsesAnnotated meta),
+            (condImportSymbol "Generic" (Helpers.pythonModuleMetadataUsesGeneric meta)),
+            (condImportSymbol "TypeAlias" (Helpers.pythonModuleMetadataUsesTypeAlias meta)),
+            (condImportSymbol "TypeVar" (Helpers.pythonModuleMetadataUsesTypeVar meta)),
+            (condImportSymbol "cast" (Helpers.pythonModuleMetadataUsesCast meta))])]
+  in  
+    let simplified = (Maybes.cat (Lists.map (\p ->  
+            let modName = (Pairs.first p)
+            in  
+              let symbols = (Maybes.cat (Pairs.second p))
+              in (Logic.ifElse (Lists.null symbols) Nothing (Just (modName, symbols)))) pairs))
+    in (Lists.map (\p -> standardImportStatement (Pairs.first p) (Pairs.second p)) simplified)
+
+-- | Generate all import statements for a Python module
+moduleImports :: (Module.Namespaces Syntax.DottedName -> Helpers.PythonModuleMetadata -> [Syntax.Statement])
+moduleImports namespaces meta = (Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
+  moduleStandardImports meta,
+  (moduleDomainImports namespaces)]))
+
+-- | Encode a Hydra module to a Python module AST
+encodePythonModule :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph Syntax.Module)
+encodePythonModule mod defs0 =  
+  let defs = (reorderDefs defs0)
+  in  
+    let meta0 = (gatherMetadata (Module.moduleNamespace mod) defs)
+    in (Flows.bind Monads.getState (\g -> Monads.withState (makePyGraph g meta0) ( 
+      let namespaces0 = (Helpers.pythonModuleMetadataNamespaces meta0)
+      in (Flows.bind (Inference.initialTypeContext g) (\tcontext ->  
+        let env0 = (initialEnvironment namespaces0 tcontext)
+        in  
+          let isTypeMod = (isTypeModuleCheck defs0)
+          in (withDefinitions env0 defs (\env -> Flows.bind (Flows.map (\xs -> Lists.concat xs) (Flows.mapList (\d -> encodeDefinition env d) defs)) (\defStmts -> Flows.bind Monads.getState (\pyg1 ->  
+            let meta1 = (pyGraphMetadata pyg1)
+            in  
+              let meta2 = (Logic.ifElse (Logic.and (Logic.not isTypeMod) useInlineTypeParams) (setMetaUsesTypeVar meta1 False) meta1)
+              in  
+                let meta = (Logic.ifElse (Logic.and isTypeMod (Equality.equal targetPythonVersion Helpers.PythonVersionPython310)) (setMetaUsesTypeAlias meta2 True) meta2)
+                in  
+                  let namespaces = (Helpers.pythonModuleMetadataNamespaces meta1)
+                  in  
+                    let commentStmts = (Maybes.maybe [] (\c -> [
+                            Utils.commentStatement c]) (Maybes.map CoderUtils.normalizeComment (Module.moduleDescription mod)))
+                    in  
+                      let importStmts = (moduleImports namespaces meta)
+                      in  
+                        let tvars = (Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (Helpers.pythonModuleMetadataTypeVariables meta) Sets.empty)
+                        in  
+                          let tvarStmts = (Lists.map (\tv -> tvarStatement (Names.encodeTypeVariable tv)) (Sets.toList tvars))
+                          in  
+                            let body = (Lists.filter (\group -> Logic.not (Lists.null group)) (Lists.concat [
+                                    [
+                                      commentStmts,
+                                      importStmts,
+                                      tvarStmts],
+                                    defStmts]))
+                            in (Flows.pure (Syntax.Module body)))))))))))
+
+-- | Convert a Hydra module to Python source files
+moduleToPython :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map String String))
+moduleToPython mod defs = (Flows.bind (encodePythonModule mod defs) (\file ->  
+  let s = (Serialization.printExpr (Serialization.parenthesize (Serde.encodeModule file)))
+  in  
+    let path = (Names_.namespaceToFilePath Util.CaseConventionLowerSnake (Module.FileExtension "py") (Module.moduleNamespace mod))
+    in (Flows.pure (Maps.singleton path s))))

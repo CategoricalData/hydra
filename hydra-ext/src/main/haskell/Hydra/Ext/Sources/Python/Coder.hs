@@ -1,7 +1,6 @@
--- | Python code generator helper functions in Hydra DSL.
--- This module provides DSL versions of helper functions for Python code generation.
--- The main entry points (moduleToPython, encodeModule, encodeTermInline) remain in
--- Hydra.Ext.Staging.Python.Coder and use these helpers via code generation.
+-- | Python code generator in Hydra DSL.
+-- This module provides DSL versions of all Python code generation functions,
+-- including the main entry points (moduleToPython, encodePythonModule).
 
 module Hydra.Ext.Sources.Python.Coder where
 
@@ -115,7 +114,7 @@ ns = Namespace "hydra.ext.python.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Schemas.ns, Rewriting.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns]
+    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Schemas.ns, Rewriting.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns, Sorting.ns, Names.ns, Inference.ns, Monads.ns]
     (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python code generator: converts Hydra modules to Python source code"
   where
@@ -252,7 +251,19 @@ module_ = Module ns elements
       toBinding setMetaUsesName,
       toBinding setMetaUsesTypeVar,
       toBinding emptyMetadata,
-      toBinding gatherMetadata]
+      toBinding gatherMetadata,
+      toBinding setMetaUsesTypeAlias,
+      -- Module encoding
+      toBinding isTypeModuleCheck,
+      toBinding reorderDefs,
+      toBinding tvarStatement,
+      toBinding condImportSymbol,
+      toBinding moduleDomainImports,
+      toBinding standardImportStatement,
+      toBinding moduleStandardImports,
+      toBinding moduleImports,
+      toBinding encodePythonModule,
+      toBinding moduleToPython]
 
 -- | Version-aware inline type parameters.
 --   Python 3.12+ supports `def foo[T]()` syntax.
@@ -3750,3 +3761,288 @@ gatherMetadata = def "gatherMetadata" $
     -- Check if we have type variables and set usesTypeVar accordingly
     "tvars" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "result") $
     setMetaUsesTypeVar @@ var "result" @@ (Logic.not $ Sets.null $ var "tvars")
+
+-- | Set the usesTypeAlias flag in metadata
+setMetaUsesTypeAlias :: TBinding (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesTypeAlias = def "setMetaUsesTypeAlias" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Check whether a list of definitions contains any type definitions
+isTypeModuleCheck :: TBinding ([Definition] -> Bool)
+isTypeModuleCheck = def "isTypeModuleCheck" $
+  doc "Check whether a list of definitions contains any type definitions" $
+  "defs" ~>
+    Logic.not $ Lists.null $ Lists.filter
+      ("d" ~> cases _Definition (var "d") (Just false) [
+        _Definition_type>>: constant true])
+      (var "defs")
+
+-- | Reorder definitions: type definitions first (with Name first among types),
+--   then term definitions in topological order
+reorderDefs :: TBinding ([Definition] -> [Definition])
+reorderDefs = def "reorderDefs" $
+  doc "Reorder definitions: types first, then topologically sorted terms" $
+  "defs" ~>
+    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "typeDefsRaw" <~ Pairs.first (var "partitioned") $
+    "termDefsRaw" <~ Pairs.second (var "partitioned") $
+    -- Sort type defs: Name type first, then the rest
+    "nameFirst" <~ Lists.filter
+      ("td" ~> Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "nameRest" <~ Lists.filter
+      ("td" ~> Logic.not $ Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "sortedTypeDefs" <~ Lists.concat (list [
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameFirst"),
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
+    -- Sort term defs topologically
+    "termDefs" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td")) (var "termDefsRaw") $
+    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
+      ("d" ~> cases _Definition (var "d") Nothing [
+        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
+      @@
+      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
+        _Definition_term>>: "td" ~>
+          Sets.toList $ Rewriting.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
+      @@ var "termDefs") $
+    Lists.concat (list [var "sortedTypeDefs", var "sortedTermDefs"])
+
+-- | Create a TypeVar assignment statement for a type variable name
+tvarStatement :: TBinding (Py.Name -> Py.Statement)
+tvarStatement = def "tvarStatement" $
+  doc "Create a TypeVar assignment statement for a type variable name" $
+  "name" ~>
+    PyUtils.assignmentStatement @@ var "name" @@
+      (PyUtils.functionCall @@
+        (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "TypeVar") @@
+        list [PyUtils.doubleQuotedString @@ (unwrap Py._Name @@ var "name")])
+
+-- | Conditionally include a symbol name based on a boolean flag
+condImportSymbol :: TBinding (String -> Bool -> Maybe String)
+condImportSymbol = def "condImportSymbol" $
+  doc "Conditionally include a symbol name based on a boolean flag" $
+  "name" ~> "flag" ~>
+    Logic.ifElse (var "flag") (just $ var "name") nothing
+
+-- | Generate domain import statements from namespace mappings
+moduleDomainImports :: TBinding (Namespaces Py.DottedName -> [Py.ImportStatement])
+moduleDomainImports = def "moduleDomainImports" $
+  doc "Generate domain import statements from namespace mappings" $
+  "namespaces" ~>
+    "names" <~ (Lists.sort $ Maps.elems $ Module.namespacesMapping (var "namespaces")) $
+    Lists.map
+      ("ns" ~>
+        inject Py._ImportStatement Py._ImportStatement_name
+          (wrap Py._ImportName $ list [
+            record Py._DottedAsName [
+              Py._DottedAsName_name>>: var "ns",
+              Py._DottedAsName_as>>: nothing]]))
+      (var "names")
+
+-- | Generate a single "from X import Y, Z" standard import statement
+standardImportStatement :: TBinding (String -> [String] -> Py.ImportStatement)
+standardImportStatement = def "standardImportStatement" $
+  doc "Generate a single from-import statement" $
+  "modName" ~> "symbols" ~>
+    inject Py._ImportStatement Py._ImportStatement_from
+      (record Py._ImportFrom [
+        Py._ImportFrom_prefixes>>: list ([] :: [TTerm Py.RelativeImportPrefix]),
+        Py._ImportFrom_dottedName>>: just (wrap Py._DottedName $ list [PyDsl.name $ var "modName"]),
+        Py._ImportFrom_targets>>:
+          inject Py._ImportFromTargets Py._ImportFromTargets_simple
+            (Lists.map ("s" ~>
+              record Py._ImportFromAsName [
+                Py._ImportFromAsName_name>>: PyDsl.name $ var "s",
+                Py._ImportFromAsName_as>>: nothing])
+              (var "symbols"))])
+
+-- | Generate standard import statements based on module metadata
+moduleStandardImports :: TBinding (PyHelpers.PythonModuleMetadata -> [Py.ImportStatement])
+moduleStandardImports = def "moduleStandardImports" $
+  doc "Generate standard import statements based on module metadata" $
+  "meta" ~>
+    -- Build list of (moduleName, [Maybe symbol]) pairs, then filter to non-empty
+    "pairs" <~ list [
+      pair (string "__future__") (list [
+        condImportSymbol @@ string "annotations" @@ PyNames.useFutureAnnotations]),
+      pair (string "collections.abc") (list [
+        condImportSymbol @@ string "Callable" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "meta")]),
+      pair (string "dataclasses") (list [
+        condImportSymbol @@ string "dataclass" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "meta")]),
+      pair (string "decimal") (list [
+        condImportSymbol @@ string "Decimal" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "meta")]),
+      pair (string "enum") (list [
+        condImportSymbol @@ string "Enum" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "meta")]),
+      pair (string "functools") (list [
+        condImportSymbol @@ string "lru_cache" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "meta")]),
+      pair (string "hydra.dsl.python") (list [
+        condImportSymbol @@ string "Either" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "meta"),
+        condImportSymbol @@ string "FrozenDict" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "meta"),
+        condImportSymbol @@ string "Just" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "meta"),
+        condImportSymbol @@ string "Left" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "meta"),
+        condImportSymbol @@ string "Maybe" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "meta"),
+        condImportSymbol @@ string "Node" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "meta"),
+        condImportSymbol @@ string "Nothing" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "meta"),
+        condImportSymbol @@ string "Right" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "meta"),
+        condImportSymbol @@ string "frozenlist" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "meta")]),
+      pair (string "typing") (list [
+        condImportSymbol @@ string "Annotated" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "meta"),
+        condImportSymbol @@ string "Generic" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "meta"),
+        condImportSymbol @@ string "TypeAlias" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "meta"),
+        condImportSymbol @@ string "TypeVar" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "meta"),
+        condImportSymbol @@ string "cast" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "meta")])] $
+    -- Filter each pair to remove Nothing symbols, then filter out pairs with no remaining symbols
+    "simplified" <~ Maybes.cat (Lists.map
+      ("p" ~>
+        "modName" <~ Pairs.first (var "p") $
+        "symbols" <~ Maybes.cat (Pairs.second (var "p")) $
+        Logic.ifElse (Lists.null $ var "symbols")
+          nothing
+          (just $ pair (var "modName") (var "symbols")))
+      (var "pairs")) $
+    Lists.map
+      ("p" ~> standardImportStatement @@ Pairs.first (var "p") @@ Pairs.second (var "p"))
+      (var "simplified")
+
+-- | Generate all import statements (standard + domain) for a Python module
+moduleImports :: TBinding (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
+moduleImports = def "moduleImports" $
+  doc "Generate all import statements for a Python module" $
+  "namespaces" ~> "meta" ~>
+    Lists.map
+      ("imp" ~> PyUtils.pySimpleStatementToPyStatement @@
+        (PyDsl.simpleStatementImport $ var "imp"))
+      (Lists.concat (list [
+        moduleStandardImports @@ var "meta",
+        moduleDomainImports @@ var "namespaces"]))
+
+-- | Encode a Hydra module to a Python module AST.
+--   This is the main orchestration function that:
+--   1. Reorders definitions (types first, then topologically sorted terms)
+--   2. Gathers initial metadata
+--   3. Sets up the environment
+--   4. Encodes all definitions
+--   5. Generates imports based on metadata
+--   6. Assembles the final module
+encodePythonModule :: TBinding (Module -> [Definition] -> Flow Graph Py.Module)
+encodePythonModule = def "encodePythonModule" $
+  doc "Encode a Hydra module to a Python module AST" $
+  "mod" ~> "defs0" ~>
+    "defs" <~ (reorderDefs @@ var "defs0") $
+    "meta0" <~ (gatherMetadata @@ (Module.moduleNamespace $ var "mod") @@ var "defs") $
+    "g" <<~ Monads.getState $
+    Monads.withState @@ (makePyGraph @@ var "g" @@ var "meta0") @@
+      ("namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
+       "tcontext" <<~ (Inference.initialTypeContext @@ var "g") $
+       "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "tcontext") $
+       "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
+       withDefinitions @@ var "env0" @@ var "defs" @@ ("env" ~>
+         "defStmts" <<~ (Flows.map ("xs" ~> Lists.concat (var "xs")) (Flows.mapList ("d" ~> encodeDefinition @@ var "env" @@ var "d") (var "defs"))) $
+         "pyg1" <<~ Monads.getState $
+         "meta1" <~ (pyGraphMetadata @@ var "pyg1") $
+         -- Adjust metadata: if not type module and useInlineTypeParams, clear usesTypeVar
+         "meta2" <~ Logic.ifElse (Logic.and (Logic.not $ var "isTypeMod") (asTerm useInlineTypeParams))
+           (setMetaUsesTypeVar @@ var "meta1" @@ false)
+           (var "meta1") $
+         -- Adjust metadata: if type module and Python 3.10, set usesTypeAlias
+         "meta" <~ Logic.ifElse (Logic.and (var "isTypeMod")
+           (Equality.equal (asTerm targetPythonVersion) (inject PyHelpers._PythonVersion PyHelpers._PythonVersion_python310 unit)))
+           (setMetaUsesTypeAlias @@ var "meta2" @@ true)
+           (var "meta2") $
+         "namespaces" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta1") $
+         -- Generate comment statements from module description
+         "commentStmts" <~ (Maybes.maybe
+           (list ([] :: [TTerm Py.Statement]))
+           ("c" ~> list [PyUtils.commentStatement @@ var "c"])
+           (Maybes.map CoderUtils.normalizeComment (Module.moduleDescription $ var "mod"))) $
+         -- Generate import statements
+         "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
+         -- Generate type variable statements
+         "tvars" <~ Logic.ifElse (Logic.or (var "isTypeMod") (Logic.not $ asTerm useInlineTypeParams))
+           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "meta")
+           Sets.empty $
+         "tvarStmts" <~ Lists.map ("tv" ~> tvarStatement @@ (PyNames.encodeTypeVariable @@ var "tv")) (Sets.toList $ var "tvars") $
+         -- Assemble final module body: filter out empty groups
+         "body" <~ Lists.filter ("group" ~> Logic.not $ Lists.null $ var "group")
+           (Lists.concat (list [
+             list [var "commentStmts", var "importStmts", var "tvarStmts"],
+             var "defStmts"])) $
+         produce $ PyDsl.module_ (var "body")))
+
+-- | Main entry point: convert a Hydra module to Python source files
+moduleToPython :: TBinding (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
+moduleToPython = def "moduleToPython" $
+  doc "Convert a Hydra module to Python source files" $
+  "mod" ~> "defs" ~>
+    "file" <<~ (encodePythonModule @@ var "mod" @@ var "defs") $
+    "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.encodeModule @@ var "file"))) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Module.moduleNamespace $ var "mod")) $
+    produce $ Maps.singleton (var "path") (var "s")

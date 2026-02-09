@@ -26,7 +26,7 @@ import Hydra.Ext.Staging.Java.Coder
 import Hydra.Ext.Staging.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
 import Hydra.Ext.Staging.Protobuf.Coder
-import Hydra.Ext.Python.Module (moduleToPython)
+import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Staging.Scala.Coder
 
 import qualified System.FilePath as FP
