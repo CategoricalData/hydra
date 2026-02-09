@@ -3,6 +3,7 @@ wiki/
 
 # Haskell / Stack / Cabal
 .stack-work
+dist-newstyle/
 stack.yaml.lock
 *.cabal
 
@@ -12,6 +13,7 @@ gradle.properties`
 build
 
 # IDEs
+.bsp/
 .idea
 *.iml
 .vscode
