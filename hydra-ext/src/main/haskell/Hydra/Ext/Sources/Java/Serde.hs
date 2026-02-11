@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Meta.Lib.Literals               as LibLiterals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
@@ -765,7 +765,7 @@ writeTypeArgumentsOrDiamond = def "writeTypeArgumentsOrDiamond" $
 writeFloatingPointLiteral :: TBinding (Java.FloatingPointLiteral -> Expr)
 writeFloatingPointLiteral = def "writeFloatingPointLiteral" $
   lambda "fl" $
-    Serialization.cst @@ Literals.showFloat64 (unwrap Java._FloatingPointLiteral @@ var "fl")
+    Serialization.cst @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl")
 
 writeIntegerLiteral :: TBinding (Java.IntegerLiteral -> Expr)
 writeIntegerLiteral = def "writeIntegerLiteral" $
@@ -776,7 +776,7 @@ writeIntegerLiteral = def "writeIntegerLiteral" $
         (Equality.lt (var "i") (bigint (-2147483648))))
       (string "L")
       (string "")] $
-    Serialization.cst @@ Strings.cat2 (Literals.showBigint (var "i")) (var "suffix")
+    Serialization.cst @@ Strings.cat2 (LibLiterals.showBigint (var "i")) (var "suffix")
 
 writeStringLiteral :: TBinding (Java.StringLiteral -> Expr)
 writeStringLiteral = def "writeStringLiteral" $
@@ -794,23 +794,25 @@ writeLiteral = def "writeLiteral" $
       Java._Literal_floatingPoint>>: lambda "fl" $ writeFloatingPointLiteral @@ var "fl",
       Java._Literal_boolean>>: lambda "b" $ Serialization.cst @@ Logic.ifElse (var "b") (string "true") (string "false"),
       Java._Literal_character>>: lambda "c" $
+        -- Convert uint16 char to int32 for comparison and string operations
+        "ci" <~ LibLiterals.bigintToInt32 (LibLiterals.uint16ToBigint $ var "c") $
         -- Escape the character code for a Java char literal
         Serialization.cst @@ Strings.cat2 (string "'")
           (Strings.cat2
-            (Logic.ifElse (Equality.equal (var "c") (int32 39))  -- '\''
+            (Logic.ifElse (Equality.equal (var "ci") (int32 39))  -- '\''
               (string "\\'")
-              (Logic.ifElse (Equality.equal (var "c") (int32 92))  -- '\\'
+              (Logic.ifElse (Equality.equal (var "ci") (int32 92))  -- '\\'
                 (string "\\\\")
-                (Logic.ifElse (Equality.equal (var "c") (int32 10))  -- '\n'
+                (Logic.ifElse (Equality.equal (var "ci") (int32 10))  -- '\n'
                   (string "\\n")
-                  (Logic.ifElse (Equality.equal (var "c") (int32 13))  -- '\r'
+                  (Logic.ifElse (Equality.equal (var "ci") (int32 13))  -- '\r'
                     (string "\\r")
-                    (Logic.ifElse (Equality.equal (var "c") (int32 9))  -- '\t'
+                    (Logic.ifElse (Equality.equal (var "ci") (int32 9))  -- '\t'
                       (string "\\t")
-                      (Logic.ifElse (Logic.and (Equality.gte (var "c") (int32 32))
-                                               (Equality.lt (var "c") (int32 127)))
-                        (Strings.fromList (list [var "c"]))
-                        (javaUnicodeEscape @@ var "c")))))))
+                      (Logic.ifElse (Logic.and (Equality.gte (var "ci") (int32 32))
+                                               (Equality.lt (var "ci") (int32 127)))
+                        (Strings.fromList (list [var "ci"]))
+                        (javaUnicodeEscape @@ var "ci")))))))
             (string "'")),
       Java._Literal_string>>: lambda "sl" $ writeStringLiteral @@ var "sl"]
 
