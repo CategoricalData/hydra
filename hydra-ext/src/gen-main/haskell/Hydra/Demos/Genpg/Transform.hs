@@ -292,7 +292,7 @@ tableForEdge edge =
                     inId] (Maps.elems props)))
             in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Right (Lists.head (Sets.toList tables))) (Left (Strings.cat [
               "Specification for ",
-              Model.unEdgeLabel label,
+              (Model.unEdgeLabel label),
               " edges has wrong number of tables"])))
 
 -- | Get the table name for a vertex specification. Returns an error if not exactly one table is referenced.
@@ -307,7 +307,7 @@ tableForVertex vertex =
         let tables = (findTablesInTerms (Lists.cons id (Maps.elems props)))
         in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Right (Lists.head (Sets.toList tables))) (Left (Strings.cat [
           "Specification for ",
-          Model.unVertexLabel label,
+          (Model.unVertexLabel label),
           " vertices has wrong number of tables"])))
 
 -- | Build a map from table name to table type

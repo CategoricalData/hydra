@@ -111,6 +111,6 @@ vertexError showValue v = (prepend (Strings.cat2 "Invalid vertex with id " (show
 vertexLabelMismatch :: (Model.VertexLabel -> Model.VertexLabel -> String)
 vertexLabelMismatch expected actual = (Strings.cat [
   "expected ",
-  Model.unVertexLabel expected,
+  (Model.unVertexLabel expected),
   ", found ",
   (Model.unVertexLabel actual)])
