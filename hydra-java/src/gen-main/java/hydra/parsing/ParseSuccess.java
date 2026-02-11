@@ -34,7 +34,7 @@ public class ParseSuccess<A> implements Serializable, Comparable<ParseSuccess<A>
     if (!(other instanceof ParseSuccess)) {
       return false;
     }
-    ParseSuccess o = (ParseSuccess) (other);
+    ParseSuccess o = (ParseSuccess) other;
     return java.util.Objects.equals(
       this.value,
       o.value) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ParseSuccess<A> implements Serializable, Comparable<ParseSuccess<A>
   @SuppressWarnings("unchecked")
   public int compareTo(ParseSuccess other) {
     int cmp = 0;
-    cmp = ((Comparable) (value)).compareTo(other.value);
+    cmp = ((Comparable) value).compareTo(other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (remainder)).compareTo(other.remainder);
+    return ((Comparable) remainder).compareTo(other.remainder);
   }
   
   public ParseSuccess withValue(A value) {

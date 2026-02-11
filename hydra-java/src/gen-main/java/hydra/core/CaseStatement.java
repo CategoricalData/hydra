@@ -42,7 +42,7 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
     if (!(other instanceof CaseStatement)) {
       return false;
     }
-    CaseStatement o = (CaseStatement) (other);
+    CaseStatement o = (CaseStatement) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -61,7 +61,7 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(CaseStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }

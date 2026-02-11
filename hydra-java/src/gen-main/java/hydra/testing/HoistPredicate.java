@@ -36,23 +36,23 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(HoistPredicate instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(CaseStatements instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Applications instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lists instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Nothing instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -69,7 +69,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
       if (!(other instanceof CaseStatements)) {
         return false;
       }
-      CaseStatements o = (CaseStatements) (other);
+      CaseStatements o = (CaseStatements) other;
       return true;
     }
     
@@ -81,7 +81,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HoistPredicate other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -107,7 +107,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
       if (!(other instanceof Applications)) {
         return false;
       }
-      Applications o = (Applications) (other);
+      Applications o = (Applications) other;
       return true;
     }
     
@@ -119,7 +119,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HoistPredicate other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -145,7 +145,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
       if (!(other instanceof Lists)) {
         return false;
       }
-      Lists o = (Lists) (other);
+      Lists o = (Lists) other;
       return true;
     }
     
@@ -157,7 +157,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HoistPredicate other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -183,7 +183,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
       if (!(other instanceof Nothing)) {
         return false;
       }
-      Nothing o = (Nothing) (other);
+      Nothing o = (Nothing) other;
       return true;
     }
     
@@ -195,7 +195,7 @@ public abstract class HoistPredicate implements Serializable, Comparable<HoistPr
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HoistPredicate other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

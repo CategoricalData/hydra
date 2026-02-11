@@ -28,15 +28,15 @@ public abstract class Export implements Serializable, Comparable<Export> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Export instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Declaration instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Module instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class Export implements Serializable, Comparable<Export> {
       if (!(other instanceof Declaration)) {
         return false;
       }
-      Declaration o = (Declaration) (other);
+      Declaration o = (Declaration) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class Export implements Serializable, Comparable<Export> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Export other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Declaration o = (Declaration) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Declaration o = (Declaration) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class Export implements Serializable, Comparable<Export> {
       if (!(other instanceof Module)) {
         return false;
       }
-      Module o = (Module) (other);
+      Module o = (Module) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class Export implements Serializable, Comparable<Export> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Export other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Module o = (Module) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Module o = (Module) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

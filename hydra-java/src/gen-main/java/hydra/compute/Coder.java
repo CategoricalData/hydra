@@ -34,7 +34,7 @@ public class Coder<S1, S2, V1, V2> implements Serializable, Comparable<Coder<S1,
     if (!(other instanceof Coder)) {
       return false;
     }
-    Coder o = (Coder) (other);
+    Coder o = (Coder) other;
     return java.util.Objects.equals(
       this.encode,
       o.encode) && java.util.Objects.equals(

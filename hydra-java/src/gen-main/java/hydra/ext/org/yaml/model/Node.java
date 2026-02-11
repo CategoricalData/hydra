@@ -32,19 +32,19 @@ public abstract class Node implements Serializable, Comparable<Node> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Node instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Mapping instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Scalar instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Sequence instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Mapping)) {
         return false;
       }
-      Mapping o = (Mapping) (other);
+      Mapping o = (Mapping) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,11 +77,11 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Mapping o = (Mapping) (other);
+      Mapping o = (Mapping) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -108,7 +108,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Scalar)) {
         return false;
       }
-      Scalar o = (Scalar) (other);
+      Scalar o = (Scalar) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -122,12 +122,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Scalar o = (Scalar) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Scalar o = (Scalar) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -151,7 +151,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Sequence)) {
         return false;
       }
-      Sequence o = (Sequence) (other);
+      Sequence o = (Sequence) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -165,11 +165,11 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Sequence o = (Sequence) (other);
+      Sequence o = (Sequence) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());

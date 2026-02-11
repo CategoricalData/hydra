@@ -34,7 +34,7 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
     if (!(other instanceof LambdaExpression)) {
       return false;
     }
-    LambdaExpression o = (LambdaExpression) (other);
+    LambdaExpression o = (LambdaExpression) other;
     return java.util.Objects.equals(
       this.bindings,
       o.bindings) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (inner)).compareTo(other.inner);
+    return ((Comparable) inner).compareTo(other.inner);
   }
   
   public LambdaExpression withBindings(java.util.List<hydra.ext.haskell.ast.Pattern> bindings) {

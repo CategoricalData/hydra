@@ -42,7 +42,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     if (!(other instanceof Lambda)) {
       return false;
     }
-    Lambda o = (Lambda) (other);
+    Lambda o = (Lambda) other;
     return java.util.Objects.equals(
       this.parameter,
       o.parameter) && java.util.Objects.equals(
@@ -61,7 +61,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
   @SuppressWarnings("unchecked")
   public int compareTo(Lambda other) {
     int cmp = 0;
-    cmp = ((Comparable) (parameter)).compareTo(other.parameter);
+    cmp = ((Comparable) parameter).compareTo(other.parameter);
     if (cmp != 0) {
       return cmp;
     }
@@ -71,7 +71,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (body)).compareTo(other.body);
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public Lambda withParameter(hydra.core.Name parameter) {

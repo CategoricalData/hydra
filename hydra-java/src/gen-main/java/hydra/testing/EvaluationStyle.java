@@ -28,15 +28,15 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(EvaluationStyle instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Eager instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lazy instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -50,7 +50,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
       if (!(other instanceof Eager)) {
         return false;
       }
-      Eager o = (Eager) (other);
+      Eager o = (Eager) other;
       return true;
     }
     
@@ -62,7 +62,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EvaluationStyle other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -85,7 +85,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
       if (!(other instanceof Lazy)) {
         return false;
       }
-      Lazy o = (Lazy) (other);
+      Lazy o = (Lazy) other;
       return true;
     }
     
@@ -97,7 +97,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EvaluationStyle other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -34,7 +34,7 @@ public class HoistPolymorphicLetBindingsTestCase implements Serializable, Compar
     if (!(other instanceof HoistPolymorphicLetBindingsTestCase)) {
       return false;
     }
-    HoistPolymorphicLetBindingsTestCase o = (HoistPolymorphicLetBindingsTestCase) (other);
+    HoistPolymorphicLetBindingsTestCase o = (HoistPolymorphicLetBindingsTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class HoistPolymorphicLetBindingsTestCase implements Serializable, Compar
   @SuppressWarnings("unchecked")
   public int compareTo(HoistPolymorphicLetBindingsTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public HoistPolymorphicLetBindingsTestCase withInput(hydra.core.Let input) {

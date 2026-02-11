@@ -34,7 +34,7 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
     if (!(other instanceof GraphPattern)) {
       return false;
     }
-    GraphPattern o = (GraphPattern) (other);
+    GraphPattern o = (GraphPattern) other;
     return java.util.Objects.equals(
       this.graph,
       o.graph) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(GraphPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (graph)).compareTo(other.graph);
+    cmp = ((Comparable) graph).compareTo(other.graph);
     if (cmp != 0) {
       return cmp;
     }

@@ -32,19 +32,19 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(FoldOperation instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(SumInt32Literals instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(CollectListLengths instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(CollectLabels instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -61,7 +61,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       if (!(other instanceof SumInt32Literals)) {
         return false;
       }
-      SumInt32Literals o = (SumInt32Literals) (other);
+      SumInt32Literals o = (SumInt32Literals) other;
       return true;
     }
     
@@ -73,7 +73,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -99,7 +99,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       if (!(other instanceof CollectListLengths)) {
         return false;
       }
-      CollectListLengths o = (CollectListLengths) (other);
+      CollectListLengths o = (CollectListLengths) other;
       return true;
     }
     
@@ -111,7 +111,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -137,7 +137,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       if (!(other instanceof CollectLabels)) {
         return false;
       }
-      CollectLabels o = (CollectLabels) (other);
+      CollectLabels o = (CollectLabels) other;
       return true;
     }
     
@@ -149,7 +149,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

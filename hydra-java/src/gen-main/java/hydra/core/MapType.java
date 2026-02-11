@@ -34,7 +34,7 @@ public class MapType implements Serializable, Comparable<MapType> {
     if (!(other instanceof MapType)) {
       return false;
     }
-    MapType o = (MapType) (other);
+    MapType o = (MapType) other;
     return java.util.Objects.equals(
       this.keys,
       o.keys) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class MapType implements Serializable, Comparable<MapType> {
   @SuppressWarnings("unchecked")
   public int compareTo(MapType other) {
     int cmp = 0;
-    cmp = ((Comparable) (keys)).compareTo(other.keys);
+    cmp = ((Comparable) keys).compareTo(other.keys);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (values)).compareTo(other.values);
+    return ((Comparable) values).compareTo(other.values);
   }
   
   public MapType withKeys(hydra.core.Type keys) {

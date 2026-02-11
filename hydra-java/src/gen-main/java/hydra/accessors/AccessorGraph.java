@@ -34,7 +34,7 @@ public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
     if (!(other instanceof AccessorGraph)) {
       return false;
     }
-    AccessorGraph o = (AccessorGraph) (other);
+    AccessorGraph o = (AccessorGraph) other;
     return java.util.Objects.equals(
       this.nodes,
       o.nodes) && java.util.Objects.equals(

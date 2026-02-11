@@ -42,7 +42,7 @@ public class Trace implements Serializable, Comparable<Trace> {
     if (!(other instanceof Trace)) {
       return false;
     }
-    Trace o = (Trace) (other);
+    Trace o = (Trace) other;
     return java.util.Objects.equals(
       this.stack,
       o.stack) && java.util.Objects.equals(

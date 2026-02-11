@@ -28,15 +28,15 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(IndentStyle instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(AllLines instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SubsequentLines instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
       if (!(other instanceof AllLines)) {
         return false;
       }
-      AllLines o = (AllLines) (other);
+      AllLines o = (AllLines) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IndentStyle other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      AllLines o = (AllLines) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      AllLines o = (AllLines) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
       if (!(other instanceof SubsequentLines)) {
         return false;
       }
-      SubsequentLines o = (SubsequentLines) (other);
+      SubsequentLines o = (SubsequentLines) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IndentStyle other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      SubsequentLines o = (SubsequentLines) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      SubsequentLines o = (SubsequentLines) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

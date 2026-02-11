@@ -50,7 +50,7 @@ public class TransformWorkflow implements Serializable, Comparable<TransformWork
     if (!(other instanceof TransformWorkflow)) {
       return false;
     }
-    TransformWorkflow o = (TransformWorkflow) (other);
+    TransformWorkflow o = (TransformWorkflow) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class TransformWorkflow implements Serializable, Comparable<TransformWork
   @SuppressWarnings("unchecked")
   public int compareTo(TransformWorkflow other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (schemaSpec)).compareTo(other.schemaSpec);
+    cmp = ((Comparable) schemaSpec).compareTo(other.schemaSpec);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (srcDir)).compareTo(other.srcDir);
+    cmp = ((Comparable) srcDir).compareTo(other.srcDir);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (destDir)).compareTo(other.destDir);
+    return ((Comparable) destDir).compareTo(other.destDir);
   }
   
   public TransformWorkflow withName(String name) {

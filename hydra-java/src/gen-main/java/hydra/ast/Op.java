@@ -50,7 +50,7 @@ public class Op implements Serializable, Comparable<Op> {
     if (!(other instanceof Op)) {
       return false;
     }
-    Op o = (Op) (other);
+    Op o = (Op) other;
     return java.util.Objects.equals(
       this.symbol,
       o.symbol) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class Op implements Serializable, Comparable<Op> {
   @SuppressWarnings("unchecked")
   public int compareTo(Op other) {
     int cmp = 0;
-    cmp = ((Comparable) (symbol)).compareTo(other.symbol);
+    cmp = ((Comparable) symbol).compareTo(other.symbol);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (padding)).compareTo(other.padding);
+    cmp = ((Comparable) padding).compareTo(other.padding);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (precedence)).compareTo(other.precedence);
+    cmp = ((Comparable) precedence).compareTo(other.precedence);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (associativity)).compareTo(other.associativity);
+    return ((Comparable) associativity).compareTo(other.associativity);
   }
   
   public Op withSymbol(hydra.ast.Symbol symbol) {

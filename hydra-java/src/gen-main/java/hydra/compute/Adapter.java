@@ -50,7 +50,7 @@ public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
     if (!(other instanceof Adapter)) {
       return false;
     }
-    Adapter o = (Adapter) (other);
+    Adapter o = (Adapter) other;
     return java.util.Objects.equals(
       this.isLossy,
       o.isLossy) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(Adapter other) {
     int cmp = 0;
-    cmp = ((Comparable) (isLossy)).compareTo(other.isLossy);
+    cmp = ((Comparable) isLossy).compareTo(other.isLossy);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (source)).compareTo(other.source);
+    cmp = ((Comparable) source).compareTo(other.source);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (target)).compareTo(other.target);
+    cmp = ((Comparable) target).compareTo(other.target);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (coder)).compareTo(other.coder);
+    return ((Comparable) coder).compareTo(other.coder);
   }
   
   public Adapter withIsLossy(Boolean isLossy) {

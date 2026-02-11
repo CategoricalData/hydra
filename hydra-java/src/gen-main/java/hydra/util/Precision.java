@@ -28,15 +28,15 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Precision instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Arbitrary instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Bits instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -53,7 +53,7 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
       if (!(other instanceof Arbitrary)) {
         return false;
       }
-      Arbitrary o = (Arbitrary) (other);
+      Arbitrary o = (Arbitrary) other;
       return true;
     }
     
@@ -65,7 +65,7 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Precision other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -93,7 +93,7 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
       if (!(other instanceof Bits)) {
         return false;
       }
-      Bits o = (Bits) (other);
+      Bits o = (Bits) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -107,12 +107,12 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Precision other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Bits o = (Bits) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Bits o = (Bits) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

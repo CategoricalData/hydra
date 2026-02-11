@@ -34,7 +34,7 @@ public class Production implements Serializable, Comparable<Production> {
     if (!(other instanceof Production)) {
       return false;
     }
-    Production o = (Production) (other);
+    Production o = (Production) other;
     return java.util.Objects.equals(
       this.symbol,
       o.symbol) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Production implements Serializable, Comparable<Production> {
   @SuppressWarnings("unchecked")
   public int compareTo(Production other) {
     int cmp = 0;
-    cmp = ((Comparable) (symbol)).compareTo(other.symbol);
+    cmp = ((Comparable) symbol).compareTo(other.symbol);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (pattern)).compareTo(other.pattern);
+    return ((Comparable) pattern).compareTo(other.pattern);
   }
   
   public Production withSymbol(hydra.grammar.Symbol symbol) {

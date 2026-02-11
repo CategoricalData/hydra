@@ -34,7 +34,7 @@ public class TypeSignatureExpression implements Serializable, Comparable<TypeSig
     if (!(other instanceof TypeSignatureExpression)) {
       return false;
     }
-    TypeSignatureExpression o = (TypeSignatureExpression) (other);
+    TypeSignatureExpression o = (TypeSignatureExpression) other;
     return java.util.Objects.equals(
       this.inner,
       o.inner) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeSignatureExpression implements Serializable, Comparable<TypeSig
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSignatureExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (inner)).compareTo(other.inner);
+    cmp = ((Comparable) inner).compareTo(other.inner);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypeSignatureExpression withInner(hydra.ext.haskell.ast.Expression inner) {

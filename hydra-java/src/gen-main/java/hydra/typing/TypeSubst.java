@@ -23,7 +23,7 @@ public class TypeSubst implements Serializable, Comparable<TypeSubst> {
     if (!(other instanceof TypeSubst)) {
       return false;
     }
-    TypeSubst o = (TypeSubst) (other);
+    TypeSubst o = (TypeSubst) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

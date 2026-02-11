@@ -34,7 +34,7 @@ public class ParseError implements Serializable, Comparable<ParseError> {
     if (!(other instanceof ParseError)) {
       return false;
     }
-    ParseError o = (ParseError) (other);
+    ParseError o = (ParseError) other;
     return java.util.Objects.equals(
       this.message,
       o.message) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ParseError implements Serializable, Comparable<ParseError> {
   @SuppressWarnings("unchecked")
   public int compareTo(ParseError other) {
     int cmp = 0;
-    cmp = ((Comparable) (message)).compareTo(other.message);
+    cmp = ((Comparable) message).compareTo(other.message);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (remainder)).compareTo(other.remainder);
+    return ((Comparable) remainder).compareTo(other.remainder);
   }
   
   public ParseError withMessage(String message) {

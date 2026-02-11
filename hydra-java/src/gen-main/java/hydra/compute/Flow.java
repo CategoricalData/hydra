@@ -23,7 +23,7 @@ public class Flow<S, V> implements Serializable, Comparable<Flow<S, V>> {
     if (!(other instanceof Flow)) {
       return false;
     }
-    Flow o = (Flow) (other);
+    Flow o = (Flow) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

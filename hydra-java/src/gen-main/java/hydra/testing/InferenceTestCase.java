@@ -34,7 +34,7 @@ public class InferenceTestCase implements Serializable, Comparable<InferenceTest
     if (!(other instanceof InferenceTestCase)) {
       return false;
     }
-    InferenceTestCase o = (InferenceTestCase) (other);
+    InferenceTestCase o = (InferenceTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class InferenceTestCase implements Serializable, Comparable<InferenceTest
   @SuppressWarnings("unchecked")
   public int compareTo(InferenceTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public InferenceTestCase withInput(hydra.core.Term input) {

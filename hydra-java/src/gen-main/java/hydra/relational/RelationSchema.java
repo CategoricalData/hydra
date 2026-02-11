@@ -50,7 +50,7 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
     if (!(other instanceof RelationSchema)) {
       return false;
     }
-    RelationSchema o = (RelationSchema) (other);
+    RelationSchema o = (RelationSchema) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -71,7 +71,7 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
   @SuppressWarnings("unchecked")
   public int compareTo(RelationSchema other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

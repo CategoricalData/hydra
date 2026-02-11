@@ -34,7 +34,7 @@ public class Record implements Serializable, Comparable<Record> {
     if (!(other instanceof Record)) {
       return false;
     }
-    Record o = (Record) (other);
+    Record o = (Record) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class Record implements Serializable, Comparable<Record> {
   @SuppressWarnings("unchecked")
   public int compareTo(Record other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }

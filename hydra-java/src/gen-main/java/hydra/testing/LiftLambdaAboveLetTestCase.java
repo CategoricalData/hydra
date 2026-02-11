@@ -34,7 +34,7 @@ public class LiftLambdaAboveLetTestCase implements Serializable, Comparable<Lift
     if (!(other instanceof LiftLambdaAboveLetTestCase)) {
       return false;
     }
-    LiftLambdaAboveLetTestCase o = (LiftLambdaAboveLetTestCase) (other);
+    LiftLambdaAboveLetTestCase o = (LiftLambdaAboveLetTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class LiftLambdaAboveLetTestCase implements Serializable, Comparable<Lift
   @SuppressWarnings("unchecked")
   public int compareTo(LiftLambdaAboveLetTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public LiftLambdaAboveLetTestCase withInput(hydra.core.Term input) {

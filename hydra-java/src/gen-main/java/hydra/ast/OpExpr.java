@@ -42,7 +42,7 @@ public class OpExpr implements Serializable, Comparable<OpExpr> {
     if (!(other instanceof OpExpr)) {
       return false;
     }
-    OpExpr o = (OpExpr) (other);
+    OpExpr o = (OpExpr) other;
     return java.util.Objects.equals(
       this.op,
       o.op) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class OpExpr implements Serializable, Comparable<OpExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(OpExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) (op)).compareTo(other.op);
+    cmp = ((Comparable) op).compareTo(other.op);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (lhs)).compareTo(other.lhs);
+    cmp = ((Comparable) lhs).compareTo(other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (rhs)).compareTo(other.rhs);
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public OpExpr withOp(hydra.ast.Op op) {

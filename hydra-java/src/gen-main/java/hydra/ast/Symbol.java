@@ -23,7 +23,7 @@ public class Symbol implements Serializable, Comparable<Symbol> {
     if (!(other instanceof Symbol)) {
       return false;
     }
-    Symbol o = (Symbol) (other);
+    Symbol o = (Symbol) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Symbol implements Serializable, Comparable<Symbol> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Symbol other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -42,7 +42,7 @@ public class Primitive implements Serializable, Comparable<Primitive> {
     if (!(other instanceof Primitive)) {
       return false;
     }
-    Primitive o = (Primitive) (other);
+    Primitive o = (Primitive) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class Primitive implements Serializable, Comparable<Primitive> {
   @SuppressWarnings("unchecked")
   public int compareTo(Primitive other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }

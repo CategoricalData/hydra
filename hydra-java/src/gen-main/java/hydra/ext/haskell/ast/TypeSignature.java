@@ -34,7 +34,7 @@ public class TypeSignature implements Serializable, Comparable<TypeSignature> {
     if (!(other instanceof TypeSignature)) {
       return false;
     }
-    TypeSignature o = (TypeSignature) (other);
+    TypeSignature o = (TypeSignature) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeSignature implements Serializable, Comparable<TypeSignature> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSignature other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypeSignature withName(hydra.ext.haskell.ast.Name name) {

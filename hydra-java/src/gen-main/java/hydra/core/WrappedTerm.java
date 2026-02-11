@@ -34,7 +34,7 @@ public class WrappedTerm implements Serializable, Comparable<WrappedTerm> {
     if (!(other instanceof WrappedTerm)) {
       return false;
     }
-    WrappedTerm o = (WrappedTerm) (other);
+    WrappedTerm o = (WrappedTerm) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class WrappedTerm implements Serializable, Comparable<WrappedTerm> {
   @SuppressWarnings("unchecked")
   public int compareTo(WrappedTerm other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (body)).compareTo(other.body);
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public WrappedTerm withTypeName(hydra.core.Name typeName) {

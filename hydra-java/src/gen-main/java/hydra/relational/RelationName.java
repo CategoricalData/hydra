@@ -23,7 +23,7 @@ public class RelationName implements Serializable, Comparable<RelationName> {
     if (!(other instanceof RelationName)) {
       return false;
     }
-    RelationName o = (RelationName) (other);
+    RelationName o = (RelationName) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class RelationName implements Serializable, Comparable<RelationName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RelationName other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

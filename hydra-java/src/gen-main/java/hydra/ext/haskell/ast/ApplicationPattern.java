@@ -34,7 +34,7 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
     if (!(other instanceof ApplicationPattern)) {
       return false;
     }
-    ApplicationPattern o = (ApplicationPattern) (other);
+    ApplicationPattern o = (ApplicationPattern) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

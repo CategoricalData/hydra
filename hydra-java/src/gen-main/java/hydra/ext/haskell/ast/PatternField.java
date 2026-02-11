@@ -34,7 +34,7 @@ public class PatternField implements Serializable, Comparable<PatternField> {
     if (!(other instanceof PatternField)) {
       return false;
     }
-    PatternField o = (PatternField) (other);
+    PatternField o = (PatternField) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class PatternField implements Serializable, Comparable<PatternField> {
   @SuppressWarnings("unchecked")
   public int compareTo(PatternField other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (pattern)).compareTo(other.pattern);
+    return ((Comparable) pattern).compareTo(other.pattern);
   }
   
   public PatternField withName(hydra.ext.haskell.ast.Name name) {

@@ -40,27 +40,27 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Ws instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(None instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Space instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Break instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(BreakAndIndent instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DoubleBreak instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -77,7 +77,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
       if (!(other instanceof None)) {
         return false;
       }
-      None o = (None) (other);
+      None o = (None) other;
       return true;
     }
     
@@ -89,7 +89,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Ws other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -115,7 +115,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
       if (!(other instanceof Space)) {
         return false;
       }
-      Space o = (Space) (other);
+      Space o = (Space) other;
       return true;
     }
     
@@ -127,7 +127,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Ws other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -153,7 +153,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
       if (!(other instanceof Break)) {
         return false;
       }
-      Break o = (Break) (other);
+      Break o = (Break) other;
       return true;
     }
     
@@ -165,7 +165,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Ws other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -193,7 +193,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
       if (!(other instanceof BreakAndIndent)) {
         return false;
       }
-      BreakAndIndent o = (BreakAndIndent) (other);
+      BreakAndIndent o = (BreakAndIndent) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -207,12 +207,12 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Ws other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      BreakAndIndent o = (BreakAndIndent) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      BreakAndIndent o = (BreakAndIndent) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -234,7 +234,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
       if (!(other instanceof DoubleBreak)) {
         return false;
       }
-      DoubleBreak o = (DoubleBreak) (other);
+      DoubleBreak o = (DoubleBreak) other;
       return true;
     }
     
@@ -246,7 +246,7 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Ws other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

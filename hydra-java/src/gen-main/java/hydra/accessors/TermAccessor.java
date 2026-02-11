@@ -100,87 +100,87 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TermAccessor instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(AnnotatedBody instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ApplicationFunction instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ApplicationArgument instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LambdaBody instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(UnionCasesDefault instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(UnionCasesBranch instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LetBody instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LetBinding instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ListElement instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(MapKey instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(MapValue instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(MaybeTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ProductTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(RecordField instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SetElement instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SumTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeLambdaBody instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeApplicationTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(InjectionTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(WrappedTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -197,7 +197,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof AnnotatedBody)) {
         return false;
       }
-      AnnotatedBody o = (AnnotatedBody) (other);
+      AnnotatedBody o = (AnnotatedBody) other;
       return true;
     }
     
@@ -209,7 +209,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -235,7 +235,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof ApplicationFunction)) {
         return false;
       }
-      ApplicationFunction o = (ApplicationFunction) (other);
+      ApplicationFunction o = (ApplicationFunction) other;
       return true;
     }
     
@@ -247,7 +247,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -273,7 +273,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof ApplicationArgument)) {
         return false;
       }
-      ApplicationArgument o = (ApplicationArgument) (other);
+      ApplicationArgument o = (ApplicationArgument) other;
       return true;
     }
     
@@ -285,7 +285,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -311,7 +311,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof LambdaBody)) {
         return false;
       }
-      LambdaBody o = (LambdaBody) (other);
+      LambdaBody o = (LambdaBody) other;
       return true;
     }
     
@@ -323,7 +323,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -349,7 +349,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof UnionCasesDefault)) {
         return false;
       }
-      UnionCasesDefault o = (UnionCasesDefault) (other);
+      UnionCasesDefault o = (UnionCasesDefault) other;
       return true;
     }
     
@@ -361,7 +361,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -389,7 +389,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof UnionCasesBranch)) {
         return false;
       }
-      UnionCasesBranch o = (UnionCasesBranch) (other);
+      UnionCasesBranch o = (UnionCasesBranch) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -403,12 +403,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      UnionCasesBranch o = (UnionCasesBranch) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      UnionCasesBranch o = (UnionCasesBranch) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -430,7 +430,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof LetBody)) {
         return false;
       }
-      LetBody o = (LetBody) (other);
+      LetBody o = (LetBody) other;
       return true;
     }
     
@@ -442,7 +442,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -470,7 +470,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof LetBinding)) {
         return false;
       }
-      LetBinding o = (LetBinding) (other);
+      LetBinding o = (LetBinding) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -484,12 +484,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      LetBinding o = (LetBinding) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      LetBinding o = (LetBinding) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -513,7 +513,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof ListElement)) {
         return false;
       }
-      ListElement o = (ListElement) (other);
+      ListElement o = (ListElement) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -527,12 +527,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      ListElement o = (ListElement) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      ListElement o = (ListElement) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -556,7 +556,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof MapKey)) {
         return false;
       }
-      MapKey o = (MapKey) (other);
+      MapKey o = (MapKey) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -570,12 +570,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      MapKey o = (MapKey) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      MapKey o = (MapKey) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -599,7 +599,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof MapValue)) {
         return false;
       }
-      MapValue o = (MapValue) (other);
+      MapValue o = (MapValue) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -613,12 +613,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      MapValue o = (MapValue) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      MapValue o = (MapValue) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -640,7 +640,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof MaybeTerm)) {
         return false;
       }
-      MaybeTerm o = (MaybeTerm) (other);
+      MaybeTerm o = (MaybeTerm) other;
       return true;
     }
     
@@ -652,7 +652,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -680,7 +680,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof ProductTerm)) {
         return false;
       }
-      ProductTerm o = (ProductTerm) (other);
+      ProductTerm o = (ProductTerm) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -694,12 +694,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      ProductTerm o = (ProductTerm) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      ProductTerm o = (ProductTerm) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -723,7 +723,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof RecordField)) {
         return false;
       }
-      RecordField o = (RecordField) (other);
+      RecordField o = (RecordField) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -737,12 +737,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      RecordField o = (RecordField) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      RecordField o = (RecordField) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -766,7 +766,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof SetElement)) {
         return false;
       }
-      SetElement o = (SetElement) (other);
+      SetElement o = (SetElement) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -780,12 +780,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      SetElement o = (SetElement) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      SetElement o = (SetElement) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -807,7 +807,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof SumTerm)) {
         return false;
       }
-      SumTerm o = (SumTerm) (other);
+      SumTerm o = (SumTerm) other;
       return true;
     }
     
@@ -819,7 +819,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -845,7 +845,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof TypeLambdaBody)) {
         return false;
       }
-      TypeLambdaBody o = (TypeLambdaBody) (other);
+      TypeLambdaBody o = (TypeLambdaBody) other;
       return true;
     }
     
@@ -857,7 +857,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -883,7 +883,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof TypeApplicationTerm)) {
         return false;
       }
-      TypeApplicationTerm o = (TypeApplicationTerm) (other);
+      TypeApplicationTerm o = (TypeApplicationTerm) other;
       return true;
     }
     
@@ -895,7 +895,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -921,7 +921,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof InjectionTerm)) {
         return false;
       }
-      InjectionTerm o = (InjectionTerm) (other);
+      InjectionTerm o = (InjectionTerm) other;
       return true;
     }
     
@@ -933,7 +933,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -959,7 +959,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       if (!(other instanceof WrappedTerm)) {
         return false;
       }
-      WrappedTerm o = (WrappedTerm) (other);
+      WrappedTerm o = (WrappedTerm) other;
       return true;
     }
     
@@ -971,7 +971,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

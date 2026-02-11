@@ -34,7 +34,7 @@ public class SerializationTestCase implements Serializable, Comparable<Serializa
     if (!(other instanceof SerializationTestCase)) {
       return false;
     }
-    SerializationTestCase o = (SerializationTestCase) (other);
+    SerializationTestCase o = (SerializationTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class SerializationTestCase implements Serializable, Comparable<Serializa
   @SuppressWarnings("unchecked")
   public int compareTo(SerializationTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public SerializationTestCase withInput(hydra.ast.Expr input) {

@@ -7,7 +7,7 @@ package hydra.show.meta;
  */
 public interface Meta {
   static String termVariant(hydra.variants.TermVariant v1) {
-    return ((v1)).accept(new hydra.variants.TermVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.TermVariant.PartialVisitor<>() {
       @Override
       public String visit(hydra.variants.TermVariant.Annotated ignored) {
         return "annotated";
@@ -101,7 +101,7 @@ public interface Meta {
   }
   
   static String typeVariant(hydra.variants.TypeVariant v1) {
-    return ((v1)).accept(new hydra.variants.TypeVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.TypeVariant.PartialVisitor<>() {
       @Override
       public String visit(hydra.variants.TypeVariant.Annotated ignored) {
         return "annotated";

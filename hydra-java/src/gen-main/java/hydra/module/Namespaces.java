@@ -34,7 +34,7 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
     if (!(other instanceof Namespaces)) {
       return false;
     }
-    Namespaces o = (Namespaces) (other);
+    Namespaces o = (Namespaces) other;
     return java.util.Objects.equals(
       this.focus,
       o.focus) && java.util.Objects.equals(

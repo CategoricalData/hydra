@@ -23,7 +23,7 @@ public class PrimaryKey implements Serializable, Comparable<PrimaryKey> {
     if (!(other instanceof PrimaryKey)) {
       return false;
     }
-    PrimaryKey o = (PrimaryKey) (other);
+    PrimaryKey o = (PrimaryKey) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

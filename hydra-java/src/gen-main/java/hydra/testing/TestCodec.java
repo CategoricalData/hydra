@@ -106,7 +106,7 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
     if (!(other instanceof TestCodec)) {
       return false;
     }
-    TestCodec o = (TestCodec) (other);
+    TestCodec o = (TestCodec) other;
     return java.util.Objects.equals(
       this.language,
       o.language) && java.util.Objects.equals(
@@ -141,11 +141,11 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
   @SuppressWarnings("unchecked")
   public int compareTo(TestCodec other) {
     int cmp = 0;
-    cmp = ((Comparable) (language)).compareTo(other.language);
+    cmp = ((Comparable) language).compareTo(other.language);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (fileExtension)).compareTo(other.fileExtension);
+    cmp = ((Comparable) fileExtension).compareTo(other.fileExtension);
     if (cmp != 0) {
       return cmp;
     }
@@ -173,19 +173,19 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (testCaseTemplate)).compareTo(other.testCaseTemplate);
+    cmp = ((Comparable) testCaseTemplate).compareTo(other.testCaseTemplate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (testGroupTemplate)).compareTo(other.testGroupTemplate);
+    cmp = ((Comparable) testGroupTemplate).compareTo(other.testGroupTemplate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (moduleTemplate)).compareTo(other.moduleTemplate);
+    cmp = ((Comparable) moduleTemplate).compareTo(other.moduleTemplate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (importTemplate)).compareTo(other.importTemplate);
+    cmp = ((Comparable) importTemplate).compareTo(other.importTemplate);
     if (cmp != 0) {
       return cmp;
     }

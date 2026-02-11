@@ -32,19 +32,19 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(FloatType instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Bigfloat instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Float32 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Float64 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -61,7 +61,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
       if (!(other instanceof Bigfloat)) {
         return false;
       }
-      Bigfloat o = (Bigfloat) (other);
+      Bigfloat o = (Bigfloat) other;
       return true;
     }
     
@@ -73,7 +73,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -99,7 +99,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
       if (!(other instanceof Float32)) {
         return false;
       }
-      Float32 o = (Float32) (other);
+      Float32 o = (Float32) other;
       return true;
     }
     
@@ -111,7 +111,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -137,7 +137,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
       if (!(other instanceof Float64)) {
         return false;
       }
-      Float64 o = (Float64) (other);
+      Float64 o = (Float64) other;
       return true;
     }
     
@@ -149,7 +149,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

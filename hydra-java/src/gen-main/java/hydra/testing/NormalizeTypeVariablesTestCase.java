@@ -34,7 +34,7 @@ public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<
     if (!(other instanceof NormalizeTypeVariablesTestCase)) {
       return false;
     }
-    NormalizeTypeVariablesTestCase o = (NormalizeTypeVariablesTestCase) (other);
+    NormalizeTypeVariablesTestCase o = (NormalizeTypeVariablesTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<
   @SuppressWarnings("unchecked")
   public int compareTo(NormalizeTypeVariablesTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public NormalizeTypeVariablesTestCase withInput(hydra.core.Term input) {

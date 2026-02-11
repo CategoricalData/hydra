@@ -42,7 +42,7 @@ public class TypeScheme implements Serializable, Comparable<TypeScheme> {
     if (!(other instanceof TypeScheme)) {
       return false;
     }
-    TypeScheme o = (TypeScheme) (other);
+    TypeScheme o = (TypeScheme) other;
     return java.util.Objects.equals(
       this.variables,
       o.variables) && java.util.Objects.equals(
@@ -67,7 +67,7 @@ public class TypeScheme implements Serializable, Comparable<TypeScheme> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }

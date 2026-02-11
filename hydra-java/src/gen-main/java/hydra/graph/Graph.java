@@ -66,7 +66,7 @@ public class Graph implements Serializable, Comparable<Graph> {
     if (!(other instanceof Graph)) {
       return false;
     }
-    Graph o = (Graph) (other);
+    Graph o = (Graph) other;
     return java.util.Objects.equals(
       this.elements,
       o.elements) && java.util.Objects.equals(
@@ -109,7 +109,7 @@ public class Graph implements Serializable, Comparable<Graph> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (body)).compareTo(other.body);
+    cmp = ((Comparable) body).compareTo(other.body);
     if (cmp != 0) {
       return cmp;
     }

@@ -34,7 +34,7 @@ public class HydraSchemaSpec implements Serializable, Comparable<HydraSchemaSpec
     if (!(other instanceof HydraSchemaSpec)) {
       return false;
     }
-    HydraSchemaSpec o = (HydraSchemaSpec) (other);
+    HydraSchemaSpec o = (HydraSchemaSpec) other;
     return java.util.Objects.equals(
       this.modules,
       o.modules) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class HydraSchemaSpec implements Serializable, Comparable<HydraSchemaSpec
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (typeName)).compareTo(other.typeName);
+    return ((Comparable) typeName).compareTo(other.typeName);
   }
   
   public HydraSchemaSpec withModules(java.util.List<hydra.module.Module> modules) {

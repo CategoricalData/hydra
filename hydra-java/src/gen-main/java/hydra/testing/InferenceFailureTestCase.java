@@ -26,7 +26,7 @@ public class InferenceFailureTestCase implements Serializable, Comparable<Infere
     if (!(other instanceof InferenceFailureTestCase)) {
       return false;
     }
-    InferenceFailureTestCase o = (InferenceFailureTestCase) (other);
+    InferenceFailureTestCase o = (InferenceFailureTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input);
@@ -40,6 +40,6 @@ public class InferenceFailureTestCase implements Serializable, Comparable<Infere
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InferenceFailureTestCase other) {
-    return ((Comparable) (input)).compareTo(other.input);
+    return ((Comparable) input).compareTo(other.input);
   }
 }

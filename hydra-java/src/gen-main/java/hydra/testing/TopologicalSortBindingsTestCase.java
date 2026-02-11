@@ -34,7 +34,7 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
     if (!(other instanceof TopologicalSortBindingsTestCase)) {
       return false;
     }
-    TopologicalSortBindingsTestCase o = (TopologicalSortBindingsTestCase) (other);
+    TopologicalSortBindingsTestCase o = (TopologicalSortBindingsTestCase) other;
     return java.util.Objects.equals(
       this.bindings,
       o.bindings) && java.util.Objects.equals(

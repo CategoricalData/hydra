@@ -34,7 +34,7 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
     if (!(other instanceof RecordPattern)) {
       return false;
     }
-    RecordPattern o = (RecordPattern) (other);
+    RecordPattern o = (RecordPattern) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(RecordPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

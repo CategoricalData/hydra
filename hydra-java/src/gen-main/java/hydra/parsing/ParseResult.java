@@ -28,15 +28,15 @@ public abstract class ParseResult<A> implements Serializable, Comparable<ParseRe
   
   public interface PartialVisitor<A, R> extends Visitor<A, R> {
     default R otherwise(ParseResult<A> instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Success<A> instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Failure<A> instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class ParseResult<A> implements Serializable, Comparable<ParseRe
       if (!(other instanceof Success)) {
         return false;
       }
-      Success o = (Success) (other);
+      Success o = (Success) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class ParseResult<A> implements Serializable, Comparable<ParseRe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ParseResult other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Success o = (Success) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Success o = (Success) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class ParseResult<A> implements Serializable, Comparable<ParseRe
       if (!(other instanceof Failure)) {
         return false;
       }
-      Failure o = (Failure) (other);
+      Failure o = (Failure) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class ParseResult<A> implements Serializable, Comparable<ParseRe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ParseResult other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Failure o = (Failure) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Failure o = (Failure) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

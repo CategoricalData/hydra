@@ -42,7 +42,7 @@ public class JsonDecodeTestCase implements Serializable, Comparable<JsonDecodeTe
     if (!(other instanceof JsonDecodeTestCase)) {
       return false;
     }
-    JsonDecodeTestCase o = (JsonDecodeTestCase) (other);
+    JsonDecodeTestCase o = (JsonDecodeTestCase) other;
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class JsonDecodeTestCase implements Serializable, Comparable<JsonDecodeTe
   @SuppressWarnings("unchecked")
   public int compareTo(JsonDecodeTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (json)).compareTo(other.json);
+    cmp = ((Comparable) json).compareTo(other.json);
     if (cmp != 0) {
       return cmp;
     }

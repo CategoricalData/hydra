@@ -34,7 +34,7 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
     if (!(other instanceof RecordConstructor)) {
       return false;
     }
-    RecordConstructor o = (RecordConstructor) (other);
+    RecordConstructor o = (RecordConstructor) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
   @SuppressWarnings("unchecked")
   public int compareTo(RecordConstructor other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

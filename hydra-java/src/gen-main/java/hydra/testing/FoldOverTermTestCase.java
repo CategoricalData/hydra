@@ -50,7 +50,7 @@ public class FoldOverTermTestCase implements Serializable, Comparable<FoldOverTe
     if (!(other instanceof FoldOverTermTestCase)) {
       return false;
     }
-    FoldOverTermTestCase o = (FoldOverTermTestCase) (other);
+    FoldOverTermTestCase o = (FoldOverTermTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class FoldOverTermTestCase implements Serializable, Comparable<FoldOverTe
   @SuppressWarnings("unchecked")
   public int compareTo(FoldOverTermTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (traversalOrder)).compareTo(other.traversalOrder);
+    cmp = ((Comparable) traversalOrder).compareTo(other.traversalOrder);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (operation)).compareTo(other.operation);
+    cmp = ((Comparable) operation).compareTo(other.operation);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public FoldOverTermTestCase withInput(hydra.core.Term input) {

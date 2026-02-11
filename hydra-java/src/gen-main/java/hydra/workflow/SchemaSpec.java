@@ -32,19 +32,19 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SchemaSpec instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Hydra instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(File instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Provided instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
       if (!(other instanceof Hydra)) {
         return false;
       }
-      Hydra o = (Hydra) (other);
+      Hydra o = (Hydra) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SchemaSpec other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Hydra o = (Hydra) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Hydra o = (Hydra) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
       if (!(other instanceof File)) {
         return false;
       }
-      File o = (File) (other);
+      File o = (File) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SchemaSpec other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      File o = (File) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      File o = (File) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -147,7 +147,7 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
       if (!(other instanceof Provided)) {
         return false;
       }
-      Provided o = (Provided) (other);
+      Provided o = (Provided) other;
       return true;
     }
     
@@ -159,7 +159,7 @@ public abstract class SchemaSpec implements Serializable, Comparable<SchemaSpec>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SchemaSpec other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

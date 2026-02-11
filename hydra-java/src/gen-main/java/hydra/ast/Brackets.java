@@ -34,7 +34,7 @@ public class Brackets implements Serializable, Comparable<Brackets> {
     if (!(other instanceof Brackets)) {
       return false;
     }
-    Brackets o = (Brackets) (other);
+    Brackets o = (Brackets) other;
     return java.util.Objects.equals(
       this.open,
       o.open) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Brackets implements Serializable, Comparable<Brackets> {
   @SuppressWarnings("unchecked")
   public int compareTo(Brackets other) {
     int cmp = 0;
-    cmp = ((Comparable) (open)).compareTo(other.open);
+    cmp = ((Comparable) open).compareTo(other.open);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (close)).compareTo(other.close);
+    return ((Comparable) close).compareTo(other.close);
   }
   
   public Brackets withOpen(hydra.ast.Symbol open) {

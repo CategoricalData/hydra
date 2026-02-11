@@ -42,7 +42,7 @@ public class RewriteTypeTestCase implements Serializable, Comparable<RewriteType
     if (!(other instanceof RewriteTypeTestCase)) {
       return false;
     }
-    RewriteTypeTestCase o = (RewriteTypeTestCase) (other);
+    RewriteTypeTestCase o = (RewriteTypeTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class RewriteTypeTestCase implements Serializable, Comparable<RewriteType
   @SuppressWarnings("unchecked")
   public int compareTo(RewriteTypeTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (rewriter)).compareTo(other.rewriter);
+    cmp = ((Comparable) rewriter).compareTo(other.rewriter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public RewriteTypeTestCase withInput(hydra.core.Type input) {

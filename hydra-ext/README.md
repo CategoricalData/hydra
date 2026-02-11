@@ -367,7 +367,7 @@ writeJava "src/gen-main/java" (hydraExtModules <> kernelModules) hydraExtModules
 The generated Haskell can be updated using:
 
 ```haskell
-writeHaskell "src/gen-main/haskell" kernelModules hydraExtModules
+writeHaskell "src/gen-main/haskell" mainModules hydraExtModules
 ```
 
 ## Tools

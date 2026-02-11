@@ -82,7 +82,7 @@ public class LanguageConstraints implements Serializable, Comparable<LanguageCon
     if (!(other instanceof LanguageConstraints)) {
       return false;
     }
-    LanguageConstraints o = (LanguageConstraints) (other);
+    LanguageConstraints o = (LanguageConstraints) other;
     return java.util.Objects.equals(
       this.eliminationVariants,
       o.eliminationVariants) && java.util.Objects.equals(

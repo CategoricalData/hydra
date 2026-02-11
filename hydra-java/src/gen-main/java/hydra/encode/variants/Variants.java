@@ -7,7 +7,7 @@ package hydra.encode.variants;
  */
 public interface Variants {
   static hydra.core.Term eliminationVariant(hydra.variants.EliminationVariant v1) {
-    return ((v1)).accept(new hydra.variants.EliminationVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.EliminationVariant.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.variants.EliminationVariant.Record y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.EliminationVariant"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Unit())));
@@ -26,7 +26,7 @@ public interface Variants {
   }
   
   static hydra.core.Term functionVariant(hydra.variants.FunctionVariant v1) {
-    return ((v1)).accept(new hydra.variants.FunctionVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.FunctionVariant.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.variants.FunctionVariant.Elimination y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.FunctionVariant"), new hydra.core.Field(new hydra.core.Name("elimination"), new hydra.core.Term.Unit())));
@@ -45,7 +45,7 @@ public interface Variants {
   }
   
   static hydra.core.Term literalVariant(hydra.variants.LiteralVariant v1) {
-    return ((v1)).accept(new hydra.variants.LiteralVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.LiteralVariant.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.variants.LiteralVariant.Binary y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit())));
@@ -74,7 +74,7 @@ public interface Variants {
   }
   
   static hydra.core.Term termVariant(hydra.variants.TermVariant v1) {
-    return ((v1)).accept(new hydra.variants.TermVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.TermVariant.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.variants.TermVariant.Annotated y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("annotated"), new hydra.core.Term.Unit())));
@@ -168,7 +168,7 @@ public interface Variants {
   }
   
   static hydra.core.Term typeVariant(hydra.variants.TypeVariant v1) {
-    return ((v1)).accept(new hydra.variants.TypeVariant.PartialVisitor<>() {
+    return (v1).accept(new hydra.variants.TypeVariant.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.variants.TypeVariant.Annotated y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("annotated"), new hydra.core.Term.Unit())));

@@ -34,7 +34,7 @@ public class Application implements Serializable, Comparable<Application> {
     if (!(other instanceof Application)) {
       return false;
     }
-    Application o = (Application) (other);
+    Application o = (Application) other;
     return java.util.Objects.equals(
       this.function,
       o.function) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Application implements Serializable, Comparable<Application> {
   @SuppressWarnings("unchecked")
   public int compareTo(Application other) {
     int cmp = 0;
-    cmp = ((Comparable) (function)).compareTo(other.function);
+    cmp = ((Comparable) function).compareTo(other.function);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (argument)).compareTo(other.argument);
+    return ((Comparable) argument).compareTo(other.argument);
   }
   
   public Application withFunction(hydra.core.Term function) {

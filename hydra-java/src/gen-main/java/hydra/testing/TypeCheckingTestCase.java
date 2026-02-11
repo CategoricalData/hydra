@@ -42,7 +42,7 @@ public class TypeCheckingTestCase implements Serializable, Comparable<TypeChecki
     if (!(other instanceof TypeCheckingTestCase)) {
       return false;
     }
-    TypeCheckingTestCase o = (TypeCheckingTestCase) (other);
+    TypeCheckingTestCase o = (TypeCheckingTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class TypeCheckingTestCase implements Serializable, Comparable<TypeChecki
   @SuppressWarnings("unchecked")
   public int compareTo(TypeCheckingTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (outputTerm)).compareTo(other.outputTerm);
+    cmp = ((Comparable) outputTerm).compareTo(other.outputTerm);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (outputType)).compareTo(other.outputType);
+    return ((Comparable) outputType).compareTo(other.outputType);
   }
   
   public TypeCheckingTestCase withInput(hydra.core.Term input) {

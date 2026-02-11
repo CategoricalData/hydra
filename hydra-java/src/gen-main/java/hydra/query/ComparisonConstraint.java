@@ -44,31 +44,31 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ComparisonConstraint instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Equal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(NotEqual instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LessThan instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(GreaterThan instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LessThanOrEqual instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(GreaterThanOrEqual instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -82,7 +82,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof Equal)) {
         return false;
       }
-      Equal o = (Equal) (other);
+      Equal o = (Equal) other;
       return true;
     }
     
@@ -94,7 +94,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -117,7 +117,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof NotEqual)) {
         return false;
       }
-      NotEqual o = (NotEqual) (other);
+      NotEqual o = (NotEqual) other;
       return true;
     }
     
@@ -129,7 +129,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -152,7 +152,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof LessThan)) {
         return false;
       }
-      LessThan o = (LessThan) (other);
+      LessThan o = (LessThan) other;
       return true;
     }
     
@@ -164,7 +164,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -187,7 +187,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof GreaterThan)) {
         return false;
       }
-      GreaterThan o = (GreaterThan) (other);
+      GreaterThan o = (GreaterThan) other;
       return true;
     }
     
@@ -199,7 +199,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -222,7 +222,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof LessThanOrEqual)) {
         return false;
       }
-      LessThanOrEqual o = (LessThanOrEqual) (other);
+      LessThanOrEqual o = (LessThanOrEqual) other;
       return true;
     }
     
@@ -234,7 +234,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -257,7 +257,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
       if (!(other instanceof GreaterThanOrEqual)) {
         return false;
       }
-      GreaterThanOrEqual o = (GreaterThanOrEqual) (other);
+      GreaterThanOrEqual o = (GreaterThanOrEqual) other;
       return true;
     }
     
@@ -269,7 +269,7 @@ public abstract class ComparisonConstraint implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonConstraint other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

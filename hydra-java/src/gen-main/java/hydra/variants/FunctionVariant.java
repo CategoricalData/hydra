@@ -32,19 +32,19 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(FunctionVariant instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Elimination instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lambda instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Primitive instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -58,7 +58,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
       if (!(other instanceof Elimination)) {
         return false;
       }
-      Elimination o = (Elimination) (other);
+      Elimination o = (Elimination) other;
       return true;
     }
     
@@ -70,7 +70,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FunctionVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -93,7 +93,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
       if (!(other instanceof Lambda)) {
         return false;
       }
-      Lambda o = (Lambda) (other);
+      Lambda o = (Lambda) other;
       return true;
     }
     
@@ -105,7 +105,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FunctionVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -128,7 +128,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
       if (!(other instanceof Primitive)) {
         return false;
       }
-      Primitive o = (Primitive) (other);
+      Primitive o = (Primitive) other;
       return true;
     }
     
@@ -140,7 +140,7 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FunctionVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

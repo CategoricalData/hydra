@@ -34,7 +34,7 @@ public class Query implements Serializable, Comparable<Query> {
     if (!(other instanceof Query)) {
       return false;
     }
-    Query o = (Query) (other);
+    Query o = (Query) other;
     return java.util.Objects.equals(
       this.variables,
       o.variables) && java.util.Objects.equals(

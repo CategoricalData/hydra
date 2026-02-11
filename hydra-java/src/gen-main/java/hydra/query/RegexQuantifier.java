@@ -48,35 +48,35 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(RegexQuantifier instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(One instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ZeroOrOne instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ZeroOrMore instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(OneOrMore instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Exactly instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(AtLeast instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Range instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -93,7 +93,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof One)) {
         return false;
       }
-      One o = (One) (other);
+      One o = (One) other;
       return true;
     }
     
@@ -105,7 +105,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -131,7 +131,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof ZeroOrOne)) {
         return false;
       }
-      ZeroOrOne o = (ZeroOrOne) (other);
+      ZeroOrOne o = (ZeroOrOne) other;
       return true;
     }
     
@@ -143,7 +143,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -169,7 +169,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof ZeroOrMore)) {
         return false;
       }
-      ZeroOrMore o = (ZeroOrMore) (other);
+      ZeroOrMore o = (ZeroOrMore) other;
       return true;
     }
     
@@ -181,7 +181,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -207,7 +207,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof OneOrMore)) {
         return false;
       }
-      OneOrMore o = (OneOrMore) (other);
+      OneOrMore o = (OneOrMore) other;
       return true;
     }
     
@@ -219,7 +219,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -247,7 +247,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof Exactly)) {
         return false;
       }
-      Exactly o = (Exactly) (other);
+      Exactly o = (Exactly) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -261,12 +261,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Exactly o = (Exactly) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Exactly o = (Exactly) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -290,7 +290,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof AtLeast)) {
         return false;
       }
-      AtLeast o = (AtLeast) (other);
+      AtLeast o = (AtLeast) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -304,12 +304,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      AtLeast o = (AtLeast) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      AtLeast o = (AtLeast) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -333,7 +333,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       if (!(other instanceof Range)) {
         return false;
       }
-      Range o = (Range) (other);
+      Range o = (Range) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -347,12 +347,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Range o = (Range) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Range o = (Range) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

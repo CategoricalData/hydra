@@ -8,8 +8,8 @@ package hydra.test.testTerms;
 public interface TestTerms {
   static hydra.core.Term latlonRecord(Float lat, Float lon) {
     return new hydra.core.Term.Record(new hydra.core.Record(hydra.test.testTypes.TestTypes.testTypeLatLonName(), java.util.List.of(
-      new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((lat))))),
-      new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((lon))))))));
+      new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32(lat)))),
+      new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32(lon)))))));
   }
   
   static hydra.core.Term testDataArthur() {

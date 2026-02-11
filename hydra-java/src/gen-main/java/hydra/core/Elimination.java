@@ -32,19 +32,19 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Elimination instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Record instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Union instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Wrap instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
       if (!(other instanceof Record)) {
         return false;
       }
-      Record o = (Record) (other);
+      Record o = (Record) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Elimination other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Record o = (Record) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Record o = (Record) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
       if (!(other instanceof Union)) {
         return false;
       }
-      Union o = (Union) (other);
+      Union o = (Union) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Elimination other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Union o = (Union) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Union o = (Union) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
       if (!(other instanceof Wrap)) {
         return false;
       }
-      Wrap o = (Wrap) (other);
+      Wrap o = (Wrap) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Elimination other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Wrap o = (Wrap) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Wrap o = (Wrap) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

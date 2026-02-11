@@ -44,31 +44,31 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Literal instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Char instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Double_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Float_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Integer_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(String_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -87,7 +87,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof Char)) {
         return false;
       }
-      Char o = (Char) (other);
+      Char o = (Char) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -101,12 +101,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Char o = (Char) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Char o = (Char) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -130,7 +130,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof Double_)) {
         return false;
       }
-      Double_ o = (Double_) (other);
+      Double_ o = (Double_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -144,12 +144,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Double_ o = (Double_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Double_ o = (Double_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -173,7 +173,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof Float_)) {
         return false;
       }
-      Float_ o = (Float_) (other);
+      Float_ o = (Float_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -187,12 +187,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Float_ o = (Float_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Float_ o = (Float_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -216,7 +216,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof Int)) {
         return false;
       }
-      Int o = (Int) (other);
+      Int o = (Int) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -230,12 +230,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int o = (Int) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int o = (Int) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -259,7 +259,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof Integer_)) {
         return false;
       }
-      Integer_ o = (Integer_) (other);
+      Integer_ o = (Integer_) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -271,12 +271,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Integer_ o = (Integer_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Integer_ o = (Integer_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -300,7 +300,7 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
       if (!(other instanceof String_)) {
         return false;
       }
-      String_ o = (String_) (other);
+      String_ o = (String_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -314,12 +314,12 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Literal other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      String_ o = (String_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      String_ o = (String_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

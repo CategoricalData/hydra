@@ -23,7 +23,7 @@ public class Regex implements Serializable, Comparable<Regex> {
     if (!(other instanceof Regex)) {
       return false;
     }
-    Regex o = (Regex) (other);
+    Regex o = (Regex) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Regex implements Serializable, Comparable<Regex> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Regex other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

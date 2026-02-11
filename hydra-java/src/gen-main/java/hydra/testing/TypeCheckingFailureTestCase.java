@@ -26,7 +26,7 @@ public class TypeCheckingFailureTestCase implements Serializable, Comparable<Typ
     if (!(other instanceof TypeCheckingFailureTestCase)) {
       return false;
     }
-    TypeCheckingFailureTestCase o = (TypeCheckingFailureTestCase) (other);
+    TypeCheckingFailureTestCase o = (TypeCheckingFailureTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input);
@@ -40,6 +40,6 @@ public class TypeCheckingFailureTestCase implements Serializable, Comparable<Typ
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeCheckingFailureTestCase other) {
-    return ((Comparable) (input)).compareTo(other.input);
+    return ((Comparable) input).compareTo(other.input);
   }
 }

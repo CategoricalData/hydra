@@ -23,7 +23,7 @@ public class Precedence implements Serializable, Comparable<Precedence> {
     if (!(other instanceof Precedence)) {
       return false;
     }
-    Precedence o = (Precedence) (other);
+    Precedence o = (Precedence) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Precedence implements Serializable, Comparable<Precedence> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Precedence other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

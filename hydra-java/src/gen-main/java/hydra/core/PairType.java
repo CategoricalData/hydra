@@ -34,7 +34,7 @@ public class PairType implements Serializable, Comparable<PairType> {
     if (!(other instanceof PairType)) {
       return false;
     }
-    PairType o = (PairType) (other);
+    PairType o = (PairType) other;
     return java.util.Objects.equals(
       this.first,
       o.first) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class PairType implements Serializable, Comparable<PairType> {
   @SuppressWarnings("unchecked")
   public int compareTo(PairType other) {
     int cmp = 0;
-    cmp = ((Comparable) (first)).compareTo(other.first);
+    cmp = ((Comparable) first).compareTo(other.first);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (second)).compareTo(other.second);
+    return ((Comparable) second).compareTo(other.second);
   }
   
   public PairType withFirst(hydra.core.Type first) {

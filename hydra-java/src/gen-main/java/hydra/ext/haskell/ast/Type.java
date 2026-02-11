@@ -52,39 +52,39 @@ public abstract class Type implements Serializable, Comparable<Type> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Type instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Application instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Ctx instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Function instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Infix instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(List instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Parens instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Tuple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Variable instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -103,7 +103,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Application)) {
         return false;
       }
-      Application o = (Application) (other);
+      Application o = (Application) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -117,12 +117,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Application o = (Application) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Application o = (Application) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -146,7 +146,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Ctx)) {
         return false;
       }
-      Ctx o = (Ctx) (other);
+      Ctx o = (Ctx) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -160,12 +160,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Ctx o = (Ctx) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Ctx o = (Ctx) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -189,7 +189,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Function)) {
         return false;
       }
-      Function o = (Function) (other);
+      Function o = (Function) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -203,12 +203,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Function o = (Function) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Function o = (Function) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -232,7 +232,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Infix)) {
         return false;
       }
-      Infix o = (Infix) (other);
+      Infix o = (Infix) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -246,12 +246,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Infix o = (Infix) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Infix o = (Infix) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -275,7 +275,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof List)) {
         return false;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -289,12 +289,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      List o = (List) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      List o = (List) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -318,7 +318,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Parens)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parens o = (Parens) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -332,12 +332,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Parens o = (Parens) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Parens o = (Parens) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -361,7 +361,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Tuple)) {
         return false;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -375,11 +375,11 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -406,7 +406,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       if (!(other instanceof Variable)) {
         return false;
       }
-      Variable o = (Variable) (other);
+      Variable o = (Variable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -420,12 +420,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Variable o = (Variable) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Variable o = (Variable) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

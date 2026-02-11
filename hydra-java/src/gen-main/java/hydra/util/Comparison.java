@@ -32,19 +32,19 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Comparison instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(LessThan instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(EqualTo instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(GreaterThan instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -58,7 +58,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       if (!(other instanceof LessThan)) {
         return false;
       }
-      LessThan o = (LessThan) (other);
+      LessThan o = (LessThan) other;
       return true;
     }
     
@@ -70,7 +70,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -93,7 +93,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       if (!(other instanceof EqualTo)) {
         return false;
       }
-      EqualTo o = (EqualTo) (other);
+      EqualTo o = (EqualTo) other;
       return true;
     }
     
@@ -105,7 +105,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -128,7 +128,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       if (!(other instanceof GreaterThan)) {
         return false;
       }
-      GreaterThan o = (GreaterThan) (other);
+      GreaterThan o = (GreaterThan) other;
       return true;
     }
     
@@ -140,7 +140,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -23,7 +23,7 @@ public class NamePart implements Serializable, Comparable<NamePart> {
     if (!(other instanceof NamePart)) {
       return false;
     }
-    NamePart o = (NamePart) (other);
+    NamePart o = (NamePart) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class NamePart implements Serializable, Comparable<NamePart> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NamePart other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

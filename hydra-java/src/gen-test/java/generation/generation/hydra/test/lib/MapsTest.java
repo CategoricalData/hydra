@@ -110,9 +110,9 @@ public class MapsTest {
 
             hydra.lib.maps.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
-    (k),
+    k,
     2)),
-  (java.util.function.Function<String, String>) (v -> hydra.lib.strings.ToUpper.apply((v))),
+  (java.util.function.Function<String, String>) (v -> hydra.lib.strings.ToUpper.apply(v)),
   java.util.Map.ofEntries(
     java.util.Map.entry(
       1,
@@ -133,9 +133,9 @@ public class MapsTest {
 
             hydra.lib.maps.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
-    (k),
+    k,
     2)),
-  (java.util.function.Function<String, String>) (v -> hydra.lib.strings.ToUpper.apply((v))),
+  (java.util.function.Function<String, String>) (v -> hydra.lib.strings.ToUpper.apply(v)),
   (java.util.Map<Integer, String>) ((java.util.Map<Integer, String>) (java.util.Map.<Integer, String>ofEntries()))));
 
     }
@@ -232,7 +232,7 @@ public class MapsTest {
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
     hydra.lib.strings.CharAt.apply(
       0,
-      (v)),
+      v),
     97)),
   java.util.Map.ofEntries(
     java.util.Map.entry(
@@ -259,7 +259,7 @@ public class MapsTest {
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
     hydra.lib.strings.CharAt.apply(
       0,
-      (v)),
+      v),
     97)),
   java.util.Map.ofEntries(
     java.util.Map.entry(
@@ -283,7 +283,7 @@ public class MapsTest {
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
     hydra.lib.strings.CharAt.apply(
       0,
-      (v)),
+      v),
     97)),
   (java.util.Map<java.lang.Object, String>) ((java.util.Map<java.lang.Object, String>) (java.util.Map.<java.lang.Object, String>ofEntries()))));
 
@@ -307,7 +307,7 @@ public class MapsTest {
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<String, Boolean>>) (k -> (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Gt.apply(
-    (k),
+    k,
     1))),
   java.util.Map.ofEntries(
     java.util.Map.entry(
@@ -332,7 +332,7 @@ public class MapsTest {
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<String, Boolean>>) (k -> (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Gt.apply(
-    (k),
+    k,
     1))),
   java.util.Map.ofEntries(java.util.Map.entry(
     1,
@@ -350,7 +350,7 @@ public class MapsTest {
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<java.lang.Object, Boolean>>) (k -> (java.util.function.Function<java.lang.Object, Boolean>) (v -> hydra.lib.equality.Gt.apply(
-    (k),
+    k,
     1))),
   (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
 
@@ -661,7 +661,7 @@ public class MapsTest {
     "B")),
 
             hydra.lib.maps.Map.apply(
-  (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply((s))),
+  (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply(s)),
   java.util.Map.ofEntries(
     java.util.Map.entry(
       1,
@@ -681,7 +681,7 @@ public class MapsTest {
             (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
 
             hydra.lib.maps.Map.apply(
-  (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply((s))),
+  (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply(s)),
   (java.util.Map<java.lang.Object, String>) ((java.util.Map<java.lang.Object, String>) (java.util.Map.<java.lang.Object, String>ofEntries()))));
 
     }
@@ -704,7 +704,7 @@ public class MapsTest {
 
             hydra.lib.maps.MapKeys.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
-    (k),
+    k,
     2)),
   java.util.Map.ofEntries(
     java.util.Map.entry(
@@ -726,7 +726,7 @@ public class MapsTest {
 
             hydra.lib.maps.MapKeys.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
-    (k),
+    k,
     2)),
   (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
 

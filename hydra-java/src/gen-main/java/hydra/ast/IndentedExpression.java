@@ -34,7 +34,7 @@ public class IndentedExpression implements Serializable, Comparable<IndentedExpr
     if (!(other instanceof IndentedExpression)) {
       return false;
     }
-    IndentedExpression o = (IndentedExpression) (other);
+    IndentedExpression o = (IndentedExpression) other;
     return java.util.Objects.equals(
       this.style,
       o.style) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class IndentedExpression implements Serializable, Comparable<IndentedExpr
   @SuppressWarnings("unchecked")
   public int compareTo(IndentedExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (style)).compareTo(other.style);
+    cmp = ((Comparable) style).compareTo(other.style);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (expr)).compareTo(other.expr);
+    return ((Comparable) expr).compareTo(other.expr);
   }
   
   public IndentedExpression withStyle(hydra.ast.IndentStyle style) {

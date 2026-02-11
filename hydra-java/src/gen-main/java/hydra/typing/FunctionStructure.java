@@ -74,7 +74,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     if (!(other instanceof FunctionStructure)) {
       return false;
     }
-    FunctionStructure o = (FunctionStructure) (other);
+    FunctionStructure o = (FunctionStructure) other;
     return java.util.Objects.equals(
       this.typeParams,
       o.typeParams) && java.util.Objects.equals(
@@ -119,7 +119,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (body)).compareTo(other.body);
+    cmp = ((Comparable) body).compareTo(other.body);
     if (cmp != 0) {
       return cmp;
     }
@@ -135,7 +135,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (environment)).compareTo(other.environment);
+    return ((Comparable) environment).compareTo(other.environment);
   }
   
   public FunctionStructure withTypeParams(java.util.List<hydra.core.Name> typeParams) {

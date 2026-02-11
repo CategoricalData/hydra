@@ -23,7 +23,7 @@ public class Constant implements Serializable, Comparable<Constant> {
     if (!(other instanceof Constant)) {
       return false;
     }
-    Constant o = (Constant) (other);
+    Constant o = (Constant) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Constant implements Serializable, Comparable<Constant> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Constant other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

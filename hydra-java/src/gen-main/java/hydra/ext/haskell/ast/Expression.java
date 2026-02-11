@@ -92,79 +92,79 @@ public abstract class Expression implements Serializable, Comparable<Expression>
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Expression instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Application instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Case instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ConstructRecord instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Do instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(If instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(InfixApplication instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Literal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lambda instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LeftSection instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Let instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(List instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Parens instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(PrefixApplication instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(RightSection instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Tuple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeSignature instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(UpdateRecord instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Variable instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -183,7 +183,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Application)) {
         return false;
       }
-      Application o = (Application) (other);
+      Application o = (Application) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -197,12 +197,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Application o = (Application) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Application o = (Application) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -226,7 +226,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Case)) {
         return false;
       }
-      Case o = (Case) (other);
+      Case o = (Case) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -240,12 +240,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Case o = (Case) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Case o = (Case) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -269,7 +269,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof ConstructRecord)) {
         return false;
       }
-      ConstructRecord o = (ConstructRecord) (other);
+      ConstructRecord o = (ConstructRecord) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -283,12 +283,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      ConstructRecord o = (ConstructRecord) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      ConstructRecord o = (ConstructRecord) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -312,7 +312,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Do)) {
         return false;
       }
-      Do o = (Do) (other);
+      Do o = (Do) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -326,11 +326,11 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Do o = (Do) (other);
+      Do o = (Do) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -357,7 +357,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof If)) {
         return false;
       }
-      If o = (If) (other);
+      If o = (If) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -371,12 +371,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      If o = (If) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      If o = (If) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -400,7 +400,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof InfixApplication)) {
         return false;
       }
-      InfixApplication o = (InfixApplication) (other);
+      InfixApplication o = (InfixApplication) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -414,12 +414,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      InfixApplication o = (InfixApplication) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      InfixApplication o = (InfixApplication) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -443,7 +443,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Literal)) {
         return false;
       }
-      Literal o = (Literal) (other);
+      Literal o = (Literal) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -457,12 +457,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Literal o = (Literal) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Literal o = (Literal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -486,7 +486,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Lambda)) {
         return false;
       }
-      Lambda o = (Lambda) (other);
+      Lambda o = (Lambda) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -500,12 +500,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Lambda o = (Lambda) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Lambda o = (Lambda) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -529,7 +529,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof LeftSection)) {
         return false;
       }
-      LeftSection o = (LeftSection) (other);
+      LeftSection o = (LeftSection) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -543,12 +543,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      LeftSection o = (LeftSection) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      LeftSection o = (LeftSection) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -572,7 +572,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Let)) {
         return false;
       }
-      Let o = (Let) (other);
+      Let o = (Let) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -586,12 +586,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Let o = (Let) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Let o = (Let) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -615,7 +615,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof List)) {
         return false;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -629,11 +629,11 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -660,7 +660,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Parens)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parens o = (Parens) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -674,12 +674,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Parens o = (Parens) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Parens o = (Parens) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -703,7 +703,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof PrefixApplication)) {
         return false;
       }
-      PrefixApplication o = (PrefixApplication) (other);
+      PrefixApplication o = (PrefixApplication) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -717,12 +717,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      PrefixApplication o = (PrefixApplication) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      PrefixApplication o = (PrefixApplication) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -746,7 +746,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof RightSection)) {
         return false;
       }
-      RightSection o = (RightSection) (other);
+      RightSection o = (RightSection) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -760,12 +760,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      RightSection o = (RightSection) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      RightSection o = (RightSection) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -789,7 +789,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Tuple)) {
         return false;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -803,11 +803,11 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -834,7 +834,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof TypeSignature)) {
         return false;
       }
-      TypeSignature o = (TypeSignature) (other);
+      TypeSignature o = (TypeSignature) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -848,12 +848,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeSignature o = (TypeSignature) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeSignature o = (TypeSignature) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -877,7 +877,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof UpdateRecord)) {
         return false;
       }
-      UpdateRecord o = (UpdateRecord) (other);
+      UpdateRecord o = (UpdateRecord) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -891,12 +891,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      UpdateRecord o = (UpdateRecord) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      UpdateRecord o = (UpdateRecord) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -920,7 +920,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       if (!(other instanceof Variable)) {
         return false;
       }
-      Variable o = (Variable) (other);
+      Variable o = (Variable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -934,12 +934,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Variable o = (Variable) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Variable o = (Variable) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

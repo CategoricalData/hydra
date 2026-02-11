@@ -23,7 +23,7 @@ public class RightHandSide implements Serializable, Comparable<RightHandSide> {
     if (!(other instanceof RightHandSide)) {
       return false;
     }
-    RightHandSide o = (RightHandSide) (other);
+    RightHandSide o = (RightHandSide) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class RightHandSide implements Serializable, Comparable<RightHandSide> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RightHandSide other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -67,7 +67,7 @@ public class MaybesTest {
             hydra.lib.maybes.Bind.apply(
   hydra.util.Maybe.just(5),
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)))));
 
     }
@@ -83,7 +83,7 @@ public class MaybesTest {
             hydra.lib.maybes.Bind.apply(
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()),
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)))));
 
     }
@@ -102,7 +102,7 @@ public class MaybesTest {
   hydra.util.Maybe.just(5),
   0,
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2))));
 
     }
@@ -119,7 +119,7 @@ public class MaybesTest {
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()),
   99,
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2))));
 
     }
@@ -198,18 +198,18 @@ public class MaybesTest {
             hydra.lib.maybes.Compose.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Lte.apply(
-      (x),
+      x,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Add.apply(
-      (x),
+      x,
       1)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (y -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gte.apply(
-      (y),
+      y,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (y),
+      y,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   5));
@@ -227,18 +227,18 @@ public class MaybesTest {
             hydra.lib.maybes.Compose.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Lte.apply(
-      (x),
+      x,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Add.apply(
-      (x),
+      x,
       1)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (y -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gte.apply(
-      (y),
+      y,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (y),
+      y,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   10));
@@ -256,18 +256,18 @@ public class MaybesTest {
             hydra.lib.maybes.Compose.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Lte.apply(
-      (x),
+      x,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Add.apply(
-      (x),
+      x,
       1)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (y -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gte.apply(
-      (y),
+      y,
       5),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (y),
+      y,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   3));
@@ -382,7 +382,7 @@ public class MaybesTest {
 
             hydra.lib.maybes.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   hydra.util.Maybe.just(5)));
 
@@ -398,7 +398,7 @@ public class MaybesTest {
 
             hydra.lib.maybes.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing())));
 
@@ -420,10 +420,10 @@ public class MaybesTest {
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gt.apply(
-      (x),
+      x,
       2),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (x),
+      x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   java.util.List.of(
@@ -446,10 +446,10 @@ public class MaybesTest {
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gt.apply(
-      (x),
+      x,
       2),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (x),
+      x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   java.util.List.of(
@@ -469,10 +469,10 @@ public class MaybesTest {
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Gt.apply(
-      (x),
+      x,
       2),
     () -> hydra.util.Maybe.just(hydra.lib.math.Mul.apply(
-      (x),
+      x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
@@ -492,7 +492,7 @@ public class MaybesTest {
             hydra.lib.maybes.Maybe.apply(
   0,
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   hydra.util.Maybe.just(5)));
 
@@ -509,7 +509,7 @@ public class MaybesTest {
             hydra.lib.maybes.Maybe.apply(
   99,
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing())));
 

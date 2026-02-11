@@ -23,7 +23,7 @@ public class Row<V> implements Serializable, Comparable<Row<V>> {
     if (!(other instanceof Row)) {
       return false;
     }
-    Row o = (Row) (other);
+    Row o = (Row) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

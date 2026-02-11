@@ -28,15 +28,15 @@ public abstract class Definition implements Serializable, Comparable<Definition>
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Definition instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Term instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Type instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class Definition implements Serializable, Comparable<Definition>
       if (!(other instanceof Term)) {
         return false;
       }
-      Term o = (Term) (other);
+      Term o = (Term) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class Definition implements Serializable, Comparable<Definition>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Definition other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Term o = (Term) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Term o = (Term) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class Definition implements Serializable, Comparable<Definition>
       if (!(other instanceof Type)) {
         return false;
       }
-      Type o = (Type) (other);
+      Type o = (Type) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class Definition implements Serializable, Comparable<Definition>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Definition other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Type o = (Type) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Type o = (Type) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

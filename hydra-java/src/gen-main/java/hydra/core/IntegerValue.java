@@ -56,43 +56,43 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(IntegerValue instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Bigint instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int8 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int16 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int32 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int64 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Uint8 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Uint16 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Uint32 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Uint64 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -111,7 +111,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Bigint)) {
         return false;
       }
-      Bigint o = (Bigint) (other);
+      Bigint o = (Bigint) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -123,12 +123,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Bigint o = (Bigint) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Bigint o = (Bigint) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -152,7 +152,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Int8)) {
         return false;
       }
-      Int8 o = (Int8) (other);
+      Int8 o = (Int8) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -166,12 +166,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int8 o = (Int8) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int8 o = (Int8) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -195,7 +195,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Int16)) {
         return false;
       }
-      Int16 o = (Int16) (other);
+      Int16 o = (Int16) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -209,12 +209,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int16 o = (Int16) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int16 o = (Int16) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -238,7 +238,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Int32)) {
         return false;
       }
-      Int32 o = (Int32) (other);
+      Int32 o = (Int32) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -252,12 +252,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int32 o = (Int32) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int32 o = (Int32) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -281,7 +281,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Int64)) {
         return false;
       }
-      Int64 o = (Int64) (other);
+      Int64 o = (Int64) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -295,12 +295,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int64 o = (Int64) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int64 o = (Int64) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -324,7 +324,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Uint8)) {
         return false;
       }
-      Uint8 o = (Uint8) (other);
+      Uint8 o = (Uint8) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -338,12 +338,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Uint8 o = (Uint8) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Uint8 o = (Uint8) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -367,7 +367,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Uint16)) {
         return false;
       }
-      Uint16 o = (Uint16) (other);
+      Uint16 o = (Uint16) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -381,12 +381,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Uint16 o = (Uint16) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Uint16 o = (Uint16) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -410,7 +410,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Uint32)) {
         return false;
       }
-      Uint32 o = (Uint32) (other);
+      Uint32 o = (Uint32) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -424,12 +424,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Uint32 o = (Uint32) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Uint32 o = (Uint32) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -453,7 +453,7 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
       if (!(other instanceof Uint64)) {
         return false;
       }
-      Uint64 o = (Uint64) (other);
+      Uint64 o = (Uint64) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -465,12 +465,12 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IntegerValue other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Uint64 o = (Uint64) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Uint64 o = (Uint64) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

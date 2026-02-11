@@ -34,7 +34,7 @@ public class EtaExpansionTestCase implements Serializable, Comparable<EtaExpansi
     if (!(other instanceof EtaExpansionTestCase)) {
       return false;
     }
-    EtaExpansionTestCase o = (EtaExpansionTestCase) (other);
+    EtaExpansionTestCase o = (EtaExpansionTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class EtaExpansionTestCase implements Serializable, Comparable<EtaExpansi
   @SuppressWarnings("unchecked")
   public int compareTo(EtaExpansionTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public EtaExpansionTestCase withInput(hydra.core.Term input) {

@@ -23,7 +23,7 @@ public class Statement implements Serializable, Comparable<Statement> {
     if (!(other instanceof Statement)) {
       return false;
     }
-    Statement o = (Statement) (other);
+    Statement o = (Statement) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Statement implements Serializable, Comparable<Statement> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Statement other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

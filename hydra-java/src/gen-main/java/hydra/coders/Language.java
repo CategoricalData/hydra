@@ -34,7 +34,7 @@ public class Language implements Serializable, Comparable<Language> {
     if (!(other instanceof Language)) {
       return false;
     }
-    Language o = (Language) (other);
+    Language o = (Language) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Language implements Serializable, Comparable<Language> {
   @SuppressWarnings("unchecked")
   public int compareTo(Language other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (constraints)).compareTo(other.constraints);
+    return ((Comparable) constraints).compareTo(other.constraints);
   }
   
   public Language withName(hydra.coders.LanguageName name) {

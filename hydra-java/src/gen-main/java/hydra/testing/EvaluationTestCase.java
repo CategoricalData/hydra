@@ -42,7 +42,7 @@ public class EvaluationTestCase implements Serializable, Comparable<EvaluationTe
     if (!(other instanceof EvaluationTestCase)) {
       return false;
     }
-    EvaluationTestCase o = (EvaluationTestCase) (other);
+    EvaluationTestCase o = (EvaluationTestCase) other;
     return java.util.Objects.equals(
       this.evaluationStyle,
       o.evaluationStyle) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class EvaluationTestCase implements Serializable, Comparable<EvaluationTe
   @SuppressWarnings("unchecked")
   public int compareTo(EvaluationTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (evaluationStyle)).compareTo(other.evaluationStyle);
+    cmp = ((Comparable) evaluationStyle).compareTo(other.evaluationStyle);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public EvaluationTestCase withEvaluationStyle(hydra.testing.EvaluationStyle evaluationStyle) {

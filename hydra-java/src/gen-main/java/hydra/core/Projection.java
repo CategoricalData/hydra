@@ -34,7 +34,7 @@ public class Projection implements Serializable, Comparable<Projection> {
     if (!(other instanceof Projection)) {
       return false;
     }
-    Projection o = (Projection) (other);
+    Projection o = (Projection) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Projection implements Serializable, Comparable<Projection> {
   @SuppressWarnings("unchecked")
   public int compareTo(Projection other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (field)).compareTo(other.field);
+    return ((Comparable) field).compareTo(other.field);
   }
   
   public Projection withTypeName(hydra.core.Name typeName) {

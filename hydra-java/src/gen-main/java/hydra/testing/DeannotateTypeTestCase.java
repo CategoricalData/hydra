@@ -34,7 +34,7 @@ public class DeannotateTypeTestCase implements Serializable, Comparable<Deannota
     if (!(other instanceof DeannotateTypeTestCase)) {
       return false;
     }
-    DeannotateTypeTestCase o = (DeannotateTypeTestCase) (other);
+    DeannotateTypeTestCase o = (DeannotateTypeTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class DeannotateTypeTestCase implements Serializable, Comparable<Deannota
   @SuppressWarnings("unchecked")
   public int compareTo(DeannotateTypeTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public DeannotateTypeTestCase withInput(hydra.core.Type input) {

@@ -34,7 +34,7 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
     if (!(other instanceof FieldWithComments)) {
       return false;
     }
-    FieldWithComments o = (FieldWithComments) (other);
+    FieldWithComments o = (FieldWithComments) other;
     return java.util.Objects.equals(
       this.field,
       o.field) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
   @SuppressWarnings("unchecked")
   public int compareTo(FieldWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) (field)).compareTo(other.field);
+    cmp = ((Comparable) field).compareTo(other.field);
     if (cmp != 0) {
       return cmp;
     }

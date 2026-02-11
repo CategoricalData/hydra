@@ -34,7 +34,7 @@ public class PrefixApplicationExpression implements Serializable, Comparable<Pre
     if (!(other instanceof PrefixApplicationExpression)) {
       return false;
     }
-    PrefixApplicationExpression o = (PrefixApplicationExpression) (other);
+    PrefixApplicationExpression o = (PrefixApplicationExpression) other;
     return java.util.Objects.equals(
       this.operator,
       o.operator) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class PrefixApplicationExpression implements Serializable, Comparable<Pre
   @SuppressWarnings("unchecked")
   public int compareTo(PrefixApplicationExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (operator)).compareTo(other.operator);
+    cmp = ((Comparable) operator).compareTo(other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (rhs)).compareTo(other.rhs);
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public PrefixApplicationExpression withOperator(hydra.ext.haskell.ast.Operator operator) {

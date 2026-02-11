@@ -42,7 +42,7 @@ public class JsonCoderTestCase implements Serializable, Comparable<JsonCoderTest
     if (!(other instanceof JsonCoderTestCase)) {
       return false;
     }
-    JsonCoderTestCase o = (JsonCoderTestCase) (other);
+    JsonCoderTestCase o = (JsonCoderTestCase) other;
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class JsonCoderTestCase implements Serializable, Comparable<JsonCoderTest
   @SuppressWarnings("unchecked")
   public int compareTo(JsonCoderTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (term)).compareTo(other.term);
+    cmp = ((Comparable) term).compareTo(other.term);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (json)).compareTo(other.json);
+    return ((Comparable) json).compareTo(other.json);
   }
   
   public JsonCoderTestCase withType(hydra.core.Type type) {

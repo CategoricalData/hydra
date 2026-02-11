@@ -42,7 +42,7 @@ public class TriplePattern implements Serializable, Comparable<TriplePattern> {
     if (!(other instanceof TriplePattern)) {
       return false;
     }
-    TriplePattern o = (TriplePattern) (other);
+    TriplePattern o = (TriplePattern) other;
     return java.util.Objects.equals(
       this.subject,
       o.subject) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class TriplePattern implements Serializable, Comparable<TriplePattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(TriplePattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (subject)).compareTo(other.subject);
+    cmp = ((Comparable) subject).compareTo(other.subject);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (predicate)).compareTo(other.predicate);
+    cmp = ((Comparable) predicate).compareTo(other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (object)).compareTo(other.object);
+    return ((Comparable) object).compareTo(other.object);
   }
   
   public TriplePattern withSubject(hydra.query.Node subject) {

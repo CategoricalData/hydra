@@ -58,7 +58,7 @@ public class InferenceContext implements Serializable, Comparable<InferenceConte
     if (!(other instanceof InferenceContext)) {
       return false;
     }
-    InferenceContext o = (InferenceContext) (other);
+    InferenceContext o = (InferenceContext) other;
     return java.util.Objects.equals(
       this.schemaTypes,
       o.schemaTypes) && java.util.Objects.equals(
@@ -105,7 +105,7 @@ public class InferenceContext implements Serializable, Comparable<InferenceConte
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (debug)).compareTo(other.debug);
+    return ((Comparable) debug).compareTo(other.debug);
   }
   
   public InferenceContext withSchemaTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes) {

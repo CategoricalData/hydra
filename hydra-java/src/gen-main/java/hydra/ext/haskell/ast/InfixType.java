@@ -42,7 +42,7 @@ public class InfixType implements Serializable, Comparable<InfixType> {
     if (!(other instanceof InfixType)) {
       return false;
     }
-    InfixType o = (InfixType) (other);
+    InfixType o = (InfixType) other;
     return java.util.Objects.equals(
       this.lhs,
       o.lhs) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class InfixType implements Serializable, Comparable<InfixType> {
   @SuppressWarnings("unchecked")
   public int compareTo(InfixType other) {
     int cmp = 0;
-    cmp = ((Comparable) (lhs)).compareTo(other.lhs);
+    cmp = ((Comparable) lhs).compareTo(other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (operator)).compareTo(other.operator);
+    cmp = ((Comparable) operator).compareTo(other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (rhs)).compareTo(other.rhs);
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public InfixType withLhs(hydra.ext.haskell.ast.Type lhs) {

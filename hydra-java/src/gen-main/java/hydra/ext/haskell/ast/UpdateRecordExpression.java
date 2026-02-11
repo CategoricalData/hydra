@@ -34,7 +34,7 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
     if (!(other instanceof UpdateRecordExpression)) {
       return false;
     }
-    UpdateRecordExpression o = (UpdateRecordExpression) (other);
+    UpdateRecordExpression o = (UpdateRecordExpression) other;
     return java.util.Objects.equals(
       this.inner,
       o.inner) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
   @SuppressWarnings("unchecked")
   public int compareTo(UpdateRecordExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (inner)).compareTo(other.inner);
+    cmp = ((Comparable) inner).compareTo(other.inner);
     if (cmp != 0) {
       return cmp;
     }

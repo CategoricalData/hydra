@@ -42,7 +42,7 @@ public class BlockStyle implements Serializable, Comparable<BlockStyle> {
     if (!(other instanceof BlockStyle)) {
       return false;
     }
-    BlockStyle o = (BlockStyle) (other);
+    BlockStyle o = (BlockStyle) other;
     return java.util.Objects.equals(
       this.indent,
       o.indent) && java.util.Objects.equals(
@@ -67,11 +67,11 @@ public class BlockStyle implements Serializable, Comparable<BlockStyle> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (newlineBeforeContent)).compareTo(other.newlineBeforeContent);
+    cmp = ((Comparable) newlineBeforeContent).compareTo(other.newlineBeforeContent);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (newlineAfterContent)).compareTo(other.newlineAfterContent);
+    return ((Comparable) newlineAfterContent).compareTo(other.newlineAfterContent);
   }
   
   public BlockStyle withIndent(hydra.util.Maybe<String> indent) {

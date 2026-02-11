@@ -28,15 +28,15 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CoderDirection instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Encode instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Decode instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -50,7 +50,7 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       if (!(other instanceof Encode)) {
         return false;
       }
-      Encode o = (Encode) (other);
+      Encode o = (Encode) other;
       return true;
     }
     
@@ -62,7 +62,7 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CoderDirection other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -85,7 +85,7 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       if (!(other instanceof Decode)) {
         return false;
       }
-      Decode o = (Decode) (other);
+      Decode o = (Decode) other;
       return true;
     }
     
@@ -97,7 +97,7 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CoderDirection other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

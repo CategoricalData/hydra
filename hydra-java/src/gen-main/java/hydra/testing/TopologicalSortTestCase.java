@@ -34,7 +34,7 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
     if (!(other instanceof TopologicalSortTestCase)) {
       return false;
     }
-    TopologicalSortTestCase o = (TopologicalSortTestCase) (other);
+    TopologicalSortTestCase o = (TopologicalSortTestCase) other;
     return java.util.Objects.equals(
       this.adjacencyList,
       o.adjacencyList) && java.util.Objects.equals(

@@ -32,19 +32,19 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(EliminationVariant instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Record instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Union instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Wrap instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -58,7 +58,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
       if (!(other instanceof Record)) {
         return false;
       }
-      Record o = (Record) (other);
+      Record o = (Record) other;
       return true;
     }
     
@@ -70,7 +70,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EliminationVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -93,7 +93,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
       if (!(other instanceof Union)) {
         return false;
       }
-      Union o = (Union) (other);
+      Union o = (Union) other;
       return true;
     }
     
@@ -105,7 +105,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EliminationVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -128,7 +128,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
       if (!(other instanceof Wrap)) {
         return false;
       }
-      Wrap o = (Wrap) (other);
+      Wrap o = (Wrap) other;
       return true;
     }
     
@@ -140,7 +140,7 @@ public abstract class EliminationVariant implements Serializable, Comparable<Eli
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EliminationVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

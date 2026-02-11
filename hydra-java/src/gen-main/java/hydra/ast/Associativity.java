@@ -36,23 +36,23 @@ public abstract class Associativity implements Serializable, Comparable<Associat
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Associativity instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(None instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Left instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Right instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Both instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -66,7 +66,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
       if (!(other instanceof None)) {
         return false;
       }
-      None o = (None) (other);
+      None o = (None) other;
       return true;
     }
     
@@ -78,7 +78,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Associativity other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -101,7 +101,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
       if (!(other instanceof Left)) {
         return false;
       }
-      Left o = (Left) (other);
+      Left o = (Left) other;
       return true;
     }
     
@@ -113,7 +113,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Associativity other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -136,7 +136,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
       if (!(other instanceof Right)) {
         return false;
       }
-      Right o = (Right) (other);
+      Right o = (Right) other;
       return true;
     }
     
@@ -148,7 +148,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Associativity other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -171,7 +171,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
       if (!(other instanceof Both)) {
         return false;
       }
-      Both o = (Both) (other);
+      Both o = (Both) other;
       return true;
     }
     
@@ -183,7 +183,7 @@ public abstract class Associativity implements Serializable, Comparable<Associat
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Associativity other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

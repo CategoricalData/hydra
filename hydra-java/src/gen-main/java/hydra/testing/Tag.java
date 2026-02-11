@@ -23,7 +23,7 @@ public class Tag implements Serializable, Comparable<Tag> {
     if (!(other instanceof Tag)) {
       return false;
     }
-    Tag o = (Tag) (other);
+    Tag o = (Tag) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Tag implements Serializable, Comparable<Tag> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Tag other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

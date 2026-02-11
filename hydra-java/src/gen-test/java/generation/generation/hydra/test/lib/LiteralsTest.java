@@ -172,7 +172,7 @@ public class LiteralsTest {
 
         assertEquals(
 
-            '\u03e8',
+            '\u03E8',
 
             hydra.lib.literals.BigintToUint16.apply(new java.math.BigInteger("1000")));
 
@@ -418,7 +418,7 @@ public class LiteralsTest {
 
             new java.math.BigInteger("1000"),
 
-            hydra.lib.literals.Uint16ToBigint.apply('\u03e8'));
+            hydra.lib.literals.Uint16ToBigint.apply('\u03E8'));
 
     }
 
@@ -878,7 +878,7 @@ public class LiteralsTest {
 
             "1000",
 
-            hydra.lib.literals.ShowUint16.apply('\u03e8'));
+            hydra.lib.literals.ShowUint16.apply('\u03E8'));
 
     }
 
@@ -1528,7 +1528,7 @@ public class LiteralsTest {
 
         assertEquals(
 
-            hydra.util.Maybe.just('\u03e8'),
+            hydra.util.Maybe.just('\u03E8'),
 
             hydra.lib.literals.ReadUint16.apply("1000"));
 

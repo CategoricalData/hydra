@@ -34,7 +34,7 @@ public class Table<V> implements Serializable, Comparable<Table<V>> {
     if (!(other instanceof Table)) {
       return false;
     }
-    Table o = (Table) (other);
+    Table o = (Table) other;
     return java.util.Objects.equals(
       this.header,
       o.header) && java.util.Objects.equals(

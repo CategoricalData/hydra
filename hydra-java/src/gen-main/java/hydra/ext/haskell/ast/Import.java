@@ -50,7 +50,7 @@ public class Import implements Serializable, Comparable<Import> {
     if (!(other instanceof Import)) {
       return false;
     }
-    Import o = (Import) (other);
+    Import o = (Import) other;
     return java.util.Objects.equals(
       this.qualified,
       o.qualified) && java.util.Objects.equals(
@@ -71,11 +71,11 @@ public class Import implements Serializable, Comparable<Import> {
   @SuppressWarnings("unchecked")
   public int compareTo(Import other) {
     int cmp = 0;
-    cmp = ((Comparable) (qualified)).compareTo(other.qualified);
+    cmp = ((Comparable) qualified).compareTo(other.qualified);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (module)).compareTo(other.module);
+    cmp = ((Comparable) module).compareTo(other.module);
     if (cmp != 0) {
       return cmp;
     }

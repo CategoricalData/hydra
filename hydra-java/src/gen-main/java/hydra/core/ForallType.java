@@ -34,7 +34,7 @@ public class ForallType implements Serializable, Comparable<ForallType> {
     if (!(other instanceof ForallType)) {
       return false;
     }
-    ForallType o = (ForallType) (other);
+    ForallType o = (ForallType) other;
     return java.util.Objects.equals(
       this.parameter,
       o.parameter) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ForallType implements Serializable, Comparable<ForallType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForallType other) {
     int cmp = 0;
-    cmp = ((Comparable) (parameter)).compareTo(other.parameter);
+    cmp = ((Comparable) parameter).compareTo(other.parameter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (body)).compareTo(other.body);
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public ForallType withParameter(hydra.core.Name parameter) {

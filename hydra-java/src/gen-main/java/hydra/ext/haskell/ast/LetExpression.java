@@ -34,7 +34,7 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
     if (!(other instanceof LetExpression)) {
       return false;
     }
-    LetExpression o = (LetExpression) (other);
+    LetExpression o = (LetExpression) other;
     return java.util.Objects.equals(
       this.bindings,
       o.bindings) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (inner)).compareTo(other.inner);
+    return ((Comparable) inner).compareTo(other.inner);
   }
   
   public LetExpression withBindings(java.util.List<hydra.ext.haskell.ast.LocalBinding> bindings) {

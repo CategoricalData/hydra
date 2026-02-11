@@ -34,7 +34,7 @@ public class TopologicalSortSCCTestCase implements Serializable, Comparable<Topo
     if (!(other instanceof TopologicalSortSCCTestCase)) {
       return false;
     }
-    TopologicalSortSCCTestCase o = (TopologicalSortSCCTestCase) (other);
+    TopologicalSortSCCTestCase o = (TopologicalSortSCCTestCase) other;
     return java.util.Objects.equals(
       this.adjacencyList,
       o.adjacencyList) && java.util.Objects.equals(

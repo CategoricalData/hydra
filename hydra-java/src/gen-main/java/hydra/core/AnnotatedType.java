@@ -34,7 +34,7 @@ public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
     if (!(other instanceof AnnotatedType)) {
       return false;
     }
-    AnnotatedType o = (AnnotatedType) (other);
+    AnnotatedType o = (AnnotatedType) other;
     return java.util.Objects.equals(
       this.body,
       o.body) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedType other) {
     int cmp = 0;
-    cmp = ((Comparable) (body)).compareTo(other.body);
+    cmp = ((Comparable) body).compareTo(other.body);
     if (cmp != 0) {
       return cmp;
     }

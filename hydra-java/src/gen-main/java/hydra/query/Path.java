@@ -32,19 +32,19 @@ public abstract class Path implements Serializable, Comparable<Path> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Path instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Step instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Regex instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Inverse instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Path implements Serializable, Comparable<Path> {
       if (!(other instanceof Step)) {
         return false;
       }
-      Step o = (Step) (other);
+      Step o = (Step) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Step o = (Step) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Step o = (Step) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Path implements Serializable, Comparable<Path> {
       if (!(other instanceof Regex)) {
         return false;
       }
-      Regex o = (Regex) (other);
+      Regex o = (Regex) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Regex o = (Regex) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Regex o = (Regex) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class Path implements Serializable, Comparable<Path> {
       if (!(other instanceof Inverse)) {
         return false;
       }
-      Inverse o = (Inverse) (other);
+      Inverse o = (Inverse) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Inverse o = (Inverse) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Inverse o = (Inverse) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

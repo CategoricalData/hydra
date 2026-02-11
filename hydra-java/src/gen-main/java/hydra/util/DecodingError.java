@@ -23,7 +23,7 @@ public class DecodingError implements Serializable, Comparable<DecodingError> {
     if (!(other instanceof DecodingError)) {
       return false;
     }
-    DecodingError o = (DecodingError) (other);
+    DecodingError o = (DecodingError) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class DecodingError implements Serializable, Comparable<DecodingError> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DecodingError other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

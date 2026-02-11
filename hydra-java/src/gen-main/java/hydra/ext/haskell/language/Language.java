@@ -64,7 +64,7 @@ public interface Language {
       new hydra.variants.TypeVariant.Unit(),
       new hydra.variants.TypeVariant.Variable(),
       new hydra.variants.TypeVariant.Wrap())));
-    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.haskell"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.haskell.language.Language.<hydra.core.Type>haskellLanguage_typePredicate((p0))));
+    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.haskell"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.haskell.language.Language.<hydra.core.Type>haskellLanguage_typePredicate(p0)));
   }
   
   static <T0> Boolean haskellLanguage_typePredicate(T0 ignored) {
@@ -111,7 +111,7 @@ public interface Language {
       "String",
       "True");
     return hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat2.apply(
-      (keywordSymbols),
-      (reservedSymbols)));
+      keywordSymbols,
+      reservedSymbols));
   }
 }

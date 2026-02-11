@@ -172,159 +172,159 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TestCase instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(AlphaConversion instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(CaseConversion instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DeannotateTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DeannotateType instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DelegatedEvaluation instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(EtaExpansion instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(FlattenLetTerms instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(FreeVariables instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Evaluation instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Inference instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(InferenceFailure instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonCoder instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonDecode instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonEncode instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonParser instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonRoundtrip instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JsonWriter instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LiftLambdaAboveLet instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Serialization instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SimplifyTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TopologicalSort instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TopologicalSortBindings instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TopologicalSortSCC instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeChecking instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeCheckingFailure instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeReduction instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(NormalizeTypeVariables instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(FoldOverTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(RewriteTerm instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(RewriteType instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(HoistSubterms instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(HoistCaseStatements instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(HoistLetBindings instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(HoistPolymorphicLetBindings instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SubstInType instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(VariableOccursInType instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(UnifyTypes instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(JoinTypes instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -343,7 +343,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof AlphaConversion)) {
         return false;
       }
-      AlphaConversion o = (AlphaConversion) (other);
+      AlphaConversion o = (AlphaConversion) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -357,12 +357,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      AlphaConversion o = (AlphaConversion) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      AlphaConversion o = (AlphaConversion) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -386,7 +386,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof CaseConversion)) {
         return false;
       }
-      CaseConversion o = (CaseConversion) (other);
+      CaseConversion o = (CaseConversion) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -400,12 +400,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      CaseConversion o = (CaseConversion) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      CaseConversion o = (CaseConversion) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -429,7 +429,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof DeannotateTerm)) {
         return false;
       }
-      DeannotateTerm o = (DeannotateTerm) (other);
+      DeannotateTerm o = (DeannotateTerm) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -443,12 +443,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      DeannotateTerm o = (DeannotateTerm) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      DeannotateTerm o = (DeannotateTerm) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -472,7 +472,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof DeannotateType)) {
         return false;
       }
-      DeannotateType o = (DeannotateType) (other);
+      DeannotateType o = (DeannotateType) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -486,12 +486,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      DeannotateType o = (DeannotateType) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      DeannotateType o = (DeannotateType) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -515,7 +515,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof DelegatedEvaluation)) {
         return false;
       }
-      DelegatedEvaluation o = (DelegatedEvaluation) (other);
+      DelegatedEvaluation o = (DelegatedEvaluation) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -529,12 +529,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      DelegatedEvaluation o = (DelegatedEvaluation) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      DelegatedEvaluation o = (DelegatedEvaluation) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -558,7 +558,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof EtaExpansion)) {
         return false;
       }
-      EtaExpansion o = (EtaExpansion) (other);
+      EtaExpansion o = (EtaExpansion) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -572,12 +572,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      EtaExpansion o = (EtaExpansion) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      EtaExpansion o = (EtaExpansion) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -601,7 +601,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof FlattenLetTerms)) {
         return false;
       }
-      FlattenLetTerms o = (FlattenLetTerms) (other);
+      FlattenLetTerms o = (FlattenLetTerms) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -615,12 +615,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      FlattenLetTerms o = (FlattenLetTerms) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      FlattenLetTerms o = (FlattenLetTerms) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -644,7 +644,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof FreeVariables)) {
         return false;
       }
-      FreeVariables o = (FreeVariables) (other);
+      FreeVariables o = (FreeVariables) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -658,12 +658,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      FreeVariables o = (FreeVariables) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      FreeVariables o = (FreeVariables) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -687,7 +687,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof Evaluation)) {
         return false;
       }
-      Evaluation o = (Evaluation) (other);
+      Evaluation o = (Evaluation) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -701,12 +701,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Evaluation o = (Evaluation) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Evaluation o = (Evaluation) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -730,7 +730,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof Inference)) {
         return false;
       }
-      Inference o = (Inference) (other);
+      Inference o = (Inference) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -744,12 +744,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Inference o = (Inference) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Inference o = (Inference) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -773,7 +773,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof InferenceFailure)) {
         return false;
       }
-      InferenceFailure o = (InferenceFailure) (other);
+      InferenceFailure o = (InferenceFailure) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -787,12 +787,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      InferenceFailure o = (InferenceFailure) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      InferenceFailure o = (InferenceFailure) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -816,7 +816,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonCoder)) {
         return false;
       }
-      JsonCoder o = (JsonCoder) (other);
+      JsonCoder o = (JsonCoder) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -830,12 +830,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonCoder o = (JsonCoder) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonCoder o = (JsonCoder) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -859,7 +859,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonDecode)) {
         return false;
       }
-      JsonDecode o = (JsonDecode) (other);
+      JsonDecode o = (JsonDecode) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -873,12 +873,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonDecode o = (JsonDecode) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonDecode o = (JsonDecode) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -902,7 +902,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonEncode)) {
         return false;
       }
-      JsonEncode o = (JsonEncode) (other);
+      JsonEncode o = (JsonEncode) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -916,12 +916,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonEncode o = (JsonEncode) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonEncode o = (JsonEncode) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -945,7 +945,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonParser)) {
         return false;
       }
-      JsonParser o = (JsonParser) (other);
+      JsonParser o = (JsonParser) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -959,12 +959,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonParser o = (JsonParser) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonParser o = (JsonParser) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -988,7 +988,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonRoundtrip)) {
         return false;
       }
-      JsonRoundtrip o = (JsonRoundtrip) (other);
+      JsonRoundtrip o = (JsonRoundtrip) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1002,12 +1002,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonRoundtrip o = (JsonRoundtrip) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonRoundtrip o = (JsonRoundtrip) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1031,7 +1031,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JsonWriter)) {
         return false;
       }
-      JsonWriter o = (JsonWriter) (other);
+      JsonWriter o = (JsonWriter) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1045,12 +1045,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JsonWriter o = (JsonWriter) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JsonWriter o = (JsonWriter) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1074,7 +1074,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof LiftLambdaAboveLet)) {
         return false;
       }
-      LiftLambdaAboveLet o = (LiftLambdaAboveLet) (other);
+      LiftLambdaAboveLet o = (LiftLambdaAboveLet) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1088,12 +1088,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      LiftLambdaAboveLet o = (LiftLambdaAboveLet) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      LiftLambdaAboveLet o = (LiftLambdaAboveLet) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1117,7 +1117,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof Serialization)) {
         return false;
       }
-      Serialization o = (Serialization) (other);
+      Serialization o = (Serialization) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1131,12 +1131,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Serialization o = (Serialization) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Serialization o = (Serialization) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1160,7 +1160,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof SimplifyTerm)) {
         return false;
       }
-      SimplifyTerm o = (SimplifyTerm) (other);
+      SimplifyTerm o = (SimplifyTerm) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1174,12 +1174,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      SimplifyTerm o = (SimplifyTerm) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      SimplifyTerm o = (SimplifyTerm) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1203,7 +1203,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TopologicalSort)) {
         return false;
       }
-      TopologicalSort o = (TopologicalSort) (other);
+      TopologicalSort o = (TopologicalSort) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1217,12 +1217,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TopologicalSort o = (TopologicalSort) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TopologicalSort o = (TopologicalSort) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1246,7 +1246,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TopologicalSortBindings)) {
         return false;
       }
-      TopologicalSortBindings o = (TopologicalSortBindings) (other);
+      TopologicalSortBindings o = (TopologicalSortBindings) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1260,12 +1260,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TopologicalSortBindings o = (TopologicalSortBindings) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TopologicalSortBindings o = (TopologicalSortBindings) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1289,7 +1289,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TopologicalSortSCC)) {
         return false;
       }
-      TopologicalSortSCC o = (TopologicalSortSCC) (other);
+      TopologicalSortSCC o = (TopologicalSortSCC) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1303,12 +1303,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TopologicalSortSCC o = (TopologicalSortSCC) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TopologicalSortSCC o = (TopologicalSortSCC) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1332,7 +1332,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TypeChecking)) {
         return false;
       }
-      TypeChecking o = (TypeChecking) (other);
+      TypeChecking o = (TypeChecking) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1346,12 +1346,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeChecking o = (TypeChecking) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeChecking o = (TypeChecking) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1375,7 +1375,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TypeCheckingFailure)) {
         return false;
       }
-      TypeCheckingFailure o = (TypeCheckingFailure) (other);
+      TypeCheckingFailure o = (TypeCheckingFailure) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1389,12 +1389,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeCheckingFailure o = (TypeCheckingFailure) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeCheckingFailure o = (TypeCheckingFailure) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1418,7 +1418,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof TypeReduction)) {
         return false;
       }
-      TypeReduction o = (TypeReduction) (other);
+      TypeReduction o = (TypeReduction) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1432,12 +1432,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeReduction o = (TypeReduction) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeReduction o = (TypeReduction) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1461,7 +1461,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof NormalizeTypeVariables)) {
         return false;
       }
-      NormalizeTypeVariables o = (NormalizeTypeVariables) (other);
+      NormalizeTypeVariables o = (NormalizeTypeVariables) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1475,12 +1475,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      NormalizeTypeVariables o = (NormalizeTypeVariables) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      NormalizeTypeVariables o = (NormalizeTypeVariables) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1504,7 +1504,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof FoldOverTerm)) {
         return false;
       }
-      FoldOverTerm o = (FoldOverTerm) (other);
+      FoldOverTerm o = (FoldOverTerm) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1518,12 +1518,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      FoldOverTerm o = (FoldOverTerm) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      FoldOverTerm o = (FoldOverTerm) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1547,7 +1547,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof RewriteTerm)) {
         return false;
       }
-      RewriteTerm o = (RewriteTerm) (other);
+      RewriteTerm o = (RewriteTerm) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1561,12 +1561,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      RewriteTerm o = (RewriteTerm) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      RewriteTerm o = (RewriteTerm) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1590,7 +1590,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof RewriteType)) {
         return false;
       }
-      RewriteType o = (RewriteType) (other);
+      RewriteType o = (RewriteType) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1604,12 +1604,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      RewriteType o = (RewriteType) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      RewriteType o = (RewriteType) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1633,7 +1633,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof HoistSubterms)) {
         return false;
       }
-      HoistSubterms o = (HoistSubterms) (other);
+      HoistSubterms o = (HoistSubterms) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1647,12 +1647,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      HoistSubterms o = (HoistSubterms) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      HoistSubterms o = (HoistSubterms) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1676,7 +1676,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof HoistCaseStatements)) {
         return false;
       }
-      HoistCaseStatements o = (HoistCaseStatements) (other);
+      HoistCaseStatements o = (HoistCaseStatements) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1690,12 +1690,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      HoistCaseStatements o = (HoistCaseStatements) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      HoistCaseStatements o = (HoistCaseStatements) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1719,7 +1719,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof HoistLetBindings)) {
         return false;
       }
-      HoistLetBindings o = (HoistLetBindings) (other);
+      HoistLetBindings o = (HoistLetBindings) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1733,12 +1733,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      HoistLetBindings o = (HoistLetBindings) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      HoistLetBindings o = (HoistLetBindings) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1762,7 +1762,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof HoistPolymorphicLetBindings)) {
         return false;
       }
-      HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) (other);
+      HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1776,12 +1776,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1805,7 +1805,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof SubstInType)) {
         return false;
       }
-      SubstInType o = (SubstInType) (other);
+      SubstInType o = (SubstInType) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1819,12 +1819,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      SubstInType o = (SubstInType) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      SubstInType o = (SubstInType) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1848,7 +1848,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof VariableOccursInType)) {
         return false;
       }
-      VariableOccursInType o = (VariableOccursInType) (other);
+      VariableOccursInType o = (VariableOccursInType) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1862,12 +1862,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      VariableOccursInType o = (VariableOccursInType) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      VariableOccursInType o = (VariableOccursInType) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1891,7 +1891,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof UnifyTypes)) {
         return false;
       }
-      UnifyTypes o = (UnifyTypes) (other);
+      UnifyTypes o = (UnifyTypes) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1905,12 +1905,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      UnifyTypes o = (UnifyTypes) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      UnifyTypes o = (UnifyTypes) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1934,7 +1934,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       if (!(other instanceof JoinTypes)) {
         return false;
       }
-      JoinTypes o = (JoinTypes) (other);
+      JoinTypes o = (JoinTypes) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -1948,12 +1948,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      JoinTypes o = (JoinTypes) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      JoinTypes o = (JoinTypes) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

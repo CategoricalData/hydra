@@ -42,7 +42,7 @@ public class FlowState<S, V> implements Serializable, Comparable<FlowState<S, V>
     if (!(other instanceof FlowState)) {
       return false;
     }
-    FlowState o = (FlowState) (other);
+    FlowState o = (FlowState) other;
     return java.util.Objects.equals(
       this.value,
       o.value) && java.util.Objects.equals(
@@ -67,11 +67,11 @@ public class FlowState<S, V> implements Serializable, Comparable<FlowState<S, V>
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (state)).compareTo(other.state);
+    cmp = ((Comparable) state).compareTo(other.state);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (trace)).compareTo(other.trace);
+    return ((Comparable) trace).compareTo(other.trace);
   }
   
   public FlowState withValue(hydra.util.Maybe<V> value) {

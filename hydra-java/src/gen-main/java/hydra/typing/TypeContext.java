@@ -66,7 +66,7 @@ public class TypeContext implements Serializable, Comparable<TypeContext> {
     if (!(other instanceof TypeContext)) {
       return false;
     }
-    TypeContext o = (TypeContext) (other);
+    TypeContext o = (TypeContext) other;
     return java.util.Objects.equals(
       this.types,
       o.types) && java.util.Objects.equals(
@@ -121,7 +121,7 @@ public class TypeContext implements Serializable, Comparable<TypeContext> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (inferenceContext)).compareTo(other.inferenceContext);
+    return ((Comparable) inferenceContext).compareTo(other.inferenceContext);
   }
   
   public TypeContext withTypes(java.util.Map<hydra.core.Name, hydra.core.Type> types) {

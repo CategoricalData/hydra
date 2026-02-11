@@ -26,7 +26,7 @@ public class TypeVariableMetadata implements Serializable, Comparable<TypeVariab
     if (!(other instanceof TypeVariableMetadata)) {
       return false;
     }
-    TypeVariableMetadata o = (TypeVariableMetadata) (other);
+    TypeVariableMetadata o = (TypeVariableMetadata) other;
     return java.util.Objects.equals(
       this.classes,
       o.classes);

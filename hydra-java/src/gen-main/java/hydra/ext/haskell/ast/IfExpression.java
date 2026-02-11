@@ -42,7 +42,7 @@ public class IfExpression implements Serializable, Comparable<IfExpression> {
     if (!(other instanceof IfExpression)) {
       return false;
     }
-    IfExpression o = (IfExpression) (other);
+    IfExpression o = (IfExpression) other;
     return java.util.Objects.equals(
       this.condition,
       o.condition) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class IfExpression implements Serializable, Comparable<IfExpression> {
   @SuppressWarnings("unchecked")
   public int compareTo(IfExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (condition)).compareTo(other.condition);
+    cmp = ((Comparable) condition).compareTo(other.condition);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (then)).compareTo(other.then);
+    cmp = ((Comparable) then).compareTo(other.then);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (else_)).compareTo(other.else_);
+    return ((Comparable) else_).compareTo(other.else_);
   }
   
   public IfExpression withCondition(hydra.ext.haskell.ast.Expression condition) {

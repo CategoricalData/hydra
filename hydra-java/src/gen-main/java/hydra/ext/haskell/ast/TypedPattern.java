@@ -34,7 +34,7 @@ public class TypedPattern implements Serializable, Comparable<TypedPattern> {
     if (!(other instanceof TypedPattern)) {
       return false;
     }
-    TypedPattern o = (TypedPattern) (other);
+    TypedPattern o = (TypedPattern) other;
     return java.util.Objects.equals(
       this.inner,
       o.inner) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypedPattern implements Serializable, Comparable<TypedPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypedPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (inner)).compareTo(other.inner);
+    cmp = ((Comparable) inner).compareTo(other.inner);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypedPattern withInner(hydra.ext.haskell.ast.Pattern inner) {

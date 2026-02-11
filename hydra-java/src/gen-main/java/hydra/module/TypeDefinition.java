@@ -34,7 +34,7 @@ public class TypeDefinition implements Serializable, Comparable<TypeDefinition> 
     if (!(other instanceof TypeDefinition)) {
       return false;
     }
-    TypeDefinition o = (TypeDefinition) (other);
+    TypeDefinition o = (TypeDefinition) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeDefinition implements Serializable, Comparable<TypeDefinition> 
   @SuppressWarnings("unchecked")
   public int compareTo(TypeDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypeDefinition withName(hydra.core.Name name) {

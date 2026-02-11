@@ -20,11 +20,11 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(8), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(3)),
   (java.util.function.Function<java.util.function.Function<Integer, Integer>, hydra.compute.Flow<java.lang.Void, Integer>>) (f -> hydra.monads.Monads.bind(
     hydra.monads.Monads.pure(5),
-    (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (x -> hydra.monads.Monads.pure(((f)).apply((x))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+    (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (x -> hydra.monads.Monads.pure((f).apply(x)))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -38,10 +38,10 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(10), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(5),
   (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (n -> hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
-    (n),
+    n,
     5)))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
@@ -54,10 +54,10 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(12), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(3),
   (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (n -> hydra.monads.Monads.pure(hydra.lib.math.Mul.apply(
-    (n),
+    n,
     4)))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
@@ -72,7 +72,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, java.lang.Object>) ((hydra.compute.FlowState<java.lang.Void, java.lang.Object>) (new hydra.compute.FlowState<java.lang.Void, java.lang.Object>((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), java.util.List.of("Error: test error message ()"), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.lang.Object>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.lang.Object>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.lang.Object>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.lang.Object>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.fail("test error message"))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.lang.Object>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.lang.Object>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.lang.Object>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.lang.Object>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.fail("test error message"))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -86,18 +86,18 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(6), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(0),
   (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (a0 -> hydra.monads.Monads.bind(
     hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
-      (a0),
+      a0,
       1)),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (a1 -> hydra.monads.Monads.bind(
       hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
-        (a1),
+        a1,
         2)),
       (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, Integer>>) (a2 -> hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
-        (a2),
+        a2,
         3)))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
@@ -112,8 +112,8 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(-5), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.Map.apply(
-  (hydra.lib.math.Negate::apply),
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.lib.flows.Map.apply(
+  hydra.lib.math.Negate::apply,
   hydra.monads.Monads.pure(5)))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
@@ -126,8 +126,8 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(3), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.Map.apply(
-  (hydra.lib.math.Abs::apply),
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.lib.flows.Map.apply(
+  hydra.lib.math.Abs::apply,
   hydra.monads.Monads.pure(-3)))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
@@ -148,7 +148,7 @@ public class FlowsTest {
     "b",
     3))), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<String, Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<String, Integer>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<String, Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<String, Integer>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
     1,
     1)),
@@ -157,8 +157,8 @@ public class FlowsTest {
       2,
       1)),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>>) (v2 -> hydra.monads.Monads.pure(hydra.lib.maps.FromList.apply(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("a", (v1)))),
-      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("b", (v2))))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("a", v1))),
+      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("b", v2)))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -178,7 +178,7 @@ public class FlowsTest {
     3,
     "b"))), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<Integer, String>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<Integer, String>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<Integer, String>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Map<Integer, String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
     1,
     1)),
@@ -187,8 +187,8 @@ public class FlowsTest {
       2,
       1)),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>>) (k2 -> hydra.monads.Monads.pure(hydra.lib.maps.FromList.apply(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>((k1), "a"))),
-      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>((k2), "b")))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(k1, "a"))),
+      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(k2, "b")))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -205,7 +205,7 @@ public class FlowsTest {
   3,
   4)), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
     1,
     1)),
@@ -218,9 +218,9 @@ public class FlowsTest {
         3,
         1)),
       (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>>) (y3 -> hydra.monads.Monads.pure(java.util.List.of(
-        (y1),
-        (y2),
-        (y3))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+        y1,
+        y2,
+        y3)))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -234,11 +234,11 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>) ((hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>) (new hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>(hydra.util.Maybe.just(hydra.util.Maybe.just(6)), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<Integer>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
     5,
     1)),
-  (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>>) (y -> hydra.monads.Monads.pure(hydra.util.Maybe.just((y))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+  (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<Integer>>>) (y -> hydra.monads.Monads.pure(hydra.util.Maybe.just(y)))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -250,7 +250,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>) ((hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>) (new hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>(hydra.util.Maybe.just((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<java.lang.Object>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<java.lang.Object>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.pure((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<java.lang.Object>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, hydra.util.Maybe<java.lang.Object>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, hydra.util.Maybe<java.lang.Object>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.pure((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -267,7 +267,7 @@ public class FlowsTest {
   3,
   4).collect(java.util.stream.Collectors.toSet())), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Set<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Set<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Set<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Set<Integer>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Set<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Set<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.Set<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.Set<Integer>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(hydra.lib.math.Add.apply(
     1,
     1)),
@@ -280,9 +280,9 @@ public class FlowsTest {
         3,
         1)),
       (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.Set<Integer>>>) (y3 -> hydra.monads.Monads.pure(hydra.lib.sets.FromList.apply(java.util.List.of(
-        (y1),
-        (y2),
-        (y3)))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+        y1,
+        y2,
+        y3))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -296,7 +296,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(42), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.pure(42))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.pure(42))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -308,7 +308,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(0), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.pure(0))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.pure(0))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -320,7 +320,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(-5), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.pure(-5))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.pure(-5))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -332,7 +332,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, String>) ((hydra.compute.FlowState<java.lang.Void, String>) (new hydra.compute.FlowState<java.lang.Void, String>(hydra.util.Maybe.just("hello"), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, String>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, String>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, String>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, String>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.pure("hello"))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, String>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, String>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, String>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, String>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.pure("hello"))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -349,16 +349,16 @@ public class FlowsTest {
   2,
   3)), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.monads.Monads.bind(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, java.util.List<Integer>>>>>) (wrapped -> (wrapped).value))).apply(hydra.monads.Monads.bind(
   hydra.monads.Monads.pure(1),
   (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>>) (x1 -> hydra.monads.Monads.bind(
     hydra.monads.Monads.pure(2),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>>) (x2 -> hydra.monads.Monads.bind(
       hydra.monads.Monads.pure(3),
       (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.List<Integer>>>) (x3 -> hydra.monads.Monads.pure(java.util.List.of(
-        (x1),
-        (x2),
-        (x3))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+        x1,
+        x2,
+        x3)))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -372,7 +372,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(42), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.WithDefault.apply(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.lib.flows.WithDefault.apply(
   0,
   hydra.monads.Monads.pure(42)))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
@@ -386,7 +386,7 @@ public class FlowsTest {
 
             (hydra.compute.FlowState<java.lang.Void, Integer>) ((hydra.compute.FlowState<java.lang.Void, Integer>) (new hydra.compute.FlowState<java.lang.Void, Integer>(hydra.util.Maybe.just(99), null, new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> ((wrapped)).value))).apply(hydra.lib.flows.WithDefault.apply(
+            ((((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) ((java.util.function.Function<hydra.compute.Flow<java.lang.Void, Integer>, java.util.function.Function<java.lang.Void, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Void, Integer>>>>) (wrapped -> (wrapped).value))).apply(hydra.lib.flows.WithDefault.apply(
   99,
   hydra.monads.Monads.fail("error")))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 

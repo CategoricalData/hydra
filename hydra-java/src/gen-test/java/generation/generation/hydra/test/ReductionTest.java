@@ -20,7 +20,7 @@ public class ReductionTest {
 
             42,
 
-            ((java.util.function.Function<Integer, Integer>) (x -> (x))).apply(42));
+            ((java.util.function.Function<Integer, Integer>) (x -> x)).apply(42));
 
     }
 
@@ -44,7 +44,7 @@ public class ReductionTest {
 
             1,
 
-            (((java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (x -> (java.util.function.Function<Integer, Integer>) (y -> (x)))).apply(1)).apply(2));
+            (((java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (x -> (java.util.function.Function<Integer, Integer>) (y -> x))).apply(1)).apply(2));
 
     }
 
@@ -628,7 +628,7 @@ public class ReductionTest {
 
             java.util.List.of(42),
 
-            java.util.List.of(((java.util.function.Function<Integer, Integer>) (x -> (x))).apply(42)));
+            java.util.List.of(((java.util.function.Function<Integer, Integer>) (x -> x)).apply(42)));
 
     }
 
@@ -666,7 +666,7 @@ public class ReductionTest {
 
             hydra.util.Maybe.just(42),
 
-            hydra.util.Maybe.just(((java.util.function.Function<Integer, Integer>) (x -> (x))).apply(42)));
+            hydra.util.Maybe.just(((java.util.function.Function<Integer, Integer>) (x -> x)).apply(42)));
 
     }
 }

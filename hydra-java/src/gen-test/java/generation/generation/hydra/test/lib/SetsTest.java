@@ -640,7 +640,7 @@ public class SetsTest {
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   java.util.stream.Stream.of(
     1,
@@ -659,7 +659,7 @@ public class SetsTest {
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
   (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
 

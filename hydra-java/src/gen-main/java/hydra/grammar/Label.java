@@ -23,7 +23,7 @@ public class Label implements Serializable, Comparable<Label> {
     if (!(other instanceof Label)) {
       return false;
     }
-    Label o = (Label) (other);
+    Label o = (Label) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Label implements Serializable, Comparable<Label> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Label other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

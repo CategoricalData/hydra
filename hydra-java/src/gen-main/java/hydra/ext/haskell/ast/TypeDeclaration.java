@@ -34,7 +34,7 @@ public class TypeDeclaration implements Serializable, Comparable<TypeDeclaration
     if (!(other instanceof TypeDeclaration)) {
       return false;
     }
-    TypeDeclaration o = (TypeDeclaration) (other);
+    TypeDeclaration o = (TypeDeclaration) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeDeclaration implements Serializable, Comparable<TypeDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(TypeDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypeDeclaration withName(hydra.ext.haskell.ast.DeclarationHead name) {

@@ -23,7 +23,7 @@ public class ModuleName implements Serializable, Comparable<ModuleName> {
     if (!(other instanceof ModuleName)) {
       return false;
     }
-    ModuleName o = (ModuleName) (other);
+    ModuleName o = (ModuleName) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class ModuleName implements Serializable, Comparable<ModuleName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleName other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }
