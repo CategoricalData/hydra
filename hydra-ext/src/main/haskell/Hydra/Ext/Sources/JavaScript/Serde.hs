@@ -118,11 +118,14 @@ module_ = Module ns elements
       toBinding identifierToExpr,
       toBinding literalToExpr,
       toBinding stringLiteralToExpr,
+      toBinding escapeString,
+      toBinding templateLiteralToExpr,
       toBinding numericLiteralToExpr,
 
       -- Expression conversions
       toBinding expressionToExpr,
       toBinding arrayExpressionToExpr,
+      toBinding arrayElementToExpr,
       toBinding objectExpressionToExpr,
       toBinding propertyToExpr,
       toBinding functionExpressionToExpr,
@@ -132,9 +135,14 @@ module_ = Module ns elements
       toBinding conditionalExpressionToExpr,
       toBinding binaryExpressionToExpr,
       toBinding unaryExpressionToExpr,
+      toBinding assignmentExpressionToExpr,
 
       -- Pattern conversions
       toBinding patternToExpr,
+      toBinding objectPatternToExpr,
+      toBinding objectPatternPropertyToExpr,
+      toBinding arrayPatternToExpr,
+      toBinding assignmentPatternToExpr,
 
       -- Statement conversions
       toBinding statementToExpr,
@@ -148,6 +156,15 @@ module_ = Module ns elements
       toBinding returnStatementToExpr,
       toBinding throwStatementToExpr,
       toBinding tryStatementToExpr,
+      toBinding catchClauseToExpr,
+      toBinding breakStatementToExpr,
+      toBinding continueStatementToExpr,
+      toBinding whileStatementToExpr,
+      toBinding doWhileStatementToExpr,
+      toBinding forStatementToExpr,
+      toBinding forInStatementToExpr,
+      toBinding forOfStatementToExpr,
+      toBinding labeledStatementToExpr,
 
       -- Declaration conversions
       toBinding functionDeclarationToExpr,
@@ -158,7 +175,12 @@ module_ = Module ns elements
       toBinding programToExpr,
       toBinding moduleItemToExpr,
       toBinding importDeclarationToExpr,
+      toBinding importSpecifierToExpr,
+      toBinding formatImportSpecifiers,
       toBinding exportDeclarationToExpr,
+      toBinding namedExportToExpr,
+      toBinding exportSpecifierToExpr,
+      toBinding exportAllToExpr,
 
       -- Operators
       toBinding binaryOperatorToExpr,
@@ -168,6 +190,8 @@ module_ = Module ns elements
       -- Comments
       toBinding documentationCommentToExpr,
       toBinding toJavaScriptComments,
+      toBinding documentationTagToLine,
+      toBinding typeExpressionToString,
       toBinding toLineComment,
 
       -- With comments variants

@@ -198,7 +198,7 @@ crate = define "Crate" $
   T.record [
     "items">:
       doc "The top-level items in the crate" $
-      T.list item]
+      T.list itemWithComments]
 
 item :: Binding
 item = define "Item" $
